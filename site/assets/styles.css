@@ -102,12 +102,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   display: inline-flex; align-items: center; gap: 8px; color: var(--text);
 }
 .brand-mark {
-  display: inline-block; width: 26px; height: 26px;
-  background-image: url("brand-mark.svg");
+  display: inline-block; width: 28px; height: 28px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%232563eb'/><g fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'><circle cx='25' cy='27' r='9'/><path d='M25 36 L 22 44'/><path d='M27 40 L 35 48 L 51 26'/></g></svg>");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 6px;
   flex-shrink: 0;
 }
 
@@ -842,86 +841,86 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 }
 
 
-/* ===== Why-us section ===== */
-.why-us {
-  padding: 56px 0;
-  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+/* ===== Reference numbers section ===== */
+.ref-section {
+  padding: 48px 0 56px;
   border-top: 1px solid var(--border);
+  background: var(--bg);
 }
-@media (min-width: 768px) { .why-us { padding: 80px 0; } }
-.why-head { margin-bottom: 32px; max-width: 640px; }
-.why-head h2 {
-  font-size: 1.6rem; letter-spacing: -0.025em; margin: 0 0 10px;
-}
-.why-head p { color: var(--text-muted); font-size: 1rem; }
-@media (min-width: 768px) { .why-head h2 { font-size: 2rem; } }
+@media (min-width: 768px) { .ref-section { padding: 72px 0 80px; } }
 
-.why-grid {
+.ref-grid {
   display: grid; gap: 14px;
   grid-template-columns: 1fr;
-  margin-bottom: 40px;
 }
-@media (min-width: 768px) { .why-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; } }
+@media (min-width: 640px) { .ref-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+@media (min-width: 1024px) { .ref-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; } }
 
-.why-card {
+.ref-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 14px; padding: 22px 20px;
-  display: flex; flex-direction: column; gap: 10px;
+  border-radius: 14px; padding: 20px 22px 18px;
+  display: flex; flex-direction: column; gap: 12px;
+  transition: border-color 0.18s, box-shadow 0.18s;
 }
-.why-icon {
-  width: 40px; height: 40px; border-radius: 10px;
-  background: var(--accent-soft); color: var(--accent);
-  display: inline-flex; align-items: center; justify-content: center;
+.ref-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 6px 20px -12px rgba(15, 23, 42, 0.15);
 }
-.why-icon svg { width: 22px; height: 22px; }
-.why-card h3 { font-size: 1.05rem; font-weight: 700; margin: 0; }
-.why-card p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0; }
-
-/* ===== Comparison table ===== */
-.compare-wrap {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 14px; padding: 0; overflow: hidden;
-  margin-top: 16px;
-}
-.compare-head {
-  padding: 18px 20px; border-bottom: 1px solid var(--border);
-  background: var(--surface-2);
-}
-.compare-head strong {
-  font-size: 0.78rem; font-weight: 700; color: var(--text-muted);
+.ref-head { display: flex; flex-direction: column; gap: 4px; }
+.ref-tag {
+  font-size: 0.72rem; font-weight: 700; color: var(--accent);
   letter-spacing: 0.04em; text-transform: uppercase;
 }
-.compare-head h3 { font-size: 1.05rem; margin: 4px 0 0; }
+.ref-head h3 {
+  font-size: 1.02rem; font-weight: 700; margin: 0;
+  letter-spacing: -0.02em;
+}
 
-table.compare {
-  width: 100%; border-collapse: collapse; font-size: 0.92rem;
+table.ref-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.88rem; font-variant-numeric: tabular-nums;
 }
-table.compare th, table.compare td {
-  padding: 14px 16px; text-align: center; border-bottom: 1px solid var(--border);
-  vertical-align: middle;
+table.ref-table th, table.ref-table td {
+  padding: 9px 0; border-bottom: 1px dashed var(--border);
+  text-align: left; vertical-align: top;
 }
-table.compare thead th {
-  font-weight: 700; font-size: 0.85rem; color: var(--text-muted);
-  background: var(--surface-2);
+table.ref-table th {
+  color: var(--text-muted); font-weight: 500;
+  width: 45%;
 }
-table.compare thead th.us {
-  color: var(--accent); background: var(--accent-soft);
+table.ref-table td {
+  font-weight: 600; color: var(--text); text-align: right;
 }
-table.compare tbody th {
-  text-align: left; font-weight: 600; color: var(--text);
-  font-size: 0.9rem; background: var(--surface);
+table.ref-table tr:last-child th, table.ref-table tr:last-child td {
+  border-bottom: 0;
 }
-table.compare tbody td.us {
-  background: rgba(30, 58, 138, 0.04); font-weight: 700; color: var(--accent);
+
+.ref-list {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 8px;
 }
-table.compare tbody tr:last-child th, table.compare tbody tr:last-child td { border-bottom: 0; }
-table.compare .mark-o { color: var(--success); font-weight: 800; font-size: 1.1rem; }
-table.compare .mark-x { color: var(--text-subtle); font-weight: 600; }
-table.compare .mark-t { color: var(--warning); font-weight: 700; }
-@media (max-width: 600px) {
-  table.compare th, table.compare td { padding: 10px 8px; font-size: 0.82rem; }
-  table.compare tbody th { font-size: 0.82rem; }
+.ref-list li {
+  font-size: 0.88rem; color: var(--text-muted); line-height: 1.55;
+  padding-left: 14px; position: relative;
 }
+.ref-list li::before {
+  content: ""; position: absolute; left: 0; top: 9px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent);
+}
+.ref-list li strong {
+  color: var(--text); font-weight: 700; margin-right: 4px;
+}
+
+.ref-foot {
+  font-size: 0.78rem; color: var(--text-subtle); line-height: 1.55;
+  padding-top: 4px;
+}
+.ref-link {
+  font-size: 0.85rem; font-weight: 600; color: var(--accent);
+  margin-top: auto;
+}
+.ref-link:hover { text-decoration: underline; }
 
 /* ===== Interior material grid (with art) ===== */
 .material-grid {
