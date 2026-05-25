@@ -215,3 +215,182 @@ function calcBrokerageFee({ price, type }) {
   });
   recalc();
 })();
+
+// ===== Checklist as a service =====
+(function () {
+  const apps = document.querySelectorAll('[data-cl-app]');
+  if (!apps.length) return;
+
+  apps.forEach((app) => {
+    const key = 'cl:' + (app.dataset.clApp || location.pathname);
+    const noteKey = 'cl-note:' + (app.dataset.clApp || location.pathname);
+    let state = {};
+    let notes = {};
+    try { state = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
+    try { notes = JSON.parse(localStorage.getItem(noteKey) || '{}'); } catch (e) {}
+
+    const rows = app.querySelectorAll('.cl-row');
+    rows.forEach((row) => {
+      const cb = row.querySelector('input[type="checkbox"]');
+      const ta = row.querySelector('.cl-userNote');
+      const id = row.dataset.id;
+      if (!id) return;
+      if (cb && state[id]) { cb.checked = true; row.classList.add('done'); }
+      if (ta && notes[id]) { ta.value = notes[id]; ta.classList.add('has-value'); }
+      if (cb) cb.addEventListener('change', () => {
+        row.classList.toggle('done', cb.checked);
+        state[id] = cb.checked;
+        localStorage.setItem(key, JSON.stringify(state));
+        updateAll(app);
+      });
+      if (ta) {
+        ta.addEventListener('input', () => {
+          notes[id] = ta.value;
+          ta.classList.toggle('has-value', !!ta.value.trim());
+          localStorage.setItem(noteKey, JSON.stringify(notes));
+        });
+      }
+    });
+
+    // Wire actions
+    app.querySelectorAll('[data-cl-action]').forEach((btn) => {
+      const action = btn.dataset.clAction;
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (action === 'reset') {
+          if (!confirm('체크 상태와 메모를 모두 초기화할까요?')) return;
+          localStorage.removeItem(key);
+          localStorage.removeItem(noteKey);
+          rows.forEach((row) => {
+            const cb = row.querySelector('input[type="checkbox"]');
+            const ta = row.querySelector('.cl-userNote');
+            if (cb) cb.checked = false;
+            row.classList.remove('done');
+            if (ta) { ta.value = ''; ta.classList.remove('has-value'); }
+          });
+          state = {}; notes = {};
+          updateAll(app);
+        } else if (action === 'export') {
+          const lines = [];
+          const title = app.querySelector('[data-cl-title]')?.textContent?.trim() || '체크리스트';
+          lines.push(`# ${title}`);
+          lines.push(`갱신: ${new Date().toLocaleString('ko-KR')}`);
+          lines.push('');
+          app.querySelectorAll('.cl-section-title').forEach((h) => {
+            lines.push(`\n## ${h.textContent.trim()}`);
+            let el = h.nextElementSibling;
+            while (el && !el.matches('.cl-section-title')) {
+              if (el.matches('.cl-row')) {
+                const cb = el.querySelector('input[type="checkbox"]');
+                const text = el.querySelector('.cl-text')?.textContent.trim().split('\n')[0] || '';
+                const note = el.querySelector('.cl-userNote')?.value?.trim();
+                lines.push(`- [${cb?.checked ? 'x' : ' '}] ${text}${note ? '  // ' + note : ''}`);
+              }
+              el = el.nextElementSibling;
+            }
+          });
+          const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = (app.dataset.clApp || 'checklist') + '.txt';
+          a.click();
+          URL.revokeObjectURL(url);
+        } else if (action === 'print') {
+          window.print();
+        } else if (action === 'copy') {
+          const lines = [];
+          rows.forEach((row) => {
+            const cb = row.querySelector('input[type="checkbox"]');
+            const text = row.querySelector('.cl-text')?.textContent.trim().split('\n')[0] || '';
+            lines.push(`${cb?.checked ? '✅' : '⬜'} ${text}`);
+          });
+          navigator.clipboard?.writeText(lines.join('\n')).then(() => {
+            const original = btn.textContent;
+            btn.textContent = '복사됨 ✓';
+            setTimeout(() => { btn.textContent = original; }, 1500);
+          });
+        }
+      });
+    });
+
+    updateAll(app);
+
+    // Active tab on scroll
+    const tabs = app.querySelectorAll('.cl-tabs a');
+    if (tabs.length) {
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', (e) => {
+          // Native anchor scroll OK; just update active
+          tabs.forEach((t) => t.classList.remove('active'));
+          tab.classList.add('active');
+        });
+      });
+    }
+  });
+
+  function updateAll(app) {
+    const total = app.querySelectorAll('.cl-row input[type="checkbox"]').length;
+    const done = app.querySelectorAll('.cl-row input[type="checkbox"]:checked').length;
+    const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+
+    // Ring
+    const ring = app.querySelector('.cl-ring .fg');
+    if (ring) {
+      const r = parseFloat(ring.getAttribute('r')) || 60;
+      const c = 2 * Math.PI * r;
+      ring.setAttribute('stroke-dasharray', c.toFixed(2));
+      ring.setAttribute('stroke-dashoffset', (c * (1 - pct / 100)).toFixed(2));
+    }
+    const pctEl = app.querySelector('.cl-ring .pct');
+    if (pctEl) pctEl.textContent = pct + '%';
+    const totalEl = app.querySelector('.cl-ring .total');
+    if (totalEl) totalEl.textContent = `${done} / ${total}`;
+
+    // Section counts
+    app.querySelectorAll('.cl-tabs a').forEach((tab) => {
+      const sec = tab.getAttribute('href');
+      if (!sec) return;
+      const target = app.querySelector(sec);
+      if (!target) return;
+      let next = target.nextElementSibling;
+      let t = 0, d = 0;
+      while (next && !next.matches('.cl-section-title')) {
+        if (next.matches('.cl-row')) {
+          t++;
+          if (next.querySelector('input[type="checkbox"]:checked')) d++;
+        }
+        next = next.nextElementSibling;
+      }
+      const count = tab.querySelector('.count');
+      if (count) count.textContent = `${d}/${t}`;
+    });
+
+    // Save into hub stats (cross-page progress)
+    try {
+      const hub = JSON.parse(localStorage.getItem('cl-hub') || '{}');
+      const slug = app.dataset.clApp || location.pathname;
+      hub[slug] = { done, total, pct, updated: Date.now() };
+      localStorage.setItem('cl-hub', JSON.stringify(hub));
+    } catch (e) {}
+  }
+})();
+
+// ===== Checklist hub progress display =====
+(function () {
+  const cards = document.querySelectorAll('[data-cl-hub-card]');
+  if (!cards.length) return;
+  let hub = {};
+  try { hub = JSON.parse(localStorage.getItem('cl-hub') || '{}'); } catch (e) {}
+  cards.forEach((card) => {
+    const slug = card.dataset.clHubCard;
+    const data = hub[slug];
+    const bar = card.querySelector('[data-cl-hub-bar]');
+    const pct = card.querySelector('[data-cl-hub-pct]');
+    const stats = card.querySelector('[data-cl-hub-stats]');
+    if (data && bar) bar.style.width = data.pct + '%';
+    if (data && pct) pct.textContent = data.pct + '%';
+    if (data && stats) stats.textContent = `${data.done} / ${data.total} 완료`;
+    else if (stats) stats.textContent = '시작 전';
+  });
+})();
+

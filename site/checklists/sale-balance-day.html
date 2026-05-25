@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>매매 잔금일 체크리스트 — 톺다</title>
-<meta name="description" content="아파트 매매 잔금일에 챙겨야 할 항목을 단계별로 정리. 체크 상태는 브라우저에 자동 저장됩니다." />
+<meta name="description" content="아파트 매매 잔금일에 챙겨야 할 30가지 항목을 단계별로 정리. 메모와 진행 상태는 브라우저에 자동 저장됩니다." />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css" />
 </head>
@@ -17,121 +17,169 @@
       <a href="../index.html" data-nav>홈</a>
       <a href="../index.html#categories" data-nav>카테고리</a>
       <a href="../calculators/index.html" data-nav>계산기</a>
-      <a href="../checklists/sale-balance-day.html" data-nav class="active">체크리스트</a>
+      <a href="../checklists/index.html" data-nav class="active">체크리스트</a>
       <a href="../about.html" data-nav>소개</a>
     </nav>
-    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-    </button>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
   </div>
   <div class="mobile-menu" data-mobile-menu>
-    <a href="../index.html">홈</a>
-    <a href="../index.html#categories">카테고리</a>
-    <a href="../calculators/index.html">계산기</a>
-    <a href="../checklists/sale-balance-day.html">체크리스트</a>
-    <a href="../about.html">소개</a>
+    <a href="../index.html">홈</a><a href="../index.html#categories">카테고리</a><a href="../calculators/index.html">계산기</a><a href="../checklists/index.html">체크리스트</a><a href="../about.html">소개</a>
   </div>
 </header>
 
-<main class="container-narrow">
+<main class="container">
   <div class="article-header">
-    <div class="breadcrumb"><a href="../index.html">홈</a> / 체크리스트 / 매매 잔금일</div>
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">체크리스트</a> / 매매 잔금일</div>
     <div class="tag-row">
       <span class="badge badge-accent">매매</span>
       <span class="badge">잔금일</span>
     </div>
-    <h1>매매 잔금일 체크리스트</h1>
-    <div class="meta">
-      <span>2026.05.25</span>
-      <span class="dot">·</span>
-      <span>30개 항목</span>
-      <span class="dot">·</span>
-      <span>체크 상태는 자동 저장됩니다</span>
-    </div>
+    <h1 data-cl-title>매매 잔금일 체크리스트</h1>
+    <div class="meta"><span>2026.05.25</span><span class="dot">·</span><span>30개 항목 · 자동 저장</span></div>
   </div>
 
-  <div class="callout callout-info">
-    <div class="icon">⏱</div>
-    <div class="body">
-      <strong>잔금일 1~2일 전부터 사용하세요.</strong>
-      잔금일 당일에는 시간이 빠듯합니다. 미리 준비물을 챙기고, 당일에는 ‘확인’만 하면 됩니다.
-    </div>
-  </div>
-
-  <div class="checklist" data-checklist="sale-balance-day">
-
-    <div class="checklist-group">
-      <h3>1. 잔금일 전 준비 <span class="progress" data-progress>0/8</span></h3>
-      <label class="check-item"><input type="checkbox" data-id="p1"/><span class="text">잔금 송금 가능 한도 확인 (1일 이체 한도 상향)<span class="note">은행 앱에서 미리 한도 변경. 보통 5억 이상은 영업점 방문 필요.</span></span></label>
-      <label class="check-item"><input type="checkbox" data-id="p2"/><span class="text">대출 실행 일정 확정<span class="note">매도자 계좌로 직접 입금되는지 확인.</span></span></label>
-      <label class="check-item"><input type="checkbox" data-id="p3"/><span class="text">법무사 비용·취득세 견적서 수령</span></label>
-      <label class="check-item"><input type="checkbox" data-id="p4"/><span class="text">선수관리비 예치확인서 발급 요청 (관리사무소)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="p5"/><span class="text">장기수선충당금 납부확인서 발급 (임차인이 있었다면)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="p6"/><span class="text">관리비 미납 여부 확인</span></label>
-      <label class="check-item"><input type="checkbox" data-id="p7"/><span class="text">등기부등본 최신 발급 (잔금일 당일 아침 재발급 권장)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="p8"/><span class="text">잔금일 동행자 일정 확인 (배우자·법무사)</span></label>
-    </div>
-
-    <div class="checklist-group">
-      <h3>2. 잔금일 당일 — 현장 도착 시 <span class="progress" data-progress>0/7</span></h3>
-      <label class="check-item"><input type="checkbox" data-id="d1"/><span class="text">집 상태 최종 확인 (계약 시 합의한 상태 그대로인지)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="d2"/><span class="text">붙박이·옵션 항목 누락 없는지 체크리스트와 대조</span></label>
-      <label class="check-item"><input type="checkbox" data-id="d3"/><span class="text">하자 발견 시 사진 촬영 + 합의서 작성</span></label>
-      <label class="check-item"><input type="checkbox" data-id="d4"/><span class="text">도시가스·전기·수도 검침 (계량기 사진 촬영)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="d5"/><span class="text">관리사무소 방문 (선수관리비·관리비 일할 정산)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="d6"/><span class="text">매도자에게 열쇠·카드키·리모컨 전체 수령</span></label>
-      <label class="check-item"><input type="checkbox" data-id="d7"/><span class="text">매도자 신분증 확인 후 사본 보관</span></label>
+  <div class="cl-app" data-cl-app="sale-balance-day">
+    <div class="cl-app-header">
+      <div class="cl-ring">
+        <svg width="140" height="140" viewBox="0 0 140 140" aria-hidden="true">
+          <circle class="bg" cx="70" cy="70" r="60"></circle>
+          <circle class="fg" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="377"></circle>
+        </svg>
+        <div class="center">
+          <div class="pct">0%</div>
+          <div class="total">0 / 30</div>
+        </div>
+      </div>
+      <div class="cl-header-info">
+        <h2>잔금일 D-day까지</h2>
+        <p class="desc">잔금일 1~2일 전부터 사용하세요. 항목별로 메모를 추가하고, 완료한 항목은 자동 표시됩니다.</p>
+        <div class="stats">
+          <span><strong>5</strong> 단계</span>
+          <span><strong>30</strong> 항목</span>
+          <span>예상 소요 <strong>2일</strong></span>
+        </div>
+      </div>
     </div>
 
-    <div class="checklist-group">
-      <h3>3. 잔금 송금 및 정산 <span class="progress" data-progress>0/6</span></h3>
-      <label class="check-item"><input type="checkbox" data-id="m1"/><span class="text">잔금 송금 직전, 매도자 계좌 정보 재확인 (전화 통화로)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="m2"/><span class="text">잔금 송금 → 매도자 입금 확인 통화</span></label>
-      <label class="check-item"><input type="checkbox" data-id="m3"/><span class="text">선수관리비 매도자에게 별도 송금</span></label>
-      <label class="check-item"><input type="checkbox" data-id="m4"/><span class="text">관리비 일할 정산금 합의 (현장 송금 또는 차후)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="m5"/><span class="text">중개수수료 매수자·매도자 각자 송금 + 부가세</span></label>
-      <label class="check-item"><input type="checkbox" data-id="m6"/><span class="text">현금영수증 발급 요청 (중개수수료)</span></label>
+    <div class="cl-actions">
+      <button data-cl-action="copy">📋 복사</button>
+      <button data-cl-action="export">💾 내보내기 (.txt)</button>
+      <button data-cl-action="print">🖨 인쇄</button>
+      <button data-cl-action="reset">↺ 초기화</button>
     </div>
 
-    <div class="checklist-group">
-      <h3>4. 등기 및 행정 처리 <span class="progress" data-progress>0/5</span></h3>
-      <label class="check-item"><input type="checkbox" data-id="r1"/><span class="text">법무사에 등기 필요 서류 전달 (인감증명·매도용 인감)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="r2"/><span class="text">취득세 납부 (잔금일 당일 또는 60일 내)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="r3"/><span class="text">법무사 비용 송금</span></label>
-      <label class="check-item"><input type="checkbox" data-id="r4"/><span class="text">전입신고 (잔금일 ~ 14일 내)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="r5"/><span class="text">자동차 주소지 변경 (잔금일 ~ 30일 내)</span></label>
+    <div class="cl-tabs">
+      <a href="#stage-prep" class="active">잔금일 전 <span class="count">0/8</span></a>
+      <a href="#stage-arrive">현장 도착 <span class="count">0/7</span></a>
+      <a href="#stage-money">송금·정산 <span class="count">0/6</span></a>
+      <a href="#stage-registry">등기·행정 <span class="count">0/5</span></a>
+      <a href="#stage-after">후속 1주일 <span class="count">0/4</span></a>
     </div>
 
-    <div class="checklist-group">
-      <h3>5. 잔금일 후 1주일 내 <span class="progress" data-progress>0/4</span></h3>
-      <label class="check-item"><input type="checkbox" data-id="a1"/><span class="text">등기 완료 후 등기부등본 발급 → 소유자 확인</span></label>
-      <label class="check-item"><input type="checkbox" data-id="a2"/><span class="text">도시가스·전기·수도 명의 변경 확인</span></label>
-      <label class="check-item"><input type="checkbox" data-id="a3"/><span class="text">관리비 명의 변경 확인 (관리사무소)</span></label>
-      <label class="check-item"><input type="checkbox" data-id="a4"/><span class="text">계약서·등기권리증·각종 영수증 한 폴더에 보관</span></label>
-    </div>
+    <div class="cl-body">
 
-  </div>
+      <h3 class="cl-section-title" id="stage-prep">1. 잔금일 전 (D-2 ~ D-1)</h3>
+      <label class="cl-row" data-id="p1">
+        <input type="checkbox"/>
+        <div>
+          <div class="cl-text">이체 한도 사전 상향 신청</div>
+          <div class="cl-note">1일 이체 한도. 보통 5억 이상은 영업점 방문 필요</div>
+          <textarea class="cl-userNote" rows="1" placeholder="메모 추가… (예: KB 5억으로 변경 완료)"></textarea>
+        </div>
+        <span class="cl-priority must">필수</span>
+      </label>
+      <label class="cl-row" data-id="p2">
+        <input type="checkbox"/>
+        <div>
+          <div class="cl-text">대출 실행 일정 확정</div>
+          <div class="cl-note">매도자 계좌로 직접 입금되는지 확인</div>
+          <textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea>
+        </div>
+        <span class="cl-priority must">필수</span>
+      </label>
+      <label class="cl-row" data-id="p3">
+        <input type="checkbox"/>
+        <div>
+          <div class="cl-text">법무사 비용·취득세 견적서 수령</div>
+          <textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea>
+        </div>
+        <span class="cl-priority">권장</span>
+      </label>
+      <label class="cl-row" data-id="p4">
+        <input type="checkbox"/>
+        <div>
+          <div class="cl-text">선수관리비 예치확인서 발급 요청</div>
+          <div class="cl-note">관리사무소에 매도자 명의로 발급 요청</div>
+          <textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea>
+        </div>
+        <span class="cl-priority must">필수</span>
+      </label>
+      <label class="cl-row" data-id="p5">
+        <input type="checkbox"/>
+        <div>
+          <div class="cl-text">장기수선충당금 납부확인서 발급</div>
+          <div class="cl-note">임차인 있었다면 정산 근거</div>
+          <textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea>
+        </div>
+        <span class="cl-priority">조건부</span>
+      </label>
+      <label class="cl-row" data-id="p6">
+        <input type="checkbox"/>
+        <div>
+          <div class="cl-text">관리비 미납 여부 확인</div>
+          <textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea>
+        </div>
+        <span class="cl-priority">권장</span>
+      </label>
+      <label class="cl-row" data-id="p7">
+        <input type="checkbox"/>
+        <div>
+          <div class="cl-text">등기부등본 당일 아침 재발급</div>
+          <div class="cl-note">가압류·근저당 변동 점검 (인터넷등기소 1,000원)</div>
+          <textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea>
+        </div>
+        <span class="cl-priority must">필수</span>
+      </label>
+      <label class="cl-row" data-id="p8">
+        <input type="checkbox"/>
+        <div>
+          <div class="cl-text">잔금일 동행자 일정 확인</div>
+          <div class="cl-note">배우자·법무사·필요시 인테리어 담당자</div>
+          <textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea>
+        </div>
+        <span class="cl-priority">권장</span>
+      </label>
 
-  <h2 style="margin-top: 48px; margin-bottom: 16px;">자주 빠뜨리는 항목</h2>
-  <div class="table-wrap">
-    <table class="data">
-      <thead>
-        <tr><th>항목</th><th>누락 시 위험</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>이체 한도 사전 변경</td><td>잔금일 송금 불가 → 계약 지연</td></tr>
-        <tr><td>등기부등본 당일 재발급</td><td>잔금일 직전 가압류·근저당 발견 못 함</td></tr>
-        <tr><td>도시가스 검침</td><td>매도자 사용분이 매수자에게 청구됨</td></tr>
-        <tr><td>선수관리비 예치확인서</td><td>매도자 정산 근거 없음 → 분쟁 소지</td></tr>
-      </tbody>
-    </table>
-  </div>
+      <h3 class="cl-section-title" id="stage-arrive">2. 현장 도착 시</h3>
+      <label class="cl-row" data-id="d1"><input type="checkbox"/><div><div class="cl-text">집 상태 최종 확인 — 계약 시 합의 상태 그대로인지</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="d2"><input type="checkbox"/><div><div class="cl-text">붙박이·옵션 항목 누락 없는지 대조</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="d3"><input type="checkbox"/><div><div class="cl-text">하자 발견 시 사진 + 합의서 작성</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">조건부</span></label>
+      <label class="cl-row" data-id="d4"><input type="checkbox"/><div><div class="cl-text">도시가스·전기·수도 검침 (계량기 사진)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="d5"><input type="checkbox"/><div><div class="cl-text">관리사무소 방문 (선수관리비·관리비 일할)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="d6"><input type="checkbox"/><div><div class="cl-text">매도자에게 열쇠·카드키·리모컨 수령</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="d7"><input type="checkbox"/><div><div class="cl-text">매도자 신분증 확인 후 사본 보관</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
 
-  <div class="callout callout-info" style="margin-top: 32px;">
-    <div class="icon">📖</div>
-    <div class="body">
-      <strong>더 자세히 알고 싶다면</strong>
-      <a href="../posts/balance-day-settlement.html">‘아파트 매매 잔금일 정산, 빠뜨리면 손해 보는 5가지’</a>를 읽어보세요.
+      <h3 class="cl-section-title" id="stage-money">3. 송금·정산</h3>
+      <label class="cl-row" data-id="m1"><input type="checkbox"/><div><div class="cl-text">잔금 송금 직전 매도자 계좌 재확인 (전화)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="m2"><input type="checkbox"/><div><div class="cl-text">잔금 송금 → 매도자 입금 확인 통화</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="m3"><input type="checkbox"/><div><div class="cl-text">선수관리비 매도자에게 별도 송금</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="m4"><input type="checkbox"/><div><div class="cl-text">관리비 일할 정산금 합의·송금</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+      <label class="cl-row" data-id="m5"><input type="checkbox"/><div><div class="cl-text">중개수수료 송금 + 부가세</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="m6"><input type="checkbox"/><div><div class="cl-text">중개수수료 현금영수증 발급 요청</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+
+      <h3 class="cl-section-title" id="stage-registry">4. 등기·행정</h3>
+      <label class="cl-row" data-id="r1"><input type="checkbox"/><div><div class="cl-text">법무사에 등기 서류 전달 (인감증명·매도용 인감)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="r2"><input type="checkbox"/><div><div class="cl-text">취득세 납부 (당일 또는 60일 내)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="r3"><input type="checkbox"/><div><div class="cl-text">법무사 비용 송금</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="r4"><input type="checkbox"/><div><div class="cl-text">전입신고 (잔금일 ~ 14일 내)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="r5"><input type="checkbox"/><div><div class="cl-text">자동차 주소지 변경 (~30일 내)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+
+      <h3 class="cl-section-title" id="stage-after">5. 후속 1주일</h3>
+      <label class="cl-row" data-id="a1"><input type="checkbox"/><div><div class="cl-text">등기 완료 후 등기부등본 재발급 → 소유자 확인</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="a2"><input type="checkbox"/><div><div class="cl-text">도시가스·전기·수도 명의 변경 확인</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="a3"><input type="checkbox"/><div><div class="cl-text">관리비 명의 변경 확인 (관리사무소)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+      <label class="cl-row" data-id="a4"><input type="checkbox"/><div><div class="cl-text">계약서·등기권리증·영수증 한 폴더에 보관</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+
     </div>
   </div>
 
@@ -145,35 +193,16 @@
 
   <div class="callout callout-warn" style="margin-top: 32px;">
     <div class="icon">⚠</div>
-    <div class="body">
-      <strong>면책</strong>
-      본 체크리스트는 일반적인 정보 제공을 목적으로 합니다. 개별 사안은 전문가와 상의하세요.
-    </div>
+    <div class="body"><strong>면책</strong> 본 체크리스트는 일반적인 정보 제공용입니다. 개별 사안은 전문가와 상의하세요.</div>
   </div>
 </main>
 
 <footer class="site-footer">
   <div class="container">
     <div class="row">
-      <div>
-        <div class="brand"><span class="brand-mark"></span>톺다</div>
-        <p>부동산, 톺아보면 보인다.</p>
-      </div>
-      <div>
-        <h4>탐색</h4>
-        <ul>
-          <li><a href="../index.html#categories">카테고리</a></li>
-          <li><a href="../calculators/index.html">계산기</a></li>
-          <li><a href="../checklists/sale-balance-day.html">체크리스트</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>사이트 정보</h4>
-        <ul>
-          <li><a href="../about.html">소개·운영원칙</a></li>
-          <li><a href="../about.html#disclaimer">면책고지</a></li>
-        </ul>
-      </div>
+      <div><div class="brand"><span class="brand-mark"></span>톺다</div><p>부동산, 톺아보면 보인다.</p></div>
+      <div><h4>탐색</h4><ul><li><a href="../index.html#categories">카테고리</a></li><li><a href="../calculators/index.html">계산기</a></li><li><a href="../checklists/index.html">체크리스트</a></li></ul></div>
+      <div><h4>사이트 정보</h4><ul><li><a href="../about.html">소개</a></li><li><a href="../about.html#disclaimer">면책고지</a></li></ul></div>
     </div>
     <p class="disclaimer">© 2026 톺다.</p>
   </div>

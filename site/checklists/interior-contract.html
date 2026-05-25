@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>인테리어 계약 체크리스트 — 톺다</title>
+<meta name="description" content="견적 비교부터 표준계약서, 공정 검수, 하자 보수까지 인테리어 계약 단계별 체크." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a><a href="../index.html#categories" data-nav>카테고리</a><a href="../calculators/index.html" data-nav>계산기</a><a href="../checklists/index.html" data-nav class="active">체크리스트</a><a href="../about.html" data-nav>소개</a>
+    </nav>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a><a href="../index.html#categories">카테고리</a><a href="../calculators/index.html">계산기</a><a href="../checklists/index.html">체크리스트</a><a href="../about.html">소개</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">체크리스트</a> / 인테리어 계약</div>
+    <div class="tag-row"><span class="badge badge-accent">인테리어</span></div>
+    <h1 data-cl-title>인테리어 계약 체크리스트</h1>
+    <div class="meta"><span>2026.05.25</span><span class="dot">·</span><span>26개 항목 · 자동 저장</span></div>
+  </div>
+
+  <div class="cl-app" data-cl-app="interior-contract">
+    <div class="cl-app-header">
+      <div class="cl-ring">
+        <svg width="140" height="140" viewBox="0 0 140 140" aria-hidden="true">
+          <circle class="bg" cx="70" cy="70" r="60"></circle>
+          <circle class="fg" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="377"></circle>
+        </svg>
+        <div class="center"><div class="pct">0%</div><div class="total">0 / 26</div></div>
+      </div>
+      <div class="cl-header-info">
+        <h2>견적부터 하자보수까지</h2>
+        <p class="desc">분쟁 1순위는 ‘견적·계약 명세 부족’입니다. 단계별로 잠금 장치를 걸어두세요.</p>
+        <div class="stats"><span><strong>4</strong> 단계</span><span><strong>26</strong> 항목</span></div>
+      </div>
+    </div>
+    <div class="cl-actions">
+      <button data-cl-action="copy">📋 복사</button>
+      <button data-cl-action="export">💾 내보내기</button>
+      <button data-cl-action="print">🖨 인쇄</button>
+      <button data-cl-action="reset">↺ 초기화</button>
+    </div>
+    <div class="cl-tabs">
+      <a href="#stage-quote" class="active">견적 <span class="count">0/7</span></a>
+      <a href="#stage-contract">계약 <span class="count">0/7</span></a>
+      <a href="#stage-build">공정 <span class="count">0/6</span></a>
+      <a href="#stage-defect">하자보수 <span class="count">0/6</span></a>
+    </div>
+    <div class="cl-body">
+      <h3 class="cl-section-title" id="stage-quote">1. 견적 비교</h3>
+      <label class="cl-row" data-id="q1"><input type="checkbox"/><div><div class="cl-text">3~5곳에서 견적 받기</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="q2"><input type="checkbox"/><div><div class="cl-text">자재: 브랜드 + 품번 + 등급까지 명시 요청</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="q3"><input type="checkbox"/><div><div class="cl-text">시공 범위: 위치 + 작업 + 미작업 명문화</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="q4"><input type="checkbox"/><div><div class="cl-text">철거·전기·설비 포함 여부 확인</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="q5"><input type="checkbox"/><div><div class="cl-text">부가세 포함·별도 표기 통일</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="q6"><input type="checkbox"/><div><div class="cl-text">현금가/카드가 차이 확인</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+      <label class="cl-row" data-id="q7"><input type="checkbox"/><div><div class="cl-text">최근 시공 포트폴리오·후기 확인</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+
+      <h3 class="cl-section-title" id="stage-contract">2. 계약</h3>
+      <label class="cl-row" data-id="c1"><input type="checkbox"/><div><div class="cl-text">공정거래위원회 표준계약서 사용</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="c2"><input type="checkbox"/><div><div class="cl-text">대금 지급: 계약금 10~30% → 중도금 → 잔금 10%(입주 검수 후)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="c3"><input type="checkbox"/><div><div class="cl-text">자재 명세서 별첨 (품번·등급)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="c4"><input type="checkbox"/><div><div class="cl-text">추가 공사 단가표 첨부</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="c5"><input type="checkbox"/><div><div class="cl-text">지체보상금 조항 (1일 1/1000~1/1500)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="c6"><input type="checkbox"/><div><div class="cl-text">하자 보증 기간 명시 (도배 1년, 마루·타일 2년, 방수 3~5년)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="c7"><input type="checkbox"/><div><div class="cl-text">실내공기질 의무 (TVOC·포름알데히드)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+
+      <h3 class="cl-section-title" id="stage-build">3. 공정</h3>
+      <label class="cl-row" data-id="b1"><input type="checkbox"/><div><div class="cl-text">관리실 사전 신고 (소음·엘리베이터·반출입)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="b2"><input type="checkbox"/><div><div class="cl-text">이웃 양해 (안내문·작은 선물)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+      <label class="cl-row" data-id="b3"><input type="checkbox"/><div><div class="cl-text">철거 후 추가공사 항목 견적 별도 받기</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="b4"><input type="checkbox"/><div><div class="cl-text">주요 공정 완료마다 현장 사진 기록</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="b5"><input type="checkbox"/><div><div class="cl-text">방수 시 24시간 누수 테스트 입회</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="b6"><input type="checkbox"/><div><div class="cl-text">잔금 송금 전 검수 완료 후 송금</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+
+      <h3 class="cl-section-title" id="stage-defect">4. 하자보수</h3>
+      <label class="cl-row" data-id="d1"><input type="checkbox"/><div><div class="cl-text">입주 1~2주 내 하자 리스트 정리 (사진 + 위치)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="d2"><input type="checkbox"/><div><div class="cl-text">하자 리스트 시공사에 서면 통보</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="d3"><input type="checkbox"/><div><div class="cl-text">하자 보수 일정 합의 후 회신 보관</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="d4"><input type="checkbox"/><div><div class="cl-text">미해결 시 한국소비자원 분쟁조정 신청</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">조건부</span></label>
+      <label class="cl-row" data-id="d5"><input type="checkbox"/><div><div class="cl-text">자재 여분 보관 (보수용 1~2박스)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+      <label class="cl-row" data-id="d6"><input type="checkbox"/><div><div class="cl-text">하자보증서·계약서·견적서 한 폴더 보관</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div><div class="brand"><span class="brand-mark"></span>톺다</div><p>부동산, 톺아보면 보인다.</p></div>
+      <div><h4>탐색</h4><ul><li><a href="../index.html#categories">카테고리</a></li><li><a href="../calculators/index.html">계산기</a></li><li><a href="../checklists/index.html">체크리스트</a></li></ul></div>
+      <div><h4>사이트 정보</h4><ul><li><a href="../about.html">소개</a></li><li><a href="../about.html#disclaimer">면책고지</a></li></ul></div>
+    </div>
+    <p class="disclaimer">© 2026 톺다.</p>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
