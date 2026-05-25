@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>계산기 — 톺다</title>
+<meta name="description" content="취득세·중개수수료 등 부동산 거래에 필요한 계산기. 모든 계산은 브라우저 안에서만 이루어집니다." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a>
+      <a href="../index.html#categories" data-nav>카테고리</a>
+      <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../checklists/sale-balance-day.html" data-nav>체크리스트</a>
+      <a href="../about.html" data-nav>소개</a>
+    </nav>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a>
+    <a href="../index.html#categories">카테고리</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../checklists/sale-balance-day.html">체크리스트</a>
+    <a href="../about.html">소개</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / 계산기</div>
+    <h1>계산기</h1>
+    <div class="meta">
+      <span>모든 계산은 브라우저 안에서만 이루어집니다. 어떠한 입력도 서버로 전송하지 않습니다.</span>
+    </div>
+  </div>
+
+  <div class="section" style="padding-top: 0;">
+    <h2 style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500; margin-bottom: 16px;">우선 계산기 (P1)</h2>
+    <div class="calc-list">
+      <a class="calc-card" href="acquisition-tax.html">
+        <div class="icon">🏠</div>
+        <h3>취득세 계산기</h3>
+        <p class="desc">1주택·다주택·조정대상지역 반영. 농어촌특별세·지방교육세 포함 합계 계산.</p>
+      </a>
+      <a class="calc-card" href="brokerage-fee.html">
+        <div class="icon">🤝</div>
+        <h3>중개수수료 계산기</h3>
+        <p class="desc">매매·전세 거래금액별 상한요율. 부가세 포함 총액.</p>
+      </a>
+      <a class="calc-card disabled" href="#">
+        <div class="icon">📊</div>
+        <h3>잔금일 정산 계산기 <span class="badge">준비중</span></h3>
+        <p class="desc">선수관리비·장기수선충당금·관리비 일할 정산 자동화.</p>
+      </a>
+    </div>
+
+    <h2 style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500; margin: 40px 0 16px;">대출·금융 (P2)</h2>
+    <div class="calc-list">
+      <a class="calc-card disabled" href="#">
+        <div class="icon">💰</div>
+        <h3>DSR 한도 계산기 <span class="badge">준비중</span></h3>
+        <p class="desc">기존 부채 포함 총부채원리금상환비율 한도.</p>
+      </a>
+      <a class="calc-card disabled" href="#">
+        <div class="icon">📈</div>
+        <h3>원리금균등 vs 원금균등 <span class="badge">준비중</span></h3>
+        <p class="desc">상환 방식별 총이자·월상환액 비교 그래프.</p>
+      </a>
+    </div>
+
+    <h2 style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500; margin: 40px 0 16px;">기타 (P2~P3)</h2>
+    <div class="calc-list">
+      <a class="calc-card disabled" href="#">
+        <div class="icon">🧾</div>
+        <h3>양도세 계산기 <span class="badge">준비중</span></h3>
+        <p class="desc">1주택 비과세·장기보유특별공제 포함.</p>
+      </a>
+      <a class="calc-card disabled" href="#">
+        <div class="icon">🎫</div>
+        <h3>청약가점 계산기 <span class="badge">준비중</span></h3>
+        <p class="desc">무주택 기간·부양가족·청약통장 가입 기간.</p>
+      </a>
+      <a class="calc-card disabled" href="#">
+        <div class="icon">🔁</div>
+        <h3>월세→전세 전환 계산기 <span class="badge">준비중</span></h3>
+        <p class="desc">전월세전환율로 환산.</p>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="brand"><span class="brand-mark"></span>톺다</div>
+        <p>부동산, 톺아보면 보인다.</p>
+      </div>
+      <div>
+        <h4>탐색</h4>
+        <ul>
+          <li><a href="../index.html#categories">카테고리</a></li>
+          <li><a href="../calculators/index.html">계산기</a></li>
+          <li><a href="../checklists/sale-balance-day.html">체크리스트</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>사이트 정보</h4>
+        <ul>
+          <li><a href="../about.html">소개·운영원칙</a></li>
+          <li><a href="../about.html#disclaimer">면책고지</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="disclaimer">© 2026 톺다.</p>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

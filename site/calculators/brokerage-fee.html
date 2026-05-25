@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>중개수수료 계산기 — 톺다</title>
+<meta name="description" content="매매·전세 거래금액에 따른 공인중개사 수수료 상한액을 계산합니다. 서울특별시 기준." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a>
+      <a href="../index.html#categories" data-nav>카테고리</a>
+      <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../checklists/sale-balance-day.html" data-nav>체크리스트</a>
+      <a href="../about.html" data-nav>소개</a>
+    </nav>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a>
+    <a href="../index.html#categories">카테고리</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../checklists/sale-balance-day.html">체크리스트</a>
+    <a href="../about.html">소개</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../calculators/index.html">계산기</a> / 중개수수료</div>
+    <h1>중개수수료 계산기</h1>
+    <div class="meta">
+      <span>주택(아파트·단독·연립·다세대) 서울특별시 기준 · 최종 갱신 2026.05.25</span>
+    </div>
+  </div>
+
+  <div class="calc-layout" data-calc="brokerage-fee">
+
+    <div class="calc-form">
+      <div class="field">
+        <label>거래 유형</label>
+        <div class="radio-group">
+          <label><input type="radio" name="type" value="sale" checked/><span>매매·교환</span></label>
+          <label><input type="radio" name="type" value="jeonse"/><span>전세·월세</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="price">거래금액</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="price" name="price" type="text" inputmode="numeric" data-format="won" placeholder="예: 800,000,000" autocomplete="off" value="800,000,000" />
+        </div>
+        <span class="hint">월세의 경우 보증금 + 월차임 × 100 (단, 환산 후 5천만 원 미만이면 월차임 × 70).</span>
+      </div>
+
+      <div class="callout callout-info" style="margin-bottom: 0;">
+        <div class="icon">i</div>
+        <div class="body">
+          <strong>요율은 상한이며 협의가 가능합니다.</strong>
+          공인중개사법령상 상한요율을 기준으로 산정합니다. 실제 수수료는 중개인과 협의로 결정됩니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-result">
+      <h3>예상 수수료 (부가세 포함)</h3>
+      <div class="total" data-out="total">0원</div>
+
+      <div class="breakdown">
+        <div class="row">
+          <span class="key">상한 요율</span>
+          <span class="val" data-out="rate">—</span>
+        </div>
+        <div class="row">
+          <span class="key">한도액</span>
+          <span class="val" data-out="cap">—</span>
+        </div>
+        <div class="row sub">
+          <span class="key">수수료 (부가세 전)</span>
+          <span class="val" data-out="fee">0원</span>
+        </div>
+        <div class="row sub">
+          <span class="key">부가세 (10%)</span>
+          <span class="val" data-out="vat">0원</span>
+        </div>
+      </div>
+
+      <div class="callout callout-warn" style="margin-top: 24px; margin-bottom: 0;">
+        <div class="icon">⚠</div>
+        <div class="body">
+          <strong>지역에 따라 요율이 다릅니다.</strong>
+          본 계산기는 서울특별시 기준이며, 다른 지자체는 별도 고시를 따릅니다.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <section style="margin-top: 64px;">
+    <h2 style="margin-bottom: 16px;">서울특별시 상한 요율 (주택)</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr><th>거래금액</th><th>매매·교환</th><th>전세·월세</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>5천만 원 미만</td><td>0.6% (한도 25만원)</td><td>0.5% (한도 20만원)</td></tr>
+          <tr><td>5천만~2억 미만</td><td>0.5% (한도 80만원)</td><td>0.4% (한도 30만원, ~1억)</td></tr>
+          <tr><td>2~6억 미만</td><td>0.4%</td><td>0.3%</td></tr>
+          <tr><td>6~9억 미만</td><td>0.4%</td><td>0.4%</td></tr>
+          <tr><td>9~12억 미만</td><td>0.5%</td><td>—</td></tr>
+          <tr><td>12~15억 미만</td><td>0.6%</td><td>0.5%</td></tr>
+          <tr><td>15억 이상</td><td>0.7%</td><td>0.6%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 12px;">출처</h2>
+    <ul class="source-list">
+      <li>공인중개사법 제32조 · 시행규칙 제20조</li>
+      <li>서울특별시 부동산 중개보수 등에 관한 조례</li>
+      <li>조회일: 2026.05.25</li>
+    </ul>
+  </section>
+
+  <div class="callout callout-warn" style="margin-top: 32px;">
+    <div class="icon">⚠</div>
+    <div class="body">
+      <strong>면책</strong>
+      본 계산기는 일반적 정보 제공용입니다. 실제 수수료는 중개인과의 협의로 결정되며,
+      별도의 부가가치세 면세사업자 여부에 따라 부가세가 부과되지 않을 수 있습니다.
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="brand"><span class="brand-mark"></span>톺다</div>
+        <p>부동산, 톺아보면 보인다.</p>
+      </div>
+      <div>
+        <h4>탐색</h4>
+        <ul>
+          <li><a href="../index.html#categories">카테고리</a></li>
+          <li><a href="../calculators/index.html">계산기</a></li>
+          <li><a href="../checklists/sale-balance-day.html">체크리스트</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>사이트 정보</h4>
+        <ul>
+          <li><a href="../about.html">소개·운영원칙</a></li>
+          <li><a href="../about.html#disclaimer">면책고지</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="disclaimer">© 2026 톺다.</p>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

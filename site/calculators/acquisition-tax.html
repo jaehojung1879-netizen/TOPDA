@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>취득세 계산기 — 톺다</title>
+<meta name="description" content="주택 매매 시 취득세, 농어촌특별세, 지방교육세를 합산해 총 부담액을 계산합니다. 1주택·다주택·조정대상지역 반영." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a>
+      <a href="../index.html#categories" data-nav>카테고리</a>
+      <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../checklists/sale-balance-day.html" data-nav>체크리스트</a>
+      <a href="../about.html" data-nav>소개</a>
+    </nav>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a>
+    <a href="../index.html#categories">카테고리</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../checklists/sale-balance-day.html">체크리스트</a>
+    <a href="../about.html">소개</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../calculators/index.html">계산기</a> / 취득세</div>
+    <h1>취득세 계산기</h1>
+    <div class="meta">
+      <span>주택 매매 기준 · 2025년 세율 반영 · 최종 갱신 2026.05.25</span>
+    </div>
+  </div>
+
+  <div class="calc-layout" data-calc="acquisition-tax">
+
+    <div class="calc-form">
+      <div class="field">
+        <label for="price">매매가</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="price" name="price" type="text" inputmode="numeric" data-format="won" placeholder="예: 800,000,000" autocomplete="off" value="800,000,000" />
+        </div>
+        <span class="hint">실거래가(취득가액)를 입력하세요.</span>
+      </div>
+
+      <div class="field">
+        <label>주택 수 (본 거래 포함)</label>
+        <div class="radio-group">
+          <label><input type="radio" name="homes" value="1" checked/><span>1주택</span></label>
+          <label><input type="radio" name="homes" value="2"/><span>2주택</span></label>
+          <label><input type="radio" name="homes" value="3"/><span>3주택</span></label>
+          <label><input type="radio" name="homes" value="4"/><span>4주택+</span></label>
+        </div>
+        <span class="hint">법인 명의 취득은 별도 규정이 적용됩니다.</span>
+      </div>
+
+      <div class="field">
+        <label class="check-item" style="padding: 0; cursor: pointer;">
+          <input type="checkbox" name="regulated"/>
+          <span class="text">조정대상지역에 위치
+            <span class="note">2주택부터 중과세율이 달라집니다.</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label class="check-item" style="padding: 0; cursor: pointer;">
+          <input type="checkbox" name="areaOver85"/>
+          <span class="text">전용면적 85㎡ 초과
+            <span class="note">초과 시 농어촌특별세 0.2% 추가됩니다.</span>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <div class="calc-result">
+      <h3>예상 총 부담액</h3>
+      <div class="total" data-out="total">0원</div>
+
+      <div class="breakdown">
+        <div class="row">
+          <span class="key">적용 세율</span>
+          <span class="val" data-out="rate">—</span>
+        </div>
+        <div class="row sub">
+          <span class="key">취득세</span>
+          <span class="val" data-out="acquisition">0원</span>
+        </div>
+        <div class="row sub">
+          <span class="key">농어촌특별세</span>
+          <span class="val" data-out="ruralTax">0원</span>
+        </div>
+        <div class="row sub">
+          <span class="key">지방교육세</span>
+          <span class="val" data-out="localEduTax">0원</span>
+        </div>
+      </div>
+
+      <div class="callout callout-info" style="margin-top: 24px; margin-bottom: 0;">
+        <div class="icon">i</div>
+        <div class="body">
+          <strong>실 부담액은 다를 수 있습니다.</strong>
+          본 계산기는 일반 주거용 매매 표준세율을 기준으로 산정합니다.
+          생애최초·신생아 등 감면, 분양권·조합원입주권은 별도 계산이 필요합니다.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <section style="margin-top: 64px;">
+    <h2 style="margin-bottom: 16px;">세율 요약</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr><th>구분</th><th>6억 이하</th><th>6~9억</th><th>9억 초과</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1주택</td><td>1.0%</td><td>1~3% 누진</td><td>3.0%</td></tr>
+          <tr><td>2주택 (비조정)</td><td>1.0%</td><td>1~3% 누진</td><td>3.0%</td></tr>
+          <tr><td>2주택 (조정)</td><td colspan="3">8.0%</td></tr>
+          <tr><td>3주택 (비조정)</td><td colspan="3">8.0%</td></tr>
+          <tr><td>3주택 (조정)</td><td colspan="3">12.0%</td></tr>
+          <tr><td>4주택+</td><td colspan="3">12.0%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">6~9억 구간 누진식: 세율(%) = (취득가액 × 2 / 3억) − 3</p>
+  </section>
+
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 16px;">함께 보면 좋은 글</h2>
+    <div class="cards-grid">
+      <a class="card" href="../posts/balance-day-settlement.html">
+        <span class="badge badge-accent">매매 · 잔금일</span>
+        <h3>잔금일 정산 5가지</h3>
+        <p>선수관리비·장기수선충당금·관리비 일할 계산.</p>
+      </a>
+      <a class="card" href="../checklists/sale-balance-day.html">
+        <span class="badge">체크리스트</span>
+        <h3>매매 잔금일 체크리스트</h3>
+        <p>잔금일 전·당일·후 챙길 30가지.</p>
+      </a>
+      <a class="card" href="brokerage-fee.html">
+        <span class="badge badge-success">계산기</span>
+        <h3>중개수수료 계산기</h3>
+        <p>매매·전세 거래금액별 상한요율.</p>
+      </a>
+    </div>
+  </section>
+
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 12px;">출처</h2>
+    <ul class="source-list">
+      <li>지방세법 제11조 (취득세율) · 제15조 (취득세 중과세율)</li>
+      <li>지방세법 시행령 제28조의2 (1세대 1주택의 범위)</li>
+      <li>농어촌특별세법 제5조 (세율)</li>
+      <li>조회일: 2026.05.25</li>
+    </ul>
+  </section>
+
+  <div class="callout callout-warn" style="margin-top: 32px;">
+    <div class="icon">⚠</div>
+    <div class="body">
+      <strong>면책</strong>
+      본 계산기는 일반적 정보 제공용입니다. 실제 세액은 취득 시점·감면 적용·과세관청 판단에 따라 달라질 수 있으며,
+      법적 효력을 갖는 산정 결과가 아닙니다. 구체적 사안은 세무사와 상담하세요.
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="brand"><span class="brand-mark"></span>톺다</div>
+        <p>부동산, 톺아보면 보인다.</p>
+      </div>
+      <div>
+        <h4>탐색</h4>
+        <ul>
+          <li><a href="../index.html#categories">카테고리</a></li>
+          <li><a href="../calculators/index.html">계산기</a></li>
+          <li><a href="../checklists/sale-balance-day.html">체크리스트</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>사이트 정보</h4>
+        <ul>
+          <li><a href="../about.html">소개·운영원칙</a></li>
+          <li><a href="../about.html#disclaimer">면책고지</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="disclaimer">© 2026 톺다.</p>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
