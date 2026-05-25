@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>톺다 — 부동산 계산기·체크리스트</title>
-<meta name="description" content="취득세·중개수수료 계산부터 전세계약·잔금일·이사 체크리스트까지. 부동산 거래에 필요한 도구를 한 곳에서." />
+<title>톺다 — 부동산, 톺아보면 보인다</title>
+<meta name="description" content="매매·전세·대출·인테리어·이사. 부동산 거래의 모든 단계를 가이드와 도구로 정리합니다." />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="assets/styles.css" />
@@ -36,175 +36,162 @@
 
 <main>
 
-<!-- ===== Primary tools grid: app-style entry points ===== -->
-<section class="home-top">
+<!-- ===== Hero: compact tagline ===== -->
+<section class="home-intro">
   <div class="container">
-    <div class="home-top-head">
-      <h1>부동산 거래, <br/>계산부터 체크까지 한 번에.</h1>
-      <a href="calculators/index.html" class="home-top-link">전체 도구 보기 →</a>
-    </div>
+    <h1 class="home-tagline">부동산은,<br/>톺아봐야 보인다.</h1>
+  </div>
+</section>
 
-    <div class="tile-grid">
-      <a href="calculators/acquisition-tax.html" class="tile tile-primary">
-        <div class="tile-art tile-art-tax">
-          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="10" y="6" width="44" height="52" rx="4" fill="#1e3a8a"/>
-            <rect x="10" y="6" width="44" height="10" fill="#2563eb"/>
-            <rect x="16" y="24" width="32" height="3" rx="1.5" fill="#fff" opacity="0.85"/>
-            <rect x="16" y="32" width="24" height="3" rx="1.5" fill="#fff" opacity="0.6"/>
-            <rect x="16" y="44" width="32" height="8" rx="2" fill="#fff"/>
-            <text x="32" y="50.5" text-anchor="middle" font-size="6.5" font-weight="800" fill="#1e3a8a" font-family="system-ui">취득세</text>
+<!-- ===== Categories: primary, no section title ===== -->
+<section class="home-cats-primary" id="categories">
+  <div class="container">
+    <div class="cat-tile-grid">
+
+      <a href="categories/sale.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 14L16 4l12 10v13a1 1 0 01-1 1H5a1 1 0 01-1-1z"/>
+            <path d="M12 28v-8h8v8"/>
           </svg>
         </div>
-        <div class="tile-body">
-          <div class="tile-eyebrow">계산기 · P1</div>
-          <h3>취득세 계산기</h3>
-          <div class="tile-desc">1주택·다주택·조정지역 반영</div>
-        </div>
+        <h3>매매</h3>
+        <p>취득세 · 잔금일 정산 · 계약서</p>
       </a>
 
-      <a href="calculators/brokerage-fee.html" class="tile">
-        <div class="tile-icon tile-icon-broker">
-          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M9 17l-4-4 6-6 4 4M23 17l4-4-6-6-4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M11 11l5 5M21 11l-5 5M14 14l2 2 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M6 22h20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      <a href="categories/lease.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 4l11 4v9c0 6.5-4.5 11.5-11 13-6.5-1.5-11-6.5-11-13V8z"/>
+            <path d="M11 16l3.5 3.5L21 13"/>
           </svg>
         </div>
-        <h3>중개수수료</h3>
-        <div class="tile-desc">거래금액별 상한요율</div>
+        <h3>전세·월세</h3>
+        <p>대항력 · 우선변제권 · 보증보험</p>
       </a>
 
-      <a href="checklists/sale-balance-day.html" class="tile">
-        <div class="tile-icon tile-icon-balance">
-          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="5" y="6" width="22" height="22" rx="3" stroke="currentColor" stroke-width="2.2"/>
-            <path d="M5 12h22" stroke="currentColor" stroke-width="2.2"/>
-            <path d="M11 4v4M21 4v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-            <path d="M11 19l3 3 6-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <a href="calculators/index.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6" y="4" width="20" height="24" rx="3"/>
+            <path d="M11 10h10M11 16h4M19 16h2M11 22h2M17 22h4"/>
           </svg>
         </div>
-        <h3>잔금일 체크</h3>
-        <div class="tile-desc">정산·인수인계 한 번에</div>
+        <h3>대출·금융</h3>
+        <p>DSR · LTV · 정책상품</p>
       </a>
 
-      <a href="checklists/lease-contract.html" class="tile">
-        <div class="tile-icon tile-icon-lease">
-          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M6 28V12l10-7 10 7v16" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-            <path d="M12 28v-9h8v9" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-            <circle cx="22" cy="22" r="5" fill="#fff" stroke="currentColor" stroke-width="2.2"/>
-            <path d="M20 22l1.5 1.5L24 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <a href="interior/index.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 14L16 5l11 9v13a1 1 0 01-1 1H6a1 1 0 01-1-1z"/>
+            <path d="M20 11l3 3-7 7-3-3z"/>
+            <path d="M13 21l-2 6 6-2"/>
           </svg>
         </div>
-        <h3>전세계약 체크</h3>
-        <div class="tile-desc">보증금 지키는 3종 세트</div>
+        <h3>인테리어</h3>
+        <p>자재 단가 · 견적 · 하자보수</p>
       </a>
 
-      <a href="checklists/moving-day.html" class="tile">
-        <div class="tile-icon tile-icon-moving">
-          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="3" y="14" width="16" height="11" rx="1.5" stroke="currentColor" stroke-width="2.2"/>
-            <path d="M19 17h6l4 4v4h-10z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-            <circle cx="9" cy="26" r="2.5" fill="#fff" stroke="currentColor" stroke-width="2.2"/>
-            <circle cx="23" cy="26" r="2.5" fill="#fff" stroke="currentColor" stroke-width="2.2"/>
-            <path d="M7 14l3-6h6l2 6" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+      <a href="checklists/moving-day.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="15" height="12" rx="1.5"/>
+            <path d="M18 14h6l4 4v5h-10z"/>
+            <circle cx="9" cy="24.5" r="2.5"/>
+            <circle cx="23" cy="24.5" r="2.5"/>
           </svg>
         </div>
-        <h3>이사 체크</h3>
-        <div class="tile-desc">준비·당일·입주 후</div>
+        <h3>이사·입주</h3>
+        <p>전입신고 · 관리비 정산 · 인수</p>
       </a>
 
-      <a href="checklists/interior-contract.html" class="tile">
-        <div class="tile-icon tile-icon-interior">
-          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M5 14l11-9 11 9v13a2 2 0 01-2 2H7a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-            <path d="M11 29v-9h10v9" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-            <path d="M20 11l3 3-7 7-3-3z" fill="#fff" stroke="currentColor" stroke-width="2"/>
+      <a href="checklists/index.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6" y="4" width="20" height="24" rx="3"/>
+            <path d="M11 11l2 2 4-4M11 19l2 2 4-4"/>
+            <path d="M20 11h3M20 21h3"/>
           </svg>
         </div>
-        <h3>인테리어 계약</h3>
-        <div class="tile-desc">자재·하자보수까지</div>
+        <h3>체크리스트</h3>
+        <p>단계별 점검 · 자동 저장</p>
       </a>
+
     </div>
   </div>
 </section>
 
-<!-- ===== Category strip ===== -->
-<section class="section home-cats" id="categories">
+<!-- ===== Tools: secondary row ===== -->
+<section class="home-tools">
   <div class="container">
     <div class="strip-head">
-      <h2>주제별 가이드</h2>
-      <a href="index.html#categories" class="strip-link">전체 보기 →</a>
+      <h2>지금 바로</h2>
+      <a href="calculators/index.html" class="strip-link">전체 도구 →</a>
     </div>
-    <div class="cat-icon-grid">
-      <a href="categories/sale.html" class="cat-icon">
-        <div class="cat-icon-art cat-icon-sale">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M3 11l9-7 9 7v9a1 1 0 01-1 1H4a1 1 0 01-1-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-            <path d="M9 21v-6h6v6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <div class="tool-row">
+      <a href="calculators/acquisition-tax.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="3" width="16" height="18" rx="2"/>
+            <path d="M8 8l8 8M9 9.5a1 1 0 102 0 1 1 0 00-2 0M14 15.5a1 1 0 102 0 1 1 0 00-2 0"/>
           </svg>
         </div>
-        <span>매매</span>
+        <div class="tool-card-body">
+          <strong>취득세 계산</strong>
+          <span>매매 시 1주택·다주택</span>
+        </div>
       </a>
-      <a href="categories/lease.html" class="cat-icon">
-        <div class="cat-icon-art cat-icon-lease">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
-            <path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <a href="calculators/brokerage-fee.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 7v10M15 9.5h-4a1.5 1.5 0 100 3h2a1.5 1.5 0 110 3H9"/>
           </svg>
         </div>
-        <span>전세·월세</span>
+        <div class="tool-card-body">
+          <strong>중개수수료</strong>
+          <span>거래금액별 상한요율</span>
+        </div>
       </a>
-      <a href="calculators/index.html" class="cat-icon">
-        <div class="cat-icon-art cat-icon-loan">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-            <path d="M12 6v12M15 9h-4a1.5 1.5 0 100 3h2a1.5 1.5 0 110 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <a href="checklists/sale-balance-day.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="5" width="16" height="16" rx="2"/>
+            <path d="M4 10h16M9 3v4M15 3v4"/>
+            <path d="M9 15l2 2 4-4"/>
           </svg>
         </div>
-        <span>대출·계산</span>
+        <div class="tool-card-body">
+          <strong>잔금일 체크</strong>
+          <span>매매 · 30개 점검</span>
+        </div>
       </a>
-      <a href="interior/index.html" class="cat-icon">
-        <div class="cat-icon-art cat-icon-interior">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M4 11h16v9H4zM4 11l8-7 8 7" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-            <path d="M10 20v-5h4v5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <a href="checklists/lease-contract.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 21V8l6-4 6 4v13"/>
+            <path d="M10 21v-6h4v6"/>
+            <circle cx="17" cy="17" r="4" fill="#fff"/>
+            <path d="M15.5 17l1.2 1.2L19 16"/>
           </svg>
         </div>
-        <span>인테리어</span>
-      </a>
-      <a href="checklists/moving-day.html" class="cat-icon">
-        <div class="cat-icon-art cat-icon-moving">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="2" y="9" width="13" height="9" rx="1" stroke="currentColor" stroke-width="2"/>
-            <path d="M15 12h4l3 3v3h-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-            <circle cx="7" cy="19" r="2" stroke="currentColor" stroke-width="2"/>
-            <circle cx="18" cy="19" r="2" stroke="currentColor" stroke-width="2"/>
-          </svg>
+        <div class="tool-card-body">
+          <strong>전세계약 체크</strong>
+          <span>보증금 지킴 3종</span>
         </div>
-        <span>이사·입주</span>
-      </a>
-      <a href="checklists/index.html" class="cat-icon">
-        <div class="cat-icon-art cat-icon-checklist">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-            <path d="M8 8l2 2 4-4M8 14l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <span>체크리스트</span>
       </a>
     </div>
   </div>
 </section>
 
-<!-- ===== Banner row: 보증금 지킴 ===== -->
+<!-- ===== Banner ===== -->
 <section class="banner-row">
   <div class="container">
     <a href="categories/lease.html" class="big-banner">
       <div class="big-banner-text">
         <div class="big-banner-eyebrow">보증금 지키는 가장 쉬운 방법</div>
-        <div class="big-banner-title">대항력·우선변제권·보증보험,<br/>전세 3종 세트 정리</div>
+        <div class="big-banner-title">대항력·우선변제권·보증보험,<br/>전세 3종 세트 가이드</div>
         <div class="big-banner-cta">가이드 보러가기 →</div>
       </div>
       <div class="big-banner-art" aria-hidden="true">
@@ -239,7 +226,7 @@
         <div class="meta"><span>2026.05.25</span><span>· 5분 읽기</span></div>
       </a>
       <a class="card" href="calculators/acquisition-tax.html">
-        <span class="badge badge-success">계산기 · 1분</span>
+        <span class="badge badge-accent">계산기 · 1분</span>
         <h3>취득세 얼마 나올까, 1분이면 끝</h3>
         <p>주택 수·조정대상지역·면적별 세율을 반영한 인터랙티브 계산기.</p>
         <div class="meta"><span>업데이트 2026.05.25</span></div>
@@ -262,7 +249,7 @@
         <ul>
           <li><a href="calculators/index.html">계산기</a></li>
           <li><a href="checklists/index.html">체크리스트</a></li>
-          <li><a href="index.html#categories">카테고리 가이드</a></li>
+          <li><a href="index.html#categories">가이드</a></li>
         </ul>
       </div>
       <div>
