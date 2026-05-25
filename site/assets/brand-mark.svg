@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="톺다 로고">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f6cf3"/>
+      <stop offset="1" stop-color="#1e4fd6"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <g fill="none" stroke="#ffffff" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M27 41 Q 14 35 17 23 Q 21 13 32 15 Q 43 17 41 28 Q 39 36 28 36"/>
+    <path d="M27 36 L 35 46 L 50 27"/>
+  </g>
+</svg>

@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>원리금균등 vs 원금균등 비교 — 톺다</title>
+<meta name="description" content="같은 원금·금리·기간에서 두 상환 방식의 월상환액과 총이자를 비교합니다." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a>
+      <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+      <a href="../index.html#categories" data-nav>가이드</a>
+      <a href="../about.html" data-nav>소개</a>
+    </nav>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../checklists/index.html">체크리스트</a>
+    <a href="../index.html#categories">가이드</a>
+    <a href="../about.html">소개</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 원리금균등 vs 원금균등</div>
+    <h1>상환 방식 비교</h1>
+    <div class="meta">
+      <span>같은 조건에서 월상환액·총이자가 어떻게 다른지</span>
+    </div>
+  </div>
+
+  <div class="calc-layout">
+    <form class="calc-form" id="cmp-form" autocomplete="off">
+      <div class="field">
+        <label for="principal">대출 원금 (만원)</label>
+        <div class="input-suffix" data-suffix="만원">
+          <input type="number" id="principal" inputmode="numeric" min="0" step="100" value="30000"/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="rate">금리 (연, %)</label>
+        <div class="input-suffix" data-suffix="%">
+          <input type="number" id="rate" inputmode="decimal" min="0" step="0.01" value="4.2"/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="years">대출 기간 (년)</label>
+        <div class="input-suffix" data-suffix="년">
+          <input type="number" id="years" inputmode="numeric" min="1" max="50" step="1" value="30"/>
+        </div>
+      </div>
+
+      <div class="callout callout-info" style="margin-top:8px;">
+        <div class="icon">i</div>
+        <div class="body">
+          <strong>한 줄 정리</strong>
+          매월 같은 금액을 내고 싶다 → <em>원리금균등</em>. 총이자를 줄이고 싶다 → <em>원금균등</em>(다만 초기 부담이 큼).
+        </div>
+      </div>
+    </form>
+
+    <div class="calc-result">
+      <h3>총 상환액 비교</h3>
+      <div class="compare-bars">
+        <div class="compare-bar-row">
+          <span class="label">원리금균등</span>
+          <div class="bar-track">
+            <div class="bar-principal" id="bar1-p"></div>
+            <div class="bar-interest" id="bar1-i"></div>
+          </div>
+          <span class="amount" id="amt1">—</span>
+        </div>
+        <div class="compare-bar-row">
+          <span class="label">원금균등</span>
+          <div class="bar-track">
+            <div class="bar-principal" id="bar2-p"></div>
+            <div class="bar-interest" id="bar2-i"></div>
+          </div>
+          <span class="amount" id="amt2">—</span>
+        </div>
+        <div class="compare-legend">
+          <span><i class="lg-principal"></i> 원금</span>
+          <span><i class="lg-interest"></i> 이자</span>
+        </div>
+      </div>
+
+      <div class="breakdown" style="margin-top:24px;">
+        <div class="row" style="font-weight:700;"><span class="key">원리금균등</span><span class="val"></span></div>
+        <div class="row sub"><span class="key">매월 상환액 (전 기간 동일)</span><span class="val" id="a-monthly">—</span></div>
+        <div class="row sub"><span class="key">총 이자</span><span class="val" id="a-interest">—</span></div>
+        <div class="row sub"><span class="key">총 상환액</span><span class="val" id="a-total">—</span></div>
+      </div>
+
+      <div class="breakdown" style="margin-top:8px;">
+        <div class="row" style="font-weight:700;"><span class="key">원금균등</span><span class="val"></span></div>
+        <div class="row sub"><span class="key">첫 회차 (가장 큼)</span><span class="val" id="p-first">—</span></div>
+        <div class="row sub"><span class="key">마지막 회차 (가장 작음)</span><span class="val" id="p-last">—</span></div>
+        <div class="row sub"><span class="key">총 이자</span><span class="val" id="p-interest">—</span></div>
+        <div class="row sub"><span class="key">총 상환액</span><span class="val" id="p-total">—</span></div>
+      </div>
+
+      <div class="callout callout-info" style="margin-top:14px;">
+        <div class="icon">↓</div>
+        <div class="body">
+          <strong id="savings-line">—</strong>
+          <span id="savings-detail" style="color:var(--text-muted);font-size:0.88rem;"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section style="margin-top:48px;">
+    <h2 style="font-size:1.2rem;">방식별 차이 한눈에</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr><th></th><th>원리금균등</th><th>원금균등</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>매월 상환액</th><td>전 기간 동일</td><td>매월 감소 (첫달 가장 큼)</td></tr>
+          <tr><th>총 이자</th><td>상대적으로 많음</td><td>상대적으로 적음</td></tr>
+          <tr><th>초기 부담</th><td>낮음</td><td>높음</td></tr>
+          <tr><th>중도상환 시 유리</th><td>덜 유리</td><td>더 유리 (원금이 빨리 줄어들기 때문)</td></tr>
+          <tr><th>주로 적용되는 곳</th><td>주택담보·신용대출 기본값</td><td>일부 정책상품·요청 시 선택</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="brand"><span class="brand-mark"></span>톺다</div>
+        <p>부동산 거래에 필요한 도구와 가이드를 1차 출처 기반으로 정리합니다.</p>
+      </div>
+      <div>
+        <h4>도구</h4>
+        <ul>
+          <li><a href="../calculators/index.html">계산기</a></li>
+          <li><a href="../checklists/index.html">체크리스트</a></li>
+          <li><a href="../index.html#categories">가이드</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>사이트</h4>
+        <ul>
+          <li><a href="../about.html">소개·운영원칙</a></li>
+          <li><a href="../about.html#disclaimer">면책고지</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="disclaimer">© 2026 톺다. 실제 상환액은 금리 변동·상환일·중도상환 조건에 따라 달라질 수 있습니다.</p>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+<script>
+(function(){
+  const fmt = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
+  const $ = (id) => document.getElementById(id);
+
+  function pmtAnnuity(P, r, n) {
+    if (P <= 0 || n <= 0) return 0;
+    if (r === 0) return P / n;
+    return P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+  }
+  function interestAnnuity(M, n, P) { return M * n - P; }
+  // 원금균등 총이자 = P × r × (n+1) / 2 (월 금리 기준)
+  function interestPrincipal(P, r, n) { return P * r * (n + 1) / 2; }
+
+  function recalc() {
+    const P = (+$('principal').value || 0) * 10000;
+    const annualRate = (+$('rate').value || 0) / 100;
+    const r = annualRate / 12;
+    const years = +$('years').value || 0;
+    const n = years * 12;
+
+    if (P <= 0 || n <= 0) {
+      ['a-monthly','a-interest','a-total','p-first','p-last','p-interest','p-total','amt1','amt2']
+        .forEach(id => $(id).textContent = '—');
+      return;
+    }
+
+    const aMonthly = pmtAnnuity(P, r, n);
+    const aInterest = interestAnnuity(aMonthly, n, P);
+    const aTotal = P + aInterest;
+
+    const pFirst = P / n + P * r;
+    const pLast = P / n + (P / n) * r;
+    const pInterest = interestPrincipal(P, r, n);
+    const pTotal = P + pInterest;
+
+    $('a-monthly').textContent = fmt.format(Math.round(aMonthly)) + '원';
+    $('a-interest').textContent = fmt.format(Math.round(aInterest)) + '원';
+    $('a-total').textContent = fmt.format(Math.round(aTotal)) + '원';
+    $('p-first').textContent = fmt.format(Math.round(pFirst)) + '원';
+    $('p-last').textContent = fmt.format(Math.round(pLast)) + '원';
+    $('p-interest').textContent = fmt.format(Math.round(pInterest)) + '원';
+    $('p-total').textContent = fmt.format(Math.round(pTotal)) + '원';
+
+    $('amt1').textContent = fmt.format(Math.round(aTotal / 10000)) + '만';
+    $('amt2').textContent = fmt.format(Math.round(pTotal / 10000)) + '만';
+
+    // bar widths: scale to wider total
+    const maxTotal = Math.max(aTotal, pTotal);
+    const aPrincipalPct = (P / maxTotal) * 100;
+    const aInterestPct = (aInterest / maxTotal) * 100;
+    const pPrincipalPct = (P / maxTotal) * 100;
+    const pInterestPct = (pInterest / maxTotal) * 100;
+    $('bar1-p').style.width = aPrincipalPct + '%';
+    $('bar1-i').style.left = aPrincipalPct + '%';
+    $('bar1-i').style.width = aInterestPct + '%';
+    $('bar2-p').style.width = pPrincipalPct + '%';
+    $('bar2-i').style.left = pPrincipalPct + '%';
+    $('bar2-i').style.width = pInterestPct + '%';
+
+    const savings = aInterest - pInterest;
+    if (savings > 0) {
+      $('savings-line').textContent = '원금균등이 총이자 ' + fmt.format(Math.round(savings)) + '원 적게 듭니다.';
+      $('savings-detail').textContent = ' 다만 첫 회차 상환액이 원리금균등 대비 ' + fmt.format(Math.round(pFirst - aMonthly)) + '원 많습니다.';
+    } else {
+      $('savings-line').textContent = '두 방식 간 총이자 차이가 거의 없습니다.';
+      $('savings-detail').textContent = '';
+    }
+  }
+
+  document.getElementById('cmp-form').addEventListener('input', recalc);
+  recalc();
+})();
+</script>
+</body>
+</html>
