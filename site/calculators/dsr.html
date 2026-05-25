@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DSR 한도 계산기 — 톺다</title>
+<meta name="description" content="총부채원리금상환비율(DSR) 한도 계산기. 신규대출 + 기존부채 합산 연원리금을 연소득과 대비해 40%·50% 한도를 확인합니다." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a>
+      <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+      <a href="../index.html#categories" data-nav>가이드</a>
+      <a href="../about.html" data-nav>소개</a>
+    </nav>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../checklists/index.html">체크리스트</a>
+    <a href="../index.html#categories">가이드</a>
+    <a href="../about.html">소개</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / DSR 한도</div>
+    <h1>DSR 한도 계산기</h1>
+    <div class="meta">
+      <span>신규대출 + 기존부채 합산 → 연원리금 ÷ 연소득</span>
+      <span class="dot">·</span>
+      <span>입력값은 서버에 전송되지 않습니다</span>
+    </div>
+  </div>
+
+  <div class="calc-layout">
+    <form class="calc-form" id="dsr-form" autocomplete="off">
+      <div class="field">
+        <label for="income">연소득 (세전, 만원)</label>
+        <div class="input-suffix" data-suffix="만원">
+          <input type="number" id="income" inputmode="numeric" min="0" step="100" value="6000"/>
+        </div>
+        <span class="hint">근로소득·사업소득 합계 기준. 월급 × 12 + 상여.</span>
+      </div>
+
+      <h3 style="font-size:0.85rem;font-weight:700;color:var(--text-muted);letter-spacing:0.04em;text-transform:uppercase;margin:24px 0 12px;">신규 대출</h3>
+
+      <div class="field">
+        <label for="new-principal">대출 원금 (만원)</label>
+        <div class="input-suffix" data-suffix="만원">
+          <input type="number" id="new-principal" inputmode="numeric" min="0" step="100" value="30000"/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="new-rate">금리 (연, %)</label>
+        <div class="input-suffix" data-suffix="%">
+          <input type="number" id="new-rate" inputmode="decimal" min="0" step="0.01" value="4.2"/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="new-years">대출 기간 (년)</label>
+        <div class="input-suffix" data-suffix="년">
+          <input type="number" id="new-years" inputmode="numeric" min="1" max="50" step="1" value="30"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>상환 방식</label>
+        <div class="radio-group">
+          <label><input type="radio" name="method" value="annuity" checked/><span>원리금균등</span></label>
+          <label><input type="radio" name="method" value="principal"/><span>원금균등</span></label>
+        </div>
+        <span class="hint">DSR 산정 시에는 통상 첫 회차(원금균등은 가장 큰 월상환액) 기준으로 보수적으로 평가합니다.</span>
+      </div>
+
+      <h3 style="font-size:0.85rem;font-weight:700;color:var(--text-muted);letter-spacing:0.04em;text-transform:uppercase;margin:24px 0 12px;">기존 대출 (있다면)</h3>
+
+      <div class="field">
+        <label for="existing-monthly">기존 대출 월상환액 합계 (만원/월)</label>
+        <div class="input-suffix" data-suffix="만원">
+          <input type="number" id="existing-monthly" inputmode="numeric" min="0" step="10" value="0"/>
+        </div>
+        <span class="hint">신용대출·자동차할부·카드론·다른 주담대 등. 모르면 0으로.</span>
+      </div>
+    </form>
+
+    <div class="calc-result" id="dsr-result">
+      <h3>예상 DSR</h3>
+      <div class="total" id="dsr-pct">—</div>
+
+      <div class="dsr-gauge">
+        <div class="label-row">
+          <span>현재</span><span>50% 한도</span>
+        </div>
+        <div class="dsr-track">
+          <div class="dsr-fill" id="dsr-fill" style="width:0%"></div>
+        </div>
+        <div class="dsr-marks">
+          <span class="dsr-mark" style="left:80%">40%</span>
+          <span class="dsr-mark" style="left:100%">50%</span>
+        </div>
+        <p id="dsr-verdict" style="margin-top:14px;font-size:0.88rem;color:var(--text-muted);">입력값을 기반으로 즉시 계산됩니다.</p>
+      </div>
+
+      <div class="breakdown">
+        <div class="row"><span class="key">신규 대출 월상환액</span><span class="val" id="new-monthly">—</span></div>
+        <div class="row sub"><span class="key">└ 연환산</span><span class="val" id="new-annual">—</span></div>
+        <div class="row"><span class="key">기존 대출 월상환액</span><span class="val" id="existing-monthly-out">—</span></div>
+        <div class="row sub"><span class="key">└ 연환산</span><span class="val" id="existing-annual">—</span></div>
+        <div class="row" style="border-top:1px solid var(--border);margin-top:8px;padding-top:14px;font-weight:700;"><span class="key">총 연원리금</span><span class="val" id="total-annual">—</span></div>
+        <div class="row"><span class="key">연소득</span><span class="val" id="income-out">—</span></div>
+      </div>
+
+      <div class="breakdown" style="margin-top:14px;">
+        <div class="row sub"><span class="key">DSR 40% 한도 (연원리금 가능액)</span><span class="val" id="limit-40">—</span></div>
+        <div class="row sub"><span class="key">DSR 50% 한도</span><span class="val" id="limit-50">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <section style="margin-top:48px;">
+    <h2 style="font-size:1.2rem;">DSR이란</h2>
+    <p style="color:var(--text-muted);">총부채원리금상환비율(Debt Service Ratio). 연간 총 원리금 상환액을 연소득으로 나눈 비율. 1금융권 가계대출은 통상 <strong>차주별 DSR 40%</strong>(2금융권 50%) 한도가 적용되며, 일부 정책상품은 예외가 있습니다.</p>
+
+    <div class="callout callout-info" style="margin-top:16px;">
+      <div class="icon">i</div>
+      <div class="body">
+        <strong>이 계산기의 한계</strong>
+        실제 은행 DSR 산정은 신용대출·전세보증금대출에 대해 별도 가산 산식(예: 신용대출 잔액 ÷ 5년)을 사용하고, 정책상품 별도 한도가 있습니다. 본 계산은 <em>월상환액 단순 합산</em> 기준 추정치이므로, 실제 한도는 거래은행 시뮬레이션으로 확인하세요.
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top:32px;">
+    <h2 style="font-size:1.2rem;">출처</h2>
+    <ul class="source-list">
+      <li>금융위원회 가계부채 관리방안 (2023.7.) — 차주별 DSR 40% 규제</li>
+      <li>은행권 여신심사 가이드라인 — 상환비율 산정 방식</li>
+      <li>본 계산기 결과는 정보 제공용이며 대출 가능 여부·조건을 보장하지 않습니다.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="brand"><span class="brand-mark"></span>톺다</div>
+        <p>부동산 거래에 필요한 도구와 가이드를 1차 출처 기반으로 정리합니다.</p>
+      </div>
+      <div>
+        <h4>도구</h4>
+        <ul>
+          <li><a href="../calculators/index.html">계산기</a></li>
+          <li><a href="../checklists/index.html">체크리스트</a></li>
+          <li><a href="../index.html#categories">가이드</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>사이트</h4>
+        <ul>
+          <li><a href="../about.html">소개·운영원칙</a></li>
+          <li><a href="../about.html#disclaimer">면책고지</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="disclaimer">© 2026 톺다. 본 계산기는 일반 정보 제공용으로 법령·금융기관 산정과 차이가 있을 수 있습니다.</p>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+<script>
+(function(){
+  const fmt = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
+  const $ = (id) => document.getElementById(id);
+
+  function pmtAnnuity(P, rMonthly, n) {
+    if (P <= 0 || n <= 0) return 0;
+    if (rMonthly === 0) return P / n;
+    return P * (rMonthly * Math.pow(1 + rMonthly, n)) / (Math.pow(1 + rMonthly, n) - 1);
+  }
+  // 원금균등 first-month payment (largest)
+  function pmtPrincipalFirst(P, rMonthly, n) {
+    if (P <= 0 || n <= 0) return 0;
+    return P / n + P * rMonthly;
+  }
+
+  function recalc() {
+    const income = (+$('income').value || 0) * 10000;
+    const P = (+$('new-principal').value || 0) * 10000;
+    const annualRate = (+$('new-rate').value || 0) / 100;
+    const rMonthly = annualRate / 12;
+    const years = +$('new-years').value || 0;
+    const n = years * 12;
+    const method = document.querySelector('input[name="method"]:checked').value;
+    const existingMonthly = (+$('existing-monthly').value || 0) * 10000;
+
+    const newMonthly = (method === 'principal') ? pmtPrincipalFirst(P, rMonthly, n) : pmtAnnuity(P, rMonthly, n);
+    const newAnnual = newMonthly * 12;
+    const existingAnnual = existingMonthly * 12;
+    const totalAnnual = newAnnual + existingAnnual;
+    const dsrPct = income > 0 ? (totalAnnual / income) * 100 : 0;
+
+    $('new-monthly').textContent = fmt.format(Math.round(newMonthly)) + '원';
+    $('new-annual').textContent = fmt.format(Math.round(newAnnual)) + '원';
+    $('existing-monthly-out').textContent = fmt.format(Math.round(existingMonthly)) + '원';
+    $('existing-annual').textContent = fmt.format(Math.round(existingAnnual)) + '원';
+    $('total-annual').textContent = fmt.format(Math.round(totalAnnual)) + '원';
+    $('income-out').textContent = fmt.format(Math.round(income)) + '원';
+    $('limit-40').textContent = fmt.format(Math.round(income * 0.4)) + '원';
+    $('limit-50').textContent = fmt.format(Math.round(income * 0.5)) + '원';
+
+    $('dsr-pct').textContent = dsrPct.toFixed(1) + '%';
+    const fillPct = Math.min(100, (dsrPct / 50) * 100);
+    const fill = $('dsr-fill');
+    fill.style.width = fillPct + '%';
+    fill.classList.toggle('warn', dsrPct > 40);
+
+    const v = $('dsr-verdict');
+    if (income <= 0) {
+      v.textContent = '연소득을 입력해 주세요.';
+      v.style.color = 'var(--text-muted)';
+    } else if (dsrPct <= 40) {
+      v.innerHTML = '<strong style="color:var(--success);">1금융권 한도(40%) 이내</strong>로 추정됩니다. 다만 신용대출 가산 산식 등으로 실제는 더 높을 수 있습니다.';
+      v.style.color = 'var(--text)';
+    } else if (dsrPct <= 50) {
+      v.innerHTML = '<strong style="color:var(--warning);">2금융권 한도(50%) 이내</strong>이나 1금융권(40%) 초과. 대출 기간 연장·원금 축소를 검토하세요.';
+      v.style.color = 'var(--text)';
+    } else {
+      v.innerHTML = '<strong style="color:var(--danger);">50% 초과</strong>로 추정. 일반 가계대출 한도 초과이며, 원금·기간·기존부채 정리가 필요합니다.';
+      v.style.color = 'var(--text)';
+    }
+  }
+
+  document.getElementById('dsr-form').addEventListener('input', recalc);
+  recalc();
+})();
+</script>
+</body>
+</html>
