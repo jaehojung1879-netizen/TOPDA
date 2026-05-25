@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>전세 계약 체크리스트 — 톺다</title>
+<meta name="description" content="권리관계 확인부터 보증보험 가입까지, 전세 계약 단계별 체크리스트." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a><a href="../index.html#categories" data-nav>카테고리</a><a href="../calculators/index.html" data-nav>계산기</a><a href="../checklists/index.html" data-nav class="active">체크리스트</a><a href="../about.html" data-nav>소개</a>
+    </nav>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a><a href="../index.html#categories">카테고리</a><a href="../calculators/index.html">계산기</a><a href="../checklists/index.html">체크리스트</a><a href="../about.html">소개</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">체크리스트</a> / 전세 계약</div>
+    <div class="tag-row"><span class="badge badge-accent">전세</span><span class="badge">계약</span></div>
+    <h1 data-cl-title>전세 계약 체크리스트</h1>
+    <div class="meta"><span>2026.05.25</span><span class="dot">·</span><span>24개 항목 · 자동 저장</span></div>
+  </div>
+
+  <div class="cl-app" data-cl-app="lease-contract">
+    <div class="cl-app-header">
+      <div class="cl-ring">
+        <svg width="140" height="140" viewBox="0 0 140 140" aria-hidden="true">
+          <circle class="bg" cx="70" cy="70" r="60"></circle>
+          <circle class="fg" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="377"></circle>
+        </svg>
+        <div class="center"><div class="pct">0%</div><div class="total">0 / 24</div></div>
+      </div>
+      <div class="cl-header-info">
+        <h2>보증금을 지키는 24개 체크</h2>
+        <p class="desc">대항력·우선변제권·보증보험을 한 번에 갖추기 위한 단계별 점검.</p>
+        <div class="stats"><span><strong>4</strong> 단계</span><span><strong>24</strong> 항목</span></div>
+      </div>
+    </div>
+
+    <div class="cl-actions">
+      <button data-cl-action="copy">📋 복사</button>
+      <button data-cl-action="export">💾 내보내기</button>
+      <button data-cl-action="print">🖨 인쇄</button>
+      <button data-cl-action="reset">↺ 초기화</button>
+    </div>
+
+    <div class="cl-tabs">
+      <a href="#stage-find" class="active">매물 탐색 <span class="count">0/5</span></a>
+      <a href="#stage-rights">권리관계 <span class="count">0/7</span></a>
+      <a href="#stage-contract">계약 <span class="count">0/6</span></a>
+      <a href="#stage-balance">잔금일 <span class="count">0/6</span></a>
+    </div>
+
+    <div class="cl-body">
+      <h3 class="cl-section-title" id="stage-find">1. 매물 탐색·시세</h3>
+      <label class="cl-row" data-id="f1"><input type="checkbox"/><div><div class="cl-text">같은 단지·평형 최근 3개월 전세 실거래가 확인</div><div class="cl-note">국토부 rt.molit.go.kr</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="f2"><input type="checkbox"/><div><div class="cl-text">매매가 대비 전세가율 80% 이하인지</div><div class="cl-note">80% 이상이면 깡통전세 위험</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="f3"><input type="checkbox"/><div><div class="cl-text">주변 시세보다 비정상적으로 낮은지 의심</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+      <label class="cl-row" data-id="f4"><input type="checkbox"/><div><div class="cl-text">중개사 등록 여부 확인</div><div class="cl-note">국토교통부 부동산중개업조회시스템</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="f5"><input type="checkbox"/><div><div class="cl-text">신축 빌라·다세대는 특히 시세 신중 확인</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+
+      <h3 class="cl-section-title" id="stage-rights">2. 권리관계 확인</h3>
+      <label class="cl-row" data-id="r1"><input type="checkbox"/><div><div class="cl-text">등기부등본 발급 (인터넷등기소, 700원)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="r2"><input type="checkbox"/><div><div class="cl-text">갑구 — 소유자 본인 확인</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="r3"><input type="checkbox"/><div><div class="cl-text">을구 — 근저당·가압류·신탁 없는지</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="r4"><input type="checkbox"/><div><div class="cl-text">건축물대장 — 위반건축물 표시 없는지</div><div class="cl-note">정부24 gov.kr</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="r5"><input type="checkbox"/><div><div class="cl-text">선순위 임차인 유무 (다가구·다세대)</div><div class="cl-note">전입세대열람 — 임대인 동의 필요</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">조건부</span></label>
+      <label class="cl-row" data-id="r6"><input type="checkbox"/><div><div class="cl-text">임대인 국세·지방세 완납증명 요구</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="r7"><input type="checkbox"/><div><div class="cl-text">전세보증보험 가입 가능 매물인지 사전 조회</div><div class="cl-note">HUG·HF·SGI 중 하나</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+
+      <h3 class="cl-section-title" id="stage-contract">3. 계약 당일</h3>
+      <label class="cl-row" data-id="c1"><input type="checkbox"/><div><div class="cl-text">법무부 표준 임대차계약서 사용</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="c2"><input type="checkbox"/><div><div class="cl-text">계약 당일 아침 등기부등본 재발급</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="c3"><input type="checkbox"/><div><div class="cl-text">임대인 본인·신분증 대조</div><div class="cl-note">대리인이면 위임장·인감증명서</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="c4"><input type="checkbox"/><div><div class="cl-text">특약: 전입·확정일자 가능 명시</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="c5"><input type="checkbox"/><div><div class="cl-text">특약: 보증보험 가입 협조</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="c6"><input type="checkbox"/><div><div class="cl-text">계약 후 30일 내 전월세신고</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+
+      <h3 class="cl-section-title" id="stage-balance">4. 잔금일</h3>
+      <label class="cl-row" data-id="b1"><input type="checkbox"/><div><div class="cl-text">잔금일 아침 등기부등본 마지막 재발급</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="b2"><input type="checkbox"/><div><div class="cl-text">잔금 송금 + 매도자 입금 확인</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="b3"><input type="checkbox"/><div><div class="cl-text">전입신고 + 확정일자</div><div class="cl-note">행정복지센터 또는 정부24 온라인 (같은 날)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="b4"><input type="checkbox"/><div><div class="cl-text">전세보증보험 가입 신청 (같은 날)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="b5"><input type="checkbox"/><div><div class="cl-text">입실 시 상태 사진 기록 (원상회복 기준)</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority must">필수</span></label>
+      <label class="cl-row" data-id="b6"><input type="checkbox"/><div><div class="cl-text">관리비 일할·열쇠 인수</div><textarea class="cl-userNote" rows="1" placeholder="메모 추가…"></textarea></div><span class="cl-priority">권장</span></label>
+    </div>
+  </div>
+
+  <div class="callout callout-warn" style="margin-top: 32px;">
+    <div class="icon">⚠</div>
+    <div class="body"><strong>면책</strong> 본 체크리스트는 일반적인 정보 제공용입니다. 개별 사안은 전문가와 상의하세요.</div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div><div class="brand"><span class="brand-mark"></span>톺다</div><p>부동산, 톺아보면 보인다.</p></div>
+      <div><h4>탐색</h4><ul><li><a href="../index.html#categories">카테고리</a></li><li><a href="../calculators/index.html">계산기</a></li><li><a href="../checklists/index.html">체크리스트</a></li></ul></div>
+      <div><h4>사이트 정보</h4><ul><li><a href="../about.html">소개</a></li><li><a href="../about.html#disclaimer">면책고지</a></li></ul></div>
+    </div>
+    <p class="disclaimer">© 2026 톺다.</p>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
