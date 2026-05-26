@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>양도소득세 계산기 — 톺다</title>
+<meta name="description" content="주택 양도소득세 자동 계산기. 1세대1주택 비과세·고가주택 안분과세·장기보유특별공제·다주택 중과세율까지 현행 소득세법 기준으로 반영." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a>
+      <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+      <a href="../index.html#categories" data-nav>가이드</a>
+      <a href="../about.html" data-nav>소개</a>
+    </nav>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../checklists/index.html">체크리스트</a>
+    <a href="../index.html#categories">가이드</a>
+    <a href="../about.html">소개</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../calculators/index.html">계산기</a> / 양도소득세</div>
+    <h1>양도소득세 계산기</h1>
+    <div class="meta">
+      <span>주택 매도 시 발생하는 양도세 · 지방소득세 합계 · 2025~2026년 소득세법 기준 · 최종 갱신 2026.05.25</span>
+    </div>
+  </div>
+
+  <div class="calc-layout" data-calc="transfer-tax">
+
+    <div class="calc-form">
+      <div class="field">
+        <label for="t-sell">양도가액 (매도가)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="t-sell" name="sellPrice" type="text" inputmode="numeric" data-format="won" placeholder="예: 1,500,000,000" autocomplete="off" value="1,500,000,000" />
+        </div>
+        <span class="hint">매도 계약상의 거래가액(다운계약 제외).</span>
+      </div>
+
+      <div class="field">
+        <label for="t-buy">취득가액 (매수가)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="t-buy" name="buyPrice" type="text" inputmode="numeric" data-format="won" placeholder="예: 900,000,000" autocomplete="off" value="900,000,000" />
+        </div>
+        <span class="hint">취득 당시 실거래가. 상속·증여는 별도 평가가액 적용.</span>
+      </div>
+
+      <div class="field">
+        <label for="t-cost">필요경비</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="t-cost" name="cost" type="text" inputmode="numeric" data-format="won" placeholder="예: 25,000,000" autocomplete="off" value="25,000,000" />
+        </div>
+        <span class="hint">취득세·중개수수료·법무사비·자본적지출(샷시·확장 등). 일반 도배·장판은 불인정.</span>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="t-hold">보유 기간 (년)</label>
+          <input id="t-hold" name="holdYears" type="number" min="0" max="30" step="1" value="8" />
+          <span class="hint">취득일~양도일 만년수.</span>
+        </div>
+        <div class="field">
+          <label for="t-live">거주 기간 (년)</label>
+          <input id="t-live" name="liveYears" type="number" min="0" max="30" step="1" value="5" />
+          <span class="hint">1세대1주택 고가 장특공제용.</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>주택 수 (본 양도 포함)</label>
+        <div class="radio-group">
+          <label><input type="radio" name="homes" value="1" checked/><span>1주택</span></label>
+          <label><input type="radio" name="homes" value="2"/><span>2주택</span></label>
+          <label><input type="radio" name="homes" value="3"/><span>3주택+</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="check-item" style="padding: 0; cursor: pointer;">
+          <input type="checkbox" name="onlyHome" checked/>
+          <span class="text">1세대 1주택 비과세 요건 충족
+            <span class="note">2년 이상 보유 (조정대상지역 취득 시 2년 거주 포함). 1주택일 때만 활성.</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label class="check-item" style="padding: 0; cursor: pointer;">
+          <input type="checkbox" name="regulated"/>
+          <span class="text">조정대상지역에 위치 (양도 시점)
+            <span class="note">다주택 중과 적용 판단용. 2026.05.10부로 한시적 중과배제 종료 여부 확인 필요.</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label class="check-item" style="padding: 0; cursor: pointer;">
+          <input type="checkbox" name="multiSurcharge"/>
+          <span class="text">다주택 중과세율 적용
+            <span class="note">조정지역 2주택 +20%p · 3주택+ +30%p. 한시적 중과배제 기간이면 체크 해제.</span>
+          </span>
+        </label>
+      </div>
+
+    </div>
+
+    <div class="calc-result">
+      <h3>예상 총 부담 세액</h3>
+      <div class="total" data-out="total">0원</div>
+      <div class="result-sub" data-out="effective">실효세율 —</div>
+
+      <div class="breakdown">
+        <div class="row"><span class="key">양도차익</span><span class="val" data-out="gain">0원</span></div>
+        <div class="row sub"><span class="key">– 장기보유특별공제</span><span class="val" data-out="ltDeduct">0원</span></div>
+        <div class="row sub"><span class="key">= 양도소득금액</span><span class="val" data-out="income">0원</span></div>
+        <div class="row sub"><span class="key">– 기본공제 (250만원)</span><span class="val" data-out="basicDeduct">0원</span></div>
+        <div class="row"><span class="key">과세표준</span><span class="val" data-out="taxBase">0원</span></div>
+        <div class="row sub"><span class="key">적용 세율</span><span class="val" data-out="rate">—</span></div>
+        <div class="row"><span class="key">산출 양도소득세</span><span class="val" data-out="incomeTax">0원</span></div>
+        <div class="row sub"><span class="key">지방소득세 (10%)</span><span class="val" data-out="localTax">0원</span></div>
+      </div>
+
+      <div class="callout callout-success" data-out="exemptBox" style="display: none; margin-top: 20px; margin-bottom: 0;">
+        <div class="icon">✓</div>
+        <div class="body" data-out="exemptMsg"><strong>비과세 대상</strong></div>
+      </div>
+
+      <div class="callout callout-info" style="margin-top: 16px; margin-bottom: 0;">
+        <div class="icon">i</div>
+        <div class="body">
+          본 계산은 일반 주거용 주택 양도 기준입니다. 분양권·조합원입주권·상가·토지·재개발입주권은 별도 계산이 필요합니다.
+          공동명의·증여재산 합산·이월과세는 반영되지 않습니다.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <section style="margin-top: 64px;">
+    <h2 style="margin-bottom: 16px;">2025년 양도소득세 누진세율 (장기 보유 · 일반)</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr><th>과세표준 구간</th><th>세율</th><th>누진공제</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1,400만원 이하</td><td>6%</td><td>—</td></tr>
+          <tr><td>1,400만 ~ 5,000만원</td><td>15%</td><td>126만원</td></tr>
+          <tr><td>5,000만 ~ 8,800만원</td><td>24%</td><td>576만원</td></tr>
+          <tr><td>8,800만 ~ 1억 5천만원</td><td>35%</td><td>1,544만원</td></tr>
+          <tr><td>1.5억 ~ 3억원</td><td>38%</td><td>1,994만원</td></tr>
+          <tr><td>3억 ~ 5억원</td><td>40%</td><td>2,594만원</td></tr>
+          <tr><td>5억 ~ 10억원</td><td>42%</td><td>3,594만원</td></tr>
+          <tr><td>10억원 초과</td><td>45%</td><td>6,594만원</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">출처: 소득세법 제55조 (종합소득세율 = 양도세 기본세율) · 조회일 2026.05.25</p>
+  </section>
+
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 16px;">단기 보유 중과세율 (주택·조합원입주권)</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead>
+          <tr><th>보유 기간</th><th>주택·조합원입주권</th><th>분양권</th><th>기타 부동산</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1년 미만</td><td>70%</td><td>70%</td><td>50%</td></tr>
+          <tr><td>1년 ~ 2년 미만</td><td>60%</td><td>60%</td><td>40%</td></tr>
+          <tr><td>2년 이상</td><td>기본세율 (위 표)</td><td>60%</td><td>기본세율</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">출처: 소득세법 제104조 (양도소득세율) · 단기보유 시 비교과세 적용</p>
+  </section>
+
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 16px;">장기보유특별공제율</h2>
+    <div class="hub-grid">
+      <div class="hub-tool" style="cursor: default;">
+        <div class="hub-tool-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M9 12h6M12 9v6"/></svg>
+        </div>
+        <div class="hub-tool-body">
+          <h3>일반 (1세대1주택 외)</h3>
+          <p>보유 3년부터 매년 2%씩 가산. <strong>최대 15년 보유 → 30%</strong>. 2년 미만은 적용 불가.</p>
+        </div>
+      </div>
+      <div class="hub-tool" style="cursor: default;">
+        <div class="hub-tool-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V8l6-4 6 4v13"/><path d="M9 21v-7h6v7"/></svg>
+        </div>
+        <div class="hub-tool-body">
+          <h3>1세대1주택 고가주택 (12억 초과)</h3>
+          <p>보유 3년~ <strong>매년 4%</strong> + 거주 3년~ <strong>매년 4%</strong>. 보유 10년 + 거주 10년 = <strong>최대 80%</strong>. 거주 미충족 시 일반 공제율 적용.</p>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap" style="margin-top: 16px;">
+      <table class="data">
+        <thead>
+          <tr><th>보유연수</th><th>일반</th><th>1세대1주택 (보유)</th><th>1세대1주택 (거주)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>3년</td><td>6%</td><td>12%</td><td>12%</td></tr>
+          <tr><td>4년</td><td>8%</td><td>16%</td><td>16%</td></tr>
+          <tr><td>5년</td><td>10%</td><td>20%</td><td>20%</td></tr>
+          <tr><td>6년</td><td>12%</td><td>24%</td><td>24%</td></tr>
+          <tr><td>7년</td><td>14%</td><td>28%</td><td>28%</td></tr>
+          <tr><td>8년</td><td>16%</td><td>32%</td><td>32%</td></tr>
+          <tr><td>9년</td><td>18%</td><td>36%</td><td>36%</td></tr>
+          <tr><td>10년 이상</td><td>20~30%</td><td>40%</td><td>40%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">출처: 소득세법 제95조 (양도소득금액) · 시행령 제159조의3</p>
+  </section>
+
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 16px;">1세대 1주택 비과세 — 12억 안분 공식</h2>
+    <div class="callout callout-info">
+      <div class="icon">i</div>
+      <div class="body">
+        <strong>양도가액 12억원 이하 → 전액 비과세</strong>. 12억 초과 시 초과분만 과세합니다.
+        <div style="margin-top: 10px; padding: 12px 14px; background: #fff; border-radius: 8px; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.7;">
+          과세 양도차익 = 전체 양도차익 × (양도가액 − 12억) ÷ 양도가액
+        </div>
+      </div>
+    </div>
+    <ul class="ref-list">
+      <li><strong>비과세 요건</strong>: 1세대가 양도일 현재 국내 1주택 보유 + 보유기간 2년 이상</li>
+      <li><strong>조정대상지역 추가 요건</strong>: 취득 당시 조정지역이었다면 거주기간 2년 이상</li>
+      <li><strong>일시적 2주택</strong>: 신주택 취득 후 3년 이내 종전주택 양도 시 1주택 비과세 가능</li>
+      <li><strong>제외 대상</strong>: 등기 안 한 주택, 매매를 가장한 증여, 미신고 다운계약 등</li>
+    </ul>
+  </section>
+
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 16px;">놓치면 손해 보는 양도세 꿀팁 7가지</h2>
+    <div class="def-list">
+      <div class="row"><div class="k">자본적 지출은 영수증</div><div class="v">샷시·발코니확장·시스템에어컨·보일러 교체 등은 필요경비 인정. 세금계산서·계좌이체내역을 보관해야 공제됩니다.</div></div>
+      <div class="row"><div class="k">잔금일 = 양도일</div><div class="v">등기 이전이 아니라 ‘잔금 청산일’이 양도일. 12월 양도와 1월 양도는 과세연도가 달라져 세부담이 갈립니다.</div></div>
+      <div class="row"><div class="k">기본공제 250만원</div><div class="v">1년 1회 한정. 같은 해에 여러 자산을 팔면 한 번만 적용됩니다. 분산 양도 검토.</div></div>
+      <div class="row"><div class="k">공동명의 절세</div><div class="v">부부 공동명의면 각각 누진세율 구간이 분리돼 세부담이 크게 줄어드는 경우가 많습니다.</div></div>
+      <div class="row"><div class="k">거주 요건 채우기</div><div class="v">고가주택(12억 초과) 1세대1주택은 거주기간이 장특공제율을 좌우. 보유 10년 + 거주 10년 = 80% 공제.</div></div>
+      <div class="row"><div class="k">일시적 2주택 3년</div><div class="v">신규 취득일로부터 3년 안에 종전주택을 양도하면 1주택 비과세 유지. 이사로 한 번에 두 채가 된 경우 활용.</div></div>
+      <div class="row"><div class="k">분양권·입주권 주의</div><div class="v">2021.1.1 이후 취득 분양권은 ‘주택 수’에 포함. 다주택 중과 판정에 들어가니 매도 순서 전략 필요.</div></div>
+    </div>
+  </section>
+
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 16px;">신고·납부</h2>
+    <ul class="ref-list">
+      <li><strong>예정신고</strong>: 양도일이 속하는 달의 말일부터 <strong>2개월 이내</strong> 신고·납부 (홈택스)</li>
+      <li><strong>확정신고</strong>: 같은 해 2회 이상 양도하거나 누락된 경우 다음 해 5월 종합 확정신고</li>
+      <li><strong>지방소득세</strong>: 양도소득세의 10%, 시·군·구청에 별도 신고</li>
+      <li><strong>가산세</strong>: 무신고 20%(부정 40%), 납부지연 일 0.022%</li>
+    </ul>
+  </section>
+
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 16px;">함께 보면 좋은 글</h2>
+    <div class="cards-grid">
+      <a class="card" href="acquisition-tax.html">
+        <span class="badge badge-accent">계산기 · 매수자</span>
+        <h3>취득세 계산기</h3>
+        <p>매수자가 내는 취득세를 면적·주택수·조정지역까지 반영해 계산.</p>
+      </a>
+      <a class="card" href="../categories/sale.html">
+        <span class="badge">가이드</span>
+        <h3>매매 종합 가이드</h3>
+        <p>매도자 입장에서 잔금일·등기·세금 신고까지 한 번에.</p>
+      </a>
+      <a class="card" href="balance-settlement.html">
+        <span class="badge badge-success">계산기</span>
+        <h3>잔금일 정산 계산기</h3>
+        <p>잔금일 기준 관리비·선수관리비·장수금 일할 정산.</p>
+      </a>
+    </div>
+  </section>
+
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 12px;">출처</h2>
+    <ul class="source-list">
+      <li>소득세법 제55조 (종합소득세율) · 제94조~제104조 (양도소득세)</li>
+      <li>소득세법 제95조 (장기보유특별공제) · 제103조 (양도소득기본공제)</li>
+      <li>소득세법 시행령 제154조 (1세대1주택 비과세) · 제155조 (일시적 2주택)</li>
+      <li>지방세법 제103조의2~7 (양도소득에 대한 개인지방소득세)</li>
+      <li>국세청 홈택스 양도소득세 모의계산 · 국세법령정보시스템 (txsi.hometax.go.kr)</li>
+      <li>조회일: 2026.05.25</li>
+    </ul>
+  </section>
+
+  <div class="callout callout-warn" style="margin-top: 32px;">
+    <div class="icon">⚠</div>
+    <div class="body">
+      <strong>면책</strong>
+      본 계산기는 일반 주택 양도 기준의 단순 산식입니다. 상속·증여·이월과세·이혼분할·재개발입주권·감면주택 등 특수 케이스는 반영되지 않으며,
+      법령·세율은 시점에 따라 변경됩니다. 실제 신고 전 세무사·홈택스 모의계산을 함께 활용하세요.
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="brand"><span class="brand-mark"></span>톺다</div>
+        <p>부동산, 하나하나 톺아보자.</p>
+      </div>
+      <div>
+        <h4>탐색</h4>
+        <ul>
+          <li><a href="../index.html#categories">카테고리</a></li>
+          <li><a href="../calculators/index.html">계산기</a></li>
+          <li><a href="../checklists/index.html">체크리스트</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>사이트 정보</h4>
+        <ul>
+          <li><a href="../about.html">소개·운영원칙</a></li>
+          <li><a href="../about.html#disclaimer">면책고지</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="disclaimer">© 2026 톺다.</p>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

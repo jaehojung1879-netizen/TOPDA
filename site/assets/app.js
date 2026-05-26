@@ -216,6 +216,314 @@ function calcBrokerageFee({ price, type }) {
   recalc();
 })();
 
+// ===== Transfer Tax (양도소득세) Calculator =====
+// 단순화 모델 (일반 주거용 주택 · 2025~2026년 기준)
+// - 1세대1주택 비과세: 양도가 12억 이하면 전액 면세. 초과 시 (양도차익 × (양도가-12억)/양도가) 만큼만 과세
+// - 장기보유특별공제:
+//   * 일반: 3년 6%, 매년 +2%, 15년 30% 상한 (보유 2년 미만 0%)
+//   * 1세대1주택: 보유 3년 12% +4%/년 (10년 40% 상한) + 거주 3년 12% +4%/년 (10년 40% 상한). 합산 최대 80%
+// - 기본공제 250만원
+// - 누진세율: 8구간 (1,400 / 5,000 / 8,800 / 1.5억 / 3억 / 5억 / 10억 / 그 외)
+// - 단기보유 중과: 1년 미만 70%, 1~2년 60% (주택 기준, 비교과세 단순화)
+// - 다주택 중과: 2주택 +20%p, 3주택+ +30%p (조정대상지역 양도 시)
+// - 지방소득세 = 양도소득세 × 10%
+function calcTransferTax(input) {
+  const { sellPrice, buyPrice, cost, holdYears, liveYears, homes, onlyHome, regulated, multiSurcharge } = input;
+  if (!sellPrice || sellPrice <= 0) return null;
+
+  const rawGain = Math.max(0, sellPrice - buyPrice - cost);
+
+  // 1세대 1주택 비과세 / 안분
+  let exempted = false;
+  let taxableGainRatio = 1;
+  const isOneHome = homes === 1 && onlyHome;
+  if (isOneHome && holdYears >= 2) {
+    if (sellPrice <= 1200000000) {
+      exempted = true;
+      taxableGainRatio = 0;
+    } else {
+      taxableGainRatio = (sellPrice - 1200000000) / sellPrice;
+    }
+  }
+  const taxableGain = rawGain * taxableGainRatio;
+
+  // 단기보유 판정
+  let shortTermRate = null;
+  if (holdYears < 1) shortTermRate = 0.70;
+  else if (holdYears < 2) shortTermRate = 0.60;
+
+  // 장기보유특별공제
+  let ltDeductRate = 0;
+  if (!shortTermRate && holdYears >= 3) {
+    if (isOneHome && sellPrice > 1200000000) {
+      const holdY = Math.min(holdYears, 10);
+      const liveY = Math.min(liveYears, 10);
+      const holdRate = holdY >= 3 ? Math.min(0.40, 0.12 + (holdY - 3) * 0.04) : 0;
+      const liveRate = liveY >= 3 ? Math.min(0.40, 0.12 + (liveY - 3) * 0.04) : 0;
+      ltDeductRate = Math.min(0.80, holdRate + liveRate);
+    } else {
+      const y = Math.min(holdYears, 15);
+      ltDeductRate = Math.max(0, (y - 2) * 0.02);
+      ltDeductRate = Math.min(0.30, ltDeductRate);
+    }
+  }
+  const ltDeduct = taxableGain * ltDeductRate;
+  const incomeAmount = Math.max(0, taxableGain - ltDeduct);
+
+  // 기본공제 250만원
+  const basicDeduct = Math.min(2500000, incomeAmount);
+  const taxBase = Math.max(0, incomeAmount - basicDeduct);
+
+  // 산출세액
+  let rate, deduction, appliedRateLabel;
+  if (shortTermRate) {
+    rate = shortTermRate;
+    deduction = 0;
+    appliedRateLabel = (shortTermRate * 100) + '% (단기보유 중과)';
+  } else {
+    const t = calcProgressiveTax(taxBase);
+    rate = t.marginalRate;
+    deduction = t.deduction;
+    appliedRateLabel = (t.marginalRate * 100).toFixed(0) + '% (누진)';
+  }
+
+  // 다주택 중과 (조정지역 + 다주택 + 중과 적용 체크 + 단기보유 아닐 때)
+  let surchargeRate = 0;
+  if (!shortTermRate && regulated && multiSurcharge && homes >= 2) {
+    surchargeRate = homes >= 3 ? 0.30 : 0.20;
+    rate += surchargeRate;
+    appliedRateLabel += ' + ' + (surchargeRate * 100) + '%p 중과';
+  }
+
+  let incomeTax;
+  if (shortTermRate || surchargeRate > 0) {
+    incomeTax = taxBase * rate;
+  } else {
+    incomeTax = taxBase * rate - deduction;
+  }
+  incomeTax = Math.max(0, incomeTax);
+
+  const localTax = incomeTax * 0.10;
+  const total = incomeTax + localTax;
+  const effective = sellPrice > 0 ? (total / sellPrice * 100) : 0;
+
+  return {
+    exempted, taxableGainRatio, rawGain, taxableGain,
+    ltDeductRate, ltDeduct, incomeAmount, basicDeduct, taxBase,
+    rate, appliedRateLabel, incomeTax, localTax, total, effective,
+  };
+}
+
+function calcProgressiveTax(base) {
+  // 2025 기준 누진세율 (8구간)
+  const brackets = [
+    { upTo: 14000000,    rate: 0.06, deduction: 0 },
+    { upTo: 50000000,    rate: 0.15, deduction: 1260000 },
+    { upTo: 88000000,    rate: 0.24, deduction: 5760000 },
+    { upTo: 150000000,   rate: 0.35, deduction: 15440000 },
+    { upTo: 300000000,   rate: 0.38, deduction: 19940000 },
+    { upTo: 500000000,   rate: 0.40, deduction: 25940000 },
+    { upTo: 1000000000,  rate: 0.42, deduction: 35940000 },
+    { upTo: Infinity,    rate: 0.45, deduction: 65940000 },
+  ];
+  for (const b of brackets) {
+    if (base <= b.upTo) return { marginalRate: b.rate, deduction: b.deduction };
+  }
+  const last = brackets[brackets.length - 1];
+  return { marginalRate: last.rate, deduction: last.deduction };
+}
+
+(function () {
+  const root = document.querySelector('[data-calc="transfer-tax"]');
+  if (!root) return;
+  const inputs = root.querySelectorAll('input, select');
+  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+  const recalc = () => {
+    const sellPrice = fmt.parseWon(root.querySelector('[name="sellPrice"]').value);
+    const buyPrice = fmt.parseWon(root.querySelector('[name="buyPrice"]').value);
+    const cost = fmt.parseWon(root.querySelector('[name="cost"]').value);
+    const holdYears = Number(root.querySelector('[name="holdYears"]').value || 0);
+    const liveYears = Number(root.querySelector('[name="liveYears"]').value || 0);
+    const homes = Number(root.querySelector('[name="homes"]:checked')?.value || 1);
+    const onlyHome = root.querySelector('[name="onlyHome"]')?.checked || false;
+    const regulated = root.querySelector('[name="regulated"]')?.checked || false;
+    const multiSurcharge = root.querySelector('[name="multiSurcharge"]')?.checked || false;
+    const r = calcTransferTax({ sellPrice, buyPrice, cost, holdYears, liveYears, homes, onlyHome, regulated, multiSurcharge });
+    const exemptBox = root.querySelector('[data-out="exemptBox"]');
+    if (!r) {
+      ['total','gain','ltDeduct','income','basicDeduct','taxBase','incomeTax','localTax'].forEach(k => setText(k, '0원'));
+      setText('rate', '—');
+      setText('effective', '실효세율 —');
+      if (exemptBox) exemptBox.style.display = 'none';
+      return;
+    }
+    setText('gain', fmt.won(r.rawGain));
+    setText('ltDeduct', '−' + fmt.won(r.ltDeduct) + ' (' + (r.ltDeductRate * 100).toFixed(0) + '%)');
+    setText('income', fmt.won(r.incomeAmount));
+    setText('basicDeduct', '−' + fmt.won(r.basicDeduct));
+    setText('taxBase', fmt.won(r.taxBase));
+    setText('rate', r.appliedRateLabel);
+    setText('incomeTax', fmt.won(r.incomeTax));
+    setText('localTax', fmt.won(r.localTax));
+    setText('total', fmt.won(r.total));
+    setText('effective', '실효세율 ' + r.effective.toFixed(2) + '% (양도가액 대비)');
+    if (exemptBox) {
+      if (r.exempted) {
+        exemptBox.style.display = '';
+        const msg = root.querySelector('[data-out="exemptMsg"]');
+        if (msg) msg.innerHTML = '<strong>1세대 1주택 비과세 대상</strong>양도가액 12억원 이하 + 보유 2년 이상 요건을 충족합니다. 별도 세부담이 없습니다.';
+      } else if (r.taxableGainRatio < 1 && r.taxableGainRatio > 0) {
+        exemptBox.style.display = '';
+        const msg = root.querySelector('[data-out="exemptMsg"]');
+        if (msg) msg.innerHTML = '<strong>고가주택 안분과세</strong>1세대1주택이나 12억 초과. 양도차익 중 ' + (r.taxableGainRatio * 100).toFixed(1) + '%만 과세대상입니다.';
+      } else {
+        exemptBox.style.display = 'none';
+      }
+    }
+  };
+  inputs.forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
+  recalc();
+})();
+
+// ===== Balance-Day Settlement (잔금일 정산) Calculator =====
+function calcBalanceSettlement(input) {
+  const { monthlyFee, daysInMonth, daysOccupiedBySeller, prepaidFee, accumLongRepair, gasCost, electricCost, additional } = input;
+  const sellerShare = monthlyFee * (daysOccupiedBySeller / daysInMonth);
+  const buyerShare = monthlyFee - sellerShare;
+  // 매도자가 매수자에게 반환받는 항목: 선수관리비
+  // 매도자가 임차인에게 정산받는 항목: 장기수선충당금 (소유자 부담분이지만 임차인이 매월 납부한 경우 임차인에게 반환)
+  // 본 계산기는 매매 잔금일 기준 (선수관리비는 매수자 → 매도자에게 반환)
+  const sellerNet = sellerShare + gasCost + electricCost + additional - prepaidFee;
+  const buyerNet = prepaidFee - sellerShare - gasCost - electricCost - additional;
+  return {
+    sellerShare, buyerShare, prepaidFee, accumLongRepair,
+    sellerNet, // 매도자가 추가로 내야 할 금액 (음수면 받을 금액)
+    buyerNet,  // 매수자가 매도자에게 전달할 금액 (음수면 받을 금액)
+  };
+}
+
+(function () {
+  const root = document.querySelector('[data-calc="balance-settlement"]');
+  if (!root) return;
+  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+  const recalc = () => {
+    const monthlyFee = fmt.parseWon(root.querySelector('[name="monthlyFee"]').value);
+    const daysInMonth = Number(root.querySelector('[name="daysInMonth"]').value || 30);
+    const daysOccupiedBySeller = Number(root.querySelector('[name="daysOccupiedBySeller"]').value || 0);
+    const prepaidFee = fmt.parseWon(root.querySelector('[name="prepaidFee"]').value);
+    const accumLongRepair = fmt.parseWon(root.querySelector('[name="accumLongRepair"]').value);
+    const gasCost = fmt.parseWon(root.querySelector('[name="gasCost"]').value);
+    const electricCost = fmt.parseWon(root.querySelector('[name="electricCost"]').value);
+    const additional = fmt.parseWon(root.querySelector('[name="additional"]').value);
+    const r = calcBalanceSettlement({ monthlyFee, daysInMonth, daysOccupiedBySeller, prepaidFee, accumLongRepair, gasCost, electricCost, additional });
+    setText('sellerShare', fmt.won(r.sellerShare));
+    setText('buyerShare', fmt.won(r.buyerShare));
+    setText('prepaidOut', fmt.won(r.prepaidFee));
+    setText('longRepairOut', fmt.won(r.accumLongRepair));
+    // 매도자 받을 금액 = 선수관리비 - 매도자 사용분 관리비 - 가스 - 전기 - 기타
+    // = -buyerNet
+    const netToSeller = r.prepaidFee - r.sellerShare - gasCost - electricCost - additional;
+    if (netToSeller >= 0) {
+      setText('settlement', '매수자 → 매도자 ' + fmt.won(netToSeller));
+    } else {
+      setText('settlement', '매도자 → 매수자 ' + fmt.won(-netToSeller));
+    }
+    setText('netSeller', fmt.won(netToSeller));
+    setText('tenantLongRepair', fmt.won(r.accumLongRepair));
+  };
+  root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
+  recalc();
+})();
+
+// ===== Jeonse ↔ Monthly Rent Conversion =====
+function calcJeonseMonthly(input) {
+  const { mode, deposit, monthly, baseDeposit, rate } = input;
+  // 전환율(연 %): 보증금 × rate / 12 = 월세 (원)
+  const monthlyRate = rate / 100 / 12;
+  if (mode === 'toMonthly') {
+    // 전세 → 순수 월세 (보증금 = baseDeposit, 나머지 보증금을 월세로 환산)
+    const convertibleDeposit = Math.max(0, deposit - baseDeposit);
+    const calcMonthly = convertibleDeposit * monthlyRate;
+    return { calcMonthly, calcDeposit: baseDeposit, convertibleDeposit };
+  } else {
+    // 월세 → 전세 (월세 부분을 보증금으로 환산해 합산)
+    const convertibleDeposit = monthly / monthlyRate;
+    const totalDeposit = deposit + convertibleDeposit;
+    return { calcDeposit: totalDeposit, convertibleDeposit, monthlyConverted: monthly };
+  }
+}
+
+(function () {
+  const root = document.querySelector('[data-calc="jeonse-monthly"]');
+  if (!root) return;
+  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+  const recalc = () => {
+    const mode = root.querySelector('[name="mode"]:checked')?.value || 'toMonthly';
+    const deposit = fmt.parseWon(root.querySelector('[name="deposit"]').value);
+    const monthly = fmt.parseWon(root.querySelector('[name="monthly"]').value);
+    const baseDeposit = fmt.parseWon(root.querySelector('[name="baseDeposit"]').value);
+    const rate = Number(root.querySelector('[name="rate"]').value || 6);
+    const r = calcJeonseMonthly({ mode, deposit, monthly, baseDeposit, rate });
+    // Show/hide depending on mode
+    const toMonthlyEl = root.querySelector('[data-mode="toMonthly"]');
+    const toJeonseEl = root.querySelector('[data-mode="toJeonse"]');
+    if (mode === 'toMonthly') {
+      if (toMonthlyEl) toMonthlyEl.style.display = '';
+      if (toJeonseEl) toJeonseEl.style.display = 'none';
+      setText('outMonthly', fmt.won(r.calcMonthly));
+      setText('outBaseDeposit', fmt.won(r.calcDeposit));
+      setText('outConverted', fmt.won(r.convertibleDeposit));
+    } else {
+      if (toMonthlyEl) toMonthlyEl.style.display = 'none';
+      if (toJeonseEl) toJeonseEl.style.display = '';
+      setText('outTotalDeposit', fmt.won(r.calcDeposit));
+      setText('outAddedDeposit', fmt.won(r.convertibleDeposit));
+    }
+    setText('outRate', rate.toFixed(2) + '% (연)');
+  };
+  root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
+  recalc();
+})();
+
+// ===== Housing Subscription Score (청약가점) =====
+function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
+  // 무주택기간 (32점): 만30세 미만이거나 미혼이면 0점. 1년 미만 2점, 1년부터 매년 +2점, 15년 32점
+  let s1;
+  if (noHomeYears < 1) s1 = 2;
+  else s1 = Math.min(32, 2 + Math.floor(noHomeYears) * 2);
+  if (noHomeYears <= 0) s1 = 0;
+
+  // 부양가족 (35점): 0명 5점, 1~6명 매명 +5점, 7명+ 35점
+  let s2 = Math.min(35, 5 + dependents * 5);
+
+  // 청약통장 가입기간 (17점): 6개월 미만 1점, 6개월~1년 2점, 1년부터 매년 +1점, 15년 이상 17점
+  let s3;
+  if (accountYears < 0.5) s3 = 1;
+  else if (accountYears < 1) s3 = 2;
+  else s3 = Math.min(17, 2 + Math.floor(accountYears));
+
+  return { s1, s2, s3, total: s1 + s2 + s3 };
+}
+
+(function () {
+  const root = document.querySelector('[data-calc="housing-subscription"]');
+  if (!root) return;
+  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+  const recalc = () => {
+    const noHomeYears = Number(root.querySelector('[name="noHomeYears"]').value || 0);
+    const dependents = Number(root.querySelector('[name="dependents"]').value || 0);
+    const accountYears = Number(root.querySelector('[name="accountYears"]').value || 0);
+    const r = calcSubscriptionScore({ noHomeYears, dependents, accountYears });
+    setText('s1', r.s1 + '점');
+    setText('s2', r.s2 + '점');
+    setText('s3', r.s3 + '점');
+    setText('total', r.total + '점');
+    setText('totalLabel', '/ 84점 만점');
+  };
+  root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
+  recalc();
+})();
+
 // ===== Checklist as a service =====
 (function () {
   const apps = document.querySelectorAll('[data-cl-app]');

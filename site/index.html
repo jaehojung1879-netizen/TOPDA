@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>톺다 — 부동산, 톺아보면 보인다</title>
+<title>톺다 — 부동산, 하나하나 톺아보자</title>
 <meta name="description" content="매매·전세·대출·인테리어·이사. 부동산 거래의 모든 단계를 가이드와 도구로 정리합니다." />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -39,7 +39,8 @@
 <!-- ===== Hero: compact tagline ===== -->
 <section class="home-intro">
   <div class="container">
-    <h1 class="home-tagline">부동산은,<br/>톺아봐야 보인다.</h1>
+    <h1 class="home-tagline">부동산,<br/>하나하나 톺아보자.</h1>
+    <p class="home-subtagline">취득세부터 양도세까지, 강변·3베이·용적률부터 잔금일 정산까지. 톺다가 빠짐없이 챙겨드립니다.</p>
   </div>
 </section>
 
@@ -62,8 +63,9 @@
       <a href="categories/lease.html" class="cat-tile">
         <div class="cat-tile-icon">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M16 4l11 4v9c0 6.5-4.5 11.5-11 13-6.5-1.5-11-6.5-11-13V8z"/>
-            <path d="M11 16l3.5 3.5L21 13"/>
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M15.5 14.5l11 11"/>
+            <path d="M21 20l3 3M24 17l3 3"/>
           </svg>
         </div>
         <h3>전세·월세</h3>
@@ -84,9 +86,10 @@
       <a href="interior/index.html" class="cat-tile">
         <div class="cat-tile-icon">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 14L16 5l11 9v13a1 1 0 01-1 1H6a1 1 0 01-1-1z"/>
-            <path d="M20 11l3 3-7 7-3-3z"/>
-            <path d="M13 21l-2 6 6-2"/>
+            <rect x="6" y="5" width="20" height="7" rx="1.5"/>
+            <path d="M22 12v3a1 1 0 01-1 1H11a1 1 0 01-1-1v-3"/>
+            <path d="M16 16v5"/>
+            <rect x="12" y="21" width="8" height="6" rx="1"/>
           </svg>
         </div>
         <h3>인테리어</h3>
@@ -122,14 +125,14 @@
   </div>
 </section>
 
-<!-- ===== Tools: secondary row ===== -->
+<!-- ===== Tools: calculators ===== -->
 <section class="home-tools">
   <div class="container">
     <div class="strip-head">
-      <h2>지금 바로</h2>
-      <a href="calculators/index.html" class="strip-link">전체 도구 →</a>
+      <h2>계산기</h2>
+      <a href="calculators/index.html" class="strip-link">전체 계산기 →</a>
     </div>
-    <div class="tool-row">
+    <div class="tool-row tool-row-4">
       <a href="calculators/acquisition-tax.html" class="tool-card">
         <div class="tool-card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -138,8 +141,20 @@
           </svg>
         </div>
         <div class="tool-card-body">
-          <strong>취득세 계산</strong>
-          <span>매매 시 1주택·다주택</span>
+          <strong>취득세</strong>
+          <span>1주택·다주택·조정</span>
+        </div>
+      </a>
+      <a href="calculators/transfer-tax.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 12h14M13 8l4 4-4 4"/>
+            <path d="M21 5v14"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>양도소득세</strong>
+          <span>1세대1주택·장특·중과</span>
         </div>
       </a>
       <a href="calculators/brokerage-fee.html" class="tool-card">
@@ -154,6 +169,77 @@
           <span>거래금액별 상한요율</span>
         </div>
       </a>
+      <a href="calculators/dsr.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 20V8m6 12V4m6 16v-8m6 8V12"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>DSR 한도</strong>
+          <span>1금융 40% · 2금융 50%</span>
+        </div>
+      </a>
+      <a href="calculators/loan-compare.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 18V6m18 12V6"/>
+            <path d="M3 18l18-12"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>원리금 vs 원금균등</strong>
+          <span>월상환·총이자 비교</span>
+        </div>
+      </a>
+      <a href="calculators/balance-settlement.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="5" width="16" height="15" rx="2"/>
+            <path d="M4 10h16M9 3v4M15 3v4"/>
+            <path d="M8 14h8M8 17h5"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>잔금일 정산</strong>
+          <span>관리비·선수·장수금 일할</span>
+        </div>
+      </a>
+      <a href="calculators/jeonse-monthly.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 7h13M7 7l3-3M7 7l3 3"/>
+            <path d="M17 17H4M17 17l-3 3M17 17l-3-3"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>월세 ↔ 전세</strong>
+          <span>전월세 전환율 환산</span>
+        </div>
+      </a>
+      <a href="calculators/housing-subscription.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>청약가점</strong>
+          <span>무주택·부양·통장 84점</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Tools: checklists ===== -->
+<section class="home-tools" style="padding-top: 28px;">
+  <div class="container">
+    <div class="strip-head">
+      <h2>체크리스트</h2>
+      <a href="checklists/index.html" class="strip-link">전체 체크리스트 →</a>
+    </div>
+    <div class="tool-row tool-row-4">
       <a href="checklists/sale-balance-day.html" class="tool-card">
         <div class="tool-card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -163,23 +249,89 @@
           </svg>
         </div>
         <div class="tool-card-body">
-          <strong>잔금일 체크</strong>
-          <span>매매 · 30개 점검</span>
+          <strong>매매 잔금일</strong>
+          <span>등기·정산 30가지</span>
         </div>
       </a>
       <a href="checklists/lease-contract.html" class="tool-card">
         <div class="tool-card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M6 21V8l6-4 6 4v13"/>
-            <path d="M10 21v-6h4v6"/>
-            <circle cx="17" cy="17" r="4" fill="#fff"/>
-            <path d="M15.5 17l1.2 1.2L19 16"/>
+            <rect x="5" y="3" width="14" height="18" rx="2"/>
+            <path d="M9 8h6M9 12h6M9 16h4"/>
           </svg>
         </div>
         <div class="tool-card-body">
-          <strong>전세계약 체크</strong>
+          <strong>전세계약</strong>
           <span>보증금 지킴 3종</span>
         </div>
+      </a>
+      <a href="checklists/moving-day.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="8" width="11" height="9" rx="1"/>
+            <path d="M14 11h5l3 3v3h-8z"/>
+            <circle cx="7" cy="18" r="1.8"/>
+            <circle cx="17" cy="18" r="1.8"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>이사 당일</strong>
+          <span>전입·관리비·인수</span>
+        </div>
+      </a>
+      <a href="checklists/interior-contract.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="4" width="6" height="6" rx="1"/>
+            <path d="M14 5h6M14 9h6M4 14h16M4 18h11"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>인테리어 계약</strong>
+          <span>견적·표준계약·하자</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Buying tips strip ===== -->
+<section class="home-tips">
+  <div class="container">
+    <div class="strip-head">
+      <h2>좋은 집 보는 눈 <span class="strip-sub">— 매매 전에 꼭 짚고 갈 포인트</span></h2>
+      <a href="categories/sale.html#tips" class="strip-link">전체 꿀팁 →</a>
+    </div>
+    <div class="tip-cards">
+      <a href="categories/sale.html#tips-river" class="tip-card">
+        <div class="tip-card-num">01</div>
+        <h3>강·공원 조망</h3>
+        <p>같은 단지에서도 한강·천·공원 조망 라인은 시세가 10~25% 높게 형성됩니다. 한강·중랑천·탄천 조망 가능 호수는 매도가 빠릅니다.</p>
+      </a>
+      <a href="categories/sale.html#tips-bay" class="tip-card">
+        <div class="tip-card-num">02</div>
+        <h3>3베이·4베이 구조</h3>
+        <p>판상형 3베이 이상은 환기·채광이 압도적. 같은 평형 타워형보다 실평수가 더 넓게 느껴지고 거주 만족도가 높습니다.</p>
+      </a>
+      <a href="categories/sale.html#tips-far" class="tip-card">
+        <div class="tip-card-num">03</div>
+        <h3>용적률·건폐율</h3>
+        <p>재건축 가능성을 판단하는 핵심. 200% 이하면 사업성이 살아납니다. 단지 배치도·층고와 함께 봐야 의미가 있습니다.</p>
+      </a>
+      <a href="categories/sale.html#tips-direction" class="tip-card">
+        <div class="tip-card-num">04</div>
+        <h3>향(向)과 채광</h3>
+        <p>남향 > 남동 > 남서 > 동 > 서 > 북. 같은 향이라도 앞동과의 거리·층수에 따라 일조량이 크게 달라집니다.</p>
+      </a>
+      <a href="categories/sale.html#tips-school" class="tip-card">
+        <div class="tip-card-num">05</div>
+        <h3>학군·생활권</h3>
+        <p>초품아(초등학교 품은 아파트)·중학교 학군은 매매가의 안전판. 도보 5~10분이면 충분, 길 건너야 하면 마이너스.</p>
+      </a>
+      <a href="categories/sale.html#tips-station" class="tip-card">
+        <div class="tip-card-num">06</div>
+        <h3>역세권 (도보 5분)</h3>
+        <p>지하철역까지 도보 5분이 황금선. 10분 이상이면 ‘역세권’ 표기는 마케팅 용어. 호선과 노선 환승까지 봐야 합니다.</p>
       </a>
     </div>
   </div>
