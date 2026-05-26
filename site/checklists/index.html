@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>체크리스트 — 톺다</title>
-<meta name="description" content="매매·전세·이사·인테리어 단계별 체크리스트. 진행 상태가 자동 저장됩니다." />
+<meta name="description" content="매매·전세·이사·인테리어 단계별 체크리스트. 진행 상태와 메모가 자동 저장됩니다." />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css" />
 </head>
@@ -31,28 +31,21 @@
   <div class="article-header">
     <div class="breadcrumb"><a href="../index.html">홈</a> / 체크리스트</div>
     <h1>체크리스트</h1>
-    <div class="meta"><span>거래·이사·인테리어 단계별 체크리스트. 항목별 메모와 진행 상태가 자동 저장됩니다.</span></div>
+    <div class="meta"><span>거래·이사·인테리어 단계별 점검표. 체크 상태와 메모가 이 브라우저에 자동 저장됩니다.</span></div>
   </div>
 
-  <div class="section" style="padding-top: 0;">
-    <h2 style="font-size: 1rem; color: var(--text-muted); font-weight: 500; margin-bottom: 16px;">매매</h2>
-    <div class="cards-grid" style="margin-bottom: 40px;">
-      <a class="hub-card" href="sale-balance-day.html" data-cl-hub-card="sale-balance-day">
+  <section class="hub-section">
+    <div class="hub-section-head">
+      <span class="hub-section-tag">매매</span>
+      <h2>매매 거래</h2>
+      <p>아파트·주택을 살 때 잔금일에 빠뜨리면 손해 보는 항목을 단계별로 점검합니다.</p>
+    </div>
+    <div class="hub-grid">
+      <a class="hub-card hub-card-tall" href="sale-balance-day.html" data-cl-hub-card="sale-balance-day">
         <div class="head">
           <div style="flex:1">
-            <h3>매매 잔금일</h3>
-            <p class="desc">잔금일 전·당일·후 챙길 30가지. 등기·관리비 정산까지.</p>
-          </div>
-          <div class="pct" data-cl-hub-pct>0%</div>
-        </div>
-        <div class="bar-track"><div class="bar" data-cl-hub-bar></div></div>
-        <div class="stats" data-cl-hub-stats>시작 전</div>
-      </a>
-      <a class="hub-card" href="lease-contract.html" data-cl-hub-card="lease-contract">
-        <div class="head">
-          <div style="flex:1">
-            <h3>전세 계약</h3>
-            <p class="desc">권리관계 확인 → 계약 → 잔금일 보증금 보호 3종 세트.</p>
+            <h3>매매 잔금일 체크리스트</h3>
+            <p class="desc">잔금일 전(D-7) · 당일 · 후(D+14) 챙길 30가지. 등기·세금·관리비 정산까지.</p>
           </div>
           <div class="pct" data-cl-hub-pct>0%</div>
         </div>
@@ -60,25 +53,20 @@
         <div class="stats" data-cl-hub-stats>시작 전</div>
       </a>
     </div>
+  </section>
 
-    <h2 style="font-size: 1rem; color: var(--text-muted); font-weight: 500; margin-bottom: 16px;">이사·인테리어</h2>
-    <div class="cards-grid">
-      <a class="hub-card" href="moving-day.html" data-cl-hub-card="moving-day">
+  <section class="hub-section">
+    <div class="hub-section-head">
+      <span class="hub-section-tag">전세 · 월세</span>
+      <h2>임대차 계약</h2>
+      <p>보증금을 지키려면 ‘대항력 + 우선변제권 + 보증보험’ 3중 방어. 잔금일에 한 번에 갖춰야 안전합니다.</p>
+    </div>
+    <div class="hub-grid">
+      <a class="hub-card hub-card-tall" href="lease-contract.html" data-cl-hub-card="lease-contract">
         <div class="head">
           <div style="flex:1">
-            <h3>이사 당일</h3>
-            <p class="desc">짐 분류·이삿짐센터·전입·우편물 이전까지.</p>
-          </div>
-          <div class="pct" data-cl-hub-pct>0%</div>
-        </div>
-        <div class="bar-track"><div class="bar" data-cl-hub-bar></div></div>
-        <div class="stats" data-cl-hub-stats>시작 전</div>
-      </a>
-      <a class="hub-card" href="interior-contract.html" data-cl-hub-card="interior-contract">
-        <div class="head">
-          <div style="flex:1">
-            <h3>인테리어 계약</h3>
-            <p class="desc">견적 비교 → 표준계약 → 공정 → 하자 보수.</p>
+            <h3>전세 계약 체크리스트</h3>
+            <p class="desc">권리관계 확인 → 계약 → 잔금일 보증금 보호 3종. 깡통전세 위험신호 점검표.</p>
           </div>
           <div class="pct" data-cl-hub-pct>0%</div>
         </div>
@@ -86,13 +74,45 @@
         <div class="stats" data-cl-hub-stats>시작 전</div>
       </a>
     </div>
-  </div>
+  </section>
+
+  <section class="hub-section">
+    <div class="hub-section-head">
+      <span class="hub-section-tag">이사 · 인테리어</span>
+      <h2>이사·인테리어</h2>
+      <p>이사 당일과 인테리어 계약 단계에서 챙길 항목을 한곳에 모았습니다.</p>
+    </div>
+    <div class="hub-grid">
+      <a class="hub-card hub-card-tall" href="moving-day.html" data-cl-hub-card="moving-day">
+        <div class="head">
+          <div style="flex:1">
+            <h3>이사 당일 체크리스트</h3>
+            <p class="desc">짐 분류 · 이삿짐센터 · 전입신고 · 우편물 이전까지.</p>
+          </div>
+          <div class="pct" data-cl-hub-pct>0%</div>
+        </div>
+        <div class="bar-track"><div class="bar" data-cl-hub-bar></div></div>
+        <div class="stats" data-cl-hub-stats>시작 전</div>
+      </a>
+      <a class="hub-card hub-card-tall" href="interior-contract.html" data-cl-hub-card="interior-contract">
+        <div class="head">
+          <div style="flex:1">
+            <h3>인테리어 계약 체크리스트</h3>
+            <p class="desc">견적 비교 → 표준계약 → 공정관리 → 하자보수 청구까지.</p>
+          </div>
+          <div class="pct" data-cl-hub-pct>0%</div>
+        </div>
+        <div class="bar-track"><div class="bar" data-cl-hub-bar></div></div>
+        <div class="stats" data-cl-hub-stats>시작 전</div>
+      </a>
+    </div>
+  </section>
 
   <div class="callout callout-info" style="margin-top: 32px;">
     <div class="icon">i</div>
     <div class="body">
       <strong>체크 상태와 메모는 이 브라우저에만 저장됩니다.</strong>
-      다른 기기에서 이어 보려면 ‘내보내기’ 기능으로 텍스트로 저장하세요.
+      다른 기기에서 이어 보려면 체크리스트 상단의 ‘내보내기’ 기능으로 텍스트 파일로 저장하세요.
     </div>
   </div>
 </main>
@@ -100,7 +120,7 @@
 <footer class="site-footer">
   <div class="container">
     <div class="row">
-      <div><div class="brand"><span class="brand-mark"></span>톺다</div><p>부동산, 톺아보면 보인다.</p></div>
+      <div><div class="brand"><span class="brand-mark"></span>톺다</div><p>부동산, 하나하나 톺아보자.</p></div>
       <div><h4>탐색</h4><ul><li><a href="../index.html#categories">카테고리</a></li><li><a href="../calculators/index.html">계산기</a></li><li><a href="../checklists/index.html">체크리스트</a></li></ul></div>
       <div><h4>사이트 정보</h4><ul><li><a href="../about.html">소개</a></li><li><a href="../about.html#disclaimer">면책고지</a></li></ul></div>
     </div>
