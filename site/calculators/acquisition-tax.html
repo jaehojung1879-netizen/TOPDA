@@ -77,7 +77,16 @@
         <label class="check-item" style="padding: 0; cursor: pointer;">
           <input type="checkbox" name="areaOver85"/>
           <span class="text">전용면적 85㎡ 초과
-            <span class="note">초과 시 농어촌특별세 0.2% 추가됩니다.</span>
+            <span class="note">국민주택규모(85㎡) 초과 시 농어촌특별세가 부과됩니다. 표준세율 0.2%, 중과 8% → 0.6%, 중과 12% → 1.0%.</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label class="check-item" style="padding: 0; cursor: pointer;">
+          <input type="checkbox" name="firstHome"/>
+          <span class="text">생애최초 주택 구입자
+            <span class="note">무주택 세대 + 가액 12억원 이하 + 1주택 표준세율 적용 시 취득세 최대 200만 원 감면 (지방세특례제한법 제36조의2).</span>
           </span>
         </label>
       </div>
@@ -93,8 +102,12 @@
           <span class="val" data-out="rate">—</span>
         </div>
         <div class="row sub">
-          <span class="key">취득세</span>
+          <span class="key">취득세 (감면 후)</span>
           <span class="val" data-out="acquisition">0원</span>
+        </div>
+        <div class="row sub">
+          <span class="key">생애최초 감면</span>
+          <span class="val" data-out="firstHomeDeduct">해당 없음</span>
         </div>
         <div class="row sub">
           <span class="key">농어촌특별세</span>
@@ -109,9 +122,9 @@
       <div class="callout callout-info" style="margin-top: 24px; margin-bottom: 0;">
         <div class="icon">i</div>
         <div class="body">
-          <strong>실 부담액은 다를 수 있습니다.</strong>
-          본 계산기는 일반 주거용 매매 표준세율을 기준으로 산정합니다.
-          생애최초·신생아 등 감면, 분양권·조합원입주권은 별도 계산이 필요합니다.
+          <strong>면적·주택수·중과 여부에 따라 부가세가 달라집니다.</strong>
+          농어촌특별세는 85㎡ 초과 + 중과 적용 시 0.6~1.0%, 지방교육세는 중과 시 매매가의 0.4%로 별도 산정됩니다.
+          신생아 감면·분양권·조합원입주권·법인 명의는 별도 규정이 적용됩니다.
         </div>
       </div>
     </div>
@@ -136,6 +149,21 @@
       </table>
     </div>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">6~9억 구간 누진식: 세율(%) = (취득가액 × 2 / 3억) − 3</p>
+
+    <h3 style="margin-top: 28px; margin-bottom: 12px;">면적·주택수에 따른 부가세 차이</h3>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>구분</th><th>85㎡ 이하</th><th>85㎡ 초과</th></tr></thead>
+        <tbody>
+          <tr><th>농어촌특별세 (표준세율 1~3%)</th><td>면제</td><td>0.2%</td></tr>
+          <tr><th>농어촌특별세 (중과 8%)</th><td>면제</td><td>0.6%</td></tr>
+          <tr><th>농어촌특별세 (중과 12%)</th><td>면제</td><td>1.0%</td></tr>
+          <tr><th>지방교육세 (표준세율 적용)</th><td colspan="2">본 취득세의 10% (면적 무관)</td></tr>
+          <tr><th>지방교육세 (중과 적용)</th><td colspan="2">매매가의 0.4% (면적 무관)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">출처: 농어촌특별세법 제5조, 지방세법 제151조</p>
   </section>
 
   <section style="margin-top: 48px;">

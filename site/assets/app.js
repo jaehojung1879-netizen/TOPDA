@@ -176,42 +176,71 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 // ===== Acquisition Tax Calculator =====
-// 단순화 모델: 일반 주거용 매매 기준.
-// - 1주택: 6억 이하 1.0%, 6~9억 (가격×2/3억-3)%, 9억 초과 3.0%
-// - 2주택: 조정대상지역 8.0% / 비조정 1~3% (1주택 동일 누진)
-// - 3주택: 조정 12.0% / 비조정 8.0%
-// - 4주택+: 12.0%
-// 부가: 농어촌특별세(국민주택규모 초과 시 0.2%), 지방교육세 = 취득세율 × 1/2 × 20% 등 단순화
+// 모델 (주거용 매매 기준, 지방세법 제11·제15조 / 지방세법 시행령 / 농어촌특별세법 / 지방세특례제한법 제36조의2):
+// 1) 본세(취득세)
+//    - 1주택: 6억 이하 1.0%, 6~9억 누진(가격×2/3-3)%, 9억 초과 3.0%
+//    - 2주택: 조정대상 8.0% / 비조정은 1주택과 동일
+//    - 3주택: 조정 12.0% / 비조정 8.0%
+//    - 4주택+: 12.0%
+// 2) 농어촌특별세 (면적 영향)
+//    - 전용 85㎡ 이하: 면제(국민주택규모)
+//    - 전용 85㎡ 초과 + 표준세율(1~3%): 매매가의 0.2%
+//    - 전용 85㎡ 초과 + 중과세율 8%: 0.6%
+//    - 전용 85㎡ 초과 + 중과세율 12%: 1.0%
+// 3) 지방교육세
+//    - 표준세율 적용: 본 취득세 × 10% (= 표준세율의 1/10)
+//    - 중과세율 8%·12% 적용: 매매가의 0.4% 고정
+// 4) 생애최초 주택 취득 감면 (지방세특례제한법 제36조의2)
+//    - 무주택 세대 + 가액 12억 이하 → 취득세 최대 200만 원 한도 감면
 function calcAcquisitionTax(input) {
-  const { price, homes, regulated, areaOver85 } = input;
+  const { price, homes, regulated, areaOver85, firstHome } = input;
   if (!price || price <= 0) return null;
-  const eok = price / 100000000; // 억 단위
-  let baseRate;
+  const eok = price / 100000000;
+  let baseRate, isHeavy = false;
   if (homes === 1) {
     if (eok <= 6) baseRate = 0.01;
     else if (eok <= 9) baseRate = ((eok * 2 / 3) - 3) / 100;
     else baseRate = 0.03;
   } else if (homes === 2) {
-    baseRate = regulated ? 0.08 : (eok <= 6 ? 0.01 : eok <= 9 ? ((eok * 2 / 3) - 3) / 100 : 0.03);
+    if (regulated) { baseRate = 0.08; isHeavy = true; }
+    else baseRate = (eok <= 6 ? 0.01 : eok <= 9 ? ((eok * 2 / 3) - 3) / 100 : 0.03);
   } else if (homes === 3) {
     baseRate = regulated ? 0.12 : 0.08;
+    isHeavy = true;
   } else {
     baseRate = 0.12;
+    isHeavy = true;
   }
   baseRate = Math.max(baseRate, 0.01);
 
-  const acquisition = price * baseRate;
-  // 농어촌특별세: 전용 85㎡ 초과 시 0.2% (단순화)
-  const ruralTax = areaOver85 ? price * 0.002 : 0;
-  // 지방교육세: 취득세율의 50% × 20% (= 취득세의 10%) 단순화
-  const localEduTax = acquisition * 0.10;
+  let acquisition = price * baseRate;
+
+  // 생애최초 감면 (1주택·표준세율·12억 이하)
+  let firstHomeDeduct = 0;
+  if (firstHome && homes === 1 && !isHeavy && eok <= 12) {
+    firstHomeDeduct = Math.min(2000000, acquisition);
+    acquisition = acquisition - firstHomeDeduct;
+  }
+
+  // 농어촌특별세
+  let ruralTax = 0;
+  if (areaOver85) {
+    if (isHeavy && baseRate >= 0.12) ruralTax = price * 0.010;
+    else if (isHeavy && baseRate >= 0.08) ruralTax = price * 0.006;
+    else ruralTax = price * 0.002;
+  }
+
+  // 지방교육세
+  let localEduTax;
+  if (isHeavy) localEduTax = price * 0.004;
+  else localEduTax = (price * baseRate) * 0.10; // 표준세율 적용분 기준 (감면 전 본세의 10%)
+
   const total = acquisition + ruralTax + localEduTax;
 
   return {
-    baseRate,
-    acquisition,
-    ruralTax,
-    localEduTax,
+    baseRate, isHeavy,
+    acquisition, firstHomeDeduct,
+    ruralTax, localEduTax,
     total,
   };
 }
@@ -220,29 +249,26 @@ function calcAcquisitionTax(input) {
   const root = document.querySelector('[data-calc="acquisition-tax"]');
   if (!root) return;
   const inputs = root.querySelectorAll('input, select');
-  const out = {
-    rate: root.querySelector('[data-out="rate"]'),
-    acquisition: root.querySelector('[data-out="acquisition"]'),
-    ruralTax: root.querySelector('[data-out="ruralTax"]'),
-    localEduTax: root.querySelector('[data-out="localEduTax"]'),
-    total: root.querySelector('[data-out="total"]'),
-  };
+  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
   const recalc = () => {
     const price = fmt.parseWon(root.querySelector('[name="price"]').value);
     const homes = Number(root.querySelector('[name="homes"]:checked')?.value || 1);
     const regulated = root.querySelector('[name="regulated"]')?.checked || false;
     const areaOver85 = root.querySelector('[name="areaOver85"]')?.checked || false;
-    const r = calcAcquisitionTax({ price, homes, regulated, areaOver85 });
+    const firstHome = root.querySelector('[name="firstHome"]')?.checked || false;
+    const r = calcAcquisitionTax({ price, homes, regulated, areaOver85, firstHome });
     if (!r) {
-      if (out.total) out.total.textContent = '0원';
-      ['acquisition','ruralTax','localEduTax','rate'].forEach(k => { if (out[k]) out[k].textContent = k === 'rate' ? '—' : '0원'; });
+      setText('total', fmt.won(0));
+      ['acquisition','ruralTax','localEduTax','firstHomeDeduct'].forEach(k => setText(k, fmt.won(0)));
+      setText('rate', '—');
       return;
     }
-    if (out.rate) out.rate.textContent = (r.baseRate * 100).toFixed(2) + '%';
-    if (out.acquisition) out.acquisition.textContent = fmt.won(r.acquisition);
-    if (out.ruralTax) out.ruralTax.textContent = fmt.won(r.ruralTax);
-    if (out.localEduTax) out.localEduTax.textContent = fmt.won(r.localEduTax);
-    if (out.total) out.total.textContent = fmt.won(r.total);
+    setText('rate', (r.baseRate * 100).toFixed(2) + '%' + (r.isHeavy ? (isEn ? ' (heavy)' : ' (중과)') : ''));
+    setText('acquisition', fmt.won(r.acquisition));
+    setText('ruralTax', fmt.won(r.ruralTax));
+    setText('localEduTax', fmt.won(r.localEduTax));
+    setText('firstHomeDeduct', r.firstHomeDeduct ? '−' + fmt.won(r.firstHomeDeduct) : (isEn ? 'N/A' : '해당 없음'));
+    setText('total', fmt.won(r.total));
   };
   inputs.forEach((el) => el.addEventListener('input', recalc));
   inputs.forEach((el) => el.addEventListener('change', recalc));
@@ -686,6 +712,102 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       else verdict = '시세보다 비쌈 — 재검토';
     }
     setText('verdict', verdict);
+  };
+  root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
+  recalc();
+})();
+
+// ===== Interior estimate calculator =====
+// 단가표(원): 기본/중간/프리미엄
+// - 면적 비례: 도배(㎡), 바닥재(㎡), 도장(㎡)
+// - 평형 비례 1식: 욕실, 주방, 샷시, 발코니, 조명, 전기, 방문, 붙박이장, 에어컨, 철거
+const INTERIOR_PRICES = {
+  // 면적당 단가 (원/㎡)
+  wallpaper: { basic: 18000, standard: 25000, premium: 35000 },
+  floor:     { basic: 40000, standard: 60000, premium: 90000 },
+  paint:     { basic: 12000, standard: 18000, premium: 26000 }, // 천장+벽 일부 (전용면적의 60%)
+  film:      { basic: 9000,  standard: 14000, premium: 20000 }, // 전용면적의 20%
+  // 정액 (원/식 또는 단위당)
+  bath:      { basic: 2500000, standard: 4000000, premium: 7000000 },
+  bath2:     { basic: 2500000, standard: 4000000, premium: 7000000 },
+  kitchen:   { basic: 4000000, standard: 6500000, premium: 12000000 },
+  window:    { basic: 9000000, standard: 14000000, premium: 22000000, scaleBy: 'area', scaleBase: 84 },
+  balcony:   { basic: 3000000, standard: 4500000, premium: 7000000 },
+  tile:      { basic: 1200000, standard: 1800000, premium: 2800000 },
+  lighting:  { basic: 800000,  standard: 1500000, premium: 3000000 },
+  electric:  { basic: 600000,  standard: 900000,  premium: 1400000 },
+  door:      { basic: 900000,  standard: 1350000, premium: 2100000 }, // 3개분
+  closet:    { basic: 2400000, standard: 3600000, premium: 5600000 }, // 2m
+  airconClean:{basic: 200000,  standard: 280000,  premium: 380000 },
+  cleanout:  { basic: 1500000, standard: 2200000, premium: 3500000, scaleBy: 'area', scaleBase: 84 },
+};
+const INTERIOR_LABELS = {
+  wallpaper: '도배', floor: '바닥재', paint: '도장', film: '시트지/필름',
+  bath: '욕실', bath2: '욕실 추가', kitchen: '주방',
+  window: '샷시·창호', balcony: '발코니 확장', tile: '타일',
+  lighting: '조명', electric: '전기·콘센트', door: '방문 교체',
+  closet: '붙박이장', airconClean: '에어컨', cleanout: '철거·폐기물',
+};
+const AREA_BASED = new Set(['wallpaper', 'floor', 'paint', 'film']);
+const PAINT_RATIO = { paint: 0.6, film: 0.2 }; // 면적 일부만 적용
+
+function calcInteriorEstimate({ area, grade, items }) {
+  if (!area || area <= 0) return null;
+  const breakdown = [];
+  let total = 0;
+  items.forEach((key) => {
+    const def = INTERIOR_PRICES[key];
+    if (!def) return;
+    const unit = def[grade];
+    let cost;
+    if (AREA_BASED.has(key)) {
+      const ratio = PAINT_RATIO[key] || 1.0;
+      cost = unit * area * ratio;
+    } else if (def.scaleBy === 'area') {
+      cost = unit * (area / (def.scaleBase || 84));
+    } else {
+      cost = unit;
+    }
+    cost = Math.round(cost);
+    breakdown.push({ key, label: INTERIOR_LABELS[key] || key, cost });
+    total += cost;
+  });
+  return { total, breakdown };
+}
+
+(function () {
+  const root = document.querySelector('[data-calc="interior-estimate"]');
+  if (!root) return;
+  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+  const recalc = () => {
+    const area = Number(root.querySelector('[name="area"]').value || 0);
+    const grade = root.querySelector('[name="grade"]:checked')?.value || 'basic';
+    const items = Array.from(root.querySelectorAll('[name="item"]:checked')).map(el => el.value);
+    const r = calcInteriorEstimate({ area, grade, items });
+    if (!r) {
+      setText('total', fmt.won(0));
+      setText('range', '—'); setText('perPyeong', '—');
+      const bd = root.querySelector('[data-out="itemBreakdown"]');
+      if (bd) bd.innerHTML = '';
+      return;
+    }
+    setText('total', fmt.won(r.total));
+    setText('range', fmt.won(r.total * 0.85) + ' ~ ' + fmt.won(r.total * 1.25));
+    const pyeong = area / 3.3058;
+    setText('perPyeong', pyeong > 0 ? fmt.won(r.total / pyeong) + ' / 평' : '—');
+    const bd = root.querySelector('[data-out="itemBreakdown"]');
+    if (bd) {
+      bd.innerHTML = '';
+      r.breakdown.forEach((b) => {
+        const row = document.createElement('div');
+        row.className = 'row sub';
+        row.innerHTML = `<span class="key">${b.label}</span><span class="val">${fmt.won(b.cost)}</span>`;
+        bd.appendChild(row);
+      });
+      if (!r.breakdown.length) {
+        bd.innerHTML = '<div class="row sub"><span class="key" style="color:var(--text-subtle)">시공 항목을 선택하세요</span><span class="val"></span></div>';
+      }
+    }
   };
   root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
   recalc();
