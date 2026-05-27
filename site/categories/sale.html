@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>매매 종합 가이드 — 톺다</title>
-<meta name="description" content="아파트 매매 전 과정의 흐름·공식 계약서·필수 확인 사항을 한 곳에. 자금 계획부터 등기 완료까지." />
+<title>매매 — 톺다</title>
+<meta name="description" content="아파트·주택 매매에 필요한 모든 것. 좋은 집 보는 눈, 등기부 읽는 법, 계약서 특약, 잔금일 정산, 세금까지 주제별로." />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css" />
 </head>
@@ -15,9 +15,9 @@
     <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
     <nav class="nav">
       <a href="../index.html" data-nav>홈</a>
-      <a href="../index.html#categories" data-nav class="active">카테고리</a>
       <a href="../calculators/index.html" data-nav>계산기</a>
       <a href="../checklists/index.html" data-nav>체크리스트</a>
+      <a href="../index.html#categories" data-nav class="active">가이드</a>
       <a href="../about.html" data-nav>소개</a>
     </nav>
     <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기">
@@ -26,303 +26,167 @@
   </div>
   <div class="mobile-menu" data-mobile-menu>
     <a href="../index.html">홈</a>
-    <a href="../index.html#categories">카테고리</a>
     <a href="../calculators/index.html">계산기</a>
     <a href="../checklists/index.html">체크리스트</a>
+    <a href="../index.html#categories">가이드</a>
     <a href="../about.html">소개</a>
   </div>
 </header>
 
 <main class="container">
   <div class="article-header">
-    <div class="breadcrumb"><a href="../index.html">홈</a> / 카테고리 / 매매</div>
+    <div class="breadcrumb"><a href="../index.html">홈</a> / 매매</div>
     <div class="tag-row">
       <span class="badge badge-accent">매매</span>
-      <span class="badge">종합 가이드</span>
     </div>
-    <h1>매매 종합 가이드</h1>
+    <h1>매매</h1>
     <div class="meta">
-      <span>전체 흐름 · 공식 계약서 · 필수 확인 사항</span>
-      <span class="dot">·</span>
-      <span>최종 갱신 2026.05.25</span>
+      <span>아파트·주택 매매에 필요한 7개 주제 — 좋은 집 보는 눈부터 등기 완료까지</span>
     </div>
   </div>
 
-  <div class="layout-with-toc">
-    <div>
-      <div class="article-summary">
-        <div class="label">한 줄 결론</div>
-        <p>‘예산 → 매물 → 계약 → 잔금 → 등기’ 5단계만 정확히 밟으면, 보통의 매매는 4~8주 안에 마무리됩니다.</p>
-      </div>
-
-      <h2 id="flow">매매 스케줄 (D-60 → 등기 완료)</h2>
-      <p style="color: var(--text-muted);">평균 6~8주. 자금 준비가 되어 있다면 4주도 가능합니다. 각 단계의 ‘when’은 잔금일을 D-day로 한 기준입니다.</p>
-
-      <div class="flow">
-        <div class="flow-step" data-step="1">
-          <h3>예산 수립 · 자금 계획</h3>
-          <div class="when">D-60 ~ D-30</div>
-          <p class="body">자기자본 + 가능한 대출액 + 부대비용(취득세·중개수수료·법무사·이사·인테리어)을 합산해 ‘총 사용 가능 금액’을 산정합니다.</p>
-          <div class="actions">
-            <span>DSR·LTV 한도 확인 (은행 또는 정부24 ‘주택담보대출 한도 사전 확인’)</span>
-            <span>부대비용 추정: <a href="../calculators/acquisition-tax.html">취득세 계산기</a> · <a href="../calculators/brokerage-fee.html">중개수수료 계산기</a></span>
-            <span>최소 1~3주 비상금 분리 보관</span>
-          </div>
-        </div>
-
-        <div class="flow-step" data-step="2">
-          <h3>매물 탐색 · 임장</h3>
-          <div class="when">D-30 ~ D-7</div>
-          <p class="body">실거래가·시세를 비교한 뒤 임장에서 실사용 가치를 확인합니다. 같은 단지·평형이라도 동·층·향에 따라 1억 차이 나는 게 흔합니다.</p>
-          <div class="actions">
-            <span>실거래가: 국토교통부 ‘실거래가 공개시스템’ (rt.molit.go.kr)</span>
-            <span>등기부등본 발급(인터넷등기소) → 소유자·근저당·가압류·임차권 확인</span>
-            <span>건축물대장 확인(정부24) → 위반건축물 여부</span>
-            <span>임장 시 채광·환기·층간소음·주차·관리상태 직접 확인</span>
-          </div>
-        </div>
-
-        <div class="flow-step" data-step="3">
-          <h3>계약 (계약금 5~10%)</h3>
-          <div class="when">D-day (계약일)</div>
-          <p class="body">계약금은 보통 매매가의 5~10%. 계약 즉시 임의 해지가 어려워지므로 가계약 전 자금·대출 가능 여부를 최종 확인해야 합니다.</p>
-          <div class="actions">
-            <span>등기부등본을 ‘계약 당일 아침’에 재발급하여 가압류·근저당 변동 확인</span>
-            <span>매도자 본인 여부·신분증 대조</span>
-            <span>중도금·잔금 일정과 금액 명시</span>
-            <span>특약사항(현 상태·하자보수·옵션 인계·잔금일 정산) 명문화</span>
-            <span>계약 후 30일 내 부동산거래신고 (보통 중개인이 처리)</span>
-          </div>
-        </div>
-
-        <div class="flow-step" data-step="4">
-          <h3>중도금 (생략 가능)</h3>
-          <div class="when">D-day + 2~6주</div>
-          <p class="body">매매가의 30~40%를 중도금으로 납부. 중도금 송금 후에는 매도자의 단순 해약이 거의 불가능합니다(이행착수). 계약금만으로 잔금까지 가는 경우도 많습니다.</p>
-          <div class="actions">
-            <span>중도금이 있다면, 이체일·계좌 명문화</span>
-            <span>중도금 송금 시 등기부등본 재확인</span>
-          </div>
-        </div>
-
-        <div class="flow-step" data-step="5">
-          <h3>잔금 · 등기 이전</h3>
-          <div class="when">잔금일</div>
-          <p class="body">잔금 송금과 동시에 등기 이전을 신청합니다. 법무사 동행이 일반적. 잔금일 정산(관리비·선수관리비·장기수선충당금)을 한 번에 처리합니다.</p>
-          <div class="actions">
-            <span>잔금일 아침 등기부등본 ‘마지막’ 재발급</span>
-            <span>잔금 송금 → 매도자 통장 입금 확인 → 법무사가 등기 신청</span>
-            <span>취득세 신고·납부 (잔금일 ~ 60일 내, 실무상 당일)</span>
-            <span>관리비 일할·선수관리비·장기수선충당금 정산</span>
-            <span>전입신고 (잔금일 ~ 14일 내)</span>
-          </div>
-        </div>
-      </div>
-
-      <h2 id="tips">좋은 집 보는 눈 — 매매 전에 꼭 짚어야 할 12가지</h2>
-      <p style="color: var(--text-muted);">실거주 만족도와 향후 시세를 동시에 좌우하는 포인트. 임장 갈 때 이 항목을 그대로 들고 다니세요.</p>
-
-      <div class="tip-grid">
-        <div class="tip-row" id="tips-river">
-          <div class="tip-row-num">01</div>
-          <div class="tip-row-body">
-            <h3>강·공원·산 조망 (자연 조망)</h3>
-            <p>같은 단지에서도 한강·중랑천·탄천 등 수변 조망 호수는 시세가 <strong>10~25% 높게</strong> 형성. 매도 회전도 압도적으로 빠릅니다. ‘파인뷰(공원뷰)’도 비슷한 프리미엄. 단, 시야 막힘(앞동 거리·층수)을 반드시 현장에서 확인하세요.</p>
-          </div>
-        </div>
-        <div class="tip-row" id="tips-bay">
-          <div class="tip-row-num">02</div>
-          <div class="tip-row-body">
-            <h3>3베이 vs 4베이 vs 타워형</h3>
-            <p>‘베이’는 거실+방이 일렬로 늘어선 칸 수. <strong>판상형 3베이 이상은 채광·환기·실평수 체감이 압도적</strong>으로 좋습니다. 타워형은 조망은 좋지만 같은 평형 대비 실평수가 작고 환기가 어렵습니다. 30평대는 3베이, 40평 이상은 4베이가 표준.</p>
-          </div>
-        </div>
-        <div class="tip-row" id="tips-far">
-          <div class="tip-row-num">03</div>
-          <div class="tip-row-body">
-            <h3>용적률·건폐율 (재건축 가능성)</h3>
-            <p>‘용적률 = 연면적 ÷ 대지면적’. <strong>200% 이하</strong>면 재건축 사업성이 살아납니다. 3종 일반주거지역 상한 300%. 1기 신도시 평촌·분당은 200% 안팎이라 재건축 기대감이 큽니다. 건폐율(20% 안팎)이 낮을수록 동간 거리가 넓어 채광·프라이버시가 좋습니다.</p>
-          </div>
-        </div>
-        <div class="tip-row" id="tips-direction">
-          <div class="tip-row-num">04</div>
-          <div class="tip-row-body">
-            <h3>향(向)과 일조량</h3>
-            <p>남향 > 남동향 > 남서향 > 동향 > 서향 > 북향. <strong>같은 남향도 앞동 간격과 층수가 일조를 결정</strong>. 동지(冬至) 기준 오전 9시~오후 3시 일조가 2시간 이상이면 양호. 임장은 가능하면 정오~오후 2시 시점에 채광을 직접 확인하세요.</p>
-          </div>
-        </div>
-        <div class="tip-row" id="tips-school">
-          <div class="tip-row-num">05</div>
-          <div class="tip-row-body">
-            <h3>학군 — 초품아 + 중학교</h3>
-            <p>‘초품아(초등학교를 품은 아파트)’는 도보 5~10분, 길 안 건너고 통학이 핵심. 매매가의 안전판 역할. 중학교는 평준화 학군이라도 ‘배정 가능 풀’과 ‘이전 진학 결과’를 확인. 강남·목동·중계 같은 명문 학군지는 학기 시작 직전 거래가 폭증합니다.</p>
-          </div>
-        </div>
-        <div class="tip-row" id="tips-station">
-          <div class="tip-row-num">06</div>
-          <div class="tip-row-body">
-            <h3>역세권 — ‘도보 5분’의 진실</h3>
-            <p>지하철역 출구까지 <strong>실측 도보 5분(약 400m)</strong>이 황금선. 부동산 광고의 ‘초역세권 10분’은 마케팅 문구로 보세요. 호선보다 ‘급행정차 여부’와 ‘환승 동선’이 가치 결정. 9호선·신분당선·GTX 노선은 프리미엄.</p>
-          </div>
-        </div>
-        <div class="tip-row" id="tips-floor">
-          <div class="tip-row-num">07</div>
-          <div class="tip-row-body">
-            <h3>층수 — 로열층의 기준</h3>
-            <p>전체 층의 <strong>중간~상위 30%</strong>가 로열층. 21층 단지면 12~18층. 너무 높은 층은 화재·이사·아이 안전 이슈, 너무 낮은 층은 채광·소음·사생활 이슈. 1·2층은 ‘필로티(주차장 위)’가 아니면 시세가 크게 빠집니다.</p>
-          </div>
-        </div>
-        <div class="tip-row" id="tips-noise">
-          <div class="tip-row-num">08</div>
-          <div class="tip-row-body">
-            <h3>층간소음·이중창</h3>
-            <p>2005년 이전 준공 단지는 슬래브 두께 120mm로 층간소음에 취약. 2014년 이후 기준 강화(210mm). 발코니 확장 단지는 이중창(시스템창호) 여부가 결정적. 임장 시 창문 닫고 외부 소음을 체감해보세요.</p>
-          </div>
-        </div>
-        <div class="tip-row" id="tips-parking">
-          <div class="tip-row-num">09</div>
-          <div class="tip-row-body">
-            <h3>주차대수 — 세대당 1.0대 이상</h3>
-            <p>세대당 주차 1.0대 미만이면 야간 주차 전쟁. 1.2대 이상은 안정권. 2000년 이전 단지는 0.7~0.9대가 많아 ‘이중주차’ 일상화. 지상 주차 단지보다 지하 100% 주차 단지가 안전·시세 모두 유리.</p>
-          </div>
-        </div>
-        <div class="tip-row" id="tips-mgmt">
-          <div class="tip-row-num">10</div>
-          <div class="tip-row-body">
-            <h3>관리상태 — 단지 첫인상</h3>
-            <p>현관·복도·엘리베이터·놀이터 청결도를 보세요. <strong>관리비 미납률·장기수선충당금 잔액</strong>은 관리사무소에 정중히 요청 가능. 외벽 균열·옥상 방수·승강기 노후도가 ‘지출 예고편’입니다.</p>
-          </div>
-        </div>
-        <div class="tip-row" id="tips-pyeong">
-          <div class="tip-row-num">11</div>
-          <div class="tip-row-body">
-            <h3>전용면적 vs 공급면적</h3>
-            <p>등기·세금은 <strong>전용면적</strong> 기준. 84㎡(공급 32~34평) 안팎이 국민평형. 85㎡ 초과는 취득세 농어촌특별세 0.2%p, 양도세 비과세 12억 한도가 같은데 평수가 커서 실효세율은 낮아집니다. 서비스면적(발코니)이 큰 곳이 실평수에서 유리.</p>
-          </div>
-        </div>
-        <div class="tip-row" id="tips-future">
-          <div class="tip-row-num">12</div>
-          <div class="tip-row-body">
-            <h3>호재·악재 — 5년 안에 결정될 것</h3>
-            <p>호재: GTX·지하철 연장, 대규모 재개발, 명문 학교 신설, 대형 상업시설. 악재: 쓰레기소각장·송전탑·고속도로 IC 신설, 인접 단지 노후화. <strong>‘5년 이내 확정·착공’이 아니면 가격 반영은 미약</strong>합니다.</p>
-          </div>
-        </div>
-      </div>
-
-      <h2 id="contract">공식 계약서</h2>
-      <p>표준계약서를 사용하면 누락·불공정 조항 위험을 크게 줄일 수 있습니다. 중개사가 다른 양식을 권하더라도 표준양식을 기준으로 검토하세요.</p>
-
-      <div class="contract-card">
-        <span class="label">국토교통부 표준</span>
-        <h3>부동산 매매계약서 (주택)</h3>
-        <p class="issuer">발행: 국토교통부 · 공인중개사협회 공통 사용</p>
-        <ul>
-          <li>매매대금·계약금·중도금·잔금 일정과 금액</li>
-          <li>등기 이전에 필요한 서류와 시점</li>
-          <li>위약금(통상 계약금 상당) 조항</li>
-          <li>특약사항란 — 가장 중요. 옵션·하자·정산 모두 여기 명기</li>
-        </ul>
-        <a class="dl" href="https://www.law.go.kr" target="_blank" rel="noopener">법령정보센터에서 검색 →</a>
-      </div>
-
-      <h3>특약사항에 꼭 들어가야 할 것</h3>
-      <div class="def-list">
-        <div class="row"><div class="k">현 상태 매매</div><div class="v">육안상 확인된 하자 외 추가 보수의무 없음 (또는 ‘다음 항목은 매도자 부담’ 명시)</div></div>
-        <div class="row"><div class="k">옵션 인계</div><div class="v">에어컨·붙박이장·세탁기 등 잔류 옵션의 품명·수량·상태</div></div>
-        <div class="row"><div class="k">잔금일 정산</div><div class="v">선수관리비·장기수선충당금·관리비 일할 계산을 잔금일 정산함</div></div>
-        <div class="row"><div class="k">근저당 말소</div><div class="v">잔금 동시 말소 또는 잔금에서 직접 변제 후 말소</div></div>
-        <div class="row"><div class="k">임차인 명도</div><div class="v">임차인이 있다면 잔금일까지의 명도 책임 명기</div></div>
-        <div class="row"><div class="k">위반건축물</div><div class="v">발견 시 매도자 시정의무 또는 매매대금 조정</div></div>
-      </div>
-
-      <h2 id="cost">핵심 비용</h2>
-      <p>대략적인 부대비용 비율(매매가 10억 기준).</p>
-      <div class="table-wrap">
-        <table class="data">
-          <thead>
-            <tr><th>항목</th><th>비율 / 기준</th><th>10억 매매 시 예시</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>취득세</td><td>1.0% ~ 12% (주택 수·지역)</td><td>1주택 약 3,300만원</td></tr>
-            <tr><td>농어촌특별세</td><td>85㎡ 초과 시 0.2%</td><td>약 200만원</td></tr>
-            <tr><td>지방교육세</td><td>취득세의 10% 수준</td><td>약 330만원</td></tr>
-            <tr><td>중개수수료</td><td>0.4~0.7% + 부가세</td><td>약 440만원</td></tr>
-            <tr><td>법무사비</td><td>30~80만원</td><td>약 50만원</td></tr>
-            <tr><td>인지세·증지·국민주택채권</td><td>몇만~수십만원</td><td>약 30만원</td></tr>
-            <tr><td><strong>합계(1주택 가정)</strong></td><td></td><td><strong>약 4,350만원</strong></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">정확한 금액은 <a href="../calculators/acquisition-tax.html">취득세 계산기</a> 및 <a href="../calculators/brokerage-fee.html">중개수수료 계산기</a>를 활용하세요.</p>
-
-      <h2 id="check">놓치면 위험한 7가지</h2>
-      <div class="callout callout-danger">
-        <div class="icon">⚠</div>
-        <div class="body">
-          <strong>등기부등본은 ‘계약 직전·중도금·잔금일 아침’ 3회 발급</strong>
-          가압류·근저당은 하루 사이에도 추가될 수 있습니다. 인터넷등기소에서 1,000원으로 발급 가능합니다.
-        </div>
-      </div>
-      <ol style="padding-left: 22px; color: var(--text);">
-        <li style="list-style: decimal; margin-bottom: 8px;"><strong>이체 한도</strong> — 1일 이체 한도를 미리 상향해 두지 않으면 잔금 송금이 막힙니다.</li>
-        <li style="list-style: decimal; margin-bottom: 8px;"><strong>건축물대장 확인</strong> — ‘위반건축물’ 표시가 있으면 대출이 막힐 수 있습니다.</li>
-        <li style="list-style: decimal; margin-bottom: 8px;"><strong>임차인 있는 매물</strong> — 대항력 임차인은 매수자에게 승계됩니다. 보증금 인수 여부 명문화.</li>
-        <li style="list-style: decimal; margin-bottom: 8px;"><strong>관리비 미납</strong> — 잔금일 정산 시 매도자의 미납 관리비 확인.</li>
-        <li style="list-style: decimal; margin-bottom: 8px;"><strong>선수관리비 정산</strong> — 매수자가 매도자에게 별도 반환해야 하는 금액.</li>
-        <li style="list-style: decimal; margin-bottom: 8px;"><strong>대출 실행 일정</strong> — 잔금일에 대출 실행이 안 되면 계약 위반 위험.</li>
-        <li style="list-style: decimal; margin-bottom: 8px;"><strong>등기 완료 확인</strong> — 잔금 후 1~2주, 등기부등본에 자기 이름이 올라왔는지 반드시 확인.</li>
-      </ol>
-
-      <h2 id="related">관련 자료</h2>
-      <div class="cards-grid">
-        <a class="card" href="../checklists/sale-balance-day.html">
-          <span class="badge badge-accent">체크리스트</span>
-          <h3>매매 잔금일 체크리스트</h3>
-          <p>잔금일 전·당일·후 챙길 30가지를 단계별로.</p>
-        </a>
-        <a class="card" href="../posts/balance-day-settlement.html">
-          <span class="badge">글</span>
-          <h3>잔금일 정산 5가지</h3>
-          <p>선수관리비·장기수선충당금·관리비 일할 계산.</p>
-        </a>
-        <a class="card" href="../calculators/acquisition-tax.html">
-          <span class="badge badge-success">계산기</span>
-          <h3>취득세 계산기</h3>
-          <p>주택 수·면적·지역 반영 합계 계산.</p>
-        </a>
-      </div>
-
-      <h2 id="sources">출처</h2>
-      <ul class="source-list">
-        <li>부동산 거래신고 등에 관한 법률 (국토교통부)</li>
-        <li>지방세법 제11조·제15조 (취득세)</li>
-        <li>공인중개사법 시행규칙 제20조 (중개보수)</li>
-        <li>주택임대차보호법 (대항력·우선변제권)</li>
-        <li>인터넷등기소 (iros.go.kr) · 정부24 (gov.kr) · 실거래가 공개시스템 (rt.molit.go.kr)</li>
-        <li>조회일: 2026.05.25</li>
-      </ul>
-
-      <div class="callout callout-warn" style="margin-top: 32px;">
-        <div class="icon">⚠</div>
-        <div class="body">
-          <strong>면책</strong>
-          본 가이드는 일반적인 정보 제공용입니다. 개별 사안은 변호사·세무사·공인중개사와 상의하세요. 세율·요건·절차는 시점에 따라 변경됩니다.
-        </div>
-      </div>
+  <section class="topic-section">
+    <div class="strip-head">
+      <h2>전체 스케줄</h2>
+      <span class="strip-sub">D-60 → 등기 완료까지 평균 6~8주</span>
     </div>
+    <ol class="timeline">
+      <li><span class="t-when">D-60 ~ D-30</span><span class="t-what">예산·자금 계획</span><span class="t-tool"><a href="../calculators/dsr.html">DSR 한도 계산</a></span></li>
+      <li><span class="t-when">D-30 ~ D-7</span><span class="t-what">매물 탐색·임장</span><span class="t-tool"><a href="../posts/property-tour.html">임장 체크리스트</a></span></li>
+      <li><span class="t-when">D-day (계약)</span><span class="t-what">계약금 5~10% · 특약 작성</span><span class="t-tool"><a href="../posts/sale-contract-tips.html">계약서 특약 가이드</a></span></li>
+      <li><span class="t-when">D+2~6주</span><span class="t-what">중도금 (생략 가능)</span><span class="t-tool">—</span></li>
+      <li><span class="t-when">잔금일</span><span class="t-what">잔금·등기·정산 동시 처리</span><span class="t-tool"><a href="../checklists/sale-balance-day.html">잔금일 체크리스트</a></span></li>
+    </ol>
+  </section>
 
-    <aside class="toc-sidebar">
-      <div class="label">이 페이지</div>
-      <ol>
-        <li><a href="#flow">전체 흐름 (스케줄)</a></li>
-        <li><a href="#tips">좋은 집 보는 눈 12</a></li>
-        <li><a href="#contract">공식 계약서</a></li>
-        <li><a href="#cost">핵심 비용</a></li>
-        <li><a href="#check">놓치면 위험한 7가지</a></li>
-        <li><a href="#related">관련 자료</a></li>
-        <li><a href="#sources">출처</a></li>
-      </ol>
-    </aside>
+  <section class="topic-section">
+    <div class="strip-head">
+      <h2>매매 주제별 가이드</h2>
+      <span class="strip-sub">관심 있는 주제를 골라 깊이 있게</span>
+    </div>
+    <div class="topic-grid">
+      <a class="topic-card" href="../posts/good-house-eye.html">
+        <span class="topic-tag">매물 보는 눈</span>
+        <h3>좋은 집 보는 눈 12가지</h3>
+        <p>조망·구조(베이)·용적률·향·학군·역세권·층수·소음·주차·관리상태·평형·호재까지. 임장 가서 그대로 들고 다닐 체크 포인트.</p>
+        <span class="topic-link">자세히 보기 →</span>
+      </a>
+      <a class="topic-card" href="../posts/registry-reading.html">
+        <span class="topic-tag">권리관계</span>
+        <h3>등기부등본 읽는 법</h3>
+        <p>표제부·갑구·을구가 뭔지, 근저당·가압류·신탁 표시를 어떻게 해석하는지. 위험 매물을 등기부 한 장으로 거르는 법.</p>
+        <span class="topic-link">자세히 보기 →</span>
+      </a>
+      <a class="topic-card" href="../posts/property-tour.html">
+        <span class="topic-tag">임장</span>
+        <h3>임장 체크리스트 30선</h3>
+        <p>채광·환기·결로·곰팡이·층간소음·수압·주차·관리상태. 같은 단지라도 동·층·향으로 달라지는 디테일을 한 번에.</p>
+        <span class="topic-link">자세히 보기 →</span>
+      </a>
+      <a class="topic-card" href="../posts/sale-contract-tips.html">
+        <span class="topic-tag">계약</span>
+        <h3>매매계약서 특약, 이것만은</h3>
+        <p>현 상태 매매·옵션 인계·잔금일 정산·근저당 말소·위반건축물·임차인 명도. 분쟁의 90%가 특약에서 시작됩니다.</p>
+        <span class="topic-link">자세히 보기 →</span>
+      </a>
+      <a class="topic-card" href="../posts/balance-day-settlement.html">
+        <span class="topic-tag">잔금일</span>
+        <h3>잔금일 정산 5가지</h3>
+        <p>선수관리비·장기수선충당금·관리비 일할 계산까지. 잔금일에 빠뜨리면 수십만 원이 갈리는 항목.</p>
+        <span class="topic-link">자세히 보기 →</span>
+      </a>
+      <a class="topic-card" href="../calculators/acquisition-tax.html">
+        <span class="topic-tag">세금 · 계산기</span>
+        <h3>취득세 계산기</h3>
+        <p>매매가·주택수·조정대상지역·85㎡ 면적까지 반영. 농어촌특별세·지방교육세 포함 총액.</p>
+        <span class="topic-link">계산하기 →</span>
+      </a>
+      <a class="topic-card topic-card-hl" href="../calculators/transfer-tax.html">
+        <span class="topic-tag">세금 · 계산기</span>
+        <h3>양도소득세 계산기</h3>
+        <p>1세대1주택 12억 비과세·고가주택 안분과세·장기보유특별공제·다주택 중과까지. 현행 소득세법 8구간 누진세율 반영.</p>
+        <span class="topic-link">계산하기 →</span>
+      </a>
+      <a class="topic-card" href="../calculators/brokerage-fee.html">
+        <span class="topic-tag">중개수수료</span>
+        <h3>중개수수료 계산기</h3>
+        <p>거래금액별 상한요율(서울 기준). 부가세 포함 총액.</p>
+        <span class="topic-link">계산하기 →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="topic-section">
+    <div class="strip-head">
+      <h2>공식 자료 · 법령</h2>
+      <span class="strip-sub">계약서·세율의 1차 출처</span>
+    </div>
+    <div class="source-grid">
+      <a href="https://www.law.go.kr/lsSc.do?menuId=1&subMenuId=15&tabMenuId=81&query=지방세법" target="_blank" rel="noopener" class="source-card">
+        <span class="source-icon">⚖</span>
+        <div>
+          <h4>지방세법 (취득세)</h4>
+          <p>국가법령정보센터 → 제11조·제15조</p>
+        </div>
+      </a>
+      <a href="https://www.law.go.kr/lsSc.do?menuId=1&subMenuId=15&tabMenuId=81&query=소득세법" target="_blank" rel="noopener" class="source-card">
+        <span class="source-icon">⚖</span>
+        <div>
+          <h4>소득세법 (양도세)</h4>
+          <p>제55조·제94조~제104조</p>
+        </div>
+      </a>
+      <a href="https://www.law.go.kr/lsSc.do?menuId=1&subMenuId=15&tabMenuId=81&query=공인중개사법" target="_blank" rel="noopener" class="source-card">
+        <span class="source-icon">⚖</span>
+        <div>
+          <h4>공인중개사법</h4>
+          <p>제32조·시행규칙 별표1</p>
+        </div>
+      </a>
+      <a href="https://www.iros.go.kr" target="_blank" rel="noopener" class="source-card">
+        <span class="source-icon">📄</span>
+        <div>
+          <h4>인터넷등기소</h4>
+          <p>등기부등본 발급 (700원)</p>
+        </div>
+      </a>
+      <a href="https://rt.molit.go.kr" target="_blank" rel="noopener" class="source-card">
+        <span class="source-icon">📊</span>
+        <div>
+          <h4>국토부 실거래가 공개시스템</h4>
+          <p>아파트·연립·다세대 실거래가</p>
+        </div>
+      </a>
+      <a href="https://www.gov.kr" target="_blank" rel="noopener" class="source-card">
+        <span class="source-icon">🏛</span>
+        <div>
+          <h4>정부24 (건축물대장)</h4>
+          <p>위반건축물 여부 확인</p>
+        </div>
+      </a>
+      <a href="https://www.hometax.go.kr" target="_blank" rel="noopener" class="source-card">
+        <span class="source-icon">💰</span>
+        <div>
+          <h4>국세청 홈택스</h4>
+          <p>양도세 모의계산·예정신고</p>
+        </div>
+      </a>
+      <a href="https://www.wetax.go.kr" target="_blank" rel="noopener" class="source-card">
+        <span class="source-icon">🧾</span>
+        <div>
+          <h4>위택스 (지방세)</h4>
+          <p>취득세 신고·납부</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <div class="callout callout-warn" style="margin-top: 32px;">
+    <div class="icon">⚠</div>
+    <div class="body">
+      <strong>면책</strong>
+      본 가이드는 일반 정보 제공용입니다. 개별 사안(증여·상속·이혼분할·재개발 등)은 변호사·세무사·공인중개사의 자문을 받아주세요.
+    </div>
   </div>
 </main>
 
