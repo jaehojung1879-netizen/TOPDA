@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LTV 완벽 정리 — 담보인정비율 — 톺다</title>
+<meta name="description" content="LTV = 대출액 ÷ 담보가치. 비조정 70% · 조정 50% · 투기과열 40%. 9억 초과·15억 초과 별도 제한." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" /></head><body>
+<header class="site-header"><div class="container row"><a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a><nav class="nav"><a href="../index.html" data-nav>홈</a><a href="../calculators/index.html" data-nav>계산기</a><a href="../checklists/index.html" data-nav>체크리스트</a><a href="../index.html#categories" data-nav>가이드</a><a href="../about.html" data-nav>소개</a></nav><button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button></div><div class="mobile-menu" data-mobile-menu><a href="../index.html">홈</a><a href="../calculators/index.html">계산기</a><a href="../checklists/index.html">체크리스트</a><a href="../index.html#categories">가이드</a><a href="../about.html">소개</a></div></header>
+
+<main class="container-narrow">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../categories/loan.html">대출</a> / LTV</div>
+    <div class="tag-row"><span class="badge badge-accent">대출</span><span class="badge">LTV</span></div>
+    <h1>LTV — 담보인정비율</h1>
+    <div class="meta"><span>최종 갱신 2026.05.26</span><span class="dot">·</span><span>6분 읽기</span></div>
+  </div>
+
+  <div class="article-summary">
+    <div class="label">한 줄 결론</div>
+    <p>LTV = 대출 가능 한도 ÷ 담보(주택)가치. 지역·주택수·주택가격에 따라 40~80%로 차등. DSR과 동시에 통과해야 실제 대출이 나옵니다.</p>
+  </div>
+
+  <div class="prose">
+    <h2>지역·주택수별 LTV 한도 (2026 기준)</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>구분</th><th>비조정</th><th>조정대상지역</th><th>투기과열지구</th></tr></thead>
+        <tbody>
+          <tr><td>무주택 / 생애최초</td><td>70~80%</td><td>50%</td><td>40%</td></tr>
+          <tr><td>1주택</td><td>60~70%</td><td>50%</td><td>40%</td></tr>
+          <tr><td>2주택+</td><td>50%</td><td>30%</td><td>0% (대출 불가)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">9억 초과는 9억까지만 위 LTV 적용 + 9~15억은 20%, 15억 초과 0%. 정책 변동 잦음 → 신청 직전 <a href="https://www.fss.or.kr" target="_blank" rel="noopener">금융감독원</a> 확인.</p>
+
+    <h2>담보가치는 어떻게 평가?</h2>
+    <ul class="ref-list">
+      <li><strong>KB 시세</strong> — 일반 평가 (시세 평균값)</li>
+      <li><strong>한국감정원 시세</strong> — 정책상품 평가</li>
+      <li><strong>매매가</strong> 또는 <strong>감정평가액</strong> 중 ‘낮은 금액’ 적용</li>
+    </ul>
+
+    <h2>실전 예시 — 10억 아파트, 무주택, 비조정지역</h2>
+    <ul class="ref-list">
+      <li>매매가 10억, KB 시세 10억 → 담보가치 10억</li>
+      <li>LTV 70% → 최대 대출 7억</li>
+      <li>DSR도 통과해야 → 7억 대출 시 연 원리금 약 4,200만원</li>
+      <li>1금융 DSR 40% 통과하려면 연소득 1억 500만원 이상 필요</li>
+      <li>연소득 부족하면 → 대출 한도 줄임 또는 정책상품 이용</li>
+    </ul>
+
+    <h2>주의 — LTV ≠ 실제 대출액</h2>
+    <p>LTV는 ‘최대 한도’일 뿐, 실제 대출액은 <strong>LTV와 DSR 둘 중 더 작은 값</strong>으로 결정됩니다. 한도 산정 순서:</p>
+    <ol class="ref-list">
+      <li>LTV 한도 계산 (담보가치 × 비율)</li>
+      <li>DSR 한도 계산 (소득 × 비율 ÷ 연원리금)</li>
+      <li>두 값 중 작은 금액이 실제 대출 한도</li>
+    </ol>
+
+    <h2>관련 자료</h2>
+    <ul class="ref-list">
+      <li><a href="https://www.fss.or.kr" target="_blank" rel="noopener">금융감독원 (대출 규제)</a></li>
+      <li><a href="dsr-explain.html">DSR 완벽 정리</a></li>
+      <li><a href="stress-dsr.html">스트레스 DSR</a></li>
+      <li><a href="../calculators/dsr.html">DSR 한도 계산기</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer class="site-footer"><div class="container"><div class="row"><div><div class="brand"><span class="brand-mark"></span>톺다</div><p>부동산, 하나하나 톺아보자.</p></div><div><h4>탐색</h4><ul><li><a href="../index.html#categories">카테고리</a></li><li><a href="../calculators/index.html">계산기</a></li><li><a href="../checklists/index.html">체크리스트</a></li></ul></div><div><h4>사이트 정보</h4><ul><li><a href="../about.html">소개·운영원칙</a></li><li><a href="../about.html#disclaimer">면책고지</a></li></ul></div></div><p class="disclaimer">© 2026 톺다.</p></div></footer>
+<script src="../assets/app.js"></script>
+</body></html>
