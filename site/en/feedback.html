@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Feedback — TOPDA</title>
+<meta name="description" content="Submit corrections, requests, or feedback. Secret posts are visible only on your device." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="index.html" class="brand"><span class="brand-mark"></span>TOPDA</a>
+    <nav class="nav">
+      <a href="index.html" data-nav>Home</a>
+      <a href="calculators/index.html" data-nav>Calculators</a>
+      <a href="jeonse.html" data-nav>Jeonse 101</a>
+      <a href="foreigner-loan.html" data-nav>Foreigner Loan</a>
+      <a href="foreigner-tax.html" data-nav>Foreigner Tax</a>
+      <a href="auction.html" data-nav>Auction</a>
+      <a href="about.html" data-nav>About</a>
+    </nav>
+    <div class="lang-switch">
+      <a href="../feedback.html">KR</a>
+      <a href="feedback.html" class="active">EN</a>
+    </div>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="Menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="index.html">Home</a>
+    <a href="calculators/index.html">Calculators</a>
+    <a href="jeonse.html">Jeonse 101</a>
+    <a href="foreigner-loan.html">Foreigner Loan</a>
+    <a href="foreigner-tax.html">Foreigner Tax</a>
+    <a href="auction.html">Auction</a>
+    <a href="about.html">About</a>
+  </div>
+</header>
+
+<main class="container-narrow">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Feedback</div>
+    <h1>Feedback &amp; Corrections</h1>
+    <p class="lead">Submit errors, requests, or ideas. Marking a post as “secret” keeps it visible only on your device.</p>
+  </div>
+
+  <div class="fb-app" data-fb-app>
+
+    <section class="fb-form-card">
+      <h2>New post</h2>
+      <form data-fb-form>
+        <div class="field">
+          <label for="fb-title">Title</label>
+          <input id="fb-title" name="title" type="text" maxlength="80" required placeholder="e.g. Acquisition tax calculator returns wrong result" />
+        </div>
+        <div class="field">
+          <label for="fb-author">Name or nickname (optional)</label>
+          <input id="fb-author" name="author" type="text" maxlength="20" placeholder="Anonymous is fine" />
+        </div>
+        <div class="field">
+          <label for="fb-page">Related page (optional)</label>
+          <input id="fb-page" name="page" type="text" maxlength="120" placeholder="e.g. /en/jeonse.html" />
+        </div>
+        <div class="field">
+          <label for="fb-body">Message</label>
+          <textarea id="fb-body" name="body" rows="6" maxlength="2000" required placeholder="Describe what's wrong or what you'd like to see."></textarea>
+        </div>
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="secret" />
+            <span class="text">Make this post secret
+              <span class="note">If checked, the post is stored on this device only and is not shown publicly.</span>
+            </span>
+          </label>
+        </div>
+        <div class="fb-actions">
+          <button class="btn btn-primary" type="submit">Post</button>
+          <a class="btn btn-secondary" data-fb-email href="#">Send by email too</a>
+        </div>
+        <p class="fb-note">
+          The board is browser-only (localStorage). To make sure the operator receives the message, also click <strong>Send by email too</strong>. Do not include personal or sensitive information.
+        </p>
+      </form>
+    </section>
+
+    <section class="fb-list-section">
+      <div class="fb-tabs">
+        <button class="fb-tab active" data-fb-tab="public">Public</button>
+        <button class="fb-tab" data-fb-tab="mine">My secret posts <span class="count" data-fb-secret-count>0</span></button>
+      </div>
+      <ul class="fb-list" data-fb-list-public></ul>
+      <ul class="fb-list" data-fb-list-mine hidden></ul>
+      <p class="fb-empty" data-fb-empty>No posts yet. Be the first to post.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. General information only.</p></div></footer>
+<script src="../assets/app.js"></script>
+<script src="../assets/feedback.js"></script>
+</body>
+</html>

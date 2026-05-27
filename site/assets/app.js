@@ -6,6 +6,53 @@
     toggle.addEventListener('click', () => menu.classList.toggle('open'));
   }
 
+  // ===== Auto-inject language switch into header (if not already present) =====
+  try {
+    const header = document.querySelector('.site-header .row');
+    if (header && !header.querySelector('.lang-switch')) {
+      const lang = document.documentElement.lang || 'ko';
+      const path = location.pathname;
+      // KR ↔ EN 페어 결정: '/en/'을 토글
+      let krHref, enHref;
+      if (path.includes('/en/')) {
+        enHref = path.split('/').pop() || 'index.html';
+        krHref = path.replace('/en/', '/');
+      } else {
+        krHref = path.split('/').pop() || 'index.html';
+        // 한국어 페이지 대부분의 영문 대응은 en/index.html로 fallback
+        enHref = path.replace(/\/site\//, '/site/en/');
+        // 동일 경로의 en 버전이 없을 수 있으므로 단순화: en/index.html
+        const parts = path.split('/');
+        const fileName = parts.pop();
+        // 같은 파일명이 /en/ 에 있다고 가정하고 상대로 변환
+        enHref = (parts.length ? parts.join('/') + '/' : '') + 'en/' + fileName;
+        // 깊은 폴더(categories/ 등)에서는 상대경로 갱신
+        if (path.includes('/categories/') || path.includes('/calculators/') || path.includes('/checklists/') || path.includes('/posts/') || path.includes('/interior/')) {
+          // 단순 fallback: 영문 홈
+          enHref = '../en/index.html';
+        }
+      }
+      const ls = document.createElement('div');
+      ls.className = 'lang-switch';
+      const a1 = document.createElement('a');
+      a1.textContent = 'KR'; a1.setAttribute('aria-label', '한국어');
+      const a2 = document.createElement('a');
+      a2.textContent = 'EN'; a2.setAttribute('aria-label', 'English');
+      if (lang === 'en') {
+        a1.href = krHref;
+        a2.href = '#'; a2.classList.add('active');
+      } else {
+        a1.href = '#'; a1.classList.add('active');
+        a2.href = enHref;
+      }
+      ls.appendChild(a1); ls.appendChild(a2);
+      // nav-toggle 앞에 삽입
+      const navToggle = header.querySelector('.nav-toggle');
+      if (navToggle) header.insertBefore(ls, navToggle);
+      else header.appendChild(ls);
+    }
+  } catch (e) {}
+
   // Mark active nav link
   const path = location.pathname.replace(/\/$/, '');
   document.querySelectorAll('[data-nav]').forEach((a) => {
@@ -18,10 +65,12 @@
 })();
 
 // ===== Formatting =====
+const isEn = document.documentElement.lang === 'en';
 const fmt = {
   won: (n) => {
-    if (n === null || n === undefined || isNaN(n)) return '0원';
-    return Math.round(n).toLocaleString('ko-KR') + '원';
+    if (n === null || n === undefined || isNaN(n)) return isEn ? 'KRW 0' : '0원';
+    const num = Math.round(n).toLocaleString('ko-KR');
+    return isEn ? ('KRW ' + num) : (num + '원');
   },
   number: (n) => {
     if (n === null || n === undefined || isNaN(n)) return '0';
@@ -35,16 +84,59 @@ const fmt = {
   },
 };
 
+// 단위 변환: 큰 금액을 '억/만 원'으로 사람이 읽기 쉽게
+fmt.eokMan = (n) => {
+  if (!n || n < 10000) return '';
+  const eok = Math.floor(n / 100000000);
+  const man = Math.floor((n % 100000000) / 10000);
+  if (isEn) {
+    // 영문 페이지: 백만/십억 단위로 표시
+    const million = n / 1000000;
+    if (n >= 1000000000) return '≈ KRW ' + (n / 1000000000).toFixed(2) + ' billion';
+    if (n >= 1000000) return '≈ KRW ' + million.toFixed(1) + ' million';
+    return '';
+  }
+  const parts = [];
+  if (eok) parts.push(eok.toLocaleString('ko-KR') + '억');
+  if (man) parts.push(man.toLocaleString('ko-KR') + '만');
+  return parts.length ? '약 ' + parts.join(' ') + ' 원' : '';
+};
+
+function updateEokHint(input) {
+  const n = fmt.parseWon(input.value);
+  const text = fmt.eokMan(n);
+  let host = input.closest('.field') || input.parentElement;
+  if (!host) return;
+  let hint = host.querySelector(':scope > .eok-hint');
+  if (!hint) {
+    hint = document.createElement('span');
+    hint.className = 'eok-hint';
+    // 가능하면 .input-suffix 바로 다음에, 아니면 host 끝에 삽입
+    const after = host.querySelector('.input-suffix') || input;
+    if (after && after.parentElement === host) {
+      after.insertAdjacentElement('afterend', hint);
+    } else {
+      host.appendChild(hint);
+    }
+  }
+  hint.textContent = text;
+  hint.style.display = text ? '' : 'none';
+}
+
 // Live-format any input with data-format="won"
 document.addEventListener('input', (e) => {
   const t = e.target;
   if (!(t instanceof HTMLInputElement)) return;
   if (t.dataset.format !== 'won') return;
-  const cursor = t.selectionStart;
   const raw = t.value.replace(/[^0-9]/g, '');
   t.value = raw ? Number(raw).toLocaleString('ko-KR') : '';
-  // Best-effort cursor preservation
   try { t.setSelectionRange(t.value.length, t.value.length); } catch (e) {}
+  updateEokHint(t);
+});
+
+// 페이지 로드 시 기존값에도 적용
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('input[data-format="won"]').forEach(updateEokHint);
 });
 
 // ===== Checklist persistence =====
@@ -204,7 +296,7 @@ function calcBrokerageFee({ price, type }) {
       return;
     }
     setText('[data-out="rate"]', (r.rate * 100).toFixed(2) + '%');
-    setText('[data-out="cap"]', r.max ? fmt.won(r.max) : '상한 없음(협의)');
+    setText('[data-out="cap"]', r.max ? fmt.won(r.max) : (isEn ? 'No cap (negotiable)' : '상한 없음(협의)'));
     setText('[data-out="fee"]', fmt.won(r.fee));
     setText('[data-out="vat"]', fmt.won(r.vat));
     setText('[data-out="total"]', fmt.won(r.total));
@@ -519,6 +611,81 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
     setText('s3', r.s3 + '점');
     setText('total', r.total + '점');
     setText('totalLabel', '/ 84점 만점');
+  };
+  root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
+  recalc();
+})();
+
+// ===== Auction Bid Simulator =====
+// 입찰가 + 인수보증금 + 취득세(+10% 부가) + 명도비 + 미납관리비 + 기타 = 총 부담액
+// 시세 대비 마진 = (시세 - 총 부담액) / 시세 × 100
+(function () {
+  const root = document.querySelector('[data-calc="auction-bid"]');
+  if (!root) return;
+  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+
+  function acquisitionRate(price, homes, regulated) {
+    const eok = price / 100000000;
+    if (homes === 1) {
+      if (eok <= 6) return 0.01;
+      if (eok <= 9) return ((eok * 2 / 3) - 3) / 100;
+      return 0.03;
+    }
+    if (homes === 2) {
+      return regulated ? 0.08 : (eok <= 6 ? 0.01 : eok <= 9 ? ((eok * 2 / 3) - 3) / 100 : 0.03);
+    }
+    return regulated ? 0.12 : 0.08;
+  }
+
+  const recalc = () => {
+    const bid = fmt.parseWon(root.querySelector('[name="bid"]').value);
+    const market = fmt.parseWon(root.querySelector('[name="market"]').value);
+    const deposit = fmt.parseWon(root.querySelector('[name="deposit"]').value);
+    const homes = Number(root.querySelector('[name="homes"]:checked')?.value || 1);
+    const regulated = root.querySelector('[name="regulated"]')?.checked || false;
+    const evict = fmt.parseWon(root.querySelector('[name="evict"]').value);
+    const unpaid = fmt.parseWon(root.querySelector('[name="unpaid"]').value);
+    const misc = fmt.parseWon(root.querySelector('[name="misc"]').value);
+
+    if (!bid) {
+      ['total','bid','depositOut','taxOut','evictOut','unpaidOut','miscOut','marketOut'].forEach(k => setText(k, '0원'));
+      setText('margin', '—'); setText('verdict', '—');
+      return;
+    }
+
+    const rate = acquisitionRate(bid, homes, regulated);
+    const acqTax = bid * rate;
+    const taxBundle = acqTax * 1.10; // 지방교육세·농특세 단순 가산
+    const total = bid + deposit + taxBundle + evict + unpaid + misc;
+    const margin = market > 0 ? (market - total) / market * 100 : 0;
+
+    setText('bid', fmt.won(bid));
+    setText('depositOut', fmt.won(deposit));
+    setText('taxOut', fmt.won(taxBundle) + ' (' + (rate * 100).toFixed(2) + '%)');
+    setText('evictOut', fmt.won(evict));
+    setText('unpaidOut', fmt.won(unpaid));
+    setText('miscOut', fmt.won(misc));
+    setText('marketOut', fmt.won(market));
+    setText('total', fmt.won(total));
+    setText('margin', (margin >= 0 ? '+' : '') + margin.toFixed(1) + '% (' + fmt.won(market - total) + ')');
+
+    let verdict;
+    if (isEn) {
+      if (market <= 0) verdict = 'Enter market value';
+      else if (margin >= 20) verdict = 'Wide margin — short-term flip range';
+      else if (margin >= 10) verdict = 'Safe margin';
+      else if (margin >= 5) verdict = 'Owner-occupier range';
+      else if (margin >= 0) verdict = 'Thin margin — risk of loss';
+      else verdict = 'Above market — reconsider';
+    } else {
+      if (market <= 0) verdict = '시세 입력 필요';
+      else if (margin >= 20) verdict = '여유 있음 (단기차익 검토 구간)';
+      else if (margin >= 10) verdict = '안전마진 확보';
+      else if (margin >= 5) verdict = '실수요 적정 구간';
+      else if (margin >= 0) verdict = '마진 얇음 — 추가 비용 발생 시 손실';
+      else verdict = '시세보다 비쌈 — 재검토';
+    }
+    setText('verdict', verdict);
   };
   root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
   recalc();

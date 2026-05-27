@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>경매·공매 — 톺다</title>
+<meta name="description" content="부동산 경매와 공매의 차이부터 권리분석·말소기준권리·임차인 분석·입찰가 산정·낙찰 후 절차까지 1차 출처 기반으로 정리합니다." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a>
+      <a href="../calculators/index.html" data-nav>계산기</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+      <a href="../index.html#categories" data-nav class="active">가이드</a>
+      <a href="../about.html" data-nav>안내</a>
+    </nav>
+    <div class="lang-switch">
+      <a href="auction.html" class="active">KR</a>
+      <a href="../en/auction.html">EN</a>
+    </div>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../checklists/index.html">체크리스트</a>
+    <a href="../index.html#categories">가이드</a>
+    <a href="../about.html">안내</a>
+    <a href="../feedback.html">수정 요청</a>
+    <a href="../en/auction.html">English</a>
+  </div>
+</header>
+
+<main class="container-narrow">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / 경매·공매</div>
+    <div class="tag-row"><span class="badge badge-accent">경매</span><span class="badge">공매</span></div>
+    <h1>경매·공매 시작 가이드</h1>
+    <p class="lead">시세보다 싸게 사는 만큼 권리관계 리스크가 따라옵니다. 이 가이드는 등기부·권리분석·입찰가 산정·낙찰 후 명도까지의 흐름을 1차 출처에 맞춰 정리합니다.</p>
+  </div>
+
+  <div class="article-summary">
+    <div class="label">한 줄 결론</div>
+    <p>경매의 핵심은 ① 말소기준권리를 정확히 찾고 ② 인수될 권리(선순위 임차인·가등기·예고등기 등)를 파악한 뒤 ③ 명도 비용까지 더해 입찰가를 산정하는 것입니다.</p>
+  </div>
+
+  <div class="prose">
+
+    <h2>경매와 공매의 차이</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>구분</th><th>법원 경매</th><th>공매 (캠코)</th></tr></thead>
+        <tbody>
+          <tr><th>근거법</th><td>민사집행법</td><td>국세징수법 · 자산유동화법</td></tr>
+          <tr><th>주관</th><td>법원 (집행관)</td><td>한국자산관리공사(KAMCO) · 온비드</td></tr>
+          <tr><th>입찰 방식</th><td>기일입찰(현장) 또는 기간입찰</td><td>전자 입찰 (온비드)</td></tr>
+          <tr><th>대금 납부</th><td>잔금 납부 기한 통상 30~45일</td><td>잔금 납부 기한 통상 30일 이내</td></tr>
+          <tr><th>인도(명도)</th><td>인도명령 신청 가능 (민사집행법 제136조)</td><td>명도소송 필요할 수 있음</td></tr>
+          <tr><th>물건 종류</th><td>채무자 부동산 일반</td><td>국세·지방세 체납 압류, 신탁·유입 자산</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>1단계 — 물건 검색</h2>
+    <ul class="ref-list">
+      <li><strong>법원경매정보 (courtauction.go.kr)</strong> — 무료, 공식. 사건번호·소재지·감정가·최저매각가·매각기일 확인.</li>
+      <li><strong>온비드 (onbid.co.kr)</strong> — 공매. 캠코 자산·국세 체납 압류 자산.</li>
+      <li><strong>유료 사이트 (지지옥션·굿옥션 등)</strong> — 권리분석 요약·임장 정보 보강용. 다만 최종 결정은 등기부등본·매각물건명세서·현황조사서 원본으로.</li>
+    </ul>
+
+    <h2>2단계 — 권리분석 (핵심)</h2>
+    <p>경매에서 가장 중요한 개념은 <strong>말소기준권리</strong>입니다. 이 권리보다 후순위인 모든 권리는 매각으로 소멸되고, 선순위 권리는 낙찰자가 인수합니다.</p>
+
+    <h3>말소기준권리 후보</h3>
+    <ul class="ref-list">
+      <li><strong>(근)저당권</strong> — 가장 흔한 말소기준</li>
+      <li><strong>압류·가압류</strong></li>
+      <li><strong>담보가등기</strong> (소유권이전청구권 가등기는 제외)</li>
+      <li><strong>경매개시결정 등기</strong> (위 4개가 없을 때)</li>
+      <li><strong>전세권</strong> — 단, 등기부상 ‘전세권 설정자가 직접 경매를 신청’했거나 ‘배당요구한 경우’에 한해 말소기준</li>
+    </ul>
+
+    <h3>인수 위험 — 낙찰자가 책임지게 되는 권리</h3>
+    <ul class="ref-list">
+      <li><strong>대항력 있는 임차인의 보증금</strong> — 말소기준권리보다 먼저 ‘주택 인도 + 전입신고’를 마친 임차인. 배당받지 못하거나 일부만 받은 잔액은 낙찰자 인수 (주택임대차보호법 제3조의2).</li>
+      <li><strong>선순위 가등기 (소유권이전청구권)</strong> — 본등기되면 낙찰자 명의가 말소될 수도 있는 치명적 권리.</li>
+      <li><strong>선순위 가처분</strong> — 처분금지가처분이 본안 승소하면 소유권 상실 가능.</li>
+      <li><strong>예고등기 (구법)</strong> — 폐지되었지만 폐지 이전 등재분은 여전히 효력. 발견 시 변호사 자문 필수.</li>
+      <li><strong>법정지상권</strong> — 토지·건물 소유자가 달라지는 경매에서 발생. 건물만 낙찰 시 토지 사용대가(지료) 부담.</li>
+      <li><strong>유치권</strong> — 등기 없이 점유로 성립. 공사대금 미수 등 명목으로 주장되며, 진위 다툼이 잦은 위험 권리.</li>
+    </ul>
+
+    <h2>3단계 — 임차인 분석</h2>
+    <p>매각물건명세서와 현황조사서, 그리고 임차인의 권리신고·배당요구를 종합 검토합니다.</p>
+    <ul class="ref-list">
+      <li><strong>대항력</strong> = 주택의 인도 + 전입신고. 다음 날 0시부터 효력 발생.</li>
+      <li><strong>우선변제권</strong> = 대항력 + 확정일자. 경매 배당에서 후순위 채권자보다 우선.</li>
+      <li><strong>최우선변제권</strong> = 소액임차인 보증금 일부에 대해 다른 담보물권보다 우선 변제 (주택임대차보호법 제8조, 시행령 제10·11조).</li>
+      <li>‘선순위 임차인 + 배당요구 없음’ 물건은 보증금 전액이 낙찰자 인수가 됩니다. 매각가에 가산해서 계산할 것.</li>
+    </ul>
+
+    <h2>4단계 — 입찰가 산정</h2>
+    <p>입찰가는 단순히 ‘감정가의 70%’ 식으로 잡지 않습니다. 다음 항목을 모두 더해 ‘실제 들어갈 총비용’을 추정한 뒤, 시세 대비 충분한 마진이 나오는지 검토합니다.</p>
+    <ul class="ref-list">
+      <li><strong>낙찰가</strong> — 입찰 예정 금액</li>
+      <li><strong>인수 보증금</strong> — 선순위 임차인 미배당분 등</li>
+      <li><strong>취득세</strong> — 경매 낙찰도 일반 매매와 동일한 취득세율 적용 (지방세법 제10조 1항)</li>
+      <li><strong>명도 비용</strong> — 이사비 합의금 (보통 100~500만원), 강제집행 비용 (인도명령 신청+집행) 200~500만원, 점유이전금지가처분 비용 등</li>
+      <li><strong>체납 관리비</strong> — 공용부분 관리비는 낙찰자 인수 (대법원 2001다8677). 전용부분은 원칙적으로 점유자 부담이지만 현실적으론 협상 대상</li>
+      <li><strong>법무사·등기 비용</strong> — 통상 매매가의 0.2~0.5%</li>
+      <li><strong>수리·인테리어</strong> — 임장 시 추정</li>
+    </ul>
+
+    <div class="callout callout-info">
+      <div class="icon">i</div>
+      <div class="body">
+        <strong>‘안전마진’ 룰</strong>
+        실수요라면 시세 대비 5~10%, 단기 차익이 목적이라면 15~20% 이상의 마진을 확보하는 것이 일반적입니다.
+        입찰 직전에 KB부동산·한국부동산원 시세, 직거래 호가, 최근 실거래가(국토부 실거래가 공개시스템)를 동시에 확인하세요.
+      </div>
+    </div>
+
+    <h2>5단계 — 입찰 당일</h2>
+    <ul class="ref-list">
+      <li><strong>입찰보증금</strong> — 최저매각가의 10% (재매각 사건은 통상 20~30%). 입찰표 미기재·금액 오기는 무효 사유.</li>
+      <li><strong>대리 입찰</strong> — 위임장(인감) + 인감증명서 지참. 본인 신분증·도장도 별도 필요.</li>
+      <li><strong>낙찰 후</strong> — 1주일 내 매각허가결정. 이의 없으면 잔금 납부 기한이 통지됩니다 (통상 30일).</li>
+      <li><strong>패찰</strong> — 입찰보증금 즉시 반환.</li>
+    </ul>
+
+    <h2>6단계 — 잔금·등기·명도</h2>
+    <ul class="ref-list">
+      <li><strong>잔금 대출</strong> — 경락잔금대출. LTV·DSR 일반 매매와 동일하게 적용. 낙찰 후 약 2주 내 은행 심사 시작.</li>
+      <li><strong>소유권이전등기</strong> — 잔금 납부 후 법원이 직권으로 촉탁등기. 별도 법무사 비용은 낮은 편.</li>
+      <li><strong>인도명령</strong> — 점유자가 협조하지 않으면 잔금 납부 후 6개월 내 인도명령 신청 가능 (민사집행법 제136조). 그 이후엔 명도소송.</li>
+      <li><strong>강제집행</strong> — 인도명령 결정 → 집행관 사무실 접수 → 계고 → 강제집행. 통상 신청부터 2~3개월.</li>
+    </ul>
+
+    <h2>흔한 함정 5가지</h2>
+    <ul class="ref-list">
+      <li><strong>가장임차인</strong> — 친인척·지인을 임차인으로 위장 등록. 매각물건명세서의 점유자·전입·확정일자·계약일을 교차 검증.</li>
+      <li><strong>허위 유치권</strong> — 점유와 채권의 견련성, 점유의 평온·공연성을 다투면 깨질 가능성. 다만 분쟁 비용 발생.</li>
+      <li><strong>토지·건물 따로 경매</strong> — 법정지상권 성립 여부를 잘못 판단하면 지료 부담 또는 건물 철거 위험.</li>
+      <li><strong>지분 경매</strong> — 공유자 우선매수권(민사집행법 제140조) 행사 시 낙찰이 무효화될 수 있음.</li>
+      <li><strong>특수물건 (위반건축물·맹지·도로지정)</strong> — 가격이 싼 이유가 명확. 시정·인허가 가능성 사전 확인.</li>
+    </ul>
+
+    <h2>관련 자료</h2>
+    <ul class="ref-list">
+      <li><a href="https://www.courtauction.go.kr" target="_blank" rel="noopener">대법원 법원경매정보</a></li>
+      <li><a href="https://www.onbid.co.kr" target="_blank" rel="noopener">온비드 (공매)</a></li>
+      <li><a href="https://www.law.go.kr/법령/민사집행법" target="_blank" rel="noopener">민사집행법</a></li>
+      <li><a href="https://www.law.go.kr/법령/주택임대차보호법" target="_blank" rel="noopener">주택임대차보호법</a></li>
+      <li><a href="../posts/registry-reading.html">등기부등본 읽는 법</a></li>
+      <li><a href="../calculators/auction-bid.html">경매 입찰가 시뮬레이터</a></li>
+    </ul>
+
+    <h2>관련 계산기·체크리스트</h2>
+  </div>
+
+  <div class="cards-grid">
+    <a class="card" href="../calculators/auction-bid.html">
+      <span class="badge badge-success">계산기</span>
+      <h3>경매 입찰가 시뮬레이터</h3>
+      <p>낙찰가·인수 보증금·세금·명도 비용을 합산해 ‘실제 총 부담액’과 시세 대비 마진을 보여줍니다.</p>
+    </a>
+    <a class="card" href="../calculators/acquisition-tax.html">
+      <span class="badge badge-accent">계산기</span>
+      <h3>취득세 계산기</h3>
+      <p>경매 낙찰도 일반 주택 매매와 동일한 취득세율. 다주택·조정대상 반영.</p>
+    </a>
+    <a class="card" href="../posts/registry-reading.html">
+      <span class="badge">가이드</span>
+      <h3>등기부등본 읽는 법</h3>
+      <p>표제부·갑구·을구 구조와 말소기준권리 찾는 법.</p>
+    </a>
+  </div>
+
+  <div class="callout callout-warn" style="margin-top: 32px;">
+    <div class="icon">⚠</div>
+    <div class="body">
+      <strong>면책</strong> 본 페이지는 일반 정보 제공용입니다. 개별 사건의 권리분석·인수 위험·낙찰 후 절차는 사안마다 다릅니다. 입찰 전 변호사·법무사 자문을 권장합니다.
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="brand"><span class="brand-mark"></span>톺다</div>
+        <p>부동산, 하나하나 톺아보자.</p>
+      </div>
+      <div>
+        <h4>탐색</h4>
+        <ul>
+          <li><a href="../index.html#categories">카테고리</a></li>
+          <li><a href="../calculators/index.html">계산기</a></li>
+          <li><a href="../checklists/index.html">체크리스트</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>사이트 정보</h4>
+        <ul>
+          <li><a href="../about.html">안내</a></li>
+          <li><a href="../about.html#disclaimer">면책고지</a></li>
+          <li><a href="../feedback.html">수정 요청</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="disclaimer">© 톺다.</p>
+  </div>
+</footer>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
