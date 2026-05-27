@@ -260,6 +260,8 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .prose ul, .prose ol { padding-left: 22px; margin-bottom: 16px; }
 .prose ul li { list-style: disc; margin-bottom: 6px; }
 .prose ol li { list-style: decimal; margin-bottom: 6px; }
+.prose ul.ref-list { padding-left: 0; }
+.prose ul.ref-list li { list-style: none; margin-bottom: 0; }
 .prose strong { font-weight: 700; color: var(--text); }
 .prose blockquote {
   margin: 24px 0; padding: 16px 20px;
@@ -334,6 +336,10 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .field { margin-bottom: 20px; }
 .field label { display: block; font-size: 0.92rem; font-weight: 600; margin-bottom: 8px; color: var(--text); }
 .field .hint { display: block; font-size: 0.82rem; color: var(--text-muted); margin-top: 6px; }
+.field .eok-hint {
+  display: block; font-size: 0.85rem; font-weight: 600;
+  color: var(--accent); margin-top: 6px; letter-spacing: -0.01em;
+}
 .field input[type="text"], .field input[type="number"], .field select {
   width: 100%; padding: 12px 14px;
   border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
@@ -1252,3 +1258,107 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   margin: 32px 0 12px;
 }
 .calc-cat-head:first-of-type { margin-top: 0; }
+
+/* ===== Language switch (top-right header) ===== */
+.lang-switch {
+  display: inline-flex; align-items: center; gap: 0;
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 2px; background: var(--surface);
+  margin-left: 12px;
+}
+.lang-switch a {
+  font-size: 0.78rem; font-weight: 700; color: var(--text-muted);
+  padding: 4px 10px; border-radius: 999px;
+  letter-spacing: 0.04em;
+  transition: all 0.15s;
+}
+.lang-switch a.active { background: var(--accent); color: #fff; }
+.lang-switch a:hover:not(.active) { color: var(--text); }
+@media (max-width: 767px) {
+  .lang-switch { margin-left: 6px; margin-right: 4px; }
+  .lang-switch a { padding: 4px 8px; font-size: 0.72rem; }
+}
+
+/* ===== Feedback board ===== */
+.fb-app { margin-top: 8px; }
+.fb-form-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px; margin-bottom: 32px;
+}
+.fb-form-card h2 { font-size: 1.15rem; margin-bottom: 16px; }
+.fb-form-card textarea {
+  width: 100%; padding: 10px 12px;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background: #fff; color: var(--text); resize: vertical; min-height: 120px;
+}
+.fb-form-card textarea:focus {
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(30,58,138,0.12);
+}
+.fb-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.fb-note {
+  font-size: 0.8rem; color: var(--text-subtle);
+  margin-top: 12px; line-height: 1.6;
+}
+.fb-note a { color: var(--accent); text-decoration: underline; }
+
+.fb-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.fb-tab {
+  padding: 10px 14px; font-size: 0.92rem; font-weight: 600;
+  color: var(--text-muted); border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.fb-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+.fb-tab .count {
+  display: inline-block; min-width: 18px; padding: 0 6px;
+  font-size: 0.72rem; background: var(--surface-2); border-radius: 999px;
+  color: var(--text-muted); margin-left: 4px;
+}
+
+.fb-list { display: flex; flex-direction: column; gap: 12px; }
+.fb-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px;
+}
+.fb-item-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.fb-item-title { font-size: 1rem; color: var(--text); }
+.fb-item-meta { font-size: 0.78rem; color: var(--text-subtle); margin-bottom: 8px; }
+.fb-item-meta .fb-page {
+  display: inline-block; padding: 0 6px; border-radius: 4px;
+  background: var(--surface-2); margin-left: 4px; font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+.fb-item-body {
+  font-size: 0.92rem; color: var(--text); line-height: 1.65;
+  white-space: pre-wrap; word-break: break-word;
+}
+.fb-item-foot { margin-top: 10px; text-align: right; }
+.fb-del {
+  font-size: 0.78rem; color: var(--danger);
+  padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px;
+}
+.fb-del:hover { background: var(--danger-soft); }
+.fb-empty {
+  text-align: center; color: var(--text-subtle); font-size: 0.9rem;
+  padding: 40px 0;
+}
+.badge-warn { background: var(--warning-soft); color: var(--warning); }
+
+/* ===== Tablet responsive tweaks (768-1024px) ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container { padding: 0 24px; }
+  /* 좁은 태블릿에서는 단일 컬럼이 더 안정적 */
+  .calc-layout { grid-template-columns: 1fr; gap: 24px; }
+  .calc-result { position: static; }
+  .calc-form, .calc-result { padding: 24px; }
+}
+@media (min-width: 1024px) {
+  .calc-layout { grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: start; }
+}
+/* 좁은 모바일에서 계산기 결과 폰트 축소 */
+@media (max-width: 480px) {
+  .calc-result .total { font-size: 1.7rem; }
+  .calc-form, .calc-result { padding: 20px; }
+}
+/* 표·이미지 가로 스크롤 가드 */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.table-wrap table { min-width: 480px; }

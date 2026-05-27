@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Acquisition Tax Calculator — TOPDA</title>
+<meta name="description" content="Calculate Korean property acquisition tax including rural special tax and local education tax, by number of homes and regulated-area status." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>TOPDA</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>Home</a>
+      <a href="index.html" data-nav class="active">Calculators</a>
+      <a href="../jeonse.html" data-nav>Jeonse 101</a>
+      <a href="../foreigner-loan.html" data-nav>Foreigner Loan</a>
+      <a href="../foreigner-tax.html" data-nav>Foreigner Tax</a>
+      <a href="../auction.html" data-nav>Auction</a>
+      <a href="../about.html" data-nav>About</a>
+    </nav>
+    <div class="lang-switch">
+      <a href="../../calculators/acquisition-tax.html">KR</a>
+      <a href="acquisition-tax.html" class="active">EN</a>
+    </div>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="Menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">Home</a>
+    <a href="index.html">Calculators</a>
+    <a href="../jeonse.html">Jeonse 101</a>
+    <a href="../foreigner-loan.html">Foreigner Loan</a>
+    <a href="../foreigner-tax.html">Foreigner Tax</a>
+    <a href="../auction.html">Auction</a>
+    <a href="../about.html">About</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Calculators</a> / Acquisition Tax</div>
+    <h1>Acquisition Tax Calculator</h1>
+    <div class="meta"><span>Residential property · standard rates · same rates apply to foreigners</span></div>
+  </div>
+
+  <div class="calc-layout" data-calc="acquisition-tax">
+
+    <div class="calc-form">
+      <div class="field">
+        <label for="price">Purchase price (KRW)</label>
+        <div class="input-suffix" data-suffix="KRW">
+          <input id="price" name="price" type="text" inputmode="numeric" data-format="won" placeholder="e.g. 800,000,000" autocomplete="off" value="800,000,000" />
+        </div>
+        <span class="hint">Actual contract price.</span>
+      </div>
+
+      <div class="field">
+        <label>Number of homes (incl. this purchase)</label>
+        <div class="radio-group">
+          <label><input type="radio" name="homes" value="1" checked/><span>1 home</span></label>
+          <label><input type="radio" name="homes" value="2"/><span>2 homes</span></label>
+          <label><input type="radio" name="homes" value="3"/><span>3 homes</span></label>
+          <label><input type="radio" name="homes" value="4"/><span>4+ homes</span></label>
+        </div>
+        <span class="hint">Includes Korean-owned homes by the household.</span>
+      </div>
+
+      <div class="field">
+        <label class="check-item" style="padding: 0; cursor: pointer;">
+          <input type="checkbox" name="regulated"/>
+          <span class="text">Located in a regulated area (조정대상지역)
+            <span class="note">From the 2nd home, the heavy-tax rate applies.</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label class="check-item" style="padding: 0; cursor: pointer;">
+          <input type="checkbox" name="areaOver85"/>
+          <span class="text">Floor area > 85 m²
+            <span class="note">Triggers a 0.2% rural special tax.</span>
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <div class="calc-result">
+      <h3>Estimated total</h3>
+      <div class="total" data-out="total">KRW 0</div>
+
+      <div class="breakdown">
+        <div class="row"><span class="key">Applied rate</span><span class="val" data-out="rate">—</span></div>
+        <div class="row sub"><span class="key">Acquisition tax</span><span class="val" data-out="acquisition">KRW 0</span></div>
+        <div class="row sub"><span class="key">Rural special tax</span><span class="val" data-out="ruralTax">KRW 0</span></div>
+        <div class="row sub"><span class="key">Local education tax</span><span class="val" data-out="localEduTax">KRW 0</span></div>
+      </div>
+
+      <div class="callout callout-info" style="margin-top:24px; margin-bottom:0;">
+        <div class="icon">i</div>
+        <div class="body">
+          <strong>Standard rates only.</strong> First-home buyer relief, newborn-household relief, and pre-sale rights are not modeled. Consult a tax accountant for non-standard cases.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <section style="margin-top: 64px;">
+    <h2 style="margin-bottom: 16px;">Rate summary</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>Tier</th><th>≤ KRW 600M</th><th>KRW 600-900M</th><th>> KRW 900M</th></tr></thead>
+        <tbody>
+          <tr><td>1 home</td><td>1.0%</td><td>1-3% progressive</td><td>3.0%</td></tr>
+          <tr><td>2 homes (non-regulated)</td><td>1.0%</td><td>1-3%</td><td>3.0%</td></tr>
+          <tr><td>2 homes (regulated)</td><td colspan="3">8.0%</td></tr>
+          <tr><td>3 homes (non-regulated)</td><td colspan="3">8.0%</td></tr>
+          <tr><td>3 homes (regulated)</td><td colspan="3">12.0%</td></tr>
+          <tr><td>4+ homes</td><td colspan="3">12.0%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">Source: Local Tax Act Art. 11, Art. 15. The progressive formula for the 600-900M tier: rate (%) = (price × 2 / 3 × 10⁸) − 3.</p>
+  </section>
+
+  <div class="callout callout-warn" style="margin-top: 32px;">
+    <div class="icon">!</div>
+    <div class="body">
+      <strong>Disclaimer</strong> General information only. Actual tax depends on assessed value, relief eligibility, and local jurisdiction. Consult a Korean tax accountant.
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. General information only.</p></div></footer>
+<script src="../../assets/app.js"></script>
+</body>
+</html>

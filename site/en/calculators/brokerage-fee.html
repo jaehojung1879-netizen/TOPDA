@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brokerage Fee Calculator — TOPDA</title>
+<meta name="description" content="Calculate the maximum real estate agent commission for sale or Jeonse transactions in Seoul." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>TOPDA</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>Home</a>
+      <a href="index.html" data-nav class="active">Calculators</a>
+      <a href="../jeonse.html" data-nav>Jeonse 101</a>
+      <a href="../auction.html" data-nav>Auction</a>
+      <a href="../about.html" data-nav>About</a>
+    </nav>
+    <div class="lang-switch">
+      <a href="../../calculators/brokerage-fee.html">KR</a>
+      <a href="brokerage-fee.html" class="active">EN</a>
+    </div>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="Menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">Home</a>
+    <a href="index.html">Calculators</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Calculators</a> / Brokerage Fee</div>
+    <h1>Brokerage Fee Calculator</h1>
+    <div class="meta"><span>Seoul max rates · negotiable in practice · VAT additional</span></div>
+  </div>
+
+  <div class="calc-layout" data-calc="brokerage-fee">
+
+    <div class="calc-form">
+      <div class="field">
+        <label>Transaction type</label>
+        <div class="radio-group">
+          <label><input type="radio" name="type" value="sale" checked/><span>Sale (매매)</span></label>
+          <label><input type="radio" name="type" value="jeonse"/><span>Jeonse (전세)</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="price">Transaction value (KRW)</label>
+        <div class="input-suffix" data-suffix="KRW">
+          <input id="price" name="price" type="text" inputmode="numeric" data-format="won" placeholder="e.g. 500,000,000" autocomplete="off" value="500,000,000" />
+        </div>
+        <span class="hint">Sale price for purchases; deposit for Jeonse.</span>
+      </div>
+    </div>
+
+    <div class="calc-result">
+      <h3>Maximum total (incl. VAT)</h3>
+      <div class="total" data-out="total">KRW 0</div>
+
+      <div class="breakdown">
+        <div class="row"><span class="key">Rate</span><span class="val" data-out="rate">—</span></div>
+        <div class="row"><span class="key">Cap</span><span class="val" data-out="cap">—</span></div>
+        <div class="row sub"><span class="key">Commission (excl. VAT)</span><span class="val" data-out="fee">KRW 0</span></div>
+        <div class="row sub"><span class="key">VAT (10%)</span><span class="val" data-out="vat">KRW 0</span></div>
+      </div>
+
+      <div class="callout callout-info" style="margin-top:24px; margin-bottom:0;">
+        <div class="icon">i</div>
+        <div class="body">
+          <strong>These are caps, not fixed rates.</strong> The actual fee is negotiable. VAT applies only if the agent is a standard taxpayer.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section style="margin-top:64px;">
+    <h2>Seoul rates (residential)</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>Tier</th><th>Sale</th><th>Jeonse</th></tr></thead>
+        <tbody>
+          <tr><th>&lt; KRW 50M</th><td>0.6% (cap 250K)</td><td>0.5% (cap 200K)</td></tr>
+          <tr><th>50M-200M</th><td>0.5% (cap 800K)</td><td>—</td></tr>
+          <tr><th>50M-100M (Jeonse)</th><td>—</td><td>0.4% (cap 300K)</td></tr>
+          <tr><th>100M-600M (Jeonse) / 200M-900M (Sale)</th><td>0.4%</td><td>0.3%</td></tr>
+          <tr><th>600M-1.2B (Jeonse) / 900M-1.2B (Sale)</th><td>0.5%</td><td>0.4%</td></tr>
+          <tr><th>1.2B-1.5B</th><td>0.6%</td><td>0.5%</td></tr>
+          <tr><th>≥ 1.5B</th><td>0.7%</td><td>0.6%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.85rem; color: var(--text-muted)">Source: Licensed Real Estate Agent Act Enforcement Rule (Seoul ordinance). Rates outside Seoul may differ.</p>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. General information only.</p></div></footer>
+<script src="../../assets/app.js"></script>
+</body>
+</html>
