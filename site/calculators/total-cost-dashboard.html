@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>부동산 종합 계산 대시보드 — 톺다</title>
-<meta name="description" content="매매·전세·임대·상속·증여 한 화면에서 비교. 취득세·양도세·중개수수료·DSR·신용대출까지 종합 산정하는 부동산 통합 대시보드." />
+<meta name="description" content="매수·매도·전세 임차·임대·상속·증여 6가지 시나리오를 한 화면에서. 취득세·양도세·DSR·RTI·중개수수료까지 종합 산정." />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css" />
 </head>
@@ -17,13 +17,12 @@
       <a href="../index.html" data-nav>홈</a>
       <a href="../calculators/index.html" data-nav class="active">계산기</a>
       <a href="../checklists/index.html" data-nav>체크리스트</a>
-      <a href="../index.html#categories" data-nav>가이드</a>
       <a href="../about.html" data-nav>안내</a>
     </nav>
-    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
-  </div>
-  <div class="mobile-menu" data-mobile-menu>
-    <a href="../index.html">홈</a><a href="../calculators/index.html">계산기</a><a href="../checklists/index.html">체크리스트</a><a href="../index.html#categories">가이드</a><a href="../about.html">안내</a>
+    <div class="lang-switch">
+      <a href="total-cost-dashboard.html" class="active">KR</a>
+      <a href="../en/index.html">EN</a>
+    </div>
   </div>
 </header>
 
@@ -31,15 +30,15 @@
   <div class="article-header">
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 종합 대시보드</div>
     <h1>부동산 종합 계산 대시보드</h1>
-    <p class="lead">한 화면에서 매매·전세·임대·상속·증여 5가지 시나리오의 종합 비용·세금·대출 한도를 동시에 산정합니다. 신용대출 포함 DSR도 함께 점검합니다.</p>
+    <p class="lead">매수·매도·전세·임대·상속·증여 6가지 거래를 한 화면에서 비교합니다. 시나리오마다 적용되는 세법·대출 규제(DSR/RTI)만 자동으로 노출합니다.</p>
   </div>
 
   <!-- 시나리오 탭 -->
   <div class="scn-tabs" data-scn-tabs role="tablist">
-    <button class="scn-tab active" data-scn="sale" role="tab" aria-selected="true">매매(매수)</button>
-    <button class="scn-tab" data-scn="transfer" role="tab" aria-selected="false">매도(양도)</button>
+    <button class="scn-tab active" data-scn="sale" role="tab" aria-selected="true">매수 (취득)</button>
+    <button class="scn-tab" data-scn="transfer" role="tab" aria-selected="false">매도 (양도)</button>
     <button class="scn-tab" data-scn="lease" role="tab" aria-selected="false">전세 임차</button>
-    <button class="scn-tab" data-scn="rent" role="tab" aria-selected="false">임대인(임대 소득)</button>
+    <button class="scn-tab" data-scn="rent" role="tab" aria-selected="false">임대 (RTI)</button>
     <button class="scn-tab" data-scn="inherit" role="tab" aria-selected="false">상속</button>
     <button class="scn-tab" data-scn="gift" role="tab" aria-selected="false">증여</button>
   </div>
@@ -48,8 +47,8 @@
 
     <div class="calc-form">
 
-      <!-- ===== 공통: 주택 수 ===== -->
-      <div class="field">
+      <!-- ===== 공통: 주택 수 (sale/transfer/rent 노출) ===== -->
+      <div class="field" data-show-on="sale,transfer,rent">
         <label>현재 주택 수 (본 거래 포함)</label>
         <div class="radio-group">
           <label><input type="radio" name="homes" value="1" checked/><span>1주택</span></label>
@@ -58,16 +57,16 @@
         </div>
       </div>
 
-      <div class="field">
+      <div class="field" data-show-on="sale,transfer">
         <label class="check-item" style="padding: 0; cursor: pointer;">
           <input type="checkbox" name="regulated"/>
           <span class="text">조정대상지역</span>
         </label>
       </div>
 
-      <!-- ===== 매매(매수) ===== -->
+      <!-- ===== 매수 ===== -->
       <div class="scn-panel" data-scn-panel="sale">
-        <h3 class="scn-section-title">매매 정보</h3>
+        <h3 class="scn-section-title">매수 정보</h3>
 
         <div class="field">
           <label for="td-price">매매가</label>
@@ -92,9 +91,9 @@
           </label>
         </div>
 
-        <h3 class="scn-section-title">대출</h3>
+        <h3 class="scn-section-title">주담대</h3>
         <div class="field">
-          <label for="td-loan">주담대 금액</label>
+          <label for="td-loan">대출 금액</label>
           <div class="input-suffix" data-suffix="원">
             <input id="td-loan" name="loan" type="text" inputmode="numeric" data-format="won" value="400,000,000" />
           </div>
@@ -163,11 +162,12 @@
             <span class="text">1세대 1주택 (양도일 기준)</span>
           </label>
         </div>
+        <p class="scn-note">매도 시나리오는 양도소득세 산정이 중심이라 소득·DSR을 적용하지 않습니다.</p>
       </div>
 
       <!-- ===== 전세 임차 ===== -->
       <div class="scn-panel" data-scn-panel="lease" hidden>
-        <h3 class="scn-section-title">전세 계약 정보</h3>
+        <h3 class="scn-section-title">전세 계약</h3>
         <div class="field">
           <label for="td-deposit">전세 보증금</label>
           <div class="input-suffix" data-suffix="원">
@@ -190,9 +190,10 @@
             <input id="td-leaseTerm" name="leaseTerm" type="number" min="1" max="10" step="1" value="2" />
           </div>
         </div>
+        <p class="scn-note">전세자금대출(HUG·HF·SGI 보증부)은 가계대출 DSR 산정 대상에서 제외됩니다(금감원 가계대출 관리방안). 다만 일부 ‘전세대출 + 신용보강’ 상품은 신용대출 한도에 영향을 주므로 은행에 확인 필요.</p>
       </div>
 
-      <!-- ===== 임대인(임대 소득) ===== -->
+      <!-- ===== 임대(임대 수입 + RTI) ===== -->
       <div class="scn-panel" data-scn-panel="rent" hidden>
         <h3 class="scn-section-title">임대 수입</h3>
         <div class="field">
@@ -208,12 +209,34 @@
           </div>
         </div>
         <div class="field">
-          <label for="td-propPrice">주택 공시가격 (참고)</label>
+          <label for="td-propPrice">주택 공시가격</label>
           <div class="input-suffix" data-suffix="원">
             <input id="td-propPrice" name="propPrice" type="text" inputmode="numeric" data-format="won" value="600,000,000" />
           </div>
           <span class="hint">재산세·종부세 산정용. 시세의 60~70% 수준.</span>
         </div>
+
+        <h3 class="scn-section-title">임대사업자 대출 (RTI)</h3>
+        <div class="field">
+          <label for="td-rentLoan">임대 사업자 대출 (검토 대상)</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-rentLoan" name="rentLoan" type="text" inputmode="numeric" data-format="won" value="200,000,000" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-rentLoanRate">금리 (연 %)</label>
+            <input id="td-rentLoanRate" name="rentLoanRate" type="number" min="1" max="15" step="0.01" value="5.0" />
+          </div>
+          <div class="field">
+            <label>물건 유형</label>
+            <div class="radio-group">
+              <label><input type="radio" name="rentType" value="residential" checked/><span>주택</span></label>
+              <label><input type="radio" name="rentType" value="commercial"/><span>비주택</span></label>
+            </div>
+          </div>
+        </div>
+        <p class="scn-note">RTI(임대업이자상환비율) = 연간 임대수입 ÷ 연간 이자비용. 주택 1.25배, 비주택 1.5배 이상이 일반적 승인 기준 (금감원 임대업 이자상환비율 도입 안내).</p>
       </div>
 
       <!-- ===== 상속 ===== -->
@@ -246,7 +269,7 @@
         <div class="field">
           <label for="td-children">자녀 수</label>
           <input id="td-children" name="children" type="number" min="0" max="10" step="1" value="2" />
-          <span class="hint">자녀 1인당 5천만 원 인적공제(미성년 1년당 1천만 원 추가).</span>
+          <span class="hint">자녀 1인당 5천만 원 인적공제(미성년은 만 19세까지 연수 × 1천만 원 추가).</span>
         </div>
       </div>
 
@@ -265,9 +288,9 @@
             <label><input type="radio" name="donee" value="spouse" /><span>배우자</span></label>
             <label><input type="radio" name="donee" value="adult" checked/><span>성년 자녀</span></label>
             <label><input type="radio" name="donee" value="minor"/><span>미성년 자녀</span></label>
-            <label><input type="radio" name="donee" value="other"/><span>기타</span></label>
+            <label><input type="radio" name="donee" value="other"/><span>기타 친족</span></label>
           </div>
-          <span class="hint">10년 합산 공제: 배우자 6억 / 성년 자녀 5천만 / 미성년 2천만 / 기타 1천만 원.</span>
+          <span class="hint">10년 합산 공제: 배우자 6억 / 성년 자녀 5천만 / 미성년 2천만 / 기타 친족 1천만 원.</span>
         </div>
         <div class="field">
           <label for="td-prevGift">과거 10년 내 증여받은 금액 (동일 증여자 기준)</label>
@@ -277,26 +300,28 @@
         </div>
       </div>
 
-      <!-- ===== DSR / 소득·부채 (모든 시나리오에서 노출, lease·sale에 직접 영향) ===== -->
-      <h3 class="scn-section-title" data-dsr-section>소득 · DSR 점검</h3>
-      <div class="field" data-dsr-section>
-        <label for="td-income">연 소득 (세전)</label>
-        <div class="input-suffix" data-suffix="원">
-          <input id="td-income" name="annualIncome" type="text" inputmode="numeric" data-format="won" value="60,000,000" />
+      <!-- ===== DSR (sale에서만 노출) ===== -->
+      <div data-show-on="sale">
+        <h3 class="scn-section-title">소득 · DSR 점검</h3>
+        <div class="field">
+          <label for="td-income">연 소득 (세전)</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-income" name="annualIncome" type="text" inputmode="numeric" data-format="won" value="60,000,000" />
+          </div>
         </div>
-      </div>
-      <div class="field" data-dsr-section>
-        <label for="td-otherDebt">기존 주담대·기타 대출의 연 원리금</label>
-        <div class="input-suffix" data-suffix="원">
-          <input id="td-otherDebt" name="otherDebt" type="text" inputmode="numeric" data-format="won" value="0" />
+        <div class="field">
+          <label for="td-otherDebt">기존 주담대·기타 대출의 연 원리금</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-otherDebt" name="otherDebt" type="text" inputmode="numeric" data-format="won" value="0" />
+          </div>
         </div>
-      </div>
-      <div class="field" data-dsr-section>
-        <label for="td-credit">신용대출 잔액</label>
-        <div class="input-suffix" data-suffix="원">
-          <input id="td-credit" name="creditDebt" type="text" inputmode="numeric" data-format="won" value="0" />
+        <div class="field">
+          <label for="td-credit">신용대출 잔액</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-credit" name="creditDebt" type="text" inputmode="numeric" data-format="won" value="0" />
+          </div>
+          <span class="hint">DSR 산정에서 신용대출은 잔액 ÷ 5년으로 연환산됩니다.</span>
         </div>
-        <span class="hint">DSR 계산에서는 신용대출 잔액 ÷ 5년으로 연환산해 합산합니다.</span>
       </div>
     </div>
 
@@ -311,18 +336,21 @@
         <div class="row"><span class="key" data-quick-label3>—</span><span class="val" data-out="quick3">—</span></div>
       </div>
 
-      <div class="chart-wrap" data-show-chart>
+      <div class="chart-wrap">
         <canvas id="costChart" height="220"></canvas>
+        <div class="chart-empty" data-chart-empty hidden>
+          입력값을 채우면 비중 차트가 표시됩니다.
+        </div>
       </div>
 
       <div class="breakdown" data-detail-breakdown style="border-top:1px solid var(--border); padding-top:14px; margin-top:8px;">
         <!-- JS에서 채움 -->
       </div>
 
-      <!-- DSR 결과 박스 -->
+      <!-- DSR 결과 (sale에서만) -->
       <div class="dsr-box" data-dsr-box>
         <div class="dsr-box-head">
-          <strong>DSR</strong>
+          <strong>DSR (총부채원리금상환비율)</strong>
           <span class="dsr-pct" data-out="dsrPct">—</span>
         </div>
         <div class="dsr-bar"><div class="dsr-bar-fill" data-out="dsrFill" style="width:0%"></div></div>
@@ -333,20 +361,78 @@
         <p class="dsr-verdict" data-out="dsrVerdict">소득과 대출 정보를 입력하면 자동 계산됩니다.</p>
       </div>
 
+      <!-- RTI 결과 (rent에서만) -->
+      <div class="dsr-box" data-rti-box hidden>
+        <div class="dsr-box-head">
+          <strong>RTI (임대업이자상환비율)</strong>
+          <span class="dsr-pct" data-out="rtiRatio">—</span>
+        </div>
+        <div class="dsr-bar"><div class="dsr-bar-fill" data-out="rtiFill" style="width:0%"></div></div>
+        <div class="dsr-meta">
+          <span>주택 1.25배</span>
+          <span>비주택 1.5배</span>
+        </div>
+        <p class="dsr-verdict" data-out="rtiVerdict">임대수입과 대출 정보를 입력하면 자동 계산됩니다.</p>
+      </div>
+
     </div>
   </div>
 
-  <section style="margin-top: 56px;">
-    <h2 style="margin-bottom: 16px;">계산 가정 · 출처</h2>
+  <!-- 최근 규제 / 뉴스 -->
+  <section class="news-section">
+    <h2 style="margin-bottom: 8px;">최근 규제·정책 소식</h2>
+    <p style="color: var(--text-muted); font-size:0.88rem; margin-bottom: 16px;">계산기에 반영된 기준이 변동될 수 있는 항목입니다. 각 항목은 1차 출처 사이트에서 갱신일 기준으로 확인하시기 바랍니다.</p>
+    <div class="news-grid">
+      <a class="news-card" href="https://www.fsc.go.kr" target="_blank" rel="noopener">
+        <span class="news-tag">금융위·금감원</span>
+        <h3>스트레스 DSR — 3단계 시행 일정</h3>
+        <p>변동·혼합금리 주담대에 가산금리(통상 1.5%p)를 더해 DSR을 평가하는 제도. 단계별로 가산 폭이 확대됩니다. 시행 일정과 적용 범위는 금융위 보도자료에서 확인.</p>
+        <span class="news-link">금융위 →</span>
+      </a>
+      <a class="news-card" href="https://nhuf.molit.go.kr" target="_blank" rel="noopener">
+        <span class="news-tag">국토부 · 주택도시기금</span>
+        <h3>신생아 특례 대출 / 정책 모기지</h3>
+        <p>신생아 가구 우대 금리, 디딤돌·보금자리 한도와 금리는 정책 발표에 따라 수시 변경됩니다.</p>
+        <span class="news-link">주택도시기금 →</span>
+      </a>
+      <a class="news-card" href="https://www.nts.go.kr" target="_blank" rel="noopener">
+        <span class="news-tag">국세청</span>
+        <h3>양도소득세 한시적 중과배제</h3>
+        <p>다주택자 양도세 중과(20~30%p) 한시 배제 기간 연장 여부에 따라 매도 전략이 달라집니다. 시행령 개정안 공시 확인.</p>
+        <span class="news-link">국세청 →</span>
+      </a>
+      <a class="news-card" href="https://www.molit.go.kr" target="_blank" rel="noopener">
+        <span class="news-tag">국토교통부</span>
+        <h3>조정대상지역·투기과열지구</h3>
+        <p>지정·해제에 따라 취득세 중과 8~12%, LTV·DSR 가산 기준이 달라집니다. 현재 지정 현황을 확인하세요.</p>
+        <span class="news-link">국토부 →</span>
+      </a>
+      <a class="news-card" href="https://www.khug.or.kr" target="_blank" rel="noopener">
+        <span class="news-tag">HUG</span>
+        <h3>전세보증금 반환보증 — 가입 조건</h3>
+        <p>공시가격 대비 보증한도 비율(2024년 기준 126%), 보증료율, 가입 시한이 매년 갱신됩니다.</p>
+        <span class="news-link">HUG →</span>
+      </a>
+      <a class="news-card" href="https://www.law.go.kr/법령/지방세법" target="_blank" rel="noopener">
+        <span class="news-tag">지방세법</span>
+        <h3>취득세율·생애최초 감면 한도</h3>
+        <p>생애최초 감면(200만 원 한도)·신생아 가구 감면 신설 등 시행령 개정 추이를 반영해 입력하세요.</p>
+        <span class="news-link">국가법령정보센터 →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 출처 (간소화) -->
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 16px;">출처</h2>
     <ul class="ref-list">
-      <li><strong>취득세</strong> — 지방세법 제11·15조. 1주택 6억 이하 1.0%, 6~9억 누진, 9억 초과 3.0%, 다주택·조정 8~12%. 농어촌특별세는 85㎡ 초과 시 0.2~1.0%, 지방교육세는 표준세율의 10% 또는 매매가 0.4%(중과)</li>
-      <li><strong>양도소득세</strong> — 소득세법 제55조 누진세율 8구간. 1세대1주택 12억 비과세, 12억 초과는 안분과세. 장기보유특별공제(일반 6~30% / 1주택 거주·보유 합산 최대 80%). 지방소득세는 양도세의 10%</li>
-      <li><strong>임대소득세</strong> — 분리과세 14% 또는 종합과세 6~45%. 월세 + 간주임대료(3주택 이상은 보증금 합계 3억 초과분 × 기준이자율) 합산</li>
-      <li><strong>상속세</strong> — 일괄공제 5억 또는 기초+인적공제. 배우자공제는 실제 상속분 한도(최소 5억, 최대 30억). 누진세율 10~50%</li>
-      <li><strong>증여세</strong> — 10년 합산 공제 후 누진세율 10~50%. 직계존비속 5천만(미성년 2천만), 배우자 6억, 기타 친족 1천만 원</li>
-      <li><strong>DSR</strong> — (연 원리금 + 신용대출 잔액÷5) ÷ 연 소득. 1금융 40%, 2금융 50% 한도</li>
-      <li><strong>중개수수료(서울 매매)</strong> — 9억~12억 0.5%, 12억~15억 0.6%, 15억+ 0.7%. VAT 10% 별도</li>
-      <li><strong>법무사·등기</strong> — 매매가의 0.2% 안팎 추정</li>
+      <li><a href="https://www.law.go.kr/법령/지방세법" target="_blank" rel="noopener">지방세법</a> (제11·제15조 — 취득세 세율)</li>
+      <li><a href="https://www.law.go.kr/법령/지방세특례제한법" target="_blank" rel="noopener">지방세특례제한법</a> (제36조의2 — 생애최초 감면)</li>
+      <li><a href="https://www.law.go.kr/법령/소득세법" target="_blank" rel="noopener">소득세법</a> (제55조 누진세율 / 양도소득세)</li>
+      <li><a href="https://www.law.go.kr/법령/상속세및증여세법" target="_blank" rel="noopener">상속세 및 증여세법</a> (누진세율·공제)</li>
+      <li><a href="https://www.law.go.kr/법령/종합부동산세법" target="_blank" rel="noopener">종합부동산세법</a> · <a href="https://www.law.go.kr/법령/주택임대차보호법" target="_blank" rel="noopener">주택임대차보호법</a></li>
+      <li><a href="https://www.fsc.go.kr" target="_blank" rel="noopener">금융위원회</a> · <a href="https://www.fss.or.kr" target="_blank" rel="noopener">금융감독원</a> (DSR·RTI·스트레스 DSR 가이드)</li>
+      <li><a href="https://www.nts.go.kr" target="_blank" rel="noopener">국세청 홈택스</a> · <a href="https://www.wetax.go.kr" target="_blank" rel="noopener">위택스</a></li>
     </ul>
   </section>
 
@@ -360,7 +446,7 @@
 
 <footer class="site-footer">
   <div class="container">
-    <p class="disclaimer">© 톺다. 일반 정보 제공용입니다.</p>
+    <p class="disclaimer">© 톺다. 일반 정보 제공용이며 법률·세무·금융 자문이 아닙니다.</p>
   </div>
 </footer>
 
