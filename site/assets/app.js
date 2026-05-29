@@ -642,146 +642,496 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
   recalc();
 })();
 
-// ===== Total Cost Dashboard (Chart.js 도넛) =====
+
+// ===== Total Cost Dashboard — 6 시나리오 통합 =====
+// 매매(매수) · 매도(양도) · 전세 임차 · 임대인(임대 소득) · 상속 · 증여
+// + 모든 시나리오에서 DSR(신용대출 포함) 동시 점검
 (function () {
   const root = document.querySelector('[data-calc="total-cost-dashboard"]');
   if (!root) return;
-  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
-  const canvas = document.getElementById('costChart');
-  let chart = null;
-
-  // 취득세(본세) 계산 — calcAcquisitionTax 로직 일부 재사용
-  function calcAcqTotal(price, homes, regulated, areaOver85) {
-    if (!price || price <= 0) return 0;
-    const r = calcAcquisitionTax({ price, homes, regulated, areaOver85, firstHome: false });
-    return r ? r.total : 0;
-  }
-  // 중개수수료 — 서울 매매 기준, 부가세 포함
-  function calcBroker(price) {
-    if (!price || price <= 0) return 0;
-    const eok = price / 100000000;
-    let rate, max;
-    if (eok < 0.5) { rate = 0.006; max = 250000; }
-    else if (eok < 2) { rate = 0.005; max = 800000; }
-    else if (eok < 9) { rate = 0.004; max = null; }
-    else if (eok < 12) { rate = 0.005; max = null; }
-    else if (eok < 15) { rate = 0.006; max = null; }
-    else { rate = 0.007; max = null; }
-    let fee = price * rate;
-    if (max != null) fee = Math.min(fee, max);
-    return Math.round(fee * 1.1); // VAT 포함
-  }
-  // 월 원리금균등 상환액
-  function calcMonthly(principal, annualRate, years) {
-    if (!principal || principal <= 0 || annualRate <= 0 || years <= 0) return 0;
-    const i = annualRate / 100 / 12;
-    const n = years * 12;
-    return principal * i * Math.pow(1 + i, n) / (Math.pow(1 + i, n) - 1);
-  }
-
-  function makeChart(data, labels, colors) {
-    if (!canvas || typeof Chart === 'undefined') return;
-    const opts = {
-      type: 'doughnut',
-      data: {
-        labels,
-        datasets: [{
-          data,
-          backgroundColor: colors,
-          borderColor: '#fff',
-          borderWidth: 2,
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 600, easing: 'easeOutQuart' },
-        cutout: '62%',
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: { font: { size: 12, family: 'Pretendard Variable' }, usePointStyle: true, padding: 12 },
-          },
-          tooltip: {
-            callbacks: {
-              label: (ctx) => {
-                const v = ctx.parsed;
-                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                const pct = total > 0 ? (v / total * 100).toFixed(1) : '0.0';
-                return ctx.label + ': ' + fmt.won(v) + ' (' + pct + '%)';
-              },
-            },
-          },
-        },
-      },
-    };
-    if (chart) {
-      chart.data.labels = labels;
-      chart.data.datasets[0].data = data;
-      chart.data.datasets[0].backgroundColor = colors;
-      chart.update();
-    } else {
-      chart = new Chart(canvas.getContext('2d'), opts);
-    }
-  }
-
-  const recalc = () => {
-    const price = fmt.parseWon(root.querySelector('[name="price"]').value);
-    const homes = Number(root.querySelector('[name="homes"]:checked')?.value || 1);
-    const regulated = root.querySelector('[name="regulated"]')?.checked || false;
-    const areaOver85 = root.querySelector('[name="areaOver85"]')?.checked || false;
-    const loan = fmt.parseWon(root.querySelector('[name="loan"]').value);
-    const rate = Number(root.querySelector('[name="rate"]').value || 0);
-    const term = Number(root.querySelector('[name="term"]').value || 30);
-    const purpose = root.querySelector('[name="purpose"]:checked')?.value || 'own';
-    const jeonseDeposit = purpose === 'gap' ? fmt.parseWon(root.querySelector('[name="jeonseDeposit"]').value) : 0;
-
-    // 갭투자 옵션 영역 토글
-    const gapField = root.querySelector('[data-purpose="gap"]');
-    if (gapField) gapField.style.display = purpose === 'gap' ? '' : 'none';
-
-    const tax = calcAcqTotal(price, homes, regulated, areaOver85);
-    const broker = calcBroker(price);
-    const legal = price * 0.002; // 법무사·등기 추정
-    const monthly = calcMonthly(loan, rate, term);
-    const totalInterest = monthly * term * 12 - loan;
-
-    // 자기자본 계산
-    let equity = price - loan - jeonseDeposit;
-    if (equity < 0) equity = 0;
-    const initialCapital = equity + tax + broker + legal;
-    const grandTotal = price + tax + broker + legal;
-
-    setText('initialCapital', fmt.won(initialCapital));
-    setText('monthlyPayment', fmt.won(monthly));
-    setText('totalInterest', fmt.won(totalInterest));
-    setText('equityAmt', fmt.won(equity));
-    setText('loanAmt', fmt.won(loan));
-    setText('jeonseAmt', fmt.won(jeonseDeposit));
-    setText('taxAmt', fmt.won(tax));
-    setText('brokerAmt', fmt.won(broker));
-    setText('legalAmt', fmt.won(legal));
-    setText('grandTotal', fmt.won(grandTotal));
-
-    const data = [equity, loan, jeonseDeposit, tax, broker, legal].filter((v, i) => v > 0 || i < 2);
-    const labels = ['자기자본', '대출 원금', '전세보증금 인수', '취득세', '중개수수료', '법무사·등기'];
-    const colors = ['#1e3a8a', '#3b82f6', '#60a5fa', '#f59e0b', '#ef4444', '#a855f7'];
-    // jeonseDeposit이 0이면 차트에서도 제외
-    const dataset = [];
-    const labset = [];
-    const colset = [];
-    [equity, loan, jeonseDeposit, tax, broker, legal].forEach((v, i) => {
-      if (v > 0) { dataset.push(v); labset.push(labels[i]); colset.push(colors[i]); }
-    });
-    makeChart(dataset, labset, colset);
-  };
-  root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
-  // Chart.js 로드 후 재시도
   if (typeof Chart === 'undefined') {
     const wait = setInterval(() => {
-      if (typeof Chart !== 'undefined') { clearInterval(wait); recalc(); }
+      if (typeof Chart !== 'undefined') { clearInterval(wait); init(); }
     }, 100);
-  } else {
+    return;
+  }
+  init();
+
+  function init() {
+    let currentScn = 'sale';
+    let chart = null;
+    const canvas = document.getElementById('costChart');
+    const panels = document.querySelectorAll('[data-scn-panel]');
+    const resultTitle = root.querySelector('[data-scn-result-title]');
+    const detailBox = root.querySelector('[data-detail-breakdown]');
+    const dsrBox = root.querySelector('[data-dsr-box]');
+    const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+    const setLabel = (attr, txt) => { const el = root.querySelector('['+attr+']'); if (el) el.textContent = txt; };
+
+    const getN = (name) => fmt.parseWon(root.querySelector('[name="'+name+'"]')?.value || '0');
+    const getNum = (name) => Number(root.querySelector('[name="'+name+'"]')?.value || 0);
+    const getRadio = (name) => root.querySelector('[name="'+name+'"]:checked')?.value;
+    const getCheck = (name) => root.querySelector('[name="'+name+'"]')?.checked || false;
+
+    function acquisitionTotal(price, homes, regulated, areaOver85, firstHome) {
+      const r = calcAcquisitionTax({ price, homes, regulated, areaOver85, firstHome });
+      return r || { total: 0, acquisition: 0, ruralTax: 0, localEduTax: 0, firstHomeDeduct: 0, baseRate: 0 };
+    }
+
+    function brokerFee(price, type) {
+      if (!price || price <= 0) return 0;
+      const eok = price / 100000000;
+      let rate, max;
+      if (type === 'lease') {
+        if (eok < 0.5) { rate = 0.005; max = 200000; }
+        else if (eok < 1) { rate = 0.004; max = 300000; }
+        else if (eok < 6) { rate = 0.003; max = null; }
+        else if (eok < 12) { rate = 0.004; max = null; }
+        else if (eok < 15) { rate = 0.005; max = null; }
+        else { rate = 0.006; max = null; }
+      } else {
+        if (eok < 0.5) { rate = 0.006; max = 250000; }
+        else if (eok < 2) { rate = 0.005; max = 800000; }
+        else if (eok < 9) { rate = 0.004; max = null; }
+        else if (eok < 12) { rate = 0.005; max = null; }
+        else if (eok < 15) { rate = 0.006; max = null; }
+        else { rate = 0.007; max = null; }
+      }
+      let fee = price * rate;
+      if (max != null) fee = Math.min(fee, max);
+      return Math.round(fee * 1.1);
+    }
+
+    function monthlyPayment(principal, annualRate, years) {
+      if (!principal || annualRate <= 0 || years <= 0) return 0;
+      const i = annualRate / 100 / 12;
+      const n = years * 12;
+      return principal * i * Math.pow(1+i, n) / (Math.pow(1+i, n) - 1);
+    }
+
+    function progressiveTax(base) {
+      const brackets = [
+        { upTo: 14000000,    rate: 0.06, deduction: 0 },
+        { upTo: 50000000,    rate: 0.15, deduction: 1260000 },
+        { upTo: 88000000,    rate: 0.24, deduction: 5760000 },
+        { upTo: 150000000,   rate: 0.35, deduction: 15440000 },
+        { upTo: 300000000,   rate: 0.38, deduction: 19940000 },
+        { upTo: 500000000,   rate: 0.40, deduction: 25940000 },
+        { upTo: 1000000000,  rate: 0.42, deduction: 35940000 },
+        { upTo: Infinity,    rate: 0.45, deduction: 65940000 },
+      ];
+      for (const b of brackets) if (base <= b.upTo) return Math.max(0, base * b.rate - b.deduction);
+      return 0;
+    }
+
+    function inheritGiftTax(base) {
+      const brackets = [
+        { upTo: 100000000,   rate: 0.10, deduction: 0 },
+        { upTo: 500000000,   rate: 0.20, deduction: 10000000 },
+        { upTo: 1000000000,  rate: 0.30, deduction: 60000000 },
+        { upTo: 3000000000,  rate: 0.40, deduction: 160000000 },
+        { upTo: Infinity,    rate: 0.50, deduction: 460000000 },
+      ];
+      for (const b of brackets) if (base <= b.upTo) return Math.max(0, base * b.rate - b.deduction);
+      return 0;
+    }
+
+    function renderChart(items) {
+      if (!canvas) return;
+      const data = items.filter(x => x.value > 0);
+      if (!data.length) { if (chart) { chart.destroy(); chart = null; } return; }
+      const cfg = {
+        type: 'doughnut',
+        data: {
+          labels: data.map(d => d.label),
+          datasets: [{ data: data.map(d => d.value), backgroundColor: data.map(d => d.color), borderColor: '#fff', borderWidth: 2 }],
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          animation: { duration: 500, easing: 'easeOutQuart' },
+          cutout: '62%',
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 12 }, usePointStyle: true, padding: 10 } },
+            tooltip: { callbacks: { label: (ctx) => {
+              const v = ctx.parsed;
+              const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              const pct = total > 0 ? (v / total * 100).toFixed(1) : '0.0';
+              return ctx.label + ': ' + fmt.won(v) + ' (' + pct + '%)';
+            } } },
+          },
+        },
+      };
+      if (chart) {
+        chart.data.labels = cfg.data.labels;
+        chart.data.datasets[0].data = cfg.data.datasets[0].data;
+        chart.data.datasets[0].backgroundColor = cfg.data.datasets[0].backgroundColor;
+        chart.update();
+      } else {
+        chart = new Chart(canvas.getContext('2d'), cfg);
+      }
+    }
+
+    function renderDetail(items) {
+      if (!detailBox) return;
+      detailBox.innerHTML = '';
+      items.forEach((it) => {
+        if (it.divider) {
+          const row = document.createElement('div');
+          row.className = 'row';
+          row.style.borderTop = '1px dashed var(--border)';
+          row.style.paddingTop = '8px';
+          row.style.marginTop = '6px';
+          row.innerHTML = `<span class="key" style="font-weight:700;">${it.label}</span><span class="val" style="font-weight:700;">${fmt.won(it.value)}</span>`;
+          detailBox.appendChild(row);
+          return;
+        }
+        const row = document.createElement('div');
+        row.className = it.sub ? 'row sub' : 'row';
+        const dot = it.color ? `<span class="dot" style="background:${it.color}"></span>` : '';
+        row.innerHTML = `<span class="key">${dot}${it.label}</span><span class="val">${typeof it.value === 'string' ? it.value : fmt.won(it.value)}</span>`;
+        detailBox.appendChild(row);
+      });
+    }
+
+    function renderDSR(annualPmt) {
+      const income = getN('annualIncome');
+      const otherDebt = getN('otherDebt');
+      const credit = getN('creditDebt');
+      const creditAnnual = credit / 5;
+      const totalAnnualPmt = annualPmt + otherDebt + creditAnnual;
+      const dsr = income > 0 ? totalAnnualPmt / income * 100 : 0;
+      setText('dsrPct', income > 0 ? dsr.toFixed(1) + '%' : '소득 입력 필요');
+      const fillEl = root.querySelector('[data-out="dsrFill"]');
+      if (fillEl) {
+        fillEl.style.width = Math.min(100, dsr) + '%';
+        if (dsr > 50) fillEl.style.background = '#b91c1c';
+        else if (dsr > 40) fillEl.style.background = '#b45309';
+        else fillEl.style.background = '#047857';
+      }
+      let verdict;
+      if (income <= 0) verdict = '소득을 입력하면 DSR이 자동 계산됩니다.';
+      else if (dsr > 50) verdict = '2금융 한도(50%)도 초과 — 대출 금액·기간을 조정해야 합니다.';
+      else if (dsr > 40) verdict = '1금융 한도(40%) 초과, 2금융(50%) 내 가능. 금리 부담을 비교 검토하세요.';
+      else if (dsr > 0) verdict = '1금융 한도(40%) 내에서 정상 승인 가능한 수준입니다.';
+      else verdict = '대출 정보가 0이라 DSR이 적용되지 않습니다.';
+      if (credit > 0 && income > 0) verdict += ` (신용대출 ${fmt.won(credit)} → 연환산 ${fmt.won(creditAnnual)})`;
+      setText('dsrVerdict', verdict);
+    }
+
+    function calcSale() {
+      const price = getN('price');
+      const homes = Number(getRadio('homes') || 1);
+      const regulated = getCheck('regulated');
+      const areaOver85 = getCheck('areaOver85');
+      const firstHome = getCheck('firstHome');
+      const loan = getN('loan');
+      const rate = getNum('rate');
+      const term = getNum('term');
+      const purpose = getRadio('purpose') || 'own';
+      const jeonseDeposit = purpose === 'gap' ? getN('jeonseDeposit') : 0;
+      const gapField = root.querySelector('[data-purpose="gap"]');
+      if (gapField) gapField.style.display = purpose === 'gap' ? '' : 'none';
+
+      const acq = acquisitionTotal(price, homes, regulated, areaOver85, firstHome);
+      const broker = brokerFee(price, 'sale');
+      const legal = price * 0.002;
+      const monthly = monthlyPayment(loan, rate, term);
+      const totalInterest = monthly > 0 ? monthly * term * 12 - loan : 0;
+      const equity = Math.max(0, price - loan - jeonseDeposit);
+      const initialCapital = equity + acq.total + broker + legal;
+      const grandTotal = price + acq.total + broker + legal;
+
+      if (resultTitle) resultTitle.textContent = purpose === 'gap' ? '갭투자 — 실제 투입 자기자본' : '예상 총 매수 비용';
+      setText('primaryTotal', fmt.won(initialCapital));
+      setLabel('data-quick-label1', '월 원리금 상환');
+      setText('quick1', fmt.won(monthly));
+      setLabel('data-quick-label2', '총 이자 (만기까지)');
+      setText('quick2', fmt.won(totalInterest));
+      setLabel('data-quick-label3', '취득세 합계');
+      setText('quick3', fmt.won(acq.total));
+
+      renderChart([
+        { label: '자기자본', value: equity, color: '#1e3a8a' },
+        { label: '대출 원금', value: loan, color: '#3b82f6' },
+        { label: '전세보증금 인수', value: jeonseDeposit, color: '#60a5fa' },
+        { label: '취득세 합계', value: acq.total, color: '#f59e0b' },
+        { label: '중개수수료', value: broker, color: '#ef4444' },
+        { label: '법무사·등기', value: legal, color: '#a855f7' },
+      ]);
+      renderDetail([
+        { label: '자기자본', value: equity, color: '#1e3a8a' },
+        { label: '대출 원금', value: loan, color: '#3b82f6' },
+        ...(purpose === 'gap' ? [{ label: '전세보증금 인수', value: jeonseDeposit, color: '#60a5fa' }] : []),
+        { label: '취득세 (감면 후)', value: acq.acquisition, color: '#f59e0b', sub: true },
+        ...(acq.firstHomeDeduct > 0 ? [{ label: '생애최초 감면', value: '−' + fmt.won(acq.firstHomeDeduct), sub: true }] : []),
+        { label: '농어촌특별세', value: acq.ruralTax, sub: true },
+        { label: '지방교육세', value: acq.localEduTax, sub: true },
+        { label: '중개수수료(VAT 포함)', value: broker, color: '#ef4444' },
+        { label: '법무사·등기 (추정)', value: legal, color: '#a855f7' },
+        { divider: true, label: '총 매수 비용 (대출 포함)', value: grandTotal },
+      ]);
+      renderDSR(monthly * 12);
+    }
+
+    function calcTransfer() {
+      const sellPrice = getN('sellPrice');
+      const buyPrice = getN('buyPrice');
+      const cost = getN('cost');
+      const holdYears = getNum('holdYears');
+      const liveYears = getNum('liveYears');
+      const homes = Number(getRadio('homes') || 1);
+      const onlyHome = getCheck('onlyHome');
+
+      const rawGain = Math.max(0, sellPrice - buyPrice - cost);
+      const isOne = homes === 1 && onlyHome && holdYears >= 2;
+      let exempted = false, ratio = 1;
+      if (isOne) {
+        if (sellPrice <= 1200000000) { exempted = true; ratio = 0; }
+        else { ratio = (sellPrice - 1200000000) / sellPrice; }
+      }
+      const taxableGain = rawGain * ratio;
+
+      let ltRate = 0;
+      if (holdYears >= 3) {
+        if (isOne && sellPrice > 1200000000) {
+          const h = Math.min(holdYears, 10);
+          const l = Math.min(liveYears, 10);
+          const hr = h >= 3 ? Math.min(0.40, 0.12 + (h-3)*0.04) : 0;
+          const lr = l >= 3 ? Math.min(0.40, 0.12 + (l-3)*0.04) : 0;
+          ltRate = Math.min(0.80, hr + lr);
+        } else {
+          const y = Math.min(holdYears, 15);
+          ltRate = Math.min(0.30, Math.max(0, (y-2) * 0.02));
+        }
+      }
+      const ltDeduct = taxableGain * ltRate;
+      const income = Math.max(0, taxableGain - ltDeduct);
+      const basicDeduct = Math.min(2500000, income);
+      const taxBase = Math.max(0, income - basicDeduct);
+      let incomeTax;
+      if (holdYears < 1) incomeTax = taxBase * 0.70;
+      else if (holdYears < 2) incomeTax = taxBase * 0.60;
+      else incomeTax = progressiveTax(taxBase);
+      const localTax = incomeTax * 0.10;
+      const total = incomeTax + localTax;
+
+      if (resultTitle) resultTitle.textContent = exempted ? '1세대1주택 비과세 (양도세 0원)' : '예상 양도소득세';
+      setText('primaryTotal', fmt.won(total));
+      setLabel('data-quick-label1', '양도차익');
+      setText('quick1', fmt.won(rawGain));
+      setLabel('data-quick-label2', '과세표준');
+      setText('quick2', fmt.won(taxBase));
+      setLabel('data-quick-label3', '실효세율 (양도가 대비)');
+      setText('quick3', sellPrice > 0 ? (total / sellPrice * 100).toFixed(2) + '%' : '—');
+
+      renderChart([
+        { label: '국세 양도소득세', value: incomeTax, color: '#1e3a8a' },
+        { label: '지방소득세 (10%)', value: localTax, color: '#3b82f6' },
+        { label: '장기보유 공제분', value: ltDeduct, color: '#047857' },
+      ]);
+      renderDetail([
+        { label: '양도가액', value: sellPrice, sub: true },
+        { label: '취득가액 + 필요경비', value: buyPrice + cost, sub: true },
+        { label: '양도차익', value: rawGain, color: '#1e3a8a' },
+        ...(ratio < 1 && ratio > 0 ? [{ label: '과세 비율 (12억 초과)', value: (ratio*100).toFixed(1)+'%', sub: true }] : []),
+        { label: '장기보유특별공제 (' + (ltRate*100).toFixed(0) + '%)', value: '−' + fmt.won(ltDeduct), sub: true },
+        { label: '기본공제', value: '−' + fmt.won(basicDeduct), sub: true },
+        { label: '과세표준', value: taxBase },
+        { label: '산출세액 (국세)', value: incomeTax, color: '#1e3a8a' },
+        { label: '지방소득세', value: localTax, color: '#3b82f6' },
+        { divider: true, label: '총 부담세액', value: total },
+      ]);
+      renderDSR(0);
+    }
+
+    function calcLease() {
+      const deposit = getN('leaseDeposit');
+      const loan = getN('leaseLoan');
+      const rate = getNum('leaseRate');
+      const term = getNum('leaseTerm') || 2;
+      const broker = brokerFee(deposit, 'lease');
+      const monthly = monthlyPayment(loan, rate, term);
+      const totalInterest = monthly * term * 12 - loan;
+      const equity = Math.max(0, deposit - loan);
+
+      if (resultTitle) resultTitle.textContent = '전세 임차 — 실제 투입 자기자본';
+      setText('primaryTotal', fmt.won(equity + broker));
+      setLabel('data-quick-label1', '월 이자 부담');
+      setText('quick1', fmt.won(monthly));
+      setLabel('data-quick-label2', '총 이자 (계약 기간)');
+      setText('quick2', fmt.won(totalInterest));
+      setLabel('data-quick-label3', '중개수수료');
+      setText('quick3', fmt.won(broker));
+
+      renderChart([
+        { label: '자기자본', value: equity, color: '#1e3a8a' },
+        { label: '전세자금대출', value: loan, color: '#3b82f6' },
+        { label: '중개수수료', value: broker, color: '#ef4444' },
+      ]);
+      renderDetail([
+        { label: '자기자본', value: equity, color: '#1e3a8a' },
+        { label: '전세자금대출', value: loan, color: '#3b82f6' },
+        { label: '중개수수료(VAT 포함)', value: broker, color: '#ef4444' },
+        { divider: true, label: '총 임차 비용 (보증금 + 부대)', value: deposit + broker },
+      ]);
+      renderDSR(monthly * 12);
+    }
+
+    function calcRent() {
+      const monthlyRent = getN('monthlyRent');
+      const deposit = getN('rentDeposit');
+      const propPrice = getN('propPrice');
+      const homes = Number(getRadio('homes') || 1);
+
+      let imputedRent = 0;
+      if (homes >= 3 && deposit > 300000000) imputedRent = (deposit - 300000000) * 0.029;
+      const annualRent = monthlyRent * 12;
+      const taxableRent = annualRent + imputedRent;
+      const separateTax = taxableRent * 0.14;
+      const necessary = taxableRent * 0.5;
+      const taxBase = Math.max(0, taxableRent - necessary);
+      const compositeTax = progressiveTax(taxBase);
+      const propertyTax = propPrice * 0.0025;
+      const annualNet = annualRent - separateTax;
+
+      if (resultTitle) resultTitle.textContent = '연간 임대 수입 (분리과세 후)';
+      setText('primaryTotal', fmt.won(annualNet));
+      setLabel('data-quick-label1', '연간 임대 수입');
+      setText('quick1', fmt.won(annualRent));
+      setLabel('data-quick-label2', '간주임대료 (3주택+)');
+      setText('quick2', fmt.won(imputedRent));
+      setLabel('data-quick-label3', '예상 재산세');
+      setText('quick3', fmt.won(propertyTax));
+
+      renderChart([
+        { label: '연 임대 수입', value: annualRent, color: '#1e3a8a' },
+        { label: '간주임대료', value: imputedRent, color: '#3b82f6' },
+        { label: '재산세', value: propertyTax, color: '#f59e0b' },
+        { label: '분리과세 14%', value: separateTax, color: '#ef4444' },
+      ]);
+      renderDetail([
+        { label: '월세 × 12', value: annualRent, color: '#1e3a8a' },
+        { label: '간주임대료 (3주택+ 보증금 3억 초과분)', value: imputedRent, sub: true },
+        { label: '분리과세 (14%, 수입 2천만 이하 가능)', value: separateTax, color: '#ef4444' },
+        { label: '종합과세 추정 (필요경비 50% 가정)', value: compositeTax, sub: true },
+        { label: '재산세 (공시가격 × 0.25% 추정)', value: propertyTax, color: '#f59e0b' },
+        { divider: true, label: '연간 수입 (분리과세 후)', value: annualNet },
+      ]);
+      renderDSR(0);
+    }
+
+    function calcInherit() {
+      const propValue = getN('inheritValue');
+      const other = getN('otherInherit');
+      const debt = getN('debt');
+      const hasSpouse = getCheck('hasSpouse');
+      const children = getNum('children');
+      const grossAssets = propValue + other;
+      const netAssets = Math.max(0, grossAssets - debt);
+      const basicDeduct = 200000000;
+      const personalDeduct = children * 50000000;
+      const totalBasic = basicDeduct + personalDeduct;
+      const publicDeduct = Math.max(500000000, totalBasic);
+      let spouseDeduct = 0;
+      if (hasSpouse) spouseDeduct = Math.min(3000000000, Math.max(500000000, netAssets * 0.3));
+      const totalDeduct = publicDeduct + spouseDeduct;
+      const taxBase = Math.max(0, netAssets - totalDeduct);
+      const tax = inheritGiftTax(taxBase);
+
+      if (resultTitle) resultTitle.textContent = '예상 상속세';
+      setText('primaryTotal', fmt.won(tax));
+      setLabel('data-quick-label1', '총 상속재산');
+      setText('quick1', fmt.won(grossAssets));
+      setLabel('data-quick-label2', '공제 합계');
+      setText('quick2', fmt.won(totalDeduct));
+      setLabel('data-quick-label3', '과세표준');
+      setText('quick3', fmt.won(taxBase));
+
+      renderChart([
+        { label: '순 상속재산', value: netAssets, color: '#1e3a8a' },
+        { label: '공제 합계', value: totalDeduct, color: '#047857' },
+        { label: '상속세', value: tax, color: '#ef4444' },
+      ]);
+      renderDetail([
+        { label: '부동산 평가액', value: propValue, sub: true },
+        { label: '기타 상속재산', value: other, sub: true },
+        { label: '채무·장례비', value: '−' + fmt.won(debt), sub: true },
+        { label: '순 상속재산', value: netAssets },
+        { label: '기초공제 + 인적공제', value: '−' + fmt.won(totalBasic), sub: true },
+        { label: '일괄공제 5억 (max 적용)', value: '−' + fmt.won(publicDeduct), sub: true },
+        ...(hasSpouse ? [{ label: '배우자 공제 (추정)', value: '−' + fmt.won(spouseDeduct), sub: true }] : []),
+        { label: '과세표준', value: taxBase },
+        { divider: true, label: '예상 상속세', value: tax },
+      ]);
+      renderDSR(0);
+    }
+
+    function calcGift() {
+      const value = getN('giftValue');
+      const donee = getRadio('donee') || 'adult';
+      const prev = getN('prevGift');
+      const deductMap = { spouse: 600000000, adult: 50000000, minor: 20000000, other: 10000000 };
+      const baseDeduct = deductMap[donee] || 0;
+      const remainingDeduct = Math.max(0, baseDeduct - prev);
+      const taxBase = Math.max(0, value - remainingDeduct);
+      const tax = inheritGiftTax(taxBase);
+      const acqOnGift = value * 0.035 + value * 0.003;
+
+      if (resultTitle) resultTitle.textContent = '예상 증여세';
+      setText('primaryTotal', fmt.won(tax));
+      setLabel('data-quick-label1', '공제 한도 (10년)');
+      setText('quick1', fmt.won(baseDeduct));
+      setLabel('data-quick-label2', '잔여 공제');
+      setText('quick2', fmt.won(remainingDeduct));
+      setLabel('data-quick-label3', '과세표준');
+      setText('quick3', fmt.won(taxBase));
+
+      renderChart([
+        { label: '증여 평가액', value: value, color: '#1e3a8a' },
+        { label: '공제 한도', value: remainingDeduct, color: '#047857' },
+        { label: '증여세', value: tax, color: '#ef4444' },
+        { label: '취득세 (부동산)', value: acqOnGift, color: '#f59e0b' },
+      ]);
+      renderDetail([
+        { label: '증여 평가액', value: value, sub: true },
+        { label: '과거 10년 증여액', value: prev, sub: true },
+        { label: '잔여 공제', value: '−' + fmt.won(remainingDeduct), sub: true },
+        { label: '과세표준', value: taxBase },
+        { label: '증여세 (누진)', value: tax, color: '#ef4444' },
+        { label: '부동산 취득세 (별도, 3.8% 추정)', value: acqOnGift, color: '#f59e0b' },
+        { divider: true, label: '예상 총 부담 (증여세 + 취득세)', value: tax + acqOnGift },
+      ]);
+      renderDSR(0);
+    }
+
+    function switchScn(name) {
+      currentScn = name;
+      document.querySelectorAll('[data-scn]').forEach((t) => {
+        const on = t.dataset.scn === name;
+        t.classList.toggle('active', on);
+        t.setAttribute('aria-selected', String(on));
+      });
+      panels.forEach((p) => { p.hidden = p.dataset.scnPanel !== name; });
+      const showDSR = ['sale', 'lease'].includes(name);
+      root.querySelectorAll('[data-dsr-section]').forEach((el) => { el.style.opacity = showDSR ? '1' : '0.65'; });
+      if (dsrBox) dsrBox.style.opacity = showDSR ? '1' : '0.45';
+      recalc();
+    }
+    document.querySelectorAll('[data-scn]').forEach((t) => t.addEventListener('click', () => switchScn(t.dataset.scn)));
+
+    function recalc() {
+      if (currentScn === 'sale') calcSale();
+      else if (currentScn === 'transfer') calcTransfer();
+      else if (currentScn === 'lease') calcLease();
+      else if (currentScn === 'rent') calcRent();
+      else if (currentScn === 'inherit') calcInherit();
+      else if (currentScn === 'gift') calcGift();
+    }
+
+    root.querySelectorAll('input').forEach((el) => {
+      el.addEventListener('input', recalc);
+      el.addEventListener('change', recalc);
+    });
     recalc();
   }
 })();

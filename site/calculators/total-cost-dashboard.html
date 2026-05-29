@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>매매 종합비용 대시보드 — 톺다</title>
-<meta name="description" content="매매가·대출·금리·자기자본만 넣으면 취득세·중개수수료·법무사비·월 상환액까지 한 번에. Chart.js 도넛으로 자금 비중 시각화." />
+<title>부동산 종합 계산 대시보드 — 톺다</title>
+<meta name="description" content="매매·전세·임대·상속·증여 한 화면에서 비교. 취득세·양도세·중개수수료·DSR·신용대출까지 종합 산정하는 부동산 통합 대시보드." />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css" />
 </head>
@@ -29,23 +29,28 @@
 
 <main class="container">
   <div class="article-header">
-    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 매매 종합비용 대시보드</div>
-    <h1>매매 종합비용 대시보드</h1>
-    <div class="meta"><span>매매가·대출·금리 하나만 넣으면 초기 자금·월 상환·총 부대비용까지 한 화면에</span></div>
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 종합 대시보드</div>
+    <h1>부동산 종합 계산 대시보드</h1>
+    <p class="lead">한 화면에서 매매·전세·임대·상속·증여 5가지 시나리오의 종합 비용·세금·대출 한도를 동시에 산정합니다. 신용대출 포함 DSR도 함께 점검합니다.</p>
+  </div>
+
+  <!-- 시나리오 탭 -->
+  <div class="scn-tabs" data-scn-tabs role="tablist">
+    <button class="scn-tab active" data-scn="sale" role="tab" aria-selected="true">매매(매수)</button>
+    <button class="scn-tab" data-scn="transfer" role="tab" aria-selected="false">매도(양도)</button>
+    <button class="scn-tab" data-scn="lease" role="tab" aria-selected="false">전세 임차</button>
+    <button class="scn-tab" data-scn="rent" role="tab" aria-selected="false">임대인(임대 소득)</button>
+    <button class="scn-tab" data-scn="inherit" role="tab" aria-selected="false">상속</button>
+    <button class="scn-tab" data-scn="gift" role="tab" aria-selected="false">증여</button>
   </div>
 
   <div class="calc-layout" data-calc="total-cost-dashboard">
 
     <div class="calc-form">
-      <div class="field">
-        <label for="td-price">매매가</label>
-        <div class="input-suffix" data-suffix="원">
-          <input id="td-price" name="price" type="text" inputmode="numeric" data-format="won" value="800,000,000" />
-        </div>
-      </div>
 
+      <!-- ===== 공통: 주택 수 ===== -->
       <div class="field">
-        <label>주택 수 (본 거래 포함)</label>
+        <label>현재 주택 수 (본 거래 포함)</label>
         <div class="radio-group">
           <label><input type="radio" name="homes" value="1" checked/><span>1주택</span></label>
           <label><input type="radio" name="homes" value="2"/><span>2주택</span></label>
@@ -60,89 +65,295 @@
         </label>
       </div>
 
-      <div class="field">
-        <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="areaOver85"/>
-          <span class="text">전용면적 85㎡ 초과</span>
-        </label>
-      </div>
+      <!-- ===== 매매(매수) ===== -->
+      <div class="scn-panel" data-scn-panel="sale">
+        <h3 class="scn-section-title">매매 정보</h3>
 
-      <div class="field">
-        <label for="td-loan">대출 금액</label>
-        <div class="input-suffix" data-suffix="원">
-          <input id="td-loan" name="loan" type="text" inputmode="numeric" data-format="won" value="400,000,000" />
-        </div>
-        <span class="hint">통상 매매가의 50~70% (LTV 규제 내).</span>
-      </div>
-
-      <div class="field-row">
         <div class="field">
-          <label for="td-rate">대출 금리 (연 %)</label>
-          <input id="td-rate" name="rate" type="number" min="1" max="15" step="0.01" value="4.5" />
+          <label for="td-price">매매가</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-price" name="price" type="text" inputmode="numeric" data-format="won" value="800,000,000" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="areaOver85"/>
+            <span class="text">전용면적 85㎡ 초과</span>
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="firstHome"/>
+            <span class="text">생애최초 주택 구입자
+              <span class="note">무주택 세대 + 12억 이하 → 취득세 최대 200만 원 감면</span>
+            </span>
+          </label>
+        </div>
+
+        <h3 class="scn-section-title">대출</h3>
+        <div class="field">
+          <label for="td-loan">주담대 금액</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-loan" name="loan" type="text" inputmode="numeric" data-format="won" value="400,000,000" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-rate">금리 (연 %)</label>
+            <input id="td-rate" name="rate" type="number" min="1" max="15" step="0.01" value="4.5" />
+          </div>
+          <div class="field">
+            <label for="td-term">기간 (년)</label>
+            <input id="td-term" name="term" type="number" min="1" max="40" step="1" value="30" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>구매 목적</label>
+          <div class="radio-group">
+            <label><input type="radio" name="purpose" value="own" checked/><span>실거주</span></label>
+            <label><input type="radio" name="purpose" value="gap"/><span>갭투자</span></label>
+          </div>
+        </div>
+
+        <div class="field" data-purpose="gap" style="display:none;">
+          <label for="td-jeonse">예상 전세 보증금 인수</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-jeonse" name="jeonseDeposit" type="text" inputmode="numeric" data-format="won" value="500,000,000" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 매도(양도) ===== -->
+      <div class="scn-panel" data-scn-panel="transfer" hidden>
+        <h3 class="scn-section-title">양도 정보</h3>
+        <div class="field">
+          <label for="td-sellPrice">양도가액</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-sellPrice" name="sellPrice" type="text" inputmode="numeric" data-format="won" value="1,200,000,000" />
+          </div>
         </div>
         <div class="field">
-          <label for="td-term">상환 기간 (년)</label>
-          <input id="td-term" name="term" type="number" min="1" max="40" step="1" value="30" />
+          <label for="td-buyPrice">취득가액</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-buyPrice" name="buyPrice" type="text" inputmode="numeric" data-format="won" value="700,000,000" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-cost">필요경비 (취득세·중개수수료·리모델링 등)</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-cost" name="cost" type="text" inputmode="numeric" data-format="won" value="30,000,000" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-holdYears">보유 기간 (년)</label>
+            <input id="td-holdYears" name="holdYears" type="number" min="0" max="50" step="0.5" value="6" />
+          </div>
+          <div class="field">
+            <label for="td-liveYears">거주 기간 (년)</label>
+            <input id="td-liveYears" name="liveYears" type="number" min="0" max="50" step="0.5" value="4" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="onlyHome" checked/>
+            <span class="text">1세대 1주택 (양도일 기준)</span>
+          </label>
         </div>
       </div>
 
-      <div class="field">
-        <label>구매 목적</label>
-        <div class="radio-group">
-          <label><input type="radio" name="purpose" value="own" checked/><span>실거주</span></label>
-          <label><input type="radio" name="purpose" value="gap"/><span>갭투자</span></label>
+      <!-- ===== 전세 임차 ===== -->
+      <div class="scn-panel" data-scn-panel="lease" hidden>
+        <h3 class="scn-section-title">전세 계약 정보</h3>
+        <div class="field">
+          <label for="td-deposit">전세 보증금</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-deposit" name="leaseDeposit" type="text" inputmode="numeric" data-format="won" value="500,000,000" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-leaseLoan">전세자금대출</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-leaseLoan" name="leaseLoan" type="text" inputmode="numeric" data-format="won" value="300,000,000" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-leaseRate">금리 (연 %)</label>
+            <input id="td-leaseRate" name="leaseRate" type="number" min="1" max="15" step="0.01" value="4.0" />
+          </div>
+          <div class="field">
+            <label for="td-leaseTerm">기간 (년)</label>
+            <input id="td-leaseTerm" name="leaseTerm" type="number" min="1" max="10" step="1" value="2" />
+          </div>
         </div>
       </div>
 
-      <div class="field" data-purpose="gap" style="display:none;">
-        <label for="td-jeonse">예상 전세 보증금</label>
+      <!-- ===== 임대인(임대 소득) ===== -->
+      <div class="scn-panel" data-scn-panel="rent" hidden>
+        <h3 class="scn-section-title">임대 수입</h3>
+        <div class="field">
+          <label for="td-monthlyRent">월세 (월 수령액)</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-monthlyRent" name="monthlyRent" type="text" inputmode="numeric" data-format="won" value="1,000,000" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-rentDeposit">임차인 보증금</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-rentDeposit" name="rentDeposit" type="text" inputmode="numeric" data-format="won" value="50,000,000" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-propPrice">주택 공시가격 (참고)</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-propPrice" name="propPrice" type="text" inputmode="numeric" data-format="won" value="600,000,000" />
+          </div>
+          <span class="hint">재산세·종부세 산정용. 시세의 60~70% 수준.</span>
+        </div>
+      </div>
+
+      <!-- ===== 상속 ===== -->
+      <div class="scn-panel" data-scn-panel="inherit" hidden>
+        <h3 class="scn-section-title">상속 정보</h3>
+        <div class="field">
+          <label for="td-inheritValue">상속 부동산 평가액</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-inheritValue" name="inheritValue" type="text" inputmode="numeric" data-format="won" value="1,500,000,000" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-otherInherit">기타 상속재산 (예금·주식 등)</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-otherInherit" name="otherInherit" type="text" inputmode="numeric" data-format="won" value="100,000,000" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-debt">상속 채무·장례비</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-debt" name="debt" type="text" inputmode="numeric" data-format="won" value="50,000,000" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="hasSpouse" checked/>
+            <span class="text">배우자 생존 (배우자 상속공제 적용)</span>
+          </label>
+        </div>
+        <div class="field">
+          <label for="td-children">자녀 수</label>
+          <input id="td-children" name="children" type="number" min="0" max="10" step="1" value="2" />
+          <span class="hint">자녀 1인당 5천만 원 인적공제(미성년 1년당 1천만 원 추가).</span>
+        </div>
+      </div>
+
+      <!-- ===== 증여 ===== -->
+      <div class="scn-panel" data-scn-panel="gift" hidden>
+        <h3 class="scn-section-title">증여 정보</h3>
+        <div class="field">
+          <label for="td-giftValue">증여 부동산 평가액</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-giftValue" name="giftValue" type="text" inputmode="numeric" data-format="won" value="500,000,000" />
+          </div>
+        </div>
+        <div class="field">
+          <label>수증자 (받는 사람)</label>
+          <div class="radio-group">
+            <label><input type="radio" name="donee" value="spouse" /><span>배우자</span></label>
+            <label><input type="radio" name="donee" value="adult" checked/><span>성년 자녀</span></label>
+            <label><input type="radio" name="donee" value="minor"/><span>미성년 자녀</span></label>
+            <label><input type="radio" name="donee" value="other"/><span>기타</span></label>
+          </div>
+          <span class="hint">10년 합산 공제: 배우자 6억 / 성년 자녀 5천만 / 미성년 2천만 / 기타 1천만 원.</span>
+        </div>
+        <div class="field">
+          <label for="td-prevGift">과거 10년 내 증여받은 금액 (동일 증여자 기준)</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-prevGift" name="prevGift" type="text" inputmode="numeric" data-format="won" value="0" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DSR / 소득·부채 (모든 시나리오에서 노출, lease·sale에 직접 영향) ===== -->
+      <h3 class="scn-section-title" data-dsr-section>소득 · DSR 점검</h3>
+      <div class="field" data-dsr-section>
+        <label for="td-income">연 소득 (세전)</label>
         <div class="input-suffix" data-suffix="원">
-          <input id="td-jeonse" name="jeonseDeposit" type="text" inputmode="numeric" data-format="won" value="500,000,000" />
+          <input id="td-income" name="annualIncome" type="text" inputmode="numeric" data-format="won" value="60,000,000" />
         </div>
-        <span class="hint">갭투자는 ‘매매가 − 전세보증금’이 실제 투입 자기자본.</span>
+      </div>
+      <div class="field" data-dsr-section>
+        <label for="td-otherDebt">기존 주담대·기타 대출의 연 원리금</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="td-otherDebt" name="otherDebt" type="text" inputmode="numeric" data-format="won" value="0" />
+        </div>
+      </div>
+      <div class="field" data-dsr-section>
+        <label for="td-credit">신용대출 잔액</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="td-credit" name="creditDebt" type="text" inputmode="numeric" data-format="won" value="0" />
+        </div>
+        <span class="hint">DSR 계산에서는 신용대출 잔액 ÷ 5년으로 연환산해 합산합니다.</span>
       </div>
     </div>
 
+    <!-- ===== 결과 영역 ===== -->
     <div class="calc-result">
-      <h3>실제 필요한 초기 투자금</h3>
-      <div class="total" data-out="initialCapital">0원</div>
-      <div class="breakdown" style="margin-bottom: 8px;">
-        <div class="row"><span class="key">월 원리금 상환</span><span class="val" data-out="monthlyPayment">0원</span></div>
-        <div class="row"><span class="key">총 이자 (만기까지)</span><span class="val" data-out="totalInterest">0원</span></div>
+      <h3 data-scn-result-title>예상 총 매수 비용</h3>
+      <div class="total" data-out="primaryTotal">0원</div>
+
+      <div class="breakdown" data-scn-quick>
+        <div class="row"><span class="key" data-quick-label1>—</span><span class="val" data-out="quick1">—</span></div>
+        <div class="row"><span class="key" data-quick-label2>—</span><span class="val" data-out="quick2">—</span></div>
+        <div class="row"><span class="key" data-quick-label3>—</span><span class="val" data-out="quick3">—</span></div>
       </div>
 
-      <div class="chart-wrap">
+      <div class="chart-wrap" data-show-chart>
         <canvas id="costChart" height="220"></canvas>
       </div>
 
-      <div class="breakdown" style="border-top:1px solid var(--border); padding-top:14px; margin-top:8px;">
-        <div class="row"><span class="key"><span class="dot" style="background:#1e3a8a"></span>자기자본</span><span class="val" data-out="equityAmt">0원</span></div>
-        <div class="row"><span class="key"><span class="dot" style="background:#3b82f6"></span>대출 원금</span><span class="val" data-out="loanAmt">0원</span></div>
-        <div class="row"><span class="key"><span class="dot" style="background:#60a5fa"></span>전세보증금 인수</span><span class="val" data-out="jeonseAmt">0원</span></div>
-        <div class="row"><span class="key"><span class="dot" style="background:#f59e0b"></span>취득세 합계</span><span class="val" data-out="taxAmt">0원</span></div>
-        <div class="row"><span class="key"><span class="dot" style="background:#ef4444"></span>중개수수료</span><span class="val" data-out="brokerAmt">0원</span></div>
-        <div class="row"><span class="key"><span class="dot" style="background:#a855f7"></span>법무사·등기</span><span class="val" data-out="legalAmt">0원</span></div>
-        <div class="row" style="border-top:1px dashed var(--border); padding-top:8px; margin-top:6px;"><span class="key" style="font-weight:700;">총 매수 비용</span><span class="val" style="font-weight:700;" data-out="grandTotal">0원</span></div>
+      <div class="breakdown" data-detail-breakdown style="border-top:1px solid var(--border); padding-top:14px; margin-top:8px;">
+        <!-- JS에서 채움 -->
       </div>
+
+      <!-- DSR 결과 박스 -->
+      <div class="dsr-box" data-dsr-box>
+        <div class="dsr-box-head">
+          <strong>DSR</strong>
+          <span class="dsr-pct" data-out="dsrPct">—</span>
+        </div>
+        <div class="dsr-bar"><div class="dsr-bar-fill" data-out="dsrFill" style="width:0%"></div></div>
+        <div class="dsr-meta">
+          <span>1금융 한도 40%</span>
+          <span>2금융 한도 50%</span>
+        </div>
+        <p class="dsr-verdict" data-out="dsrVerdict">소득과 대출 정보를 입력하면 자동 계산됩니다.</p>
+      </div>
+
     </div>
   </div>
 
   <section style="margin-top: 56px;">
-    <h2 style="margin-bottom: 16px;">계산 방식 · 가정</h2>
+    <h2 style="margin-bottom: 16px;">계산 가정 · 출처</h2>
     <ul class="ref-list">
-      <li><strong>취득세</strong> — 지방세법 제11·15조. 1주택 6억 이하 1.0%, 6~9억 누진, 9억 초과 3.0%, 다주택·조정 8~12%</li>
-      <li><strong>지방교육세·농어촌특별세</strong> — 표준세율: 본세의 10%(교육) + 85㎡ 초과 시 0.2%(농특). 중과: 매매가 0.4%(교육) + 0.6~1.0%(농특, 85㎡ 초과)</li>
-      <li><strong>중개수수료</strong> — 서울 매매 기준. 6~9억 0.4%, 9~12억 0.5%, 12~15억 0.6%, 15억 이상 0.7%. 부가세 10% 별도</li>
-      <li><strong>법무사·등기</strong> — 매매가의 0.15~0.25% 추정 (등록면허세 0.2% + 법무사 보수)</li>
-      <li><strong>월 원리금</strong> — 원리금균등 가정: P × i × (1+i)^n / ((1+i)^n − 1)</li>
-      <li><strong>갭투자</strong> — 자기자본 = 매매가 − 대출 − 인수 전세보증금 + 부대비용</li>
+      <li><strong>취득세</strong> — 지방세법 제11·15조. 1주택 6억 이하 1.0%, 6~9억 누진, 9억 초과 3.0%, 다주택·조정 8~12%. 농어촌특별세는 85㎡ 초과 시 0.2~1.0%, 지방교육세는 표준세율의 10% 또는 매매가 0.4%(중과)</li>
+      <li><strong>양도소득세</strong> — 소득세법 제55조 누진세율 8구간. 1세대1주택 12억 비과세, 12억 초과는 안분과세. 장기보유특별공제(일반 6~30% / 1주택 거주·보유 합산 최대 80%). 지방소득세는 양도세의 10%</li>
+      <li><strong>임대소득세</strong> — 분리과세 14% 또는 종합과세 6~45%. 월세 + 간주임대료(3주택 이상은 보증금 합계 3억 초과분 × 기준이자율) 합산</li>
+      <li><strong>상속세</strong> — 일괄공제 5억 또는 기초+인적공제. 배우자공제는 실제 상속분 한도(최소 5억, 최대 30억). 누진세율 10~50%</li>
+      <li><strong>증여세</strong> — 10년 합산 공제 후 누진세율 10~50%. 직계존비속 5천만(미성년 2천만), 배우자 6억, 기타 친족 1천만 원</li>
+      <li><strong>DSR</strong> — (연 원리금 + 신용대출 잔액÷5) ÷ 연 소득. 1금융 40%, 2금융 50% 한도</li>
+      <li><strong>중개수수료(서울 매매)</strong> — 9억~12억 0.5%, 12억~15억 0.6%, 15억+ 0.7%. VAT 10% 별도</li>
+      <li><strong>법무사·등기</strong> — 매매가의 0.2% 안팎 추정</li>
     </ul>
   </section>
 
   <div class="callout callout-warn" style="margin-top: 32px;">
     <div class="icon">⚠</div>
     <div class="body">
-      <strong>면책</strong> 본 대시보드는 일반 참고용 추정치이며, 실제 비용은 감정평가·은행 심사·법무사 견적·지방세 감면에 따라 달라질 수 있습니다.
+      <strong>면책</strong> 본 대시보드는 일반 추정치를 제공하는 참고 도구입니다. 실 세액·대출 한도는 감정평가·과세관청 판단·은행 심사·개인별 공제 적용 여부에 따라 차이가 날 수 있으며, 구체적인 의사결정은 세무사·법무사·금융기관과 상의해 주세요.
     </div>
   </div>
 </main>

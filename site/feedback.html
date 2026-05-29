@@ -42,49 +42,10 @@
   <div class="article-header">
     <div class="breadcrumb"><a href="index.html">홈</a> / 수정 요청</div>
     <h1>수정 요청 게시판</h1>
-    <p class="lead">내용 오류·추가 요청·계산기 개선 의견을 자유롭게 남겨주세요. 비밀글로 작성하면 본인만 볼 수 있습니다.</p>
+    <p class="lead">내용 오류·추가 요청·계산기 개선 의견을 남겨주세요. 비밀글로 작성하면 본인 기기에서만 보입니다.</p>
   </div>
 
   <div class="fb-app" data-fb-app>
-
-    <section class="fb-form-card">
-      <h2>새 글 작성</h2>
-      <form data-fb-form>
-        <div class="field">
-          <label for="fb-title">제목</label>
-          <input id="fb-title" name="title" type="text" maxlength="80" required placeholder="예: 취득세 계산기 결과가 이상해요" />
-        </div>
-        <div class="field">
-          <label for="fb-author">이름 또는 닉네임 (선택)</label>
-          <input id="fb-author" name="author" type="text" maxlength="20" placeholder="익명도 가능" />
-        </div>
-        <div class="field">
-          <label for="fb-page">관련 페이지 (선택)</label>
-          <input id="fb-page" name="page" type="text" maxlength="120" placeholder="예: /calculators/acquisition-tax.html" />
-        </div>
-        <div class="field">
-          <label for="fb-body">내용</label>
-          <textarea id="fb-body" name="body" rows="6" maxlength="2000" required placeholder="개선이 필요한 점, 잘못된 정보, 원하는 추가 기능을 자세히 적어주세요."></textarea>
-        </div>
-        <div class="field">
-          <label class="check-item" style="padding: 0; cursor: pointer;">
-            <input type="checkbox" name="secret" />
-            <span class="text">비밀글로 작성
-              <span class="note">체크하면 작성한 브라우저에서만 보이고, 공개 목록에 노출되지 않습니다.</span>
-            </span>
-          </label>
-        </div>
-        <div class="fb-actions">
-          <button class="btn btn-primary" type="submit">게시</button>
-          <a class="btn btn-secondary" data-fb-email href="#">이메일로도 전달</a>
-        </div>
-        <p class="fb-note">
-          ※ 본 게시판은 개인 브라우저(localStorage) 기반입니다. 운영자에게 직접 전달하려면
-          <a data-fb-email href="#">이메일로도 전달</a> 버튼을 함께 눌러주세요.
-          개인정보·민감정보는 입력하지 마세요.
-        </p>
-      </form>
-    </section>
 
     <section class="fb-list-section">
       <div class="fb-tabs">
@@ -93,22 +54,69 @@
       </div>
       <ul class="fb-list" data-fb-list-public></ul>
       <ul class="fb-list" data-fb-list-mine hidden></ul>
-      <p class="fb-empty" data-fb-empty>등록된 글이 아직 없습니다. 첫 글을 남겨주세요.</p>
+      <p class="fb-empty" data-fb-empty>등록된 글이 아직 없습니다. 우측 하단의 ‘작성’ 버튼으로 첫 글을 남겨주세요.</p>
     </section>
-
   </div>
 
   <div class="callout callout-info" style="margin-top: 32px;">
     <div class="icon">i</div>
     <div class="body">
       <strong>이 게시판의 동작 방식</strong>
-      개인정보 보호를 위해 톺다는 별도 서버를 운영하지 않습니다.
-      공개글은 본 기기의 다른 사용자가 함께 볼 수 있도록 같은 페이지에 표시되지만,
-      기기 간에는 동기화되지 않습니다.
-      운영자가 확실히 받아 처리하길 원하시면 작성 후 <strong>이메일로도 전달</strong> 버튼을 함께 눌러주세요.
+      개인정보 보호를 위해 별도 서버 없이 운영합니다. 공개글은 같은 기기에 표시되며, 비밀글은 작성한 브라우저에서만 보입니다. 개인정보·민감정보는 입력하지 마세요.
     </div>
   </div>
 </main>
+
+<!-- 작성 FAB -->
+<button class="fb-fab" data-fb-open aria-label="새 글 작성">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 5v14M5 12h14"/>
+  </svg>
+  <span class="fb-fab-label">작성</span>
+</button>
+
+<!-- 작성 모달 -->
+<div class="fb-modal" data-fb-modal aria-hidden="true">
+  <div class="fb-modal-backdrop" data-fb-close></div>
+  <div class="fb-modal-panel" role="dialog" aria-labelledby="fb-modal-title">
+    <div class="fb-modal-header">
+      <h2 id="fb-modal-title">새 글 작성</h2>
+      <button class="fb-modal-close" data-fb-close aria-label="닫기">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <form data-fb-form class="fb-modal-body">
+      <div class="field">
+        <label for="fb-title">제목</label>
+        <input id="fb-title" name="title" type="text" maxlength="80" required placeholder="예: 취득세 계산기 결과가 이상해요" />
+      </div>
+      <div class="field">
+        <label for="fb-author">이름 또는 닉네임 (선택)</label>
+        <input id="fb-author" name="author" type="text" maxlength="20" placeholder="익명도 가능" />
+      </div>
+      <div class="field">
+        <label for="fb-page">관련 페이지 (선택)</label>
+        <input id="fb-page" name="page" type="text" maxlength="120" placeholder="예: /calculators/acquisition-tax.html" />
+      </div>
+      <div class="field">
+        <label for="fb-body">내용</label>
+        <textarea id="fb-body" name="body" rows="6" maxlength="2000" required placeholder="개선이 필요한 점, 잘못된 정보, 원하는 추가 기능을 자세히 적어주세요."></textarea>
+      </div>
+      <div class="field">
+        <label class="check-item" style="padding: 0; cursor: pointer;">
+          <input type="checkbox" name="secret" />
+          <span class="text">비밀글로 작성
+            <span class="note">체크하면 본인 브라우저에서만 보이고 공개 목록에 노출되지 않습니다.</span>
+          </span>
+        </label>
+      </div>
+      <div class="fb-modal-actions">
+        <button type="button" class="btn btn-secondary" data-fb-close>취소</button>
+        <button type="submit" class="btn btn-primary">게시</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <footer class="site-footer">
   <div class="container">
