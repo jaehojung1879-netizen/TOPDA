@@ -111,18 +111,40 @@ html, body { overflow-x: hidden; }
   flex-shrink: 0;
 }
 
-.nav { display: none; gap: 18px; align-items: center; }
+.nav {
+  display: flex; align-items: center;
+  gap: 14px;
+  position: absolute; left: 0; right: 0;
+  bottom: -1px;
+  padding: 0 16px 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  background: rgba(255,255,255,0.85);
+  border-bottom: 1px solid var(--border);
+  justify-content: flex-start;
+  white-space: nowrap;
+}
+.nav::-webkit-scrollbar { display: none; }
 .nav a {
-  font-size: 0.92rem; font-weight: 600; color: var(--text-muted);
-  padding: 8px 0; transition: color 0.15s; white-space: nowrap;
+  font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
+  padding: 6px 2px;
+  transition: color 0.15s; white-space: nowrap;
+  flex-shrink: 0;
 }
 .nav a:hover, .nav a.active { color: var(--text); }
+.site-header { padding-bottom: 28px; }
 @media (min-width: 768px) {
+  .site-header { padding-bottom: 0; }
   .nav {
-    display: flex; gap: 22px;
-    position: absolute; left: 50%; top: 50%;
+    position: absolute; left: 50%; top: 50%; right: auto; bottom: auto;
     transform: translate(-50%, -50%);
+    padding: 0; gap: 22px;
+    background: transparent; border: 0;
+    overflow: visible;
+    font-size: 0.92rem;
   }
+  .nav a { font-size: 0.92rem; padding: 8px 0; }
 }
 @media (min-width: 1024px) { .nav { gap: 28px; } }
 
@@ -133,8 +155,9 @@ html, body { overflow-x: hidden; }
 }
 .nav-cta:hover { background: var(--accent); }
 
-.nav-toggle { display: inline-flex; padding: 6px; }
-@media (min-width: 768px) { .nav-toggle { display: none; } }
+/* 모바일에서도 nav가 노출되므로 햄버거는 숨김.
+   추가 메뉴(피드백·English 등 부메뉴) 호출은 lang-switch 옆 mini 버튼이 담당 */
+.nav-toggle { display: none; }
 
 .mobile-menu {
   display: none; flex-direction: column; padding: 16px 20px 20px;
@@ -1022,10 +1045,14 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
   word-break: keep-all; overflow-wrap: anywhere;
 }
 .tool-card-body span {
-  font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  display: block;
+  /* 부제 회색 설명은 노출하지 않음 — 카드 타이틀만 표시 */
+  display: none;
 }
+/* 카테고리 카드의 부제 회색 설명도 마찬가지로 제거 */
+.cat-tile > p {
+  display: none;
+}
+.cat-tile { padding-bottom: 26px; }
 
 /* ===== Banner row ===== */
 .banner-row { padding: 0 0 8px; }
@@ -1276,6 +1303,62 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 .topic-quick-btn::after { content: '↓'; font-size: 0.9em; }
 .topic-quick-btn:hover {
   color: var(--text); border-color: var(--accent); background: var(--accent-soft);
+}
+
+/* ===== Scenario tabs (종합 대시보드) ===== */
+.scn-tabs {
+  display: flex; flex-wrap: nowrap; gap: 6px;
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 4px; background: var(--surface);
+  margin: 4px 0 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.scn-tabs::-webkit-scrollbar { display: none; }
+.scn-tab {
+  flex-shrink: 0;
+  padding: 8px 16px; border-radius: 999px;
+  font-size: 0.88rem; font-weight: 600;
+  color: var(--text-muted); white-space: nowrap;
+  transition: all 0.15s;
+}
+.scn-tab:hover { color: var(--text); }
+.scn-tab.active { background: var(--accent); color: #fff; }
+.scn-section-title {
+  font-size: 0.82rem; font-weight: 800; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--text-muted);
+  margin: 24px 0 12px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.scn-section-title:first-child { margin-top: 0; }
+
+/* ===== DSR Result Box ===== */
+.dsr-box {
+  margin-top: 20px; padding: 16px;
+  background: var(--surface-2); border-radius: var(--radius);
+}
+.dsr-box-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 8px;
+}
+.dsr-box-head strong { font-size: 0.92rem; color: var(--text); }
+.dsr-pct { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+.dsr-bar {
+  height: 8px; background: var(--border); border-radius: 999px; overflow: hidden;
+}
+.dsr-bar-fill {
+  height: 100%; width: 0%; background: var(--success);
+  transition: width 0.4s ease-out, background 0.3s;
+}
+.dsr-meta {
+  display: flex; justify-content: space-between;
+  font-size: 0.75rem; color: var(--text-subtle);
+  margin-top: 6px;
+}
+.dsr-verdict {
+  font-size: 0.85rem; color: var(--text); line-height: 1.6;
+  margin-top: 10px;
 }
 
 /* ===== Material Gallery (인테리어 자재 사진) ===== */
@@ -1656,6 +1739,74 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   padding: 40px 0;
 }
 .badge-warn { background: var(--warning-soft); color: var(--warning); }
+
+/* ===== Feedback FAB (작성 버튼) ===== */
+.fb-fab {
+  position: fixed; right: 24px; bottom: 24px;
+  z-index: 60;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 18px; border-radius: 999px;
+  background: var(--accent); color: #fff;
+  font-size: 0.92rem; font-weight: 700;
+  box-shadow: 0 10px 24px -8px rgba(30, 58, 138, 0.45);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.fb-fab:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -8px rgba(30, 58, 138, 0.55); }
+.fb-fab svg { color: #fff; }
+.fb-fab-label { letter-spacing: -0.01em; }
+@media (max-width: 480px) {
+  .fb-fab { right: 16px; bottom: 16px; padding: 12px 16px; font-size: 0.88rem; }
+}
+
+/* ===== Feedback Modal ===== */
+.fb-modal {
+  position: fixed; inset: 0; z-index: 80;
+  display: none; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.fb-modal.open { display: flex; }
+.fb-modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+}
+.fb-modal-panel {
+  position: relative;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  width: 100%; max-width: 540px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: fbModalIn 0.18s ease-out;
+}
+@keyframes fbModalIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.fb-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px; border-bottom: 1px solid var(--border);
+}
+.fb-modal-header h2 { font-size: 1.1rem; margin: 0; }
+.fb-modal-close {
+  width: 32px; height: 32px; border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+}
+.fb-modal-close:hover { background: var(--surface-2); color: var(--text); }
+.fb-modal-body { padding: 22px; }
+.fb-modal-body textarea {
+  width: 100%; padding: 10px 12px;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background: #fff; color: var(--text); resize: vertical; min-height: 120px;
+}
+.fb-modal-body textarea:focus {
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(30,58,138,0.12);
+}
+.fb-modal-actions {
+  display: flex; gap: 10px; justify-content: flex-end;
+  margin-top: 12px;
+}
 
 /* ===== Tablet responsive tweaks (768-1024px) ===== */
 @media (min-width: 768px) and (max-width: 1023px) {
