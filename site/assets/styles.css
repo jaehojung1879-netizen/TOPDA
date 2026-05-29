@@ -1278,6 +1278,276 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   color: var(--text); border-color: var(--accent); background: var(--accent-soft);
 }
 
+/* ===== Material Gallery (인테리어 자재 사진) ===== */
+.material-help {
+  font-size: 0.82rem; color: var(--text-muted);
+  margin: 4px 0 16px;
+}
+.material-help a { color: var(--accent); text-decoration: underline; }
+.material-gallery {
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 32px;
+}
+@media (min-width: 640px) { .material-gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .material-gallery { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.material-card {
+  margin: 0;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; background: var(--surface);
+  transition: border-color 0.15s, transform 0.15s;
+}
+.material-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.material-card img {
+  width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
+  background: var(--surface-2);
+}
+.material-card figcaption {
+  padding: 10px 12px;
+  font-size: 0.85rem; line-height: 1.5;
+}
+.material-card figcaption strong {
+  display: block; color: var(--text); font-weight: 700;
+  font-size: 0.92rem; margin-bottom: 2px;
+}
+.material-card figcaption span { color: var(--text-muted); font-size: 0.78rem; }
+
+/* ===== Chart wrapper (Chart.js 컨테이너) ===== */
+.chart-wrap {
+  position: relative; padding: 8px 0;
+  margin: 12px 0;
+  min-height: 220px;
+}
+.chart-wrap canvas { max-width: 100%; }
+.breakdown .dot {
+  display: inline-block; width: 10px; height: 10px;
+  border-radius: 50%; margin-right: 6px; vertical-align: middle;
+}
+
+/* ===== Rating sliders ===== */
+.rating-row {
+  display: grid; grid-template-columns: 1fr; gap: 8px;
+  padding: 12px 14px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 10px;
+}
+.rating-row label { font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+.rating-row label .rating-val {
+  font-size: 0.95rem; color: var(--accent); font-weight: 800;
+}
+.rating-row input[type="range"] {
+  width: 100%; accent-color: var(--accent);
+}
+.rating-row .rating-sub { font-size: 0.78rem; color: var(--text-subtle); }
+
+/* ===== D-Day Timeline ===== */
+.dday-timeline {
+  position: relative; list-style: none; padding: 0; margin: 0;
+}
+.dday-timeline::before {
+  content: ''; position: absolute;
+  left: 110px; top: 4px; bottom: 4px;
+  width: 2px; background: var(--border);
+}
+@media (max-width: 600px) {
+  .dday-timeline::before { left: 78px; }
+}
+.dt-item {
+  display: grid; grid-template-columns: 110px 1fr; gap: 16px;
+  padding: 14px 0; position: relative;
+  align-items: flex-start;
+}
+@media (max-width: 600px) {
+  .dt-item { grid-template-columns: 78px 1fr; gap: 12px; }
+}
+.dt-dot {
+  position: absolute; left: 102px; top: 22px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--surface); border: 3px solid var(--accent);
+  z-index: 1;
+}
+@media (max-width: 600px) {
+  .dt-dot { left: 70px; }
+}
+.dt-past .dt-dot { border-color: var(--text-subtle); opacity: 0.5; }
+.dt-meta {
+  text-align: right; padding-right: 26px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.dt-dday {
+  font-weight: 800; font-size: 0.95rem; color: var(--accent);
+  letter-spacing: -0.02em;
+}
+.dt-past .dt-dday { color: var(--text-subtle); }
+.dt-date { font-size: 0.78rem; color: var(--text-muted); }
+.dt-body {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 14px;
+}
+.dt-past .dt-body { opacity: 0.55; }
+.dt-title {
+  font-weight: 700; font-size: 0.95rem; color: var(--text);
+  margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.dt-tag {
+  display: inline-block; font-size: 0.72rem; font-weight: 700;
+  padding: 2px 8px; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent);
+}
+.dt-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.55; }
+.dt-empty {
+  text-align: center; padding: 40px 0;
+  color: var(--text-subtle); font-size: 0.9rem;
+}
+
+/* ===== Interactive Contract Viewer ===== */
+.contract-viewer {
+  display: grid; gap: 16px;
+  grid-template-columns: 1fr;
+  margin-top: 16px;
+}
+@media (min-width: 900px) {
+  .contract-viewer { grid-template-columns: minmax(0, 1.2fr) minmax(280px, 1fr); gap: 20px; align-items: start; }
+  .contract-panel { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; }
+}
+.contract-doc {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px 24px 28px;
+  font-size: 0.92rem; line-height: 1.85; color: var(--text);
+  white-space: normal;
+}
+.contract-doc h2 {
+  font-size: 1.1rem; text-align: center;
+  margin: 0 0 16px; padding-bottom: 8px;
+  border-bottom: 2px solid var(--text);
+  letter-spacing: -0.02em;
+}
+.contract-doc h3 {
+  font-size: 0.95rem; margin: 18px 0 8px; color: var(--text);
+}
+.contract-doc .article {
+  margin: 12px 0; padding-left: 6px;
+  border-left: 2px solid transparent;
+}
+.contract-doc .article-title {
+  font-weight: 700; color: var(--text);
+  display: inline-block; margin-right: 4px;
+}
+.contract-doc [data-clause] {
+  display: inline; padding: 1px 4px; border-radius: 4px;
+  cursor: pointer;
+  background: linear-gradient(transparent 60%, rgba(30,58,138,0.10) 60%);
+  transition: background 0.15s, color 0.15s, outline 0.15s;
+  outline: 1px solid transparent;
+}
+.contract-doc [data-clause]:hover,
+.contract-doc [data-clause]:focus-visible {
+  background: rgba(30,58,138,0.18);
+  outline-color: var(--accent);
+}
+.contract-doc [data-clause].active {
+  background: var(--accent); color: #fff; outline-color: var(--accent);
+}
+.contract-doc [data-clause]::before {
+  content: '⌕'; font-size: 0.75em; opacity: 0.5;
+  margin-right: 2px; vertical-align: 1px;
+}
+.contract-blank {
+  display: inline-block; min-width: 60px;
+  border-bottom: 1px solid var(--text-subtle);
+  color: var(--text-subtle);
+}
+
+.contract-panel {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 22px;
+}
+.contract-panel-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px;
+}
+.contract-panel-header .pulse {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+.contract-panel-header span {
+  font-size: 0.78rem; font-weight: 700;
+  color: var(--accent); letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.contract-panel h3 {
+  font-size: 1.15rem; margin-bottom: 12px;
+  color: var(--text);
+}
+.contract-panel .body { color: var(--text); font-size: 0.92rem; line-height: 1.7; }
+.contract-panel .body p { margin-bottom: 10px; }
+.contract-panel .caution {
+  margin-top: 16px; padding: 12px 14px;
+  background: var(--warning-soft); border-radius: var(--radius-sm);
+  font-size: 0.85rem; color: var(--text);
+  border-left: 3px solid var(--warning);
+}
+.contract-panel .caution::before {
+  content: '⚠ 실무 체크포인트';
+  display: block; font-weight: 700; color: var(--warning);
+  font-size: 0.78rem; margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+.contract-panel-reset {
+  margin-top: 14px; font-size: 0.82rem;
+  color: var(--text-muted); padding: 4px 10px;
+  border: 1px solid var(--border); border-radius: 4px;
+}
+
+/* ===== Topic Tabs (가이드 / 계산기 분리) ===== */
+.topic-tabs {
+  display: flex; gap: 4px;
+  border-bottom: 1px solid var(--border);
+  margin: 8px 0 24px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.topic-tabs::-webkit-scrollbar { display: none; }
+.topic-tab {
+  appearance: none; -webkit-appearance: none;
+  background: transparent; border: 0;
+  padding: 12px 18px;
+  font-size: 0.95rem; font-weight: 600; color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.topic-tab:hover { color: var(--text); }
+.topic-tab[aria-selected="true"] {
+  color: var(--accent); border-bottom-color: var(--accent);
+}
+.topic-tab .tt-count {
+  display: inline-block; margin-left: 6px;
+  font-size: 0.72rem; font-weight: 700;
+  padding: 1px 7px; border-radius: 999px;
+  background: var(--surface-2); color: var(--text-muted);
+  vertical-align: middle;
+}
+.topic-tab[aria-selected="true"] .tt-count {
+  background: var(--accent-soft); color: var(--accent);
+}
+.topic-tabpanel { display: none; }
+.topic-tabpanel.active { display: block; animation: fadeInTab 0.18s ease-out; }
+@keyframes fadeInTab {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 480px) {
+  .topic-tab { padding: 10px 12px; font-size: 0.9rem; }
+}
+
 /* ===== Calculator subnav (top of calculators index) ===== */
 .calc-cat-head {
   font-size: 0.78rem; font-weight: 700; color: var(--text-muted);

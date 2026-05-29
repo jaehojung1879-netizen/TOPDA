@@ -49,7 +49,12 @@
     <a href="#schedule" class="topic-quick-btn">전체 스케줄 보기</a>
   </div>
 
-  <section class="topic-section">
+  <div class="topic-tabs" data-topic-tabs id="sale-tabs" role="tablist">
+    <button class="topic-tab" data-tab="guides" role="tab" aria-selected="true">가이드 <span class="tt-count">5</span></button>
+    <button class="topic-tab" data-tab="calculators" role="tab" aria-selected="false">계산기 <span class="tt-count">4</span></button>
+  </div>
+
+  <section class="topic-section topic-tabpanel active" data-tabpanel="guides">
     <div class="strip-head">
       <h2>매매 주제별 가이드</h2>
       <span class="strip-sub">관심 있는 주제를 골라 깊이 있게</span>
@@ -73,8 +78,14 @@
         <p>채광·환기·결로·곰팡이·층간소음·수압·주차·관리상태. 같은 단지라도 동·층·향으로 달라지는 디테일을 한 번에.</p>
         <span class="topic-link">자세히 보기 →</span>
       </a>
+      <a class="topic-card topic-card-hl" href="../posts/contract-viewer-sale.html">
+        <span class="topic-tag">인터랙티브 ✨ NEW</span>
+        <h3>표준 매매계약서 뷰어</h3>
+        <p>국토부 표준 매매계약서 각 조항에 마우스를 올리면 우측 패널에 법적 의미와 실거래 시 확인사항이 표시됩니다.</p>
+        <span class="topic-link">뷰어 열기 →</span>
+      </a>
       <a class="topic-card" href="../posts/sale-contract-tips.html">
-        <span class="topic-tag">계약</span>
+        <span class="topic-tag">계약 특약</span>
         <h3>매매계약서 특약, 이것만은</h3>
         <p>현 상태 매매·옵션 인계·잔금일 정산·근저당 말소·위반건축물·임차인 명도. 분쟁의 90%가 특약에서 시작됩니다.</p>
         <span class="topic-link">자세히 보기 →</span>
@@ -85,16 +96,31 @@
         <p>선수관리비·장기수선충당금·관리비 일할 계산까지. 잔금일에 빠뜨리면 수십만 원이 갈리는 항목.</p>
         <span class="topic-link">자세히 보기 →</span>
       </a>
+    </div>
+  </section>
+
+  <section class="topic-section topic-tabpanel" data-tabpanel="calculators">
+    <div class="strip-head">
+      <h2>매매 관련 계산기</h2>
+      <span class="strip-sub">세금·중개수수료·잔금일·전체 비용을 한 번에</span>
+    </div>
+    <div class="topic-grid">
+      <a class="topic-card topic-card-hl" href="../calculators/total-cost-dashboard.html">
+        <span class="topic-tag">대시보드 ✨ NEW</span>
+        <h3>매매 종합비용 대시보드</h3>
+        <p>매매가·대출·금리 하나만 넣으면 취득세·법무사·중개수수료·월 상환액까지 한 화면에. Chart.js 도넛으로 비중 시각화.</p>
+        <span class="topic-link">대시보드 열기 →</span>
+      </a>
       <a class="topic-card" href="../calculators/acquisition-tax.html">
-        <span class="topic-tag">세금 · 계산기</span>
+        <span class="topic-tag">세금</span>
         <h3>취득세 계산기</h3>
-        <p>매매가·주택수·조정대상지역·85㎡ 면적까지 반영. 농어촌특별세·지방교육세 포함 총액.</p>
+        <p>매매가·주택수·조정대상지역·85㎡ 면적까지 반영. 농어촌특별세·지방교육세·생애최초 감면 포함.</p>
         <span class="topic-link">계산하기 →</span>
       </a>
-      <a class="topic-card topic-card-hl" href="../calculators/transfer-tax.html">
-        <span class="topic-tag">세금 · 계산기</span>
+      <a class="topic-card" href="../calculators/transfer-tax.html">
+        <span class="topic-tag">세금</span>
         <h3>양도소득세 계산기</h3>
-        <p>1세대1주택 12억 비과세·고가주택 안분과세·장기보유특별공제·다주택 중과까지. 현행 소득세법 8구간 누진세율 반영.</p>
+        <p>1세대1주택 12억 비과세·고가주택 안분·장기보유특별공제·다주택 중과까지.</p>
         <span class="topic-link">계산하기 →</span>
       </a>
       <a class="topic-card" href="../calculators/brokerage-fee.html">
@@ -102,6 +128,18 @@
         <h3>중개수수료 계산기</h3>
         <p>거래금액별 상한요율(서울 기준). 부가세 포함 총액.</p>
         <span class="topic-link">계산하기 →</span>
+      </a>
+      <a class="topic-card" href="../calculators/balance-settlement.html">
+        <span class="topic-tag">잔금일</span>
+        <h3>잔금일 정산 계산기</h3>
+        <p>관리비 일할·선수관리비·장기수선충당금 자동 안분.</p>
+        <span class="topic-link">계산하기 →</span>
+      </a>
+      <a class="topic-card" href="../calculators/dday-scheduler.html">
+        <span class="topic-tag">일정 ✨ NEW</span>
+        <h3>D-Day 거래 스케줄러</h3>
+        <p>계약일·잔금일만 넣으면 자금조달계획서·대출·이사 등 필수 일정을 자동 생성합니다.</p>
+        <span class="topic-link">스케줄 만들기 →</span>
       </a>
     </div>
   </section>

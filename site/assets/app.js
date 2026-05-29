@@ -642,6 +642,374 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
   recalc();
 })();
 
+// ===== Total Cost Dashboard (Chart.js 도넛) =====
+(function () {
+  const root = document.querySelector('[data-calc="total-cost-dashboard"]');
+  if (!root) return;
+  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+  const canvas = document.getElementById('costChart');
+  let chart = null;
+
+  // 취득세(본세) 계산 — calcAcquisitionTax 로직 일부 재사용
+  function calcAcqTotal(price, homes, regulated, areaOver85) {
+    if (!price || price <= 0) return 0;
+    const r = calcAcquisitionTax({ price, homes, regulated, areaOver85, firstHome: false });
+    return r ? r.total : 0;
+  }
+  // 중개수수료 — 서울 매매 기준, 부가세 포함
+  function calcBroker(price) {
+    if (!price || price <= 0) return 0;
+    const eok = price / 100000000;
+    let rate, max;
+    if (eok < 0.5) { rate = 0.006; max = 250000; }
+    else if (eok < 2) { rate = 0.005; max = 800000; }
+    else if (eok < 9) { rate = 0.004; max = null; }
+    else if (eok < 12) { rate = 0.005; max = null; }
+    else if (eok < 15) { rate = 0.006; max = null; }
+    else { rate = 0.007; max = null; }
+    let fee = price * rate;
+    if (max != null) fee = Math.min(fee, max);
+    return Math.round(fee * 1.1); // VAT 포함
+  }
+  // 월 원리금균등 상환액
+  function calcMonthly(principal, annualRate, years) {
+    if (!principal || principal <= 0 || annualRate <= 0 || years <= 0) return 0;
+    const i = annualRate / 100 / 12;
+    const n = years * 12;
+    return principal * i * Math.pow(1 + i, n) / (Math.pow(1 + i, n) - 1);
+  }
+
+  function makeChart(data, labels, colors) {
+    if (!canvas || typeof Chart === 'undefined') return;
+    const opts = {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [{
+          data,
+          backgroundColor: colors,
+          borderColor: '#fff',
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 600, easing: 'easeOutQuart' },
+        cutout: '62%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { font: { size: 12, family: 'Pretendard Variable' }, usePointStyle: true, padding: 12 },
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const v = ctx.parsed;
+                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                const pct = total > 0 ? (v / total * 100).toFixed(1) : '0.0';
+                return ctx.label + ': ' + fmt.won(v) + ' (' + pct + '%)';
+              },
+            },
+          },
+        },
+      },
+    };
+    if (chart) {
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = data;
+      chart.data.datasets[0].backgroundColor = colors;
+      chart.update();
+    } else {
+      chart = new Chart(canvas.getContext('2d'), opts);
+    }
+  }
+
+  const recalc = () => {
+    const price = fmt.parseWon(root.querySelector('[name="price"]').value);
+    const homes = Number(root.querySelector('[name="homes"]:checked')?.value || 1);
+    const regulated = root.querySelector('[name="regulated"]')?.checked || false;
+    const areaOver85 = root.querySelector('[name="areaOver85"]')?.checked || false;
+    const loan = fmt.parseWon(root.querySelector('[name="loan"]').value);
+    const rate = Number(root.querySelector('[name="rate"]').value || 0);
+    const term = Number(root.querySelector('[name="term"]').value || 30);
+    const purpose = root.querySelector('[name="purpose"]:checked')?.value || 'own';
+    const jeonseDeposit = purpose === 'gap' ? fmt.parseWon(root.querySelector('[name="jeonseDeposit"]').value) : 0;
+
+    // 갭투자 옵션 영역 토글
+    const gapField = root.querySelector('[data-purpose="gap"]');
+    if (gapField) gapField.style.display = purpose === 'gap' ? '' : 'none';
+
+    const tax = calcAcqTotal(price, homes, regulated, areaOver85);
+    const broker = calcBroker(price);
+    const legal = price * 0.002; // 법무사·등기 추정
+    const monthly = calcMonthly(loan, rate, term);
+    const totalInterest = monthly * term * 12 - loan;
+
+    // 자기자본 계산
+    let equity = price - loan - jeonseDeposit;
+    if (equity < 0) equity = 0;
+    const initialCapital = equity + tax + broker + legal;
+    const grandTotal = price + tax + broker + legal;
+
+    setText('initialCapital', fmt.won(initialCapital));
+    setText('monthlyPayment', fmt.won(monthly));
+    setText('totalInterest', fmt.won(totalInterest));
+    setText('equityAmt', fmt.won(equity));
+    setText('loanAmt', fmt.won(loan));
+    setText('jeonseAmt', fmt.won(jeonseDeposit));
+    setText('taxAmt', fmt.won(tax));
+    setText('brokerAmt', fmt.won(broker));
+    setText('legalAmt', fmt.won(legal));
+    setText('grandTotal', fmt.won(grandTotal));
+
+    const data = [equity, loan, jeonseDeposit, tax, broker, legal].filter((v, i) => v > 0 || i < 2);
+    const labels = ['자기자본', '대출 원금', '전세보증금 인수', '취득세', '중개수수료', '법무사·등기'];
+    const colors = ['#1e3a8a', '#3b82f6', '#60a5fa', '#f59e0b', '#ef4444', '#a855f7'];
+    // jeonseDeposit이 0이면 차트에서도 제외
+    const dataset = [];
+    const labset = [];
+    const colset = [];
+    [equity, loan, jeonseDeposit, tax, broker, legal].forEach((v, i) => {
+      if (v > 0) { dataset.push(v); labset.push(labels[i]); colset.push(colors[i]); }
+    });
+    makeChart(dataset, labset, colset);
+  };
+  root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
+  // Chart.js 로드 후 재시도
+  if (typeof Chart === 'undefined') {
+    const wait = setInterval(() => {
+      if (typeof Chart !== 'undefined') { clearInterval(wait); recalc(); }
+    }, 100);
+  } else {
+    recalc();
+  }
+})();
+
+// ===== Property Rating Radar (임장 점수 레이더 차트) =====
+(function () {
+  const root = document.querySelector('[data-calc="property-rating"]');
+  if (!root) return;
+  const canvas = document.getElementById('radarChart');
+  let chart = null;
+  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+  const KEYS = ['traffic', 'school', 'commerce', 'condition', 'amenity'];
+  const LABELS = ['교통', '학군', '상권', '노후도(신축감)', '단지 쾌적성'];
+
+  function makeRadar(values) {
+    if (!canvas || typeof Chart === 'undefined') return;
+    const opts = {
+      type: 'radar',
+      data: {
+        labels: LABELS,
+        datasets: [{
+          label: '평가 점수',
+          data: values,
+          fill: true,
+          backgroundColor: 'rgba(30, 58, 138, 0.18)',
+          borderColor: '#1e3a8a',
+          borderWidth: 2,
+          pointBackgroundColor: '#1e3a8a',
+          pointRadius: 4,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 500, easing: 'easeOutQuart' },
+        scales: {
+          r: {
+            beginAtZero: true, min: 0, max: 5, ticks: { stepSize: 1, display: false },
+            pointLabels: { font: { size: 13, family: 'Pretendard Variable', weight: '600' } },
+            grid: { color: 'rgba(0,0,0,0.06)' },
+            angleLines: { color: 'rgba(0,0,0,0.08)' },
+          },
+        },
+        plugins: { legend: { display: false } },
+      },
+    };
+    if (chart) {
+      chart.data.datasets[0].data = values;
+      chart.update();
+    } else {
+      chart = new Chart(canvas.getContext('2d'), opts);
+    }
+  }
+
+  function verdict(scores, address) {
+    const sum = scores.reduce((a, b) => a + b, 0);
+    const avg = sum / scores.length;
+    const max = Math.max(...scores);
+    const min = Math.min(...scores);
+    const maxKey = LABELS[scores.indexOf(max)];
+    const minKey = LABELS[scores.indexOf(min)];
+    const tag = address ? `‘${address}’` : '해당 매물';
+    if (avg >= 4.2) return `${tag}은 전반적으로 매우 우수합니다. 특히 ${maxKey} 항목이 강점.`;
+    if (avg >= 3.4) return `${tag}은 무난한 선택. 강점은 ${maxKey}, 다만 ${minKey}는 개선 여지가 있습니다.`;
+    if (avg >= 2.6) return `${tag}은 평균 이하 항목이 다수입니다. 특히 ${minKey}가 약점 — 가격 협상 카드로 활용 가능.`;
+    return `${tag}은 종합 점수가 낮습니다. 입지·환경의 결정적 단점이 있는지 재확인하세요.`;
+  }
+
+  const recalc = () => {
+    const scores = KEYS.map((k) => Number(root.querySelector('[name="'+k+'"]').value || 0));
+    const address = root.querySelector('[name="address"]').value.trim();
+    const total = scores.reduce((a, b) => a + b, 0);
+    const avg = (total / scores.length) || 0;
+    setText('totalScore', total + ' / 25');
+    setText('avgScore', avg.toFixed(2) + ' / 5');
+    setText('verdict', verdict(scores, address));
+    // 항목별 점수 표시
+    KEYS.forEach((k, i) => {
+      const out = root.querySelector('[data-out="score-'+k+'"]');
+      if (out) out.textContent = scores[i] + '점';
+    });
+    makeRadar(scores);
+  };
+  root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
+  if (typeof Chart === 'undefined') {
+    const wait = setInterval(() => {
+      if (typeof Chart !== 'undefined') { clearInterval(wait); recalc(); }
+    }, 100);
+  } else {
+    recalc();
+  }
+})();
+
+// ===== D-Day Scheduler =====
+// 계약일·잔금일을 기준으로 거래 단계별 일정을 자동 생성
+(function () {
+  const root = document.querySelector('[data-calc="dday-scheduler"]');
+  if (!root) return;
+  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+  const timelineOut = root.querySelector('[data-out="timeline"]');
+
+  const FMT_DATE = (d) => {
+    if (!d) return '';
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`;
+  };
+  const dayDiff = (a, b) => Math.round((b - a) / 86400000);
+  const addDays = (d, n) => { const r = new Date(d); r.setDate(r.getDate() + n); return r; };
+
+  function dDayLabel(today, target) {
+    if (!target) return '—';
+    const diff = dayDiff(today, target);
+    if (diff === 0) return 'D-day';
+    if (diff > 0) return 'D-' + diff;
+    return 'D+' + Math.abs(diff);
+  }
+
+  // 매매 일정 템플릿 (계약일=C, 잔금일=B 기준)
+  function buildSaleSteps({ contract, balance, useLoan, needMove, needFunding }) {
+    const steps = [];
+    if (contract) {
+      steps.push({ date: addDays(contract, -7), title: '권리관계 최종 점검', desc: '등기부등본 발급 → 근저당·가압류·신탁 확인', tag: '필수' });
+      steps.push({ date: contract, title: '매매계약 체결 · 계약금 지급', desc: '계약금 5~10% 매도인 본인 명의 계좌로 송금', tag: 'D-day' });
+      steps.push({ date: addDays(contract, 30), title: '실거래가 신고 (30일 내)', desc: '계약일로부터 30일 내 시·군·구 신고 (부동산 거래신고법)', tag: '의무' });
+      if (needFunding) steps.push({ date: addDays(contract, 30), title: '자금조달계획서 제출', desc: '6억 이상 매매 또는 조정대상지역 매매 시 신고 (30일 내)', tag: '의무' });
+    }
+    if (useLoan && balance) {
+      steps.push({ date: addDays(balance, -30), title: '대출 사전심사 (은행 2~3곳)', desc: '소득증빙·신용점수 준비 → 한도·금리 비교', tag: '대출' });
+      steps.push({ date: addDays(balance, -14), title: '대출 본심사 · 감정평가', desc: '담보물 감정평가 진행', tag: '대출' });
+      steps.push({ date: addDays(balance, -3), title: '대출 약정 체결', desc: '근저당 설정 동의서 등 서명', tag: '대출' });
+    }
+    if (needMove && balance) {
+      steps.push({ date: addDays(balance, -30), title: '이사업체 방문견적 (3~5사)', desc: '허가 업체·표준약관·적재물배상보험 확인', tag: '이사' });
+      steps.push({ date: addDays(balance, -14), title: '이사 계약 · 계약금 지급', desc: '업체 확정 · 계약금 10%', tag: '이사' });
+      steps.push({ date: addDays(balance, -7), title: '사다리차·엘리베이터 예약', desc: '양 단지 관리실에 신청', tag: '이사' });
+    }
+    if (balance) {
+      steps.push({ date: balance, title: '잔금일 · 등기 · 정산', desc: '잔금 지급 · 소유권 이전등기 · 근저당 말소 · 관리비/공과금 정산 · 열쇠 인수', tag: 'D-day' });
+      steps.push({ date: addDays(balance, 14), title: '전입신고 (14일 내)', desc: '관할 동주민센터 또는 정부24. 미신고 시 과태료 5만 원', tag: '의무' });
+      steps.push({ date: addDays(balance, 60), title: '취득세 납부 (60일 내)', desc: '위택스에서 신고·납부. 미납 시 가산세', tag: '세금' });
+      steps.push({ date: addDays(balance, 60), title: '소유권이전등기 (60일 내)', desc: '법무사 위임 또는 직접 신청', tag: '등기' });
+    }
+    return steps;
+  }
+
+  function buildLeaseSteps({ contract, balance, useLoan, needMove }) {
+    const steps = [];
+    if (contract) {
+      steps.push({ date: addDays(contract, -14), title: '시세·전세가율 확인', desc: '국토부 실거래가 + KB부동산. 전세가율 80% 이상은 위험', tag: '준비' });
+      steps.push({ date: addDays(contract, -7), title: '등기부·전입세대 확인', desc: '근저당·가압류·신탁 + 선순위 임차인 점검', tag: '필수' });
+      steps.push({ date: contract, title: '임대차계약 체결 · 계약금 지급', desc: '계약금 5~10% 임대인 본인 명의 계좌로', tag: 'D-day' });
+      steps.push({ date: addDays(contract, 30), title: '주택임대차 신고 (30일 내)', desc: '보증금 6천만 원 또는 월세 30만 원 초과 시 신고 의무', tag: '의무' });
+    }
+    if (useLoan && balance) {
+      steps.push({ date: addDays(balance, -30), title: '전세자금대출 신청', desc: 'HUG·HF·SGI 보증 상품 검토. 잔금 지급일 기준 입금 가능 시점 확인', tag: '대출' });
+      steps.push({ date: addDays(balance, -7), title: '대출 승인 · 자금 입금 일정 확정', desc: '은행과 잔금일 자금 이체 시간 협의', tag: '대출' });
+    }
+    if (needMove && balance) {
+      steps.push({ date: addDays(balance, -21), title: '이사업체 견적·계약', desc: '방문견적 3사 이상', tag: '이사' });
+      steps.push({ date: addDays(balance, -7), title: '관리실 사다리차·엘리베이터 예약', desc: '양 단지 모두', tag: '이사' });
+    }
+    if (balance) {
+      steps.push({ date: balance, title: '잔금일 · 전입 · 확정 · 보증보험', desc: '잔금 지급 후 즉시 ① 점유(이사) ② 전입신고 ③ 확정일자 ④ 보증보험 신청', tag: 'D-day' });
+      steps.push({ date: addDays(balance, 14), title: '전입신고 완료 확인 (14일 내)', desc: '미완료 시 과태료. 외국인은 외국인등록 변경', tag: '의무' });
+      steps.push({ date: addDays(balance, 30), title: '전세보증금 반환보증 가입', desc: 'HUG/HF/SGI 중 선택. 잔금일 가까울수록 가산 보험료 발생', tag: '필수' });
+    }
+    return steps;
+  }
+
+  const recalc = () => {
+    const dealType = root.querySelector('[name="dealType"]:checked')?.value || 'sale';
+    const contractStr = root.querySelector('[name="contractDate"]').value;
+    const balanceStr = root.querySelector('[name="balanceDate"]').value;
+    const useLoan = root.querySelector('[name="useLoan"]')?.checked || false;
+    const needMove = root.querySelector('[name="needMove"]')?.checked || false;
+    const amount = fmt.parseWon(root.querySelector('[name="amount"]').value);
+
+    const contract = contractStr ? new Date(contractStr + 'T00:00:00') : null;
+    const balance = balanceStr ? new Date(balanceStr + 'T00:00:00') : null;
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    setText('today', FMT_DATE(today));
+    setText('dDayContract', dDayLabel(today, contract));
+    setText('dDayBalance', dDayLabel(today, balance));
+    if (contract && balance) {
+      setText('totalSpan', dayDiff(contract, balance) + '일');
+    } else {
+      setText('totalSpan', '—');
+    }
+
+    const needFunding = amount >= 600000000;
+    let steps;
+    if (dealType === 'sale') {
+      steps = buildSaleSteps({ contract, balance, useLoan, needMove, needFunding });
+    } else {
+      steps = buildLeaseSteps({ contract, balance, useLoan, needMove });
+    }
+    steps.sort((a, b) => a.date - b.date);
+
+    if (!timelineOut) return;
+    if (!steps.length) {
+      timelineOut.innerHTML = '<li class="dt-empty">계약일과 잔금일을 입력하면 타임라인이 생성됩니다.</li>';
+      return;
+    }
+    timelineOut.innerHTML = '';
+    steps.forEach((s) => {
+      const dDay = dDayLabel(today, s.date);
+      const past = s.date < today;
+      const li = document.createElement('li');
+      li.className = 'dt-item' + (past ? ' dt-past' : '');
+      li.innerHTML = `
+        <div class="dt-dot"></div>
+        <div class="dt-meta">
+          <span class="dt-dday">${dDay}</span>
+          <span class="dt-date">${FMT_DATE(s.date)}</span>
+        </div>
+        <div class="dt-body">
+          <div class="dt-title"><span class="dt-tag">${s.tag}</span>${s.title}</div>
+          <div class="dt-desc">${s.desc}</div>
+        </div>
+      `;
+      timelineOut.appendChild(li);
+    });
+  };
+  root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
+  recalc();
+})();
+
 // ===== Auction Bid Simulator =====
 // 입찰가 + 인수보증금 + 취득세(+10% 부가) + 명도비 + 미납관리비 + 기타 = 총 부담액
 // 시세 대비 마진 = (시세 - 총 부담액) / 시세 × 100
@@ -715,6 +1083,89 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
   };
   root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
   recalc();
+})();
+
+// ===== Topic tabs (가이드 / 계산기 분리) =====
+// 사용법:
+// <div class="topic-tabs" data-topic-tabs>
+//   <button class="topic-tab" data-tab="guides" aria-selected="true">가이드 <span class="tt-count">7</span></button>
+//   <button class="topic-tab" data-tab="calculators">계산기 <span class="tt-count">3</span></button>
+// </div>
+// <div class="topic-tabpanel active" data-tabpanel="guides">...</div>
+// <div class="topic-tabpanel" data-tabpanel="calculators">...</div>
+(function () {
+  const groups = document.querySelectorAll('[data-topic-tabs]');
+  if (!groups.length) return;
+  groups.forEach((group) => {
+    const tabs = group.querySelectorAll('[data-tab]');
+    // 패널들은 group의 같은 부모 안에서 형제로 존재
+    const scope = group.parentElement || document;
+    const switchTo = (key) => {
+      tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === key)));
+      scope.querySelectorAll('[data-tabpanel]').forEach((p) => {
+        p.classList.toggle('active', p.dataset.tabpanel === key);
+      });
+      // URL 해시 갱신 (페이지 새로고침 후에도 유지)
+      try {
+        const id = group.id || 'tabs';
+        history.replaceState(null, '', '#' + id + ':' + key);
+      } catch (e) {}
+    };
+    tabs.forEach((t) => t.addEventListener('click', () => switchTo(t.dataset.tab)));
+    // URL 해시에서 복원
+    try {
+      const m = location.hash.match(/^#([\w-]+):([\w-]+)$/);
+      if (m && (group.id === m[1] || !group.id)) {
+        const target = group.querySelector('[data-tab="' + m[2] + '"]');
+        if (target) switchTo(m[2]);
+      }
+    } catch (e) {}
+  });
+})();
+
+// ===== Interactive contract viewer (좌측 계약서 / 우측 해설) =====
+// 사용법: 계약서 요소에 data-clause="K" 부여, .contract-panel에 [data-clause-panel] 배치
+(function () {
+  const viewers = document.querySelectorAll('[data-contract-viewer]');
+  if (!viewers.length) return;
+  viewers.forEach((v) => {
+    const panel = v.querySelector('[data-clause-panel]');
+    const titleEl = v.querySelector('[data-clause-title]');
+    const bodyEl = v.querySelector('[data-clause-body]');
+    const cautionEl = v.querySelector('[data-clause-caution]');
+    const defaultTitle = titleEl ? titleEl.textContent : '';
+    const defaultBody = bodyEl ? bodyEl.innerHTML : '';
+    const defaultCaution = cautionEl ? cautionEl.innerHTML : '';
+
+    const fill = (el) => {
+      const title = el.dataset.clauseTitle || '';
+      const body = el.dataset.clauseBody || '';
+      const caution = el.dataset.clauseCaution || '';
+      if (titleEl) titleEl.textContent = title;
+      if (bodyEl) bodyEl.innerHTML = body;
+      if (cautionEl) cautionEl.innerHTML = caution;
+      v.querySelectorAll('[data-clause]').forEach((c) => c.classList.remove('active'));
+      el.classList.add('active');
+      if (panel) panel.classList.add('has-selection');
+    };
+    const reset = () => {
+      if (titleEl) titleEl.textContent = defaultTitle;
+      if (bodyEl) bodyEl.innerHTML = defaultBody;
+      if (cautionEl) cautionEl.innerHTML = defaultCaution;
+      v.querySelectorAll('[data-clause]').forEach((c) => c.classList.remove('active'));
+      if (panel) panel.classList.remove('has-selection');
+    };
+
+    v.querySelectorAll('[data-clause]').forEach((el) => {
+      el.addEventListener('mouseenter', () => fill(el));
+      el.addEventListener('focus', () => fill(el));
+      el.addEventListener('click', (e) => { e.preventDefault(); fill(el); });
+      el.setAttribute('tabindex', '0');
+    });
+    // 모바일: 패널 영역 밖 클릭 시 초기화
+    const resetBtn = v.querySelector('[data-clause-reset]');
+    if (resetBtn) resetBtn.addEventListener('click', reset);
+  });
 })();
 
 // ===== Interior estimate calculator =====

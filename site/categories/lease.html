@@ -49,7 +49,12 @@
     <a href="#schedule" class="topic-quick-btn">전세 스케줄 보기</a>
   </div>
 
-  <section class="topic-section">
+  <div class="topic-tabs" data-topic-tabs id="lease-tabs" role="tablist">
+    <button class="topic-tab" data-tab="guides" role="tab" aria-selected="true">가이드 <span class="tt-count">7</span></button>
+    <button class="topic-tab" data-tab="calculators" role="tab" aria-selected="false">계산기 <span class="tt-count">3</span></button>
+  </div>
+
+  <section class="topic-section topic-tabpanel active" data-tabpanel="guides">
     <div class="strip-head">
       <h2>전세 주제별 가이드</h2>
       <span class="strip-sub">관심 있는 주제만 골라 깊이 있게</span>
@@ -58,14 +63,20 @@
       <a class="topic-card topic-card-hl" href="../posts/jeonse-protection.html">
         <span class="topic-tag">보증금 보호</span>
         <h3>보증금 지키는 3종 세트</h3>
-        <p>대항력(전입+점유)·우선변제권(확정일자)·보증보험(HUG/HF/SGI). 잔금일에 동시에 갖춰야 진짜 안전. 한 가지라도 빠지면 위험.</p>
+        <p>대항력(전입+점유)·우선변제권(확정일자)·보증보험(HUG/HF/SGI). 잔금일에 동시에 갖춰야 진짜 안전.</p>
         <span class="topic-link">자세히 보기 →</span>
       </a>
       <a class="topic-card topic-card-hl" href="../posts/jeonse-scam.html">
         <span class="topic-tag">전세사기</span>
         <h3>깡통전세 · 전세사기 판별</h3>
-        <p>전세가율 80% 이상, 신탁등기, 미반환 임대인, 다세대 빌라 신축 시세 부풀리기. 위험 신호 10가지와 빠져나오는 법.</p>
+        <p>전세가율 80% 이상, 신탁등기, 미반환 임대인, 다세대 빌라 신축 시세 부풀리기. 위험 신호 10가지.</p>
         <span class="topic-link">자세히 보기 →</span>
+      </a>
+      <a class="topic-card topic-card-hl" href="../posts/contract-viewer-lease.html">
+        <span class="topic-tag">인터랙티브 ✨ NEW</span>
+        <h3>표준 주택임대차계약서 뷰어</h3>
+        <p>국토부 표준 임대차계약서 각 조항(대항력·확정일자·수선 의무 등)에 마우스를 올리면 우측 패널에 법적 의미와 실무 체크포인트.</p>
+        <span class="topic-link">뷰어 열기 →</span>
       </a>
       <a class="topic-card" href="../posts/registry-reading.html">
         <span class="topic-tag">권리관계</span>
@@ -74,7 +85,7 @@
         <span class="topic-link">자세히 보기 →</span>
       </a>
       <a class="topic-card" href="../posts/lease-contract-tips.html">
-        <span class="topic-tag">계약</span>
+        <span class="topic-tag">계약 특약</span>
         <h3>전세 특약, 이것만은</h3>
         <p>전입·확정 협조, 근저당 말소, 선순위 임차인 없음, 세금 체납 없음, 보증보험 가입 협조. 6가지를 계약서에 반드시.</p>
         <span class="topic-link">자세히 보기 →</span>
@@ -82,7 +93,7 @@
       <a class="topic-card" href="../posts/lease-renewal.html">
         <span class="topic-tag">갱신</span>
         <h3>계약갱신요구권 정리</h3>
-        <p>2년 만기 2~6개월 전, 1회 행사. 인상 5% 한도. 임대인이 거절할 수 있는 9가지 사유. 묵시적 갱신과의 차이.</p>
+        <p>2년 만기 2~6개월 전, 1회 행사. 인상 5% 한도. 임대인 거절 사유 9가지. 묵시적 갱신과의 차이.</p>
         <span class="topic-link">자세히 보기 →</span>
       </a>
       <a class="topic-card" href="../posts/lease-return.html">
@@ -91,9 +102,18 @@
         <p>만기 지났는데 보증금 안 돌려주면? 임차권등기명령 → 보증보험 청구 → 보증금반환소송. 순서대로.</p>
         <span class="topic-link">자세히 보기 →</span>
       </a>
-      <a class="topic-card" href="../calculators/jeonse-monthly.html">
-        <span class="topic-tag">계산기</span>
-        <h3>월세 ↔ 전세 환산</h3>
+    </div>
+  </section>
+
+  <section class="topic-section topic-tabpanel" data-tabpanel="calculators">
+    <div class="strip-head">
+      <h2>전세 관련 계산기</h2>
+      <span class="strip-sub">보증금 환산·중개수수료·일정 관리</span>
+    </div>
+    <div class="topic-grid">
+      <a class="topic-card topic-card-hl" href="../calculators/jeonse-monthly.html">
+        <span class="topic-tag">환산</span>
+        <h3>월세 ↔ 전세 환산 계산기</h3>
         <p>전월세전환율로 양방향 환산. 반전세 시나리오 지원. 법정 한도(기준금리+2%) 안내.</p>
         <span class="topic-link">계산하기 →</span>
       </a>
@@ -102,6 +122,12 @@
         <h3>전월세 중개수수료 계산</h3>
         <p>거래금액별 상한요율. 월세는 ‘보증금 + 월차임 × 100’으로 환산.</p>
         <span class="topic-link">계산하기 →</span>
+      </a>
+      <a class="topic-card" href="../calculators/dday-scheduler.html">
+        <span class="topic-tag">일정 ✨ NEW</span>
+        <h3>D-Day 거래 스케줄러</h3>
+        <p>계약일·잔금일 입력으로 전입신고·확정일자·보증보험 신청까지 자동 타임라인.</p>
+        <span class="topic-link">스케줄 만들기 →</span>
       </a>
     </div>
   </section>

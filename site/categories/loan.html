@@ -49,7 +49,12 @@
     <a href="#schedule" class="topic-quick-btn">대출 준비 스케줄 보기</a>
   </div>
 
-  <section class="topic-section">
+  <div class="topic-tabs" data-topic-tabs id="loan-tabs" role="tablist">
+    <button class="topic-tab" data-tab="guides" role="tab" aria-selected="true">가이드 <span class="tt-count">4</span></button>
+    <button class="topic-tab" data-tab="calculators" role="tab" aria-selected="false">계산기 <span class="tt-count">3</span></button>
+  </div>
+
+  <section class="topic-section topic-tabpanel active" data-tabpanel="guides">
     <div class="strip-head">
       <h2>대출 주제별 가이드</h2>
       <span class="strip-sub">한도·금리·상환을 결정짓는 핵심</span>
@@ -79,16 +84,31 @@
         <p>실제 금리에 가산금리를 얹어 한도를 평가. 변동금리·혼합금리 차등 적용. 한도가 10~20% 줄어듭니다.</p>
         <span class="topic-link">자세히 보기 →</span>
       </a>
-      <a class="topic-card" href="../calculators/loan-compare.html">
-        <span class="topic-tag">계산기</span>
-        <h3>원리금균등 vs 원금균등</h3>
-        <p>같은 원금·금리·기간에서 월상환·총이자 비교. 시각화 포함.</p>
-        <span class="topic-link">계산하기 →</span>
+    </div>
+  </section>
+
+  <section class="topic-section topic-tabpanel" data-tabpanel="calculators">
+    <div class="strip-head">
+      <h2>대출 관련 계산기</h2>
+      <span class="strip-sub">한도·월상환·종합 비용</span>
+    </div>
+    <div class="topic-grid">
+      <a class="topic-card topic-card-hl" href="../calculators/total-cost-dashboard.html">
+        <span class="topic-tag">대시보드 ✨ NEW</span>
+        <h3>매매 종합비용 대시보드</h3>
+        <p>매매가·대출·금리·자기자본 입력 → 월상환·취득세·중개수수료·법무사비 합산. 도넛 차트.</p>
+        <span class="topic-link">대시보드 열기 →</span>
       </a>
       <a class="topic-card" href="../calculators/dsr.html">
-        <span class="topic-tag">계산기</span>
+        <span class="topic-tag">한도</span>
         <h3>DSR 한도 계산기</h3>
         <p>연소득·기존부채·신규대출 입력 → 1금융/2금융 한도 즉시 산출.</p>
+        <span class="topic-link">계산하기 →</span>
+      </a>
+      <a class="topic-card" href="../calculators/loan-compare.html">
+        <span class="topic-tag">상환방식</span>
+        <h3>원리금균등 vs 원금균등</h3>
+        <p>같은 원금·금리·기간에서 월상환·총이자 비교. 시각화 포함.</p>
         <span class="topic-link">계산하기 →</span>
       </a>
     </div>
