@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>임장 평가 — 단지 가치 레이더 — 톺다</title>
+<meta name="description" content="교통·학군·상권·노후도·단지 쾌적성 5개 항목에 점수를 매겨 단지의 종합 가치를 방사형 차트로 시각화합니다." />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a>
+      <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+      <a href="../index.html#categories" data-nav>가이드</a>
+      <a href="../about.html" data-nav>안내</a>
+    </nav>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a><a href="../calculators/index.html">계산기</a><a href="../checklists/index.html">체크리스트</a><a href="../index.html#categories">가이드</a><a href="../about.html">안내</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 임장 평가 레이더</div>
+    <h1>임장 평가 — 단지 가치 레이더</h1>
+    <div class="meta"><span>5개 항목에 1~5점 → 방사형 차트 + 한 줄 종합 평가</span></div>
+  </div>
+
+  <div class="calc-layout" data-calc="property-rating">
+
+    <div class="calc-form">
+      <div class="field">
+        <label for="pr-address">단지명 또는 주소 (선택)</label>
+        <input id="pr-address" name="address" type="text" maxlength="60" placeholder="예: OOO아파트 101동" />
+      </div>
+
+      <div class="rating-row">
+        <label>🚇 교통 <span class="rating-val" data-out="score-traffic">3점</span></label>
+        <input type="range" name="traffic" min="1" max="5" step="1" value="3" />
+        <div class="rating-sub">지하철·버스·도로 접근성. 도보 10분 내 지하철역이면 4~5점.</div>
+      </div>
+
+      <div class="rating-row">
+        <label>🎒 학군 <span class="rating-val" data-out="score-school">3점</span></label>
+        <input type="range" name="school" min="1" max="5" step="1" value="3" />
+        <div class="rating-sub">초·중·고 배정. 도보 거리, 학원가, 학업 성취도.</div>
+      </div>
+
+      <div class="rating-row">
+        <label>🛍 상권 <span class="rating-val" data-out="score-commerce">3점</span></label>
+        <input type="range" name="commerce" min="1" max="5" step="1" value="3" />
+        <div class="rating-sub">대형마트·전통시장·생활 편의시설 접근성.</div>
+      </div>
+
+      <div class="rating-row">
+        <label>🏗 노후도(신축감) <span class="rating-val" data-out="score-condition">3점</span></label>
+        <input type="range" name="condition" min="1" max="5" step="1" value="3" />
+        <div class="rating-sub">준공 연도·외벽 상태·엘리베이터·배관. 5점=신축, 1점=재건축 대상.</div>
+      </div>
+
+      <div class="rating-row">
+        <label>🌳 단지 쾌적성 <span class="rating-val" data-out="score-amenity">3점</span></label>
+        <input type="range" name="amenity" min="1" max="5" step="1" value="3" />
+        <div class="rating-sub">조경·주차·놀이터·관리 상태·세대수.</div>
+      </div>
+    </div>
+
+    <div class="calc-result">
+      <h3>종합 점수</h3>
+      <div class="total" data-out="totalScore">0 / 25</div>
+      <div class="breakdown" style="margin-bottom: 8px;">
+        <div class="row"><span class="key">평균</span><span class="val" data-out="avgScore">0 / 5</span></div>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="radarChart" height="240"></canvas>
+      </div>
+
+      <div class="callout callout-info" style="margin-top: 16px; margin-bottom: 0;">
+        <div class="icon">💡</div>
+        <div class="body">
+          <strong>한 줄 평</strong>
+          <p data-out="verdict" style="margin-top:4px;">점수를 입력하면 종합 평가가 표시됩니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section style="margin-top: 56px;">
+    <h2 style="margin-bottom: 16px;">평가 활용 팁</h2>
+    <ul class="ref-list">
+      <li><strong>같은 단지를 여러 번</strong> — 같은 매물이라도 평일 아침 / 저녁 / 주말로 나눠 보면 점수가 달라집니다.</li>
+      <li><strong>가족 구성원별 점수</strong> — 학군은 자녀 유무, 교통은 출퇴근 거리에 따라 가중치가 다릅니다. 본인 우선순위 항목에 가중치를 두고 비교하세요.</li>
+      <li><strong>비교 보관</strong> — 화면을 캡처해 매물별 폴더에 저장. 5~10개 임장을 끝낸 뒤 차트를 나란히 놓고 비교하면 결정이 쉬워집니다.</li>
+      <li><strong>가격과의 관계</strong> — 점수가 낮은 항목은 가격 협상 카드. 예: ‘노후도 2점’이면 인테리어 비용을 반영해 가격 조정 요청.</li>
+    </ul>
+  </section>
+
+  <div class="callout callout-warn" style="margin-top: 32px;">
+    <div class="icon">⚠</div>
+    <div class="body">
+      <strong>면책</strong> 본 평가는 주관적 임장 도구입니다. 실거래·시세·하자·법적 권리관계 확인은 별도로 진행하세요.
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="disclaimer">© 톺다. 일반 정보 제공용입니다.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>
