@@ -96,53 +96,62 @@ html, body { overflow-x: hidden; }
 }
 .site-header .row {
   display: flex; align-items: center; justify-content: space-between;
-  height: 64px; gap: 12px; position: relative;
+  min-height: 56px; gap: 12px; position: relative;
+  flex-wrap: wrap;
+  padding-top: 8px; padding-bottom: 0;
+}
+@media (min-width: 768px) {
+  .site-header .row { min-height: 64px; flex-wrap: nowrap; padding-top: 0; padding-bottom: 0; }
 }
 .brand {
-  font-weight: 800; font-size: 1.25rem; letter-spacing: -0.03em;
+  font-weight: 800; font-size: 1.2rem; letter-spacing: -0.03em;
   display: inline-flex; align-items: center; gap: 8px; color: var(--text);
 }
+@media (min-width: 768px) { .brand { font-size: 1.25rem; } }
 .brand-mark {
-  display: inline-block; width: 28px; height: 28px;
+  display: inline-block; width: 26px; height: 26px;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%232563eb'/><g fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'><circle cx='25' cy='27' r='9'/><path d='M25 36 L 22 44'/><path d='M27 40 L 35 48 L 51 26'/></g></svg>");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   flex-shrink: 0;
 }
+@media (min-width: 768px) { .brand-mark { width: 28px; height: 28px; } }
 
+/* 모바일/태블릿 세로형: 첫 줄은 [로고·톺다] [언어 토글]만, nav는 다음 줄에 가로 스크롤 strip */
 .nav {
   display: flex; align-items: center;
-  gap: 14px;
-  position: absolute; left: 0; right: 0;
-  bottom: -1px;
-  padding: 0 16px 8px;
+  gap: 18px;
+  position: static;
+  margin: 6px -20px 0;
+  padding: 6px 20px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  background: rgba(255,255,255,0.85);
-  border-bottom: 1px solid var(--border);
-  justify-content: flex-start;
+  border-top: 1px solid var(--border);
   white-space: nowrap;
+  width: calc(100% + 40px);
+  order: 3;
+  justify-content: flex-start;
 }
 .nav::-webkit-scrollbar { display: none; }
 .nav a {
-  font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
-  padding: 6px 2px;
+  font-size: 0.86rem; font-weight: 600; color: var(--text-muted);
+  padding: 6px 4px;
   transition: color 0.15s; white-space: nowrap;
   flex-shrink: 0;
 }
 .nav a:hover, .nav a.active { color: var(--text); }
-.site-header { padding-bottom: 28px; }
+
 @media (min-width: 768px) {
-  .site-header { padding-bottom: 0; }
   .nav {
     position: absolute; left: 50%; top: 50%; right: auto; bottom: auto;
     transform: translate(-50%, -50%);
-    padding: 0; gap: 22px;
+    margin: 0; padding: 0; gap: 24px;
     background: transparent; border: 0;
     overflow: visible;
-    font-size: 0.92rem;
+    width: auto; order: 0;
+    justify-content: center;
   }
   .nav a { font-size: 0.92rem; padding: 8px 0; }
 }
@@ -1333,6 +1342,128 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 .scn-section-title:first-child { margin-top: 0; }
 
+.scn-note {
+  font-size: 0.8rem; color: var(--text-muted);
+  background: var(--accent-soft); color: var(--accent-text);
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  margin-top: 12px; line-height: 1.55;
+}
+
+/* 빈 차트 placeholder */
+.chart-wrap { position: relative; min-height: 240px; }
+.chart-empty {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-subtle); font-size: 0.88rem; text-align: center;
+  pointer-events: none;
+}
+
+/* 최근 규제·정책 뉴스 카드 */
+.news-section { margin-top: 56px; }
+.news-grid {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+@media (min-width: 640px) { .news-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .news-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.news-card {
+  display: block;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.15s, transform 0.15s;
+}
+.news-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.news-tag {
+  display: inline-block;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent); background: var(--accent-soft);
+  padding: 3px 8px; border-radius: 999px;
+  margin-bottom: 10px;
+}
+.news-card h3 {
+  font-size: 1rem; line-height: 1.4; margin-bottom: 8px;
+  color: var(--text);
+}
+.news-card p {
+  font-size: 0.85rem; color: var(--text-muted); line-height: 1.55;
+  margin-bottom: 10px;
+}
+.news-link {
+  font-size: 0.82rem; font-weight: 600; color: var(--accent);
+}
+
+/* 피드백 게시판 — 작성 버튼을 탭 헤더 우측에 */
+.fb-tabs-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.fb-tabs-row .fb-tabs {
+  border-bottom: 0; margin-bottom: 0;
+}
+.fb-write-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 999px;
+  background: var(--accent); color: #fff;
+  font-size: 0.85rem; font-weight: 700;
+  white-space: nowrap;
+  margin-bottom: 4px;
+  transition: background 0.15s, transform 0.15s;
+}
+.fb-write-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.fb-write-btn svg { color: #fff; }
+
+/* 기존 FAB는 페이지에서 제거됨 (스타일은 유지하되 사용 안 함) */
+
+/* ===== Hero Calc Card (홈 상단 종합 계산기 강조) ===== */
+.hero-calc-card {
+  display: flex; gap: 16px;
+  padding: 22px; margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
+  color: #fff; border-radius: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 12px 24px -12px rgba(30,58,138,0.45);
+  align-items: center;
+}
+.hero-calc-card:hover { transform: translateY(-2px); box-shadow: 0 18px 30px -14px rgba(30,58,138,0.55); }
+.hero-calc-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.18);
+  flex-shrink: 0;
+}
+.hero-calc-icon svg { width: 32px; height: 32px; color: #fff; }
+.hero-calc-body { flex: 1; min-width: 0; color: #fff; }
+.hero-calc-tag {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.22);
+  display: inline-block; padding: 2px 8px; border-radius: 999px;
+  margin-bottom: 6px;
+}
+.hero-calc-body h3 {
+  font-size: 1.25rem; color: #fff; line-height: 1.3;
+  margin-bottom: 4px; font-weight: 800; letter-spacing: -0.02em;
+}
+.hero-calc-body p {
+  font-size: 0.88rem; color: rgba(255,255,255,0.92);
+  margin-bottom: 6px; line-height: 1.5;
+}
+.hero-calc-cta {
+  font-size: 0.85rem; font-weight: 700; color: #fff;
+}
+@media (max-width: 480px) {
+  .hero-calc-card { padding: 18px; gap: 12px; }
+  .hero-calc-icon { width: 44px; height: 44px; }
+  .hero-calc-icon svg { width: 24px; height: 24px; }
+  .hero-calc-body h3 { font-size: 1.1rem; }
+  .hero-calc-body p { font-size: 0.82rem; }
+}
+
 /* ===== DSR Result Box ===== */
 .dsr-box {
   margin-top: 20px; padding: 16px;
@@ -1422,6 +1553,157 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   width: 100%; accent-color: var(--accent);
 }
 .rating-row .rating-sub { font-size: 0.78rem; color: var(--text-subtle); }
+
+/* ===== D-Day Scheduler (체크리스트) ===== */
+.dday-app { margin-top: 8px; }
+.dday-form-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px;
+  margin-bottom: 16px;
+}
+.dday-form-title { font-size: 1.1rem; margin-bottom: 14px; }
+.dday-events {
+  display: flex; flex-direction: column; gap: 8px;
+  margin: 14px 0;
+}
+.dday-event-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1.5fr) 130px 110px 90px 80px 32px;
+  gap: 6px; align-items: center;
+}
+@media (max-width: 720px) {
+  .dday-event-row {
+    grid-template-columns: 1fr 1fr 32px;
+  }
+  .dday-event-row .de-title { grid-column: 1 / 3; }
+  .dday-event-row .de-del { grid-column: 3 / 4; grid-row: 1; }
+  .dday-event-row .de-date { grid-column: 1 / 2; }
+  .dday-event-row .de-amount { grid-column: 2 / 3; }
+  .dday-event-row .de-dir { grid-column: 1 / 2; }
+  .dday-event-row .de-tag { grid-column: 2 / 4; }
+}
+.dday-event-row input, .dday-event-row select {
+  padding: 6px 8px;
+  border: 1px solid var(--border); border-radius: 6px;
+  font-size: 0.85rem; background: #fff;
+}
+.dday-event-row input:focus, .dday-event-row select:focus {
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(30,58,138,0.12);
+}
+.dday-event-row .de-del {
+  width: 32px; height: 32px;
+  border-radius: 6px; background: transparent;
+  color: var(--text-muted); border: 1px solid var(--border);
+}
+.dday-event-row .de-del:hover { background: var(--danger-soft); color: var(--danger); }
+
+.dday-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.dday-actions .btn { font-size: 0.85rem; padding: 8px 14px; }
+
+.dday-future {
+  margin-top: 18px;
+  font-size: 0.8rem; line-height: 1.65;
+  color: var(--text-muted);
+  background: var(--accent-soft); color: var(--accent-text);
+  padding: 12px 14px; border-radius: var(--radius-sm);
+}
+.dday-future strong { display: block; color: var(--accent); margin-bottom: 4px; font-weight: 700; }
+
+.dday-summary {
+  display: grid; grid-template-columns: repeat(1, 1fr); gap: 8px;
+  background: var(--surface-2); border-radius: var(--radius);
+  padding: 14px; margin: 16px 0 24px;
+}
+@media (min-width: 640px) { .dday-summary { grid-template-columns: repeat(3, 1fr); } }
+.dday-summary-row {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.dday-summary-row span {
+  font-size: 0.78rem; color: var(--text-muted);
+}
+.dday-summary-row strong {
+  font-size: 1rem; color: var(--text); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 달력 */
+.dday-calendar-section {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 20px;
+  margin-bottom: 24px;
+}
+.dday-cal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.dday-cal-head h2 { font-size: 1.1rem; margin: 0; }
+.dday-nav {
+  width: 32px; height: 32px; border-radius: 8px;
+  font-size: 1.1rem; color: var(--text-muted);
+  border: 1px solid var(--border); background: var(--surface);
+}
+.dday-nav:hover { color: var(--text); background: var(--surface-2); }
+.dday-cal-weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  font-size: 0.78rem; font-weight: 700; color: var(--text-subtle);
+  text-align: center; padding-bottom: 6px;
+}
+.dday-cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.dc-cell {
+  min-height: 76px; padding: 4px 4px 6px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; font-size: 0.78rem;
+  overflow: hidden;
+}
+.dc-cell.dc-empty { border-style: dashed; opacity: 0.4; min-height: 76px; }
+.dc-cell.dc-today { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft) inset; }
+.dc-num {
+  display: flex; align-items: center; gap: 4px;
+  font-weight: 700; color: var(--text-muted); margin-bottom: 2px;
+}
+.dc-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+.dc-dot-out { background: #ef4444; }
+.dc-dot-in { background: #047857; }
+.dc-dot-info { background: var(--accent); }
+.dc-dot-both { background: linear-gradient(90deg, #ef4444 50%, #047857 50%); }
+.dc-ev {
+  font-size: 0.7rem; padding: 2px 5px; border-radius: 4px;
+  margin-top: 2px; display: flex; align-items: center; gap: 4px;
+  overflow: hidden;
+}
+.dc-ev .dc-ev-title {
+  flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dc-ev .dc-ev-amt {
+  font-weight: 700; font-variant-numeric: tabular-nums;
+  font-size: 0.68rem;
+}
+.dc-ev-out { background: rgba(239,68,68,0.12); color: #b91c1c; }
+.dc-ev-in { background: rgba(4,120,87,0.14); color: #065f46; }
+.dc-ev-info { background: var(--accent-soft); color: var(--accent); }
+
+@media (max-width: 600px) {
+  .dc-cell { min-height: 64px; font-size: 0.72rem; }
+  .dc-ev { display: none; }
+  .dc-ev:first-of-type { display: flex; }
+}
+
+/* 타임라인 색상 보강 */
+.dday-timeline-section { margin-top: 16px; }
+.dt-in .dt-dot { border-color: #047857; }
+.dt-out .dt-dot { border-color: #ef4444; }
+.dt-info .dt-dot { border-color: var(--accent); }
+.dt-amt {
+  display: inline-block; padding: 2px 8px; border-radius: 6px;
+  font-weight: 700; font-size: 0.82rem;
+}
+.dt-amt-in { background: rgba(4,120,87,0.12); color: #065f46; }
+.dt-amt-out { background: rgba(239,68,68,0.12); color: #b91c1c; }
+.dt-amt-info { background: var(--accent-soft); color: var(--accent); }
 
 /* ===== D-Day Timeline ===== */
 .dday-timeline {

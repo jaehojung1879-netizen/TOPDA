@@ -17,7 +17,7 @@
       <a href="index.html" data-nav>홈</a>
       <a href="calculators/index.html" data-nav>계산기</a>
       <a href="checklists/index.html" data-nav>체크리스트</a>
-      <a href="index.html#categories" data-nav>가이드</a>
+      
       <a href="about.html" data-nav>안내</a>
     </nav>
     <div class="lang-switch">
@@ -32,7 +32,7 @@
     <a href="index.html">홈</a>
     <a href="calculators/index.html">계산기</a>
     <a href="checklists/index.html">체크리스트</a>
-    <a href="index.html#categories">가이드</a>
+    
     <a href="about.html">안내</a>
     <a href="en/feedback.html">English</a>
   </div>
@@ -48,13 +48,21 @@
   <div class="fb-app" data-fb-app>
 
     <section class="fb-list-section">
-      <div class="fb-tabs">
-        <button class="fb-tab active" data-fb-tab="public">전체 공개글</button>
-        <button class="fb-tab" data-fb-tab="mine">내 비밀글 <span class="count" data-fb-secret-count>0</span></button>
+      <div class="fb-tabs-row">
+        <div class="fb-tabs">
+          <button class="fb-tab active" data-fb-tab="public">전체 공개글</button>
+          <button class="fb-tab" data-fb-tab="mine">내 비밀글 <span class="count" data-fb-secret-count>0</span></button>
+        </div>
+        <button class="fb-write-btn" data-fb-open aria-label="새 글 작성">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          작성
+        </button>
       </div>
       <ul class="fb-list" data-fb-list-public></ul>
       <ul class="fb-list" data-fb-list-mine hidden></ul>
-      <p class="fb-empty" data-fb-empty>등록된 글이 아직 없습니다. 우측 하단의 ‘작성’ 버튼으로 첫 글을 남겨주세요.</p>
+      <p class="fb-empty" data-fb-empty>등록된 글이 아직 없습니다. 우측 ‘작성’ 버튼으로 첫 글을 남겨주세요.</p>
     </section>
   </div>
 
@@ -66,14 +74,6 @@
     </div>
   </div>
 </main>
-
-<!-- 작성 FAB -->
-<button class="fb-fab" data-fb-open aria-label="새 글 작성">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 5v14M5 12h14"/>
-  </svg>
-  <span class="fb-fab-label">작성</span>
-</button>
 
 <!-- 작성 모달 -->
 <div class="fb-modal" data-fb-modal aria-hidden="true">
