@@ -2115,3 +2115,127 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 /* 표·이미지 가로 스크롤 가드 */
 .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .table-wrap table { min-width: 480px; }
+
+/* ===== Accessibility: skip link ===== */
+.skip-link {
+  position: absolute; left: 8px; top: -48px; z-index: 200;
+  background: var(--accent); color: #fff;
+  padding: 8px 14px; border-radius: var(--radius-sm);
+  font-size: 0.9rem; font-weight: 600;
+  transition: top 0.15s;
+}
+.skip-link:focus { top: 8px; outline: 2px solid #fff; outline-offset: 2px; }
+
+/* ===== Next-action flow (가이드 → 계산기 → 체크리스트 연결) ===== */
+.next-actions {
+  margin: 36px 0 8px;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: var(--surface); padding: 20px 22px;
+}
+.next-actions-head {
+  font-size: 0.78rem; font-weight: 700; color: var(--accent);
+  letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 14px;
+}
+.next-actions-grid {
+  display: grid; gap: 10px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .next-actions-grid { grid-template-columns: repeat(3, 1fr); } }
+.next-action {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px;
+  background: var(--bg); transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.next-action:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 20px -14px rgba(30,58,138,0.3); }
+.next-action .na-step {
+  font-size: 0.72rem; font-weight: 700; color: var(--text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+.next-action .na-title { font-size: 0.96rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+.next-action .na-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+.next-action .na-go { font-size: 0.82rem; font-weight: 600; color: var(--accent); margin-top: 2px; }
+
+/* ===== 광고·제휴 표시(수익화 도입 대비) ===== */
+.aff-disclosure {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em;
+  color: var(--text-muted); background: var(--surface-2);
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 3px 10px;
+}
+.aff-disclosure::before { content: "AD"; font-size: 0.62rem; color: var(--text-subtle); }
+.aff-note { font-size: 0.8rem; color: var(--text-subtle); margin-top: 8px; }
+
+/* ===== Admin layout editor ===== */
+.topda-editor-launcher {
+  position: fixed; right: 16px; bottom: 16px; z-index: 9990;
+  width: 36px; height: 36px; border: 1px solid rgba(15, 23, 42, .1); border-radius: 50%;
+  background: rgba(255, 255, 255, .72); color: #64748b; box-shadow: 0 6px 20px rgba(15, 23, 42, .08);
+  font-size: 15px; cursor: pointer; opacity: .42; backdrop-filter: blur(10px); transition: .18s ease;
+}
+.topda-editor-launcher:hover { opacity: 1; color: #1e3a8a; transform: translateY(-2px); }
+.topda-editor-active { padding-top: 54px; }
+.topda-editor-active * { cursor: crosshair !important; }
+.topda-editor-active .topda-editor-ui *, .topda-editor-active .topda-editor-launcher { cursor: default !important; }
+.topda-editor-hover { outline: 2px dashed rgba(59, 130, 246, .7) !important; outline-offset: 3px; }
+.topda-editor-selected { outline: 3px solid #2563eb !important; outline-offset: 3px; }
+.topda-editor-ui { font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #1e293b; }
+.topda-editor-toolbar {
+  position: fixed; inset: 0 0 auto; z-index: 10010; height: 54px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px 0 20px; background: #0f172a; color: #fff; box-shadow: 0 4px 16px rgba(15, 23, 42, .18);
+}
+.topda-editor-brand { display: flex; align-items: center; gap: 9px; letter-spacing: .04em; }
+.topda-editor-brand b { color: #93c5fd; font-size: 13px; letter-spacing: .14em; }
+.topda-editor-brand span { font-size: 12px; color: #cbd5e1; }
+.topda-editor-toolbar-actions { display: flex; align-items: center; gap: 5px; }
+.topda-editor-toolbar button, .topda-editor-panel button {
+  border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #334155; padding: 7px 10px; font-size: 12px; line-height: 1; cursor: pointer !important;
+}
+.topda-editor-toolbar button { border-color: rgba(255,255,255,.16); background: transparent; color: #e2e8f0; }
+.topda-editor-toolbar button:hover { background: rgba(255,255,255,.1); }
+.topda-editor-toolbar button.primary { background: #2563eb; border-color: #2563eb; color: #fff; }
+.topda-editor-toolbar button:disabled { opacity: .35; }
+.topda-editor-toolbar [data-action="close"] { margin-left: 4px; border: 0; font-size: 22px; padding: 4px 7px; }
+.topda-editor-panel {
+  position: fixed; top: 70px; right: 16px; z-index: 10000; width: 324px; max-height: calc(100vh - 86px); display: flex; flex-direction: column;
+  border: 1px solid #dbe3ef; border-radius: 12px; background: #f8fafc; box-shadow: 0 20px 42px rgba(15, 23, 42, .2); overflow: hidden;
+}
+.topda-editor-panel.collapsed { width: 52px; }
+.topda-editor-panel.collapsed .topda-editor-panel-head > div, .topda-editor-panel.collapsed .topda-editor-panel-body, .topda-editor-panel.collapsed .topda-editor-panel-foot { display: none; }
+.topda-editor-panel-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 14px 12px; border-bottom: 1px solid #e2e8f0; background: #fff; }
+.topda-editor-panel-head small, .topda-editor-selection small { display: block; color: #64748b; font-size: 9px; font-weight: 800; letter-spacing: .14em; }
+.topda-editor-panel-head h2 { margin: 4px 0 0; font-size: 16px; }
+.topda-editor-panel-head button { border: 0; font-size: 20px; background: transparent; }
+.topda-editor-panel-body { overflow-y: auto; }
+.topda-editor-empty { padding: 32px 22px; text-align: center; color: #64748b; }
+.topda-editor-empty i { display: block; margin-bottom: 10px; color: #2563eb; font-size: 24px; }
+.topda-editor-empty b { color: #334155; font-size: 14px; }
+.topda-editor-empty p { margin: 8px 0 0; font-size: 12px; line-height: 1.65; }
+.topda-editor-selection { padding: 14px; border-bottom: 1px solid #e2e8f0; background: #eff6ff; }
+.topda-editor-selection b { display: block; margin-top: 6px; color: #1d4ed8; font-size: 13px; }
+.topda-editor-selection em { margin-left: 4px; color: #475569; font-size: 11px; font-style: normal; font-weight: 500; }
+.topda-editor-selection code { display: block; margin-top: 7px; overflow: hidden; color: #64748b; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.topda-editor-inspector section { padding: 14px; border-bottom: 1px solid #e2e8f0; }
+.topda-editor-inspector h3 { margin: 0 0 10px; color: #475569; font-size: 11px; letter-spacing: .08em; }
+.topda-editor-control { display: block; margin-top: 10px; }
+.topda-editor-control > span { display: block; margin-bottom: 5px; color: #475569; font-size: 11px; }
+.topda-editor-range { display: grid; grid-template-columns: 1fr 55px 16px; align-items: center; gap: 6px; }
+.topda-editor-range input[type="range"] { min-width: 0; accent-color: #2563eb; cursor: pointer !important; }
+.topda-editor-range input[type="number"] { width: 55px; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px; color: #334155; font-size: 11px; }
+.topda-editor-range small { color: #94a3b8; font-size: 10px; }
+.topda-editor-segments { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+.topda-editor-segments button { padding: 6px 2px; font-size: 10px; }
+.topda-editor-segments button.active { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; font-weight: 700; }
+.topda-editor-quick-actions { display: flex; flex-wrap: wrap; gap: 5px; }
+.topda-editor-quick-actions button { font-size: 11px; }
+.topda-editor-panel-foot { padding: 10px 14px; background: #fff; }
+.topda-editor-status { color: #64748b; font-size: 10px; line-height: 1.4; }
+.topda-editor-status.success { color: #047857; font-weight: 700; }
+@media (max-width: 640px) {
+  .topda-editor-toolbar { padding: 0 8px 0 12px; }
+  .topda-editor-toolbar-actions { gap: 3px; }
+  .topda-editor-toolbar button { padding: 7px 6px; font-size: 10px; }
+  .topda-editor-toolbar button span { display: none; }
+  .topda-editor-panel { right: 8px; width: min(324px, calc(100vw - 16px)); }
+}
+@media print { .topda-editor-launcher, .topda-editor-ui { display: none !important; } }

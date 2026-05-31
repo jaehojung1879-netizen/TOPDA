@@ -1982,3 +1982,310 @@ function calcInteriorEstimate({ area, grade, items }) {
   });
 })();
 
+// ===== Site-wide accessibility + SEO enhancements =====
+// 모든 페이지에서 app.js가 로드되므로 한 곳에서 일괄 적용한다.
+// 1) 접근성: 본문 바로가기 링크, 장식용 아이콘 aria-hidden, main 랜드마크 보강
+// 2) SEO: canonical, Open Graph/Twitter 메타, JSON-LD 구조화 데이터 자동 주입
+(function () {
+  try {
+    const head = document.head;
+    const lang = (document.documentElement.lang || 'ko').toLowerCase();
+    const isEnPage = lang.startsWith('en');
+
+    // ---------- 분석 도구 (GA4) ----------
+    // 측정 ID를 발급받으면 아래 GA4_ID에 'G-XXXXXXX'를 넣으면 전 페이지에서 활성화됩니다.
+    // 값이 비어 있으면 어떤 추적도 로드되지 않습니다(개인정보 무수집 상태 유지).
+    const GA4_ID = '';
+    if (GA4_ID) {
+      const g = document.createElement('script');
+      g.async = true;
+      g.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
+      head.appendChild(g);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', GA4_ID, { anonymize_ip: true });
+    }
+
+    // ---------- 접근성 ----------
+    const main = document.querySelector('main');
+    if (main && !main.id) main.id = 'main';
+    if (main && !document.querySelector('.skip-link')) {
+      const skip = document.createElement('a');
+      skip.className = 'skip-link';
+      skip.href = '#' + (main.id || 'main');
+      skip.textContent = isEnPage ? 'Skip to content' : '본문 바로가기';
+      document.body.insertBefore(skip, document.body.firstChild);
+    }
+    // 장식용 텍스트 아이콘(⚠, i, ! 등)은 보조공학에 읽히지 않도록 숨김
+    document.querySelectorAll('.callout > .icon, .source-icon').forEach((el) => {
+      if (!el.hasAttribute('aria-hidden')) el.setAttribute('aria-hidden', 'true');
+    });
+    // aria-label/title 없는 순수 장식 svg 보강
+    document.querySelectorAll('svg:not([aria-label]):not([aria-hidden]):not([role="img"])').forEach((svg) => {
+      if (!svg.querySelector('title')) svg.setAttribute('aria-hidden', 'true');
+    });
+
+    // ---------- SEO ----------
+    const canonicalUrl = location.origin + location.pathname;
+    const ensureMeta = (sel, create) => {
+      if (head.querySelector(sel)) return;
+      head.appendChild(create());
+    };
+    const metaProp = (prop, content) => {
+      if (!content) return;
+      ensureMeta(`meta[property="${prop}"]`, () => {
+        const m = document.createElement('meta');
+        m.setAttribute('property', prop); m.setAttribute('content', content); return m;
+      });
+    };
+    const metaName = (name, content) => {
+      if (!content) return;
+      ensureMeta(`meta[name="${name}"]`, () => {
+        const m = document.createElement('meta');
+        m.setAttribute('name', name); m.setAttribute('content', content); return m;
+      });
+    };
+
+    // canonical
+    if (!head.querySelector('link[rel="canonical"]')) {
+      const link = document.createElement('link');
+      link.rel = 'canonical'; link.href = canonicalUrl;
+      head.appendChild(link);
+    }
+
+    // hreflang: 확실한 KR↔EN 1:1 대응 페이지에만 적용
+    (function () {
+      const pairs = [
+        ['index.html', 'en/index.html'],
+        ['about.html', 'en/about.html'],
+        ['feedback.html', 'en/feedback.html'],
+        ['calculators/index.html', 'en/calculators/index.html'],
+        ['calculators/acquisition-tax.html', 'en/calculators/acquisition-tax.html'],
+        ['calculators/brokerage-fee.html', 'en/calculators/brokerage-fee.html'],
+        ['calculators/jeonse-monthly.html', 'en/calculators/jeonse-monthly.html'],
+        ['calculators/auction-bid.html', 'en/calculators/auction-bid.html'],
+      ].sort((a, b) => b[0].length - a[0].length);
+      let path = location.pathname;
+      if (path.endsWith('/')) path += 'index.html';
+      let koUrl = null, enUrl = null;
+      if (path.includes('/en/')) {
+        for (const [ko, en] of pairs) {
+          if (path.endsWith('/' + en)) {
+            enUrl = location.origin + path;
+            koUrl = location.origin + path.slice(0, path.length - en.length) + ko;
+            break;
+          }
+        }
+      } else {
+        for (const [ko, en] of pairs) {
+          if (path.endsWith('/' + ko)) {
+            koUrl = location.origin + path;
+            enUrl = location.origin + path.slice(0, path.length - ko.length) + en;
+            break;
+          }
+        }
+      }
+      if (koUrl && enUrl) {
+        const addAlt = (hl, href) => {
+          if (head.querySelector(`link[rel="alternate"][hreflang="${hl}"]`)) return;
+          const l = document.createElement('link');
+          l.rel = 'alternate'; l.hreflang = hl; l.href = href;
+          head.appendChild(l);
+        };
+        addAlt('ko', koUrl);
+        addAlt('en', enUrl);
+        addAlt('x-default', koUrl);
+      }
+    })();
+
+    const title = document.title || '톺다';
+    const descEl = head.querySelector('meta[name="description"]');
+    const desc = descEl ? descEl.getAttribute('content') : '';
+    const isPost = location.pathname.includes('/posts/');
+    const isCalc = location.pathname.includes('/calculators/');
+
+    // Open Graph / Twitter
+    metaProp('og:site_name', '톺다');
+    metaProp('og:title', title);
+    metaProp('og:description', desc);
+    metaProp('og:type', isPost ? 'article' : 'website');
+    metaProp('og:url', canonicalUrl);
+    metaProp('og:locale', isEnPage ? 'en_US' : 'ko_KR');
+    metaName('twitter:card', 'summary');
+    metaName('twitter:title', title);
+    metaName('twitter:description', desc);
+
+    // JSON-LD 구조화 데이터
+    const addJsonLd = (obj) => {
+      const s = document.createElement('script');
+      s.type = 'application/ld+json';
+      s.textContent = JSON.stringify(obj);
+      head.appendChild(s);
+    };
+
+    // 홈: WebSite + Organization
+    const isHome = !!document.querySelector('.home-intro, .cat-tile-grid');
+    if (isHome) {
+      addJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: '톺다',
+        url: location.origin + location.pathname.replace(/index\.html$/, ''),
+        description: desc,
+      });
+      addJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: '톺다',
+        inLanguage: isEnPage ? 'en' : 'ko',
+        url: location.origin + location.pathname.replace(/index\.html$/, ''),
+      });
+    }
+
+    // 브레드크럼 → BreadcrumbList
+    const crumb = document.querySelector('.breadcrumb');
+    if (crumb) {
+      const items = [];
+      let pos = 1;
+      crumb.querySelectorAll('a').forEach((a) => {
+        items.push({ '@type': 'ListItem', position: pos++, name: a.textContent.trim(), item: a.href });
+      });
+      // 마지막(현재 페이지) 텍스트 노드
+      const lastText = (crumb.textContent.split('/').pop() || '').trim();
+      if (lastText) items.push({ '@type': 'ListItem', position: pos++, name: lastText, item: canonicalUrl });
+      if (items.length > 1) {
+        addJsonLd({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items });
+      }
+    }
+
+    // 계산기 → SoftwareApplication
+    if (isCalc) {
+      addJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: title.replace(/\s*[—-]\s*톺다.*$/, '').trim(),
+        applicationCategory: 'FinanceApplication',
+        operatingSystem: 'Web',
+        url: canonicalUrl,
+        description: desc,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'KRW' },
+      });
+    }
+
+    // 글 → Article
+    if (isPost) {
+      const h1 = document.querySelector('h1');
+      addJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: (h1 ? h1.textContent : title).trim().slice(0, 110),
+        inLanguage: isEnPage ? 'en' : 'ko',
+        description: desc,
+        url: canonicalUrl,
+        author: { '@type': 'Organization', name: '톺다' },
+        publisher: { '@type': 'Organization', name: '톺다' },
+      });
+    }
+  } catch (e) { /* 보강 실패는 페이지 동작에 영향 없음 */ }
+})();
+
+// ===== 계산기 '다음 단계' 흐름 자동 주입 =====
+// 정적으로 블록을 넣지 않은 계산기 페이지에도 관련 도구·체크리스트로 이어지는
+// 행동 흐름을 일괄 제공한다(전환성 강화). 한국어 계산기 페이지에만 적용.
+(function () {
+  try {
+    if (!location.pathname.includes('/calculators/')) return;
+    if (location.pathname.includes('/en/')) return;
+    if (document.querySelector('.next-actions')) return; // 이미 존재하면 건너뜀
+    const file = (location.pathname.split('/').pop() || '').toLowerCase();
+
+    const MAP = {
+      'acquisition-tax.html': [
+        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '취득세 포함 총 매수 비용을 한눈에'],
+        ['dsr.html', '대출', 'DSR 한도 점검', '소득 대비 대출 한도 확인'],
+        ['../checklists/sale-balance-day.html', '점검', '잔금일 체크리스트', '등기·정산 누락 방지'],
+      ],
+      'transfer-tax.html': [
+        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '매도 시나리오로 전체 비교'],
+        ['brokerage-fee.html', '비용', '중개수수료 계산', '매도 시 부담 비용 확인'],
+        ['acquisition-tax.html', '세금', '취득세 계산', '갈아타기 시 매수 비용까지'],
+      ],
+      'brokerage-fee.html': [
+        ['acquisition-tax.html', '세금', '취득세 계산', '매수 시 총 세금 확인'],
+        ['../checklists/sale-balance-day.html', '점검', '잔금일 체크리스트', '수수료 지급 시점 점검'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '전체 거래비용 비교'],
+      ],
+      'balance-settlement.html': [
+        ['../checklists/sale-balance-day.html', '점검', '잔금일 체크리스트', '정산 항목 빠짐없이'],
+        ['acquisition-tax.html', '세금', '취득세 계산', '잔금일 납부 세액 확인'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '총 비용으로 마무리'],
+      ],
+      'loan-compare.html': [
+        ['dsr.html', '대출', 'DSR 한도 점검', '상환액이 한도 내인지 확인'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '대출 포함 총비용 비교'],
+        ['acquisition-tax.html', '세금', '취득세 계산', '매수 부대비용 확인'],
+      ],
+      'jeonse-monthly.html': [
+        ['brokerage-fee.html', '비용', '중개수수료 계산', '전·월세 중개보수 확인'],
+        ['../checklists/lease-contract.html', '점검', '전세계약 체크리스트', '보증금 지키는 3종 세트'],
+        ['dsr.html', '대출', 'DSR 한도 점검', '전세자금 한도 가늠'],
+      ],
+      'housing-subscription.html': [
+        ['dsr.html', '대출', 'DSR 한도 점검', '당첨 후 자금 계획'],
+        ['acquisition-tax.html', '세금', '취득세 계산', '분양가 기준 취득세'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '입주까지 총비용'],
+      ],
+      'interior-estimate.html': [
+        ['../checklists/interior-contract.html', '점검', '인테리어 계약 체크리스트', '견적·표준계약·하자'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '리모델링 포함 자금 계획'],
+        ['balance-settlement.html', '정산', '잔금일 정산 계산', '입주 전 정산 점검'],
+      ],
+      'auction-bid.html': [
+        ['acquisition-tax.html', '세금', '취득세 계산', '낙찰 후 취득세 확인'],
+        ['dsr.html', '대출', 'DSR 한도 점검', '경락잔금대출 가늠'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '총 부담액 종합 점검'],
+      ],
+      'property-rating.html': [
+        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '마음에 들면 비용 계산'],
+        ['acquisition-tax.html', '세금', '취득세 계산', '매수 시 세금 확인'],
+        ['dsr.html', '대출', 'DSR 한도 점검', '자금 한도 점검'],
+      ],
+    };
+
+    const items = MAP[file];
+    if (!items) return;
+
+    const sec = document.createElement('section');
+    sec.className = 'next-actions';
+    sec.innerHTML = '<div class="next-actions-head">계산 후 다음 단계</div>' +
+      '<div class="next-actions-grid">' +
+      items.map(([href, step, title, desc]) =>
+        `<a class="next-action" href="${href}">` +
+        `<span class="na-step">${step}</span>` +
+        `<span class="na-title">${title}</span>` +
+        `<span class="na-desc">${desc}</span>` +
+        `<span class="na-go">바로가기 →</span></a>`
+      ).join('') +
+      '</div>';
+
+    const anchor = document.querySelector('.calc-layout');
+    if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(sec, anchor.nextSibling);
+    else {
+      const main = document.querySelector('main');
+      if (main) main.appendChild(sec);
+    }
+  } catch (e) { /* noop */ }
+})();
+
+
+// ===== Admin layout editor =====
+// Kept in a separate module so the editor can evolve without mixing with site logic.
+(function () {
+  const script = document.currentScript;
+  if (!script) return;
+  const editor = document.createElement('script');
+  editor.src = new URL('editor.js', script.src).href;
+  editor.defer = true;
+  document.head.appendChild(editor);
+})();
