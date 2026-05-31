@@ -1044,24 +1044,33 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 
 .tool-card {
   display: flex; align-items: center; gap: 10px;
-  padding: 11px 12px; background: var(--surface);
-  border: 1px solid var(--border); border-radius: 12px;
-  transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
-  min-height: 56px;
+  padding: 12px 13px; background: var(--surface);
+  border: 1px solid var(--border-strong); border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s, background 0.18s;
+  min-height: 58px;
   min-width: 0; overflow: hidden;
 }
-.tool-card:hover {
-  transform: translateY(-1px); border-color: var(--accent);
-  box-shadow: 0 6px 18px -10px rgba(30, 58, 138, 0.2);
+.tool-card::after {
+  content: "›"; margin-left: auto; color: var(--text-subtle);
+  font-size: 1.25rem; font-weight: 700; line-height: 1;
+  transition: color 0.15s, transform 0.15s; flex-shrink: 0;
 }
+.tool-card:hover {
+  transform: translateY(-2px); border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 10px 24px -12px rgba(30, 58, 138, 0.38);
+}
+.tool-card:hover::after { color: var(--accent); transform: translateX(3px); }
 .tool-card-icon {
-  width: 32px; height: 32px; border-radius: 9px;
+  width: 34px; height: 34px; border-radius: 9px;
   background: var(--accent-soft); color: var(--accent);
   display: inline-flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+  flex-shrink: 0; transition: background 0.18s, color 0.18s;
 }
-.tool-card-icon svg { width: 18px; height: 18px; }
-.tool-card-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.tool-card:hover .tool-card-icon { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color: #fff; }
+.tool-card-icon svg { width: 19px; height: 19px; }
+.tool-card-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
 .tool-card-body strong {
   font-size: 0.92rem; font-weight: 700; color: var(--text);
   letter-spacing: -0.01em; line-height: 1.3;

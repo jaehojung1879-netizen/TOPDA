@@ -917,13 +917,11 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         acq = acquisitionTotal(price, homes, regulated, areaOver85, firstHome);
       }
       const broker = nonhouse ? Math.round(price * 0.009 * 1.1) : brokerFee(price, 'sale');
-      const reg = registrationCost(price);
-      const legal = reg.total;
       const monthly = monthlyPayment(loan, rate, term);
       const totalInterest = monthly > 0 ? monthly * term * 12 - loan : 0;
       const equity = Math.max(0, price - loan - jeonseDeposit);
-      const initialCapital = equity + acq.total + broker + legal;
-      const grandTotal = price + acq.total + broker + legal;
+      const initialCapital = equity + acq.total + broker;
+      const grandTotal = price + acq.total + broker;
 
       if (resultTitle) resultTitle.textContent = purpose === 'gap'
         ? (nonhouse ? '임대 — 실제 투입 자기자본' : '갭투자 — 실제 투입 자기자본')
@@ -942,7 +940,6 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         { label: '전세보증금 인수', value: jeonseDeposit, color: '#60a5fa' },
         { label: '취득세 합계', value: acq.total, color: '#f59e0b' },
         { label: '중개수수료', value: broker, color: '#ef4444' },
-        { label: '법무사·등기', value: legal, color: '#a855f7' },
       ]);
       renderDetail([
         { label: '자기자본', value: equity, color: '#1e3a8a' },
@@ -953,7 +950,6 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         { label: '농어촌특별세', value: acq.ruralTax, sub: true },
         { label: '지방교육세', value: acq.localEduTax, sub: true },
         { label: '중개수수료(VAT 포함)', value: broker, color: '#ef4444' },
-        { label: '법무사·등기 (추정)', value: legal, color: '#a855f7' },
         { divider: true, label: '총 매수 비용 (대출 포함)', value: grandTotal },
       ]);
       renderDSR(monthly * 12);
