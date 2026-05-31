@@ -925,7 +925,9 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const initialCapital = equity + acq.total + broker + legal;
       const grandTotal = price + acq.total + broker + legal;
 
-      if (resultTitle) resultTitle.textContent = purpose === 'gap' ? '갭투자 — 실제 투입 자기자본' : '예상 총 매수 비용';
+      if (resultTitle) resultTitle.textContent = purpose === 'gap'
+        ? (nonhouse ? '임대 — 실제 투입 자기자본' : '갭투자 — 실제 투입 자기자본')
+        : '예상 총 매수 비용';
       setText('primaryTotal', fmt.won(initialCapital));
       setLabel('data-quick-label1', '월 원리금 상환');
       setText('quick1', fmt.won(monthly));
@@ -1217,6 +1219,13 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         const visibleInScn = !showOn || showOn.split(',').map(s => s.trim()).includes(currentScn);
         el.style.display = (!nonhouse && visibleInScn) ? '' : 'none';
       });
+      // 자산 유형에 맞춰 연관 라벨도 함께 바꾼다 (실거주↔직접사용 / 갭투자↔임대 등)
+      const setTxt = (sel, txt) => { const el = root.querySelector(sel); if (el) el.textContent = txt; };
+      setTxt('[data-loan-title]', nonhouse ? '담보대출' : '주담대');
+      setTxt('[data-purpose-label]', nonhouse ? '이용 계획' : '구매 목적');
+      setTxt('[data-purpose-own]', nonhouse ? '직접 사용' : '실거주');
+      setTxt('[data-purpose-gap]', nonhouse ? '임대 (임차인)' : '갭투자');
+      setTxt('[data-jeonse-label]', nonhouse ? '예상 임대 보증금 (인수)' : '예상 전세 보증금 인수');
     }
 
     function recalc() {
