@@ -18,6 +18,7 @@
       <a href="../calculators/index.html" data-nav class="active">계산기</a>
       <a href="../checklists/index.html" data-nav>체크리스트</a>
       <a href="../about.html" data-nav>안내</a>
+      <a href="../board.html" data-nav>게시판</a>
     </nav>
     <div class="lang-switch">
       <a href="total-cost-dashboard.html" class="active">KR</a>
@@ -314,6 +315,7 @@
           <div class="input-suffix" data-suffix="원">
             <input id="td-otherDebt" name="otherDebt" type="text" inputmode="numeric" data-format="won" value="0" />
           </div>
+          <span class="hint">이번에 받을 대출의 상환 예정액은 제외 — 이미 상환 중인 기존 부채만 입력하세요.</span>
         </div>
         <div class="field">
           <label for="td-credit">신용대출 잔액</label>
@@ -338,9 +340,6 @@
 
       <div class="chart-wrap">
         <canvas id="costChart" height="220"></canvas>
-        <div class="chart-empty" data-chart-empty hidden>
-          입력값을 채우면 비중 차트가 표시됩니다.
-        </div>
       </div>
 
       <div class="breakdown" data-detail-breakdown style="border-top:1px solid var(--border); padding-top:14px; margin-top:8px;">
@@ -377,6 +376,28 @@
 
     </div>
   </div>
+
+  <!-- 법무사·등기 비용 안내 -->
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 8px;">법무사·등기 비용은 무엇으로 구성되나</h2>
+    <p style="color: var(--text-muted); font-size:0.9rem; margin-bottom: 16px;">매수 시나리오의 ‘법무사·등기(추정)’ 항목은 아래 비용을 합산한 값입니다. 등록면허세 성격의 세금은 2011년부터 취득세에 통합되어 위 ‘취득세 합계’에 이미 포함됩니다.</p>
+    <div class="def-list">
+      <div class="row"><span class="k">인지세</span><span class="v">매매계약서에 붙이는 정액 세금. 거래금액 구간별로 1천만 원 이하 면제 ~ 10억 초과 35만 원. (인지세법 제3조)</span></div>
+      <div class="row"><span class="k">국민주택채권</span><span class="v">소유권 이전 등기 시 의무 매입. 대부분 즉시 매도하며, 이때 발생하는 할인손실이 실제 부담액. 시가표준액·지역·매입률·당일 할인율에 따라 달라집니다. (주택도시기금)</span></div>
+      <div class="row"><span class="k">등기신청 수수료</span><span class="v">부동산 1건 기준 방문 15,000원 / 전자 13,000원. (대법원 등기 수수료)</span></div>
+      <div class="row"><span class="k">법무사 보수</span><span class="v">대한법무사협회 보수표 기준 누진. 셀프등기 시 보수는 생략되며, 사무소·지역에 따라 협의·차이가 큽니다.</span></div>
+    </div>
+    <table class="ref-table" style="margin-top:16px;">
+      <tr><th>거래금액</th><th>인지세</th></tr>
+      <tr><td>1천만 원 이하</td><td>비과세</td></tr>
+      <tr><td>1천만 ~ 3천만 원</td><td>2만 원</td></tr>
+      <tr><td>3천만 ~ 5천만 원</td><td>4만 원</td></tr>
+      <tr><td>5천만 ~ 1억 원</td><td>7만 원</td></tr>
+      <tr><td>1억 ~ 10억 원</td><td>15만 원</td></tr>
+      <tr><td>10억 원 초과</td><td>35만 원</td></tr>
+    </table>
+    <p style="color: var(--text-muted); font-size:0.85rem; margin-top: 10px;">※ 국민주택채권 할인부담·법무사 보수는 추정치입니다. 정확한 채권 매입액은 <a href="https://nhuf.molit.go.kr" target="_blank" rel="noopener">주택도시기금</a> 매입대상금액 조회로, 법무사 보수는 견적으로 확인하세요.</p>
+  </section>
 
   <!-- 최근 규제 / 뉴스 -->
   <section class="news-section">

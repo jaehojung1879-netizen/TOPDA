@@ -711,6 +711,36 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       return principal * i * Math.pow(1+i, n) / (Math.pow(1+i, n) - 1);
     }
 
+    // 인지세(부동산 소유권 이전, 인지세법 제3조 구간별 정액)
+    function stampDuty(price) {
+      if (price <= 10000000) return 0;
+      if (price <= 30000000) return 20000;
+      if (price <= 50000000) return 40000;
+      if (price <= 100000000) return 70000;
+      if (price <= 1000000000) return 150000;
+      return 350000;
+    }
+
+    // 법무사·등기 부대비용 추정 (등록면허세·취득세는 별도 본세로 이미 반영)
+    //  - 인지세: 인지세법 정액 구간
+    //  - 등기신청 수수료: 부동산 1건 방문 신청 기준 15,000원(대법원 등기 수수료)
+    //  - 법무사 보수: 대한법무사협회 보수표 근사(매매가의 약 0.08%, 10만~200만 범위)
+    //  - 국민주택채권 즉시매도 할인 부담: 시가표준액(시세의 약 70%) × 매입률 × 할인율 근사
+    function registrationCost(price) {
+      if (!price || price <= 0) return { stamp: 0, regFee: 0, scrivener: 0, bond: 0, total: 0 };
+      const stamp = stampDuty(price);
+      const regFee = 15000;
+      let scrivener = Math.round(price * 0.0008);
+      scrivener = Math.min(Math.max(scrivener, 100000), 2000000);
+      // 국민주택채권 매입률(주택 시가표준액 구간별 근사) × 즉시매도 할인율(약 12%)
+      const std = price * 0.7;
+      const eok = std / 100000000;
+      const bondRate = eok < 0.2 ? 0.013 : eok < 0.5 ? 0.019 : eok < 1 ? 0.021 : eok < 1.6 ? 0.023 : eok < 2.6 ? 0.026 : 0.031;
+      const bond = Math.round(std * bondRate * 0.12);
+      const total = stamp + regFee + scrivener + bond;
+      return { stamp, regFee, scrivener, bond, total };
+    }
+
     function progressiveTax(base) {
       const brackets = [
         { upTo: 14000000,    rate: 0.06, deduction: 0 },
@@ -859,7 +889,8 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
 
       const acq = acquisitionTotal(price, homes, regulated, areaOver85, firstHome);
       const broker = brokerFee(price, 'sale');
-      const legal = price * 0.002;
+      const reg = registrationCost(price);
+      const legal = reg.total;
       const monthly = monthlyPayment(loan, rate, term);
       const totalInterest = monthly > 0 ? monthly * term * 12 - loan : 0;
       const equity = Math.max(0, price - loan - jeonseDeposit);
@@ -893,6 +924,10 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         { label: '지방교육세', value: acq.localEduTax, sub: true },
         { label: '중개수수료(VAT 포함)', value: broker, color: '#ef4444' },
         { label: '법무사·등기 (추정)', value: legal, color: '#a855f7' },
+        { label: '인지세', value: reg.stamp, sub: true },
+        { label: '등기신청 수수료', value: reg.regFee, sub: true },
+        { label: '국민주택채권 할인부담(추정)', value: reg.bond, sub: true },
+        { label: '법무사 보수(추정)', value: reg.scrivener, sub: true },
         { divider: true, label: '총 매수 비용 (대출 포함)', value: grandTotal },
       ]);
       renderDSR(monthly * 12);
