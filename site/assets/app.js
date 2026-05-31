@@ -722,23 +722,15 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
     }
 
     // 법무사·등기 부대비용 추정 (등록면허세·취득세는 별도 본세로 이미 반영)
-    //  - 인지세: 인지세법 정액 구간
-    //  - 등기신청 수수료: 부동산 1건 방문 신청 기준 15,000원(대법원 등기 수수료)
-    //  - 법무사 보수: 대한법무사협회 보수표 근사(매매가의 약 0.08%, 10만~200만 범위)
-    //  - 국민주택채권 즉시매도 할인 부담: 시가표준액(시세의 약 70%) × 매입률 × 할인율 근사
+    //  - 인지세(정액) + 등기신청 수수료(15,000) + 법무사 보수(추정)
+    //  - 국민주택채권 할인 부담은 변동 폭이 커 헤드라인 추정에서 제외하고
+    //    정확한 금액은 외부 등기비용 계산기 링크로 안내한다.
     function registrationCost(price) {
-      if (!price || price <= 0) return { stamp: 0, regFee: 0, scrivener: 0, bond: 0, total: 0 };
-      const stamp = stampDuty(price);
-      const regFee = 15000;
-      let scrivener = Math.round(price * 0.0008);
-      scrivener = Math.min(Math.max(scrivener, 100000), 2000000);
-      // 국민주택채권 매입률(주택 시가표준액 구간별 근사) × 즉시매도 할인율(약 12%)
-      const std = price * 0.7;
-      const eok = std / 100000000;
-      const bondRate = eok < 0.2 ? 0.013 : eok < 0.5 ? 0.019 : eok < 1 ? 0.021 : eok < 1.6 ? 0.023 : eok < 2.6 ? 0.026 : 0.031;
-      const bond = Math.round(std * bondRate * 0.12);
-      const total = stamp + regFee + scrivener + bond;
-      return { stamp, regFee, scrivener, bond, total };
+      if (!price || price <= 0) return { total: 0 };
+      var stamp = stampDuty(price);
+      var regFee = 15000;
+      var scrivener = Math.min(Math.max(Math.round(price * 0.0008), 100000), 2000000);
+      return { total: stamp + regFee + scrivener };
     }
 
     function progressiveTax(base) {
@@ -829,12 +821,40 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       });
     }
 
+    function otherLoanService() {
+      var type = (root.querySelector('[name="otherLoanType"]') || {}).value || 'none';
+      var amount = getN('otherLoanAmount');
+      var rate = getNum('otherLoanRate') / 100;
+      var term = Math.max(1, getNum('otherLoanTerm'));
+      var detail = root.querySelector('[data-other-detail]');
+      var termBox = root.querySelector('[data-other-term]');
+      var note = root.querySelector('[data-out="otherLoanNote"]');
+      var show = type !== 'none';
+      if (detail) detail.style.display = show ? '' : 'none';
+      var needsTerm = (type === 'mortgage' || type === 'card' || type === 'auto' || type === 'installment');
+      if (termBox) termBox.style.display = (show && needsTerm) ? '' : 'none';
+      if (!show || amount <= 0) { if (note) note.style.display = 'none'; return 0; }
+      var principal = 0, interest = amount * rate, desc = '';
+      switch (type) {
+        case 'mortgage': principal = amount / term; desc = '분할상환 → 원금(잔액÷' + term + '년) + 이자를 DSR에 반영'; break;
+        case 'jeonse': principal = 0; desc = '전세자금대출 → 원금은 제외, 이자만 반영 (보증부 전세대출은 DSR 산정에서 제외될 수 있음)'; break;
+        case 'credit': principal = amount / 5; desc = '신용대출 → 원금(잔액÷5년) + 이자를 DSR에 반영'; break;
+        case 'card': principal = amount / term; desc = '카드론·현금서비스 → 원금(잔액÷' + term + '년) + 이자를 DSR에 반영'; break;
+        case 'auto': principal = amount / term; desc = '자동차 할부·리스 → 원금(잔액÷' + term + '년) + 이자를 DSR에 반영'; break;
+        case 'minus': principal = amount / 5; desc = '마이너스통장 → 한도 기준 원금(한도÷5년) + 이자를 DSR에 반영'; break;
+        case 'installment': principal = amount / term; desc = '분할상환 → 원금(잔액÷' + term + '년) + 이자를 DSR에 반영'; break;
+      }
+      var annual = principal + interest;
+      if (note) { note.style.display = ''; note.innerHTML = desc + '<br/>이 대출의 DSR 반영액 ≈ <strong>' + fmt.won(Math.round(annual)) + ' / 년</strong>'; }
+      return annual;
+    }
+
     function renderDSR(annualPmt) {
       const income = getN('annualIncome');
-      const otherDebt = getN('otherDebt');
       const credit = getN('creditDebt');
       const creditAnnual = credit / 5;
-      const totalAnnualPmt = annualPmt + otherDebt + creditAnnual;
+      const other = otherLoanService();
+      const totalAnnualPmt = annualPmt + creditAnnual + other;
       const dsr = income > 0 ? totalAnnualPmt / income * 100 : 0;
       setText('dsrPct', income > 0 ? dsr.toFixed(1) + '%' : '소득 입력 필요');
       const fillEl = root.querySelector('[data-out="dsrFill"]');
@@ -924,10 +944,6 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         { label: '지방교육세', value: acq.localEduTax, sub: true },
         { label: '중개수수료(VAT 포함)', value: broker, color: '#ef4444' },
         { label: '법무사·등기 (추정)', value: legal, color: '#a855f7' },
-        { label: '인지세', value: reg.stamp, sub: true },
-        { label: '등기신청 수수료', value: reg.regFee, sub: true },
-        { label: '국민주택채권 할인부담(추정)', value: reg.bond, sub: true },
-        { label: '법무사 보수(추정)', value: reg.scrivener, sub: true },
         { divider: true, label: '총 매수 비용 (대출 포함)', value: grandTotal },
       ]);
       renderDSR(monthly * 12);
@@ -1991,6 +2007,8 @@ function calcInteriorEstimate({ area, grade, items }) {
     const head = document.head;
     const lang = (document.documentElement.lang || 'ko').toLowerCase();
     const isEnPage = lang.startsWith('en');
+    // 페이지 식별자(관리자 편집 오버라이드 스코프·분석용)
+    document.documentElement.setAttribute('data-topda-page', location.pathname);
 
     // ---------- 분석 도구 (GA4) ----------
     // 측정 ID를 발급받으면 아래 GA4_ID에 'G-XXXXXXX'를 넣으면 전 페이지에서 활성화됩니다.
@@ -2274,6 +2292,48 @@ function calcInteriorEstimate({ area, grade, items }) {
     else {
       const main = document.querySelector('main');
       if (main) main.appendChild(sec);
+    }
+  } catch (e) { /* noop */ }
+})();
+
+// ===== 관리자 편집 도구 조건부 로더 =====
+// 일반 방문자에게는 admin.js를 아예 내려받지 않게 한다.
+// 활성 조건: (1) 이전에 로그인해 둔 경우, (2) URL에 ?admin/#admin,
+//           (3) 우하단 코너의 숨은 진입 버튼 클릭 (크롬 단축키 충돌 회피)
+(function () {
+  try {
+    function assetBase() {
+      const cur = document.querySelector('script[src*="app.js"]');
+      const src = cur ? cur.getAttribute('src') : 'assets/app.js';
+      return src.replace(/app\.js(\?.*)?$/, '');
+    }
+    let loaded = false;
+    function loadAdmin() {
+      if (loaded) return;
+      loaded = true;
+      const s = document.createElement('script');
+      s.src = assetBase() + 'admin.js';
+      document.body.appendChild(s);
+    }
+    const authed = (function () { try { return localStorage.getItem('topda_admin') === '1'; } catch (e) { return false; } })();
+    if (authed || /[?#]admin\b/.test(location.href)) {
+      loadAdmin();
+    } else {
+      // 숨은 진입 버튼: 우하단 코너의 작은 점. 평소엔 흐릿, 마우스 오버 시 또렷.
+      const hint = document.createElement('button');
+      hint.id = 'topda-enter';
+      hint.type = 'button';
+      hint.setAttribute('aria-label', '관리자 진입');
+      hint.title = '관리자 편집';
+      hint.tabIndex = -1;
+      hint.style.cssText = 'position:fixed;right:10px;bottom:10px;width:26px;height:26px;padding:0;z-index:99998;'
+        + 'display:flex;align-items:center;justify-content:center;border-radius:50%;'
+        + 'background:#0f172a;border:0;cursor:pointer;opacity:0.22;transition:opacity .15s,transform .15s;';
+      hint.innerHTML = '<span style="display:block;width:11px;height:11px;border-radius:50%;border:2px solid #fff"></span>';
+      hint.addEventListener('mouseenter', function () { hint.style.opacity = '0.85'; hint.style.transform = 'scale(1.1)'; });
+      hint.addEventListener('mouseleave', function () { hint.style.opacity = '0.22'; hint.style.transform = 'none'; });
+      hint.addEventListener('click', function () { hint.remove(); loadAdmin(); });
+      (document.body || document.documentElement).appendChild(hint);
     }
   } catch (e) { /* noop */ }
 })();
