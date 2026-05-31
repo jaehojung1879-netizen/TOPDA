@@ -70,7 +70,7 @@
       <div class="field" data-show-on="sale,transfer" data-house-only>
         <label class="check-item" style="padding: 0; cursor: pointer;">
           <input type="checkbox" name="regulated"/>
-          <span class="text">조정대상지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="정부가 주택가격·청약경쟁률 등이 과열됐다고 지정한 지역. 지정되면 다주택 취득세 중과(8~12%), 양도세 중과, LTV·DSR 강화 등이 적용됩니다. 현재 지정 현황은 국토교통부 공고로 확인하세요.">?</span></span>
+          <span class="text">조정대상지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="정부가 과열됐다고 지정한 지역. 지정되면 다주택 취득세 중과(8~12%)·양도세 중과·LTV·DSR 강화가 적용됩니다. 최근 기준 서울 강남·서초·송파·용산구가 대표적으로 지정돼 있고 그 외 지역은 대부분 해제됐습니다. 수시로 바뀌니 국토교통부 공고로 최신 현황을 확인하세요.">?</span></span>
         </label>
       </div>
 
@@ -101,7 +101,7 @@
           </label>
         </div>
 
-        <h3 class="scn-section-title">주담대</h3>
+        <h3 class="scn-section-title" data-loan-title>주담대</h3>
         <div class="field">
           <label for="td-loan">대출 금액</label>
           <div class="input-suffix" data-suffix="원">
@@ -120,15 +120,15 @@
         </div>
 
         <div class="field">
-          <label>구매 목적</label>
+          <label data-purpose-label>구매 목적</label>
           <div class="radio-group">
-            <label><input type="radio" name="purpose" value="own" checked/><span>실거주</span></label>
-            <label><input type="radio" name="purpose" value="gap"/><span>갭투자</span></label>
+            <label><input type="radio" name="purpose" value="own" checked/><span data-purpose-own>실거주</span></label>
+            <label><input type="radio" name="purpose" value="gap"/><span data-purpose-gap>갭투자</span></label>
           </div>
         </div>
 
         <div class="field" data-purpose="gap" style="display:none;">
-          <label for="td-jeonse">예상 전세 보증금 인수</label>
+          <label for="td-jeonse" data-jeonse-label>예상 전세 보증금 인수</label>
           <div class="input-suffix" data-suffix="원">
             <input id="td-jeonse" name="jeonseDeposit" type="text" inputmode="numeric" data-format="won" value="500,000,000" />
           </div>
