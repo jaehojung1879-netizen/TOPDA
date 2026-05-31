@@ -2155,3 +2155,14 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 .next-action .na-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
 .next-action .na-go { font-size: 0.82rem; font-weight: 600; color: var(--accent); margin-top: 2px; }
 
+/* ===== 광고·제휴 표시(수익화 도입 대비) ===== */
+.aff-disclosure {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em;
+  color: var(--text-muted); background: var(--surface-2);
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 3px 10px;
+}
+.aff-disclosure::before { content: "AD"; font-size: 0.62rem; color: var(--text-subtle); }
+.aff-note { font-size: 0.8rem; color: var(--text-subtle); margin-top: 8px; }
+
