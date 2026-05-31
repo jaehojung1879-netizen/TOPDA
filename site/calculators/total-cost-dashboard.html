@@ -311,19 +311,43 @@
           </div>
         </div>
         <div class="field">
-          <label for="td-otherDebt">기존 주담대·기타 대출의 연 원리금</label>
-          <div class="input-suffix" data-suffix="원">
-            <input id="td-otherDebt" name="otherDebt" type="text" inputmode="numeric" data-format="won" value="0" />
-          </div>
-          <span class="hint">이번에 받을 대출의 상환 예정액은 제외 — 이미 상환 중인 기존 부채만 입력하세요.</span>
-        </div>
-        <div class="field">
           <label for="td-credit">신용대출 잔액</label>
           <div class="input-suffix" data-suffix="원">
             <input id="td-credit" name="creditDebt" type="text" inputmode="numeric" data-format="won" value="0" />
           </div>
           <span class="hint">DSR 산정에서 신용대출은 잔액 ÷ 5년으로 연환산됩니다.</span>
         </div>
+        <div class="field">
+          <label for="td-otherType">기타 대출</label>
+          <select id="td-otherType" name="otherLoanType">
+            <option value="none">없음</option>
+            <option value="mortgage">주택담보대출 (타 물건·분할상환)</option>
+            <option value="jeonse">전세자금대출</option>
+            <option value="credit">추가 신용대출</option>
+            <option value="card">카드론·현금서비스</option>
+            <option value="auto">자동차 할부·리스</option>
+            <option value="minus">마이너스통장 (한도대출)</option>
+            <option value="installment">기타 분할상환 대출</option>
+          </select>
+          <span class="hint">기존에 상환 중인 다른 대출이 있으면 종류를 고르세요. 종류별로 DSR 반영 방식이 달라집니다.</span>
+        </div>
+        <div class="field-row" data-other-detail style="display:none;">
+          <div class="field">
+            <label for="td-otherAmount">금액 (잔액·한도)</label>
+            <div class="input-suffix" data-suffix="원">
+              <input id="td-otherAmount" name="otherLoanAmount" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="td-otherRate">금리 (연 %)</label>
+            <input id="td-otherRate" name="otherLoanRate" type="number" min="0" max="20" step="0.1" value="6" />
+          </div>
+        </div>
+        <div class="field" data-other-term style="display:none;">
+          <label for="td-otherTerm">남은 만기 (년)</label>
+          <input id="td-otherTerm" name="otherLoanTerm" type="number" min="1" max="40" step="1" value="3" />
+        </div>
+        <p class="scn-note" data-out="otherLoanNote" style="display:none;"></p>
       </div>
     </div>
 
@@ -402,27 +426,14 @@
     </div>
   </section>
 
-  <!-- 법무사·등기 비용 안내 -->
-  <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 8px;">법무사·등기 비용은 무엇으로 구성되나</h2>
-    <p style="color: var(--text-muted); font-size:0.9rem; margin-bottom: 16px;">매수 시나리오의 ‘법무사·등기(추정)’ 항목은 아래 비용을 합산한 값입니다. 등록면허세 성격의 세금은 2011년부터 취득세에 통합되어 위 ‘취득세 합계’에 이미 포함됩니다.</p>
-    <div class="def-list">
-      <div class="row"><span class="k">인지세</span><span class="v">매매계약서에 붙이는 정액 세금. 거래금액 구간별로 1천만 원 이하 면제 ~ 10억 초과 35만 원. (인지세법 제3조)</span></div>
-      <div class="row"><span class="k">국민주택채권</span><span class="v">소유권 이전 등기 시 의무 매입. 대부분 즉시 매도하며, 이때 발생하는 할인손실이 실제 부담액. 시가표준액·지역·매입률·당일 할인율에 따라 달라집니다. (주택도시기금)</span></div>
-      <div class="row"><span class="k">등기신청 수수료</span><span class="v">부동산 1건 기준 방문 15,000원 / 전자 13,000원. (대법원 등기 수수료)</span></div>
-      <div class="row"><span class="k">법무사 보수</span><span class="v">대한법무사협회 보수표 기준 누진. 셀프등기 시 보수는 생략되며, 사무소·지역에 따라 협의·차이가 큽니다.</span></div>
+  <!-- 법무사·등기·시가표준액 참고 -->
+  <div class="callout callout-info" style="margin-top: 32px;">
+    <div class="icon">i</div>
+    <div class="body">
+      <strong>법무사·등기 비용과 시가표준액</strong>
+      위 ‘법무사·등기’는 대략적인 추정치입니다. 인지세·국민주택채권 할인·법무사 보수까지 반영한 정확한 금액은 <a href="https://xn--989a00af8jnslv3dba.com/%EB%93%B1%EA%B8%B0%EB%B9%84%EC%9A%A9" target="_blank" rel="noopener">부동산계산기 · 등기비용</a>에서 확인하세요. 취득세·채권의 기준이 되는 시가표준액·공시가격은 <a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a> · <a href="https://www.wetax.go.kr" target="_blank" rel="noopener">위택스(시가표준액)</a>에서 조회할 수 있습니다.
     </div>
-    <table class="ref-table" style="margin-top:16px;">
-      <tr><th>거래금액</th><th>인지세</th></tr>
-      <tr><td>1천만 원 이하</td><td>비과세</td></tr>
-      <tr><td>1천만 ~ 3천만 원</td><td>2만 원</td></tr>
-      <tr><td>3천만 ~ 5천만 원</td><td>4만 원</td></tr>
-      <tr><td>5천만 ~ 1억 원</td><td>7만 원</td></tr>
-      <tr><td>1억 ~ 10억 원</td><td>15만 원</td></tr>
-      <tr><td>10억 원 초과</td><td>35만 원</td></tr>
-    </table>
-    <p style="color: var(--text-muted); font-size:0.85rem; margin-top: 10px;">※ 국민주택채권 할인부담·법무사 보수는 추정치입니다. 정확한 채권 매입액은 <a href="https://nhuf.molit.go.kr" target="_blank" rel="noopener">주택도시기금</a> 매입대상금액 조회로, 법무사 보수는 견적으로 확인하세요.</p>
-  </section>
+  </div>
 
   <!-- 최근 규제 / 뉴스 -->
   <section class="news-section">

@@ -164,14 +164,23 @@ html, body { overflow-x: hidden; }
 }
 .nav-cta:hover { background: var(--accent); }
 
-/* 우측 상단 메뉴 아이콘: 정사각형 콤팩트 햄버거 (KR/EN 옆 노출) */
+/* 우측 상단 메뉴 아이콘: 정사각형 콤팩트 햄버거 (KR/EN 옆 노출).
+   인라인 SVG 렌더 편차를 피하려고 3줄을 CSS로 직접 그린다. */
 .nav-toggle {
   display: inline-flex;
+  position: relative;
   width: 38px; height: 38px; padding: 0;
   align-items: center; justify-content: center;
   border-radius: 9px; flex-shrink: 0;
+  color: var(--text);
 }
-.nav-toggle svg { width: 18px; height: 18px; }
+.nav-toggle svg { display: none; }
+.nav-toggle::before {
+  content: "";
+  width: 18px; height: 2px; border-radius: 2px;
+  background: currentColor;
+  box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor;
+}
 
 .mobile-menu {
   display: none; flex-direction: column; padding: 16px 20px 20px;
