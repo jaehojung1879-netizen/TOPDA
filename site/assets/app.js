@@ -2282,7 +2282,8 @@ function calcInteriorEstimate({ area, grade, items }) {
 
 // ===== 관리자 편집 도구 조건부 로더 =====
 // 일반 방문자에게는 admin.js를 아예 내려받지 않게 한다.
-// 활성 조건: (1) 이전에 로그인해 둔 경우, (2) URL에 ?admin/#admin, (3) Ctrl+Shift+A
+// 활성 조건: (1) 이전에 로그인해 둔 경우, (2) URL에 ?admin/#admin,
+//           (3) 우하단 코너의 숨은 진입 버튼 클릭 (크롬 단축키 충돌 회피)
 (function () {
   try {
     function assetBase() {
@@ -2302,13 +2303,19 @@ function calcInteriorEstimate({ area, grade, items }) {
     if (authed || /[?#]admin\b/.test(location.href)) {
       loadAdmin();
     } else {
-      // 숨은 트리거: Ctrl+Shift+A 로 관리자 게이트 호출
-      document.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-          e.preventDefault();
-          loadAdmin();
-        }
-      });
+      // 숨은 진입 버튼: 우하단 코너의 거의 보이지 않는 점. 클릭하면 관리자 게이트.
+      const hint = document.createElement('button');
+      hint.id = 'topda-enter';
+      hint.type = 'button';
+      hint.setAttribute('aria-label', '관리자');
+      hint.tabIndex = -1;
+      hint.style.cssText = 'position:fixed;right:2px;bottom:2px;width:16px;height:16px;padding:0;z-index:99998;'
+        + 'background:transparent;border:0;cursor:default;opacity:0.07;transition:opacity .15s;';
+      hint.innerHTML = '<span style="display:block;width:9px;height:9px;border-radius:50%;background:#94a3b8;margin:3px"></span>';
+      hint.addEventListener('mouseenter', function () { hint.style.opacity = '0.4'; });
+      hint.addEventListener('mouseleave', function () { hint.style.opacity = '0.07'; });
+      hint.addEventListener('click', function () { hint.remove(); loadAdmin(); });
+      (document.body || document.documentElement).appendChild(hint);
     }
   } catch (e) { /* noop */ }
 })();
