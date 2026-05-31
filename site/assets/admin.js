@@ -14,6 +14,8 @@
 
   var LS_AUTH = 'topda_admin';
   var LS_OVR = 'topda_overrides_v1';
+  var LS_TEXT = 'topda_text_v1';
+  var LS_IMG = 'topda_img_v1';
   // 패스코드(향후 로그인으로 대체). 기본값은 운영자가 변경하세요.
   var PASSCODE = 'topda';
   var PAGE = location.pathname;
