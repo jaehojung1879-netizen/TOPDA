@@ -1982,3 +1982,151 @@ function calcInteriorEstimate({ area, grade, items }) {
   });
 })();
 
+// ===== Site-wide accessibility + SEO enhancements =====
+// 모든 페이지에서 app.js가 로드되므로 한 곳에서 일괄 적용한다.
+// 1) 접근성: 본문 바로가기 링크, 장식용 아이콘 aria-hidden, main 랜드마크 보강
+// 2) SEO: canonical, Open Graph/Twitter 메타, JSON-LD 구조화 데이터 자동 주입
+(function () {
+  try {
+    const head = document.head;
+    const lang = (document.documentElement.lang || 'ko').toLowerCase();
+    const isEnPage = lang.startsWith('en');
+
+    // ---------- 접근성 ----------
+    const main = document.querySelector('main');
+    if (main && !main.id) main.id = 'main';
+    if (main && !document.querySelector('.skip-link')) {
+      const skip = document.createElement('a');
+      skip.className = 'skip-link';
+      skip.href = '#' + (main.id || 'main');
+      skip.textContent = isEnPage ? 'Skip to content' : '본문 바로가기';
+      document.body.insertBefore(skip, document.body.firstChild);
+    }
+    // 장식용 텍스트 아이콘(⚠, i, ! 등)은 보조공학에 읽히지 않도록 숨김
+    document.querySelectorAll('.callout > .icon, .source-icon').forEach((el) => {
+      if (!el.hasAttribute('aria-hidden')) el.setAttribute('aria-hidden', 'true');
+    });
+    // aria-label/title 없는 순수 장식 svg 보강
+    document.querySelectorAll('svg:not([aria-label]):not([aria-hidden]):not([role="img"])').forEach((svg) => {
+      if (!svg.querySelector('title')) svg.setAttribute('aria-hidden', 'true');
+    });
+
+    // ---------- SEO ----------
+    const canonicalUrl = location.origin + location.pathname;
+    const ensureMeta = (sel, create) => {
+      if (head.querySelector(sel)) return;
+      head.appendChild(create());
+    };
+    const metaProp = (prop, content) => {
+      if (!content) return;
+      ensureMeta(`meta[property="${prop}"]`, () => {
+        const m = document.createElement('meta');
+        m.setAttribute('property', prop); m.setAttribute('content', content); return m;
+      });
+    };
+    const metaName = (name, content) => {
+      if (!content) return;
+      ensureMeta(`meta[name="${name}"]`, () => {
+        const m = document.createElement('meta');
+        m.setAttribute('name', name); m.setAttribute('content', content); return m;
+      });
+    };
+
+    // canonical
+    if (!head.querySelector('link[rel="canonical"]')) {
+      const link = document.createElement('link');
+      link.rel = 'canonical'; link.href = canonicalUrl;
+      head.appendChild(link);
+    }
+
+    const title = document.title || '톺다';
+    const descEl = head.querySelector('meta[name="description"]');
+    const desc = descEl ? descEl.getAttribute('content') : '';
+    const isPost = location.pathname.includes('/posts/');
+    const isCalc = location.pathname.includes('/calculators/');
+
+    // Open Graph / Twitter
+    metaProp('og:site_name', '톺다');
+    metaProp('og:title', title);
+    metaProp('og:description', desc);
+    metaProp('og:type', isPost ? 'article' : 'website');
+    metaProp('og:url', canonicalUrl);
+    metaProp('og:locale', isEnPage ? 'en_US' : 'ko_KR');
+    metaName('twitter:card', 'summary');
+    metaName('twitter:title', title);
+    metaName('twitter:description', desc);
+
+    // JSON-LD 구조화 데이터
+    const addJsonLd = (obj) => {
+      const s = document.createElement('script');
+      s.type = 'application/ld+json';
+      s.textContent = JSON.stringify(obj);
+      head.appendChild(s);
+    };
+
+    // 홈: WebSite + Organization
+    const isHome = !!document.querySelector('.home-intro, .cat-tile-grid');
+    if (isHome) {
+      addJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: '톺다',
+        url: location.origin + location.pathname.replace(/index\.html$/, ''),
+        description: desc,
+      });
+      addJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: '톺다',
+        inLanguage: isEnPage ? 'en' : 'ko',
+        url: location.origin + location.pathname.replace(/index\.html$/, ''),
+      });
+    }
+
+    // 브레드크럼 → BreadcrumbList
+    const crumb = document.querySelector('.breadcrumb');
+    if (crumb) {
+      const items = [];
+      let pos = 1;
+      crumb.querySelectorAll('a').forEach((a) => {
+        items.push({ '@type': 'ListItem', position: pos++, name: a.textContent.trim(), item: a.href });
+      });
+      // 마지막(현재 페이지) 텍스트 노드
+      const lastText = (crumb.textContent.split('/').pop() || '').trim();
+      if (lastText) items.push({ '@type': 'ListItem', position: pos++, name: lastText, item: canonicalUrl });
+      if (items.length > 1) {
+        addJsonLd({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items });
+      }
+    }
+
+    // 계산기 → SoftwareApplication
+    if (isCalc) {
+      addJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: title.replace(/\s*[—-]\s*톺다.*$/, '').trim(),
+        applicationCategory: 'FinanceApplication',
+        operatingSystem: 'Web',
+        url: canonicalUrl,
+        description: desc,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'KRW' },
+      });
+    }
+
+    // 글 → Article
+    if (isPost) {
+      const h1 = document.querySelector('h1');
+      addJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: (h1 ? h1.textContent : title).trim().slice(0, 110),
+        inLanguage: isEnPage ? 'en' : 'ko',
+        description: desc,
+        url: canonicalUrl,
+        author: { '@type': 'Organization', name: '톺다' },
+        publisher: { '@type': 'Organization', name: '톺다' },
+      });
+    }
+  } catch (e) { /* 보강 실패는 페이지 동작에 영향 없음 */ }
+})();
+

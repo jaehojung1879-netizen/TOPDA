@@ -2115,3 +2115,43 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 /* 표·이미지 가로 스크롤 가드 */
 .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .table-wrap table { min-width: 480px; }
+
+/* ===== Accessibility: skip link ===== */
+.skip-link {
+  position: absolute; left: 8px; top: -48px; z-index: 200;
+  background: var(--accent); color: #fff;
+  padding: 8px 14px; border-radius: var(--radius-sm);
+  font-size: 0.9rem; font-weight: 600;
+  transition: top 0.15s;
+}
+.skip-link:focus { top: 8px; outline: 2px solid #fff; outline-offset: 2px; }
+
+/* ===== Next-action flow (가이드 → 계산기 → 체크리스트 연결) ===== */
+.next-actions {
+  margin: 36px 0 8px;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: var(--surface); padding: 20px 22px;
+}
+.next-actions-head {
+  font-size: 0.78rem; font-weight: 700; color: var(--accent);
+  letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 14px;
+}
+.next-actions-grid {
+  display: grid; gap: 10px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .next-actions-grid { grid-template-columns: repeat(3, 1fr); } }
+.next-action {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px;
+  background: var(--bg); transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.next-action:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 20px -14px rgba(30,58,138,0.3); }
+.next-action .na-step {
+  font-size: 0.72rem; font-weight: 700; color: var(--text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+.next-action .na-title { font-size: 0.96rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+.next-action .na-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+.next-action .na-go { font-size: 0.82rem; font-weight: 600; color: var(--accent); margin-top: 2px; }
+
