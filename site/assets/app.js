@@ -907,8 +907,16 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const gapField = root.querySelector('[data-purpose="gap"]');
       if (gapField) gapField.style.display = purpose === 'gap' ? '' : 'none';
 
-      const acq = acquisitionTotal(price, homes, regulated, areaOver85, firstHome);
-      const broker = brokerFee(price, 'sale');
+      const nonhouse = (getRadio('assetType') || 'house') === 'nonhouse';
+      let acq;
+      if (nonhouse) {
+        // 비주택(상가·오피스텔(업무용)·토지 등): 취득세 4.0% + 농특세 0.2% + 지방교육세 0.4% = 4.6%
+        const base = price * 0.04, rural = price * 0.002, edu = price * 0.004;
+        acq = { total: base + rural + edu, acquisition: base, ruralTax: rural, localEduTax: edu, firstHomeDeduct: 0, baseRate: 0.04 };
+      } else {
+        acq = acquisitionTotal(price, homes, regulated, areaOver85, firstHome);
+      }
+      const broker = nonhouse ? Math.round(price * 0.009 * 1.1) : brokerFee(price, 'sale');
       const reg = registrationCost(price);
       const legal = reg.total;
       const monthly = monthlyPayment(loan, rate, term);
@@ -957,9 +965,10 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const liveYears = getNum('liveYears');
       const homes = Number(getRadio('homes') || 1);
       const onlyHome = getCheck('onlyHome');
+      const nonhouse = (getRadio('assetType') || 'house') === 'nonhouse';
 
       const rawGain = Math.max(0, sellPrice - buyPrice - cost);
-      const isOne = homes === 1 && onlyHome && holdYears >= 2;
+      const isOne = !nonhouse && homes === 1 && onlyHome && holdYears >= 2;
       let exempted = false, ratio = 1;
       if (isOne) {
         if (sellPrice <= 1200000000) { exempted = true; ratio = 0; }
@@ -985,8 +994,8 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const basicDeduct = Math.min(2500000, income);
       const taxBase = Math.max(0, income - basicDeduct);
       let incomeTax;
-      if (holdYears < 1) incomeTax = taxBase * 0.70;
-      else if (holdYears < 2) incomeTax = taxBase * 0.60;
+      if (holdYears < 1) incomeTax = taxBase * (nonhouse ? 0.50 : 0.70);
+      else if (holdYears < 2) incomeTax = taxBase * (nonhouse ? 0.40 : 0.60);
       else incomeTax = progressiveTax(taxBase);
       const localTax = incomeTax * 0.10;
       const total = incomeTax + localTax;
@@ -1201,7 +1210,17 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
     }
     document.querySelectorAll('[data-scn]').forEach((t) => t.addEventListener('click', () => switchScn(t.dataset.scn)));
 
+    function applyAssetType() {
+      const nonhouse = (root.querySelector('[name="assetType"]:checked') || {}).value === 'nonhouse';
+      root.querySelectorAll('[data-house-only]').forEach((el) => {
+        const showOn = el.dataset.showOn;
+        const visibleInScn = !showOn || showOn.split(',').map(s => s.trim()).includes(currentScn);
+        el.style.display = (!nonhouse && visibleInScn) ? '' : 'none';
+      });
+    }
+
     function recalc() {
+      applyAssetType();
       if (currentScn === 'sale') calcSale();
       else if (currentScn === 'transfer') calcTransfer();
       else if (currentScn === 'lease') calcLease();
@@ -2338,3 +2357,17 @@ function calcInteriorEstimate({ area, grade, items }) {
   } catch (e) { /* noop */ }
 })();
 
+
+// ===== 도움말 툴팁 (?) — 클릭/터치 토글 (hover는 CSS가 처리) =====
+(function () {
+  document.addEventListener('click', function (e) {
+    var tip = e.target.closest ? e.target.closest('.tip') : null;
+    document.querySelectorAll('.tip.open').forEach(function (t) { if (t !== tip) t.classList.remove('open'); });
+    if (tip) { e.preventDefault(); e.stopPropagation(); tip.classList.toggle('open'); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('tip')) {
+      e.preventDefault(); e.target.classList.toggle('open');
+    }
+  });
+})();

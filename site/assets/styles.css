@@ -1960,7 +1960,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   padding: 1px; background: var(--surface);
   margin-left: auto;
 }
-.site-header .nav-toggle { margin-left: 8px; }
+.site-header .nav-toggle { margin-left: 8px; padding: 0; }
 @media (min-width: 768px) { .site-header .nav-toggle { margin-left: 0; } }
 .lang-switch a {
   font-size: 0.7rem; font-weight: 700; color: var(--text-muted);
@@ -2174,3 +2174,33 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 .aff-disclosure::before { content: "AD"; font-size: 0.62rem; color: var(--text-subtle); }
 .aff-note { font-size: 0.8rem; color: var(--text-subtle); margin-top: 8px; }
 
+
+/* ===== 도움말 툴팁 (?) ===== */
+.tip {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; margin-left: 5px; vertical-align: middle;
+  border-radius: 50%; background: var(--surface-2); color: var(--text-muted);
+  font-size: 0.7rem; font-weight: 800; cursor: help; position: relative;
+  border: 1px solid var(--border-strong); user-select: none; flex-shrink: 0;
+}
+.tip:hover, .tip:focus, .tip.open {
+  background: var(--accent); color: #fff; border-color: var(--accent); outline: none;
+}
+.tip::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 9px); left: 50%; transform: translateX(-50%);
+  width: max-content; max-width: 240px;
+  background: #0f172a; color: #fff; font-size: 0.78rem; font-weight: 500; line-height: 1.5;
+  letter-spacing: -0.01em; text-align: left; white-space: normal;
+  padding: 9px 11px; border-radius: 8px;
+  box-shadow: 0 8px 24px -8px rgba(15,23,42,0.45);
+  opacity: 0; visibility: hidden; transition: opacity 0.12s; z-index: 70; pointer-events: none;
+}
+.tip::before {
+  content: ""; position: absolute; bottom: calc(100% + 3px); left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: #0f172a;
+  opacity: 0; visibility: hidden; transition: opacity 0.12s; z-index: 70; pointer-events: none;
+}
+.tip:hover::after, .tip:focus::after, .tip.open::after,
+.tip:hover::before, .tip:focus::before, .tip.open::before { opacity: 1; visibility: visible; }
+@media (max-width: 600px) { .tip::after { max-width: 190px; } }
