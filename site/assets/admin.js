@@ -25,6 +25,12 @@
   function writeAll(o) { try { localStorage.setItem(LS_OVR, JSON.stringify(o)); } catch (e) {} }
   function pageOvr() { var a = readAll(); return a[PAGE] || {}; }
   function savePageOvr(o) { var a = readAll(); a[PAGE] = o; writeAll(a); }
+  // 텍스트/이미지 오버라이드(스타일과 별도 저장소)
+  function _read(k) { try { return JSON.parse(localStorage.getItem(k) || '{}'); } catch (e) { return {}; } }
+  function getText() { var a = _read(LS_TEXT); return a[PAGE] || {}; }
+  function setTextStore(o) { var a = _read(LS_TEXT); a[PAGE] = o; try { localStorage.setItem(LS_TEXT, JSON.stringify(a)); } catch (e) {} }
+  function getImg() { var a = _read(LS_IMG); return a[PAGE] || {}; }
+  function setImgStore(o) { var a = _read(LS_IMG); a[PAGE] = o; try { localStorage.setItem(LS_IMG, JSON.stringify(a)); } catch (e) { return false; } return true; }
 
   // ---------- 선택자 경로 ----------
   function cssPath(el) {
@@ -57,6 +63,67 @@
         Object.keys(props).forEach(function (p) { el.style.setProperty(p, props[p], 'important'); });
       });
     });
+  }
+  function applyText() {
+    var t = getText();
+    Object.keys(t).forEach(function (sel) {
+      var nodes; try { nodes = document.querySelectorAll(sel); } catch (e) { return; }
+      nodes.forEach(function (el) { el.innerHTML = t[sel]; });
+    });
+  }
+  function applyImages() {
+    var im = getImg();
+    Object.keys(im).forEach(function (sel) {
+      var nodes; try { nodes = document.querySelectorAll(sel); } catch (e) { return; }
+      nodes.forEach(function (el) { if (el.tagName === 'IMG') { el.onerror = null; el.src = im[sel]; } });
+    });
+  }
+
+  // ---------- 텍스트 직접 편집 (더블클릭) ----------
+  function editText(el) {
+    if (!el || isAdminUI(el) || el.tagName === 'IMG') return;
+    el.setAttribute('contenteditable', 'plaintext-only');
+    el.style.outline = '2px dashed #2563eb';
+    el.focus();
+    var done = function () {
+      el.removeEventListener('blur', done);
+      el.removeAttribute('contenteditable');
+      el.style.outline = '';
+      var sel = cssPath(el);
+      var t = getText(); t[sel] = el.innerHTML; setTextStore(t);
+      updateLiveDot();
+      toast('텍스트 저장됨 (게시하려면 내보내기 → HTML 반영)');
+    };
+    el.addEventListener('blur', done);
+  }
+
+  // ---------- 이미지 드래그&드롭 ----------
+  function handleDrop(img, file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var data = reader.result;
+      img.onerror = null; img.src = data;            // 즉시 미리보기
+      var sel = cssPath(img);
+      var ok = true;
+      try { var im = getImg(); im[sel] = data; ok = setImgStore(im); } catch (e) { ok = false; }
+      select(img);
+      updateLiveDot();
+      toast(ok ? '이미지 적용됨 — 게시하려면 내보내기에서 내려받아 커밋' : '미리보기만 적용(용량이 커서 저장 안 됨)');
+    };
+    reader.readAsDataURL(file);
+  }
+  function imgDownload(dataURL, i) {
+    try {
+      var m = /^data:(image\/[a-z0-9.+-]+);base64,(.*)$/i.exec(dataURL);
+      var ext = m ? m[1].split('/')[1].replace('jpeg', 'jpg').replace('svg+xml', 'svg') : 'png';
+      var bin = atob(m[2]); var arr = new Uint8Array(bin.length);
+      for (var k = 0; k < bin.length; k++) arr[k] = bin.charCodeAt(k);
+      var blob = new Blob([arr], { type: m[1] });
+      var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+      a.download = 'image-' + (i + 1) + '.' + ext; a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+      toast('이미지 내려받음 — 저장소 경로에 커밋하세요');
+    } catch (e) { toast('내려받기 실패'); }
   }
 
   // ---------- 상태 ----------
@@ -162,7 +229,8 @@
   function onClickCapture(e) {
     if (!editMode) return;
     var el = e.target;
-    if (isAdminUI(el)) return; // 패널/바 클릭은 통과
+    if (isAdminUI(el)) return;       // 패널/바 클릭은 통과
+    if (el.isContentEditable) return; // 텍스트 편집 중인 요소 클릭은 통과(캐럿 이동)
     e.preventDefault(); e.stopPropagation();
     select(el);
   }
@@ -387,20 +455,31 @@
 
   function doExport() {
     var css = exportCSS();
-    var bg = showModal('CSS로 내보내기',
-      '아래 CSS를 저장소의 <b>site/assets/styles.css</b> 맨 아래에 붙여넣고 커밋하면 모든 방문자에게 반영됩니다. (현재는 이 브라우저에만 적용된 상태입니다)',
-      css,
-      [{ id: 'copy', label: '복사', cls: 'pri' }, { id: 'dl', label: '.css 내려받기', cls: 'sec' }, { id: 'json', label: 'JSON 백업', cls: 'sec' }]);
-    bg.querySelector('[data-mb="copy"]').addEventListener('click', function () {
-      copy(css); toast('클립보드에 복사됨');
-    });
-    bg.querySelector('[data-mb="dl"]').addEventListener('click', function () {
-      download('topda-overrides' + PAGE.replace(/[\/.]/g, '-') + '.css', css);
-    });
-    bg.querySelector('[data-mb="json"]').addEventListener('click', function () {
-      var data = {}; data[PAGE] = pageOvr();
-      copy(JSON.stringify(data, null, 2)); toast('JSON이 복사됨 (백업용)');
-    });
+    var text = getText(), img = getImg();
+    var tKeys = Object.keys(text), iKeys = Object.keys(img);
+    closeModal();
+    var bg = document.createElement('div'); bg.id = 'topda-modal-bg';
+    var h = '<div id="topda-modal"><h3>변경분 내보내기</h3>';
+    h += '<p><b>① 스타일</b>(글자·여백·정렬 등) — 아래 CSS를 <b>site/assets/styles.css</b> 맨 아래에 붙여넣고 커밋하면 모든 방문자에 반영됩니다.</p>';
+    h += '<textarea spellcheck="false">' + css.replace(/</g, '&lt;') + '</textarea>';
+    h += '<div class="ma"><button class="pri" data-mb="copy">CSS 복사</button><button class="sec" data-mb="dl">.css 내려받기</button></div>';
+    if (tKeys.length) {
+      var tlist = tKeys.map(function (s) { return s + '\n  → ' + String(text[s]).replace(/<[^>]+>/g, '').trim(); }).join('\n\n');
+      h += '<p style="margin-top:14px"><b>② 텍스트 변경</b> — 텍스트는 HTML 본문을 직접 고쳐야 게시됩니다. 아래 목록 참고(또는 저에게 “이 텍스트로 바꿔줘” 하셔도 됩니다).</p>';
+      h += '<textarea spellcheck="false" style="height:120px">' + tlist.replace(/</g, '&lt;') + '</textarea>';
+    }
+    if (iKeys.length) {
+      h += '<p style="margin-top:14px"><b>③ 이미지</b> — 내려받아 저장소의 이미지 경로에 같은 파일명으로 커밋하세요.</p><div>'
+        + iKeys.map(function (s, i) { return '<button class="sec" data-img="' + i + '" style="margin:2px">이미지 ' + (i + 1) + ' 내려받기</button>'; }).join('') + '</div>';
+    }
+    h += '<div class="ma"><button class="sec" data-mb="close">닫기</button></div></div>';
+    bg.innerHTML = h;
+    document.body.appendChild(bg);
+    bg.addEventListener('click', function (e) { if (e.target === bg) closeModal(); });
+    bg.querySelector('[data-mb="close"]').addEventListener('click', closeModal);
+    bg.querySelector('[data-mb="copy"]').addEventListener('click', function () { copy(css); toast('CSS 복사됨'); });
+    bg.querySelector('[data-mb="dl"]').addEventListener('click', function () { download('topda-overrides' + PAGE.replace(/[\/.]/g, '-') + '.css', css); });
+    iKeys.forEach(function (s, i) { var b = bg.querySelector('[data-img="' + i + '"]'); if (b) b.addEventListener('click', function () { imgDownload(img[s], i); }); });
   }
   function copy(t) {
     if (navigator.clipboard) navigator.clipboard.writeText(t).catch(function () { legacyCopy(t); });
@@ -414,8 +493,10 @@
   }
 
   function resetPage() {
-    if (!window.confirm('이 페이지에 저장한 모든 편집을 지울까요? (커밋한 CSS는 영향 없음)')) return;
+    if (!window.confirm('이 페이지에 저장한 모든 편집(스타일·텍스트·이미지)을 지울까요? (커밋한 CSS는 영향 없음)')) return;
     var a = readAll(); delete a[PAGE]; writeAll(a);
+    var t = _read(LS_TEXT); delete t[PAGE]; try { localStorage.setItem(LS_TEXT, JSON.stringify(t)); } catch (e) {}
+    var im = _read(LS_IMG); delete im[PAGE]; try { localStorage.setItem(LS_IMG, JSON.stringify(im)); } catch (e) {}
     location.reload();
   }
 
@@ -453,9 +534,9 @@
   }
   function updateLiveDot() {
     var d = document.getElementById('topda-livedot'); if (!d) return;
-    var n = Object.keys(pageOvr()).length;
+    var n = Object.keys(pageOvr()).length + Object.keys(getText()).length + Object.keys(getImg()).length;
     d.classList.toggle('live', n > 0);
-    d.title = n > 0 ? (n + '개 요소에 저장된 변경 있음') : '저장된 변경 없음';
+    d.title = n > 0 ? (n + '개 변경 저장됨') : '저장된 변경 없음';
   }
 
   // ---------- 부팅 ----------
@@ -464,10 +545,34 @@
     hlEl = document.createElement('div'); hlEl.id = 'topda-hl'; document.body.appendChild(hlEl);
     selEl = document.createElement('div'); selEl.id = 'topda-sel'; document.body.appendChild(selEl);
     applyAll();
+    applyText();
+    applyImages();
     buildBar();
 
     document.addEventListener('mousemove', onMove, true);
     document.addEventListener('click', onClickCapture, true);
+    // 더블클릭: 텍스트 직접 편집
+    document.addEventListener('dblclick', function (e) {
+      if (!editMode) return;
+      var el = e.target;
+      if (isAdminUI(el) || el.tagName === 'IMG') return;
+      e.preventDefault(); e.stopPropagation();
+      editText(el);
+    }, true);
+    // 이미지 드래그&드롭
+    document.addEventListener('dragover', function (e) {
+      if (!editMode) return;
+      var img = e.target.closest && e.target.closest('img');
+      if (img && !isAdminUI(img)) { e.preventDefault(); rectTo(hlEl, img); }
+    }, true);
+    document.addEventListener('drop', function (e) {
+      if (!editMode) return;
+      var img = e.target.closest && e.target.closest('img');
+      if (!img || isAdminUI(img)) return;
+      e.preventDefault(); e.stopPropagation();
+      var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f && /^image\//.test(f.type)) handleDrop(img, f);
+    }, true);
     window.addEventListener('scroll', syncSelBox, true);
     window.addEventListener('resize', syncSelBox);
 
@@ -486,7 +591,7 @@
         buildPanel();
       }
     });
-    toast('관리자 편집 도구 준비됨 — E 키로 편집 모드');
+    toast('편집 모드: 클릭=선택 · 더블클릭=글자수정 · 이미지에 사진 드롭');
   }
 
   // 인증 후 부팅

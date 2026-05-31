@@ -164,10 +164,9 @@ html, body { overflow-x: hidden; }
 }
 .nav-cta:hover { background: var(--accent); }
 
-/* 우측 상단 메뉴 아이콘: 정사각형으로 콤팩트하게.
-   기본 nav는 별도로 노출되므로 햄버거는 숨겨두되, 노출 시 정사각형 형태 유지 */
+/* 우측 상단 메뉴 아이콘: 정사각형 콤팩트 햄버거 (KR/EN 옆 노출) */
 .nav-toggle {
-  display: none;
+  display: inline-flex;
   width: 38px; height: 38px; padding: 0;
   align-items: center; justify-content: center;
   border-radius: 9px; flex-shrink: 0;
