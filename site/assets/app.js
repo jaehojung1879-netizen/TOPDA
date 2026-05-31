@@ -1991,6 +1991,8 @@ function calcInteriorEstimate({ area, grade, items }) {
     const head = document.head;
     const lang = (document.documentElement.lang || 'ko').toLowerCase();
     const isEnPage = lang.startsWith('en');
+    // 페이지 식별자(관리자 편집 오버라이드 스코프·분석용)
+    document.documentElement.setAttribute('data-topda-page', location.pathname);
 
     // ---------- 분석 도구 (GA4) ----------
     // 측정 ID를 발급받으면 아래 GA4_ID에 'G-XXXXXXX'를 넣으면 전 페이지에서 활성화됩니다.
@@ -2274,6 +2276,39 @@ function calcInteriorEstimate({ area, grade, items }) {
     else {
       const main = document.querySelector('main');
       if (main) main.appendChild(sec);
+    }
+  } catch (e) { /* noop */ }
+})();
+
+// ===== 관리자 편집 도구 조건부 로더 =====
+// 일반 방문자에게는 admin.js를 아예 내려받지 않게 한다.
+// 활성 조건: (1) 이전에 로그인해 둔 경우, (2) URL에 ?admin/#admin, (3) Ctrl+Shift+A
+(function () {
+  try {
+    function assetBase() {
+      const cur = document.querySelector('script[src*="app.js"]');
+      const src = cur ? cur.getAttribute('src') : 'assets/app.js';
+      return src.replace(/app\.js(\?.*)?$/, '');
+    }
+    let loaded = false;
+    function loadAdmin() {
+      if (loaded) return;
+      loaded = true;
+      const s = document.createElement('script');
+      s.src = assetBase() + 'admin.js';
+      document.body.appendChild(s);
+    }
+    const authed = (function () { try { return localStorage.getItem('topda_admin') === '1'; } catch (e) { return false; } })();
+    if (authed || /[?#]admin\b/.test(location.href)) {
+      loadAdmin();
+    } else {
+      // 숨은 트리거: Ctrl+Shift+A 로 관리자 게이트 호출
+      document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+          e.preventDefault();
+          loadAdmin();
+        }
+      });
     }
   } catch (e) { /* noop */ }
 })();
