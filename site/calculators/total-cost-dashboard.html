@@ -48,8 +48,17 @@
 
     <div class="calc-form">
 
+      <!-- ===== 공통: 자산 유형 (sale/transfer 노출) ===== -->
+      <div class="field" data-show-on="sale,transfer">
+        <label>자산 유형<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="주택(아파트·빌라·단독 등)과 비주택(상가·오피스텔(업무용)·토지 등)은 취득세율과 양도세 규정이 다릅니다. 비주택은 취득세 4.6%(농특·교육세 포함), 양도 시 단기세율 50/40%가 적용되고 1세대1주택 비과세·다주택 중과 같은 주택 전용 규정은 적용되지 않습니다.">?</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="assetType" value="house" checked/><span>주택</span></label>
+          <label><input type="radio" name="assetType" value="nonhouse"/><span>비주택(상가·토지 등)</span></label>
+        </div>
+      </div>
+
       <!-- ===== 공통: 주택 수 (sale/transfer/rent 노출) ===== -->
-      <div class="field" data-show-on="sale,transfer,rent">
+      <div class="field" data-show-on="sale,transfer,rent" data-house-only>
         <label>현재 주택 수 (본 거래 포함)</label>
         <div class="radio-group">
           <label><input type="radio" name="homes" value="1" checked/><span>1주택</span></label>
@@ -58,10 +67,10 @@
         </div>
       </div>
 
-      <div class="field" data-show-on="sale,transfer">
+      <div class="field" data-show-on="sale,transfer" data-house-only>
         <label class="check-item" style="padding: 0; cursor: pointer;">
           <input type="checkbox" name="regulated"/>
-          <span class="text">조정대상지역</span>
+          <span class="text">조정대상지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="정부가 주택가격·청약경쟁률 등이 과열됐다고 지정한 지역. 지정되면 다주택 취득세 중과(8~12%), 양도세 중과, LTV·DSR 강화 등이 적용됩니다. 현재 지정 현황은 국토교통부 공고로 확인하세요.">?</span></span>
         </label>
       </div>
 
@@ -76,14 +85,14 @@
           </div>
         </div>
 
-        <div class="field">
+        <div class="field" data-house-only>
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="areaOver85"/>
-            <span class="text">전용면적 85㎡ 초과</span>
+            <span class="text">전용면적 85㎡ 초과<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택규모(85㎡)를 넘는 주택은 농어촌특별세가 더해집니다. 85㎡ 이하는 농특세가 면제됩니다.">?</span></span>
           </label>
         </div>
 
-        <div class="field">
+        <div class="field" data-house-only>
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="firstHome"/>
             <span class="text">생애최초 주택 구입자
@@ -157,10 +166,10 @@
             <input id="td-liveYears" name="liveYears" type="number" min="0" max="50" step="0.5" value="4" />
           </div>
         </div>
-        <div class="field">
+        <div class="field" data-house-only>
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="onlyHome" checked/>
-            <span class="text">1세대 1주택 (양도일 기준)</span>
+            <span class="text">1세대 1주택 (양도일 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="양도일 현재 1세대가 국내에 주택 1채만 보유하고 2년 이상 보유(조정지역은 2년 거주)하면 12억까지 비과세됩니다. 비주택에는 적용되지 않습니다.">?</span></span>
           </label>
         </div>
         <p class="scn-note">매도 시나리오는 양도소득세 산정이 중심이라 소득·DSR을 적용하지 않습니다.</p>

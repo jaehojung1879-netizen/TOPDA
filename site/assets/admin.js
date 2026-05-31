@@ -132,6 +132,7 @@
   var editMode = false;
   var selected = null;
   var undoStack = [];
+  var clip = null;
 
   // ---------- 스타일 주입 ----------
   function injectStyle() {
@@ -220,7 +221,7 @@
     box.style.width = r.width + 'px'; box.style.height = r.height + 'px';
     box.style.display = 'block';
   }
-  function isAdminUI(el) { return !!(el.closest && el.closest('#topda-admin-bar,#topda-admin-panel,#topda-modal-bg,#topda-toast,#topda-hl,#topda-sel')); }
+  function isAdminUI(el) { return !!(el.closest && el.closest('#topda-admin-bar,#topda-admin-panel,#topda-modal-bg,#topda-toast,#topda-hl,#topda-sel,.topda-rz')); }
 
   function onMove(e) {
     if (!editMode) return;
@@ -243,7 +244,56 @@
     buildPanel();
     syncSelBox();
   }
-  function syncSelBox() { if (selected) rectTo(selEl, selected); else selEl.style.display = 'none'; }
+  function syncSelBox() {
+    if (selected) { rectTo(selEl, selected); positionHandles(); }
+    else { selEl.style.display = 'none'; hideHandles(); }
+  }
+
+  // ---------- 리사이즈 핸들 (드래그로 셀 크기 조정) ----------
+  var handles = {};
+  function makeHandles() {
+    ['e', 's', 'se'].forEach(function (dir) {
+      var h = document.createElement('div');
+      h.className = 'topda-rz topda-rz-' + dir;
+      h.style.cssText = 'position:fixed;z-index:99992;width:12px;height:12px;border:2px solid #f59e0b;'
+        + 'background:#fff;border-radius:3px;display:none;'
+        + 'cursor:' + (dir === 'e' ? 'ew-resize' : dir === 's' ? 'ns-resize' : 'nwse-resize') + ';';
+      h.addEventListener('mousedown', function (e) { startResize(e, dir); });
+      document.body.appendChild(h);
+      handles[dir] = h;
+    });
+  }
+  function positionHandles() {
+    if (!selected || !editMode) { hideHandles(); return; }
+    var r = selected.getBoundingClientRect();
+    place(handles.e, r.right - 6, r.top + r.height / 2 - 6);
+    place(handles.s, r.left + r.width / 2 - 6, r.bottom - 6);
+    place(handles.se, r.right - 6, r.bottom - 6);
+  }
+  function place(h, x, y) { if (h) { h.style.left = x + 'px'; h.style.top = y + 'px'; h.style.display = 'block'; } }
+  function hideHandles() { ['e', 's', 'se'].forEach(function (d) { if (handles[d]) handles[d].style.display = 'none'; }); }
+  var rz = null;
+  function startResize(e, dir) {
+    if (!selected) return;
+    e.preventDefault(); e.stopPropagation();
+    var r = selected.getBoundingClientRect();
+    rz = { dir: dir, x: e.clientX, y: e.clientY, w: r.width, h: r.height };
+    document.body.style.userSelect = 'none';
+    document.addEventListener('mousemove', onResize, true);
+    document.addEventListener('mouseup', endResize, true);
+  }
+  function onResize(e) {
+    if (!rz) return;
+    if (rz.dir === 'e' || rz.dir === 'se') setProp('width', Math.max(20, Math.round(rz.w + (e.clientX - rz.x))) + 'px', false);
+    if (rz.dir === 's' || rz.dir === 'se') setProp('height', Math.max(20, Math.round(rz.h + (e.clientY - rz.y))) + 'px', false);
+  }
+  function endResize() {
+    rz = null; document.body.style.userSelect = '';
+    document.removeEventListener('mousemove', onResize, true);
+    document.removeEventListener('mouseup', endResize, true);
+    if (selected) buildPanel();
+    updateLiveDot();
+  }
 
   // ---------- 속성 변경 ----------
   function setProp(prop, value, record) {
@@ -296,7 +346,7 @@
     var tag = cssPath(selected);
     panel.innerHTML = ''
       + '<div class="ph"><div class="tag">' + tag.replace(/</g, '&lt;') + '</div>'
-      + '<div class="nav"><button data-act="parent">▲ 상위 선택</button><button data-act="deselect">선택 해제</button></div></div>'
+      + '<div class="nav"><button data-act="parent">▲ 상위</button><button data-act="edittext">✎ 글자</button><button data-act="deselect">해제</button></div></div>'
 
       + '<div class="grp"><h4>글자</h4>'
       + row('크기', stepCtrl('font-size', px(cur('fontSize')), 1, 'px'))
@@ -406,6 +456,7 @@
         var act = b.getAttribute('data-act');
         if (act === 'parent') { if (selected && selected.parentElement && selected.parentElement !== document.body) select(selected.parentElement); }
         else if (act === 'deselect') { selected = null; selEl.style.display = 'none'; panel.classList.remove('show'); }
+        else if (act === 'edittext') { if (selected) editText(selected); }
         else if (act === 'reset') { resetSelected(); }
       });
     });
@@ -509,7 +560,7 @@
     btnEdit.classList.toggle('on', on);
     btnEdit.textContent = on ? '■ 편집 중' : '✎ 편집 모드';
     hlEl.style.display = 'none';
-    if (on) { buildPanel(); } else { panel && panel.classList.remove('show'); selEl.style.display = 'none'; }
+    if (on) { buildPanel(); } else { panel && panel.classList.remove('show'); selEl.style.display = 'none'; hideHandles(); }
   }
 
   // ---------- 바 ----------
@@ -546,6 +597,7 @@
     injectStyle();
     hlEl = document.createElement('div'); hlEl.id = 'topda-hl'; document.body.appendChild(hlEl);
     selEl = document.createElement('div'); selEl.id = 'topda-sel'; document.body.appendChild(selEl);
+    makeHandles();
     applyAll();
     applyText();
     applyImages();
@@ -581,6 +633,21 @@
     document.addEventListener('keydown', function (e) {
       var typing = /^(INPUT|TEXTAREA|SELECT)$/.test((e.target.tagName || '')) || e.target.isContentEditable;
       if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.key === 'Z')) { if (editMode) { e.preventDefault(); undo(); } return; }
+      // 요소 복사/붙여넣기 (PPT식): Ctrl+C / Ctrl+V
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C') && editMode && selected && !typing) {
+        e.preventDefault(); clip = selected.cloneNode(true); toast('요소 복사됨 — Ctrl+V로 붙여넣기'); return;
+      }
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'v' || e.key === 'V') && editMode && clip && selected && !typing) {
+        e.preventDefault();
+        var node = clip.cloneNode(true);
+        if (selected.parentNode) {
+          selected.parentNode.insertBefore(node, selected.nextSibling);
+          select(node);
+          updateLiveDot();
+          toast('붙여넣음 — 구조 변경은 HTML에 직접 반영해야 게시됩니다');
+        }
+        return;
+      }
       if (typing) return;
       if (e.key === 'Escape') { if (editMode) setEdit(false); return; }
       if (e.key === 'e' || e.key === 'E') { setEdit(!editMode); return; }
@@ -593,7 +660,7 @@
         buildPanel();
       }
     });
-    toast('편집 모드: 클릭=선택 · 더블클릭=글자수정 · 이미지에 사진 드롭');
+    toast('클릭=선택 · 더블클릭=글자수정 · 모서리 드래그=크기 · Ctrl+C/V=복사·붙여넣기 · 이미지엔 사진 드롭');
   }
 
   // 인증 후 부팅
