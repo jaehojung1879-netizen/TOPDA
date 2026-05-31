@@ -17,8 +17,8 @@
       <a href="../index.html" data-nav>홈</a>
       <a href="../calculators/index.html" data-nav class="active">계산기</a>
       <a href="../checklists/index.html" data-nav>체크리스트</a>
-      
-      <a href="../about.html" data-nav>소개</a>
+      <a href="../about.html" data-nav>안내</a>
+      <a href="../board.html" data-nav>게시판</a>
     </nav>
     <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
@@ -28,8 +28,8 @@
     <a href="../index.html">홈</a>
     <a href="../calculators/index.html">계산기</a>
     <a href="../checklists/index.html">체크리스트</a>
-    
-    <a href="../about.html">소개</a>
+    <a href="../about.html">안내</a>
+    <a href="../board.html">게시판</a>
   </div>
 </header>
 
@@ -51,6 +51,7 @@
         <div class="input-suffix" data-suffix="만원">
           <input type="number" id="income" inputmode="numeric" min="0" step="100" value="6000"/>
         </div>
+        <span class="eok-hint" id="income-eok"></span>
         <span class="hint">근로소득·사업소득 합계 기준. 월급 × 12 + 상여.</span>
       </div>
 
@@ -61,6 +62,7 @@
         <div class="input-suffix" data-suffix="만원">
           <input type="number" id="new-principal" inputmode="numeric" min="0" step="100" value="30000"/>
         </div>
+        <span class="eok-hint" id="new-principal-eok"></span>
       </div>
       <div class="field">
         <label for="new-rate">금리 (연, %)</label>
@@ -184,6 +186,24 @@
   const fmt = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
   const $ = (id) => document.getElementById(id);
 
+  // 만원 입력값을 '억/만 원'으로 환산해 표시 (다른 계산기와 동일한 형식)
+  function eokManFromWon(won) {
+    if (!won || won < 10000) return '';
+    const eok = Math.floor(won / 100000000);
+    const man = Math.floor((won % 100000000) / 10000);
+    const parts = [];
+    if (eok) parts.push(eok.toLocaleString('ko-KR') + '억');
+    if (man) parts.push(man.toLocaleString('ko-KR') + '만');
+    return parts.length ? '약 ' + parts.join(' ') + ' 원' : '';
+  }
+  function setEok(hintId, manValue) {
+    const el = $(hintId);
+    if (!el) return;
+    const text = eokManFromWon((manValue || 0) * 10000);
+    el.textContent = text;
+    el.style.display = text ? '' : 'none';
+  }
+
   function pmtAnnuity(P, rMonthly, n) {
     if (P <= 0 || n <= 0) return 0;
     if (rMonthly === 0) return P / n;
@@ -204,6 +224,9 @@
     const n = years * 12;
     const method = document.querySelector('input[name="method"]:checked').value;
     const existingMonthly = (+$('existing-monthly').value || 0) * 10000;
+
+    setEok('income-eok', +$('income').value || 0);
+    setEok('new-principal-eok', +$('new-principal').value || 0);
 
     const newMonthly = (method === 'principal') ? pmtPrincipalFirst(P, rMonthly, n) : pmtAnnuity(P, rMonthly, n);
     const newAnnual = newMonthly * 12;

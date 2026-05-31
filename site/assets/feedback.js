@@ -7,8 +7,9 @@
   const root = document.querySelector('[data-fb-app]');
   if (!root) return;
 
-  const KEY_PUB = 'fb:public';
-  const KEY_SEC = 'fb:secret';
+  // 저장소 키는 페이지에서 data-key-public / data-key-secret 로 재정의 가능
+  const KEY_PUB = root.dataset.keyPublic || 'fb:public';
+  const KEY_SEC = root.dataset.keySecret || 'fb:secret';
 
   const form = document.querySelector('[data-fb-form]');
   const listPub = root.querySelector('[data-fb-list-public]');
