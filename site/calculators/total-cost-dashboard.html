@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>부동산 종합 계산 대시보드 — 톺다</title>
-<meta name="description" content="매수·매도·전세 임차·임대·상속·증여 6가지 시나리오를 한 화면에서. 취득세·양도세·DSR·RTI·중개수수료까지 종합 산정." />
+<meta name="description" content="매수·매도·전세 임차·임대·상속·증여 6가지 시나리오를 한 화면에서. 취득세·양도세·DSR·RTI·중개수수료에 등기·법무사 비용까지 종합 산정." />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css" />
 </head>
@@ -132,6 +132,27 @@
           <div class="input-suffix" data-suffix="원">
             <input id="td-jeonse" name="jeonseDeposit" type="text" inputmode="numeric" data-format="won" value="500,000,000" />
           </div>
+        </div>
+
+        <h3 class="scn-section-title">등기·법무사</h3>
+        <div class="field">
+          <label for="td-regStd">시가표준액 (채권 매입 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택채권 매입액은 매매가가 아니라 시가표준액(공동주택가격·개별주택가격·토지 공시지가)을 기준으로 합니다. 비워두면 매매가의 70%로 추정합니다. 정확한 값은 부동산공시가격알리미·위택스에서 조회하세요.">?</span></label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-regStd" name="regStd" type="text" inputmode="numeric" data-format="won" value="" />
+          </div>
+          <span class="hint">모르면 비워두세요 → 매매가 × 70%로 추정.</span>
+        </div>
+        <div class="field">
+          <label for="td-regDiscount">국민주택채권 할인율<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="채권을 즉시 매도(할인)할 때 본인이 부담하는 손실률입니다. 시장금리에 따라 매일 바뀌며 최근 8% 안팎입니다. 당일 고시는 은행·법무사에 확인하세요.">?</span></label>
+          <div class="input-suffix" data-suffix="%">
+            <input id="td-regDiscount" name="regDiscount" type="number" min="0" max="30" step="0.1" value="8.7" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="selfReg"/>
+            <span class="text">셀프 등기 (법무사 보수 제외)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="법무사 없이 직접 등기하면 보수·부가세가 들지 않습니다. 인지세·채권·등기수수료는 동일하게 발생합니다.">?</span></span>
+          </label>
         </div>
       </div>
 
@@ -435,12 +456,12 @@
     </div>
   </section>
 
-  <!-- 등기·법무사 비용은 별도 계산기로 -->
+  <!-- 등기·법무사 비용 안내 -->
   <div class="callout callout-info" style="margin-top: 32px;">
     <div class="icon">i</div>
     <div class="body">
-      <strong>등기·법무사 비용은 별도 계산기에서</strong>
-      위 결과는 취득세·중개수수료까지만 반영했습니다. 등기 시 드는 인지세·국민주택채권 할인·법무사 보수 등은 거래금액·시가표준액에 따라 달라지므로 <a href="registration-cost.html">등기·법무사 비용 계산기 →</a>에서 항목별로 계산하세요. 기준이 되는 시가표준액·공시가격은 <a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a> · <a href="https://www.wetax.go.kr" target="_blank" rel="noopener">위택스(시가표준액)</a>에서 조회할 수 있습니다.
+      <strong>등기·법무사 비용이 매수 결과에 포함됩니다</strong>
+      매수 시나리오의 총비용에는 인지세·등기신청 수수료·국민주택채권 할인 부담·법무사 보수(부가세 포함)가 반영됩니다. 국민주택채권은 시가표준액 기준이며 할인율은 매일 변동하므로, 정확한 시가표준액·공시가격은 <a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a> · <a href="https://www.wetax.go.kr" target="_blank" rel="noopener">위택스(시가표준액)</a>에서 확인하세요. 항목별 상세 계산은 <a href="registration-cost.html">등기·법무사 비용 계산기 →</a>에서도 가능합니다.
     </div>
   </div>
 
