@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="톺다 — 부동산, 하나하나 톺아보자">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1e3a8a"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g transform="translate(96,150)">
+    <rect width="120" height="120" rx="26" fill="#ffffff"/>
+    <g fill="none" stroke="#2563eb" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" transform="translate(28,28) scale(1)">
+      <circle cx="25" cy="27" r="9"/>
+      <path d="M25 36 L 22 44"/>
+      <path d="M27 40 L 35 48 L 51 26"/>
+    </g>
+  </g>
+  <text x="96" y="380" font-family="Pretendard, 'Apple SD Gothic Neo', system-ui, sans-serif" font-size="92" font-weight="800" fill="#ffffff">톺다</text>
+  <text x="96" y="460" font-family="Pretendard, 'Apple SD Gothic Neo', system-ui, sans-serif" font-size="40" font-weight="500" fill="#dbeafe">부동산, 하나하나 톺아보자</text>
+  <text x="96" y="528" font-family="Pretendard, 'Apple SD Gothic Neo', system-ui, sans-serif" font-size="30" font-weight="400" fill="#bfdbfe">계산기 · 체크리스트 · 가이드</text>
+</svg>

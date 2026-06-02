@@ -2080,20 +2080,9 @@ function calcInteriorEstimate({ area, grade, items }) {
     // 페이지 식별자(관리자 편집 오버라이드 스코프·분석용)
     document.documentElement.setAttribute('data-topda-page', location.pathname);
 
-    // ---------- 분석 도구 (GA4) ----------
-    // 측정 ID를 발급받으면 아래 GA4_ID에 'G-XXXXXXX'를 넣으면 전 페이지에서 활성화됩니다.
-    // 값이 비어 있으면 어떤 추적도 로드되지 않습니다(개인정보 무수집 상태 유지).
-    const GA4_ID = '';
-    if (GA4_ID) {
-      const g = document.createElement('script');
-      g.async = true;
-      g.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
-      head.appendChild(g);
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function () { window.dataLayer.push(arguments); };
-      window.gtag('js', new Date());
-      window.gtag('config', GA4_ID, { anonymize_ip: true });
-    }
+    // ---------- 분석 도구 ----------
+    // GA4·네이버 애널리틱스는 assets/analytics.js에서 일괄 로드한다(전 페이지 정적 포함).
+    // 측정 ID도 그 파일 한 곳에서만 교체하면 된다. 여기서는 중복 로드하지 않는다.
 
     // ---------- 접근성 ----------
     const main = document.querySelector('main');
@@ -2205,7 +2194,11 @@ function calcInteriorEstimate({ area, grade, items }) {
     metaName('twitter:description', desc);
 
     // JSON-LD 구조화 데이터
+    // 정적 HTML에 이미 JSON-LD가 포함된 페이지(대부분)에서는 중복을 피하기 위해 건너뛴다.
+    // 정적 블록이 없는 페이지에 한해 폴백으로 동작한다.
+    const hasStaticLd = !!head.querySelector('script[type="application/ld+json"]');
     const addJsonLd = (obj) => {
+      if (hasStaticLd) return;
       const s = document.createElement('script');
       s.type = 'application/ld+json';
       s.textContent = JSON.stringify(obj);
@@ -2421,4 +2414,91 @@ function calcInteriorEstimate({ area, grade, items }) {
       e.preventDefault(); e.target.classList.toggle('open');
     }
   });
+})();
+
+
+// ===== 계산기 입력값 자동 복원 (localStorage) + 결과 aria-live 안내 =====
+// HTML 수정 없이 모든 계산기 폼에 적용된다.
+//  - 입력값을 페이지별 키로 저장하고 재방문 시 복원 (개인정보·민감정보 미포함: 클라이언트 로컬에만 보관)
+//  - 결과 총액 영역에 aria-live를 부여해 스크린리더가 변경을 읽도록 함 (WCAG 2.2)
+(function () {
+  'use strict';
+
+  // ---- 결과 영역 aria-live (접근성) ----
+  function markLive() {
+    document.querySelectorAll('.calc-result .total, [data-out="primaryTotal"], #rc-total').forEach((el) => {
+      if (!el.hasAttribute('aria-live')) {
+        el.setAttribute('aria-live', 'polite');
+        el.setAttribute('role', 'status');
+      }
+    });
+  }
+
+  // ---- 입력값 저장/복원 ----
+  function persistForms() {
+    const forms = document.querySelectorAll('.calc-form, [data-calc]');
+    forms.forEach((form, idx) => {
+      const key = 'calc:' + location.pathname + ':' + idx;
+      const fields = form.querySelectorAll('input[name], input[id], select[name], select[id]');
+      if (!fields.length) return;
+
+      const nameOf = (el) => el.name || el.id;
+
+      // 복원
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { saved = null; }
+      if (saved && typeof saved === 'object') {
+        const touched = new Set();
+        fields.forEach((el) => {
+          const n = nameOf(el);
+          if (!(n in saved)) return;
+          const v = saved[n];
+          if (el.type === 'checkbox') {
+            el.checked = !!v;
+          } else if (el.type === 'radio') {
+            el.checked = (el.value === v);
+          } else {
+            el.value = v;
+          }
+          touched.add(el);
+        });
+        // 복원값으로 재계산 트리거 (won 포맷터·계산기 리스너 모두 깨움)
+        touched.forEach((el) => {
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      }
+
+      // 저장 (디바운스)
+      let t = null;
+      const save = () => {
+        if (t) clearTimeout(t);
+        t = setTimeout(() => {
+          const data = {};
+          fields.forEach((el) => {
+            const n = nameOf(el);
+            if (!n) return;
+            if (el.type === 'checkbox') data[n] = el.checked;
+            else if (el.type === 'radio') { if (el.checked) data[n] = el.value; }
+            else data[n] = el.value;
+          });
+          try { localStorage.setItem(key, JSON.stringify(data)); } catch (e) {}
+        }, 250);
+      };
+      form.addEventListener('input', save);
+      form.addEventListener('change', save);
+    });
+  }
+
+  function init() {
+    markLive();
+    // 각 계산기의 자체 초기화(인라인 스크립트)가 먼저 끝난 뒤 복원하도록 한 틱 양보
+    requestAnimationFrame(() => { try { persistForms(); } catch (e) {} });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
