@@ -659,6 +659,9 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
 
   function init() {
     let currentScn = 'sale';
+    const RATES = window.TOPDA_RATES || {};
+    const DSR_T1 = (RATES.dsr && RATES.dsr.tier1) || 40; // 1금융 한도(%)
+    const DSR_T2 = (RATES.dsr && RATES.dsr.tier2) || 50; // 2금융 한도(%)
     let chart = null;
     const canvas = document.getElementById('costChart');
     const chartEmpty = root.querySelector('[data-chart-empty]');
@@ -894,15 +897,15 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const fillEl = root.querySelector('[data-out="dsrFill"]');
       if (fillEl) {
         fillEl.style.width = Math.min(100, dsr) + '%';
-        if (dsr > 50) fillEl.style.background = '#b91c1c';
-        else if (dsr > 40) fillEl.style.background = '#b45309';
+        if (dsr > DSR_T2) fillEl.style.background = '#b91c1c';
+        else if (dsr > DSR_T1) fillEl.style.background = '#b45309';
         else fillEl.style.background = '#047857';
       }
       let verdict;
       if (income <= 0) verdict = '소득을 입력하면 DSR이 자동 계산됩니다.';
-      else if (dsr > 50) verdict = '2금융 한도(50%)도 초과 — 대출 금액·기간 조정이 필요합니다.';
-      else if (dsr > 40) verdict = '1금융 한도(40%) 초과, 2금융(50%) 내에서 검토 가능합니다.';
-      else if (dsr > 0) verdict = '1금융 한도(40%) 내 — 정상 승인이 가능한 수준입니다.';
+      else if (dsr > DSR_T2) verdict = `2금융 한도(${DSR_T2}%)도 초과 — 대출 금액·기간 조정이 필요합니다.`;
+      else if (dsr > DSR_T1) verdict = `1금융 한도(${DSR_T1}%) 초과, 2금융(${DSR_T2}%) 내에서 검토 가능합니다.`;
+      else if (dsr > 0) verdict = `1금융 한도(${DSR_T1}%) 내 — 정상 승인이 가능한 수준입니다.`;
       else verdict = '대출 정보가 0이라 DSR이 적용되지 않습니다.';
       if (credit > 0 && income > 0) verdict += ` (신용대출 ${fmt.won(credit)} → 연환산 ${fmt.won(creditAnnual)})`;
       setText('dsrVerdict', verdict);
@@ -1124,7 +1127,9 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const propertyTax = propPrice * 0.0025;
       const annualNet = annualRent - separateTax;
       const annualInterest = loan * rate / 100;
-      const threshold = rentType === 'residential' ? 1.25 : 1.5;
+      const threshold = rentType === 'residential'
+        ? ((RATES.rti && RATES.rti.residential) || 1.25)
+        : ((RATES.rti && RATES.rti.commercial) || 1.5);
 
       if (resultTitle) resultTitle.textContent = '연간 임대 수입 (분리과세 후) 및 RTI';
       setText('primaryTotal', fmt.won(annualNet));
@@ -2555,9 +2560,12 @@ function calcInteriorEstimate({ area, grade, items }) {
         window.print();
       });
     });
+
+    injectReviewNote();
+    wireNextStepPrefill();
   }
 
-  function buildShareUrl(scope) {
+  function serializeParams(scope) {
     const p = new URLSearchParams();
     fieldsIn(scope).forEach((el) => {
       const n = nameOf(el);
@@ -2568,7 +2576,48 @@ function calcInteriorEstimate({ area, grade, items }) {
     });
     const scn = document.querySelector('[data-scn].active');
     if (scn) p.set('scn', scn.dataset.scn);
-    return location.origin + location.pathname + '?' + p.toString();
+    return p;
+  }
+
+  function buildShareUrl(scope) {
+    return location.origin + location.pathname + '?' + serializeParams(scope).toString();
+  }
+
+  // 계산기 간 연동: '다음 단계' 링크에 현재 입력값을 실어 보내 대상 계산기를 프리필한다.
+  // (대상은 #27 URL 복원 로직으로 자기 필드명과 일치하는 값만 적용 — 나머지는 무시)
+  function wireNextStepPrefill() {
+    const scope = document.querySelector('[data-calc]') || document.querySelector('.calc-layout');
+    if (!scope) return;
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a.next-action, a[data-prefill]');
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      const base = href.split('?')[0];
+      if (!/\.html$/.test(base)) return;       // 계산기 페이지 링크만
+      if (href.includes('?')) return;          // 이미 파라미터가 있으면 건드리지 않음
+      if (href.includes('/checklists/')) return;
+      const qs = serializeParams(scope).toString();
+      if (qs) a.setAttribute('href', base + '?' + qs);
+    }, true);
+  }
+
+  // E-E-A-T: 계산기 하단에 '최종 검토일 · 주요 출처' 표기 (rates.js에서 읽음)
+  function injectReviewNote() {
+    const result = document.querySelector('.calc-result');
+    if (!result || result.querySelector('[data-review-note]')) return;
+    const R = window.TOPDA_RATES;
+    if (!R || !R.lastReviewed) return;
+    const slug = (location.pathname.split('/').pop() || '').replace('.html', '');
+    const src = (R.sources && (R.sources[slug] || R.sources['default'])) || '';
+    const note = document.createElement('p');
+    note.className = 'calc-review-note';
+    note.setAttribute('data-review-note', '');
+    const label = isEn ? 'Last reviewed' : '최종 검토일';
+    note.innerHTML = '<strong>' + label + ' ' + R.lastReviewed + '</strong>'
+      + (src ? ' · ' + (isEn ? 'Basis: ' : '기준: ') + src : '');
+    const shareBar = result.querySelector('[data-calc-share]');
+    if (shareBar) result.insertBefore(note, shareBar);
+    else result.appendChild(note);
   }
 
   function copyToClipboard(text) {

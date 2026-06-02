@@ -2276,3 +2276,14 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   .chart-wrap { max-height: 320px; }
   .article-header h1 { font-size: 18pt; }
 }
+
+/* ===== 계산기 최종 검토일 / 출처 노트 (E-E-A-T) ===== */
+.calc-review-note {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+.calc-review-note strong { color: var(--text); font-weight: 600; }
