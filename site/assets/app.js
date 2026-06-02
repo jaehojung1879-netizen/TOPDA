@@ -721,16 +721,50 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       return 350000;
     }
 
-    // 법무사·등기 부대비용 추정 (등록면허세·취득세는 별도 본세로 이미 반영)
-    //  - 인지세(정액) + 등기신청 수수료(15,000) + 법무사 보수(추정)
-    //  - 국민주택채권 할인 부담은 변동 폭이 커 헤드라인 추정에서 제외하고
-    //    정확한 금액은 외부 등기비용 계산기 링크로 안내한다.
-    function registrationCost(price) {
-      if (!price || price <= 0) return { total: 0 };
-      var stamp = stampDuty(price);
-      var regFee = 15000;
-      var scrivener = Math.min(Math.max(Math.round(price * 0.0008), 100000), 2000000);
-      return { total: stamp + regFee + scrivener };
+    // 국민주택채권 매입률 (특별시·광역시 기준 근사, 시가표준액 구간별 — 주택도시기금)
+    function bondRate(std, asset) {
+      const eok = std / 100000000;
+      if (asset === 'land') {
+        if (std < 5000000) return 0;
+        if (eok < 0.5) return 0.025;
+        if (eok < 1) return 0.04;
+        return 0.05;
+      }
+      // 주택
+      if (std < 20000000) return 0;
+      if (eok < 0.5) return 0.013;
+      if (eok < 1) return 0.019;
+      if (eok < 1.6) return 0.021;
+      if (eok < 2.6) return 0.023;
+      if (eok < 6) return 0.026;
+      return 0.031;
+    }
+
+    // 법무사 보수(소유권이전) 누진 근사 — 대한법무사협회 보수표 기준
+    function scrivenerFee(price) {
+      if (price <= 0) return 0;
+      let f;
+      if (price <= 50000000) f = Math.max(50000, price * 0.002);
+      else if (price <= 200000000) f = 100000 + (price - 50000000) * 0.0009;
+      else if (price <= 500000000) f = 235000 + (price - 200000000) * 0.0007;
+      else if (price <= 1000000000) f = 445000 + (price - 500000000) * 0.0005;
+      else f = 695000 + (price - 1000000000) * 0.0003;
+      return Math.round(Math.min(f, 1500000) / 1000) * 1000;
+    }
+
+    // 법무사·등기 부대비용 (등록면허세·취득세는 별도 본세로 이미 반영)
+    //  인지세 + 등기신청 수수료 + 국민주택채권 즉시매도 할인부담 + 법무사 보수(+부가세)
+    function registrationCost(price, std, discount, self, asset) {
+      if (!price || price <= 0) return { total: 0, stamp: 0, regFee: 0, bond: 0, bondBuy: 0, rate: 0, scrivener: 0, vat: 0, std: 0 };
+      if (!std || std <= 0) std = Math.round(price * 0.7);
+      const stamp = stampDuty(price);
+      const regFee = 15000;
+      const rate = bondRate(std, asset || 'house');
+      const bondBuy = Math.round(std * rate);
+      const bond = Math.round(bondBuy * (discount || 0));
+      const scrivener = self ? 0 : scrivenerFee(price);
+      const vat = Math.round(scrivener * 0.1);
+      return { total: stamp + regFee + bond + scrivener + vat, stamp, regFee, bond, bondBuy, rate, scrivener, vat, std };
     }
 
     function progressiveTax(base) {
@@ -917,11 +951,15 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         acq = acquisitionTotal(price, homes, regulated, areaOver85, firstHome);
       }
       const broker = nonhouse ? Math.round(price * 0.009 * 1.1) : brokerFee(price, 'sale');
+      const regStd = getN('regStd');
+      const regDiscount = (getNum('regDiscount') || 0) / 100;
+      const selfReg = getCheck('selfReg');
+      const reg = registrationCost(price, regStd, regDiscount, selfReg, nonhouse ? 'land' : 'house');
       const monthly = monthlyPayment(loan, rate, term);
       const totalInterest = monthly > 0 ? monthly * term * 12 - loan : 0;
       const equity = Math.max(0, price - loan - jeonseDeposit);
-      const initialCapital = equity + acq.total + broker;
-      const grandTotal = price + acq.total + broker;
+      const initialCapital = equity + acq.total + broker + reg.total;
+      const grandTotal = price + acq.total + broker + reg.total;
 
       if (resultTitle) resultTitle.textContent = purpose === 'gap'
         ? (nonhouse ? '임대 — 실제 투입 자기자본' : '갭투자 — 실제 투입 자기자본')
@@ -940,6 +978,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         { label: '전세보증금 인수', value: jeonseDeposit, color: '#60a5fa' },
         { label: '취득세 합계', value: acq.total, color: '#f59e0b' },
         { label: '중개수수료', value: broker, color: '#ef4444' },
+        { label: '등기·법무사', value: reg.total, color: '#a855f7' },
       ]);
       renderDetail([
         { label: '자기자본', value: equity, color: '#1e3a8a' },
@@ -950,6 +989,13 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         { label: '농어촌특별세', value: acq.ruralTax, sub: true },
         { label: '지방교육세', value: acq.localEduTax, sub: true },
         { label: '중개수수료(VAT 포함)', value: broker, color: '#ef4444' },
+        { label: '등기·법무사', value: reg.total, color: '#a855f7' },
+        { label: '인지세', value: reg.stamp, sub: true },
+        { label: '등기신청 수수료', value: reg.regFee, sub: true },
+        { label: '국민주택채권 할인부담 (매입률 ' + (reg.rate * 100).toFixed(1) + '% · 할인 ' + (regDiscount * 100).toFixed(1) + '%)', value: reg.bond, sub: true },
+        ...(selfReg
+          ? [{ label: '법무사 보수', value: '셀프 등기 (0원)', sub: true }]
+          : [{ label: '법무사 보수', value: reg.scrivener, sub: true }, { label: '└ 부가세 (10%)', value: reg.vat, sub: true }]),
         { divider: true, label: '총 매수 비용 (대출 포함)', value: grandTotal },
       ]);
       renderDSR(monthly * 12);
