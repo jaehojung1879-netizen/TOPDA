@@ -2213,3 +2213,77 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 .tip:hover::after, .tip:focus::after, .tip.open::after,
 .tip:hover::before, .tip:focus::before, .tip.open::before { opacity: 1; visibility: visible; }
 @media (max-width: 600px) { .tip::after { max-width: 190px; } }
+
+/* ===== 계산기 결과 공유 / 인쇄 툴바 ===== */
+.calc-share {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.calc-share-btn {
+  flex: 1 1 auto;
+  min-width: 120px;
+  padding: 9px 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: #fff;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, transform 0.05s;
+}
+.calc-share-btn:hover { background: var(--accent-soft); border-color: var(--accent); }
+.calc-share-btn:active { transform: translateY(1px); }
+.calc-share-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ===== 토스트 ===== */
+.calc-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(12px);
+  background: #0f172a;
+  color: #fff;
+  padding: 11px 18px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 99999;
+  pointer-events: none;
+}
+.calc-toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+
+/* ===== 계산기 인쇄 / PDF ===== */
+@media print {
+  .scn-tabs, .calc-share, .next-actions, .news-section,
+  .callout-info, .lang-switch, .skip-link { display: none !important; }
+  .calc-layout { display: block !important; }
+  .calc-form, .calc-result {
+    border: 0 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .calc-result { margin-top: 16px; }
+  .chart-wrap { max-height: 320px; }
+  .article-header h1 { font-size: 18pt; }
+}
+
+/* ===== 계산기 최종 검토일 / 출처 노트 (E-E-A-T) ===== */
+.calc-review-note {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+.calc-review-note strong { color: var(--text); font-weight: 600; }

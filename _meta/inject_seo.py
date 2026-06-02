@@ -167,6 +167,7 @@ def process(rel, full):
     # ----- 메타 블록 -----
     lines = ["<!-- seo:meta -->"]
     lines.append('<link rel="canonical" href="%s" />' % canonical)
+    lines.append('<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="%s/feed.xml" />' % BASE)
     lines.append('<meta property="og:type" content="%s" />' % og_type)
     lines.append('<meta property="og:site_name" content="%s" />' % site_name)
     lines.append('<meta property="og:title" content="%s" />' % title_attr)

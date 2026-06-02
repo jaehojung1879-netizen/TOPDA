@@ -659,6 +659,9 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
 
   function init() {
     let currentScn = 'sale';
+    const RATES = window.TOPDA_RATES || {};
+    const DSR_T1 = (RATES.dsr && RATES.dsr.tier1) || 40; // 1금융 한도(%)
+    const DSR_T2 = (RATES.dsr && RATES.dsr.tier2) || 50; // 2금융 한도(%)
     let chart = null;
     const canvas = document.getElementById('costChart');
     const chartEmpty = root.querySelector('[data-chart-empty]');
@@ -894,15 +897,15 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const fillEl = root.querySelector('[data-out="dsrFill"]');
       if (fillEl) {
         fillEl.style.width = Math.min(100, dsr) + '%';
-        if (dsr > 50) fillEl.style.background = '#b91c1c';
-        else if (dsr > 40) fillEl.style.background = '#b45309';
+        if (dsr > DSR_T2) fillEl.style.background = '#b91c1c';
+        else if (dsr > DSR_T1) fillEl.style.background = '#b45309';
         else fillEl.style.background = '#047857';
       }
       let verdict;
       if (income <= 0) verdict = '소득을 입력하면 DSR이 자동 계산됩니다.';
-      else if (dsr > 50) verdict = '2금융 한도(50%)도 초과 — 대출 금액·기간 조정이 필요합니다.';
-      else if (dsr > 40) verdict = '1금융 한도(40%) 초과, 2금융(50%) 내에서 검토 가능합니다.';
-      else if (dsr > 0) verdict = '1금융 한도(40%) 내 — 정상 승인이 가능한 수준입니다.';
+      else if (dsr > DSR_T2) verdict = `2금융 한도(${DSR_T2}%)도 초과 — 대출 금액·기간 조정이 필요합니다.`;
+      else if (dsr > DSR_T1) verdict = `1금융 한도(${DSR_T1}%) 초과, 2금융(${DSR_T2}%) 내에서 검토 가능합니다.`;
+      else if (dsr > 0) verdict = `1금융 한도(${DSR_T1}%) 내 — 정상 승인이 가능한 수준입니다.`;
       else verdict = '대출 정보가 0이라 DSR이 적용되지 않습니다.';
       if (credit > 0 && income > 0) verdict += ` (신용대출 ${fmt.won(credit)} → 연환산 ${fmt.won(creditAnnual)})`;
       setText('dsrVerdict', verdict);
@@ -1124,7 +1127,9 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const propertyTax = propPrice * 0.0025;
       const annualNet = annualRent - separateTax;
       const annualInterest = loan * rate / 100;
-      const threshold = rentType === 'residential' ? 1.25 : 1.5;
+      const threshold = rentType === 'residential'
+        ? ((RATES.rti && RATES.rti.residential) || 1.25)
+        : ((RATES.rti && RATES.rti.commercial) || 1.5);
 
       if (resultTitle) resultTitle.textContent = '연간 임대 수입 (분리과세 후) 및 RTI';
       setText('primaryTotal', fmt.won(annualNet));
@@ -2417,12 +2422,42 @@ function calcInteriorEstimate({ area, grade, items }) {
 })();
 
 
-// ===== 계산기 입력값 자동 복원 (localStorage) + 결과 aria-live 안내 =====
-// HTML 수정 없이 모든 계산기 폼에 적용된다.
-//  - 입력값을 페이지별 키로 저장하고 재방문 시 복원 (개인정보·민감정보 미포함: 클라이언트 로컬에만 보관)
-//  - 결과 총액 영역에 aria-live를 부여해 스크린리더가 변경을 읽도록 함 (WCAG 2.2)
+// ===== 계산기: 입력값 복원(URL·localStorage) + 결과 공유 + 인쇄/PDF + aria-live =====
+// HTML 수정 없이 모든 계산기에 적용된다.
+//  - 우선순위: URL 쿼리파라미터(공유 링크) > localStorage(지난 방문) > 페이지 기본값
+//  - '결과 링크 복사' 버튼: 현재 입력값을 URL 파라미터로 인코딩해 클립보드 복사
+//  - '인쇄 / PDF' 버튼: window.print() (전용 인쇄 CSS로 계산 영역만 깔끔하게 출력)
+//  - 결과 총액 영역에 aria-live 부여 (WCAG 2.2)
+//  - 입력값은 클라이언트(로컬·URL)에만 존재하며 서버로 전송하지 않는다.
 (function () {
   'use strict';
+
+  const lang = (document.documentElement.lang || 'ko').toLowerCase();
+  const isEn = lang.startsWith('en');
+  const T = isEn
+    ? { copy: '🔗 Copy result link', print: '🖨 Print / PDF', copied: 'Link copied', copyFail: 'Copy failed — link shown for manual copy' }
+    : { copy: '🔗 결과 링크 복사', print: '🖨 인쇄 / PDF', copied: '링크가 복사되었습니다', copyFail: '복사 실패 — 링크를 직접 복사하세요' };
+
+  const nameOf = (el) => el.name || el.id;
+  const fieldsIn = (scope) => Array.from(scope.querySelectorAll('input[name], input[id], select[name], select[id]'))
+    .filter((el) => el.type !== 'button' && el.type !== 'submit' && el.type !== 'file');
+  const esc = (s) => (window.CSS && CSS.escape) ? CSS.escape(s) : String(s).replace(/["\\]/g, '\\$&');
+
+  // 결과 영역의 입력 범위(폼) 찾기: 대시보드는 [data-calc] 내부, 일반 계산기는 .calc-layout 형제
+  function scopeFor(resultEl) {
+    return resultEl.closest('[data-calc]') || resultEl.closest('.calc-layout') || document;
+  }
+
+  function applyValue(el, v) {
+    if (el.type === 'checkbox') el.checked = (v === '1' || v === 'true' || v === true);
+    else if (el.type === 'radio') el.checked = (el.value === String(v));
+    else el.value = v;
+  }
+
+  function fire(el) {
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  }
 
   // ---- 결과 영역 aria-live (접근성) ----
   function markLive() {
@@ -2434,40 +2469,52 @@ function calcInteriorEstimate({ area, grade, items }) {
     });
   }
 
-  // ---- 입력값 저장/복원 ----
-  function persistForms() {
+  // ---- 토스트 ----
+  let toastEl = null, toastTimer = null;
+  function toast(msg) {
+    if (!toastEl) {
+      toastEl = document.createElement('div');
+      toastEl.className = 'calc-toast';
+      toastEl.setAttribute('role', 'status');
+      toastEl.setAttribute('aria-live', 'polite');
+      document.body.appendChild(toastEl);
+    }
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2400);
+  }
+
+  // ---- 입력값 저장/복원 + 공유/인쇄 툴바 ----
+  function setup() {
+    const params = new URLSearchParams(location.search);
+
+    // 1) 폼 단위 저장/복원 (URL > localStorage)
     const forms = document.querySelectorAll('.calc-form, [data-calc]');
     forms.forEach((form, idx) => {
       const key = 'calc:' + location.pathname + ':' + idx;
-      const fields = form.querySelectorAll('input[name], input[id], select[name], select[id]');
+      const fields = fieldsIn(form);
       if (!fields.length) return;
 
-      const nameOf = (el) => el.name || el.id;
-
-      // 복원
-      let saved = null;
-      try { saved = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { saved = null; }
-      if (saved && typeof saved === 'object') {
-        const touched = new Set();
-        fields.forEach((el) => {
-          const n = nameOf(el);
-          if (!(n in saved)) return;
-          const v = saved[n];
-          if (el.type === 'checkbox') {
-            el.checked = !!v;
-          } else if (el.type === 'radio') {
-            el.checked = (el.value === v);
-          } else {
-            el.value = v;
-          }
-          touched.add(el);
-        });
-        // 복원값으로 재계산 트리거 (won 포맷터·계산기 리스너 모두 깨움)
-        touched.forEach((el) => {
-          el.dispatchEvent(new Event('input', { bubbles: true }));
-          el.dispatchEvent(new Event('change', { bubbles: true }));
-        });
+      // 대시보드 시나리오 탭 복원(필드 적용 전에 패널 전환)
+      if (params.has('scn')) {
+        const tab = form.querySelector('[data-scn="' + esc(params.get('scn')) + '"]')
+          || document.querySelector('[data-scn="' + esc(params.get('scn')) + '"]');
+        if (tab) tab.click();
       }
+
+      const urlHasAny = fields.some((el) => params.has(nameOf(el)));
+      const touched = new Set();
+      if (urlHasAny) {
+        fields.forEach((el) => { const n = nameOf(el); if (params.has(n)) { applyValue(el, params.get(n)); touched.add(el); } });
+      } else {
+        let saved = null;
+        try { saved = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { saved = null; }
+        if (saved && typeof saved === 'object') {
+          fields.forEach((el) => { const n = nameOf(el); if (n in saved) { applyValue(el, saved[n]); touched.add(el); } });
+        }
+      }
+      touched.forEach(fire);
 
       // 저장 (디바운스)
       let t = null;
@@ -2488,12 +2535,117 @@ function calcInteriorEstimate({ area, grade, items }) {
       form.addEventListener('input', save);
       form.addEventListener('change', save);
     });
+
+    // 2) 결과 영역마다 공유/인쇄 툴바 주입
+    document.querySelectorAll('.calc-result').forEach((result) => {
+      if (result.querySelector('[data-calc-share]')) return;
+      const scope = scopeFor(result);
+      const bar = document.createElement('div');
+      bar.className = 'calc-share';
+      bar.setAttribute('data-calc-share', '');
+      const shareBtn = document.createElement('button');
+      shareBtn.type = 'button'; shareBtn.className = 'calc-share-btn'; shareBtn.textContent = T.copy;
+      const printBtn = document.createElement('button');
+      printBtn.type = 'button'; printBtn.className = 'calc-share-btn'; printBtn.textContent = T.print;
+      bar.appendChild(shareBtn); bar.appendChild(printBtn);
+      result.appendChild(bar);
+
+      shareBtn.addEventListener('click', () => {
+        const url = buildShareUrl(scope);
+        if (window.topdaTrack) window.topdaTrack('share_click', { page: location.pathname });
+        copyToClipboard(url);
+      });
+      printBtn.addEventListener('click', () => {
+        if (window.topdaTrack) window.topdaTrack('print_click', { page: location.pathname });
+        window.print();
+      });
+    });
+
+    injectReviewNote();
+    wireNextStepPrefill();
+  }
+
+  function serializeParams(scope) {
+    const p = new URLSearchParams();
+    fieldsIn(scope).forEach((el) => {
+      const n = nameOf(el);
+      if (!n) return;
+      if (el.type === 'checkbox') p.set(n, el.checked ? '1' : '0');
+      else if (el.type === 'radio') { if (el.checked) p.set(n, el.value); }
+      else if (el.value !== '') p.set(n, el.value);
+    });
+    const scn = document.querySelector('[data-scn].active');
+    if (scn) p.set('scn', scn.dataset.scn);
+    return p;
+  }
+
+  function buildShareUrl(scope) {
+    return location.origin + location.pathname + '?' + serializeParams(scope).toString();
+  }
+
+  // 계산기 간 연동: '다음 단계' 링크에 현재 입력값을 실어 보내 대상 계산기를 프리필한다.
+  // (대상은 #27 URL 복원 로직으로 자기 필드명과 일치하는 값만 적용 — 나머지는 무시)
+  function wireNextStepPrefill() {
+    const scope = document.querySelector('[data-calc]') || document.querySelector('.calc-layout');
+    if (!scope) return;
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a.next-action, a[data-prefill]');
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      const base = href.split('?')[0];
+      if (!/\.html$/.test(base)) return;       // 계산기 페이지 링크만
+      if (href.includes('?')) return;          // 이미 파라미터가 있으면 건드리지 않음
+      if (href.includes('/checklists/')) return;
+      const qs = serializeParams(scope).toString();
+      if (qs) a.setAttribute('href', base + '?' + qs);
+    }, true);
+  }
+
+  // E-E-A-T: 계산기 하단에 '최종 검토일 · 주요 출처' 표기 (rates.js에서 읽음)
+  function injectReviewNote() {
+    const result = document.querySelector('.calc-result');
+    if (!result || result.querySelector('[data-review-note]')) return;
+    const R = window.TOPDA_RATES;
+    if (!R || !R.lastReviewed) return;
+    const slug = (location.pathname.split('/').pop() || '').replace('.html', '');
+    const src = (R.sources && (R.sources[slug] || R.sources['default'])) || '';
+    const note = document.createElement('p');
+    note.className = 'calc-review-note';
+    note.setAttribute('data-review-note', '');
+    const label = isEn ? 'Last reviewed' : '최종 검토일';
+    note.innerHTML = '<strong>' + label + ' ' + R.lastReviewed + '</strong>'
+      + (src ? ' · ' + (isEn ? 'Basis: ' : '기준: ') + src : '');
+    const shareBar = result.querySelector('[data-calc-share]');
+    if (shareBar) result.insertBefore(note, shareBar);
+    else result.appendChild(note);
+  }
+
+  function copyToClipboard(text) {
+    const done = () => toast(T.copied);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text));
+    } else {
+      fallbackCopy(text);
+    }
+  }
+  function fallbackCopy(text) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      toast(T.copied);
+    } catch (e) {
+      toast(T.copyFail);
+      window.prompt(T.copyFail, text);
+    }
   }
 
   function init() {
     markLive();
-    // 각 계산기의 자체 초기화(인라인 스크립트)가 먼저 끝난 뒤 복원하도록 한 틱 양보
-    requestAnimationFrame(() => { try { persistForms(); } catch (e) {} });
+    // 각 계산기의 자체 초기화(인라인 스크립트)가 끝난 뒤 복원하도록 한 틱 양보
+    requestAnimationFrame(() => { try { setup(); } catch (e) {} });
   }
 
   if (document.readyState === 'loading') {
