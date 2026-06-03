@@ -2261,29 +2261,61 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 .calc-toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
 
-/* ===== 계산기 인쇄 / PDF ===== */
+/* ===== 계산기 인쇄 / PDF — 한 장짜리 보고서 ===== */
+/* 화면에서는 숨김. 인쇄 시 JS가 body에 .printing-report를 붙이면 보고서만 출력된다. */
+#print-report { display: none; }
+
 @media print {
-  .scn-tabs, .calc-share, .next-actions, .news-section,
-  .callout-info, .lang-switch, .skip-link { display: none !important; }
-  .calc-layout { display: block !important; }
-  .calc-form, .calc-result {
-    border: 0 !important;
-    box-shadow: none !important;
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-  .calc-result { margin-top: 16px; }
-  .chart-wrap { max-height: 320px; }
-  .article-header h1 { font-size: 18pt; }
+  @page { size: A4; margin: 14mm; }
+  body.printing-report > *:not(#print-report) { display: none !important; }
+  body.printing-report #print-report { display: block !important; }
 }
 
-/* ===== 계산기 최종 검토일 / 출처 노트 (E-E-A-T) ===== */
-.calc-review-note {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--border);
-  font-size: 0.8rem;
-  line-height: 1.5;
-  color: var(--text-muted);
+/* 보고서 레이아웃 (인쇄에서만 보이지만 일반 규칙으로 정의) */
+#print-report {
+  color: #111;
+  font-size: 10.5pt;
+  line-height: 1.45;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
-.calc-review-note strong { color: var(--text); font-weight: 600; }
+#print-report .pr-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 2px solid #1e3a8a; padding-bottom: 6px; margin-bottom: 10px;
+}
+#print-report .pr-brand { font-weight: 800; color: #1e3a8a; font-size: 11pt; }
+#print-report .pr-date { color: #555; font-size: 9pt; }
+#print-report .pr-title { font-size: 16pt; font-weight: 800; margin: 0 0 12px; }
+#print-report .pr-cols { display: flex; gap: 18px; align-items: flex-start; }
+#print-report .pr-block { flex: 1 1 0; min-width: 0; }
+#print-report .pr-block h2 {
+  font-size: 11pt; font-weight: 700; color: #1e3a8a;
+  border-bottom: 1px solid #ddd; padding-bottom: 4px; margin: 0 0 8px;
+}
+#print-report .pr-total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  background: #eff6ff; border: 1px solid #c7d6f5; border-radius: 6px;
+  padding: 8px 10px; margin-bottom: 10px;
+}
+#print-report .pr-total span { font-size: 9.5pt; color: #333; }
+#print-report .pr-total strong { font-size: 14pt; color: #1e3a8a; }
+#print-report .pr-chart { display: block; width: 100%; max-width: 220px; max-height: 150px; margin: 0 auto 10px; object-fit: contain; }
+#print-report .pr-table { width: 100%; border-collapse: collapse; }
+#print-report .pr-table th, #print-report .pr-table td {
+  text-align: left; padding: 3px 4px; border-bottom: 1px solid #eee;
+  vertical-align: top; font-weight: 400;
+}
+#print-report .pr-table th { color: #444; width: 58%; }
+#print-report .pr-table td { text-align: right; font-variant-numeric: tabular-nums; color: #111; }
+#print-report .pr-table tr.sub th { padding-left: 12px; color: #777; font-size: 9.5pt; }
+#print-report .pr-table tr.sub td { color: #555; font-size: 9.5pt; }
+#print-report .pr-meter {
+  margin-top: 8px; padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px;
+}
+#print-report .pr-meter strong { color: #1e3a8a; }
+#print-report .pr-meter span { float: right; font-weight: 700; }
+#print-report .pr-meter-v { font-size: 9pt; color: #555; margin-top: 2px; }
+#print-report .pr-foot {
+  margin-top: 14px; padding-top: 8px; border-top: 1px solid #ddd;
+  font-size: 8pt; color: #777; line-height: 1.4;
+}
