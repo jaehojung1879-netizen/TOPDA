@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>임대업 RTI 계산기 — 톺다</title>
+<meta name="description" content="임대사업자 대출 심사 기준인 RTI(임대업이자상환비율)를 계산합니다. 연 임대수입 ÷ 연 이자비용. 주택 1.25배·비주택 1.5배 기준." />
+<!-- seo:meta -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="canonical" href="https://jaehojung1879-netizen.github.io/TOPDA/calculators/rti-calculator.html" />
+<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://jaehojung1879-netizen.github.io/TOPDA/feed.xml" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="톺다" />
+<meta property="og:title" content="임대업 RTI 계산기 — 톺다" />
+<meta property="og:description" content="임대사업자 대출 심사 기준인 RTI(임대업이자상환비율)를 계산합니다. 연 임대수입 ÷ 연 이자비용. 주택 1.25배·비주택 1.5배 기준." />
+<meta property="og:url" content="https://jaehojung1879-netizen.github.io/TOPDA/calculators/rti-calculator.html" />
+<meta property="og:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
+<meta property="og:locale" content="ko_KR" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="임대업 RTI 계산기 — 톺다" />
+<meta name="twitter:description" content="임대사업자 대출 심사 기준인 RTI(임대업이자상환비율)를 계산합니다. 연 임대수입 ÷ 연 이자비용. 주택 1.25배·비주택 1.5배 기준." />
+<meta name="twitter:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
+<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "홈",
+      "item": "https://jaehojung1879-netizen.github.io/TOPDA/index.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "계산기",
+      "item": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/index.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "임대업 RTI 계산기 — 톺다",
+      "item": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/rti-calculator.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "임대업 RTI 계산기 — 톺다",
+  "url": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/rti-calculator.html",
+  "description": "임대사업자 대출 심사 기준인 RTI(임대업이자상환비율)를 계산합니다. 연 임대수입 ÷ 연 이자비용. 주택 1.25배·비주택 1.5배 기준.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "inLanguage": "ko",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "KRW"
+  },
+  "publisher": {
+    "@id": "https://jaehojung1879-netizen.github.io/TOPDA/#organization"
+  }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a>
+      <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+      <a href="../about.html" data-nav>안내</a>
+      <a href="../board.html" data-nav>게시판</a>
+    </nav>
+    <div class="lang-switch">
+      <a href="rti-calculator.html" class="active">KR</a>
+      <a href="../en/index.html">EN</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 임대업 RTI</div>
+    <h1>임대업 RTI 계산기</h1>
+    <div class="meta">
+      <span>임대사업자 대출 심사 지표 — RTI(임대업이자상환비율) = 연 임대수입 ÷ 연 이자비용</span>
+    </div>
+  </div>
+
+  <div class="calc-layout">
+    <form class="calc-form" id="rti-form" autocomplete="off">
+      <div class="field">
+        <label>물건 유형</label>
+        <div class="radio-group">
+          <label><input type="radio" name="type" value="residential" checked/><span>주택</span></label>
+          <label><input type="radio" name="type" value="commercial"/><span>비주택(상가·오피스텔 등)</span></label>
+        </div>
+        <span class="hint">승인 기준 배수가 달라집니다 — 주택 1.25배, 비주택 1.5배.</span>
+      </div>
+
+      <div class="field">
+        <label for="rti-rent">월 임대료 (월세)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="rti-rent" name="rent" type="text" inputmode="numeric" data-format="won" value="3,000,000"/>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="rti-deposit">임차인 보증금<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="보증금을 운용해 얻는 이자수입을 임대수입에 더하는 은행도 있습니다(간주임대료). 여기서는 보증금 × 정기예금 이자율을 임대수입에 가산해 보수적으로 반영합니다.">?</span></label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="rti-deposit" name="deposit" type="text" inputmode="numeric" data-format="won" value="50,000,000"/>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="rti-loan">임대사업자 대출 금액</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="rti-loan" name="loan" type="text" inputmode="numeric" data-format="won" value="200,000,000"/>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="rti-rate">대출 금리 (연 %)</label>
+        <div class="input-suffix" data-suffix="%">
+          <input id="rti-rate" name="rate" type="number" min="0" max="20" step="0.01" value="5.0"/>
+        </div>
+      </div>
+    </form>
+
+    <div class="calc-result" id="rti-result">
+      <h3>RTI (임대업이자상환비율)</h3>
+      <div class="total" id="rti-total">—</div>
+
+      <div class="dsr-box" style="margin-top:0;">
+        <div class="dsr-box-head">
+          <strong>승인 기준 대비</strong>
+          <span class="dsr-pct" id="rti-ratio">—</span>
+        </div>
+        <div class="dsr-bar"><div class="dsr-bar-fill" id="rti-fill" style="width:0%"></div></div>
+        <div class="dsr-meta">
+          <span>주택 1.25배</span>
+          <span>비주택 1.5배</span>
+        </div>
+        <p class="dsr-verdict" id="rti-verdict">임대수입과 대출 정보를 입력하면 자동 계산됩니다.</p>
+      </div>
+
+      <div class="breakdown">
+        <div class="row"><span class="key">연 임대수입</span><span class="val" id="rti-annual-rent">—</span></div>
+        <div class="row sub"><span class="key">└ 월세 × 12</span><span class="val" id="rti-rent12">—</span></div>
+        <div class="row sub"><span class="key">└ 보증금 간주임대 (예금이자율 가산)</span><span class="val" id="rti-deposit-int">—</span></div>
+        <div class="row"><span class="key">연 이자비용</span><span class="val" id="rti-annual-int">—</span></div>
+        <div class="row"><span class="key">적용 기준 배수</span><span class="val" id="rti-threshold">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <section style="margin-top:48px;">
+    <h2 style="font-size:1.2rem;">RTI란</h2>
+    <div class="def-list">
+      <div class="row"><span class="k">RTI</span><span class="v">임대업이자상환비율 = 연간 임대수입 ÷ 연간 이자비용. 임대사업자(개인·법인) 대출 심사에 쓰입니다.</span></div>
+      <div class="row"><span class="k">승인 기준</span><span class="v">통상 주택 1.25배, 비주택 1.5배 이상이면 일반적인 승인 수준입니다(은행·상품별 차이).</span></div>
+      <div class="row"><span class="k">DSR과의 차이</span><span class="v">개인이 가계대출로 살 때는 DSR(소득 대비), 임대사업자 대출로 살 때는 RTI(임대수입 대비)로 심사합니다.</span></div>
+    </div>
+  </section>
+
+  <div class="callout callout-warn" style="margin-top:24px;">
+    <div class="icon">⚠</div>
+    <div class="body"><strong>참고해 주세요</strong> 여기 값은 일반 기준으로 계산한 예상치예요. 보증금 간주임대 반영 방식·기준 배수는 은행·상품마다 다르니 실제 한도는 취급 금융기관에 확인하세요.</div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="disclaimer">© 톺다. 일반 정보 제공용이며 금융 자문이 아닙니다.</p>
+  </div>
+</footer>
+
+<script src="../assets/rates.js"></script>
+<script src="../assets/app.js"></script>
+<script>
+(function () {
+  const won = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
+  const $ = (id) => document.getElementById(id);
+  const parseWon = (v) => Number(String(v).replace(/[^0-9]/g, '')) || 0;
+  const DEPOSIT_RATE = 0.035; // 보증금 간주임대 가산 이자율(정기예금 근사)
+
+  function recalc() {
+    const type = document.querySelector('input[name="type"]:checked').value;
+    const rent = parseWon($('rti-rent').value);
+    const deposit = parseWon($('rti-deposit').value);
+    const loan = parseWon($('rti-loan').value);
+    const rate = (+$('rti-rate').value || 0) / 100;
+    const R = window.TOPDA_RATES || {};
+    const threshold = type === 'residential'
+      ? ((R.rti && R.rti.residential) || 1.25)
+      : ((R.rti && R.rti.commercial) || 1.5);
+
+    const rent12 = rent * 12;
+    const depositInt = Math.round(deposit * DEPOSIT_RATE);
+    const annualRent = rent12 + depositInt;
+    const annualInterest = Math.round(loan * rate);
+    const rti = annualInterest > 0 ? annualRent / annualInterest : 0;
+
+    $('rti-total').textContent = annualInterest > 0 ? rti.toFixed(2) + '배' : '—';
+    $('rti-ratio').textContent = annualInterest > 0 ? rti.toFixed(2) + '배' : '이자 입력 필요';
+    const fill = $('rti-fill');
+    const pct = Math.min(100, rti / 2 * 100);
+    fill.style.width = pct + '%';
+    if (rti < threshold) fill.style.background = '#b91c1c';
+    else if (rti < threshold + 0.25) fill.style.background = '#b45309';
+    else fill.style.background = '#047857';
+
+    let verdict;
+    if (annualInterest <= 0) verdict = '대출 이자가 0이라 RTI가 적용되지 않습니다.';
+    else if (rti >= threshold + 0.25) verdict = `기준(${threshold}배) 이상 — 임대업 대출 승인이 가능한 수준입니다.`;
+    else if (rti >= threshold) verdict = `기준(${threshold}배) 충족 — 다만 여유가 크지 않습니다.`;
+    else verdict = `기준(${threshold}배) 미달 — 대출 금액 축소 또는 임대수입 보강이 필요합니다.`;
+    $('rti-verdict').textContent = verdict;
+
+    $('rti-annual-rent').textContent = won.format(annualRent) + '원';
+    $('rti-rent12').textContent = won.format(rent12) + '원';
+    $('rti-deposit-int').textContent = won.format(depositInt) + '원';
+    $('rti-annual-int').textContent = won.format(annualInterest) + '원';
+    $('rti-threshold').textContent = threshold + '배 (' + (type === 'residential' ? '주택' : '비주택') + ')';
+  }
+
+  $('rti-form').addEventListener('input', recalc);
+  $('rti-form').addEventListener('change', recalc);
+  recalc();
+})();
+</script>
+</body>
+</html>

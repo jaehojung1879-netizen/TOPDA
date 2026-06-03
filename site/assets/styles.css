@@ -96,16 +96,16 @@ html, body { overflow-x: hidden; }
 }
 .site-header .row {
   display: flex; align-items: center; justify-content: space-between;
-  min-height: 56px; gap: 12px; position: relative;
-  flex-wrap: wrap;
-  padding-top: 8px; padding-bottom: 0;
+  min-height: 56px; gap: 10px; position: relative;
+  flex-wrap: nowrap;
 }
 @media (min-width: 768px) {
-  .site-header .row { min-height: 64px; flex-wrap: nowrap; padding-top: 0; padding-bottom: 0; }
+  .site-header .row { min-height: 64px; }
 }
 .brand {
   font-weight: 800; font-size: 1.2rem; letter-spacing: -0.03em;
   display: inline-flex; align-items: center; gap: 8px; color: var(--text);
+  flex-shrink: 0;
 }
 @media (min-width: 768px) { .brand { font-size: 1.25rem; } }
 .brand-mark {
@@ -118,41 +118,29 @@ html, body { overflow-x: hidden; }
 }
 @media (min-width: 768px) { .brand-mark { width: 28px; height: 28px; } }
 
-/* 모바일/태블릿 세로형: 첫 줄은 [로고·톺다] [언어 토글]만, nav는 다음 줄에 가로 스크롤 strip */
+/* 네비는 항상 [로고·톺다]와 [KR/EN] 사이 한 줄에 컴팩트하게. 좁으면 가로 스크롤. */
 .nav {
   display: flex; align-items: center;
-  gap: 18px;
-  position: static;
-  margin: 6px -20px 0;
-  padding: 6px 20px;
+  flex: 1 1 auto; min-width: 0;
+  gap: 14px;
+  margin: 0; padding: 0; border: 0; background: transparent;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  border-top: 1px solid var(--border);
   white-space: nowrap;
-  width: calc(100% + 40px);
-  order: 3;
   justify-content: flex-start;
 }
 .nav::-webkit-scrollbar { display: none; }
 .nav a {
   font-size: 0.86rem; font-weight: 600; color: var(--text-muted);
-  padding: 6px 4px;
+  padding: 6px 2px;
   transition: color 0.15s; white-space: nowrap;
   flex-shrink: 0;
 }
 .nav a:hover, .nav a.active { color: var(--text); }
 
 @media (min-width: 768px) {
-  .nav {
-    position: absolute; left: 50%; top: 50%; right: auto; bottom: auto;
-    transform: translate(-50%, -50%);
-    margin: 0; padding: 0; gap: 24px;
-    background: transparent; border: 0;
-    overflow: visible;
-    width: auto; order: 0;
-    justify-content: center;
-  }
+  .nav { gap: 24px; justify-content: center; }
   .nav a { font-size: 0.92rem; padding: 8px 0; }
 }
 @media (min-width: 1024px) { .nav { gap: 28px; } }
@@ -164,29 +152,13 @@ html, body { overflow-x: hidden; }
 }
 .nav-cta:hover { background: var(--accent); }
 
-/* 우측 상단 메뉴 아이콘: 정사각형 콤팩트 햄버거 (KR/EN 옆 노출).
-   인라인 SVG 렌더 편차를 피하려고 3줄을 CSS로 직접 그린다. */
-.nav-toggle {
-  display: inline-flex;
-  position: relative;
-  width: 38px; height: 38px; padding: 0;
-  align-items: center; justify-content: center;
-  border-radius: 9px; flex-shrink: 0;
-  color: var(--text);
-}
-.nav-toggle svg { display: none; }
-.nav-toggle::before {
-  content: "";
-  width: 18px; height: 2px; border-radius: 2px;
-  background: currentColor;
-  box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor;
-}
+/* 햄버거·모바일 드롭다운은 더 이상 쓰지 않는다(네비를 항상 인라인 노출). */
+.nav-toggle { display: none !important; }
 
 .mobile-menu {
-  display: none; flex-direction: column; padding: 16px 20px 20px;
-  border-top: 1px solid var(--border); background: #fff;
+  display: none !important;
 }
-.mobile-menu.open { display: flex; }
+.mobile-menu.open { display: none !important; }
 .mobile-menu a { padding: 10px 0; font-size: 1rem; border-bottom: 1px solid var(--border); }
 .mobile-menu a:last-child { border-bottom: 0; }
 
@@ -862,7 +834,27 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
   transform: translateY(-2px); border-color: var(--accent);
   box-shadow: 0 12px 28px -16px rgba(30, 58, 138, 0.25);
 }
-.hub-tool-hl { border-color: var(--accent-soft); background: linear-gradient(180deg, #f8faff 0%, #fff 60%); }
+/* 종합 계산기 — 풀폭 강조 배너 CTA (가장 눈에 띄게) */
+.hub-tool-hl {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  border-color: transparent; color: #fff;
+  padding: 26px; align-items: center;
+  box-shadow: 0 16px 40px -22px rgba(30, 58, 138, 0.6);
+}
+.hub-tool-hl:hover {
+  border-color: transparent; transform: translateY(-2px);
+  box-shadow: 0 22px 50px -22px rgba(30, 58, 138, 0.7);
+}
+.hub-tool-hl .hub-tool-icon { background: rgba(255,255,255,0.18); color: #fff; width: 48px; height: 48px; }
+.hub-tool-hl .hub-tool-icon svg { width: 26px; height: 26px; }
+.hub-tool-hl .hub-tool-body h3 { color: #fff; font-size: 1.3rem; }
+.hub-tool-hl .hub-tool-body p { color: rgba(255,255,255,0.9); font-size: 0.95rem; }
+.hub-tool-hl .hub-tool-link {
+  background: #fff; color: #1e3a8a; padding: 9px 18px;
+  border-radius: 999px; font-weight: 700;
+}
+.hub-tool-hl .badge-accent { background: rgba(255,255,255,0.22); color: #fff; }
 .hub-tool-icon {
   width: 38px; height: 38px; border-radius: 11px;
   background: var(--accent-soft); color: var(--accent);
@@ -1967,10 +1959,8 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   display: inline-flex; align-items: center;
   border: 1px solid var(--border); border-radius: 999px;
   padding: 1px; background: var(--surface);
-  margin-left: auto;
+  flex-shrink: 0;
 }
-.site-header .nav-toggle { margin-left: 8px; padding: 0; }
-@media (min-width: 768px) { .site-header .nav-toggle { margin-left: 0; } }
 .lang-switch a {
   font-size: 0.7rem; font-weight: 700; color: var(--text-muted);
   padding: 3px 8px; border-radius: 999px;
@@ -2318,4 +2308,45 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 #print-report .pr-foot {
   margin-top: 14px; padding-top: 8px; border-top: 1px solid #ddd;
   font-size: 8pt; color: #777; line-height: 1.4;
+}
+
+/* ===== 기타 대출 다중 행 ===== */
+.other-loan-row {
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px; margin-bottom: 10px; background: #fff;
+}
+.other-loan-head { display: flex; gap: 8px; align-items: center; }
+.other-loan-head .ol-type { flex: 1 1 auto; min-width: 0; }
+.ol-remove {
+  flex-shrink: 0; width: 32px; height: 32px;
+  border: 1px solid var(--border-strong); border-radius: 8px;
+  background: #fff; color: var(--text-muted); cursor: pointer; line-height: 1;
+}
+.ol-remove:hover { border-color: #b91c1c; color: #b91c1c; }
+.other-loan-row .field-row { margin-top: 10px; }
+.other-loan-row .scn-note { margin-top: 8px; }
+.btn-add-loan {
+  display: inline-block; margin-top: 2px; padding: 8px 14px;
+  font-size: 0.86rem; font-weight: 600; color: var(--accent);
+  background: var(--accent-soft); border: 1px dashed var(--accent);
+  border-radius: 8px; cursor: pointer;
+}
+.btn-add-loan:hover { background: #e0ebff; }
+
+/* ===== 세로형(모바일·태블릿): 결과(총액·그래프)를 상단에 고정해 입력과 동시에 보이게 ===== */
+@media (max-width: 899px) {
+  .calc-layout { display: flex; flex-direction: column; gap: 14px; }
+  .calc-result {
+    order: -1;
+    position: sticky; top: 56px;
+    max-height: 54vh; overflow-y: auto;
+    padding: 16px 18px;
+    z-index: 5;
+    box-shadow: 0 8px 20px -12px rgba(0,0,0,0.28);
+    -webkit-overflow-scrolling: touch;
+  }
+  .calc-result .total { font-size: 1.7rem; margin-bottom: 14px; }
+  .calc-result .breakdown { padding-top: 14px; }
+  .chart-wrap { max-height: 210px; }
+  .calc-result .calc-share { position: sticky; bottom: 0; background: #fff; }
 }

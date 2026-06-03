@@ -166,6 +166,7 @@ def process(rel, full):
 
     # ----- 메타 블록 -----
     lines = ["<!-- seo:meta -->"]
+    lines.append('<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />')
     lines.append('<link rel="canonical" href="%s" />' % canonical)
     lines.append('<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="%s/feed.xml" />' % BASE)
     lines.append('<meta property="og:type" content="%s" />' % og_type)
