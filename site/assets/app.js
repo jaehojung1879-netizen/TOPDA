@@ -2674,11 +2674,26 @@ function calcInteriorEstimate({ area, grade, items }) {
     // (#print-report는 화면에서 항상 숨김이라 미리 만들어도 화면엔 영향이 없다)
     triggerPrint = function () {
       build();
-      window.addEventListener('afterprint', teardown, { once: true });
-      // 모바일은 afterprint가 안 뜰 수 있어 복귀 시점(focus)에 정리 + 안전장치 타이머
-      setTimeout(function () { window.addEventListener('focus', teardown, { once: true }); }, 500);
-      setTimeout(teardown, 30000);
-      try { window.print(); } catch (e) { teardown(); }
+      const go = function () {
+        window.addEventListener('afterprint', teardown, { once: true });
+        // 모바일은 afterprint가 안 뜰 수 있어 복귀 시점(focus)에 정리 + 안전장치 타이머
+        setTimeout(function () { window.addEventListener('focus', teardown, { once: true }); }, 500);
+        setTimeout(teardown, 30000);
+        try { window.print(); } catch (e) { teardown(); }
+      };
+      // PC에서 보고서의 도넛(data URL 이미지)이 그려지기 전에 동기 인쇄가 시작돼
+      // 차트가 비던 문제 → 이미지가 디코딩된 뒤에 인쇄한다.
+      const img = reportEl && reportEl.querySelector('img.pr-chart');
+      if (img) {
+        let started = false;
+        const once = function () { if (started) return; started = true; go(); };
+        if (img.decode) { img.decode().then(once, once); }
+        else if (img.complete) { once(); }
+        else { img.addEventListener('load', once); img.addEventListener('error', once); }
+        setTimeout(once, 700); // 안전장치
+      } else {
+        go();
+      }
     };
   }
 
