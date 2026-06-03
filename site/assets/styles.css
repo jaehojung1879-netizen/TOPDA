@@ -447,6 +447,21 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .calc-result .row .val { font-weight: 600; font-variant-numeric: tabular-nums; }
 .calc-result .row.sub { padding-left: 16px; font-size: 0.88rem; color: var(--text-muted); }
 .calc-result .row.sub .val { font-weight: 500; color: var(--text-muted); }
+/* 적용 시나리오 배지 (결과 상단) */
+.result-scenario {
+  display: inline-block; margin-bottom: 12px; padding: 5px 12px;
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px;
+  font-size: 0.82rem; font-weight: 600; color: var(--accent);
+  word-break: keep-all; line-height: 1.35;
+}
+/* 세율 요약 표에서 현재 적용 구간 하이라이트 */
+table.data tr.is-active > td, table.data tr.is-active > th {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  font-weight: 700;
+}
+table.data tr.is-active > td:first-child, table.data tr.is-active > th:first-child {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
 
 /* ===== Footer ===== */
 .site-footer {
