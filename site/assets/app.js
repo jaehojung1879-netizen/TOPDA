@@ -3,7 +3,11 @@
   const toggle = document.querySelector('[data-nav-toggle]');
   const menu = document.querySelector('[data-mobile-menu]');
   if (toggle && menu) {
-    toggle.addEventListener('click', () => menu.classList.toggle('open'));
+    toggle.setAttribute('aria-expanded', menu.classList.contains('open') ? 'true' : 'false');
+    toggle.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
   }
 
   // ===== Auto-inject language switch into header (if not already present) =====
