@@ -95,7 +95,7 @@
   <div class="article-header">
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 종합 대시보드</div>
     <h1>부동산 종합 계산 대시보드</h1>
-    <p class="lead">매수·매도·전세·임대·상속·증여 6가지 거래를 한 화면에서 비교합니다. 시나리오마다 적용되는 세법·대출 규제(DSR/RTI)만 자동으로 노출합니다.</p>
+    <p class="lead">부동산 거래에 따른 계산을 한 번에. 매수·매도·전세·상속·증여까지 필요한 세금·대출·부대비용을 한 화면에서 계산합니다.</p>
   </div>
 
   <!-- 시나리오 탭 -->
@@ -103,7 +103,6 @@
     <button class="scn-tab active" data-scn="sale" role="tab" aria-selected="true">매수 (취득)</button>
     <button class="scn-tab" data-scn="transfer" role="tab" aria-selected="false">매도 (양도)</button>
     <button class="scn-tab" data-scn="lease" role="tab" aria-selected="false">전세 임차</button>
-    <button class="scn-tab" data-scn="rent" role="tab" aria-selected="false">임대 (RTI)</button>
     <button class="scn-tab" data-scn="inherit" role="tab" aria-selected="false">상속</button>
     <button class="scn-tab" data-scn="gift" role="tab" aria-selected="false">증여</button>
   </div>
@@ -141,6 +140,8 @@
       <!-- ===== 매수 ===== -->
       <div class="scn-panel" data-scn-panel="sale">
         <h3 class="scn-section-title">매수 정보</h3>
+
+        <p class="scn-note" data-nonhouse-note style="display:none;">비주택(상가·오피스텔·토지)도 등기 시 <strong>국민주택채권 매입 의무</strong>가 있고 취득세는 <strong>4.6%</strong>가 적용됩니다. 대출은 가계대출이면 <strong>DSR</strong>(비주택담보 원금 산정만기 8년), 임대 목적의 임대사업자 대출이면 <strong>RTI</strong>로 심사됩니다.</p>
 
         <div class="field">
           <label for="td-price">매매가</label>
@@ -196,6 +197,15 @@
           <div class="input-suffix" data-suffix="원">
             <input id="td-jeonse" name="jeonseDeposit" type="text" inputmode="numeric" data-format="won" value="500,000,000" />
           </div>
+        </div>
+
+        <!-- 비주택 임대(RTI): 비주택 + 임대 목적일 때만 노출 -->
+        <div class="field" data-rti-input style="display:none;">
+          <label for="td-saleRent">예상 월 임대료<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="상가·오피스텔 등 비주택을 임대 목적으로 매수할 때, 임대사업자 대출은 가계 DSR 대신 RTI(임대업이자상환비율)로 심사됩니다. RTI = 연 임대수입 ÷ 연 이자비용. 비주택은 1.5배 이상이면 일반적 승인 수준입니다.">?</span></label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-saleRent" name="saleRent" type="text" inputmode="numeric" data-format="won" value="3,000,000" />
+          </div>
+          <span class="hint">임대사업자 대출은 DSR이 아니라 RTI로 심사됩니다. 위 ‘대출 금액·금리’를 기준으로 RTI를 함께 계산합니다.</span>
         </div>
 
         <h3 class="scn-section-title">등기·법무사</h3>
@@ -288,52 +298,6 @@
         <p class="scn-note">전세자금대출(HUG·HF·SGI 보증부)은 가계대출 DSR 산정 대상에서 제외됩니다(금감원 가계대출 관리방안). 다만 일부 ‘전세대출 + 신용보강’ 상품은 신용대출 한도에 영향을 주므로 은행에 확인 필요.</p>
       </div>
 
-      <!-- ===== 임대(임대 수입 + RTI) ===== -->
-      <div class="scn-panel" data-scn-panel="rent" hidden>
-        <h3 class="scn-section-title">임대 수입</h3>
-        <div class="field">
-          <label for="td-monthlyRent">월세 (월 수령액)</label>
-          <div class="input-suffix" data-suffix="원">
-            <input id="td-monthlyRent" name="monthlyRent" type="text" inputmode="numeric" data-format="won" value="1,000,000" />
-          </div>
-        </div>
-        <div class="field">
-          <label for="td-rentDeposit">임차인 보증금</label>
-          <div class="input-suffix" data-suffix="원">
-            <input id="td-rentDeposit" name="rentDeposit" type="text" inputmode="numeric" data-format="won" value="50,000,000" />
-          </div>
-        </div>
-        <div class="field">
-          <label for="td-propPrice">주택 공시가격</label>
-          <div class="input-suffix" data-suffix="원">
-            <input id="td-propPrice" name="propPrice" type="text" inputmode="numeric" data-format="won" value="600,000,000" />
-          </div>
-          <span class="hint">재산세·종부세 산정용. 시세의 60~70% 수준.</span>
-        </div>
-
-        <h3 class="scn-section-title">임대사업자 대출 (RTI)</h3>
-        <div class="field">
-          <label for="td-rentLoan">임대 사업자 대출 (검토 대상)</label>
-          <div class="input-suffix" data-suffix="원">
-            <input id="td-rentLoan" name="rentLoan" type="text" inputmode="numeric" data-format="won" value="200,000,000" />
-          </div>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="td-rentLoanRate">금리 (연 %)</label>
-            <input id="td-rentLoanRate" name="rentLoanRate" type="number" min="1" max="15" step="0.01" value="5.0" />
-          </div>
-          <div class="field">
-            <label>물건 유형</label>
-            <div class="radio-group">
-              <label><input type="radio" name="rentType" value="residential" checked/><span>주택</span></label>
-              <label><input type="radio" name="rentType" value="commercial"/><span>비주택</span></label>
-            </div>
-          </div>
-        </div>
-        <p class="scn-note">RTI(임대업이자상환비율) = 연간 임대수입 ÷ 연간 이자비용. 주택 1.25배, 비주택 1.5배 이상이 일반적 승인 기준 (금감원 임대업 이자상환비율 도입 안내).</p>
-      </div>
-
       <!-- ===== 상속 ===== -->
       <div class="scn-panel" data-scn-panel="inherit" hidden>
         <h3 class="scn-section-title">상속 정보</h3>
@@ -412,38 +376,11 @@
           <span class="hint">DSR 산정에서 신용대출은 잔액 ÷ 5년으로 연환산됩니다.</span>
         </div>
         <div class="field">
-          <label for="td-otherType">기타 대출</label>
-          <select id="td-otherType" name="otherLoanType">
-            <option value="none">없음</option>
-            <option value="mortgage">주택담보대출 (분할상환·타 물건)</option>
-            <option value="mortgageBullet">주택담보대출 (만기일시·거치)</option>
-            <option value="nonhouse">비주택담보대출 (상가·오피스텔·토지)</option>
-            <option value="jeonse">전세자금대출</option>
-            <option value="deposit">예적금·보험약관 담보대출</option>
-            <option value="stock">유가증권·기타담보대출</option>
-            <option value="card">카드론·현금서비스</option>
-            <option value="auto">자동차 할부·리스</option>
-            <option value="minus">마이너스통장 (한도대출)</option>
-          </select>
-          <span class="hint">추가 신용대출은 위 ‘신용대출 잔액’에 합산하세요. 그 외 대출은 종류를 고르면 금액·만기 입력란이 나타나며, 종류별 DSR 원금 산정 방식이 자동 적용됩니다.</span>
+          <label>기타 대출 (DSR 합산)</label>
+          <div data-other-loans></div>
+          <button type="button" class="btn-add-loan" data-add-loan>＋ 기타 대출 추가</button>
+          <span class="hint">추가 신용대출은 위 ‘신용대출 잔액’에 합산하세요. 그 외 대출은 종류를 고르면 금액·만기 입력란과 DSR 반영 방식이 바로 나타납니다. 대출이 여러 건이면 ‘추가’로 늘릴 수 있습니다.</span>
         </div>
-        <div class="field-row" data-other-detail style="display:none;">
-          <div class="field">
-            <label for="td-otherAmount">금액 (잔액·한도)</label>
-            <div class="input-suffix" data-suffix="원">
-              <input id="td-otherAmount" name="otherLoanAmount" type="text" inputmode="numeric" data-format="won" value="0" />
-            </div>
-          </div>
-          <div class="field">
-            <label for="td-otherRate">금리 (연 %)</label>
-            <input id="td-otherRate" name="otherLoanRate" type="number" min="0" max="20" step="0.1" value="6" />
-          </div>
-        </div>
-        <div class="field" data-other-term style="display:none;">
-          <label for="td-otherTerm">남은 만기 (년)</label>
-          <input id="td-otherTerm" name="otherLoanTerm" type="number" min="1" max="40" step="1" value="3" />
-        </div>
-        <p class="scn-note" data-out="otherLoanNote" style="display:none;"></p>
       </div>
     </div>
 
@@ -583,7 +520,7 @@
   <div class="callout callout-warn" style="margin-top: 32px;">
     <div class="icon">⚠</div>
     <div class="body">
-      <strong>면책</strong> 본 대시보드는 일반 추정치를 제공하는 참고 도구입니다. 실 세액·대출 한도는 감정평가·과세관청 판단·은행 심사·개인별 공제 적용 여부에 따라 차이가 날 수 있으며, 구체적인 의사결정은 세무사·법무사·금융기관과 상의해 주세요.
+      <strong>참고해 주세요</strong> 여기 나오는 금액은 입력값으로 계산한 예상치예요. 실제 세금과 대출 한도는 공시가격·과세관청 판단·은행 심사·개인 공제에 따라 달라질 수 있으니, 계약 전에 세무사·법무사·은행에서 한 번 더 확인하시는 걸 권합니다.
     </div>
   </div>
 </main>

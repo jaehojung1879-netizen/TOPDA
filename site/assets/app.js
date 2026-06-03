@@ -858,43 +858,98 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       });
     }
 
-    function otherLoanService() {
-      var type = (root.querySelector('[name="otherLoanType"]') || {}).value || 'none';
-      var amount = getN('otherLoanAmount');
-      var rate = getNum('otherLoanRate') / 100;
-      var term = Math.max(1, getNum('otherLoanTerm'));
-      var detail = root.querySelector('[data-other-detail]');
-      var termBox = root.querySelector('[data-other-term]');
-      var note = root.querySelector('[data-out="otherLoanNote"]');
-      var show = type !== 'none';
-      if (detail) detail.style.display = show ? '' : 'none';
-      // 사용자 입력 만기가 필요한 종류(실제 약정/잔존만기 사용). 그 외는 금감원 고정 연수 적용.
-      var needsTerm = (type === 'mortgage' || type === 'mortgageBullet' || type === 'card' || type === 'auto');
-      if (termBox) termBox.style.display = (show && needsTerm) ? '' : 'none';
-      if (!show || amount <= 0) { if (note) note.style.display = 'none'; return 0; }
-      // 금감원 DSR 원금 산정 방식(대출 종류별 산정만기)
-      var principal = 0, interest = amount * rate, desc = '';
+    // ── 기타 대출(여러 건) — 금감원 DSR 원금 산정 방식 ──
+    var OTHER_TYPES = [
+      ['none', '없음'],
+      ['mortgage', '주택담보대출 (분할상환·타 물건)'],
+      ['mortgageBullet', '주택담보대출 (만기일시·거치)'],
+      ['nonhouse', '비주택담보대출 (상가·오피스텔·토지)'],
+      ['jeonse', '전세자금대출'],
+      ['deposit', '예적금·보험약관 담보대출'],
+      ['stock', '유가증권·기타담보대출'],
+      ['card', '카드론·현금서비스'],
+      ['auto', '자동차 할부·리스'],
+      ['minus', '마이너스통장 (한도대출)'],
+    ];
+    // 종류 → [원금산정함수(amount,term), 설명, 만기입력필요]
+    function otherLoanSpec(type) {
       switch (type) {
-        case 'mortgage': principal = amount / term; desc = '주택담보대출(분할상환) → 원금(잔액÷잔존만기 ' + term + '년) + 이자를 DSR에 반영'; break;
-        case 'mortgageBullet': principal = amount / term; desc = '주택담보대출(만기일시·거치) → 원금(대출액÷대출기간 ' + term + '년) + 이자를 DSR에 반영'; break;
-        case 'nonhouse': principal = amount / 8; desc = '비주택담보대출 → 원금(대출액÷8년) + 이자를 DSR에 반영 (금감원 산정만기 8년)'; break;
-        case 'jeonse': principal = 0; desc = '전세자금대출 → 원금 제외, 이자만 반영 (보증부 전세대출은 DSR 산정에서 제외될 수 있음)'; break;
-        case 'deposit': principal = 0; desc = '예적금·보험약관 담보대출 → 원금 제외, 이자만 반영 (담보가치 확실)'; break;
-        case 'stock': principal = amount / 8; desc = '유가증권·기타담보대출 → 원금(대출액÷8년) + 이자를 DSR에 반영 (금감원 산정만기 8년)'; break;
-        case 'card': principal = amount / term; desc = '카드론·현금서비스 → 원금(잔액÷약정 ' + term + '년) + 이자를 DSR에 반영'; break;
-        case 'auto': principal = amount / term; desc = '자동차 할부·리스 → 원금(잔액÷약정 ' + term + '년) + 이자를 DSR에 반영'; break;
-        case 'minus': principal = amount / 5; desc = '마이너스통장(한도대출) → 원금(한도÷5년) + 이자를 DSR에 반영'; break;
+        case 'mortgage': return [function (a, t) { return a / t; }, '주택담보대출(분할상환) → 원금(잔액÷잔존만기 N년) + 이자', true];
+        case 'mortgageBullet': return [function (a, t) { return a / t; }, '주택담보대출(만기일시·거치) → 원금(대출액÷대출기간 N년) + 이자', true];
+        case 'nonhouse': return [function (a) { return a / 8; }, '비주택담보대출 → 원금(대출액÷8년) + 이자 (금감원 산정만기 8년)', false];
+        case 'jeonse': return [function () { return 0; }, '전세자금대출 → 이자만 반영 (보증부는 DSR 산정 제외 가능)', false];
+        case 'deposit': return [function () { return 0; }, '예적금·보험약관 담보대출 → 이자만 반영 (원금 제외)', false];
+        case 'stock': return [function (a) { return a / 8; }, '유가증권·기타담보대출 → 원금(대출액÷8년) + 이자 (산정만기 8년)', false];
+        case 'card': return [function (a, t) { return a / t; }, '카드론·현금서비스 → 원금(잔액÷약정 N년) + 이자', true];
+        case 'auto': return [function (a, t) { return a / t; }, '자동차 할부·리스 → 원금(잔액÷약정 N년) + 이자', true];
+        case 'minus': return [function (a) { return a / 5; }, '마이너스통장(한도대출) → 원금(한도÷5년) + 이자', false];
+        default: return [function () { return 0; }, '', false];
       }
+    }
+
+    function updateOtherLoanRow(row) {
+      var type = row.querySelector('.ol-type').value;
+      var spec = otherLoanSpec(type);
+      var show = type !== 'none';
+      var amount = fmt.parseWon(row.querySelector('.ol-amount').value);
+      var rate = (Number(row.querySelector('.ol-rate').value) || 0) / 100;
+      var term = Math.max(1, Number(row.querySelector('.ol-term').value) || 1);
+      row.querySelector('[data-row-detail]').style.display = show ? '' : 'none';
+      row.querySelector('[data-row-term]').style.display = (show && spec[2]) ? '' : 'none';
+      var note = row.querySelector('[data-row-note]');
+      if (!show) { note.style.display = 'none'; return 0; }
+      // 종류를 고르는 즉시 설명 노출(금액 0이어도)
+      var principal = spec[0](amount, term), interest = amount * rate;
       var annual = principal + interest;
-      if (note) { note.style.display = ''; note.innerHTML = desc + '<br/>이 대출의 DSR 반영액 ≈ <strong>' + fmt.won(Math.round(annual)) + ' / 년</strong>'; }
+      note.style.display = '';
+      note.innerHTML = spec[1].replace('N', term)
+        + (amount > 0 ? '<br/>이 대출의 DSR 반영액 ≈ <strong>' + fmt.won(Math.round(annual)) + ' / 년</strong>' : '');
       return annual;
+    }
+
+    function otherLoansTotal() {
+      var sum = 0;
+      root.querySelectorAll('.other-loan-row').forEach(function (row) { sum += updateOtherLoanRow(row); });
+      return sum;
+    }
+
+    function addOtherLoanRow() {
+      var box = root.querySelector('[data-other-loans]');
+      if (!box) return;
+      var row = document.createElement('div');
+      row.className = 'other-loan-row';
+      var opts = OTHER_TYPES.map(function (o) { return '<option value="' + o[0] + '">' + o[1] + '</option>'; }).join('');
+      row.innerHTML =
+        '<div class="other-loan-head">'
+        + '<select class="ol-type">' + opts + '</select>'
+        + '<button type="button" class="ol-remove" aria-label="삭제">✕</button>'
+        + '</div>'
+        + '<div class="field-row" data-row-detail style="display:none;">'
+        + '  <div class="field"><label>금액 (잔액·한도)</label><div class="input-suffix" data-suffix="원"><input class="ol-amount" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>'
+        + '  <div class="field"><label>금리 (연 %)</label><input class="ol-rate" type="number" min="0" max="20" step="0.1" value="6" /></div>'
+        + '</div>'
+        + '<div class="field" data-row-term style="display:none;"><label>남은 만기 (년)</label><input class="ol-term" type="number" min="1" max="40" step="1" value="3" /></div>'
+        + '<p class="scn-note" data-row-note style="display:none;"></p>';
+      box.appendChild(row);
+      row.querySelectorAll('input, select').forEach(function (el) {
+        el.addEventListener('input', recalc);
+        el.addEventListener('change', recalc);
+      });
+      row.querySelector('.ol-remove').addEventListener('click', function () { row.remove(); recalc(); });
+      return row;
+    }
+
+    function initOtherLoans() {
+      addOtherLoanRow(); // 기본 1행
+      var addBtn = root.querySelector('[data-add-loan]');
+      if (addBtn) addBtn.addEventListener('click', function () { addOtherLoanRow(); recalc(); });
     }
 
     function renderDSR(annualPmt) {
       const income = getN('annualIncome');
       const credit = getN('creditDebt');
       const creditAnnual = credit / 5;
-      const other = otherLoanService();
+      const other = otherLoansTotal();
       const totalAnnualPmt = annualPmt + creditAnnual + other;
       const dsr = income > 0 ? totalAnnualPmt / income * 100 : 0;
       setText('dsrPct', income > 0 ? dsr.toFixed(1) + '%' : '소득 입력 필요');
@@ -949,6 +1004,10 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       if (gapField) gapField.style.display = purpose === 'gap' ? '' : 'none';
 
       const nonhouse = (getRadio('assetType') || 'house') === 'nonhouse';
+      // 비주택을 임대 목적으로 매수 → 임대사업자 대출은 DSR 대신 RTI로 심사
+      const isLeaseBiz = nonhouse && purpose === 'gap';
+      const rtiField = root.querySelector('[data-rti-input]');
+      if (rtiField) rtiField.style.display = isLeaseBiz ? '' : 'none';
       let acq;
       if (nonhouse) {
         // 비주택(상가·오피스텔(업무용)·토지 등): 취득세 4.0% + 농특세 0.2% + 지방교육세 0.4% = 4.6%
@@ -1005,7 +1064,19 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
           : [{ label: '법무사 보수', value: reg.scrivener, sub: true }, { label: '└ 부가세 (10%)', value: reg.vat, sub: true }]),
         { divider: true, label: '총 매수 비용 (대출 포함)', value: grandTotal },
       ]);
-      renderDSR(monthly * 12);
+
+      if (isLeaseBiz) {
+        // 임대사업자 대출 → RTI
+        const annualRent = getN('saleRent') * 12;
+        const annualInterest = loan * (rate / 100);
+        if (dsrBox) dsrBox.hidden = true;
+        if (rtiBox) rtiBox.hidden = false;
+        renderRTI(annualRent, annualInterest, (RATES.rti && RATES.rti.commercial) || 1.5);
+      } else {
+        if (rtiBox) rtiBox.hidden = true;
+        if (dsrBox) dsrBox.hidden = false;
+        renderDSR(monthly * 12);
+      }
     }
 
     function calcTransfer() {
@@ -1111,58 +1182,6 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       ]);
     }
 
-    function calcRent() {
-      const monthlyRent = getN('monthlyRent');
-      const deposit = getN('rentDeposit');
-      const propPrice = getN('propPrice');
-      const homes = Number(getRadio('homes') || 1);
-      const loan = getN('rentLoan');
-      const rate = getNum('rentLoanRate');
-      const rentType = getRadio('rentType') || 'residential';
-
-      let imputedRent = 0;
-      if (homes >= 3 && deposit > 300000000) imputedRent = (deposit - 300000000) * 0.029;
-      const annualRent = monthlyRent * 12;
-      const taxableRent = annualRent + imputedRent;
-      const separateTax = taxableRent * 0.14;
-      const necessary = taxableRent * 0.5;
-      const taxBase = Math.max(0, taxableRent - necessary);
-      const compositeTax = progressiveTax(taxBase);
-      const propertyTax = propPrice * 0.0025;
-      const annualNet = annualRent - separateTax;
-      const annualInterest = loan * rate / 100;
-      const threshold = rentType === 'residential'
-        ? ((RATES.rti && RATES.rti.residential) || 1.25)
-        : ((RATES.rti && RATES.rti.commercial) || 1.5);
-
-      if (resultTitle) resultTitle.textContent = '연간 임대 수입 (분리과세 후) 및 RTI';
-      setText('primaryTotal', fmt.won(annualNet));
-      setLabel('data-quick-label1', '연 임대 수입');
-      setText('quick1', fmt.won(annualRent));
-      setLabel('data-quick-label2', '연 이자 비용 (임대 대출)');
-      setText('quick2', fmt.won(annualInterest));
-      setLabel('data-quick-label3', '예상 재산세');
-      setText('quick3', fmt.won(propertyTax));
-
-      renderChart([
-        { label: '월세 수입 (연)', value: annualRent, color: '#1e3a8a' },
-        { label: '간주임대료 (3주택+)', value: imputedRent, color: '#3b82f6' },
-        { label: '분리과세 14%', value: separateTax, color: '#ef4444' },
-        { label: '재산세', value: propertyTax, color: '#f59e0b' },
-        { label: '대출 이자', value: annualInterest, color: '#a855f7' },
-      ]);
-      renderDetail([
-        { label: '월세 × 12', value: annualRent, color: '#1e3a8a' },
-        { label: '간주임대료 (3주택+, 보증금 3억 초과분 × 2.9%)', value: imputedRent, sub: true },
-        { label: '분리과세 (14%, 임대수입 2천만 이하 가능)', value: separateTax, color: '#ef4444' },
-        { label: '종합과세 추정 (필요경비 50% 가정)', value: compositeTax, sub: true },
-        { label: '재산세 (공시가격 × 0.25% 추정)', value: propertyTax, color: '#f59e0b' },
-        { label: '대출 이자 (연)', value: annualInterest, color: '#a855f7' },
-        { divider: true, label: '연간 수입 (분리과세 후)', value: annualNet },
-      ]);
-      renderRTI(annualRent, annualInterest, threshold);
-    }
-
     function calcInherit() {
       const propValue = getN('inheritValue');
       const other = getN('otherInherit');
@@ -1258,7 +1277,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         el.style.display = arr.includes(name) ? '' : 'none';
       });
       if (dsrBox) dsrBox.hidden = (name !== 'sale');
-      if (rtiBox) rtiBox.hidden = (name !== 'rent');
+      if (rtiBox) rtiBox.hidden = true; // 매수 시나리오에서 calcSale이 비주택 임대일 때만 노출
       recalc();
     }
     document.querySelectorAll('[data-scn]').forEach((t) => t.addEventListener('click', () => switchScn(t.dataset.scn)));
@@ -1277,6 +1296,8 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       setTxt('[data-purpose-own]', nonhouse ? '직접 사용' : '실거주');
       setTxt('[data-purpose-gap]', nonhouse ? '임대 (임차인)' : '갭투자');
       setTxt('[data-jeonse-label]', nonhouse ? '예상 임대 보증금 (인수)' : '예상 전세 보증금 인수');
+      const nhNote = root.querySelector('[data-nonhouse-note]');
+      if (nhNote) nhNote.style.display = nonhouse ? '' : 'none';
     }
 
     function recalc() {
@@ -1284,7 +1305,6 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       if (currentScn === 'sale') calcSale();
       else if (currentScn === 'transfer') calcTransfer();
       else if (currentScn === 'lease') calcLease();
-      else if (currentScn === 'rent') calcRent();
       else if (currentScn === 'inherit') calcInherit();
       else if (currentScn === 'gift') calcGift();
     }
@@ -1293,6 +1313,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       el.addEventListener('input', recalc);
       el.addEventListener('change', recalc);
     });
+    initOtherLoans();
     switchScn('sale');
   }
 })();
@@ -2696,11 +2717,18 @@ function calcInteriorEstimate({ area, grade, items }) {
     const today = new Date();
     const ymd = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
 
-    // 차트 이미지
+    // 차트 이미지 — Chart.js 인스턴스의 toBase64Image()를 우선 사용(빈 캡처 방지),
+    // 없으면 canvas.toDataURL()로 폴백. (인쇄 시 도넛이 누락되던 문제 해결)
     let chartImg = '';
     const canvas = scope.querySelector('canvas') || document.querySelector('.calc-result canvas');
-    if (canvas && canvas.width > 0) {
-      try { chartImg = '<img class="pr-chart" alt="구성 차트" src="' + canvas.toDataURL('image/png') + '" />'; } catch (e) {}
+    if (canvas) {
+      let dataUrl = '';
+      try {
+        const inst = (window.Chart && Chart.getChart) ? Chart.getChart(canvas) : null;
+        if (inst && inst.toBase64Image) dataUrl = inst.toBase64Image('image/png', 1);
+        else if (canvas.width > 0) dataUrl = canvas.toDataURL('image/png');
+      } catch (e) { dataUrl = ''; }
+      if (dataUrl) chartImg = '<img class="pr-chart" alt="구성 차트" src="' + dataUrl + '" />';
     }
 
     const esc = (s) => String(s).replace(/[&<>]/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
