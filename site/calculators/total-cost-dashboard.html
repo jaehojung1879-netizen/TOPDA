@@ -415,15 +415,17 @@
           <label for="td-otherType">기타 대출</label>
           <select id="td-otherType" name="otherLoanType">
             <option value="none">없음</option>
-            <option value="mortgage">주택담보대출 (타 물건·분할상환)</option>
+            <option value="mortgage">주택담보대출 (분할상환·타 물건)</option>
+            <option value="mortgageBullet">주택담보대출 (만기일시·거치)</option>
+            <option value="nonhouse">비주택담보대출 (상가·오피스텔·토지)</option>
             <option value="jeonse">전세자금대출</option>
-            <option value="credit">추가 신용대출</option>
+            <option value="deposit">예적금·보험약관 담보대출</option>
+            <option value="stock">유가증권·기타담보대출</option>
             <option value="card">카드론·현금서비스</option>
             <option value="auto">자동차 할부·리스</option>
             <option value="minus">마이너스통장 (한도대출)</option>
-            <option value="installment">기타 분할상환 대출</option>
           </select>
-          <span class="hint">기존에 상환 중인 다른 대출이 있으면 종류를 고르세요. 종류별로 DSR 반영 방식이 달라집니다.</span>
+          <span class="hint">추가 신용대출은 위 ‘신용대출 잔액’에 합산하세요. 그 외 대출은 종류를 고르면 금액·만기 입력란이 나타나며, 종류별 DSR 원금 산정 방식이 자동 적용됩니다.</span>
         </div>
         <div class="field-row" data-other-detail style="display:none;">
           <div class="field">
@@ -519,15 +521,6 @@
       </a>
     </div>
   </section>
-
-  <!-- 등기·법무사 비용 안내 -->
-  <div class="callout callout-info" style="margin-top: 32px;">
-    <div class="icon">i</div>
-    <div class="body">
-      <strong>등기·법무사 비용이 매수 결과에 포함됩니다</strong>
-      매수 시나리오의 총비용에는 인지세·등기신청 수수료·국민주택채권 할인 부담·법무사 보수(부가세 포함)가 반영됩니다. 국민주택채권은 시가표준액 기준이며 할인율은 매일 변동하므로, 정확한 시가표준액·공시가격은 <a href="https://www.realtyprice.kr" target="_blank" rel="noopener">부동산공시가격알리미</a> · <a href="https://www.wetax.go.kr" target="_blank" rel="noopener">위택스(시가표준액)</a>에서 확인하세요. 항목별 상세 계산은 <a href="registration-cost.html">등기·법무사 비용 계산기 →</a>에서도 가능합니다.
-    </div>
-  </div>
 
   <!-- 최근 규제 / 뉴스 -->
   <section class="news-section">

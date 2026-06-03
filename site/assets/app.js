@@ -868,18 +868,22 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       var note = root.querySelector('[data-out="otherLoanNote"]');
       var show = type !== 'none';
       if (detail) detail.style.display = show ? '' : 'none';
-      var needsTerm = (type === 'mortgage' || type === 'card' || type === 'auto' || type === 'installment');
+      // 사용자 입력 만기가 필요한 종류(실제 약정/잔존만기 사용). 그 외는 금감원 고정 연수 적용.
+      var needsTerm = (type === 'mortgage' || type === 'mortgageBullet' || type === 'card' || type === 'auto');
       if (termBox) termBox.style.display = (show && needsTerm) ? '' : 'none';
       if (!show || amount <= 0) { if (note) note.style.display = 'none'; return 0; }
+      // 금감원 DSR 원금 산정 방식(대출 종류별 산정만기)
       var principal = 0, interest = amount * rate, desc = '';
       switch (type) {
-        case 'mortgage': principal = amount / term; desc = '분할상환 → 원금(잔액÷' + term + '년) + 이자를 DSR에 반영'; break;
-        case 'jeonse': principal = 0; desc = '전세자금대출 → 원금은 제외, 이자만 반영 (보증부 전세대출은 DSR 산정에서 제외될 수 있음)'; break;
-        case 'credit': principal = amount / 5; desc = '신용대출 → 원금(잔액÷5년) + 이자를 DSR에 반영'; break;
-        case 'card': principal = amount / term; desc = '카드론·현금서비스 → 원금(잔액÷' + term + '년) + 이자를 DSR에 반영'; break;
-        case 'auto': principal = amount / term; desc = '자동차 할부·리스 → 원금(잔액÷' + term + '년) + 이자를 DSR에 반영'; break;
-        case 'minus': principal = amount / 5; desc = '마이너스통장 → 한도 기준 원금(한도÷5년) + 이자를 DSR에 반영'; break;
-        case 'installment': principal = amount / term; desc = '분할상환 → 원금(잔액÷' + term + '년) + 이자를 DSR에 반영'; break;
+        case 'mortgage': principal = amount / term; desc = '주택담보대출(분할상환) → 원금(잔액÷잔존만기 ' + term + '년) + 이자를 DSR에 반영'; break;
+        case 'mortgageBullet': principal = amount / term; desc = '주택담보대출(만기일시·거치) → 원금(대출액÷대출기간 ' + term + '년) + 이자를 DSR에 반영'; break;
+        case 'nonhouse': principal = amount / 8; desc = '비주택담보대출 → 원금(대출액÷8년) + 이자를 DSR에 반영 (금감원 산정만기 8년)'; break;
+        case 'jeonse': principal = 0; desc = '전세자금대출 → 원금 제외, 이자만 반영 (보증부 전세대출은 DSR 산정에서 제외될 수 있음)'; break;
+        case 'deposit': principal = 0; desc = '예적금·보험약관 담보대출 → 원금 제외, 이자만 반영 (담보가치 확실)'; break;
+        case 'stock': principal = amount / 8; desc = '유가증권·기타담보대출 → 원금(대출액÷8년) + 이자를 DSR에 반영 (금감원 산정만기 8년)'; break;
+        case 'card': principal = amount / term; desc = '카드론·현금서비스 → 원금(잔액÷약정 ' + term + '년) + 이자를 DSR에 반영'; break;
+        case 'auto': principal = amount / term; desc = '자동차 할부·리스 → 원금(잔액÷약정 ' + term + '년) + 이자를 DSR에 반영'; break;
+        case 'minus': principal = amount / 5; desc = '마이너스통장(한도대출) → 원금(한도÷5년) + 이자를 DSR에 반영'; break;
       }
       var annual = principal + interest;
       if (note) { note.style.display = ''; note.innerHTML = desc + '<br/>이 대출의 DSR 반영액 ≈ <strong>' + fmt.won(Math.round(annual)) + ' / 년</strong>'; }
@@ -2561,8 +2565,8 @@ function calcInteriorEstimate({ area, grade, items }) {
       });
     });
 
-    injectReviewNote();
     wireNextStepPrefill();
+    wirePrint();
   }
 
   function serializeParams(scope) {
@@ -2601,23 +2605,127 @@ function calcInteriorEstimate({ area, grade, items }) {
     }, true);
   }
 
-  // E-E-A-T: 계산기 하단에 '최종 검토일 · 주요 출처' 표기 (rates.js에서 읽음)
-  function injectReviewNote() {
+  // ===== 인쇄 / PDF: 입력+결과를 한 장짜리 전문 보고서로 출력 =====
+  // 버튼 클릭과 브라우저 Ctrl+P 모두 beforeprint에서 보고서를 생성하고 afterprint에서 정리한다.
+  function wirePrint() {
     const result = document.querySelector('.calc-result');
-    if (!result || result.querySelector('[data-review-note]')) return;
-    const R = window.TOPDA_RATES;
-    if (!R || !R.lastReviewed) return;
-    const slug = (location.pathname.split('/').pop() || '').replace('.html', '');
-    const src = (R.sources && (R.sources[slug] || R.sources['default'])) || '';
-    const note = document.createElement('p');
-    note.className = 'calc-review-note';
-    note.setAttribute('data-review-note', '');
-    const label = isEn ? 'Last reviewed' : '최종 검토일';
-    note.innerHTML = '<strong>' + label + ' ' + R.lastReviewed + '</strong>'
-      + (src ? ' · ' + (isEn ? 'Basis: ' : '기준: ') + src : '');
-    const shareBar = result.querySelector('[data-calc-share]');
-    if (shareBar) result.insertBefore(note, shareBar);
-    else result.appendChild(note);
+    if (!result) return;                 // 계산기 페이지에만 적용
+    const scope = scopeFor(result);
+    let reportEl = null;
+    const teardown = () => {
+      document.body.classList.remove('printing-report');
+      if (reportEl && reportEl.parentNode) reportEl.parentNode.removeChild(reportEl);
+      reportEl = null;
+    };
+    const build = () => {
+      teardown();
+      reportEl = buildPrintReport(scope, result);
+      if (reportEl) { document.body.appendChild(reportEl); document.body.classList.add('printing-report'); }
+    };
+    window.addEventListener('beforeprint', build);
+    window.addEventListener('afterprint', teardown);
+  }
+
+  const cleanText = (el) => {
+    if (!el) return '';
+    const c = el.cloneNode(true);
+    c.querySelectorAll('.tip, .note, .hint, .eok-hint').forEach((x) => x.remove());
+    return (c.textContent || '').replace(/\s+/g, ' ').replace(/\?$/, '').trim();
+  };
+
+  function collectInputs(scope) {
+    const rows = [];
+    const scn = document.querySelector('[data-scn].active');
+    if (scn) rows.push(['시나리오', cleanText(scn)]);
+    scope.querySelectorAll('.field').forEach((field) => {
+      if (field.offsetParent === null) return;          // 숨겨진(비활성 시나리오) 필드 제외
+      const radios = field.querySelectorAll('input[type="radio"]');
+      const checks = field.querySelectorAll('input[type="checkbox"]');
+      const free = field.querySelector('input[type="text"], input[type="number"], select');
+      let label = '', value = '';
+      if (checks.length) {
+        const c = checks[0];
+        label = cleanText(field.querySelector('.text') || field.querySelector('label'));
+        if (!c.checked) return;                          // 체크된 항목만 표기
+        value = '예';
+      } else if (radios.length) {
+        label = cleanText(field.querySelector('label'));
+        const c = field.querySelector('input[type="radio"]:checked');
+        value = c ? cleanText(c.closest('label')) : '';
+      } else if (free) {
+        label = cleanText(field.querySelector('label'));
+        value = (free.value || '').trim();
+        if (free.tagName === 'SELECT' && free.selectedOptions[0]) value = free.selectedOptions[0].textContent.trim();
+        const suffix = (field.querySelector('.input-suffix') || {}).getAttribute && field.querySelector('.input-suffix').getAttribute('data-suffix');
+        if (value && suffix) value += suffix;
+      }
+      if (label && value !== '') rows.push([label, value]);
+    });
+    return rows;
+  }
+
+  function collectResults(result) {
+    const rows = [];
+    result.querySelectorAll('.breakdown .row').forEach((r) => {
+      const k = r.querySelector('.key'), v = r.querySelector('.val');
+      if (k && v) rows.push([cleanText(k), cleanText(v), r.classList.contains('sub') || r.classList.contains('divider')]);
+    });
+    const totalEl = result.querySelector('.total');
+    const titleEl = result.querySelector('[data-scn-result-title]') || result.querySelector('h3');
+    // DSR / RTI 박스(보이는 것만)
+    const meters = [];
+    result.querySelectorAll('.dsr-box').forEach((box) => {
+      if (box.hidden || box.offsetParent === null) return;
+      const head = cleanText(box.querySelector('.dsr-box-head strong'));
+      const pct = cleanText(box.querySelector('.dsr-pct'));
+      const verdict = cleanText(box.querySelector('.dsr-verdict'));
+      if (head) meters.push([head, pct, verdict]);
+    });
+    return {
+      title: titleEl ? cleanText(titleEl) : '계산 결과',
+      total: totalEl ? cleanText(totalEl) : '',
+      rows: rows,
+      meters: meters,
+    };
+  }
+
+  function buildPrintReport(scope, result) {
+    const title = (document.title || '톺다').replace(/\s*[—-]\s*톺다.*$/, '').replace(/\s*[—-]\s*TOPDA.*$/, '').trim();
+    const inputs = collectInputs(scope);
+    const res = collectResults(result);
+    const today = new Date();
+    const ymd = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+    // 차트 이미지
+    let chartImg = '';
+    const canvas = scope.querySelector('canvas') || document.querySelector('.calc-result canvas');
+    if (canvas && canvas.width > 0) {
+      try { chartImg = '<img class="pr-chart" alt="구성 차트" src="' + canvas.toDataURL('image/png') + '" />'; } catch (e) {}
+    }
+
+    const esc = (s) => String(s).replace(/[&<>]/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+    const inputRows = inputs.map(([k, v]) => '<tr><th>' + esc(k) + '</th><td>' + esc(v) + '</td></tr>').join('');
+    const resultRows = res.rows.map(([k, v, sub]) =>
+      '<tr class="' + (sub ? 'sub' : '') + '"><th>' + esc(k) + '</th><td>' + esc(v) + '</td></tr>').join('');
+    const meterRows = res.meters.map(([h, p, vd]) =>
+      '<div class="pr-meter"><strong>' + esc(h) + '</strong> <span>' + esc(p) + '</span><div class="pr-meter-v">' + esc(vd) + '</div></div>').join('');
+
+    const wrap = document.createElement('div');
+    wrap.id = 'print-report';
+    wrap.innerHTML =
+      '<div class="pr-head"><span class="pr-brand">톺다 · 부동산 계산 보고서</span><span class="pr-date">' + ymd + '</span></div>'
+      + '<h1 class="pr-title">' + esc(title) + '</h1>'
+      + '<div class="pr-cols">'
+      + '  <section class="pr-block"><h2>입력 요약</h2><table class="pr-table">' + (inputRows || '<tr><td>—</td></tr>') + '</table></section>'
+      + '  <section class="pr-block"><h2>계산 결과</h2>'
+      + (res.total ? '<div class="pr-total"><span>' + esc(res.title) + '</span><strong>' + esc(res.total) + '</strong></div>' : '')
+      + chartImg
+      + '<table class="pr-table">' + resultRows + '</table>'
+      + meterRows
+      + '  </section>'
+      + '</div>'
+      + '<div class="pr-foot">본 보고서는 일반 정보 제공용 추정치입니다. 실제 세액·대출 한도는 과세관청 판단·금융기관 심사·개인별 조건에 따라 달라질 수 있습니다. · 톺다 jaehojung1879-netizen.github.io/TOPDA</div>';
+    return wrap;
   }
 
   function copyToClipboard(text) {
