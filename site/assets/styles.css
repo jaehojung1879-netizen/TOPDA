@@ -374,14 +374,14 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .check-item.done .text { color: var(--text-subtle); text-decoration: line-through; }
 
 /* ===== Calculator ===== */
-/* 입력은 왼쪽, 결과는 오른쪽. 태블릿(≥768px)부터 2단, 모바일은 입력 위·결과 아래로 정리. */
-.calc-layout { display: grid; gap: 20px; align-items: start; }
-@media (min-width: 768px) {
-  .calc-layout { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 28px; }
+/* 입력은 왼쪽, 결과는 오른쪽 — 모바일 세로 화면에서도 좁게나마 항상 2단으로 함께 보인다. */
+.calc-layout {
+  display: grid; align-items: start;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 12px;
 }
-@media (min-width: 1024px) {
-  .calc-layout { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 40px; }
-}
+@media (min-width: 768px) { .calc-layout { gap: 28px; } }
+@media (min-width: 1024px) { .calc-layout { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 40px; } }
 
 .calc-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); }
 .field { margin-bottom: 20px; }
@@ -433,51 +433,14 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
   box-shadow: var(--shadow);
   position: static;
 }
+/* 2단일 때 결과는 우측에 따라오되, 내용 전체가 잘림 없이 보이도록 내부 스크롤은 두지 않는다. */
 @media (min-width: 768px) {
-  .calc-result {
-    position: sticky; top: 88px;
-    max-height: calc(100vh - 108px);
-    overflow-y: auto;
-  }
+  .calc-result { position: sticky; top: 88px; }
 }
 .calc-result h3 { font-size: 0.92rem; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; letter-spacing: -0.01em; }
 .calc-result .total { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 24px; color: var(--accent); font-variant-numeric: tabular-nums; }
 .calc-result .breakdown { border-top: 1px solid var(--border); padding-top: 20px; }
-.calc-result .row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.95rem; }
-
-/* 모바일 고정 요약바: 입력을 편집하는 동안에도 결과 총액이 늘 한 화면에 보이도록 */
-.calc-mini {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
-  display: none; align-items: center; gap: 12px;
-  padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
-  background: rgba(255, 255, 255, 0.94);
-  -webkit-backdrop-filter: saturate(1.4) blur(10px);
-  backdrop-filter: saturate(1.4) blur(10px);
-  border-top: 1px solid var(--border);
-  box-shadow: 0 -8px 24px -12px rgba(15, 23, 42, 0.28);
-  transform: translateY(115%);
-  transition: transform 0.24s ease;
-}
-.calc-mini.show { transform: translateY(0); }
-.calc-mini .cm-text { flex: 1; min-width: 0; }
-.calc-mini .cm-label { display: block; font-size: 0.72rem; color: var(--text-muted); line-height: 1.25; }
-.calc-mini .cm-total {
-  display: block; font-size: 1.18rem; font-weight: 800; color: var(--accent);
-  line-height: 1.25; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.calc-mini .cm-go {
-  flex: none; padding: 10px 16px; border-radius: 999px;
-  background: var(--accent); color: #fff; font-size: 0.84rem; font-weight: 700;
-  border: 0; cursor: pointer; transition: transform 0.12s, background 0.15s;
-}
-.calc-mini .cm-go:hover { background: var(--accent-hover); }
-.calc-mini .cm-go:active { transform: translateY(1px); }
-@media (max-width: 767px) {
-  .calc-mini.ready { display: flex; }
-  body.has-calc-mini { padding-bottom: 68px; }
-}
-@media print { .calc-mini { display: none !important; } }
+.calc-result .row { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; font-size: 0.95rem; }
 .calc-result .row .key { color: var(--text-muted); }
 .calc-result .row .val { font-weight: 600; font-variant-numeric: tabular-nums; }
 .calc-result .row.sub { padding-left: 16px; font-size: 0.88rem; color: var(--text-muted); }
@@ -2320,9 +2283,17 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 #print-report { display: none; }
 
 @media print {
-  @page { size: A4; margin: 14mm; }
+  @page { size: A4; margin: 12mm; }
+  html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
   body.printing-report > *:not(#print-report) { display: none !important; }
   body.printing-report #print-report { display: block !important; }
+  /* 보고서는 한 장 안에 통째로 — 내부에서 페이지가 쪼개지지 않도록 */
+  #print-report,
+  #print-report .pr-cols, #print-report .pr-block,
+  #print-report .pr-total, #print-report .pr-table, #print-report .pr-table tr,
+  #print-report .pr-meter, #print-report .pr-chart {
+    page-break-inside: avoid; break-inside: avoid;
+  }
 }
 
 /* 보고서 레이아웃 (인쇄에서만 보이지만 일반 규칙으로 정의) */
@@ -2397,19 +2368,34 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 .btn-add-loan:hover { background: #e0ebff; }
 
-/* ===== 모바일(<768px): 입력(위) · 결과(아래) 자연 흐름 유지, 여백·폰트만 압축 ===== */
+/* ===== 모바일(<768px): 입력(좌)·결과(우) 2단을 좁게 유지하면서 깔끔하게 압축 ===== */
 @media (max-width: 767px) {
-  .calc-form, .calc-result { padding: 18px 18px 20px; }
-  .field { margin-bottom: 14px; }
-  .field-row { gap: 10px; }
-  .calc-result h3 { margin-bottom: 4px; }
-  .calc-result .total { font-size: clamp(1.6rem, 7vw, 1.95rem); margin-bottom: 14px; }
-  .calc-result .breakdown { padding-top: 14px; }
-  .calc-result .row { padding: 6px 0; font-size: 0.92rem; }
-  .chart-wrap { max-height: 220px; }
+  .calc-form, .calc-result { padding: 13px; border-radius: 12px; }
+  .field { margin-bottom: 12px; }
+  .field label { font-size: 0.82rem; margin-bottom: 5px; }
+  .field .hint, .field .eok-hint { font-size: 0.74rem; margin-top: 4px; }
+  .field input[type="text"], .field input[type="number"], .field select { padding: 9px 10px; font-size: 0.95rem; }
+  .field .input-suffix input { padding-right: 34px; }
+  .field .input-suffix::after { right: 9px; font-size: 0.8rem; }
+  /* 좁은 폭에서는 한 줄 2칸 입력·라디오를 세로로 쌓아 가독성 확보 */
+  .field-row { grid-template-columns: 1fr; gap: 8px; }
+  .radio-group { gap: 6px; }
+  .radio-group label { min-width: 0; flex: 1 1 calc(50% - 6px); padding: 8px 6px; font-size: 0.82rem; }
+  .calc-result h3 { font-size: 0.8rem; margin-bottom: 3px; }
+  .calc-result .total { font-size: clamp(1.15rem, 5.4vw, 1.5rem); margin-bottom: 12px; }
+  .calc-result .breakdown { padding-top: 12px; }
+  /* 좁은 결과 칸에서 키/값이 겹치지 않도록 줄바꿈 허용 */
+  .calc-result .row { padding: 5px 0; font-size: 0.78rem; flex-wrap: wrap; gap: 2px 8px; }
+  .calc-result .row .key { flex: 1 1 auto; min-width: 0; }
+  .calc-result .row .val { flex: 0 0 auto; }
+  .calc-result .row.sub { padding-left: 8px; }
+  .chart-wrap { min-height: 150px; max-height: 180px; }
+  .container { padding: 0 12px; }
 }
 
-@media (max-width: 420px) and (orientation: portrait) {
-  .calc-form, .calc-result { padding: 16px; }
-  .field input[type="text"], .field input[type="number"], .field select { padding-top: 11px; padding-bottom: 11px; }
+@media (max-width: 380px) {
+  .calc-layout { gap: 8px; }
+  .calc-form, .calc-result { padding: 11px; }
+  .calc-result .row { font-size: 0.74rem; }
+  .radio-group label { flex-basis: 100%; }
 }
