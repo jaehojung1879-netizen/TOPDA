@@ -838,6 +838,14 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       } else {
         chart = new Chart(canvas.getContext('2d'), cfg);
       }
+      // 인쇄용 도넛 이미지 캐시: 애니메이션이 끝나고 화면에 보일 때 캡처해 둔다.
+      // (인쇄 시점에는 print 미디어가 캔버스를 숨겨 toBase64Image가 빈 이미지가 되는 문제 회피)
+      try {
+        clearTimeout(window.__topdaChartT);
+        window.__topdaChartT = setTimeout(function () {
+          try { if (chart) window.__topdaChartImg = chart.toBase64Image('image/png', 1); } catch (e) {}
+        }, 650);
+      } catch (e) {}
     }
 
     function renderDetail(items) {
@@ -2596,7 +2604,6 @@ function calcInteriorEstimate({ area, grade, items }) {
 
     wireNextStepPrefill();
     wirePrint();
-    wireMiniSummary();
   }
 
   function serializeParams(scope) {
@@ -2666,52 +2673,6 @@ function calcInteriorEstimate({ area, grade, items }) {
       setTimeout(teardown, 30000);
       try { window.print(); } catch (e) { teardown(); }
     };
-  }
-
-  // 모바일 세로 화면에서 입력을 편집하는 동안에도 결과 총액이 늘 보이도록
-  // 하단 고정 요약바를 주입한다. 총액(.total)이 있는 계산기에만 적용.
-  function wireMiniSummary() {
-    const result = document.querySelector('.calc-result');
-    if (!result) return;
-    const totalEl = result.querySelector('.total');
-    if (!totalEl) return;                 // 비교형 등 단일 총액이 없는 계산기는 제외
-    if (document.querySelector('.calc-mini')) return;
-    const labelEl = result.querySelector('[data-scn-result-title]') || result.querySelector('h3');
-
-    const bar = document.createElement('div');
-    bar.className = 'calc-mini ready';
-    bar.innerHTML = '<div class="cm-text"><span class="cm-label"></span><span class="cm-total"></span></div>'
-      + '<button type="button" class="cm-go"></button>';
-    const cmLabel = bar.querySelector('.cm-label');
-    const cmTotal = bar.querySelector('.cm-total');
-    const goBtn = bar.querySelector('.cm-go');
-    goBtn.textContent = isEn ? 'View result' : '결과 보기';
-    document.body.appendChild(bar);
-    document.body.classList.add('has-calc-mini');
-
-    const sync = function () {
-      cmLabel.textContent = labelEl ? (labelEl.textContent || '').replace(/\s+/g, ' ').trim() : (isEn ? 'Result' : '결과');
-      cmTotal.textContent = (totalEl.textContent || '').replace(/\s+/g, ' ').trim();
-    };
-    sync();
-    try {
-      new MutationObserver(sync).observe(totalEl, { childList: true, characterData: true, subtree: true });
-    } catch (e) {}
-
-    // 결과 카드가 화면에 보이면 요약바를 숨겨 중복을 피하고, 보이지 않을 때만 띄운다.
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) { bar.classList.toggle('show', !en.isIntersecting); });
-      }, { threshold: 0, rootMargin: '0px 0px -45% 0px' });
-      io.observe(result);
-    } else {
-      bar.classList.add('show');
-    }
-
-    goBtn.addEventListener('click', function () {
-      try { result.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-      catch (e) { result.scrollIntoView(); }
-    });
   }
 
   const cleanText = (el) => {
@@ -2788,15 +2749,15 @@ function calcInteriorEstimate({ area, grade, items }) {
     // 없으면 canvas.toDataURL()로 폴백. (인쇄 시 도넛이 누락되던 문제 해결)
     let chartImg = '';
     const canvas = scope.querySelector('canvas') || document.querySelector('.calc-result canvas');
-    if (canvas) {
-      let dataUrl = '';
+    let dataUrl = window.__topdaChartImg || '';   // 미리 캐시해 둔 이미지 우선 사용
+    if (!dataUrl && canvas) {
       try {
         const inst = (window.Chart && Chart.getChart) ? Chart.getChart(canvas) : null;
         if (inst && inst.toBase64Image) dataUrl = inst.toBase64Image('image/png', 1);
         else if (canvas.width > 0) dataUrl = canvas.toDataURL('image/png');
       } catch (e) { dataUrl = ''; }
-      if (dataUrl) chartImg = '<img class="pr-chart" alt="구성 차트" src="' + dataUrl + '" />';
     }
+    if (dataUrl) chartImg = '<img class="pr-chart" alt="구성 차트" src="' + dataUrl + '" />';
 
     const esc = (s) => String(s).replace(/[&<>]/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
     const inputRows = inputs.map(([k, v]) => '<tr><th>' + esc(k) + '</th><td>' + esc(v) + '</td></tr>').join('');
