@@ -428,7 +428,6 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .calc-result {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-top: 3px solid var(--accent);
   border-radius: var(--radius-lg);
   padding: 26px 28px 28px;
   box-shadow: var(--shadow);
@@ -445,6 +444,40 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .calc-result .total { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 24px; color: var(--accent); font-variant-numeric: tabular-nums; }
 .calc-result .breakdown { border-top: 1px solid var(--border); padding-top: 20px; }
 .calc-result .row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.95rem; }
+
+/* 모바일 고정 요약바: 입력을 편집하는 동안에도 결과 총액이 늘 한 화면에 보이도록 */
+.calc-mini {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
+  display: none; align-items: center; gap: 12px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: rgba(255, 255, 255, 0.94);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -8px 24px -12px rgba(15, 23, 42, 0.28);
+  transform: translateY(115%);
+  transition: transform 0.24s ease;
+}
+.calc-mini.show { transform: translateY(0); }
+.calc-mini .cm-text { flex: 1; min-width: 0; }
+.calc-mini .cm-label { display: block; font-size: 0.72rem; color: var(--text-muted); line-height: 1.25; }
+.calc-mini .cm-total {
+  display: block; font-size: 1.18rem; font-weight: 800; color: var(--accent);
+  line-height: 1.25; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.calc-mini .cm-go {
+  flex: none; padding: 10px 16px; border-radius: 999px;
+  background: var(--accent); color: #fff; font-size: 0.84rem; font-weight: 700;
+  border: 0; cursor: pointer; transition: transform 0.12s, background 0.15s;
+}
+.calc-mini .cm-go:hover { background: var(--accent-hover); }
+.calc-mini .cm-go:active { transform: translateY(1px); }
+@media (max-width: 767px) {
+  .calc-mini.ready { display: flex; }
+  body.has-calc-mini { padding-bottom: 68px; }
+}
+@media print { .calc-mini { display: none !important; } }
 .calc-result .row .key { color: var(--text-muted); }
 .calc-result .row .val { font-weight: 600; font-variant-numeric: tabular-nums; }
 .calc-result .row.sub { padding-left: 16px; font-size: 0.88rem; color: var(--text-muted); }

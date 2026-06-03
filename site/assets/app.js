@@ -2467,6 +2467,10 @@ function calcInteriorEstimate({ area, grade, items }) {
     ? { copy: '🔗 Copy result link', print: '🖨 Print / PDF', copied: 'Link copied', copyFail: 'Copy failed — link shown for manual copy' }
     : { copy: '🔗 결과 링크 복사', print: '🖨 인쇄 / PDF', copied: '링크가 복사되었습니다', copyFail: '복사 실패 — 링크를 직접 복사하세요' };
 
+  // 인쇄 트리거(기본은 단순 print, wirePrint에서 '보고서 생성 후 인쇄'로 교체).
+  // beforeprint가 발생하지 않는 모바일 브라우저 대응의 핵심.
+  let triggerPrint = function () { try { window.print(); } catch (e) {} };
+
   const nameOf = (el) => el.name || el.id;
   const fieldsIn = (scope) => Array.from(scope.querySelectorAll('input[name], input[id], select[name], select[id]'))
     .filter((el) => el.type !== 'button' && el.type !== 'submit' && el.type !== 'file');
@@ -2586,12 +2590,13 @@ function calcInteriorEstimate({ area, grade, items }) {
       });
       printBtn.addEventListener('click', () => {
         if (window.topdaTrack) window.topdaTrack('print_click', { page: location.pathname });
-        window.print();
+        triggerPrint();
       });
     });
 
     wireNextStepPrefill();
     wirePrint();
+    wireMiniSummary();
   }
 
   function serializeParams(scope) {
@@ -2647,8 +2652,66 @@ function calcInteriorEstimate({ area, grade, items }) {
       reportEl = buildPrintReport(scope, result);
       if (reportEl) { document.body.appendChild(reportEl); document.body.classList.add('printing-report'); }
     };
+    // 데스크톱: 브라우저 인쇄(Ctrl+P)도 보고서로 출력
     window.addEventListener('beforeprint', build);
     window.addEventListener('afterprint', teardown);
+
+    // 버튼/모바일: beforeprint가 발생하지 않는 환경을 위해 직접 보고서를 만든 뒤 인쇄한다.
+    // (#print-report는 화면에서 항상 숨김이라 미리 만들어도 화면엔 영향이 없다)
+    triggerPrint = function () {
+      build();
+      window.addEventListener('afterprint', teardown, { once: true });
+      // 모바일은 afterprint가 안 뜰 수 있어 복귀 시점(focus)에 정리 + 안전장치 타이머
+      setTimeout(function () { window.addEventListener('focus', teardown, { once: true }); }, 500);
+      setTimeout(teardown, 30000);
+      try { window.print(); } catch (e) { teardown(); }
+    };
+  }
+
+  // 모바일 세로 화면에서 입력을 편집하는 동안에도 결과 총액이 늘 보이도록
+  // 하단 고정 요약바를 주입한다. 총액(.total)이 있는 계산기에만 적용.
+  function wireMiniSummary() {
+    const result = document.querySelector('.calc-result');
+    if (!result) return;
+    const totalEl = result.querySelector('.total');
+    if (!totalEl) return;                 // 비교형 등 단일 총액이 없는 계산기는 제외
+    if (document.querySelector('.calc-mini')) return;
+    const labelEl = result.querySelector('[data-scn-result-title]') || result.querySelector('h3');
+
+    const bar = document.createElement('div');
+    bar.className = 'calc-mini ready';
+    bar.innerHTML = '<div class="cm-text"><span class="cm-label"></span><span class="cm-total"></span></div>'
+      + '<button type="button" class="cm-go"></button>';
+    const cmLabel = bar.querySelector('.cm-label');
+    const cmTotal = bar.querySelector('.cm-total');
+    const goBtn = bar.querySelector('.cm-go');
+    goBtn.textContent = isEn ? 'View result' : '결과 보기';
+    document.body.appendChild(bar);
+    document.body.classList.add('has-calc-mini');
+
+    const sync = function () {
+      cmLabel.textContent = labelEl ? (labelEl.textContent || '').replace(/\s+/g, ' ').trim() : (isEn ? 'Result' : '결과');
+      cmTotal.textContent = (totalEl.textContent || '').replace(/\s+/g, ' ').trim();
+    };
+    sync();
+    try {
+      new MutationObserver(sync).observe(totalEl, { childList: true, characterData: true, subtree: true });
+    } catch (e) {}
+
+    // 결과 카드가 화면에 보이면 요약바를 숨겨 중복을 피하고, 보이지 않을 때만 띄운다.
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { bar.classList.toggle('show', !en.isIntersecting); });
+      }, { threshold: 0, rootMargin: '0px 0px -45% 0px' });
+      io.observe(result);
+    } else {
+      bar.classList.add('show');
+    }
+
+    goBtn.addEventListener('click', function () {
+      try { result.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      catch (e) { result.scrollIntoView(); }
+    });
   }
 
   const cleanText = (el) => {
