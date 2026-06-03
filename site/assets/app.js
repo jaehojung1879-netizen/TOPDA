@@ -843,7 +843,14 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       try {
         clearTimeout(window.__topdaChartT);
         window.__topdaChartT = setTimeout(function () {
-          try { if (chart) window.__topdaChartImg = chart.toBase64Image('image/png', 1); } catch (e) {}
+          // 인쇄 중에는 캔버스가 숨겨져 빈 이미지가 되므로 캐시를 덮어쓰지 않는다.
+          if (document.body.classList.contains('printing-report')) return;
+          try {
+            if (chart) {
+              const url = chart.toBase64Image('image/png', 1);
+              if (url && url.length > 1000) window.__topdaChartImg = url;   // 유효한 캡처만 저장
+            }
+          } catch (e) {}
         }, 650);
       } catch (e) {}
     }
