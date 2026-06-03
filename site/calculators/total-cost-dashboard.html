@@ -20,9 +20,9 @@
 <meta name="twitter:title" content="부동산 종합 계산 대시보드 — 톺다" />
 <meta name="twitter:description" content="매수·매도·전세 임차·임대·상속·증여 6가지 시나리오를 한 화면에서. 취득세·양도세·DSR·RTI·중개수수료에 등기·법무사 비용까지 종합 산정." />
 <meta name="twitter:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
-<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260604"></script>
+<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260606"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260604" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260606" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -182,6 +182,15 @@
             <label for="td-term">기간 (년)</label>
             <input id="td-term" name="term" type="number" min="1" max="40" step="1" value="30" />
           </div>
+        </div>
+
+        <div class="field">
+          <label>상환 방식<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="원리금균등은 매월 갚는 금액이 같습니다. 원금균등은 원금을 매월 똑같이 나눠 갚고 이자는 잔액에 붙어, 초기 상환액이 가장 크고 점점 줄어듭니다. DSR은 상환 부담이 가장 큰 첫해를 기준으로 심사하므로, 같은 조건이라도 원금균등이 DSR이 더 높게 나옵니다.">?</span></label>
+          <div class="radio-group">
+            <label><input type="radio" name="repay" value="amortize" checked/><span>원리금균등</span></label>
+            <label><input type="radio" name="repay" value="principal"/><span>원금균등</span></label>
+          </div>
+          <span class="hint">원금균등은 초기 상환액이 커서 DSR이 더 높게(보수적으로) 산정됩니다.</span>
         </div>
 
         <div class="field">
@@ -532,7 +541,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../assets/rates.js?v=20260604"></script>
-<script src="../assets/app.js?v=20260604"></script>
+<script src="../assets/rates.js?v=20260606"></script>
+<script src="../assets/app.js?v=20260606"></script>
 </body>
 </html>

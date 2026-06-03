@@ -718,6 +718,34 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       return principal * i * Math.pow(1+i, n) / (Math.pow(1+i, n) - 1);
     }
 
+    // 원금균등: 첫 달 상환액(원금 균등 + 잔액 이자) — 매월 줄어들며 첫 달이 가장 크다.
+    function equalPrincipalFirstMonth(principal, annualRate, years) {
+      if (!principal || years <= 0) return 0;
+      const n = years * 12;
+      const i = annualRate / 100 / 12;
+      return principal / n + principal * i;
+    }
+    // 원금균등: 첫 1년(12개월) 원리금 합계 — DSR은 상환 부담이 가장 큰 첫해 기준으로 산정.
+    function equalPrincipalFirstYear(principal, annualRate, years) {
+      if (!principal || years <= 0) return 0;
+      const n = years * 12;
+      const i = annualRate / 100 / 12;
+      const months = Math.min(12, n);
+      let sum = 0;
+      for (let k = 0; k < months; k++) {
+        const balance = principal - (principal / n) * k;
+        sum += principal / n + balance * i;
+      }
+      return sum;
+    }
+    // 원금균등: 만기까지 총 이자 = i × 원금 × (n+1)/2
+    function equalPrincipalTotalInterest(principal, annualRate, years) {
+      if (!principal || annualRate <= 0 || years <= 0) return 0;
+      const n = years * 12;
+      const i = annualRate / 100 / 12;
+      return principal * i * (n + 1) / 2;
+    }
+
     // 인지세(부동산 소유권 이전, 인지세법 제3조 구간별 정액)
     function stampDuty(price) {
       if (price <= 10000000) return 0;
@@ -1040,8 +1068,21 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const regDiscount = (getNum('regDiscount') || 0) / 100;
       const selfReg = getCheck('selfReg');
       const reg = registrationCost(price, regStd, regDiscount, selfReg, nonhouse ? 'land' : 'house');
-      const monthly = monthlyPayment(loan, rate, term);
-      const totalInterest = monthly > 0 ? monthly * term * 12 - loan : 0;
+      // 상환 방식(원리금균등 / 원금균등)에 따라 월 상환액·총이자·DSR 산정이 달라진다.
+      const repay = getRadio('repay') || 'amortize';
+      const isEqualPrincipal = repay === 'principal';
+      let monthly, monthlyLabel, totalInterest, dsrAnnual;
+      if (isEqualPrincipal) {
+        monthly = equalPrincipalFirstMonth(loan, rate, term);   // 첫 달(가장 큼)
+        monthlyLabel = '월 상환액 (첫달·최대)';
+        totalInterest = equalPrincipalTotalInterest(loan, rate, term);
+        dsrAnnual = equalPrincipalFirstYear(loan, rate, term);  // DSR은 첫해 기준
+      } else {
+        monthly = monthlyPayment(loan, rate, term);             // 매월 동일
+        monthlyLabel = '월 원리금 상환';
+        totalInterest = monthly > 0 ? monthly * term * 12 - loan : 0;
+        dsrAnnual = monthly * 12;
+      }
       const equity = Math.max(0, price - loan - jeonseDeposit);
       const initialCapital = equity + acq.total + broker + reg.total;
       const grandTotal = price + acq.total + broker + reg.total;
@@ -1050,7 +1091,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         ? (nonhouse ? '임대 — 실제 투입 자기자본' : '갭투자 — 실제 투입 자기자본')
         : '예상 총 매수 비용';
       setText('primaryTotal', fmt.won(initialCapital));
-      setLabel('data-quick-label1', '월 원리금 상환');
+      setLabel('data-quick-label1', monthlyLabel);
       setText('quick1', fmt.won(monthly));
       setLabel('data-quick-label2', '총 이자 (만기까지)');
       setText('quick2', fmt.won(totalInterest));
@@ -1094,7 +1135,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       } else {
         if (rtiBox) rtiBox.hidden = true;
         if (dsrBox) dsrBox.hidden = false;
-        renderDSR(monthly * 12);
+        renderDSR(dsrAnnual);
       }
     }
 
@@ -2674,11 +2715,26 @@ function calcInteriorEstimate({ area, grade, items }) {
     // (#print-report는 화면에서 항상 숨김이라 미리 만들어도 화면엔 영향이 없다)
     triggerPrint = function () {
       build();
-      window.addEventListener('afterprint', teardown, { once: true });
-      // 모바일은 afterprint가 안 뜰 수 있어 복귀 시점(focus)에 정리 + 안전장치 타이머
-      setTimeout(function () { window.addEventListener('focus', teardown, { once: true }); }, 500);
-      setTimeout(teardown, 30000);
-      try { window.print(); } catch (e) { teardown(); }
+      const go = function () {
+        window.addEventListener('afterprint', teardown, { once: true });
+        // 모바일은 afterprint가 안 뜰 수 있어 복귀 시점(focus)에 정리 + 안전장치 타이머
+        setTimeout(function () { window.addEventListener('focus', teardown, { once: true }); }, 500);
+        setTimeout(teardown, 30000);
+        try { window.print(); } catch (e) { teardown(); }
+      };
+      // PC에서 보고서의 도넛(data URL 이미지)이 그려지기 전에 동기 인쇄가 시작돼
+      // 차트가 비던 문제 → 이미지가 디코딩된 뒤에 인쇄한다.
+      const img = reportEl && reportEl.querySelector('img.pr-chart');
+      if (img) {
+        let started = false;
+        const once = function () { if (started) return; started = true; go(); };
+        if (img.decode) { img.decode().then(once, once); }
+        else if (img.complete) { once(); }
+        else { img.addEventListener('load', once); img.addEventListener('error', once); }
+        setTimeout(once, 700); // 안전장치
+      } else {
+        go();
+      }
     };
   }
 
