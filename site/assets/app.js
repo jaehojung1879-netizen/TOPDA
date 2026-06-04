@@ -341,56 +341,85 @@ function calcAcquisitionTax(input) {
 })();
 
 // ===== Brokerage Fee Calculator =====
-// 주택 매매 기준 (서울 기준 상한요율, 협의 가능).
-// 출처: 공인중개사법 시행규칙 별표1 (지자체별 차이 있음, 본 위젯은 서울특별시 기준 단순화)
-function calcBrokerageFee({ price, type }) {
-  if (!price || price <= 0) return null;
-  const eok = price / 100000000;
-  let rate;
-  let max;
-  if (type === 'sale') {
-    // 매매 (서울 기준)
-    if (eok < 0.5) { rate = 0.006; max = 250000; }
-    else if (eok < 2) { rate = 0.005; max = 800000; }
-    else if (eok < 9) { rate = 0.004; max = null; }
-    else if (eok < 12) { rate = 0.005; max = null; }
-    else if (eok < 15) { rate = 0.006; max = null; }
-    else { rate = 0.007; max = null; }
-  } else if (type === 'jeonse') {
-    // 전세 (서울 기준)
-    if (eok < 0.5) { rate = 0.005; max = 200000; }
-    else if (eok < 1) { rate = 0.004; max = 300000; }
-    else if (eok < 6) { rate = 0.003; max = null; }
-    else if (eok < 12) { rate = 0.004; max = null; }
-    else if (eok < 15) { rate = 0.005; max = null; }
-    else { rate = 0.006; max = null; }
+// 주택(아파트·단독·연립·다세대) 서울특별시 기준 상한요율. 요율은 상한이며 협의 가능.
+// 출처: 공인중개사법 제32조·시행규칙 제20조, 서울특별시 중개보수 조례 [별표]
+//  - 매매·교환과 임대차(전세·월세)의 요율 구간이 다름
+//  - 월세는 거래금액(환산보증금) = 보증금 + 월차임 × 100
+//    단, 환산액이 5천만 원 미만이면 보증금 + 월차임 × 70 으로 재산정
+function calcBrokerageFee({ type, price, deposit, monthly }) {
+  // 거래금액(과세표준) 산정
+  let baseAmount, converted = null, lowMultiplier = false;
+  if (type === 'rent') {
+    let amt = (deposit || 0) + (monthly || 0) * 100;
+    if (amt > 0 && amt < 50000000) { amt = (deposit || 0) + (monthly || 0) * 70; lowMultiplier = true; }
+    baseAmount = amt;
+    converted = amt;
+  } else {
+    baseAmount = price;
   }
-  let fee = price * rate;
-  if (max != null) fee = Math.min(fee, max);
-  return { rate, max, fee, vat: fee * 0.1, total: fee * 1.1 };
+  if (!baseAmount || baseAmount <= 0) return null;
+  const eok = baseAmount / 100000000;
+
+  let rate, max, bracket;
+  if (type === 'sale') {
+    if (eok < 0.5) { rate = 0.006; max = 250000; bracket = '5천만 미만'; }
+    else if (eok < 2) { rate = 0.005; max = 800000; bracket = '5천만~2억'; }
+    else if (eok < 9) { rate = 0.004; max = null; bracket = '2억~9억'; }
+    else if (eok < 12) { rate = 0.005; max = null; bracket = '9억~12억'; }
+    else if (eok < 15) { rate = 0.006; max = null; bracket = '12억~15억'; }
+    else { rate = 0.007; max = null; bracket = '15억 이상'; }
+  } else {
+    // 임대차(전세·월세) 공통 요율
+    if (eok < 0.5) { rate = 0.005; max = 200000; bracket = '5천만 미만'; }
+    else if (eok < 1) { rate = 0.004; max = 300000; bracket = '5천만~1억'; }
+    else if (eok < 6) { rate = 0.003; max = null; bracket = '1억~6억'; }
+    else if (eok < 12) { rate = 0.004; max = null; bracket = '6억~12억'; }
+    else if (eok < 15) { rate = 0.005; max = null; bracket = '12억~15억'; }
+    else { rate = 0.006; max = null; bracket = '15억 이상'; }
+  }
+  let fee = baseAmount * rate;
+  let capped = false;
+  if (max != null && fee > max) { fee = max; capped = true; }
+  return {
+    rate, max, fee, capped, bracket,
+    baseAmount, converted, lowMultiplier,
+    vat: fee * 0.1, total: fee * 1.1,
+  };
 }
 
 (function () {
   const root = document.querySelector('[data-calc="brokerage-fee"]');
   if (!root) return;
+  const setText = (sel, txt) => { const el = root.querySelector(sel); if (el) el.textContent = txt; };
+  const toggleFields = (type) => {
+    root.querySelectorAll('[data-show]').forEach((el) => {
+      el.style.display = el.getAttribute('data-show').split(' ').includes(type) ? '' : 'none';
+    });
+  };
   const recalc = () => {
-    const price = fmt.parseWon(root.querySelector('[name="price"]').value);
     const type = root.querySelector('[name="type"]:checked')?.value || 'sale';
-    const r = calcBrokerageFee({ price, type });
-    const setText = (sel, txt) => { const el = root.querySelector(sel); if (el) el.textContent = txt; };
+    toggleFields(type);
+    const price = fmt.parseWon(root.querySelector('[name="price"]')?.value || '0');
+    const deposit = fmt.parseWon(root.querySelector('[name="deposit"]')?.value || '0');
+    const monthly = fmt.parseWon(root.querySelector('[name="monthly"]')?.value || '0');
+    const r = calcBrokerageFee({ type, price, deposit, monthly });
     if (!r) {
-      setText('[data-out="rate"]', '—');
-      setText('[data-out="cap"]', '—');
-      setText('[data-out="fee"]', '0원');
-      setText('[data-out="vat"]', '0원');
-      setText('[data-out="total"]', '0원');
+      ['rate','cap','fee','vat'].forEach(k => setText('[data-out="'+k+'"]', k === 'rate' || k === 'cap' ? '—' : fmt.won(0)));
+      setText('[data-out="total"]', fmt.won(0));
+      setText('[data-out="scenario"]', isEn ? 'Enter an amount' : '거래금액을 입력하세요');
+      setText('[data-out="converted"]', '—');
       return;
     }
+    const typeLabel = type === 'sale' ? '매매·교환' : type === 'jeonse' ? '전세' : '월세';
+    setText('[data-out="scenario"]', typeLabel + ' · ' + r.bracket + ' 구간 (' + (r.rate * 100).toFixed(1) + '%)' + (r.capped ? ' · 한도 적용' : ''));
     setText('[data-out="rate"]', (r.rate * 100).toFixed(2) + '%');
     setText('[data-out="cap"]', r.max ? fmt.won(r.max) : (isEn ? 'No cap (negotiable)' : '상한 없음(협의)'));
-    setText('[data-out="fee"]', fmt.won(r.fee));
+    setText('[data-out="fee"]', fmt.won(r.fee) + (r.capped ? (isEn ? ' (capped)' : ' (한도 적용)') : ''));
     setText('[data-out="vat"]', fmt.won(r.vat));
     setText('[data-out="total"]', fmt.won(r.total));
+    setText('[data-out="converted"]', r.converted != null
+      ? fmt.won(r.converted) + (r.lowMultiplier ? (isEn ? ' (×70)' : ' (월차임 ×70 적용)') : '')
+      : '—');
   };
   root.querySelectorAll('input').forEach((el) => {
     el.addEventListener('input', recalc);

@@ -105,7 +105,7 @@
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../calculators/index.html">계산기</a> / 중개수수료</div>
     <h1>중개수수료 계산기</h1>
     <div class="meta">
-      <span>주택(아파트·단독·연립·다세대) 서울특별시 기준 · 최근 갱신</span>
+      <span>주택(아파트·단독·연립·다세대) 서울특별시 기준 · 매매·전세·월세 · 환산보증금 자동</span>
     </div>
   </div>
 
@@ -116,32 +116,54 @@
         <label>거래 유형</label>
         <div class="radio-group">
           <label><input type="radio" name="type" value="sale" checked/><span>매매·교환</span></label>
-          <label><input type="radio" name="type" value="jeonse"/><span>전세·월세</span></label>
+          <label><input type="radio" name="type" value="jeonse"/><span>전세</span></label>
+          <label><input type="radio" name="type" value="rent"/><span>월세</span></label>
         </div>
+        <span class="hint">매매·교환과 임대차(전세·월세)는 요율 구간이 다릅니다.</span>
       </div>
 
-      <div class="field">
-        <label for="price">거래금액</label>
+      <div class="field" data-show="sale jeonse">
+        <label for="price"><span data-show="sale">매매가</span><span data-show="jeonse">전세 보증금</span></label>
         <div class="input-suffix" data-suffix="원">
           <input id="price" name="price" type="text" inputmode="numeric" data-format="won" placeholder="예: 800,000,000" autocomplete="off" value="800,000,000" />
         </div>
-        <span class="hint">월세의 경우 보증금 + 월차임 × 100 (단, 환산 후 5천만 원 미만이면 월차임 × 70).</span>
+        <span class="hint">실제 거래금액(보증금)을 입력하세요.</span>
+      </div>
+
+      <div class="field" data-show="rent">
+        <label for="deposit">보증금</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="deposit" name="deposit" type="text" inputmode="numeric" data-format="won" placeholder="예: 10,000,000" autocomplete="off" value="10,000,000" />
+        </div>
+      </div>
+
+      <div class="field" data-show="rent">
+        <label for="monthly">월차임 (월세)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="monthly" name="monthly" type="text" inputmode="numeric" data-format="won" placeholder="예: 600,000" autocomplete="off" value="600,000" />
+        </div>
+        <span class="hint">환산보증금 = 보증금 + 월차임 × 100 (환산액이 5천만 원 미만이면 × 70).</span>
       </div>
 
       <div class="callout callout-info" style="margin-bottom: 0;">
         <div class="icon">i</div>
         <div class="body">
-          <strong>요율은 상한이며 협의가 가능합니다.</strong>
-          공인중개사법령상 상한요율을 기준으로 산정합니다. 실제 수수료는 중개인과 협의로 결정됩니다.
+          <strong>표시 금액은 법정 상한입니다.</strong>
+          이 금액 <em>이하</em>에서 중개인과 협의해 정합니다. 양 당사자(매도·매수, 임대·임차)가 각각 부담합니다.
         </div>
       </div>
     </div>
 
     <div class="calc-result">
-      <h3>예상 수수료 (부가세 포함)</h3>
+      <h3>예상 중개보수 (부가세 포함)</h3>
+      <div class="result-scenario" data-out="scenario">거래금액을 입력하세요</div>
       <div class="total" data-out="total">0원</div>
 
       <div class="breakdown">
+        <div class="row" data-show="rent">
+          <span class="key">환산보증금</span>
+          <span class="val" data-out="converted">—</span>
+        </div>
         <div class="row">
           <span class="key">상한 요율</span>
           <span class="val" data-out="rate">—</span>
@@ -151,7 +173,7 @@
           <span class="val" data-out="cap">—</span>
         </div>
         <div class="row sub">
-          <span class="key">수수료 (부가세 전)</span>
+          <span class="key">중개보수 (부가세 전)</span>
           <span class="val" data-out="fee">0원</span>
         </div>
         <div class="row sub">
@@ -163,8 +185,8 @@
       <div class="callout callout-warn" style="margin-top: 24px; margin-bottom: 0;">
         <div class="icon">⚠</div>
         <div class="body">
-          <strong>지역에 따라 요율이 다릅니다.</strong>
-          본 계산기는 서울특별시 기준이며, 다른 지자체는 별도 고시를 따릅니다.
+          <strong>부가세는 중개인 과세유형에 따라 달라집니다.</strong>
+          일반과세자는 10%, 간이과세자는 약 3~4%, 면세사업자는 0%입니다. 사업자등록 유형을 확인하세요.
         </div>
       </div>
     </div>
@@ -175,19 +197,51 @@
     <h2 style="margin-bottom: 16px;">서울특별시 상한 요율 (주택)</h2>
     <div class="table-wrap">
       <table class="data">
-        <thead>
-          <tr><th>거래금액</th><th>매매·교환</th><th>전세·월세</th></tr>
-        </thead>
+        <thead><tr><th>거래금액 (매매·교환)</th><th>상한 요율</th><th>한도액</th></tr></thead>
         <tbody>
-          <tr><td>5천만 원 미만</td><td>0.6% (한도 25만원)</td><td>0.5% (한도 20만원)</td></tr>
-          <tr><td>5천만~2억 미만</td><td>0.5% (한도 80만원)</td><td>0.4% (한도 30만원, ~1억)</td></tr>
-          <tr><td>2~6억 미만</td><td>0.4%</td><td>0.3%</td></tr>
-          <tr><td>6~9억 미만</td><td>0.4%</td><td>0.4%</td></tr>
-          <tr><td>9~12억 미만</td><td>0.5%</td><td>—</td></tr>
-          <tr><td>12~15억 미만</td><td>0.6%</td><td>0.5%</td></tr>
-          <tr><td>15억 이상</td><td>0.7%</td><td>0.6%</td></tr>
+          <tr><td>5천만 원 미만</td><td>0.6%</td><td>25만 원</td></tr>
+          <tr><td>5천만 ~ 2억 미만</td><td>0.5%</td><td>80만 원</td></tr>
+          <tr><td>2억 ~ 9억 미만</td><td>0.4%</td><td>—</td></tr>
+          <tr><td>9억 ~ 12억 미만</td><td>0.5%</td><td>—</td></tr>
+          <tr><td>12억 ~ 15억 미만</td><td>0.6%</td><td>—</td></tr>
+          <tr><td>15억 이상</td><td>0.7%</td><td>—</td></tr>
         </tbody>
       </table>
+    </div>
+    <div class="table-wrap" style="margin-top: 16px;">
+      <table class="data">
+        <thead><tr><th>거래금액 (전세·월세)</th><th>상한 요율</th><th>한도액</th></tr></thead>
+        <tbody>
+          <tr><td>5천만 원 미만</td><td>0.5%</td><td>20만 원</td></tr>
+          <tr><td>5천만 ~ 1억 미만</td><td>0.4%</td><td>30만 원</td></tr>
+          <tr><td>1억 ~ 6억 미만</td><td>0.3%</td><td>—</td></tr>
+          <tr><td>6억 ~ 12억 미만</td><td>0.4%</td><td>—</td></tr>
+          <tr><td>12억 ~ 15억 미만</td><td>0.5%</td><td>—</td></tr>
+          <tr><td>15억 이상</td><td>0.6%</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">월세는 거래금액 = 보증금 + 월차임 × 100 (환산액 5천만 원 미만이면 × 70). 한도액이 있는 구간은 요율로 계산한 금액과 한도액 중 <strong>작은 값</strong>이 상한입니다.</p>
+  </section>
+
+  <section style="margin-top: 48px;">
+    <h2 style="margin-bottom: 16px;">다음 단계</h2>
+    <div class="cards-grid">
+      <a class="card" href="acquisition-tax.html">
+        <span class="badge badge-success">계산기</span>
+        <h3>취득세 계산기 →</h3>
+        <p>매매라면 중개보수와 함께 취득세·농특세·지방교육세도 미리 확인하세요.</p>
+      </a>
+      <a class="card" href="balance-settlement.html">
+        <span class="badge badge-accent">정산</span>
+        <h3>잔금일 정산 계산기 →</h3>
+        <p>잔금일에 주고받을 관리비·장기수선충당금까지 한 번에.</p>
+      </a>
+      <a class="card" href="total-cost-dashboard.html">
+        <span class="badge">종합</span>
+        <h3>총비용 대시보드 →</h3>
+        <p>중개보수·취득세·대출이자를 합산해 매수 총비용을 점검하세요.</p>
+      </a>
     </div>
   </section>
 
