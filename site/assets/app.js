@@ -519,10 +519,20 @@ function calcTransferTax(input) {
   const total = incomeTax + localTax;
   const effective = sellPrice > 0 ? (total / sellPrice * 100) : 0;
 
+  // 시나리오 요약 + 1세대1주택 비과세 요건(2년 보유) 미충족 경고
+  const oneHomeShortWarn = (homes === 1 && onlyHome && holdYears < 2);
+  let scenario;
+  if (exempted) scenario = '1세대 1주택 비과세 (12억 이하·2년 이상)';
+  else if (shortTermRate) scenario = '단기보유 ' + (shortTermRate * 100) + '% 중과 (' + (holdYears < 1 ? '1년 미만' : '1~2년') + ')';
+  else if (taxableGainRatio > 0 && taxableGainRatio < 1) scenario = '1세대 1주택 고가주택 안분과세';
+  else if (surchargeRate > 0) scenario = '조정 ' + (homes >= 3 ? '3주택+' : '2주택') + ' +' + (surchargeRate * 100) + '%p 중과';
+  else scenario = '일반 누진과세';
+
   return {
     exempted, taxableGainRatio, rawGain, taxableGain,
     ltDeductRate, ltDeduct, incomeAmount, basicDeduct, taxBase,
     rate, appliedRateLabel, incomeTax, localTax, total, effective,
+    scenario, oneHomeShortWarn,
   };
 }
 
@@ -562,13 +572,18 @@ function calcProgressiveTax(base) {
     const multiSurcharge = root.querySelector('[name="multiSurcharge"]')?.checked || false;
     const r = calcTransferTax({ sellPrice, buyPrice, cost, holdYears, liveYears, homes, onlyHome, regulated, multiSurcharge });
     const exemptBox = root.querySelector('[data-out="exemptBox"]');
+    const warnBox = root.querySelector('[data-out="warnBox"]');
     if (!r) {
       ['total','gain','ltDeduct','income','basicDeduct','taxBase','incomeTax','localTax'].forEach(k => setText(k, '0원'));
       setText('rate', '—');
       setText('effective', '실효세율 —');
+      setText('scenario', isEn ? 'Enter sale price' : '양도가액을 입력하세요');
       if (exemptBox) exemptBox.style.display = 'none';
+      if (warnBox) warnBox.style.display = 'none';
       return;
     }
+    setText('scenario', r.scenario);
+    if (warnBox) warnBox.style.display = r.oneHomeShortWarn ? '' : 'none';
     setText('gain', fmt.won(r.rawGain));
     setText('ltDeduct', '−' + fmt.won(r.ltDeduct) + ' (' + (r.ltDeductRate * 100).toFixed(0) + '%)');
     setText('income', fmt.won(r.incomeAmount));
