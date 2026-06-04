@@ -1,0 +1,38 @@
+# 톺다 실데이터 파이프라인
+
+공공 API로 `site/assets/apartments.json`(맞춤 내집 찾기)과 `site/assets/market.json`
+(지역 시세 대시보드)을 자동 갱신합니다. GitHub Actions에서 **Secrets**로 키를 주입하며,
+키는 코드·로그·정적 사이트 어디에도 노출되지 않습니다.
+
+## 1) 등록할 GitHub Secrets
+`Settings → Secrets and variables → Actions → New repository secret`
+
+| Secret 이름 | 용도 | 발급처 |
+|---|---|---|
+| `DATA_GO_KR_KEY` | 국토부 실거래·K-apt·학교알리미 | 공공데이터포털(data.go.kr) — **일반 인증키(Decoding)** |
+| `KAKAO_REST_API_KEY` | 주소→좌표, 지하철·초등학교 거리 | Kakao Developers → 앱 → REST API 키 |
+| `REB_RONE_KEY` | 매매·전세 가격지수, 전세가율 | 한국부동산원 R-ONE(reb.or.kr/r-one) |
+| `NAVER_MAP_CLIENT_ID` / `_SECRET` | (선택) Kakao 대체 지도 | 네이버클라우드 Maps |
+| `JUSO_API_KEY`, `VWORLD_KEY` | (선택) 주소→좌표 대체 | juso.go.kr / vworld.kr |
+
+## 2) 실행
+- 자동: 매일 04:00 KST (`.github/workflows/refresh-data.yml`)
+- 수동: Actions 탭 → **Refresh real-estate data** → Run workflow
+- 로컬: `cd _meta && DATA_GO_KR_KEY=... KAKAO_REST_API_KEY=... python collect_apartments.py`
+
+## 3) 수집기
+| 파일 | 입력 | 출력 |
+|---|---|---|
+| `collect_apartments.py` | 국토부 실거래 + Kakao | `apartments.json`(단지·평형·실거래가·좌표·역/학교 거리) |
+| `collect_market.py` | R-ONE | `market.json`(지역별 매매·전세 지수·전세가율) |
+| `lib_pdata.py` | 공용 유틸 | — |
+
+## 4) R-ONE 설정 (필수 1회)
+`collect_market.py`의 `CONFIG`(STATBL_ID·ITM_ID)와 `REGIONS`(지역코드)를
+R-ONE **통계표 목록**에서 확인해 채워야 합니다. 채우기 전에는 기존 `market.json`을
+보존합니다(빈 결과로 덮어쓰지 않음).
+
+## 안전장치
+- 모든 수집기는 **실패·빈 결과 시 기존 JSON을 덮어쓰지 않습니다**(`save_json_safe`).
+- `apartments.json` 병합은 큐레이션 값(세대수·노선 등)을 보존하고 가격·좌표만 갱신합니다.
+- 외부 파이썬 의존성 없음(표준 라이브러리만) — CI에서 `pip install` 불필요.

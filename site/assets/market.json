@@ -1,0 +1,785 @@
+{
+  "_meta": {
+    "note": "지역 시세 대시보드 샘플 데이터. 실제 서비스는 한국부동산원 R-ONE 부동산통계 OpenAPI로 갱신.",
+    "index_base": "2024-01 = 100 기준 예시(실데이터로 대체)",
+    "fields": {
+      "sale_index": "매매가격지수",
+      "jeonse_index": "전세가격지수",
+      "jeonse_ratio": "전세가율(%)",
+      "trades": "월 거래량(건)"
+    },
+    "source": "한국부동산원 R-ONE (www.reb.or.kr/r-one) · 국토부 실거래가",
+    "disclaimer": "예시 데이터입니다. 실제 통계와 다를 수 있습니다."
+  },
+  "as_of": "2026-05",
+  "regions": [
+    {
+      "key": "서울 전체",
+      "series": [
+        {
+          "month": "2025-05",
+          "sale_index": 100.26,
+          "jeonse_index": 98.14,
+          "jeonse_ratio": 54.1,
+          "trades": 5499
+        },
+        {
+          "month": "2025-06",
+          "sale_index": 100.63,
+          "jeonse_index": 98.37,
+          "jeonse_ratio": 53.8,
+          "trades": 6517
+        },
+        {
+          "month": "2025-07",
+          "sale_index": 100.75,
+          "jeonse_index": 98.62,
+          "jeonse_ratio": 54.0,
+          "trades": 5542
+        },
+        {
+          "month": "2025-08",
+          "sale_index": 101.06,
+          "jeonse_index": 99.03,
+          "jeonse_ratio": 54.1,
+          "trades": 5852
+        },
+        {
+          "month": "2025-09",
+          "sale_index": 101.47,
+          "jeonse_index": 99.49,
+          "jeonse_ratio": 54.7,
+          "trades": 6258
+        },
+        {
+          "month": "2025-10",
+          "sale_index": 102.06,
+          "jeonse_index": 99.59,
+          "jeonse_ratio": 55.0,
+          "trades": 6007
+        },
+        {
+          "month": "2025-11",
+          "sale_index": 102.23,
+          "jeonse_index": 99.72,
+          "jeonse_ratio": 54.7,
+          "trades": 7239
+        },
+        {
+          "month": "2025-12",
+          "sale_index": 102.42,
+          "jeonse_index": 100.03,
+          "jeonse_ratio": 55.2,
+          "trades": 6201
+        },
+        {
+          "month": "2026-01",
+          "sale_index": 102.79,
+          "jeonse_index": 100.14,
+          "jeonse_ratio": 54.8,
+          "trades": 5811
+        },
+        {
+          "month": "2026-02",
+          "sale_index": 103.23,
+          "jeonse_index": 100.39,
+          "jeonse_ratio": 55.2,
+          "trades": 6700
+        },
+        {
+          "month": "2026-03",
+          "sale_index": 103.56,
+          "jeonse_index": 100.59,
+          "jeonse_ratio": 55.7,
+          "trades": 6965
+        },
+        {
+          "month": "2026-04",
+          "sale_index": 103.78,
+          "jeonse_index": 100.9,
+          "jeonse_ratio": 55.7,
+          "trades": 7377
+        },
+        {
+          "month": "2026-05",
+          "sale_index": 104.24,
+          "jeonse_index": 101.1,
+          "jeonse_ratio": 56.2,
+          "trades": 5606
+        }
+      ]
+    },
+    {
+      "key": "서울 강남구",
+      "series": [
+        {
+          "month": "2025-05",
+          "sale_index": 102.51,
+          "jeonse_index": 100.5,
+          "jeonse_ratio": 47.7,
+          "trades": 717
+        },
+        {
+          "month": "2025-06",
+          "sale_index": 102.83,
+          "jeonse_index": 101.01,
+          "jeonse_ratio": 48.4,
+          "trades": 738
+        },
+        {
+          "month": "2025-07",
+          "sale_index": 103.57,
+          "jeonse_index": 101.38,
+          "jeonse_ratio": 48.5,
+          "trades": 744
+        },
+        {
+          "month": "2025-08",
+          "sale_index": 104.16,
+          "jeonse_index": 101.8,
+          "jeonse_ratio": 48.7,
+          "trades": 835
+        },
+        {
+          "month": "2025-09",
+          "sale_index": 104.7,
+          "jeonse_index": 102.31,
+          "jeonse_ratio": 48.2,
+          "trades": 772
+        },
+        {
+          "month": "2025-10",
+          "sale_index": 105.32,
+          "jeonse_index": 102.95,
+          "jeonse_ratio": 49.0,
+          "trades": 664
+        },
+        {
+          "month": "2025-11",
+          "sale_index": 105.81,
+          "jeonse_index": 103.46,
+          "jeonse_ratio": 48.5,
+          "trades": 710
+        },
+        {
+          "month": "2025-12",
+          "sale_index": 106.19,
+          "jeonse_index": 103.75,
+          "jeonse_ratio": 48.7,
+          "trades": 789
+        },
+        {
+          "month": "2026-01",
+          "sale_index": 106.55,
+          "jeonse_index": 104.09,
+          "jeonse_ratio": 49.1,
+          "trades": 816
+        },
+        {
+          "month": "2026-02",
+          "sale_index": 106.89,
+          "jeonse_index": 104.51,
+          "jeonse_ratio": 49.4,
+          "trades": 819
+        },
+        {
+          "month": "2026-03",
+          "sale_index": 107.6,
+          "jeonse_index": 105.1,
+          "jeonse_ratio": 49.3,
+          "trades": 698
+        },
+        {
+          "month": "2026-04",
+          "sale_index": 108.08,
+          "jeonse_index": 105.69,
+          "jeonse_ratio": 50.0,
+          "trades": 629
+        },
+        {
+          "month": "2026-05",
+          "sale_index": 108.47,
+          "jeonse_index": 106.02,
+          "jeonse_ratio": 49.6,
+          "trades": 716
+        }
+      ]
+    },
+    {
+      "key": "서울 송파구",
+      "series": [
+        {
+          "month": "2025-05",
+          "sale_index": 101.54,
+          "jeonse_index": 99.29,
+          "jeonse_ratio": 50.6,
+          "trades": 621
+        },
+        {
+          "month": "2025-06",
+          "sale_index": 101.97,
+          "jeonse_index": 99.72,
+          "jeonse_ratio": 51.5,
+          "trades": 683
+        },
+        {
+          "month": "2025-07",
+          "sale_index": 102.48,
+          "jeonse_index": 100.17,
+          "jeonse_ratio": 51.4,
+          "trades": 537
+        },
+        {
+          "month": "2025-08",
+          "sale_index": 103.18,
+          "jeonse_index": 100.68,
+          "jeonse_ratio": 51.7,
+          "trades": 708
+        },
+        {
+          "month": "2025-09",
+          "sale_index": 103.63,
+          "jeonse_index": 101.04,
+          "jeonse_ratio": 51.3,
+          "trades": 670
+        },
+        {
+          "month": "2025-10",
+          "sale_index": 103.91,
+          "jeonse_index": 101.27,
+          "jeonse_ratio": 51.5,
+          "trades": 562
+        },
+        {
+          "month": "2025-11",
+          "sale_index": 104.33,
+          "jeonse_index": 101.49,
+          "jeonse_ratio": 51.5,
+          "trades": 559
+        },
+        {
+          "month": "2025-12",
+          "sale_index": 104.63,
+          "jeonse_index": 101.84,
+          "jeonse_ratio": 51.7,
+          "trades": 726
+        },
+        {
+          "month": "2026-01",
+          "sale_index": 105.19,
+          "jeonse_index": 102.1,
+          "jeonse_ratio": 52.0,
+          "trades": 604
+        },
+        {
+          "month": "2026-02",
+          "sale_index": 105.62,
+          "jeonse_index": 102.35,
+          "jeonse_ratio": 52.6,
+          "trades": 753
+        },
+        {
+          "month": "2026-03",
+          "sale_index": 106.1,
+          "jeonse_index": 102.74,
+          "jeonse_ratio": 52.2,
+          "trades": 548
+        },
+        {
+          "month": "2026-04",
+          "sale_index": 106.52,
+          "jeonse_index": 103.05,
+          "jeonse_ratio": 52.9,
+          "trades": 561
+        },
+        {
+          "month": "2026-05",
+          "sale_index": 106.78,
+          "jeonse_index": 103.63,
+          "jeonse_ratio": 52.8,
+          "trades": 558
+        }
+      ]
+    },
+    {
+      "key": "서울 노원구",
+      "series": [
+        {
+          "month": "2025-05",
+          "sale_index": 96.12,
+          "jeonse_index": 93.97,
+          "jeonse_ratio": 60.0,
+          "trades": 633
+        },
+        {
+          "month": "2025-06",
+          "sale_index": 96.4,
+          "jeonse_index": 94.13,
+          "jeonse_ratio": 60.0,
+          "trades": 514
+        },
+        {
+          "month": "2025-07",
+          "sale_index": 96.33,
+          "jeonse_index": 94.32,
+          "jeonse_ratio": 60.3,
+          "trades": 594
+        },
+        {
+          "month": "2025-08",
+          "sale_index": 96.34,
+          "jeonse_index": 94.29,
+          "jeonse_ratio": 60.7,
+          "trades": 634
+        },
+        {
+          "month": "2025-09",
+          "sale_index": 96.62,
+          "jeonse_index": 94.49,
+          "jeonse_ratio": 60.9,
+          "trades": 586
+        },
+        {
+          "month": "2025-10",
+          "sale_index": 96.58,
+          "jeonse_index": 94.58,
+          "jeonse_ratio": 60.6,
+          "trades": 448
+        },
+        {
+          "month": "2025-11",
+          "sale_index": 96.44,
+          "jeonse_index": 94.57,
+          "jeonse_ratio": 60.7,
+          "trades": 577
+        },
+        {
+          "month": "2025-12",
+          "sale_index": 96.77,
+          "jeonse_index": 94.63,
+          "jeonse_ratio": 61.4,
+          "trades": 634
+        },
+        {
+          "month": "2026-01",
+          "sale_index": 97.1,
+          "jeonse_index": 94.66,
+          "jeonse_ratio": 61.0,
+          "trades": 486
+        },
+        {
+          "month": "2026-02",
+          "sale_index": 97.05,
+          "jeonse_index": 94.62,
+          "jeonse_ratio": 61.4,
+          "trades": 617
+        },
+        {
+          "month": "2026-03",
+          "sale_index": 97.32,
+          "jeonse_index": 94.69,
+          "jeonse_ratio": 61.6,
+          "trades": 598
+        },
+        {
+          "month": "2026-04",
+          "sale_index": 97.21,
+          "jeonse_index": 94.83,
+          "jeonse_ratio": 62.0,
+          "trades": 594
+        },
+        {
+          "month": "2026-05",
+          "sale_index": 97.44,
+          "jeonse_index": 94.9,
+          "jeonse_ratio": 61.5,
+          "trades": 596
+        }
+      ]
+    },
+    {
+      "key": "경기 성남시",
+      "series": [
+        {
+          "month": "2025-05",
+          "sale_index": 99.32,
+          "jeonse_index": 97.46,
+          "jeonse_ratio": 55.4,
+          "trades": 847
+        },
+        {
+          "month": "2025-06",
+          "sale_index": 99.67,
+          "jeonse_index": 97.96,
+          "jeonse_ratio": 55.3,
+          "trades": 775
+        },
+        {
+          "month": "2025-07",
+          "sale_index": 99.88,
+          "jeonse_index": 98.14,
+          "jeonse_ratio": 55.6,
+          "trades": 977
+        },
+        {
+          "month": "2025-08",
+          "sale_index": 100.1,
+          "jeonse_index": 98.59,
+          "jeonse_ratio": 55.8,
+          "trades": 929
+        },
+        {
+          "month": "2025-09",
+          "sale_index": 100.43,
+          "jeonse_index": 98.93,
+          "jeonse_ratio": 55.3,
+          "trades": 726
+        },
+        {
+          "month": "2025-10",
+          "sale_index": 101.07,
+          "jeonse_index": 99.31,
+          "jeonse_ratio": 55.8,
+          "trades": 1017
+        },
+        {
+          "month": "2025-11",
+          "sale_index": 101.44,
+          "jeonse_index": 99.78,
+          "jeonse_ratio": 56.2,
+          "trades": 788
+        },
+        {
+          "month": "2025-12",
+          "sale_index": 101.72,
+          "jeonse_index": 100.02,
+          "jeonse_ratio": 55.8,
+          "trades": 907
+        },
+        {
+          "month": "2026-01",
+          "sale_index": 102.0,
+          "jeonse_index": 100.31,
+          "jeonse_ratio": 55.9,
+          "trades": 1009
+        },
+        {
+          "month": "2026-02",
+          "sale_index": 102.33,
+          "jeonse_index": 100.61,
+          "jeonse_ratio": 56.4,
+          "trades": 1008
+        },
+        {
+          "month": "2026-03",
+          "sale_index": 102.69,
+          "jeonse_index": 101.1,
+          "jeonse_ratio": 56.5,
+          "trades": 890
+        },
+        {
+          "month": "2026-04",
+          "sale_index": 103.1,
+          "jeonse_index": 101.23,
+          "jeonse_ratio": 56.6,
+          "trades": 779
+        },
+        {
+          "month": "2026-05",
+          "sale_index": 103.25,
+          "jeonse_index": 101.67,
+          "jeonse_ratio": 56.5,
+          "trades": 871
+        }
+      ]
+    },
+    {
+      "key": "경기 화성시",
+      "series": [
+        {
+          "month": "2025-05",
+          "sale_index": 95.16,
+          "jeonse_index": 93.16,
+          "jeonse_ratio": 62.9,
+          "trades": 956
+        },
+        {
+          "month": "2025-06",
+          "sale_index": 95.24,
+          "jeonse_index": 93.31,
+          "jeonse_ratio": 62.8,
+          "trades": 970
+        },
+        {
+          "month": "2025-07",
+          "sale_index": 95.16,
+          "jeonse_index": 93.26,
+          "jeonse_ratio": 63.5,
+          "trades": 952
+        },
+        {
+          "month": "2025-08",
+          "sale_index": 95.24,
+          "jeonse_index": 93.4,
+          "jeonse_ratio": 63.8,
+          "trades": 930
+        },
+        {
+          "month": "2025-09",
+          "sale_index": 95.35,
+          "jeonse_index": 93.44,
+          "jeonse_ratio": 63.6,
+          "trades": 1015
+        },
+        {
+          "month": "2025-10",
+          "sale_index": 95.38,
+          "jeonse_index": 93.49,
+          "jeonse_ratio": 63.7,
+          "trades": 1100
+        },
+        {
+          "month": "2025-11",
+          "sale_index": 95.53,
+          "jeonse_index": 93.68,
+          "jeonse_ratio": 64.3,
+          "trades": 867
+        },
+        {
+          "month": "2025-12",
+          "sale_index": 95.61,
+          "jeonse_index": 93.9,
+          "jeonse_ratio": 64.3,
+          "trades": 825
+        },
+        {
+          "month": "2026-01",
+          "sale_index": 95.47,
+          "jeonse_index": 93.92,
+          "jeonse_ratio": 63.9,
+          "trades": 861
+        },
+        {
+          "month": "2026-02",
+          "sale_index": 95.31,
+          "jeonse_index": 94.03,
+          "jeonse_ratio": 64.6,
+          "trades": 1085
+        },
+        {
+          "month": "2026-03",
+          "sale_index": 95.19,
+          "jeonse_index": 94.16,
+          "jeonse_ratio": 64.6,
+          "trades": 827
+        },
+        {
+          "month": "2026-04",
+          "sale_index": 95.43,
+          "jeonse_index": 94.39,
+          "jeonse_ratio": 64.4,
+          "trades": 1104
+        },
+        {
+          "month": "2026-05",
+          "sale_index": 95.43,
+          "jeonse_index": 94.42,
+          "jeonse_ratio": 65.2,
+          "trades": 1063
+        }
+      ]
+    },
+    {
+      "key": "인천 연수구",
+      "series": [
+        {
+          "month": "2025-05",
+          "sale_index": 96.48,
+          "jeonse_index": 94.66,
+          "jeonse_ratio": 61.0,
+          "trades": 574
+        },
+        {
+          "month": "2025-06",
+          "sale_index": 96.48,
+          "jeonse_index": 94.71,
+          "jeonse_ratio": 61.3,
+          "trades": 504
+        },
+        {
+          "month": "2025-07",
+          "sale_index": 96.66,
+          "jeonse_index": 94.81,
+          "jeonse_ratio": 60.9,
+          "trades": 572
+        },
+        {
+          "month": "2025-08",
+          "sale_index": 96.87,
+          "jeonse_index": 94.93,
+          "jeonse_ratio": 61.1,
+          "trades": 716
+        },
+        {
+          "month": "2025-09",
+          "sale_index": 97.16,
+          "jeonse_index": 95.24,
+          "jeonse_ratio": 61.3,
+          "trades": 558
+        },
+        {
+          "month": "2025-10",
+          "sale_index": 97.08,
+          "jeonse_index": 95.47,
+          "jeonse_ratio": 61.6,
+          "trades": 528
+        },
+        {
+          "month": "2025-11",
+          "sale_index": 97.19,
+          "jeonse_index": 95.75,
+          "jeonse_ratio": 62.2,
+          "trades": 556
+        },
+        {
+          "month": "2025-12",
+          "sale_index": 97.16,
+          "jeonse_index": 96.04,
+          "jeonse_ratio": 62.1,
+          "trades": 654
+        },
+        {
+          "month": "2026-01",
+          "sale_index": 97.1,
+          "jeonse_index": 95.98,
+          "jeonse_ratio": 62.4,
+          "trades": 593
+        },
+        {
+          "month": "2026-02",
+          "sale_index": 97.04,
+          "jeonse_index": 96.28,
+          "jeonse_ratio": 62.5,
+          "trades": 676
+        },
+        {
+          "month": "2026-03",
+          "sale_index": 96.98,
+          "jeonse_index": 96.54,
+          "jeonse_ratio": 62.2,
+          "trades": 689
+        },
+        {
+          "month": "2026-04",
+          "sale_index": 97.11,
+          "jeonse_index": 96.6,
+          "jeonse_ratio": 62.7,
+          "trades": 703
+        },
+        {
+          "month": "2026-05",
+          "sale_index": 97.14,
+          "jeonse_index": 96.57,
+          "jeonse_ratio": 62.8,
+          "trades": 552
+        }
+      ]
+    },
+    {
+      "key": "부산 해운대구",
+      "series": [
+        {
+          "month": "2025-05",
+          "sale_index": 96.88,
+          "jeonse_index": 94.99,
+          "jeonse_ratio": 61.6,
+          "trades": 383
+        },
+        {
+          "month": "2025-06",
+          "sale_index": 96.87,
+          "jeonse_index": 94.98,
+          "jeonse_ratio": 62.4,
+          "trades": 397
+        },
+        {
+          "month": "2025-07",
+          "sale_index": 96.95,
+          "jeonse_index": 94.92,
+          "jeonse_ratio": 62.2,
+          "trades": 355
+        },
+        {
+          "month": "2025-08",
+          "sale_index": 96.91,
+          "jeonse_index": 94.79,
+          "jeonse_ratio": 62.6,
+          "trades": 437
+        },
+        {
+          "month": "2025-09",
+          "sale_index": 96.83,
+          "jeonse_index": 94.84,
+          "jeonse_ratio": 62.9,
+          "trades": 369
+        },
+        {
+          "month": "2025-10",
+          "sale_index": 97.07,
+          "jeonse_index": 94.88,
+          "jeonse_ratio": 62.7,
+          "trades": 481
+        },
+        {
+          "month": "2025-11",
+          "sale_index": 97.1,
+          "jeonse_index": 94.95,
+          "jeonse_ratio": 63.1,
+          "trades": 504
+        },
+        {
+          "month": "2025-12",
+          "sale_index": 97.1,
+          "jeonse_index": 95.15,
+          "jeonse_ratio": 63.2,
+          "trades": 451
+        },
+        {
+          "month": "2026-01",
+          "sale_index": 97.13,
+          "jeonse_index": 95.15,
+          "jeonse_ratio": 62.8,
+          "trades": 372
+        },
+        {
+          "month": "2026-02",
+          "sale_index": 97.0,
+          "jeonse_index": 95.31,
+          "jeonse_ratio": 63.2,
+          "trades": 377
+        },
+        {
+          "month": "2026-03",
+          "sale_index": 96.87,
+          "jeonse_index": 95.51,
+          "jeonse_ratio": 63.8,
+          "trades": 456
+        },
+        {
+          "month": "2026-04",
+          "sale_index": 96.84,
+          "jeonse_index": 95.47,
+          "jeonse_ratio": 63.5,
+          "trades": 423
+        },
+        {
+          "month": "2026-05",
+          "sale_index": 96.75,
+          "jeonse_index": 95.51,
+          "jeonse_ratio": 63.6,
+          "trades": 501
+        }
+      ]
+    }
+  ]
+}
