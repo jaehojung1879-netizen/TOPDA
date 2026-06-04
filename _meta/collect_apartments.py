@@ -12,11 +12,51 @@ DATA_GO_KR_KEY 는 공공데이터포털의 '일반 인증키(Decoding)' 사용 
 첫 실행은 GitHub Actions(네트워크 가능)에서 수행하고 로그로 파라미터를 검증하세요.
 """
 import datetime as dt
+import math
 import os
 import sys
 from collections import defaultdict
 
 import lib_pdata as L
+
+# 주요 업무지구 좌표 (lng, lat) — 통근시간 추정용
+HUBS = {
+    "강남": (127.0276, 37.4979),   # 강남역
+    "판교": (127.1112, 37.3947),   # 판교역
+    "여의도": (126.9244, 37.5215), # 여의도역
+    "광화문": (126.9769, 37.5707), # 광화문
+}
+BUILDERS = [("래미안", "삼성물산"), ("자이", "GS건설"), ("푸르지오", "대우건설"),
+            ("e편한세상", "DL이앤씨"), ("더샵", "포스코이앤씨"), ("힐스테이트", "현대건설"),
+            ("롯데캐슬", "롯데건설"), ("캐슬", "롯데건설"), ("아이파크", "HDC현대산업"),
+            ("위브", "두산건설"), ("센트레빌", "동부건설")]
+
+
+def builder_of(name):
+    for k, v in BUILDERS:
+        if k in name:
+            return v
+    return "기타"
+
+
+def haversine_km(lng1, lat1, lng2, lat2):
+    r = 6371.0
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dlat, dlng = math.radians(lat2 - lat1), math.radians(lng2 - lng1)
+    a = math.sin(dlat / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlng / 2) ** 2
+    return 2 * r * math.asin(math.sqrt(a))
+
+
+def estimate_commute(lng, lat):
+    """수도권 단지 → 4대 업무지구 추정 통근시간(분). 직선거리×보정(도어투도어 ~26km/h).
+    Kakao Mobility(자동차 ETA) 키가 있으면 이 함수를 대체하세요."""
+    if not (36.8 <= lat <= 38.3 and 126.3 <= lng <= 127.6):  # 수도권 대략 bbox
+        return None
+    out = {}
+    for hub, (hlng, hlat) in HUBS.items():
+        km = haversine_km(lng, lat, hlng, hlat)
+        out[hub] = int(round(8 + km / 26.0 * 60))  # 기본 8분 + 이동
+    return out
 
 MOLIT = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade"
 MONTHS_BACK = 6           # 최근 6개월 실거래
@@ -89,7 +129,8 @@ def aggregate(region_name, items):
             "name": apt, "region": f"{region_name} {deals[-1]['umd']}",
             "region_key": region_name.split()[-1],
             "built_year": int(deals[-1]["build_year"] or 0) or None,
-            "units": units, "price_history": history,
+            "units": units, "price_history": history, "builder": builder_of(apt),
+            # 전세가율(R-ONE/전세 실거래)·세대당 주차·관리비(K-apt)는 후속 보강 대상
             "_addr": f"{region_name} {deals[-1]['umd']} {deals[-1]['jibun']}",
         })
     return out
@@ -108,6 +149,9 @@ def enrich_location(apt):
     sch = L.nearest_kakao(lng, lat, keyword="초등학교")
     if sch:
         apt["elementary"] = {"name": sch[0], "distance_m": sch[1], "in_zone": False}
+    commute = estimate_commute(lng, lat)
+    if commute:
+        apt["commute"] = commute
 
 
 def merge(existing, fresh):
