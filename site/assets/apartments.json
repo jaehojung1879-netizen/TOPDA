@@ -1,0 +1,210 @@
+{
+  "_meta": {
+    "note": "맞춤 내집 찾기 샘플 데이터. 가격 단위는 만원(예: 195000 = 19.5억). 거리는 도보 기준 m. 실제 서비스에서는 아래 출처를 정기 동기화해야 합니다.",
+    "currency_unit": "만원",
+    "distance_unit": "m (도보)",
+    "as_of": "2026-05",
+    "sources": {
+      "price": "국토교통부 실거래가 공개시스템 OpenAPI (data.go.kr)",
+      "complex": "공동주택관리정보시스템 K-apt (세대수·준공연도)",
+      "school": "학교알리미 + 학구도 안내 서비스 (초등학교 위치·통학구역)",
+      "distance": "카카오맵/네이버 지도 길찾기 API (좌표→도보 거리)",
+      "geocode": "도로명주소 API / V-World (주소→좌표)"
+    },
+    "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다."
+  },
+  "apartments": [
+    {
+      "id": "ap-helio",
+      "name": "헬리오시티",
+      "region": "서울 송파구 가락동",
+      "region_key": "송파구",
+      "built_year": 2018,
+      "households": 9510,
+      "subway": { "station": "송파역", "line": "8호선", "distance_m": 350 },
+      "elementary": { "name": "가락초", "distance_m": 280, "in_zone": true },
+      "units": [
+        { "label": "59㎡(25평)", "area_m2": 59, "recent_price": 155000 },
+        { "label": "84㎡(34평)", "area_m2": 84, "recent_price": 195000 },
+        { "label": "110㎡(43평)", "area_m2": 110, "recent_price": 255000 }
+      ],
+      "price_history": [188000, 191000, 193000, 195000],
+      "lat": 37.4979, "lng": 127.1189
+    },
+    {
+      "id": "ap-grace",
+      "name": "고덕그라시움",
+      "region": "서울 강동구 고덕동",
+      "region_key": "강동구",
+      "built_year": 2019,
+      "households": 4932,
+      "subway": { "station": "상일동역", "line": "5호선", "distance_m": 400 },
+      "elementary": { "name": "강덕초", "distance_m": 200, "in_zone": true },
+      "units": [
+        { "label": "59㎡(25평)", "area_m2": 59, "recent_price": 130000 },
+        { "label": "84㎡(34평)", "area_m2": 84, "recent_price": 175000 }
+      ],
+      "price_history": [168000, 172000, 174000, 175000],
+      "lat": 37.5573, "lng": 127.1709
+    },
+    {
+      "id": "ap-mapo",
+      "name": "마포래미안푸르지오",
+      "region": "서울 마포구 아현동",
+      "region_key": "마포구",
+      "built_year": 2014,
+      "households": 3885,
+      "subway": { "station": "대흥역", "line": "6호선", "distance_m": 300 },
+      "elementary": { "name": "한서초", "distance_m": 350, "in_zone": true },
+      "units": [
+        { "label": "59㎡(25평)", "area_m2": 59, "recent_price": 140000 },
+        { "label": "84㎡(34평)", "area_m2": 84, "recent_price": 185000 }
+      ],
+      "price_history": [180000, 178000, 183000, 185000],
+      "lat": 37.5497, "lng": 126.9483
+    },
+    {
+      "id": "ap-oksu",
+      "name": "e편한세상옥수파크힐스",
+      "region": "서울 성동구 옥수동",
+      "region_key": "성동구",
+      "built_year": 2016,
+      "households": 1976,
+      "subway": { "station": "옥수역", "line": "3호선", "distance_m": 500 },
+      "elementary": { "name": "옥정초", "distance_m": 400, "in_zone": true },
+      "units": [
+        { "label": "59㎡(25평)", "area_m2": 59, "recent_price": 145000 },
+        { "label": "84㎡(34평)", "area_m2": 84, "recent_price": 190000 }
+      ],
+      "price_history": [186000, 188000, 189000, 190000],
+      "lat": 37.5404, "lng": 127.0098
+    },
+    {
+      "id": "ap-els",
+      "name": "잠실엘스",
+      "region": "서울 송파구 잠실동",
+      "region_key": "송파구",
+      "built_year": 2008,
+      "households": 5678,
+      "subway": { "station": "잠실새내역", "line": "2호선", "distance_m": 350 },
+      "elementary": { "name": "잠일초", "distance_m": 250, "in_zone": true },
+      "units": [
+        { "label": "59㎡(25평)", "area_m2": 59, "recent_price": 170000 },
+        { "label": "84㎡(34평)", "area_m2": 84, "recent_price": 230000 }
+      ],
+      "price_history": [225000, 228000, 226000, 230000],
+      "lat": 37.5139, "lng": 127.0858
+    },
+    {
+      "id": "ap-sanggye7",
+      "name": "상계주공7단지",
+      "region": "서울 노원구 상계동",
+      "region_key": "노원구",
+      "built_year": 1988,
+      "households": 2634,
+      "subway": { "station": "노원역", "line": "4·7호선", "distance_m": 250 },
+      "elementary": { "name": "상천초", "distance_m": 300, "in_zone": true },
+      "units": [
+        { "label": "41㎡(16평)", "area_m2": 41, "recent_price": 52000 },
+        { "label": "59㎡(25평)", "area_m2": 59, "recent_price": 78000 }
+      ],
+      "price_history": [80000, 76000, 74000, 78000],
+      "lat": 37.6552, "lng": 127.0617
+    },
+    {
+      "id": "ap-gwanggyo",
+      "name": "광교자연앤힐스테이트",
+      "region": "경기 수원시 영통구 이의동",
+      "region_key": "수원시",
+      "built_year": 2012,
+      "households": 1764,
+      "subway": { "station": "광교중앙역", "line": "신분당선", "distance_m": 600 },
+      "elementary": { "name": "신풍초", "distance_m": 250, "in_zone": true },
+      "units": [
+        { "label": "84㎡(34평)", "area_m2": 84, "recent_price": 130000 },
+        { "label": "101㎡(40평)", "area_m2": 101, "recent_price": 165000 }
+      ],
+      "price_history": [128000, 131000, 129000, 130000],
+      "lat": 37.2861, "lng": 127.0533
+    },
+    {
+      "id": "ap-parkview",
+      "name": "분당파크뷰",
+      "region": "경기 성남시 분당구 정자동",
+      "region_key": "성남시",
+      "built_year": 2004,
+      "households": 1829,
+      "subway": { "station": "정자역", "line": "신분당·수인분당", "distance_m": 700 },
+      "elementary": { "name": "늘푸른초", "distance_m": 300, "in_zone": true },
+      "units": [
+        { "label": "84㎡(34평)", "area_m2": 84, "recent_price": 175000 },
+        { "label": "165㎡(50평)", "area_m2": 165, "recent_price": 320000 }
+      ],
+      "price_history": [170000, 173000, 174000, 175000],
+      "lat": 37.3669, "lng": 127.1086
+    },
+    {
+      "id": "ap-songdo",
+      "name": "송도더샵퍼스트파크",
+      "region": "인천 연수구 송도동",
+      "region_key": "연수구",
+      "built_year": 2017,
+      "households": 1769,
+      "subway": { "station": "센트럴파크역", "line": "인천1호선", "distance_m": 800 },
+      "elementary": { "name": "송명초", "distance_m": 350, "in_zone": true },
+      "units": [
+        { "label": "59㎡(25평)", "area_m2": 59, "recent_price": 72000 },
+        { "label": "84㎡(34평)", "area_m2": 84, "recent_price": 95000 }
+      ],
+      "price_history": [96000, 94000, 93000, 95000],
+      "lat": 37.3895, "lng": 126.6402
+    },
+    {
+      "id": "ap-dmc",
+      "name": "DMC래미안e편한세상",
+      "region": "서울 서대문구 남가좌동",
+      "region_key": "서대문구",
+      "built_year": 2012,
+      "households": 3293,
+      "subway": { "station": "가좌역", "line": "경의중앙선", "distance_m": 900 },
+      "elementary": { "name": "가재울초", "distance_m": 250, "in_zone": true },
+      "units": [
+        { "label": "59㎡(25평)", "area_m2": 59, "recent_price": 95000 },
+        { "label": "84㎡(34평)", "area_m2": 84, "recent_price": 125000 }
+      ],
+      "price_history": [123000, 124000, 126000, 125000],
+      "lat": 37.5762, "lng": 126.9176
+    },
+    {
+      "id": "ap-heukseok",
+      "name": "흑석한강센트레빌",
+      "region": "서울 동작구 흑석동",
+      "region_key": "동작구",
+      "built_year": 2011,
+      "households": 658,
+      "subway": { "station": "흑석역", "line": "9호선", "distance_m": 300 },
+      "elementary": { "name": "은로초", "distance_m": 400, "in_zone": true },
+      "units": [
+        { "label": "84㎡(34평)", "area_m2": 84, "recent_price": 175000 }
+      ],
+      "price_history": [172000, 174000, 176000, 175000],
+      "lat": 37.5088, "lng": 126.9637
+    },
+    {
+      "id": "ap-daechi",
+      "name": "래미안대치팰리스",
+      "region": "서울 강남구 대치동",
+      "region_key": "강남구",
+      "built_year": 2015,
+      "households": 1608,
+      "subway": { "station": "대치역", "line": "3호선", "distance_m": 250 },
+      "elementary": { "name": "대치초", "distance_m": 200, "in_zone": true },
+      "units": [
+        { "label": "59㎡(25평)", "area_m2": 59, "recent_price": 250000 },
+        { "label": "84㎡(34평)", "area_m2": 84, "recent_price": 320000 }
+      ],
+      "price_history": [310000, 315000, 318000, 320000],
+      "lat": 37.4942, "lng": 127.0635
+    }
+  ]
+}

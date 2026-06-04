@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>맞춤 내집 찾기 — 톺다</title>
+<meta name="description" content="예산·지역·평형·연식·역거리·초등학교 거리·세대수 조건을 입력하면, 단지별 종합점수로 추천 순위를 매겨주는 맞춤 내집 찾기. 조건은 몇 가지만 넣어도 됩니다." />
+<!-- seo:meta -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260606" />
+<style>
+  .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
+  .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
+  .finder-panel {
+    background: var(--surface, #fff); border: 1px solid var(--border, #e5e7eb);
+    border-radius: 16px; padding: 20px; position: sticky; top: 88px;
+  }
+  .finder-panel h2 { font-size: 1rem; margin: 0 0 14px; }
+  .finder-field { margin-bottom: 14px; }
+  .finder-field > label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+  .finder-field input, .finder-field select {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border, #d1d5db);
+    border-radius: 10px; font-size: 0.95rem; font-family: inherit; background: #fff; color: inherit;
+  }
+  .finder-suffix { position: relative; }
+  .finder-suffix input { padding-right: 38px; }
+  .finder-suffix::after {
+    content: attr(data-suffix); position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); font-size: 0.85rem; pointer-events: none;
+  }
+  .finder-hint { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; display: block; }
+  .finder-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .finder-actions .btn { flex: 1; }
+  .finder-count { font-weight: 700; margin: 0 0 14px; font-size: 1.05rem; }
+  .finder-count .em { color: var(--accent, #2563eb); }
+  .finder-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .apt-card {
+    border: 1px solid var(--border, #e5e7eb); border-radius: 16px; padding: 18px; background: #fff;
+    display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden;
+  }
+  .apt-card .rank {
+    position: absolute; top: 0; left: 0; background: var(--accent, #2563eb); color: #fff;
+    font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-bottom-right-radius: 10px;
+  }
+  .apt-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-top: 8px; }
+  .apt-name { font-size: 1.12rem; font-weight: 800; letter-spacing: -0.02em; }
+  .apt-region { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+  .apt-score { text-align: center; flex-shrink: 0; }
+  .apt-score .num { font-size: 1.7rem; font-weight: 800; line-height: 1; color: var(--accent, #2563eb); font-variant-numeric: tabular-nums; }
+  .apt-score .lbl { font-size: 0.68rem; color: var(--text-muted); }
+  .apt-price { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+  .apt-price small { font-size: 0.78rem; font-weight: 500; color: var(--text-muted); }
+  .apt-spec { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; font-size: 0.85rem; }
+  .apt-spec .k { color: var(--text-muted); }
+  .apt-spec .v { font-weight: 600; }
+  .apt-reasons { display: flex; flex-wrap: wrap; gap: 6px; }
+  .apt-chip {
+    background: color-mix(in srgb, var(--accent, #2563eb) 10%, transparent);
+    color: var(--accent, #2563eb); border-radius: 999px; padding: 4px 10px; font-size: 0.78rem; font-weight: 600;
+    word-break: keep-all;
+  }
+  .apt-relaxed { font-size: 0.76rem; color: #b45309; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 6px 10px; }
+  .apt-bars { display: grid; gap: 5px; }
+  .apt-bar { display: grid; grid-template-columns: 64px 1fr 34px; align-items: center; gap: 8px; font-size: 0.72rem; color: var(--text-muted); }
+  .apt-bar .track { height: 6px; background: var(--surface-2, #f1f5f9); border-radius: 4px; overflow: hidden; }
+  .apt-bar .fill { height: 100%; background: var(--accent, #2563eb); border-radius: 4px; }
+  .finder-empty { border: 1px dashed var(--border, #d1d5db); border-radius: 14px; padding: 28px; text-align: center; color: var(--text-muted); }
+  .finder-relaxed-banner { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; }
+  @media (max-width: 860px) {
+    .finder-layout { grid-template-columns: 1fr; }
+    .finder-panel { position: static; }
+    .finder-results { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a>
+      <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+      <a href="../about.html" data-nav>소개</a>
+    </nav>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a><a href="../calculators/index.html">계산기</a><a href="../checklists/index.html">체크리스트</a><a href="../about.html">소개</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 맞춤 내집 찾기</div>
+    <h1>맞춤 내집 찾기</h1>
+    <p class="finder-intro">예산·지역·평형·연식·역거리·초등학교 거리·세대수 중 <strong>원하는 조건만</strong> 넣어보세요.
+    조건에 맞는 단지를 찾아 <strong>예산 적합도·역세권·학군·실거래 안정성·단지규모·연식</strong>을 가중 합산한 종합점수로 추천 순위를 매겨 드립니다.</p>
+  </div>
+
+  <div class="finder-layout">
+    <!-- 조건 패널 -->
+    <form class="finder-panel" id="finderForm" autocomplete="off">
+      <h2>조건 입력</h2>
+
+      <div class="finder-field">
+        <label for="f-budget">예산 (최대)</label>
+        <div class="finder-suffix" data-suffix="억">
+          <input id="f-budget" name="budget" type="number" min="0" step="0.5" inputmode="decimal" placeholder="예: 15" />
+        </div>
+        <span class="finder-hint">이 금액 이하 평형이 있는 단지만 추천합니다.</span>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-region">지역</label>
+        <select id="f-region" name="region"><option value="all">전체</option></select>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-area">평형 (전용면적)</label>
+        <select id="f-area" name="area_type">
+          <option value="all">전체</option>
+          <option value="small">소형 (~60㎡)</option>
+          <option value="medium-small">국민평형 (60~85㎡)</option>
+          <option value="medium">중형 (85~102㎡)</option>
+          <option value="large">대형 (102㎡~)</option>
+        </select>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-family">가족 수 (선택 — 평형 추천)</label>
+        <select id="f-family" name="family">
+          <option value="">선택 안 함</option>
+          <option value="1">1~2인</option>
+          <option value="3">3인</option>
+          <option value="4">4인 이상</option>
+        </select>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-age">최대 연식</label>
+        <div class="finder-suffix" data-suffix="년">
+          <input id="f-age" name="max_age_years" type="number" min="0" step="1" inputmode="numeric" placeholder="예: 15" />
+        </div>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-subway">역까지 거리 (최대)</label>
+        <div class="finder-suffix" data-suffix="m">
+          <input id="f-subway" name="subway_distance_max" type="number" min="0" step="50" inputmode="numeric" placeholder="예: 500" />
+        </div>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-elem">초등학교 거리 (최대)</label>
+        <div class="finder-suffix" data-suffix="m">
+          <input id="f-elem" name="elementary_distance_max" type="number" min="0" step="50" inputmode="numeric" placeholder="예: 400" />
+        </div>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-house">최소 세대수</label>
+        <div class="finder-suffix" data-suffix="세대">
+          <input id="f-house" name="min_households" type="number" min="0" step="100" inputmode="numeric" placeholder="예: 1000" />
+        </div>
+      </div>
+
+      <div class="finder-actions">
+        <button type="submit" class="btn btn-primary">추천 받기</button>
+        <button type="button" class="btn btn-secondary" id="finderReset">초기화</button>
+      </div>
+    </form>
+
+    <!-- 결과 -->
+    <section>
+      <p class="finder-count" id="finderCount">단지를 불러오는 중…</p>
+      <div id="finderRelaxed"></div>
+      <div class="finder-results" id="finderResults"></div>
+    </section>
+  </div>
+
+  <section style="margin-top: 56px;">
+    <h2 style="margin-bottom: 12px;">종합점수는 이렇게 계산됩니다</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>항목</th><th>비중</th><th>평가 방식</th></tr></thead>
+        <tbody>
+          <tr><td>예산 적합도</td><td>25%</td><td>예산 이내에서 여유가 클수록 가점 (예산 미입력 시 비중을 나머지 항목에 배분)</td></tr>
+          <tr><td>역세권</td><td>20%</td><td>도보 300m 이하 만점, 1.5km 이상 0점</td></tr>
+          <tr><td>초등학교 접근성</td><td>20%</td><td>150m 이하(초품아) 만점, 1.2km 이상 0점</td></tr>
+          <tr><td>최근 실거래 안정성</td><td>15%</td><td>최근 실거래가 변동계수가 낮을수록(가격이 안정적일수록) 가점</td></tr>
+          <tr><td>단지규모</td><td>10%</td><td>2,000세대 이상 만점, 300세대 이하 최소점</td></tr>
+          <tr><td>연식</td><td>10%</td><td>준공 2년 이내 만점, 35년 이상 최소점</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">입력하지 않은 조건은 순위에 영향을 주지 않으며, 그 비중은 나머지 항목으로 자동 재배분됩니다.</p>
+  </section>
+
+  <section style="margin-top: 40px;">
+    <h2 style="margin-bottom: 12px;">데이터는 어디서 오나요?</h2>
+    <ul class="ref-list">
+      <li><strong>실거래가</strong> — 국토교통부 실거래가 공개시스템 OpenAPI (data.go.kr ‘아파트 매매 실거래 상세자료’)</li>
+      <li><strong>세대수·준공연도</strong> — 공동주택관리정보시스템 K-apt (k-apt.go.kr)</li>
+      <li><strong>초등학교 위치·통학구역</strong> — 학교알리미(schoolinfo.go.kr) + 학구도 안내 서비스</li>
+      <li><strong>역·학교까지 도보 거리</strong> — 카카오맵/네이버 지도 길찾기 API (단지 좌표 → 최단 도보)</li>
+      <li><strong>주소 → 좌표</strong> — 도로명주소 API(juso.go.kr) / 국토정보플랫폼 V-World</li>
+    </ul>
+    <div class="callout callout-warn" style="margin-top: 16px;">
+      <div class="icon">⚠</div>
+      <div class="body">
+        <strong>현재는 예시(샘플) 데이터로 동작합니다.</strong>
+        실제 서비스에서는 위 공공 API를 주기적으로 수집·정제해 <code>apartments.json</code>으로 빌드합니다.
+        표시된 시세·거리는 참고용이며, 계약 전 반드시 실거래가·현장·권리관계를 직접 확인하세요.
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="disclaimer">© 톺다. 일반 정보 제공용입니다.</p>
+  </div>
+</footer>
+
+<script src="../assets/score.js?v=20260606"></script>
+<script src="../assets/app.js?v=20260606"></script>
+<script>
+(function () {
+  'use strict';
+  var S = window.TopdaScore;
+  var form = document.getElementById('finderForm');
+  var resultsEl = document.getElementById('finderResults');
+  var countEl = document.getElementById('finderCount');
+  var relaxedEl = document.getElementById('finderRelaxed');
+  var regionSel = document.getElementById('f-region');
+  var familySel = document.getElementById('f-family');
+  var areaSel = document.getElementById('f-area');
+  var DATA = [];
+
+  var fmt = S.formatEok;
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function num(v) { v = parseFloat(v); return isNaN(v) ? null : v; }
+
+  // 폼 → 필터 객체 (빈 칸은 제외)
+  function readFilters() {
+    var f = {};
+    var budget = num(form.budget.value);
+    if (budget) f.budget_max = Math.round(budget * 10000); // 억 → 만원
+    if (regionSel.value && regionSel.value !== 'all') f.region = regionSel.value;
+    if (areaSel.value && areaSel.value !== 'all') f.area_type = areaSel.value;
+    var age = num(form.max_age_years.value); if (age) f.max_age_years = age;
+    var sub = num(form.subway_distance_max.value); if (sub) f.subway_distance_max = sub;
+    var elem = num(form.elementary_distance_max.value); if (elem) f.elementary_distance_max = elem;
+    var house = num(form.min_households.value); if (house) f.min_households = house;
+    return f;
+  }
+
+  var SPEC_LABELS = { budget: '예산 적합', subway: '역세권', school: '학군', stability: '실거래 안정', scale: '단지규모', age: '연식' };
+
+  function barRow(label, val) {
+    if (val == null) return '';
+    var w = Math.round(val);
+    return '<div class="apt-bar"><span>' + label + '</span><span class="track"><span class="fill" style="width:' + w + '%"></span></span><span>' + w + '</span></div>';
+  }
+
+  function card(r, rank) {
+    var a = r.apt;
+    var reasons = r.reasons.map(function (t) { return '<span class="apt-chip">' + esc(t) + '</span>'; }).join('');
+    var relaxed = r.relaxed ? '<div class="apt-relaxed">⚠ 입력 조건 중 <strong>' + esc(r.relaxed.join(', ')) + '</strong> 은(는) 충족하지 못했지만 그 외 조건이 우수해 추천합니다.</div>' : '';
+    var bars = barRow('예산', r.sub.budget) + barRow('역세권', r.sub.subway) + barRow('학군', r.sub.school)
+      + barRow('실거래', r.sub.stability) + barRow('규모', r.sub.scale) + barRow('연식', r.sub.age);
+    var walk = S.walkMin(a.subway.distance_m);
+    return '' +
+      '<article class="apt-card">' +
+        '<span class="rank">' + rank + '위</span>' +
+        '<div class="apt-head">' +
+          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(a.region) + '</div></div>' +
+          '<div class="apt-score"><div class="num">' + r.total + '</div><div class="lbl">종합점수</div></div>' +
+        '</div>' +
+        '<div class="apt-price">' + fmt(r.price) + ' <small>' + esc(r.rep ? r.rep.label : '') + ' 최근 실거래</small></div>' +
+        relaxed +
+        '<div class="apt-spec">' +
+          '<span class="k">역거리</span><span class="v">' + a.subway.distance_m + 'm · ' + esc(a.subway.station) + ' (도보 ' + walk + '분)</span>' +
+          '<span class="k">초등학교</span><span class="v">' + a.elementary.distance_m + 'm · ' + esc(a.elementary.name) + '</span>' +
+          '<span class="k">준공연도</span><span class="v">' + a.built_year + '년 (' + r.ageYears + '년차)</span>' +
+          '<span class="k">세대수</span><span class="v">' + a.households.toLocaleString() + '세대</span>' +
+        '</div>' +
+        '<div class="apt-reasons">' + reasons + '</div>' +
+        '<div class="apt-bars">' + bars + '</div>' +
+      '</article>';
+  }
+
+  function render() {
+    if (!DATA.length) return;
+    var f = readFilters();
+    var list = S.search(DATA, f);
+    relaxedEl.innerHTML = '';
+    if (list.length) {
+      countEl.innerHTML = '조건에 맞는 단지 <span class="em">' + list.length + '곳</span> · 점수 높은 순';
+      resultsEl.innerHTML = list.map(function (r, i) { return card(r, i + 1); }).join('');
+    } else {
+      var near = S.nearMatches(DATA, f, null, 1);
+      if (near.length) {
+        countEl.innerHTML = '정확히 맞는 단지가 없어 <span class="em">조건을 한 가지만 완화</span>한 추천이에요';
+        relaxedEl.innerHTML = '<div class="finder-relaxed-banner">입력하신 조건을 모두 만족하는 단지는 없었습니다. 아래는 조건 1개만 완화하면 맞는 단지입니다 — 필터를 조금 넓혀보세요.</div>';
+        resultsEl.innerHTML = near.map(function (r, i) { return card(r, i + 1); }).join('');
+      } else {
+        countEl.textContent = '조건에 맞는 단지가 없습니다';
+        resultsEl.innerHTML = '<div class="finder-empty">조건을 완화해 다시 시도해보세요. (예: 예산을 높이거나 거리 제한을 넓히기)</div>';
+      }
+    }
+  }
+
+  // 가족 수 → 평형 추천(사용자가 평형을 직접 고르지 않았을 때만)
+  familySel.addEventListener('change', function () {
+    var map = { '1': 'small', '3': 'medium-small', '4': 'medium' };
+    if (familySel.value && (!areaSel.value || areaSel.value === 'all')) {
+      areaSel.value = map[familySel.value] || 'all';
+    }
+    render();
+  });
+
+  form.addEventListener('submit', function (e) { e.preventDefault(); render(); });
+  form.addEventListener('input', render);
+  form.addEventListener('change', render);
+  document.getElementById('finderReset').addEventListener('click', function () {
+    form.reset(); render();
+  });
+
+  // 데이터 로드 (상대경로 — custom domain·서브경로 모두 안전)
+  fetch('../assets/apartments.json?v=20260606')
+    .then(function (res) { if (!res.ok) throw new Error('load'); return res.json(); })
+    .then(function (json) {
+      DATA = json.apartments || [];
+      // 지역 드롭다운 채우기
+      var regions = [];
+      DATA.forEach(function (a) { if (regions.indexOf(a.region_key) < 0) regions.push(a.region_key); });
+      regions.sort().forEach(function (r) {
+        var o = document.createElement('option'); o.value = r; o.textContent = r; regionSel.appendChild(o);
+      });
+      render();
+    })
+    .catch(function () {
+      countEl.textContent = '';
+      resultsEl.innerHTML = '<div class="finder-empty">데이터를 불러오지 못했습니다. 로컬에서 열 때는 <code>file://</code>가 아니라 간이 웹서버(예: <code>python -m http.server</code>)로 실행하세요.</div>';
+    });
+})();
+</script>
+</body>
+</html>
