@@ -618,6 +618,23 @@ function calcBalanceSettlement(input) {
   const root = document.querySelector('[data-calc="balance-settlement"]');
   if (!root) return;
   const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+  // 잔금일 날짜 → 해당 월 일수 + 매도자 점유 일수 자동 산정
+  const dateEl = root.querySelector('[name="balanceDate"]');
+  const dimEl = root.querySelector('[name="daysInMonth"]');
+  const domEl = root.querySelector('[name="daysOccupiedBySeller"]');
+  const syncFromDate = () => {
+    if (!dateEl || !dateEl.value) return;
+    const parts = dateEl.value.split('-').map(Number);
+    if (parts.length !== 3 || parts.some(isNaN)) return;
+    const [y, m, day] = parts;
+    const dim = new Date(y, m, 0).getDate(); // m월의 마지막 날
+    const dayOwner = root.querySelector('[name="dayOwner"]:checked')?.value || 'buyer';
+    const dom = dayOwner === 'seller' ? day : day - 1; // 당일 매수자 부담이면 매도자 점유는 전일까지
+    if (dimEl) dimEl.value = dim;
+    if (domEl) domEl.value = Math.max(0, Math.min(dim, dom));
+  };
+  if (dateEl) dateEl.addEventListener('change', () => { syncFromDate(); recalc(); });
+  root.querySelectorAll('[name="dayOwner"]').forEach((el) => el.addEventListener('change', () => { syncFromDate(); recalc(); }));
   const recalc = () => {
     const monthlyFee = fmt.parseWon(root.querySelector('[name="monthlyFee"]').value);
     const daysInMonth = Number(root.querySelector('[name="daysInMonth"]').value || 30);
@@ -642,6 +659,10 @@ function calcBalanceSettlement(input) {
     }
     setText('netSeller', fmt.won(netToSeller));
     setText('tenantLongRepair', fmt.won(r.accumLongRepair));
+    // 정산 방향·일수 요약 배지
+    const buyerDays = Math.max(0, daysInMonth - daysOccupiedBySeller);
+    setText('scenario', '매도자 점유 ' + daysOccupiedBySeller + '일 · 매수자 ' + buyerDays + '일 / ' + daysInMonth + '일'
+      + (netToSeller >= 0 ? ' · 매수자가 지급' : ' · 매도자가 지급'));
   };
   root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
   recalc();
