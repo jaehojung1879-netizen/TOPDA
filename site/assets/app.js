@@ -1439,95 +1439,6 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
   }
 })();
 
-// ===== Property Rating Radar (임장 점수 레이더 차트) =====
-(function () {
-  const root = document.querySelector('[data-calc="property-rating"]');
-  if (!root) return;
-  const canvas = document.getElementById('radarChart');
-  let chart = null;
-  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
-  const KEYS = ['traffic', 'school', 'commerce', 'condition', 'amenity'];
-  const LABELS = ['교통', '학군', '상권', '노후도(신축감)', '단지 쾌적성'];
-
-  function makeRadar(values) {
-    if (!canvas || typeof Chart === 'undefined') return;
-    const opts = {
-      type: 'radar',
-      data: {
-        labels: LABELS,
-        datasets: [{
-          label: '평가 점수',
-          data: values,
-          fill: true,
-          backgroundColor: 'rgba(30, 58, 138, 0.18)',
-          borderColor: '#1e3a8a',
-          borderWidth: 2,
-          pointBackgroundColor: '#1e3a8a',
-          pointRadius: 4,
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 500, easing: 'easeOutQuart' },
-        scales: {
-          r: {
-            beginAtZero: true, min: 0, max: 5, ticks: { stepSize: 1, display: false },
-            pointLabels: { font: { size: 13, family: 'Pretendard Variable', weight: '600' } },
-            grid: { color: 'rgba(0,0,0,0.06)' },
-            angleLines: { color: 'rgba(0,0,0,0.08)' },
-          },
-        },
-        plugins: { legend: { display: false } },
-      },
-    };
-    if (chart) {
-      chart.data.datasets[0].data = values;
-      chart.update();
-    } else {
-      chart = new Chart(canvas.getContext('2d'), opts);
-    }
-  }
-
-  function verdict(scores, address) {
-    const sum = scores.reduce((a, b) => a + b, 0);
-    const avg = sum / scores.length;
-    const max = Math.max(...scores);
-    const min = Math.min(...scores);
-    const maxKey = LABELS[scores.indexOf(max)];
-    const minKey = LABELS[scores.indexOf(min)];
-    const tag = address ? `‘${address}’` : '해당 매물';
-    if (avg >= 4.2) return `${tag}은 전반적으로 매우 우수합니다. 특히 ${maxKey} 항목이 강점.`;
-    if (avg >= 3.4) return `${tag}은 무난한 선택. 강점은 ${maxKey}, 다만 ${minKey}는 개선 여지가 있습니다.`;
-    if (avg >= 2.6) return `${tag}은 평균 이하 항목이 다수입니다. 특히 ${minKey}가 약점 — 가격 협상 카드로 활용 가능.`;
-    return `${tag}은 종합 점수가 낮습니다. 입지·환경의 결정적 단점이 있는지 재확인하세요.`;
-  }
-
-  const recalc = () => {
-    const scores = KEYS.map((k) => Number(root.querySelector('[name="'+k+'"]').value || 0));
-    const address = root.querySelector('[name="address"]').value.trim();
-    const total = scores.reduce((a, b) => a + b, 0);
-    const avg = (total / scores.length) || 0;
-    setText('totalScore', total + ' / 25');
-    setText('avgScore', avg.toFixed(2) + ' / 5');
-    setText('verdict', verdict(scores, address));
-    // 항목별 점수 표시
-    KEYS.forEach((k, i) => {
-      const out = root.querySelector('[data-out="score-'+k+'"]');
-      if (out) out.textContent = scores[i] + '점';
-    });
-    makeRadar(scores);
-  };
-  root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
-  if (typeof Chart === 'undefined') {
-    const wait = setInterval(() => {
-      if (typeof Chart !== 'undefined') { clearInterval(wait); recalc(); }
-    }, 100);
-  } else {
-    recalc();
-  }
-})();
-
 // ===== D-Day Scheduler (체크리스트 페이지) =====
 // 단계별 이벤트(일정+금액+방향) 입력 → 달력 시각화 + 타임라인 + ICS 내보내기
 (function () {
@@ -2478,9 +2389,9 @@ function calcInteriorEstimate({ area, grade, items }) {
         ['dsr.html', '대출', 'DSR 한도 점검', '경락잔금대출 가늠'],
         ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '총 부담액 종합 점검'],
       ],
-      'property-rating.html': [
-        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '마음에 들면 비용 계산'],
-        ['acquisition-tax.html', '세금', '취득세 계산', '매수 시 세금 확인'],
+      'search.html': [
+        ['acquisition-tax.html', '세금', '취득세 계산', '마음에 든 단지 매수 시 세금'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '매수 총비용 계산'],
         ['dsr.html', '대출', 'DSR 한도 점검', '자금 한도 점검'],
       ],
     };
