@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260607" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260609" />
 <style>
   .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
   .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
@@ -51,6 +51,9 @@
   .apt-score .lbl { font-size: 0.68rem; color: var(--text-muted); }
   .apt-price { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
   .apt-price small { font-size: 0.78rem; font-weight: 500; color: var(--text-muted); }
+  .apt-units { display: flex; flex-wrap: wrap; gap: 5px; }
+  .apt-unit { font-size: 0.74rem; padding: 3px 8px; border: 1px solid var(--border, #e5e7eb); border-radius: 8px; color: var(--text-muted); }
+  .apt-unit.is-rep { border-color: var(--accent, #2563eb); color: var(--accent, #2563eb); font-weight: 600; }
   .apt-spec { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; font-size: 0.85rem; }
   .apt-spec .k { color: var(--text-muted); }
   .apt-spec .v { font-weight: 600; }
@@ -225,8 +228,8 @@
   </div>
 </footer>
 
-<script src="../assets/score.js?v=20260607"></script>
-<script src="../assets/app.js?v=20260607"></script>
+<script src="../assets/score.js?v=20260609"></script>
+<script src="../assets/app.js?v=20260609"></script>
 <script>
 (function () {
   'use strict';
@@ -281,9 +284,12 @@
           '<div class="apt-score"><div class="num">' + r.total + '</div><div class="lbl">종합점수</div></div>' +
         '</div>' +
         '<div class="apt-price">' + fmt(r.price) + ' <small>' + esc(r.rep ? r.rep.label : '') + ' 최근 실거래</small></div>' +
+        '<div class="apt-units">' + (a.units || []).map(function (u) {
+          return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(u.label) + ' ' + fmt(u.recent_price) + '</span>';
+        }).join('') + '</div>' +
         relaxed +
         '<div class="apt-spec">' +
-          '<span class="k">역거리</span><span class="v">' + a.subway.distance_m + 'm · ' + esc(a.subway.station) + ' (도보 ' + walk + '분)</span>' +
+          '<span class="k">역거리</span><span class="v">' + a.subway.distance_m + 'm · ' + esc(a.subway.station) + ' (도보 ' + walk + '분, ' + esc(a.subway.line) + ')</span>' +
           '<span class="k">초등학교</span><span class="v">' + a.elementary.distance_m + 'm · ' + esc(a.elementary.name) + '</span>' +
           '<span class="k">준공연도</span><span class="v">' + a.built_year + '년 (' + r.ageYears + '년차)</span>' +
           '<span class="k">세대수</span><span class="v">' + a.households.toLocaleString() + '세대</span>' +
@@ -331,7 +337,7 @@
   });
 
   // 데이터 로드 (상대경로 — custom domain·서브경로 모두 안전)
-  fetch('../assets/apartments.json?v=20260607')
+  fetch('../assets/apartments.json?v=20260609')
     .then(function (res) { if (!res.ok) throw new Error('load'); return res.json(); })
     .then(function (json) {
       DATA = json.apartments || [];
