@@ -102,7 +102,7 @@
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../calculators/index.html">계산기</a> / 잔금일 정산</div>
     <h1>잔금일 정산 계산기</h1>
     <div class="meta">
-      <span>관리비·선수관리비·장기수선충당금·공과금까지 한 번에 정리</span>
+      <span>관리비·선수관리비·장기수선충당금·공과금 · 잔금일 날짜로 일수 자동계산</span>
     </div>
   </div>
 
@@ -116,6 +116,19 @@
           <input id="bs-fee" name="monthlyFee" type="text" inputmode="numeric" data-format="won" value="350,000" />
         </div>
         <span class="hint">관리실 발급 ‘잔금일 직전 월’ 부과액. 가스·전기·수도가 포함된 종합관리비 기준.</span>
+      </div>
+      <div class="field">
+        <label for="bs-date">잔금일 (선택 — 입력 시 일수 자동계산)</label>
+        <input id="bs-date" name="balanceDate" type="date" />
+        <span class="hint">날짜를 넣으면 ‘해당 월 일수’와 ‘매도자 점유 일수’가 자동으로 채워집니다.</span>
+      </div>
+      <div class="field">
+        <label>잔금일 당일 부담</label>
+        <div class="radio-group">
+          <label><input type="radio" name="dayOwner" value="buyer" checked/><span>매수자 부담</span></label>
+          <label><input type="radio" name="dayOwner" value="seller"/><span>매도자 부담</span></label>
+        </div>
+        <span class="hint">관례상 잔금일 당일은 매수자 부담입니다(특약으로 변경 가능).</span>
       </div>
       <div class="field-row">
         <div class="field">
@@ -169,6 +182,7 @@
 
     <div class="calc-result">
       <h3>잔금일 정산 결과</h3>
+      <div class="result-scenario" data-out="scenario">관리비·일수를 입력하세요</div>
       <div class="total" data-out="settlement">0원</div>
       <div class="result-sub">매도자가 받거나(+) 내야 할(−) 금액</div>
 
@@ -254,8 +268,18 @@
       </a>
       <a class="card" href="acquisition-tax.html">
         <span class="badge badge-success">계산기</span>
-        <h3>취득세 계산기</h3>
-        <p>잔금일에 함께 신고·납부하는 취득세.</p>
+        <h3>취득세 계산기 →</h3>
+        <p>매수자가 잔금일에 함께 신고·납부하는 취득세.</p>
+      </a>
+      <a class="card" href="brokerage-fee.html">
+        <span class="badge badge-success">계산기</span>
+        <h3>중개수수료 계산기 →</h3>
+        <p>잔금일에 정산하는 중개보수. 매매·전세·월세 상한요율.</p>
+      </a>
+      <a class="card" href="transfer-tax.html">
+        <span class="badge badge-success">계산기</span>
+        <h3>양도세 계산기 →</h3>
+        <p>매도자라면 잔금(양도) 후 신고하는 양도소득세를 미리 점검.</p>
       </a>
     </div>
   </section>
