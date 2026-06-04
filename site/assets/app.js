@@ -197,36 +197,59 @@ document.addEventListener('DOMContentLoaded', () => {
 // 4) 생애최초 주택 취득 감면 (지방세특례제한법 제36조의2)
 //    - 무주택 세대 + 가액 12억 이하 → 취득세 최대 200만 원 한도 감면
 function calcAcquisitionTax(input) {
-  const { price, homes, regulated, areaOver85, firstHome } = input;
+  const {
+    price, homes, regulated, areaOver85, firstHome,
+    acqType = 'purchase', tempTwoHome = false,
+    inheritNoHome = false, giftHeavy = false,
+  } = input;
   if (!price || price <= 0) return null;
   const eok = price / 100000000;
-  let baseRate, isHeavy = false;
-  if (homes === 1) {
-    if (eok <= 6) baseRate = 0.01;
-    else if (eok <= 9) baseRate = ((eok * 2 / 3) - 3) / 100;
-    else baseRate = 0.03;
-  } else if (homes === 2) {
-    if (regulated) { baseRate = 0.08; isHeavy = true; }
-    else baseRate = (eok <= 6 ? 0.01 : eok <= 9 ? ((eok * 2 / 3) - 3) / 100 : 0.03);
-  } else if (homes === 3) {
-    baseRate = regulated ? 0.12 : 0.08;
-    isHeavy = true;
+  // 유상취득 6~9억 누진식: 세율 = (취득가액×2/3억 − 3) / 100
+  const progRate = eok <= 6 ? 0.01 : eok <= 9 ? ((eok * 2 / 3) - 3) / 100 : 0.03;
+
+  let baseRate, isHeavy = false, scenario = '';
+
+  if (acqType === 'inherit') {
+    // 상속 취득: 무주택 세대의 1가구 1주택 상속 0.8% 특례, 그 외 2.8%
+    baseRate = inheritNoHome ? 0.008 : 0.028;
+    scenario = inheritNoHome ? '상속 · 무주택 1가구1주택 특례(0.8%)' : '상속 취득(2.8%)';
+  } else if (acqType === 'gift') {
+    // 무상취득(증여): 표준 3.5%. 조정대상지역 + 시가표준 3억 이상 다주택자 증여 → 12% 중과
+    if (giftHeavy) { baseRate = 0.12; isHeavy = true; scenario = '증여 · 조정대상 3억↑ 중과(12%)'; }
+    else { baseRate = 0.035; scenario = '증여 취득(3.5%)'; }
+  } else if (acqType === 'original') {
+    // 원시취득(신축·신규 분양 등)
+    baseRate = 0.028;
+    scenario = '원시취득·신축(2.8%)';
   } else {
-    baseRate = 0.12;
-    isHeavy = true;
+    // 유상취득(매매). 일시적 2주택은 종전주택 처분 조건 충족 시 1주택 세율 적용
+    const effHomes = (homes === 2 && tempTwoHome) ? 1 : homes;
+    if (effHomes === 1) {
+      baseRate = progRate;
+      scenario = (homes === 2 && tempTwoHome) ? '일시적 2주택 → 1주택 세율 적용' : '1주택 표준세율';
+    } else if (effHomes === 2) {
+      if (regulated) { baseRate = 0.08; isHeavy = true; scenario = '조정대상지역 2주택 중과(8%)'; }
+      else { baseRate = progRate; scenario = '비조정 2주택 표준세율'; }
+    } else if (effHomes === 3) {
+      baseRate = regulated ? 0.12 : 0.08; isHeavy = true;
+      scenario = regulated ? '조정대상지역 3주택 중과(12%)' : '비조정 3주택 중과(8%)';
+    } else {
+      baseRate = 0.12; isHeavy = true; scenario = '4주택 이상 중과(12%)';
+    }
   }
-  baseRate = Math.max(baseRate, 0.01);
+  baseRate = Math.max(baseRate, 0.008);
 
   let acquisition = price * baseRate;
 
-  // 생애최초 감면 (1주택·표준세율·12억 이하)
+  // 생애최초 주택 구입 감면 (유상취득·1주택 표준세율·취득가액 12억 이하, 최대 200만 원)
   let firstHomeDeduct = 0;
-  if (firstHome && homes === 1 && !isHeavy && eok <= 12) {
+  const effHomesForFirst = (homes === 2 && tempTwoHome) ? 1 : homes;
+  if (acqType === 'purchase' && firstHome && effHomesForFirst === 1 && !isHeavy && eok <= 12) {
     firstHomeDeduct = Math.min(2000000, acquisition);
     acquisition = acquisition - firstHomeDeduct;
   }
 
-  // 농어촌특별세
+  // 농어촌특별세: 전용 85㎡ 초과만 과세 (85㎡ 이하 면제)
   let ruralTax = 0;
   if (areaOver85) {
     if (isHeavy && baseRate >= 0.12) ruralTax = price * 0.010;
@@ -234,15 +257,21 @@ function calcAcquisitionTax(input) {
     else ruralTax = price * 0.002;
   }
 
-  // 지방교육세
+  // 지방교육세 (지방세법 제151조)
   let localEduTax;
-  if (isHeavy) localEduTax = price * 0.004;
-  else localEduTax = (price * baseRate) * 0.10; // 표준세율 적용분 기준 (감면 전 본세의 10%)
+  if (isHeavy) {
+    localEduTax = price * 0.004; // 중과(8·12%)는 0.4% 고정
+  } else if (acqType === 'purchase') {
+    localEduTax = (price * baseRate) * 0.10; // 주택 유상거래: 표준세율의 1/10
+  } else {
+    // 상속·증여·원시취득: (표준세율 − 2%) × 20%  예) 2.8%→0.16%, 3.5%→0.3%
+    localEduTax = price * Math.max(0, (baseRate - 0.02)) * 0.20;
+  }
 
   const total = acquisition + ruralTax + localEduTax;
 
   return {
-    baseRate, isHeavy,
+    baseRate, isHeavy, scenario, acqType,
     acquisition, firstHomeDeduct,
     ruralTax, localEduTax,
     total,
@@ -254,25 +283,57 @@ function calcAcquisitionTax(input) {
   if (!root) return;
   const inputs = root.querySelectorAll('input, select');
   const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+  // 취득유형에 따라 관련 입력만 노출 (data-show 속성에 유형 슬러그 나열)
+  const toggleFields = (acqType) => {
+    root.querySelectorAll('[data-show]').forEach((el) => {
+      const show = el.getAttribute('data-show').split(' ').includes(acqType);
+      el.style.display = show ? '' : 'none';
+    });
+  };
+  // 세율 요약 표에서 현재 적용 구간 하이라이트
+  const highlightRateRow = (r, homes, regulated, eok) => {
+    const table = document.querySelector('[data-rate-table]');
+    if (!table) return;
+    table.querySelectorAll('tr[data-row]').forEach((tr) => tr.classList.remove('is-active'));
+    if (r.acqType !== 'purchase') return; // 표는 유상취득 기준
+    let key;
+    if (r.isHeavy) {
+      if (homes === 2) key = 'h2-reg';
+      else if (homes === 3) key = regulated ? 'h3-reg' : 'h3-non';
+      else key = 'h4';
+    } else {
+      key = homes === 1 || r.scenario.includes('일시적') ? 'h1' : 'h2-non';
+    }
+    const tr = table.querySelector('tr[data-row="' + key + '"]');
+    if (tr) tr.classList.add('is-active');
+  };
   const recalc = () => {
     const price = fmt.parseWon(root.querySelector('[name="price"]').value);
+    const acqType = root.querySelector('[name="acqType"]:checked')?.value || 'purchase';
     const homes = Number(root.querySelector('[name="homes"]:checked')?.value || 1);
     const regulated = root.querySelector('[name="regulated"]')?.checked || false;
     const areaOver85 = root.querySelector('[name="areaOver85"]')?.checked || false;
     const firstHome = root.querySelector('[name="firstHome"]')?.checked || false;
-    const r = calcAcquisitionTax({ price, homes, regulated, areaOver85, firstHome });
+    const tempTwoHome = root.querySelector('[name="tempTwoHome"]')?.checked || false;
+    const inheritNoHome = root.querySelector('[name="inheritNoHome"]')?.checked || false;
+    const giftHeavy = root.querySelector('[name="giftHeavy"]')?.checked || false;
+    toggleFields(acqType);
+    const r = calcAcquisitionTax({ price, homes, regulated, areaOver85, firstHome, acqType, tempTwoHome, inheritNoHome, giftHeavy });
     if (!r) {
       setText('total', fmt.won(0));
       ['acquisition','ruralTax','localEduTax','firstHomeDeduct'].forEach(k => setText(k, fmt.won(0)));
       setText('rate', '—');
+      setText('scenario', isEn ? 'Enter a price' : '매매가를 입력하세요');
       return;
     }
+    setText('scenario', r.scenario);
     setText('rate', (r.baseRate * 100).toFixed(2) + '%' + (r.isHeavy ? (isEn ? ' (heavy)' : ' (중과)') : ''));
     setText('acquisition', fmt.won(r.acquisition));
-    setText('ruralTax', fmt.won(r.ruralTax));
+    setText('ruralTax', r.ruralTax ? fmt.won(r.ruralTax) : (isEn ? 'Exempt' : '면제'));
     setText('localEduTax', fmt.won(r.localEduTax));
     setText('firstHomeDeduct', r.firstHomeDeduct ? '−' + fmt.won(r.firstHomeDeduct) : (isEn ? 'N/A' : '해당 없음'));
     setText('total', fmt.won(r.total));
+    highlightRateRow(r, homes, regulated, price / 100000000);
   };
   inputs.forEach((el) => el.addEventListener('input', recalc));
   inputs.forEach((el) => el.addEventListener('change', recalc));

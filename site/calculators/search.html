@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260606" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260607" />
 <style>
   .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
   .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
@@ -225,8 +225,8 @@
   </div>
 </footer>
 
-<script src="../assets/score.js?v=20260606"></script>
-<script src="../assets/app.js?v=20260606"></script>
+<script src="../assets/score.js?v=20260607"></script>
+<script src="../assets/app.js?v=20260607"></script>
 <script>
 (function () {
   'use strict';
@@ -331,7 +331,7 @@
   });
 
   // 데이터 로드 (상대경로 — custom domain·서브경로 모두 안전)
-  fetch('../assets/apartments.json?v=20260606')
+  fetch('../assets/apartments.json?v=20260607')
     .then(function (res) { if (!res.ok) throw new Error('load'); return res.json(); })
     .then(function (json) {
       DATA = json.apartments || [];
