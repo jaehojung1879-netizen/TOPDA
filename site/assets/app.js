@@ -2392,7 +2392,12 @@ function calcInteriorEstimate({ area, grade, items }) {
       'search.html': [
         ['acquisition-tax.html', '세금', '취득세 계산', '마음에 든 단지 매수 시 세금'],
         ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '매수 총비용 계산'],
-        ['dsr.html', '대출', 'DSR 한도 점검', '자금 한도 점검'],
+        ['loan-limit.html', '대출', '대출 한도 시뮬레이터', '실제 받을 수 있는 한도'],
+      ],
+      'loan-limit.html': [
+        ['dsr.html', '대출', 'DSR 한도 계산', 'DSR만 따로 점검'],
+        ['acquisition-tax.html', '세금', '취득세 계산', '매수 부대비용 확인'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '대출 포함 총비용'],
       ],
     };
 
@@ -2852,4 +2857,181 @@ function calcInteriorEstimate({ area, grade, items }) {
   } else {
     init();
   }
+})();
+
+// ===== 대출 한도 시뮬레이터 (주택담보대출 / 전세대출) =====
+// 주담대 한도 = min( LTV한도, 수도권·규제지역 가격대별 한도, DSR한도 )
+//  - LTV한도 = 주택가격 × LTV%
+//  - 가격대별 한도(6.27/10월 대책, 수도권·규제지역 구입자금): 15억↓ 6억 / 15~25억 4억 / 25억↑ 2억
+//  - DSR한도 = (연소득×DSR% − 기존 연원리금)을 스트레스 금리·만기로 역산한 대출원금
+// 출처: 금융위 가계부채 관리방안(6.27)·스트레스 DSR 3단계. 값은 rates.js에서 갱신.
+function calcMortgageLimit(input) {
+  const {
+    price, ltvPercent, regulatedMetro,
+    income, existingAnnualDebt = 0,
+    rate, stressAdd = 0, termYears, dsrLimitPercent, repayType = 'equal',
+  } = input;
+  if (!price || price <= 0) return null;
+
+  const ltvLimit = price * (ltvPercent / 100);
+
+  // 수도권·규제지역 주택구입 가격대별 한도
+  let priceCap = Infinity;
+  if (regulatedMetro) {
+    const caps = (window.TOPDA_RATES && window.TOPDA_RATES.loan && window.TOPDA_RATES.loan.metroPriceCaps) || [
+      { upToEok: 15, cap: 600000000 }, { upToEok: 25, cap: 400000000 }, { upToEok: Infinity, cap: 200000000 },
+    ];
+    const eok = price / 1e8;
+    const tier = caps.find((c) => eok <= c.upToEok) || caps[caps.length - 1];
+    priceCap = tier.cap;
+  }
+
+  // DSR 한도 (스트레스 금리·만기 역산)
+  const availAnnual = Math.max(0, (income || 0) * (dsrLimitPercent / 100) - (existingAnnualDebt || 0));
+  const stressedRate = (rate || 0) + (stressAdd || 0);
+  const i = stressedRate / 100 / 12;
+  const n = (termYears || 0) * 12;
+  let dsrFactorAnnual; // 대출원금 1원당 연간 상환액
+  if (n <= 0) dsrFactorAnnual = Infinity;
+  else if (repayType === 'principal') {
+    // 원금균등: 상환부담이 가장 큰 첫해 12개월 합계 기준
+    dsrFactorAnnual = 12 / n + i * (12 - 66 / n);
+  } else {
+    // 원리금균등
+    const m = i > 0 ? i * Math.pow(1 + i, n) / (Math.pow(1 + i, n) - 1) : 1 / n;
+    dsrFactorAnnual = m * 12;
+  }
+  const dsrLimit = dsrFactorAnnual > 0 && isFinite(dsrFactorAnnual) ? availAnnual / dsrFactorAnnual : 0;
+
+  const candidates = [
+    { key: 'ltv', label: 'LTV 한도', value: ltvLimit },
+    { key: 'priceCap', label: '지역 가격대별 한도', value: priceCap },
+    { key: 'dsr', label: 'DSR 한도', value: dsrLimit },
+  ];
+  const binding = candidates.filter((c) => isFinite(c.value)).sort((a, b) => a.value - b.value)[0];
+  const limit = Math.max(0, binding ? binding.value : 0);
+
+  return { ltvLimit, priceCap, dsrLimit, limit, binding, stressedRate, availAnnual };
+}
+
+// 전세대출 한도: 보증기관별 비교. 한도 = min(보증금×보증비율, 기관 최대한도). 대상 보증금 초과 시 이용 제한.
+function calcJeonseLoanByAgency(deposit, opts) {
+  opts = opts || {};
+  const R = (window.TOPDA_RATES && window.TOPDA_RATES.loan && window.TOPDA_RATES.loan.jeonseAgencies) || [];
+  if (!deposit || deposit <= 0) return [];
+  return R.map((a) => {
+    const ratio = opts.youth && a.ratioYouth ? a.ratioYouth : a.ratio;
+    const depositCap = opts.metro ? a.depositCapMetro : a.depositCapOther;
+    const eligible = deposit <= depositCap;
+    const byRatio = deposit * (ratio / 100);
+    const limit = eligible ? Math.min(byRatio, a.maxAmount) : 0;
+    return {
+      key: a.key, name: a.name, ratioApplied: ratio, maxAmount: a.maxAmount,
+      depositCap, eligible, limit, fee: a.fee, note: a.note,
+    };
+  }).sort((x, y) => y.limit - x.limit);
+}
+
+(function () {
+  const root = document.querySelector('[data-calc="loan-limit"]');
+  if (!root) return;
+  const R = (window.TOPDA_RATES && window.TOPDA_RATES.loan) || {};
+  const ltvCfg = R.ltv || { nonRegulated: 70, nonRegulatedFirst: 80, regulated: 50, regulatedFirst: 70, regulatedStrong: 40 };
+  const setText = (sel, txt) => { const el = root.querySelector('[data-out="' + sel + '"]'); if (el) el.textContent = txt; };
+  const show = (el, on) => { if (el) el.style.display = on ? '' : 'none'; };
+
+  // 대출 종류 탭
+  const panels = { mortgage: root.querySelector('[data-panel="mortgage"]'), jeonse: root.querySelector('[data-panel="jeonse"]') };
+  function switchTab() {
+    const t = root.querySelector('[name="loanKind"]:checked')?.value || 'mortgage';
+    show(panels.mortgage, t === 'mortgage');
+    show(panels.jeonse, t === 'jeonse');
+  }
+
+  // LTV 자동 채움 (지역×보유) — 사용자가 직접 수정 가능
+  const ltvInput = root.querySelector('[name="ltvPercent"]');
+  let ltvTouched = false;
+  if (ltvInput) ltvInput.addEventListener('input', () => { ltvTouched = true; });
+  function suggestLtv() {
+    if (ltvTouched) return;
+    const region = root.querySelector('[name="region"]:checked')?.value || 'regulated';
+    const own = root.querySelector('[name="ownership"]:checked')?.value || 'none';
+    let v;
+    if (region === 'regulated') {
+      v = own === 'first' ? ltvCfg.regulatedFirst : (own === 'multi' ? 0 : ltvCfg.regulated);
+    } else {
+      v = own === 'first' ? ltvCfg.nonRegulatedFirst : (own === 'multi' ? 60 : ltvCfg.nonRegulated);
+    }
+    if (ltvInput) ltvInput.value = v;
+  }
+
+  const stressInput = root.querySelector('[name="stressAdd"]');
+  let stressTouched = false;
+  if (stressInput) stressInput.addEventListener('input', () => { stressTouched = true; });
+  function suggestStress() {
+    if (stressTouched) return;
+    const region = root.querySelector('[name="region"]:checked')?.value || 'regulated';
+    const st = R.stress || { metro: 1.5, nonMetro: 0.75 };
+    if (stressInput) stressInput.value = region === 'regulated' ? st.metro : st.nonMetro;
+  }
+
+  function recalcMortgage() {
+    const price = fmt.parseWon(root.querySelector('[name="price"]').value);
+    const region = root.querySelector('[name="region"]:checked')?.value || 'regulated';
+    const own = root.querySelector('[name="ownership"]:checked')?.value || 'none';
+    suggestLtv(); suggestStress();
+    const ltvPercent = Number(ltvInput?.value || 0);
+    const income = fmt.parseWon(root.querySelector('[name="income"]').value);
+    const existingMonthly = fmt.parseWon(root.querySelector('[name="existingMonthly"]').value);
+    const rate = Number(root.querySelector('[name="rate"]').value || 0);
+    const stressAdd = Number(stressInput?.value || 0);
+    const termYears = Number(root.querySelector('[name="termYears"]').value || 0);
+    const dsrLimitPercent = Number(root.querySelector('[name="dsrLimit"]:checked')?.value || 40);
+    const repayType = root.querySelector('[name="repayType"]:checked')?.value || 'equal';
+
+    const multiWarn = root.querySelector('[data-out="multiWarn"]');
+    show(multiWarn, region === 'regulated' && own === 'multi');
+
+    const r = calcMortgageLimit({
+      price, ltvPercent, regulatedMetro: region === 'regulated',
+      income, existingAnnualDebt: existingMonthly * 12,
+      rate, stressAdd, termYears, dsrLimitPercent, repayType,
+    });
+    if (!r) { setText('mLimit', fmt.won(0)); return; }
+    setText('mLimit', fmt.won(r.limit));
+    setText('mBinding', r.binding ? r.binding.label + ' 기준' : '—');
+    setText('mLtv', fmt.won(r.ltvLimit));
+    setText('mPriceCap', isFinite(r.priceCap) ? fmt.won(r.priceCap) : (isEn ? 'N/A' : '미적용'));
+    setText('mDsr', fmt.won(r.dsrLimit));
+    setText('mStressed', r.stressedRate.toFixed(2) + '%');
+    setText('mOwn', fmt.won(Math.max(0, price - r.limit)));
+  }
+
+  function recalcJeonse() {
+    const deposit = fmt.parseWon(root.querySelector('[name="deposit"]').value);
+    const metro = (root.querySelector('[name="jArea"]:checked')?.value || 'metro') === 'metro';
+    const youth = root.querySelector('[name="youth"]')?.checked || false;
+    const list = calcJeonseLoanByAgency(deposit, { metro, youth });
+    const box = root.querySelector('[data-out="agencyList"]');
+    if (!box) return;
+    if (!deposit) { box.innerHTML = '<p style="color:var(--text-muted)">임차보증금을 입력하세요.</p>'; setText('jBest', fmt.won(0)); return; }
+    setText('jBest', fmt.won(list.length ? list[0].limit : 0));
+    box.innerHTML = list.map((a, idx) => {
+      const pct = a.eligible ? (a.ratioApplied + '%') : '대상 외';
+      const self = Math.max(0, deposit - a.limit);
+      return '<div class="agency-card' + (idx === 0 && a.eligible ? ' is-best' : '') + '">' +
+        '<div class="agency-top"><span class="agency-name">' + a.name + (idx === 0 && a.eligible ? ' <span class="agency-best">최대</span>' : '') + '</span>' +
+        '<span class="agency-limit">' + fmt.won(a.limit) + '</span></div>' +
+        '<div class="agency-meta">보증비율 ' + pct + ' · 최대 ' + fmt.won(a.maxAmount) + ' · 대상 보증금 ' + (isFinite(a.depositCap) ? '≤' + fmt.won(a.depositCap) : '제한 적음') + '</div>' +
+        (a.eligible ? '<div class="agency-meta">내 보증금 중 자기부담 ≈ ' + fmt.won(self) + ' · 보증료 ' + (a.fee || '—') + '</div>' : '<div class="agency-meta agency-warn">이 보증금은 대상 한도를 초과해 이용이 어렵습니다.</div>') +
+        (a.note ? '<div class="agency-note">' + a.note + '</div>' : '') +
+        '</div>';
+    }).join('');
+  }
+
+  function recalcAll() { switchTab(); recalcMortgage(); recalcJeonse(); }
+  root.querySelectorAll('input, select').forEach((el) => {
+    el.addEventListener('input', recalcAll); el.addEventListener('change', recalcAll);
+  });
+  recalcAll();
 })();

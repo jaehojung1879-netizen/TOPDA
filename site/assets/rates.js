@@ -55,6 +55,48 @@
       source: '주택도시기금 / 은행 국민주택채권 포털',
     },
 
+    // ── 대출 한도 규정 (주택담보대출·전세대출) ── consumed
+    // ⚠ 정부 대책에 따라 자주 바뀝니다. 출처·시행일을 반드시 1차 자료로 대조하세요.
+    loan: {
+      effectiveFrom: '2026-06',
+      source: '금융위 가계부채 관리방안(2025.6.27)·스트레스 DSR 3단계(2025.7)·각 보증기관 공시',
+      // LTV(담보인정비율, %) — 지역×보유유형
+      ltv: {
+        nonRegulated: 70,       // 비규제 무주택·1주택
+        nonRegulatedFirst: 80,  // 비규제 생애최초
+        nonRegulatedMulti: 60,  // 비규제 다주택
+        regulated: 50,          // 규제지역 무주택·처분조건부 1주택
+        regulatedFirst: 70,     // 규제지역 생애최초(80→70 강화)
+        regulatedStrong: 40,    // 신규 규제지역 강화 적용 사례
+      },
+      // 수도권·규제지역 주택구입 주담대 가격대별 한도(원)
+      metroPriceCaps: [
+        { upToEok: 15, cap: 600000000 },        // 15억 이하 → 6억
+        { upToEok: 25, cap: 400000000 },        // 15~25억 → 4억
+        { upToEok: Infinity, cap: 200000000 },  // 25억 초과 → 2억
+      ],
+      dsr: { tier1: 40, tier2: 50 }, // DSR 한도(%)
+      // 스트레스 가산금리(%p) — DSR 한도 산정에만 가산(실제 상환금리 아님)
+      stress: {
+        metro: 1.5,        // 수도권(3단계)
+        nonMetro: 0.75,    // 비수도권(한시)
+        note: '2025.10.16~ 수도권·규제지역 주담대는 스트레스 3.0%p로 강화. 필요 시 직접 조정.',
+      },
+      // 전세자금대출 보증기관 비교 (한도=보증금×비율, 기관 최대한도 이내)
+      jeonseAgencies: [
+        { key: 'HF', name: '주택금융공사(HF)', ratio: 80, ratioYouth: 90, maxAmount: 400000000,
+          depositCapMetro: 700000000, depositCapOther: 500000000, fee: '연 0.04~0.18%',
+          note: '수도권·규제 1주택자 2억 한도, 공시가 126% 초과 보증 제한(2025.8~)' },
+        { key: 'HUG', name: '주택도시보증공사(HUG)', ratio: 80, ratioYouth: 90, maxAmount: 400000000,
+          depositCapMetro: 700000000, depositCapOther: 500000000, fee: '연 0.111~0.211%',
+          note: '전세금안심대출보증(대출+반환보증 일괄). 비수도권 보증비율 90%' },
+        { key: 'SGI', name: 'SGI서울보증', ratio: 80, ratioYouth: 80, maxAmount: 500000000,
+          depositCapMetro: Infinity, depositCapOther: Infinity, fee: '연 0.183~0.208%',
+          note: '아파트 등 고액 전세 가능. 보증금 상한이 가장 관대(심사 빠른 편)' },
+      ],
+      jeonseNote: '전세자금대출 원금은 DSR 산정에서 제외(보증부)됩니다. 청년·신혼은 우대 비율(최대 90%) 적용.',
+    },
+
     // ── 아래는 reference: 각 계산기 코드에 동일 값 존재(점진 이관 대상) ──
 
     // 취득세 (주택, 지방세법) reference
@@ -99,6 +141,7 @@
 
     // 변경 이력
     changelog: [
+      { date: '2026-06-04', note: '대출 한도 규정 블록 신설(LTV·가격대별 한도·스트레스 DSR·전세 보증기관 HF/HUG/SGI).' },
       { date: '2026-06-03', note: '취득세 계산기에 취득원인(상속·증여·신축)·일시적 2주택 반영. 생애최초 감면 근거를 제36조의3으로 정정.' },
       { date: '2026-06-02', note: '단일 데이터 파일 신설. 국민주택채권 할인율 기본값 8.7%로 갱신. DSR/RTI 임계값 분리.' },
     ],

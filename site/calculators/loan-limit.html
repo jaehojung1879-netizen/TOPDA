@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>대출 한도 시뮬레이터 — 톺다</title>
+<meta name="description" content="주택담보대출과 전세자금대출을 실제로 얼마나 받을 수 있는지 계산합니다. LTV·가격대별 한도·스트레스 DSR을 모두 반영한 주담대 한도와, HF·HUG·SGI 보증기관별 전세대출 한도 비교." />
+<!-- seo:meta -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260608" />
+<style>
+  .loan-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .loan-tabs label { flex: 1; min-width: 140px; }
+  .loan-tabs input { position: absolute; opacity: 0; pointer-events: none; }
+  .loan-tabs .tab {
+    display: block; text-align: center; padding: 12px 14px; border: 1px solid var(--border, #e5e7eb);
+    border-radius: 12px; font-weight: 700; cursor: pointer; background: var(--surface, #fff); color: var(--text-muted);
+  }
+  .loan-tabs input:checked + .tab { border-color: var(--accent, #2563eb); color: var(--accent, #2563eb); background: color-mix(in srgb, var(--accent,#2563eb) 8%, #fff); }
+  .result-scenario { display:inline-block; margin-bottom:10px; padding:5px 12px; background:var(--surface-2,#f1f5f9); border:1px solid var(--border,#e5e7eb); border-radius:999px; font-size:0.82rem; font-weight:600; color:var(--accent,#2563eb); word-break:keep-all; }
+  .agency-list { display: grid; gap: 12px; }
+  .agency-card { border: 1px solid var(--border, #e5e7eb); border-radius: 14px; padding: 14px 16px; background: #fff; }
+  .agency-card.is-best { border-color: var(--accent, #2563eb); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent,#2563eb) 18%, transparent); }
+  .agency-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .agency-name { font-weight: 800; font-size: 1.02rem; }
+  .agency-best { font-size: 0.7rem; background: var(--accent,#2563eb); color: #fff; border-radius: 999px; padding: 2px 8px; vertical-align: middle; }
+  .agency-limit { font-size: 1.2rem; font-weight: 800; color: var(--accent,#2563eb); font-variant-numeric: tabular-nums; }
+  .agency-meta { font-size: 0.82rem; color: var(--text-muted); margin-top: 5px; }
+  .agency-meta.agency-warn { color: #b45309; }
+  .agency-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border,#e5e7eb); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../index.html" data-nav>홈</a>
+      <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+      <a href="../about.html" data-nav>소개</a>
+    </nav>
+    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../index.html">홈</a><a href="../calculators/index.html">계산기</a><a href="../checklists/index.html">체크리스트</a><a href="../about.html">소개</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 대출 한도 시뮬레이터</div>
+    <h1>대출 한도 시뮬레이터</h1>
+    <div class="meta"><span>실제로 얼마나 받을 수 있나 · LTV·가격대별 한도·스트레스 DSR 반영 · 전세 보증기관 비교 · 2026.06 규정</span></div>
+  </div>
+
+  <div class="calc-layout" data-calc="loan-limit">
+    <div style="grid-column: 1 / -1;">
+      <div class="loan-tabs">
+        <label><input type="radio" name="loanKind" value="mortgage" checked/><span class="tab">🏠 주택담보대출 한도</span></label>
+        <label><input type="radio" name="loanKind" value="jeonse"/><span class="tab">🔑 전세자금대출 한도</span></label>
+      </div>
+    </div>
+
+    <!-- ========== 주택담보대출 ========== -->
+    <div class="calc-form" data-panel="mortgage">
+      <div class="field">
+        <label for="m-price">주택가격 (KB시세·감정가)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="m-price" name="price" type="text" inputmode="numeric" data-format="won" value="1,000,000,000" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>지역</label>
+        <div class="radio-group">
+          <label><input type="radio" name="region" value="regulated" checked/><span>규제지역·수도권</span></label>
+          <label><input type="radio" name="region" value="non"/><span>비규제지역</span></label>
+        </div>
+        <span class="hint">규제지역·수도권 구입자금은 가격대별 한도(15억↓ 6억 / 15~25억 4억 / 25억↑ 2억)가 추가 적용됩니다.</span>
+      </div>
+
+      <div class="field">
+        <label>보유 유형</label>
+        <div class="radio-group">
+          <label><input type="radio" name="ownership" value="none" checked/><span>무주택</span></label>
+          <label><input type="radio" name="ownership" value="first"/><span>생애최초</span></label>
+          <label><input type="radio" name="ownership" value="replace"/><span>처분조건부 1주택</span></label>
+          <label><input type="radio" name="ownership" value="multi"/><span>다주택</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="m-ltv">적용 LTV</label>
+        <div class="input-suffix" data-suffix="%">
+          <input id="m-ltv" name="ltvPercent" type="number" min="0" max="80" step="5" value="50" />
+        </div>
+        <span class="hint">지역·보유에 따라 자동 채워집니다. 실제 적용 비율을 알면 직접 수정하세요.</span>
+      </div>
+
+      <div class="callout callout-warn" data-out="multiWarn" style="display:none; margin: 4px 0 0;">
+        <div class="icon">⚠</div>
+        <div class="body"><strong>규제지역 다주택자는 주택구입 목적 주담대가 원칙적으로 금지</strong>됩니다(6.27 대책). LTV를 0으로 둡니다.</div>
+      </div>
+
+      <h3 style="font-size:0.95rem; margin:22px 0 10px; color:var(--text-muted);">DSR 한도용 입력</h3>
+      <div class="field">
+        <label for="m-income">연소득 (세전)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="m-income" name="income" type="text" inputmode="numeric" data-format="won" value="80,000,000" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="m-exist">기존 대출 월 상환액 (원리금)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="m-exist" name="existingMonthly" type="text" inputmode="numeric" data-format="won" value="0" />
+        </div>
+        <span class="hint">신용대출·기존 주담대 등 모든 가계대출의 월 원리금. 없으면 0.</span>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="m-rate">대출금리</label>
+          <div class="input-suffix" data-suffix="%"><input id="m-rate" name="rate" type="number" min="0" step="0.1" value="4.0" /></div>
+        </div>
+        <div class="field">
+          <label for="m-stress">스트레스 가산</label>
+          <div class="input-suffix" data-suffix="%p"><input id="m-stress" name="stressAdd" type="number" min="0" step="0.25" value="1.5" /></div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="m-term">만기</label>
+          <div class="input-suffix" data-suffix="년"><input id="m-term" name="termYears" type="number" min="1" max="50" step="1" value="30" /></div>
+        </div>
+        <div class="field">
+          <label>DSR 한도</label>
+          <div class="radio-group">
+            <label><input type="radio" name="dsrLimit" value="40" checked/><span>1금융 40%</span></label>
+            <label><input type="radio" name="dsrLimit" value="50"/><span>2금융 50%</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>상환 방식</label>
+        <div class="radio-group">
+          <label><input type="radio" name="repayType" value="equal" checked/><span>원리금균등</span></label>
+          <label><input type="radio" name="repayType" value="principal"/><span>원금균등</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-result" data-panel="mortgage">
+      <h3>받을 수 있는 최대 한도</h3>
+      <div class="result-scenario" data-out="mBinding">—</div>
+      <div class="total" data-out="mLimit">0원</div>
+      <div class="breakdown">
+        <div class="row"><span class="key">① LTV 한도</span><span class="val" data-out="mLtv">0원</span></div>
+        <div class="row"><span class="key">② 지역 가격대별 한도</span><span class="val" data-out="mPriceCap">미적용</span></div>
+        <div class="row"><span class="key">③ DSR 한도</span><span class="val" data-out="mDsr">0원</span></div>
+        <div class="row sub"><span class="key">DSR 적용 금리(스트레스 포함)</span><span class="val" data-out="mStressed">—</span></div>
+        <div class="row sub"><span class="key">필요 자기자본(주택가−한도)</span><span class="val" data-out="mOwn">0원</span></div>
+      </div>
+      <div class="callout callout-info" style="margin-top:18px; margin-bottom:0;">
+        <div class="icon">i</div>
+        <div class="body"><strong>세 한도 중 가장 작은 값</strong>이 실제 대출 한도입니다. 스트레스 금리는 한도 산정에만 가산되며 실제 상환 금리가 오르는 것은 아닙니다.</div>
+      </div>
+    </div>
+
+    <!-- ========== 전세자금대출 ========== -->
+    <div class="calc-form" data-panel="jeonse" style="display:none;">
+      <div class="field">
+        <label for="j-deposit">임차보증금 (전세금)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="j-deposit" name="deposit" type="text" inputmode="numeric" data-format="won" value="500,000,000" />
+        </div>
+      </div>
+      <div class="field">
+        <label>지역</label>
+        <div class="radio-group">
+          <label><input type="radio" name="jArea" value="metro" checked/><span>수도권</span></label>
+          <label><input type="radio" name="jArea" value="other"/><span>그 외 지역</span></label>
+        </div>
+        <span class="hint">대상 임차보증금 한도가 다릅니다(HF·HUG: 수도권 7억 / 그외 5억 이하).</span>
+      </div>
+      <div class="field">
+        <label class="check-item" style="padding:0; cursor:pointer;">
+          <input type="checkbox" name="youth"/>
+          <span class="text">청년·신혼부부
+            <span class="note">HF·HUG는 보증비율이 80% → 90%로 우대됩니다.</span>
+          </span>
+        </label>
+      </div>
+      <div class="callout callout-info" style="margin-bottom:0;">
+        <div class="icon">i</div>
+        <div class="body"><strong>전세자금대출 원금은 DSR 산정에서 제외</strong>됩니다(보증부). 한도는 보증기관의 보증비율·최대한도가 좌우합니다.</div>
+      </div>
+    </div>
+
+    <div class="calc-result" data-panel="jeonse" style="display:none;">
+      <h3>보증기관별 전세대출 한도</h3>
+      <div class="result-scenario">가장 많이 받을 수 있는 곳</div>
+      <div class="total" data-out="jBest">0원</div>
+      <div class="agency-list" data-out="agencyList" style="margin-top:16px;"></div>
+      <div class="callout callout-warn" style="margin-top:16px; margin-bottom:0;">
+        <div class="icon">⚠</div>
+        <div class="body">기관·상품·신용도에 따라 실제 한도와 자격은 달라집니다. HF는 수도권·규제지역 1주택자 2억 제한, 공시가 126% 초과 제한 등 별도 요건이 있으니 은행·보증기관에 반드시 확인하세요.</div>
+      </div>
+    </div>
+  </div>
+
+  <section style="margin-top:56px;">
+    <h2 style="margin-bottom:12px;">한도는 이렇게 계산됩니다</h2>
+    <h3 style="margin:8px 0 8px; font-size:1rem;">주택담보대출 = ①·②·③ 중 최소값</h3>
+    <ul class="ref-list">
+      <li><strong>① LTV 한도</strong> = 주택가격 × LTV%. 비규제 70%(생애최초 80%) / 규제지역 50%(생애최초 70%), 신규 규제지역은 40% 적용 사례.</li>
+      <li><strong>② 가격대별 한도</strong> (수도권·규제지역 구입자금) = 15억↓ 6억 / 15~25억 4억 / 25억↑ 2억.</li>
+      <li><strong>③ DSR 한도</strong> = (연소득 × DSR% − 기존 대출 연원리금)을 <strong>스트레스 금리·만기</strong>로 역산. 1금융 40% / 2금융 50%.</li>
+    </ul>
+    <h3 style="margin:18px 0 8px; font-size:1rem;">전세자금대출 = 보증기관별 비교</h3>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>보증기관</th><th>보증비율</th><th>최대한도</th><th>대상 보증금</th><th>특징</th></tr></thead>
+        <tbody>
+          <tr><td>주택금융공사(HF)</td><td>80%(청년·신혼 90%)</td><td>4억 원</td><td>수도권 7억 / 그외 5억</td><td>금리·보증료 저렴, 1주택 수도권 2억 제한</td></tr>
+          <tr><td>주택도시보증공사(HUG)</td><td>80%(그외 90%)</td><td>4억 원</td><td>수도권 7억 / 그외 5억</td><td>대출+반환보증 일괄(전세금안심대출)</td></tr>
+          <tr><td>SGI서울보증</td><td>80%</td><td>5억 원</td><td>상한 관대(아파트 고액 가능)</td><td>고액 전세 가능, 심사 빠른 편</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.85rem; margin-top:8px;">전세대출 원금은 DSR에 미산입(보증부). 표·계산값은 현행 규정 기준의 참고치이며 상품별로 다릅니다.</p>
+  </section>
+
+  <section style="margin-top:36px;">
+    <h2 style="margin-bottom:12px;">규정·출처</h2>
+    <ul class="source-list">
+      <li>금융위원회 「가계부채 관리 강화 방안」(2025.6.27) — 수도권·규제지역 주담대 6억 한도, 가격대별 차등, 생애최초 LTV 70%</li>
+      <li>스트레스 DSR 3단계(2025.7.1 시행) — 수도권 1.5%p·비수도권 0.75%p, 수도권·규제지역 주담대 강화(3.0%p)</li>
+      <li>한국주택금융공사(HF)·주택도시보증공사(HUG)·SGI서울보증 전세자금보증 상품 공시</li>
+      <li>은행연합회·금융감독원 DSR 산정 기준</li>
+    </ul>
+    <div class="callout callout-warn" style="margin-top:16px;">
+      <div class="icon">⚠</div>
+      <div class="body"><strong>면책</strong> 본 시뮬레이터는 일반 정보 제공용입니다. 대출 규정은 정부 대책에 따라 자주 바뀌며, 실제 한도·자격·금리는 개인 신용·소득·담보·은행 정책에 따라 달라집니다. 반드시 금융기관에 확인하세요.</div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container"><p class="disclaimer">© 톺다. 일반 정보 제공용입니다.</p></div>
+</footer>
+
+<script src="../assets/rates.js?v=20260608"></script>
+<script src="../assets/app.js?v=20260608"></script>
+</body>
+</html>
