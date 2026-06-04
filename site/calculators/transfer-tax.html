@@ -102,7 +102,7 @@
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../calculators/index.html">계산기</a> / 양도소득세</div>
     <h1>양도소득세 계산기</h1>
     <div class="meta">
-      <span>주택 매도 시 발생하는 양도세 · 지방소득세 합계 · 2025~2026년 소득세법 기준 · 최근 갱신</span>
+      <span>주택 양도세·지방소득세 합계 · 비과세·장특공·중과 자동 판정 · 2025~2026년 소득세법 기준</span>
     </div>
   </div>
 
@@ -186,6 +186,7 @@
 
     <div class="calc-result">
       <h3>예상 총 부담 세액</h3>
+      <div class="result-scenario" data-out="scenario">양도가액을 입력하세요</div>
       <div class="total" data-out="total">0원</div>
       <div class="result-sub" data-out="effective">실효세율 —</div>
 
@@ -203,6 +204,14 @@
       <div class="callout callout-success" data-out="exemptBox" style="display: none; margin-top: 20px; margin-bottom: 0;">
         <div class="icon">✓</div>
         <div class="body" data-out="exemptMsg"><strong>비과세 대상</strong></div>
+      </div>
+
+      <div class="callout callout-warn" data-out="warnBox" style="display: none; margin-top: 16px; margin-bottom: 0;">
+        <div class="icon">⚠</div>
+        <div class="body">
+          <strong>보유 2년 미만 — 1세대 1주택 비과세 요건 미충족</strong>
+          비과세를 적용하려면 2년 이상 보유(조정대상지역 취득 시 2년 거주 포함)해야 합니다. 현재 조건으로는 과세 대상으로 계산됩니다.
+        </div>
       </div>
 
       <div class="callout callout-info" style="margin-top: 16px; margin-bottom: 0;">
@@ -340,22 +349,22 @@
   </section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 16px;">함께 보면 좋은 글</h2>
+    <h2 style="margin-bottom: 16px;">다음 단계</h2>
     <div class="cards-grid">
-      <a class="card" href="acquisition-tax.html">
-        <span class="badge badge-accent">계산기 · 매수자</span>
-        <h3>취득세 계산기</h3>
-        <p>매수자가 내는 취득세를 면적·주택수·조정지역까지 반영해 계산.</p>
-      </a>
-      <a class="card" href="../categories/sale.html">
-        <span class="badge">가이드</span>
-        <h3>매매 종합 가이드</h3>
-        <p>매도자 입장에서 잔금일·등기·세금 신고까지 한 번에.</p>
-      </a>
       <a class="card" href="balance-settlement.html">
         <span class="badge badge-success">계산기</span>
-        <h3>잔금일 정산 계산기</h3>
-        <p>잔금일 기준 관리비·선수관리비·장수금 일할 정산.</p>
+        <h3>잔금일 정산 계산기 →</h3>
+        <p>양도(잔금)일에 주고받을 관리비·선수관리비·장수금을 일할 정산하세요.</p>
+      </a>
+      <a class="card" href="acquisition-tax.html">
+        <span class="badge badge-accent">매수자</span>
+        <h3>취득세 계산기 →</h3>
+        <p>갈아타기라면 새로 매수하는 집의 취득세도 함께 점검하세요.</p>
+      </a>
+      <a class="card" href="total-cost-dashboard.html">
+        <span class="badge">종합</span>
+        <h3>총비용 대시보드 →</h3>
+        <p>양도세·취득세·대출이자를 한 화면에서 비교해 갈아타기 손익을 점검.</p>
       </a>
     </div>
   </section>
