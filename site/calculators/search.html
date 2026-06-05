@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260609" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260611" />
 <style>
   .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
   .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
@@ -99,7 +99,7 @@
   <div class="article-header">
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 맞춤 내집 찾기</div>
     <h1>맞춤 내집 찾기</h1>
-    <p class="finder-intro">예산·지역·평형·연식·역거리·초등학교 거리·세대수 중 <strong>원하는 조건만</strong> 넣어보세요.
+    <p class="finder-intro">예산·지역·평형·연식·역거리·초등학교 거리·세대수에 더해 <strong>직장까지 통근시간·세대당 주차·전세가율</strong>까지, <strong>원하는 조건만</strong> 넣어보세요.
     조건에 맞는 단지를 찾아 <strong>예산 적합도·역세권·학군·실거래 안정성·단지규모·연식</strong>을 가중 합산한 종합점수로 추천 순위를 매겨 드립니다.</p>
   </div>
 
@@ -170,6 +170,38 @@
         </div>
       </div>
 
+      <div class="finder-field">
+        <label for="f-hub">직장(업무지구)까지 통근</label>
+        <div style="display:flex; gap:8px;">
+          <select id="f-hub" name="commute_hub" style="flex:1.1;">
+            <option value="">선택 안 함</option>
+            <option value="강남">강남</option>
+            <option value="판교">판교</option>
+            <option value="여의도">여의도</option>
+            <option value="광화문">광화문</option>
+          </select>
+          <div class="finder-suffix" data-suffix="분" style="flex:1;">
+            <input id="f-commute" name="commute_max" type="number" min="0" step="5" inputmode="numeric" placeholder="40" />
+          </div>
+        </div>
+        <span class="finder-hint">업무지구를 고르고 최대 통근시간(분)을 넣으면 그 안에 드는 단지만 추천합니다.</span>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-parking">최소 세대당 주차</label>
+        <div class="finder-suffix" data-suffix="대">
+          <input id="f-parking" name="parking_min" type="number" min="0" step="0.1" inputmode="decimal" placeholder="예: 1.2" />
+        </div>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-ratio">전세가율 상한</label>
+        <div class="finder-suffix" data-suffix="%">
+          <input id="f-ratio" name="jeonse_ratio_max" type="number" min="0" max="100" step="1" inputmode="numeric" placeholder="예: 55" />
+        </div>
+        <span class="finder-hint">낮을수록 갭(매매−전세)이 큰 상급지 경향입니다.</span>
+      </div>
+
       <div class="finder-actions">
         <button type="submit" class="btn btn-primary">추천 받기</button>
         <button type="button" class="btn btn-secondary" id="finderReset">초기화</button>
@@ -228,8 +260,8 @@
   </div>
 </footer>
 
-<script src="../assets/score.js?v=20260609"></script>
-<script src="../assets/app.js?v=20260609"></script>
+<script src="../assets/score.js?v=20260611"></script>
+<script src="../assets/app.js?v=20260611"></script>
 <script>
 (function () {
   'use strict';
@@ -258,8 +290,15 @@
     var sub = num(form.subway_distance_max.value); if (sub) f.subway_distance_max = sub;
     var elem = num(form.elementary_distance_max.value); if (elem) f.elementary_distance_max = elem;
     var house = num(form.min_households.value); if (house) f.min_households = house;
+    if (form.commute_hub.value) {
+      f.commute_hub = form.commute_hub.value;
+      f.commute_max = num(form.commute_max.value) || 60; // 업무지구만 고르면 기본 60분
+    }
+    var park = num(form.parking_min.value); if (park) f.parking_min = park;
+    var ratio = num(form.jeonse_ratio_max.value); if (ratio) f.jeonse_ratio_max = ratio;
     return f;
   }
+  var curHub = '';
 
   var SPEC_LABELS = { budget: '예산 적합', subway: '역세권', school: '학군', stability: '실거래 안정', scale: '단지규모', age: '연식' };
 
@@ -292,7 +331,10 @@
           '<span class="k">역거리</span><span class="v">' + a.subway.distance_m + 'm · ' + esc(a.subway.station) + ' (도보 ' + walk + '분, ' + esc(a.subway.line) + ')</span>' +
           '<span class="k">초등학교</span><span class="v">' + a.elementary.distance_m + 'm · ' + esc(a.elementary.name) + '</span>' +
           '<span class="k">준공연도</span><span class="v">' + a.built_year + '년 (' + r.ageYears + '년차)</span>' +
-          '<span class="k">세대수</span><span class="v">' + a.households.toLocaleString() + '세대</span>' +
+          '<span class="k">세대수</span><span class="v">' + a.households.toLocaleString() + '세대' + (a.builder && a.builder !== '기타' ? ' · ' + esc(a.builder) : '') + '</span>' +
+          (curHub && a.commute && a.commute[curHub] != null ? '<span class="k">' + esc(curHub) + '까지</span><span class="v">약 ' + a.commute[curHub] + '분</span>' : '') +
+          (a.jeonse_ratio != null ? '<span class="k">전세가율</span><span class="v">' + a.jeonse_ratio + '%</span>' : '') +
+          (a.parking_per_household != null ? '<span class="k">세대당 주차</span><span class="v">' + a.parking_per_household.toFixed(2) + '대</span>' : '') +
         '</div>' +
         '<div class="apt-reasons">' + reasons + '</div>' +
         '<div class="apt-bars">' + bars + '</div>' +
@@ -302,6 +344,7 @@
   function render() {
     if (!DATA.length) return;
     var f = readFilters();
+    curHub = f.commute_hub || '';
     var list = S.search(DATA, f);
     relaxedEl.innerHTML = '';
     if (list.length) {
@@ -337,7 +380,7 @@
   });
 
   // 데이터 로드 (상대경로 — custom domain·서브경로 모두 안전)
-  fetch('../assets/apartments.json?v=20260609')
+  fetch('../assets/apartments.json?v=20260611')
     .then(function (res) { if (!res.ok) throw new Error('load'); return res.json(); })
     .then(function (json) {
       DATA = json.apartments || [];

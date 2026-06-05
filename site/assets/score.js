@@ -116,6 +116,7 @@
   const FILTER_LABELS = {
     budget_max: '예산', region: '지역', area_type: '평형', max_age_years: '연식',
     subway_distance_max: '역거리', elementary_distance_max: '초등학교 거리', min_households: '세대수',
+    commute: '통근시간', parking_min: '주차', jeonse_ratio_max: '전세가율',
   };
 
   // ── 통과하지 못한 필터 목록 (입력한 조건만 검사) ──
@@ -135,6 +136,12 @@
     if (f.subway_distance_max && (!apt.subway || apt.subway.distance_m > f.subway_distance_max)) fails.push('subway_distance_max');
     if (f.elementary_distance_max && (!apt.elementary || apt.elementary.distance_m > f.elementary_distance_max)) fails.push('elementary_distance_max');
     if (f.min_households && (apt.households || 0) < f.min_households) fails.push('min_households');
+    if (f.commute_hub && f.commute_max) {
+      const c = apt.commute && apt.commute[f.commute_hub];
+      if (c == null || c > f.commute_max) fails.push('commute');
+    }
+    if (f.parking_min && (apt.parking_per_household == null || apt.parking_per_household < f.parking_min)) fails.push('parking_min');
+    if (f.jeonse_ratio_max && (apt.jeonse_ratio == null || apt.jeonse_ratio > f.jeonse_ratio_max)) fails.push('jeonse_ratio_max');
     return fails;
   }
 
@@ -182,6 +189,10 @@
       reasons.push({ t: `💰 예산 대비 ${Math.round((1 - price / f.budget_max) * 100)}% 여유`, s: sub.budget });
     if (sub.stability >= 80)
       reasons.push({ t: `📈 실거래가 안정적`, s: sub.stability });
+    if (f.commute_hub && apt.commute && apt.commute[f.commute_hub] != null && apt.commute[f.commute_hub] <= 30)
+      reasons.push({ t: `🏢 ${f.commute_hub} ${apt.commute[f.commute_hub]}분`, s: 100 - apt.commute[f.commute_hub] });
+    if (apt.parking_per_household != null && apt.parking_per_household >= 1.3)
+      reasons.push({ t: `🅿 세대당 ${apt.parking_per_household.toFixed(2)}대`, s: 80 });
 
     reasons.sort((a, b) => b.s - a.s);
     let reasonTexts = reasons.slice(0, 3).map((r) => r.t);

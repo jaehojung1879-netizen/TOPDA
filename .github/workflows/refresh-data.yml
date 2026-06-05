@@ -1,0 +1,61 @@
+name: Refresh real-estate data
+
+# 공공 API(국토부 실거래·K-apt·Kakao·R-ONE)를 수집해 site/assets/*.json 을 갱신하고
+# 변경분을 main 에 커밋한다. 키는 저장소 Secrets 로 주입(코드/로그에 노출 금지).
+on:
+  schedule:
+    - cron: "0 19 * * *"   # 매일 04:00 KST (UTC 19:00)
+  workflow_dispatch:        # 수동 실행
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Collect apartments (국토부 실거래 + Kakao)
+        working-directory: _meta
+        env:
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+        run: python collect_apartments.py
+        continue-on-error: true
+
+      - name: Collect market stats (한국부동산원 R-ONE)
+        working-directory: _meta
+        env:
+          REB_RONE_KEY: ${{ secrets.REB_RONE_KEY }}
+        run: python collect_market.py
+        continue-on-error: true
+
+      - name: Collect transactions (국토부 실거래 원장)
+        working-directory: _meta
+        env:
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+        run: python collect_transactions.py
+        continue-on-error: true
+
+      - name: Commit data changes
+        run: |
+          git config user.name "topda-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -n "$(git status --porcelain site/assets)" ]; then
+            git add site/assets/apartments.json site/assets/market.json site/assets/transactions.json
+            git commit -m "데이터 자동 갱신 ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "변경 없음 — 커밋 생략"
+          fi
