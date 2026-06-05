@@ -29,38 +29,28 @@ jobs:
       - name: Collect apartments (국토부 실거래 + Kakao)
         working-directory: _meta
         env:
-          # 국토부(data.go.kr) — 등록하신 이름이 무엇이든 잡히도록 후보를 모두 노출
+          # 국토부(data.go.kr) 실거래·K-apt — 실제 등록명 + 별칭
+          DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
+          DATA_GO_APT_BASIC_INFO: ${{ secrets.DATA_GO_APT_BASIC_INFO }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
-          DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
-          DATA_GO_KR: ${{ secrets.DATA_GO_KR }}
-          PUBLIC_DATA_KEY: ${{ secrets.PUBLIC_DATA_KEY }}
-          MOLIT_KEY: ${{ secrets.MOLIT_KEY }}
           # Kakao
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
-          KAKAO_REST_KEY: ${{ secrets.KAKAO_REST_KEY }}
-          KAKAO_API_KEY: ${{ secrets.KAKAO_API_KEY }}
         run: python collect_apartments.py
         continue-on-error: true
 
       - name: Collect market stats (한국부동산원 R-ONE)
         working-directory: _meta
         env:
-          REB_RONE_KEY: ${{ secrets.REB_RONE_KEY }}
-          R_ONE_KEY: ${{ secrets.R_ONE_KEY }}
           R_ONE: ${{ secrets.R_ONE }}
-          RONE_KEY: ${{ secrets.RONE_KEY }}
-          REB_KEY: ${{ secrets.REB_KEY }}
+          REB_RONE_KEY: ${{ secrets.REB_RONE_KEY }}
         run: python collect_market.py
         continue-on-error: true
 
       - name: Collect transactions (국토부 실거래 원장)
         working-directory: _meta
         env:
+          DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
-          DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
-          DATA_GO_KR: ${{ secrets.DATA_GO_KR }}
-          PUBLIC_DATA_KEY: ${{ secrets.PUBLIC_DATA_KEY }}
-          MOLIT_KEY: ${{ secrets.MOLIT_KEY }}
         run: python collect_transactions.py
         continue-on-error: true
 

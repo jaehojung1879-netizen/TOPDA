@@ -60,8 +60,11 @@ def get_xml(base, params, headers=None, timeout=20):
 
 
 KAKAO_KEYS = ["KAKAO_REST_API_KEY", "KAKAO_REST_KEY", "KAKAO_API_KEY"]
-DATA_GO_KEYS = ["DATA_GO_KR_KEY", "DATA_GO_KR_SERVICE_KEY", "DATA_GO_KR", "PUBLIC_DATA_KEY", "MOLIT_KEY"]
-RONE_KEYS = ["REB_RONE_KEY", "R_ONE_KEY", "R_ONE", "RONE_KEY", "REB_KEY"]
+# 국토부 실거래가 키 (실제 등록명 DATA_GO_APT_PRICE 우선). data.go.kr 계정 키는 활성화한 API 전반에 공용.
+DATA_GO_KEYS = ["DATA_GO_APT_PRICE", "DATA_GO_KR_KEY", "DATA_GO_KR_SERVICE_KEY", "DATA_GO_KR", "PUBLIC_DATA_KEY", "MOLIT_KEY"]
+# K-apt 단지 기본정보(세대수·준공) 키 — 보강용. 없으면 위 PRICE 키로 폴백.
+KAPT_KEYS = ["DATA_GO_APT_BASIC_INFO"] + DATA_GO_KEYS
+RONE_KEYS = ["R_ONE", "REB_RONE_KEY", "R_ONE_KEY", "RONE_KEY", "REB_KEY"]
 
 
 def kakao_headers():
