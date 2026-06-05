@@ -41,12 +41,19 @@ jobs:
         run: python collect_market.py
         continue-on-error: true
 
+      - name: Collect transactions (국토부 실거래 원장)
+        working-directory: _meta
+        env:
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+        run: python collect_transactions.py
+        continue-on-error: true
+
       - name: Commit data changes
         run: |
           git config user.name "topda-bot"
           git config user.email "actions@users.noreply.github.com"
           if [ -n "$(git status --porcelain site/assets)" ]; then
-            git add site/assets/apartments.json site/assets/market.json
+            git add site/assets/apartments.json site/assets/market.json site/assets/transactions.json
             git commit -m "데이터 자동 갱신 ($(date -u +%Y-%m-%d))"
             git push
           else
