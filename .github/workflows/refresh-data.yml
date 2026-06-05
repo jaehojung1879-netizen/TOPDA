@@ -29,7 +29,11 @@ jobs:
       - name: Collect apartments (국토부 실거래 + Kakao)
         working-directory: _meta
         env:
+          # 국토부(data.go.kr) 실거래·K-apt — 실제 등록명 + 별칭
+          DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
+          DATA_GO_APT_BASIC_INFO: ${{ secrets.DATA_GO_APT_BASIC_INFO }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+          # Kakao
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
         run: python collect_apartments.py
         continue-on-error: true
@@ -37,6 +41,7 @@ jobs:
       - name: Collect market stats (한국부동산원 R-ONE)
         working-directory: _meta
         env:
+          R_ONE: ${{ secrets.R_ONE }}
           REB_RONE_KEY: ${{ secrets.REB_RONE_KEY }}
         run: python collect_market.py
         continue-on-error: true
@@ -44,6 +49,7 @@ jobs:
       - name: Collect transactions (국토부 실거래 원장)
         working-directory: _meta
         env:
+          DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
         run: python collect_transactions.py
         continue-on-error: true

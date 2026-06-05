@@ -23,11 +23,17 @@ import xml.etree.ElementTree as ET
 SITE_ASSETS = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "site", "assets"))
 
 
-def key(name, required=False):
-    v = os.environ.get(name, "").strip()
-    if required and not v:
-        raise RuntimeError(f"환경변수 {name} 가 없습니다. GitHub Secret으로 등록하세요.")
-    return v
+def key(names, required=False):
+    """환경변수 값을 가져온다. names 는 문자열 또는 후보 이름 리스트(여러 이름 중 먼저 있는 값)."""
+    if isinstance(names, str):
+        names = [names]
+    for n in names:
+        v = os.environ.get(n, "").strip()
+        if v:
+            return v
+    if required:
+        raise RuntimeError(f"환경변수 {' 또는 '.join(names)} 중 하나가 필요합니다. GitHub Secret으로 등록하세요.")
+    return ""
 
 
 def _request(url, headers=None, timeout=20, retries=3):
@@ -53,8 +59,16 @@ def get_xml(base, params, headers=None, timeout=20):
     return ET.fromstring(_request(url, headers=headers, timeout=timeout))
 
 
+KAKAO_KEYS = ["KAKAO_REST_API_KEY", "KAKAO_REST_KEY", "KAKAO_API_KEY"]
+# 국토부 실거래가 키 (실제 등록명 DATA_GO_APT_PRICE 우선). data.go.kr 계정 키는 활성화한 API 전반에 공용.
+DATA_GO_KEYS = ["DATA_GO_APT_PRICE", "DATA_GO_KR_KEY", "DATA_GO_KR_SERVICE_KEY", "DATA_GO_KR", "PUBLIC_DATA_KEY", "MOLIT_KEY"]
+# K-apt 단지 기본정보(세대수·준공) 키 — 보강용. 없으면 위 PRICE 키로 폴백.
+KAPT_KEYS = ["DATA_GO_APT_BASIC_INFO"] + DATA_GO_KEYS
+RONE_KEYS = ["R_ONE", "REB_RONE_KEY", "R_ONE_KEY", "RONE_KEY", "REB_KEY"]
+
+
 def kakao_headers():
-    return {"Authorization": "KakaoAK " + key("KAKAO_REST_API_KEY", required=True)}
+    return {"Authorization": "KakaoAK " + key(KAKAO_KEYS, required=True)}
 
 
 def geocode_kakao(address):
