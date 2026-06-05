@@ -314,7 +314,14 @@
     var relaxed = r.relaxed ? '<div class="apt-relaxed">⚠ 입력 조건 중 <strong>' + esc(r.relaxed.join(', ')) + '</strong> 은(는) 충족하지 못했지만 그 외 조건이 우수해 추천합니다.</div>' : '';
     var bars = barRow('예산', r.sub.budget) + barRow('역세권', r.sub.subway) + barRow('학군', r.sub.school)
       + barRow('실거래', r.sub.stability) + barRow('규모', r.sub.scale) + barRow('연식', r.sub.age);
-    var walk = S.walkMin(a.subway.distance_m);
+    var sub = a.subway && a.subway.distance_m != null
+      ? a.subway.distance_m + 'm · ' + esc(a.subway.station || '') + ' (도보 ' + S.walkMin(a.subway.distance_m) + '분' + (a.subway.line ? ', ' + esc(a.subway.line) : '') + ')'
+      : '정보 없음';
+    var elem = a.elementary && a.elementary.distance_m != null
+      ? a.elementary.distance_m + 'm · ' + esc(a.elementary.name || '')
+      : '정보 없음';
+    var house = a.households ? a.households.toLocaleString() + '세대' : '세대수 미상';
+    if (a.builder && a.builder !== '기타') house += (a.households ? ' · ' : '') + esc(a.builder);
     return '' +
       '<article class="apt-card">' +
         '<span class="rank">' + rank + '위</span>' +
@@ -328,10 +335,10 @@
         }).join('') + '</div>' +
         relaxed +
         '<div class="apt-spec">' +
-          '<span class="k">역거리</span><span class="v">' + a.subway.distance_m + 'm · ' + esc(a.subway.station) + ' (도보 ' + walk + '분, ' + esc(a.subway.line) + ')</span>' +
-          '<span class="k">초등학교</span><span class="v">' + a.elementary.distance_m + 'm · ' + esc(a.elementary.name) + '</span>' +
-          '<span class="k">준공연도</span><span class="v">' + a.built_year + '년 (' + r.ageYears + '년차)</span>' +
-          '<span class="k">세대수</span><span class="v">' + a.households.toLocaleString() + '세대' + (a.builder && a.builder !== '기타' ? ' · ' + esc(a.builder) : '') + '</span>' +
+          '<span class="k">역거리</span><span class="v">' + sub + '</span>' +
+          '<span class="k">초등학교</span><span class="v">' + elem + '</span>' +
+          '<span class="k">준공연도</span><span class="v">' + (a.built_year ? a.built_year + '년 (' + r.ageYears + '년차)' : '미상') + '</span>' +
+          '<span class="k">세대수</span><span class="v">' + house + '</span>' +
           (curHub && a.commute && a.commute[curHub] != null ? '<span class="k">' + esc(curHub) + '까지</span><span class="v">약 ' + a.commute[curHub] + '분</span>' : '') +
           (a.jeonse_ratio != null ? '<span class="k">전세가율</span><span class="v">' + a.jeonse_ratio + '%</span>' : '') +
           (a.parking_per_household != null ? '<span class="k">세대당 주차</span><span class="v">' + a.parking_per_household.toFixed(2) + '대</span>' : '') +
@@ -380,7 +387,7 @@
   });
 
   // 데이터 로드 (상대경로 — custom domain·서브경로 모두 안전)
-  fetch('../assets/apartments.json?v=20260611')
+  fetch('../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })
     .then(function (res) { if (!res.ok) throw new Error('load'); return res.json(); })
     .then(function (json) {
       DATA = json.apartments || [];
