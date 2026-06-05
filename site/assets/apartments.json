@@ -3,7 +3,7 @@
     "note": "맞춤 내집 찾기 샘플 데이터. 가격 단위는 만원(예: 195000 = 19.5억). 거리는 도보 기준 m. 실제 서비스에서는 아래 출처를 정기 동기화해야 합니다.",
     "currency_unit": "만원",
     "distance_unit": "m (도보)",
-    "as_of": "2026-05",
+    "as_of": "2026-06",
     "sources": {
       "price": "국토교통부 실거래가 공개시스템 OpenAPI (data.go.kr)",
       "complex": "공동주택관리정보시스템 K-apt (세대수·준공연도)",
@@ -33,29 +33,59 @@
       },
       "units": [
         {
-          "label": "59㎡(25평)",
-          "area_m2": 59,
-          "recent_price": 155000
+          "label": "39㎡(12평)",
+          "area_m2": 39,
+          "recent_price": 180000
         },
         {
-          "label": "84㎡(34평)",
-          "area_m2": 84,
-          "recent_price": 195000
+          "label": "49㎡(15평)",
+          "area_m2": 49,
+          "recent_price": 235000
         },
         {
-          "label": "110㎡(43평)",
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 250000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 278000
+        },
+        {
+          "label": "100㎡(30평)",
+          "area_m2": 100,
+          "recent_price": 300000
+        },
+        {
+          "label": "110㎡(33평)",
           "area_m2": 110,
-          "recent_price": 255000
+          "recent_price": 315000
+        },
+        {
+          "label": "111㎡(34평)",
+          "area_m2": 111,
+          "recent_price": 328000
+        },
+        {
+          "label": "130㎡(39평)",
+          "area_m2": 130,
+          "recent_price": 368000
+        },
+        {
+          "label": "150㎡(45평)",
+          "area_m2": 150,
+          "recent_price": 450000
         }
       ],
       "price_history": [
-        188000,
-        191000,
-        193000,
-        195000
+        314356,
+        278833,
+        274020,
+        292667
       ],
-      "lat": 37.4979,
-      "lng": 127.1189,
+      "lat": 37.49742,
+      "lng": 127.107103,
       "commute": {
         "강남": 20,
         "광화문": 42,
@@ -86,24 +116,44 @@
       },
       "units": [
         {
-          "label": "59㎡(25평)",
+          "label": "59㎡(18평)",
           "area_m2": 59,
-          "recent_price": 130000
+          "recent_price": 207500
         },
         {
-          "label": "84㎡(34평)",
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 179500
+        },
+        {
+          "label": "74㎡(22평)",
+          "area_m2": 74,
+          "recent_price": 192000
+        },
+        {
+          "label": "84㎡(25평)",
           "area_m2": 84,
-          "recent_price": 175000
+          "recent_price": 250000
+        },
+        {
+          "label": "98㎡(30평)",
+          "area_m2": 98,
+          "recent_price": 250000
+        },
+        {
+          "label": "113㎡(34평)",
+          "area_m2": 113,
+          "recent_price": 280000
         }
       ],
       "price_history": [
-        168000,
-        172000,
-        174000,
-        175000
+        236600,
+        228786,
+        205166,
+        206600
       ],
-      "lat": 37.5573,
-      "lng": 127.1709,
+      "lat": 37.558069,
+      "lng": 127.163466,
       "commute": {
         "강남": 30,
         "광화문": 45,
@@ -422,24 +472,39 @@
       },
       "units": [
         {
-          "label": "59㎡(25평)",
-          "area_m2": 59,
-          "recent_price": 180000
+          "label": "35㎡(11평)",
+          "area_m2": 35,
+          "recent_price": 140000
         },
         {
-          "label": "84㎡(34평)",
-          "area_m2": 84,
-          "recent_price": 240000
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 256500
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 270000
+        },
+        {
+          "label": "122㎡(37평)",
+          "area_m2": 122,
+          "recent_price": 358000
+        },
+        {
+          "label": "145㎡(44평)",
+          "area_m2": 145,
+          "recent_price": 335000
         }
       ],
       "price_history": [
-        232000,
-        236000,
-        238000,
-        240000
+        276167,
+        246958,
+        261819,
+        302562
       ],
-      "lat": 37.5208,
-      "lng": 127.1028,
+      "lat": 37.520537,
+      "lng": 127.106151,
       "commute": {
         "강남": 20,
         "광화문": 42,
@@ -456,7 +521,7 @@
       "name": "반포자이",
       "region": "서울 서초구 반포동",
       "region_key": "서초구",
-      "built_year": 2008,
+      "built_year": 2009,
       "households": 3410,
       "subway": {
         "station": "구반포역",
@@ -470,24 +535,49 @@
       },
       "units": [
         {
-          "label": "59㎡(25평)",
-          "area_m2": 59,
-          "recent_price": 290000
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 365000
         },
         {
-          "label": "84㎡(34평)",
-          "area_m2": 84,
-          "recent_price": 380000
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 470000
+        },
+        {
+          "label": "132㎡(40평)",
+          "area_m2": 132,
+          "recent_price": 620000
+        },
+        {
+          "label": "165㎡(50평)",
+          "area_m2": 165,
+          "recent_price": 640000
+        },
+        {
+          "label": "195㎡(59평)",
+          "area_m2": 195,
+          "recent_price": 650000
+        },
+        {
+          "label": "216㎡(65평)",
+          "area_m2": 216,
+          "recent_price": 750000
+        },
+        {
+          "label": "245㎡(74평)",
+          "area_m2": 245,
+          "recent_price": 780000
         }
       ],
       "price_history": [
-        370000,
-        375000,
-        378000,
-        380000
+        668600,
+        544000,
+        599167,
+        537500
       ],
-      "lat": 37.5045,
-      "lng": 126.9962,
+      "lat": 37.506352,
+      "lng": 127.011035,
       "commute": {
         "강남": 12,
         "광화문": 38,
@@ -753,24 +843,39 @@
       },
       "units": [
         {
-          "label": "59㎡(25평)",
-          "area_m2": 59,
-          "recent_price": 95000
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 140000
         },
         {
-          "label": "84㎡(34평)",
-          "area_m2": 84,
-          "recent_price": 125000
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 120000
+        },
+        {
+          "label": "121㎡(37평)",
+          "area_m2": 121,
+          "recent_price": 171500
+        },
+        {
+          "label": "153㎡(46평)",
+          "area_m2": 153,
+          "recent_price": 180000
+        },
+        {
+          "label": "154㎡(47평)",
+          "area_m2": 154,
+          "recent_price": 165000
         }
       ],
       "price_history": [
-        123000,
-        124000,
-        126000,
-        125000
+        152485,
+        152486,
+        154000,
+        148071
       ],
-      "lat": 37.5762,
-      "lng": 126.9176,
+      "lat": 37.572649,
+      "lng": 126.910551,
       "commute": {
         "강남": 38,
         "광화문": 18,
@@ -1075,7 +1180,7 @@
       "name": "광명아크포레자이위브",
       "region": "경기 광명시 광명동",
       "region_key": "광명시",
-      "built_year": 2020,
+      "built_year": 2021,
       "households": 2104,
       "subway": {
         "station": "철산역",
@@ -1089,24 +1194,44 @@
       },
       "units": [
         {
-          "label": "59㎡(25평)",
-          "area_m2": 59,
-          "recent_price": 92000
+          "label": "33㎡(10평)",
+          "area_m2": 33,
+          "recent_price": 51800
         },
         {
-          "label": "84㎡(34평)",
-          "area_m2": 84,
-          "recent_price": 120000
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 70800
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 91600
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 100000
+        },
+        {
+          "label": "72㎡(22평)",
+          "area_m2": 72,
+          "recent_price": 113800
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 113000
         }
       ],
       "price_history": [
-        117000,
-        119000,
-        120000,
-        120000
+        94585,
+        92194,
+        96488,
+        97345
       ],
-      "lat": 37.4772,
-      "lng": 126.8662,
+      "lat": 37.472826,
+      "lng": 126.855392,
       "commute": {
         "강남": 40,
         "광화문": 45,
@@ -1438,6 +1563,3185 @@
       "parking_per_household": 0.74,
       "mgmt_fee_per_pyeong": 11446,
       "builder": "기타"
+    },
+    {
+      "name": "까치마을",
+      "region": "서울 강남구 수서동",
+      "region_key": "강남구",
+      "built_year": 1993,
+      "units": [
+        {
+          "label": "34㎡(10평)",
+          "area_m2": 34,
+          "recent_price": 149000
+        },
+        {
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 160000
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 190000
+        }
+      ],
+      "price_history": [
+        152522,
+        146757,
+        156183,
+        156286
+      ],
+      "builder": "기타",
+      "lat": 37.484734,
+      "lng": 127.087618,
+      "subway": {
+        "station": "일원역 3호선",
+        "line": "",
+        "distance_m": 319
+      },
+      "elementary": {
+        "name": "서울왕북초등학교 체육관",
+        "distance_m": 149,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 21,
+        "판교": 32,
+        "여의도": 43,
+        "광화문": 40
+      },
+      "households": null
+    },
+    {
+      "name": "개포자이프레지던스",
+      "region": "서울 강남구 개포동",
+      "region_key": "강남구",
+      "built_year": 2023,
+      "units": [
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 267500
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 298000
+        },
+        {
+          "label": "78㎡(24평)",
+          "area_m2": 78,
+          "recent_price": 350000
+        },
+        {
+          "label": "79㎡(24평)",
+          "area_m2": 79,
+          "recent_price": 335000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 360000
+        },
+        {
+          "label": "103㎡(31평)",
+          "area_m2": 103,
+          "recent_price": 418500
+        },
+        {
+          "label": "110㎡(33평)",
+          "area_m2": 110,
+          "recent_price": 413000
+        },
+        {
+          "label": "115㎡(35평)",
+          "area_m2": 115,
+          "recent_price": 465000
+        },
+        {
+          "label": "133㎡(40평)",
+          "area_m2": 133,
+          "recent_price": 508000
+        }
+      ],
+      "price_history": [
+        287250,
+        362900,
+        336000,
+        379679
+      ],
+      "builder": "GS건설",
+      "lat": 37.485563,
+      "lng": 127.071783,
+      "subway": {
+        "station": "개포동역 수인분당선",
+        "line": "",
+        "distance_m": 639
+      },
+      "elementary": {
+        "name": "서울개포초등학교",
+        "distance_m": 167,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 18,
+        "판교": 33,
+        "여의도": 39,
+        "광화문": 37
+      },
+      "households": null
+    },
+    {
+      "name": "성원대치2단지아파트",
+      "region": "서울 강남구 개포동",
+      "region_key": "강남구",
+      "built_year": 1992,
+      "units": [
+        {
+          "label": "33㎡(10평)",
+          "area_m2": 33,
+          "recent_price": 149500
+        },
+        {
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 170500
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 204000
+        }
+      ],
+      "price_history": [
+        170250,
+        173625,
+        168969,
+        182312
+      ],
+      "builder": "기타",
+      "lat": 37.494185,
+      "lng": 127.075215,
+      "subway": {
+        "station": "대모산입구역 수인분당선",
+        "line": "",
+        "distance_m": 348
+      },
+      "elementary": {
+        "name": "서울대진초등학교 행정실",
+        "distance_m": 398,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 18,
+        "판교": 35,
+        "여의도": 39,
+        "광화문": 36
+      },
+      "households": null
+    },
+    {
+      "name": "래미안퍼스티지",
+      "region": "서울 서초구 반포동",
+      "region_key": "서초구",
+      "built_year": 2009,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 402000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 500000
+        },
+        {
+          "label": "169㎡(51평)",
+          "area_m2": 169,
+          "recent_price": 700000
+        },
+        {
+          "label": "198㎡(60평)",
+          "area_m2": 198,
+          "recent_price": 781000
+        },
+        {
+          "label": "223㎡(67평)",
+          "area_m2": 223,
+          "recent_price": 960000
+        }
+      ],
+      "price_history": [
+        621667,
+        561800,
+        642250,
+        527571
+      ],
+      "builder": "삼성물산",
+      "lat": 37.502931,
+      "lng": 126.999246,
+      "subway": {
+        "station": "신반포역 9호선",
+        "line": "",
+        "distance_m": 286
+      },
+      "elementary": {
+        "name": "서울잠원초등학교",
+        "distance_m": 157,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 14,
+        "판교": 44,
+        "여의도": 24,
+        "광화문": 26
+      },
+      "households": null
+    },
+    {
+      "name": "래미안 리더스원",
+      "region": "서울 서초구 서초동",
+      "region_key": "서초구",
+      "built_year": 2020,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 298000
+        },
+        {
+          "label": "75㎡(23평)",
+          "area_m2": 75,
+          "recent_price": 330000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 374000
+        },
+        {
+          "label": "115㎡(35평)",
+          "area_m2": 115,
+          "recent_price": 465000
+        }
+      ],
+      "price_history": [
+        465000,
+        343000,
+        315000,
+        314250
+      ],
+      "builder": "삼성물산",
+      "lat": 37.490906,
+      "lng": 127.028095,
+      "subway": {
+        "station": "강남역 신분당선",
+        "line": "",
+        "distance_m": 651
+      },
+      "elementary": {
+        "name": "서이초교교차로",
+        "distance_m": 182,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 10,
+        "판교": 38,
+        "여의도": 31,
+        "광화문": 31
+      },
+      "households": null
+    },
+    {
+      "name": "리센츠",
+      "region": "서울 송파구 잠실동",
+      "region_key": "송파구",
+      "built_year": 2008,
+      "units": [
+        {
+          "label": "28㎡(8평)",
+          "area_m2": 28,
+          "recent_price": 165000
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 283000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 328000
+        },
+        {
+          "label": "99㎡(30평)",
+          "area_m2": 99,
+          "recent_price": 400000
+        },
+        {
+          "label": "124㎡(38평)",
+          "area_m2": 124,
+          "recent_price": 383000
+        }
+      ],
+      "price_history": [
+        283755,
+        258320,
+        263632,
+        285300
+      ],
+      "builder": "기타",
+      "lat": 37.512751,
+      "lng": 127.088417,
+      "subway": {
+        "station": "잠실새내역 2호선",
+        "line": "",
+        "distance_m": 223
+      },
+      "elementary": {
+        "name": "서울잠신초등학교",
+        "distance_m": 166,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 21,
+        "판교": 39,
+        "여의도": 41,
+        "광화문": 35
+      },
+      "households": null
+    },
+    {
+      "name": "선사현대아파트",
+      "region": "서울 강동구 암사동",
+      "region_key": "강동구",
+      "built_year": 2000,
+      "units": [
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 140000
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 145000
+        },
+        {
+          "label": "73㎡(22평)",
+          "area_m2": 73,
+          "recent_price": 163000
+        },
+        {
+          "label": "83㎡(25평)",
+          "area_m2": 83,
+          "recent_price": 182000
+        }
+      ],
+      "price_history": [
+        154269,
+        145467,
+        148241,
+        145200
+      ],
+      "builder": "기타",
+      "lat": 37.552396,
+      "lng": 127.125814,
+      "subway": {
+        "station": "암사역 8호선",
+        "line": "",
+        "distance_m": 291
+      },
+      "elementary": {
+        "name": "하늬쌤영어교습소",
+        "distance_m": 166,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 32,
+        "판교": 49,
+        "여의도": 50,
+        "광화문": 39
+      },
+      "households": null
+    },
+    {
+      "name": "롯데캐슬퍼스트",
+      "region": "서울 강동구 암사동",
+      "region_key": "강동구",
+      "built_year": 2008,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 160000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 185000
+        },
+        {
+          "label": "102㎡(31평)",
+          "area_m2": 102,
+          "recent_price": 190000
+        },
+        {
+          "label": "103㎡(31평)",
+          "area_m2": 103,
+          "recent_price": 195000
+        },
+        {
+          "label": "111㎡(34평)",
+          "area_m2": 111,
+          "recent_price": 198000
+        },
+        {
+          "label": "112㎡(34평)",
+          "area_m2": 112,
+          "recent_price": 205000
+        }
+      ],
+      "price_history": [
+        194443,
+        191167,
+        184722,
+        190000
+      ],
+      "builder": "롯데건설",
+      "lat": 37.556623,
+      "lng": 127.14304,
+      "subway": {
+        "station": "암사역사공원역 8호선",
+        "line": "",
+        "distance_m": 487
+      },
+      "elementary": {
+        "name": "서울명일초등학교",
+        "distance_m": 253,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 36,
+        "판교": 50,
+        "여의도": 53,
+        "광화문": 42
+      },
+      "households": null
+    },
+    {
+      "name": "한화오벨리스크",
+      "region": "서울 마포구 도화동",
+      "region_key": "마포구",
+      "built_year": 2004,
+      "units": [
+        {
+          "label": "36㎡(11평)",
+          "area_m2": 36,
+          "recent_price": 57000
+        },
+        {
+          "label": "37㎡(11평)",
+          "area_m2": 37,
+          "recent_price": 56800
+        },
+        {
+          "label": "38㎡(11평)",
+          "area_m2": 38,
+          "recent_price": 56000
+        },
+        {
+          "label": "39㎡(12평)",
+          "area_m2": 39,
+          "recent_price": 54700
+        },
+        {
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 60000
+        },
+        {
+          "label": "41㎡(12평)",
+          "area_m2": 41,
+          "recent_price": 62000
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 73800
+        },
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 95000
+        },
+        {
+          "label": "76㎡(23평)",
+          "area_m2": 76,
+          "recent_price": 122000
+        },
+        {
+          "label": "82㎡(25평)",
+          "area_m2": 82,
+          "recent_price": 130000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 116000
+        }
+      ],
+      "price_history": [
+        91883,
+        77785,
+        82633,
+        81967
+      ],
+      "builder": "기타",
+      "lat": 37.54004,
+      "lng": 126.94547,
+      "subway": {
+        "station": "마포역 5호선",
+        "line": "",
+        "distance_m": 64
+      },
+      "elementary": {
+        "name": "서울염리초등학교 행정실",
+        "distance_m": 295,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 28,
+        "판교": 58,
+        "여의도": 14,
+        "광화문": 18
+      },
+      "households": null
+    },
+    {
+      "name": "대흥동태영아파트",
+      "region": "서울 마포구 대흥동",
+      "region_key": "마포구",
+      "built_year": 1999,
+      "units": [
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 167000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 205000
+        },
+        {
+          "label": "115㎡(35평)",
+          "area_m2": 115,
+          "recent_price": 225000
+        }
+      ],
+      "price_history": [
+        219000,
+        182875,
+        193286,
+        180667
+      ],
+      "builder": "기타",
+      "lat": 37.544731,
+      "lng": 126.942571,
+      "subway": {
+        "station": "대흥역 6호선",
+        "line": "",
+        "distance_m": 323
+      },
+      "elementary": {
+        "name": "서울염리초등학교",
+        "distance_m": 384,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 29,
+        "판교": 60,
+        "여의도": 15,
+        "광화문": 18
+      },
+      "households": null
+    },
+    {
+      "name": "도화동현대",
+      "region": "서울 마포구 도화동",
+      "region_key": "마포구",
+      "built_year": 1996,
+      "units": [
+        {
+          "label": "55㎡(17평)",
+          "area_m2": 55,
+          "recent_price": 148000
+        },
+        {
+          "label": "68㎡(21평)",
+          "area_m2": 68,
+          "recent_price": 150000
+        },
+        {
+          "label": "80㎡(24평)",
+          "area_m2": 80,
+          "recent_price": 135000
+        },
+        {
+          "label": "112㎡(34평)",
+          "area_m2": 112,
+          "recent_price": 187000
+        },
+        {
+          "label": "128㎡(39평)",
+          "area_m2": 128,
+          "recent_price": 181000
+        },
+        {
+          "label": "147㎡(44평)",
+          "area_m2": 147,
+          "recent_price": 200000
+        }
+      ],
+      "price_history": [
+        168429,
+        158125,
+        177667,
+        153500
+      ],
+      "builder": "기타",
+      "lat": 37.539426,
+      "lng": 126.95386,
+      "subway": {
+        "station": "공덕역 공항철도",
+        "line": "",
+        "distance_m": 339
+      },
+      "elementary": {
+        "name": "서울마포초등학교 교무실",
+        "distance_m": 369,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 26,
+        "판교": 57,
+        "여의도": 16,
+        "광화문": 17
+      },
+      "households": null
+    },
+    {
+      "name": "라봄성동",
+      "region": "서울 성동구 마장동",
+      "region_key": "성동구",
+      "built_year": 2025,
+      "units": [
+        {
+          "label": "18㎡(5평)",
+          "area_m2": 18,
+          "recent_price": 30650
+        },
+        {
+          "label": "19㎡(6평)",
+          "area_m2": 19,
+          "recent_price": 31750
+        }
+      ],
+      "price_history": [
+        32413
+      ],
+      "builder": "기타",
+      "lat": 37.563521,
+      "lng": 127.042176,
+      "subway": {
+        "station": "마장역 5호선",
+        "line": "",
+        "distance_m": 299
+      },
+      "elementary": {
+        "name": "서울사근초등학교 행정실",
+        "distance_m": 493,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 25,
+        "판교": 54,
+        "여의도": 34,
+        "광화문": 21
+      },
+      "households": null
+    },
+    {
+      "name": "벽산",
+      "region": "서울 성동구 금호동1가",
+      "region_key": "성동구",
+      "built_year": 2001,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 163800
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 179000
+        },
+        {
+          "label": "114㎡(34평)",
+          "area_m2": 114,
+          "recent_price": 167000
+        },
+        {
+          "label": "115㎡(35평)",
+          "area_m2": 115,
+          "recent_price": 176000
+        }
+      ],
+      "price_history": [
+        167220,
+        161556,
+        148615,
+        177550
+      ],
+      "builder": "기타",
+      "lat": 37.551693,
+      "lng": 127.027223,
+      "subway": {
+        "station": "행당역 5호선",
+        "line": "",
+        "distance_m": 661
+      },
+      "elementary": {
+        "name": "북버즈 초등북클럽 영어교습소",
+        "distance_m": 573,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 22,
+        "판교": 52,
+        "여의도": 30,
+        "광화문": 19
+      },
+      "households": null
+    },
+    {
+      "name": "센트라스",
+      "region": "서울 성동구 하왕십리동",
+      "region_key": "성동구",
+      "built_year": 2016,
+      "units": [
+        {
+          "label": "41㎡(12평)",
+          "area_m2": 41,
+          "recent_price": 134000
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 188000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 223500
+        },
+        {
+          "label": "116㎡(35평)",
+          "area_m2": 116,
+          "recent_price": 265000
+        }
+      ],
+      "price_history": [
+        132790,
+        179750,
+        218273,
+        206900
+      ],
+      "builder": "기타",
+      "lat": 37.566331,
+      "lng": 127.028441,
+      "subway": {
+        "station": "상왕십리역 2호선",
+        "line": "",
+        "distance_m": 222
+      },
+      "elementary": {
+        "name": "서울숭신초등학교 교무실",
+        "distance_m": 157,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 26,
+        "판교": 55,
+        "여의도": 32,
+        "광화문": 19
+      },
+      "households": null
+    },
+    {
+      "name": "창신쌍용2",
+      "region": "서울 종로구 창신동",
+      "region_key": "종로구",
+      "built_year": 1993,
+      "units": [
+        {
+          "label": "55㎡(17평)",
+          "area_m2": 55,
+          "recent_price": 68000
+        },
+        {
+          "label": "65㎡(20평)",
+          "area_m2": 65,
+          "recent_price": 79000
+        },
+        {
+          "label": "80㎡(24평)",
+          "area_m2": 80,
+          "recent_price": 51100
+        },
+        {
+          "label": "107㎡(32평)",
+          "area_m2": 107,
+          "recent_price": 85500
+        },
+        {
+          "label": "116㎡(35평)",
+          "area_m2": 116,
+          "recent_price": 95000
+        }
+      ],
+      "price_history": [
+        74720,
+        72150,
+        74360,
+        80525
+      ],
+      "builder": "기타",
+      "lat": 37.580323,
+      "lng": 127.011785,
+      "subway": {
+        "station": "창신역 6호선",
+        "line": "",
+        "distance_m": 325
+      },
+      "elementary": {
+        "name": "서울명신초등학교 행정실",
+        "distance_m": 217,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 29,
+        "판교": 60,
+        "여의도": 31,
+        "광화문": 16
+      },
+      "households": null
+    },
+    {
+      "name": "두산",
+      "region": "서울 종로구 창신동",
+      "region_key": "종로구",
+      "built_year": 1999,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 90000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 117600
+        }
+      ],
+      "price_history": [
+        101100,
+        89833,
+        82440,
+        100267
+      ],
+      "builder": "기타",
+      "lat": 37.574218,
+      "lng": 127.014287,
+      "subway": {
+        "station": "동묘앞역 1호선",
+        "line": "",
+        "distance_m": 214
+      },
+      "elementary": {
+        "name": "서울창신초등학교",
+        "distance_m": 199,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 28,
+        "판교": 58,
+        "여의도": 31,
+        "광화문": 16
+      },
+      "households": null
+    },
+    {
+      "name": "그린나래",
+      "region": "서울 종로구 평창동",
+      "region_key": "종로구",
+      "built_year": 2026,
+      "units": [
+        {
+          "label": "37㎡(11평)",
+          "area_m2": 37,
+          "recent_price": 38484
+        }
+      ],
+      "price_history": [
+        39320
+      ],
+      "builder": "기타",
+      "lat": 37.606515,
+      "lng": 126.968631,
+      "elementary": {
+        "name": "서울세검정초등학교 행정실",
+        "distance_m": 759,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 38,
+        "판교": 70,
+        "여의도": 32,
+        "광화문": 17
+      },
+      "households": null
+    },
+    {
+      "name": "목동신시가지7",
+      "region": "서울 양천구 목동",
+      "region_key": "양천구",
+      "built_year": 1986,
+      "units": [
+        {
+          "label": "54㎡(16평)",
+          "area_m2": 54,
+          "recent_price": 225000
+        },
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 233000
+        },
+        {
+          "label": "64㎡(19평)",
+          "area_m2": 64,
+          "recent_price": 245000
+        },
+        {
+          "label": "67㎡(20평)",
+          "area_m2": 67,
+          "recent_price": 249000
+        },
+        {
+          "label": "74㎡(22평)",
+          "area_m2": 74,
+          "recent_price": 264000
+        },
+        {
+          "label": "89㎡(27평)",
+          "area_m2": 89,
+          "recent_price": 275000
+        },
+        {
+          "label": "101㎡(31평)",
+          "area_m2": 101,
+          "recent_price": 318000
+        }
+      ],
+      "price_history": [
+        243917,
+        232000,
+        242652,
+        260577
+      ],
+      "builder": "기타",
+      "lat": 37.528823,
+      "lng": 126.867841,
+      "subway": {
+        "station": "목동역 5호선",
+        "line": "",
+        "distance_m": 411
+      },
+      "elementary": {
+        "name": "미래탐구 목동 초등영재센터",
+        "distance_m": 497,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 41,
+        "판교": 68,
+        "여의도": 20,
+        "광화문": 33
+      },
+      "households": null
+    },
+    {
+      "name": "목동신시가지3",
+      "region": "서울 양천구 목동",
+      "region_key": "양천구",
+      "built_year": 1986,
+      "units": [
+        {
+          "label": "65㎡(20평)",
+          "area_m2": 65,
+          "recent_price": 235000
+        },
+        {
+          "label": "95㎡(29평)",
+          "area_m2": 95,
+          "recent_price": 282000
+        },
+        {
+          "label": "96㎡(29평)",
+          "area_m2": 96,
+          "recent_price": 287000
+        },
+        {
+          "label": "116㎡(35평)",
+          "area_m2": 116,
+          "recent_price": 317000
+        },
+        {
+          "label": "122㎡(37평)",
+          "area_m2": 122,
+          "recent_price": 335000
+        },
+        {
+          "label": "145㎡(44평)",
+          "area_m2": 145,
+          "recent_price": 365000
+        },
+        {
+          "label": "154㎡(47평)",
+          "area_m2": 154,
+          "recent_price": 360000
+        }
+      ],
+      "price_history": [
+        285944,
+        279364,
+        250818,
+        274571
+      ],
+      "builder": "기타",
+      "lat": 37.534359,
+      "lng": 126.872949,
+      "subway": {
+        "station": "오목교역 5호선",
+        "line": "",
+        "distance_m": 1110
+      },
+      "elementary": {
+        "name": "서울영도초등학교",
+        "distance_m": 191,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 41,
+        "판교": 68,
+        "여의도": 19,
+        "광화문": 31
+      },
+      "households": null
+    },
+    {
+      "name": "신트리4",
+      "region": "서울 양천구 신정동",
+      "region_key": "양천구",
+      "built_year": 2000,
+      "units": [
+        {
+          "label": "49㎡(15평)",
+          "area_m2": 49,
+          "recent_price": 73000
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 71300
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 81000
+        }
+      ],
+      "price_history": [
+        71450,
+        63000,
+        71792,
+        78038
+      ],
+      "builder": "기타",
+      "lat": 37.511262,
+      "lng": 126.850766,
+      "subway": {
+        "station": "신정네거리역 2호선",
+        "line": "",
+        "distance_m": 1012
+      },
+      "elementary": {
+        "name": "신기초등학교 후문",
+        "distance_m": 192,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 44,
+        "판교": 69,
+        "여의도": 23,
+        "광화문": 38
+      },
+      "households": null
+    },
+    {
+      "name": "우성1",
+      "region": "서울 영등포구 대림동",
+      "region_key": "영등포구",
+      "built_year": 1985,
+      "units": [
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 106000
+        },
+        {
+          "label": "52㎡(16평)",
+          "area_m2": 52,
+          "recent_price": 61900
+        },
+        {
+          "label": "62㎡(19평)",
+          "area_m2": 62,
+          "recent_price": 69250
+        },
+        {
+          "label": "64㎡(19평)",
+          "area_m2": 64,
+          "recent_price": 116000
+        },
+        {
+          "label": "84㎡(25평)",
+          "area_m2": 84,
+          "recent_price": 137000
+        }
+      ],
+      "price_history": [
+        89369,
+        94050,
+        95417,
+        86500
+      ],
+      "builder": "기타",
+      "lat": 37.495536,
+      "lng": 126.900587,
+      "subway": {
+        "station": "대림역 7호선",
+        "line": "",
+        "distance_m": 453
+      },
+      "elementary": {
+        "name": "서울대동초등학교",
+        "distance_m": 219,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 34,
+        "판교": 58,
+        "여의도": 16,
+        "광화문": 33
+      },
+      "households": null
+    },
+    {
+      "name": "현대3차",
+      "region": "서울 영등포구 양평동3가",
+      "region_key": "영등포구",
+      "built_year": 1991,
+      "units": [
+        {
+          "label": "44㎡(13평)",
+          "area_m2": 44,
+          "recent_price": 71500
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 125000
+        },
+        {
+          "label": "63㎡(19평)",
+          "area_m2": 63,
+          "recent_price": 117000
+        },
+        {
+          "label": "84㎡(25평)",
+          "area_m2": 84,
+          "recent_price": 80000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 134000
+        },
+        {
+          "label": "141㎡(43평)",
+          "area_m2": 141,
+          "recent_price": 105000
+        }
+      ],
+      "price_history": [
+        116500,
+        95517,
+        97508,
+        107900
+      ],
+      "builder": "기타",
+      "lat": 37.531321,
+      "lng": 126.895013,
+      "subway": {
+        "station": "영등포구청역 2호선",
+        "line": "",
+        "distance_m": 626
+      },
+      "elementary": {
+        "name": "e해법수학교습소 선유초교점",
+        "distance_m": 107,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 36,
+        "판교": 64,
+        "여의도": 14,
+        "광화문": 27
+      },
+      "households": null
+    },
+    {
+      "name": "삼성래미안",
+      "region": "서울 영등포구 신길동",
+      "region_key": "영등포구",
+      "built_year": 2004,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 153000
+        },
+        {
+          "label": "61㎡(18평)",
+          "area_m2": 61,
+          "recent_price": 138000
+        },
+        {
+          "label": "84㎡(25평)",
+          "area_m2": 84,
+          "recent_price": 163000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 148000
+        },
+        {
+          "label": "115㎡(35평)",
+          "area_m2": 115,
+          "recent_price": 160000
+        },
+        {
+          "label": "158㎡(48평)",
+          "area_m2": 158,
+          "recent_price": 160000
+        }
+      ],
+      "price_history": [
+        144175,
+        144700,
+        153183,
+        156500
+      ],
+      "builder": "삼성물산",
+      "lat": 37.510016,
+      "lng": 126.950079,
+      "subway": {
+        "station": "서울지방병무청역 신림선",
+        "line": "",
+        "distance_m": 655
+      },
+      "elementary": {
+        "name": "서울대방초등학교 후문",
+        "distance_m": 377,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 31,
+        "판교": 57,
+        "여의도": 13,
+        "광화문": 29
+      },
+      "households": null
+    },
+    {
+      "name": "극동(105)",
+      "region": "서울 동작구 사당동",
+      "region_key": "동작구",
+      "built_year": 1993,
+      "units": [
+        {
+          "label": "47㎡(14평)",
+          "area_m2": 47,
+          "recent_price": 137000
+        },
+        {
+          "label": "52㎡(16평)",
+          "area_m2": 52,
+          "recent_price": 146000
+        },
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 163500
+        },
+        {
+          "label": "84㎡(25평)",
+          "area_m2": 84,
+          "recent_price": 163000
+        },
+        {
+          "label": "110㎡(33평)",
+          "area_m2": 110,
+          "recent_price": 178000
+        },
+        {
+          "label": "120㎡(36평)",
+          "area_m2": 120,
+          "recent_price": 188000
+        }
+      ],
+      "price_history": [
+        156286,
+        155222,
+        154630,
+        165188
+      ],
+      "builder": "기타",
+      "lat": 37.489695,
+      "lng": 126.97565,
+      "subway": {
+        "station": "총신대입구역 4호선",
+        "line": "",
+        "distance_m": 663
+      },
+      "elementary": {
+        "name": "서울삼일초등학교",
+        "distance_m": 165,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 19,
+        "판교": 45,
+        "여의도": 21,
+        "광화문": 29
+      },
+      "households": null
+    },
+    {
+      "name": "신동아리버파크",
+      "region": "서울 동작구 노량진동",
+      "region_key": "동작구",
+      "built_year": 2001,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 139000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 164000
+        },
+        {
+          "label": "115㎡(35평)",
+          "area_m2": 115,
+          "recent_price": 168000
+        }
+      ],
+      "price_history": [
+        152136,
+        158786,
+        160283,
+        152800
+      ],
+      "builder": "기타",
+      "lat": 37.507425,
+      "lng": 126.945123,
+      "subway": {
+        "station": "상도역 7호선",
+        "line": "",
+        "distance_m": 562
+      },
+      "elementary": {
+        "name": "동작정상어학원",
+        "distance_m": 286,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 25,
+        "판교": 53,
+        "여의도": 14,
+        "광화문": 25
+      },
+      "households": null
+    },
+    {
+      "name": "홍은동벽산",
+      "region": "서울 서대문구 홍은동",
+      "region_key": "서대문구",
+      "built_year": 1997,
+      "units": [
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 67800
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 88300
+        },
+        {
+          "label": "115㎡(35평)",
+          "area_m2": 115,
+          "recent_price": 88000
+        },
+        {
+          "label": "143㎡(43평)",
+          "area_m2": 143,
+          "recent_price": 95000
+        }
+      ],
+      "price_history": [
+        71480,
+        71750,
+        77891,
+        88300
+      ],
+      "builder": "기타",
+      "lat": 37.59538,
+      "lng": 126.944732,
+      "subway": {
+        "station": "홍제역 3호선",
+        "line": "",
+        "distance_m": 732
+      },
+      "elementary": {
+        "name": "서울홍제초등학교 행정실",
+        "distance_m": 278,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 38,
+        "판교": 70,
+        "여의도": 27,
+        "광화문": 17
+      },
+      "households": null
+    },
+    {
+      "name": "문화촌현대",
+      "region": "서울 서대문구 홍제동",
+      "region_key": "서대문구",
+      "built_year": 2002,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 77000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 87000
+        }
+      ],
+      "price_history": [
+        74250,
+        74700,
+        78733,
+        80429
+      ],
+      "builder": "기타",
+      "lat": 37.592277,
+      "lng": 126.949493,
+      "subway": {
+        "station": "홍제역 3호선",
+        "line": "",
+        "distance_m": 609
+      },
+      "elementary": {
+        "name": "정석학원",
+        "distance_m": 363,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 37,
+        "판교": 68,
+        "여의도": 27,
+        "광화문": 16
+      },
+      "households": null
+    },
+    {
+      "name": "상계주공6(고층)",
+      "region": "서울 노원구 상계동",
+      "region_key": "노원구",
+      "built_year": 1988,
+      "units": [
+        {
+          "label": "32㎡(10평)",
+          "area_m2": 32,
+          "recent_price": 44500
+        },
+        {
+          "label": "37㎡(11평)",
+          "area_m2": 37,
+          "recent_price": 56800
+        },
+        {
+          "label": "38㎡(11평)",
+          "area_m2": 38,
+          "recent_price": 54000
+        },
+        {
+          "label": "41㎡(12평)",
+          "area_m2": 41,
+          "recent_price": 58900
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 66200
+        },
+        {
+          "label": "58㎡(18평)",
+          "area_m2": 58,
+          "recent_price": 74700
+        },
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 78500
+        }
+      ],
+      "price_history": [
+        64769,
+        63850,
+        66022,
+        67428
+      ],
+      "builder": "기타",
+      "lat": 37.653798,
+      "lng": 127.064749,
+      "subway": {
+        "station": "노원역 4호선",
+        "line": "",
+        "distance_m": 304
+      },
+      "elementary": {
+        "name": "서울상수초등학교",
+        "distance_m": 197,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 49,
+        "판교": 75,
+        "여의도": 52,
+        "광화문": 36
+      },
+      "households": null
+    },
+    {
+      "name": "주공2",
+      "region": "서울 노원구 월계동",
+      "region_key": "노원구",
+      "built_year": 1992,
+      "units": [
+        {
+          "label": "39㎡(12평)",
+          "area_m2": 39,
+          "recent_price": 31800
+        },
+        {
+          "label": "45㎡(14평)",
+          "area_m2": 45,
+          "recent_price": 36300
+        },
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 54500
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 57500
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 71000
+        }
+      ],
+      "price_history": [
+        39269,
+        39772,
+        37693,
+        40085
+      ],
+      "builder": "기타",
+      "lat": 37.628126,
+      "lng": 127.052782,
+      "subway": {
+        "station": "월계역 1호선",
+        "line": "",
+        "distance_m": 783
+      },
+      "elementary": {
+        "name": "서울월계초등학교 행정실",
+        "distance_m": 186,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 42,
+        "판교": 69,
+        "여의도": 46,
+        "광화문": 29
+      },
+      "households": null
+    },
+    {
+      "name": "중계그린1단지",
+      "region": "서울 노원구 중계동",
+      "region_key": "노원구",
+      "built_year": 1990,
+      "units": [
+        {
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 47500
+        },
+        {
+          "label": "44㎡(13평)",
+          "area_m2": 44,
+          "recent_price": 60000
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 55000
+        },
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 69500
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 67000
+        }
+      ],
+      "price_history": [
+        58271,
+        55122,
+        54163,
+        60976
+      ],
+      "builder": "기타",
+      "lat": 37.644371,
+      "lng": 127.063282,
+      "subway": {
+        "station": "중계역 7호선",
+        "line": "",
+        "distance_m": 108
+      },
+      "elementary": {
+        "name": "서울중원초등학교 행정실",
+        "distance_m": 73,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 46,
+        "판교": 73,
+        "여의도": 50,
+        "광화문": 34
+      },
+      "households": null
+    },
+    {
+      "name": "황골마을주공1",
+      "region": "경기 수원시영통구 영통동",
+      "region_key": "수원시영통구",
+      "built_year": 1997,
+      "units": [
+        {
+          "label": "49㎡(15평)",
+          "area_m2": 49,
+          "recent_price": 36000
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 35000
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 51500
+        }
+      ],
+      "price_history": [
+        43869,
+        44793,
+        45877,
+        48000
+      ],
+      "builder": "기타",
+      "lat": 37.262434,
+      "lng": 127.079691,
+      "subway": {
+        "station": "청명역 수인분당선",
+        "line": "",
+        "distance_m": 327
+      },
+      "elementary": {
+        "name": "황곡초교삼거리",
+        "distance_m": 303,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 69,
+        "판교": 43,
+        "여의도": 82,
+        "광화문": 90
+      },
+      "households": null
+    },
+    {
+      "name": "매탄위브하늘채",
+      "region": "경기 수원시영통구 매탄동",
+      "region_key": "수원시영통구",
+      "built_year": 2008,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 59000
+        },
+        {
+          "label": "73㎡(22평)",
+          "area_m2": 73,
+          "recent_price": 71000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 75300
+        },
+        {
+          "label": "103㎡(31평)",
+          "area_m2": 103,
+          "recent_price": 84000
+        },
+        {
+          "label": "104㎡(31평)",
+          "area_m2": 104,
+          "recent_price": 78900
+        },
+        {
+          "label": "129㎡(39평)",
+          "area_m2": 129,
+          "recent_price": 90000
+        }
+      ],
+      "price_history": [
+        77357,
+        71804,
+        71244,
+        74038
+      ],
+      "builder": "두산건설",
+      "lat": 37.261821,
+      "lng": 127.041412,
+      "subway": {
+        "station": "수원시청역 수인분당선",
+        "line": "",
+        "distance_m": 936
+      },
+      "elementary": {
+        "name": "효원초등학교 청개구리연못",
+        "distance_m": 300,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 69,
+        "판교": 45,
+        "여의도": 79,
+        "광화문": 88
+      },
+      "households": null
+    },
+    {
+      "name": "벽적골9단지주공",
+      "region": "경기 수원시영통구 영통동",
+      "region_key": "수원시영통구",
+      "built_year": 1999,
+      "units": [
+        {
+          "label": "49㎡(15평)",
+          "area_m2": 49,
+          "recent_price": 47000
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 42000
+        },
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 51500
+        }
+      ],
+      "price_history": [
+        53867,
+        58107,
+        54213,
+        53022
+      ],
+      "builder": "기타",
+      "lat": 37.247349,
+      "lng": 127.065306,
+      "subway": {
+        "station": "영통역 수인분당선",
+        "line": "",
+        "distance_m": 706
+      },
+      "elementary": {
+        "name": "영동초등학교",
+        "distance_m": 287,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 73,
+        "판교": 47,
+        "여의도": 84,
+        "광화문": 93
+      },
+      "households": null
+    },
+    {
+      "name": "한솔마을(5단지)(주공)",
+      "region": "경기 성남시분당구 정자동",
+      "region_key": "성남시분당구",
+      "built_year": 1994,
+      "units": [
+        {
+          "label": "42㎡(13평)",
+          "area_m2": 42,
+          "recent_price": 110000
+        },
+        {
+          "label": "43㎡(13평)",
+          "area_m2": 43,
+          "recent_price": 106000
+        },
+        {
+          "label": "52㎡(16평)",
+          "area_m2": 52,
+          "recent_price": 150000
+        },
+        {
+          "label": "74㎡(22평)",
+          "area_m2": 74,
+          "recent_price": 159000
+        },
+        {
+          "label": "75㎡(23평)",
+          "area_m2": 75,
+          "recent_price": 164000
+        }
+      ],
+      "price_history": [
+        122140,
+        123992,
+        120595,
+        120684
+      ],
+      "builder": "기타",
+      "lat": 37.364906,
+      "lng": 127.117799,
+      "subway": {
+        "station": "정자역 신분당선",
+        "line": "",
+        "distance_m": 864
+      },
+      "elementary": {
+        "name": "한솔초등학교",
+        "distance_m": 232,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 47,
+        "판교": 16,
+        "여의도": 64,
+        "광화문": 68
+      },
+      "households": null
+    },
+    {
+      "name": "양지마을(5단지)(한양501-514)",
+      "region": "경기 성남시분당구 수내동",
+      "region_key": "성남시분당구",
+      "built_year": 1992,
+      "units": [
+        {
+          "label": "28㎡(8평)",
+          "area_m2": 28,
+          "recent_price": 94500
+        },
+        {
+          "label": "35㎡(11평)",
+          "area_m2": 35,
+          "recent_price": 115500
+        },
+        {
+          "label": "43㎡(13평)",
+          "area_m2": 43,
+          "recent_price": 130000
+        },
+        {
+          "label": "49㎡(15평)",
+          "area_m2": 49,
+          "recent_price": 149000
+        }
+      ],
+      "price_history": [
+        127211,
+        129986,
+        121177,
+        129083
+      ],
+      "builder": "기타",
+      "lat": 37.375158,
+      "lng": 127.114716,
+      "subway": {
+        "station": "수내역 수인분당선",
+        "line": "",
+        "distance_m": 369
+      },
+      "elementary": {
+        "name": "초림초등학교 행정실",
+        "distance_m": 322,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 44,
+        "판교": 13,
+        "여의도": 62,
+        "광화문": 65
+      },
+      "households": null
+    },
+    {
+      "name": "매화마을공무원2",
+      "region": "경기 성남시분당구 야탑동",
+      "region_key": "성남시분당구",
+      "built_year": 1995,
+      "units": [
+        {
+          "label": "58㎡(18평)",
+          "area_m2": 58,
+          "recent_price": 101000
+        },
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 98000
+        },
+        {
+          "label": "67㎡(20평)",
+          "area_m2": 67,
+          "recent_price": 115000
+        }
+      ],
+      "price_history": [
+        99792,
+        100700,
+        105708,
+        100500
+      ],
+      "builder": "기타",
+      "lat": 37.414208,
+      "lng": 127.135755,
+      "subway": {
+        "station": "야탑역 수인분당선",
+        "line": "",
+        "distance_m": 695
+      },
+      "elementary": {
+        "name": "중탑초등학교 다목적강당",
+        "distance_m": 305,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 39,
+        "판교": 15,
+        "여의도": 59,
+        "광화문": 60
+      },
+      "households": null
+    },
+    {
+      "name": "보원",
+      "region": "경기 용인시수지구 풍덕천동",
+      "region_key": "용인시수지구",
+      "built_year": 1994,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 83000
+        }
+      ],
+      "price_history": [
+        77021,
+        76889,
+        77712,
+        79650
+      ],
+      "builder": "기타",
+      "lat": 37.326472,
+      "lng": 127.090677,
+      "subway": {
+        "station": "수지구청역 신분당선",
+        "line": "",
+        "distance_m": 565
+      },
+      "elementary": {
+        "name": "토월초교사거리",
+        "distance_m": 140,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 54,
+        "판교": 26,
+        "여의도": 68,
+        "광화문": 75
+      },
+      "households": null
+    },
+    {
+      "name": "동아아파트",
+      "region": "경기 용인시수지구 풍덕천동",
+      "region_key": "용인시수지구",
+      "built_year": 1994,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 71500
+        }
+      ],
+      "price_history": [
+        66450,
+        68200,
+        65305,
+        66328
+      ],
+      "builder": "기타",
+      "lat": 37.331502,
+      "lng": 127.096363,
+      "subway": {
+        "station": "동천역 신분당선",
+        "line": "",
+        "distance_m": 909
+      },
+      "elementary": {
+        "name": "풍덕초등학교",
+        "distance_m": 186,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 53,
+        "판교": 24,
+        "여의도": 68,
+        "광화문": 74
+      },
+      "households": null
+    },
+    {
+      "name": "삼익아파트",
+      "region": "경기 용인시수지구 풍덕천동",
+      "region_key": "용인시수지구",
+      "built_year": 1994,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 68000
+        }
+      ],
+      "price_history": [
+        63220,
+        67300,
+        65979,
+        69900
+      ],
+      "builder": "기타",
+      "lat": 37.331502,
+      "lng": 127.096363,
+      "subway": {
+        "station": "동천역 신분당선",
+        "line": "",
+        "distance_m": 909
+      },
+      "elementary": {
+        "name": "풍덕초등학교",
+        "distance_m": 186,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 53,
+        "판교": 24,
+        "여의도": 68,
+        "광화문": 74
+      },
+      "households": null
+    },
+    {
+      "name": "미사강변브라운스톤엔에이치에프",
+      "region": "경기 하남시 풍산동",
+      "region_key": "하남시",
+      "built_year": 2018,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 60210
+        },
+        {
+          "label": "75㎡(23평)",
+          "area_m2": 75,
+          "recent_price": 114000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 107500
+        }
+      ],
+      "price_history": [
+        94692,
+        99472,
+        104060,
+        100474
+      ],
+      "builder": "기타",
+      "lat": 37.559549,
+      "lng": 127.192777,
+      "subway": {
+        "station": "미사역 5호선",
+        "line": "",
+        "distance_m": 382
+      },
+      "elementary": {
+        "name": "청아초등학교",
+        "distance_m": 148,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 45,
+        "판교": 53,
+        "여의도": 63,
+        "광화문": 52
+      },
+      "households": null
+    },
+    {
+      "name": "대명강변타운",
+      "region": "경기 하남시 신장동",
+      "region_key": "하남시",
+      "built_year": 2007,
+      "units": [
+        {
+          "label": "68㎡(21평)",
+          "area_m2": 68,
+          "recent_price": 88700
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 92000
+        }
+      ],
+      "price_history": [
+        85140,
+        90439,
+        83788,
+        90540
+      ],
+      "builder": "기타",
+      "lat": 37.541626,
+      "lng": 127.222001,
+      "subway": {
+        "station": "하남검단산역 5호선",
+        "line": "",
+        "distance_m": 229
+      },
+      "elementary": {
+        "name": "창우초등학교 병설유치원",
+        "distance_m": 156,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 49,
+        "판교": 52,
+        "여의도": 69,
+        "광화문": 58
+      },
+      "households": null
+    },
+    {
+      "name": "부영",
+      "region": "경기 하남시 창우동",
+      "region_key": "하남시",
+      "built_year": 1994,
+      "units": [
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 63900
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 71000
+        }
+      ],
+      "price_history": [
+        62280,
+        64533,
+        59942,
+        68209
+      ],
+      "builder": "기타",
+      "lat": 37.540833,
+      "lng": 127.225225,
+      "subway": {
+        "station": "하남검단산역 5호선",
+        "line": "",
+        "distance_m": 210
+      },
+      "elementary": {
+        "name": "창우초등학교",
+        "distance_m": 125,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 50,
+        "판교": 52,
+        "여의도": 69,
+        "광화문": 59
+      },
+      "households": null
+    },
+    {
+      "name": "주공1",
+      "region": "경기 광명시 하안동",
+      "region_key": "광명시",
+      "built_year": 1989,
+      "units": [
+        {
+          "label": "36㎡(11평)",
+          "area_m2": 36,
+          "recent_price": 41000
+        },
+        {
+          "label": "41㎡(12평)",
+          "area_m2": 41,
+          "recent_price": 49990
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 60000
+        }
+      ],
+      "price_history": [
+        47308,
+        52490,
+        52405,
+        50775
+      ],
+      "builder": "기타",
+      "lat": 37.464952,
+      "lng": 126.873718,
+      "subway": {
+        "station": "철산역 7호선",
+        "line": "",
+        "distance_m": 1339
+      },
+      "elementary": {
+        "name": "BHC치킨 하안초교점",
+        "distance_m": 153,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 40,
+        "판교": 60,
+        "여의도": 26,
+        "광화문": 42
+      },
+      "households": null
+    },
+    {
+      "name": "이편한세상센트레빌",
+      "region": "경기 광명시 하안동",
+      "region_key": "광명시",
+      "built_year": 2010,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 106000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 118000
+        },
+        {
+          "label": "100㎡(30평)",
+          "area_m2": 100,
+          "recent_price": 118000
+        },
+        {
+          "label": "122㎡(37평)",
+          "area_m2": 122,
+          "recent_price": 116500
+        },
+        {
+          "label": "124㎡(38평)",
+          "area_m2": 124,
+          "recent_price": 120000
+        },
+        {
+          "label": "147㎡(44평)",
+          "area_m2": 147,
+          "recent_price": 129000
+        }
+      ],
+      "price_history": [
+        115581,
+        111443,
+        113178,
+        113950
+      ],
+      "builder": "동부건설",
+      "lat": 37.467525,
+      "lng": 126.867055,
+      "subway": {
+        "station": "철산역 7호선",
+        "line": "",
+        "distance_m": 967
+      },
+      "elementary": {
+        "name": "안현초등학교 병설유치원",
+        "distance_m": 358,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 42,
+        "판교": 61,
+        "여의도": 26,
+        "광화문": 43
+      },
+      "households": null
+    },
+    {
+      "name": "창릉호반써밋",
+      "region": "경기 고양시일산서구 동산동",
+      "region_key": "고양시일산서구",
+      "built_year": 2012,
+      "units": [
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 79000
+        }
+      ],
+      "price_history": [
+        77550,
+        78762,
+        76707,
+        80794
+      ],
+      "builder": "기타",
+      "households": null
+    },
+    {
+      "name": "샘터마을2",
+      "region": "경기 고양시일산서구 행신동",
+      "region_key": "고양시일산서구",
+      "built_year": 1996,
+      "units": [
+        {
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 23000
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 32700
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 30000
+        }
+      ],
+      "price_history": [
+        34400,
+        32542,
+        28400,
+        34233
+      ],
+      "builder": "기타",
+      "households": null
+    },
+    {
+      "name": "지축역한림풀에버",
+      "region": "경기 고양시일산서구 지축동",
+      "region_key": "고양시일산서구",
+      "built_year": 2020,
+      "units": [
+        {
+          "label": "73㎡(22평)",
+          "area_m2": 73,
+          "recent_price": 72000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 80900
+        }
+      ],
+      "price_history": [
+        79678,
+        78675,
+        81118,
+        81214
+      ],
+      "builder": "기타",
+      "households": null
+    },
+    {
+      "name": "e편한세상송도",
+      "region": "인천 연수구 송도동",
+      "region_key": "연수구",
+      "built_year": 2018,
+      "units": [
+        {
+          "label": "70㎡(21평)",
+          "area_m2": 70,
+          "recent_price": 52500
+        },
+        {
+          "label": "71㎡(21평)",
+          "area_m2": 71,
+          "recent_price": 58500
+        },
+        {
+          "label": "84㎡(25평)",
+          "area_m2": 84,
+          "recent_price": 63500
+        }
+      ],
+      "price_history": [
+        59250,
+        58975,
+        59165,
+        55437
+      ],
+      "builder": "DL이앤씨",
+      "lat": 37.411387,
+      "lng": 126.617258,
+      "subway": {
+        "station": "송도달빛축제공원역 인천1호선",
+        "line": "",
+        "distance_m": 920
+      },
+      "elementary": {
+        "name": "인천송담초등학교",
+        "distance_m": 247,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 94,
+        "판교": 109,
+        "여의도": 77,
+        "광화문": 92
+      },
+      "households": null
+    },
+    {
+      "name": "송도더샵센트럴시티",
+      "region": "인천 연수구 송도동",
+      "region_key": "연수구",
+      "built_year": 2018,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 67500
+        },
+        {
+          "label": "73㎡(22평)",
+          "area_m2": 73,
+          "recent_price": 70000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 87700
+        },
+        {
+          "label": "102㎡(31평)",
+          "area_m2": 102,
+          "recent_price": 107000
+        }
+      ],
+      "price_history": [
+        69043,
+        75438,
+        70920,
+        70890
+      ],
+      "builder": "포스코이앤씨",
+      "lat": 37.373779,
+      "lng": 126.651039,
+      "subway": {
+        "station": "지식정보단지역 인천1호선",
+        "line": "",
+        "distance_m": 617
+      },
+      "elementary": {
+        "name": "인천첨단초등학교",
+        "distance_m": 358,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 91,
+        "판교": 102,
+        "여의도": 75,
+        "광화문": 91
+      },
+      "households": null
+    },
+    {
+      "name": "우성2",
+      "region": "인천 연수구 연수동",
+      "region_key": "연수구",
+      "built_year": 1994,
+      "units": [
+        {
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 21700
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 38200
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 30500
+        }
+      ],
+      "price_history": [
+        31467,
+        31778,
+        31767,
+        32735
+      ],
+      "builder": "기타",
+      "lat": 37.411906,
+      "lng": 126.685033,
+      "subway": {
+        "station": "원인재역 수인분당선",
+        "line": "",
+        "distance_m": 192
+      },
+      "elementary": {
+        "name": "인천연화초등학교",
+        "distance_m": 293,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 81,
+        "판교": 95,
+        "여의도": 64,
+        "광화문": 80
+      },
+      "households": null
+    },
+    {
+      "name": "e편한세상부평그랑힐스",
+      "region": "인천 부평구 청천동",
+      "region_key": "부평구",
+      "built_year": 2024,
+      "units": [
+        {
+          "label": "38㎡(11평)",
+          "area_m2": 38,
+          "recent_price": 29800
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 52000
+        },
+        {
+          "label": "68㎡(21평)",
+          "area_m2": 68,
+          "recent_price": 58500
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 63000
+        },
+        {
+          "label": "142㎡(43평)",
+          "area_m2": 142,
+          "recent_price": 120000
+        }
+      ],
+      "price_history": [
+        53657,
+        52988,
+        51236,
+        57771
+      ],
+      "builder": "DL이앤씨",
+      "lat": 37.516855,
+      "lng": 126.699866,
+      "subway": {
+        "station": "산곡역 7호선",
+        "line": "",
+        "distance_m": 971
+      },
+      "elementary": {
+        "name": "더벤티 인천청천초점",
+        "distance_m": 282,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 75,
+        "판교": 97,
+        "여의도": 54,
+        "광화문": 66
+      },
+      "households": null
+    },
+    {
+      "name": "뉴서울",
+      "region": "인천 부평구 부개동",
+      "region_key": "부평구",
+      "built_year": 1989,
+      "units": [
+        {
+          "label": "39㎡(12평)",
+          "area_m2": 39,
+          "recent_price": 18500
+        },
+        {
+          "label": "47㎡(14평)",
+          "area_m2": 47,
+          "recent_price": 25000
+        }
+      ],
+      "price_history": [
+        17852,
+        17609,
+        19379,
+        19844
+      ],
+      "builder": "기타",
+      "lat": 37.506107,
+      "lng": 126.735957,
+      "subway": {
+        "station": "굴포천역 7호선",
+        "line": "",
+        "distance_m": 420
+      },
+      "elementary": {
+        "name": "로드맵수학전문학원",
+        "distance_m": 286,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 67,
+        "판교": 90,
+        "여의도": 47,
+        "광화문": 60
+      },
+      "households": null
+    },
+    {
+      "name": "부평캐슬&더샵퍼스트",
+      "region": "인천 부평구 산곡동",
+      "region_key": "부평구",
+      "built_year": 2024,
+      "units": [
+        {
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 16500
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 59300
+        },
+        {
+          "label": "73㎡(22평)",
+          "area_m2": 73,
+          "recent_price": 69900
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 79500
+        }
+      ],
+      "price_history": [
+        60356,
+        61144,
+        63956,
+        62450
+      ],
+      "builder": "포스코이앤씨",
+      "lat": 37.513743,
+      "lng": 126.702689,
+      "subway": {
+        "station": "산곡역 7호선",
+        "line": "",
+        "distance_m": 574
+      },
+      "elementary": {
+        "name": "인천산곡북초등학교",
+        "distance_m": 276,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 74,
+        "판교": 97,
+        "여의도": 53,
+        "광화문": 66
+      },
+      "households": null
+    },
+    {
+      "name": "센텀이편한세상",
+      "region": "부산 해운대구 재송동",
+      "region_key": "해운대구",
+      "built_year": 2006,
+      "units": [
+        {
+          "label": "73㎡(22평)",
+          "area_m2": 73,
+          "recent_price": 62800
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 78000
+        },
+        {
+          "label": "124㎡(38평)",
+          "area_m2": 124,
+          "recent_price": 96000
+        }
+      ],
+      "price_history": [
+        64777,
+        71450,
+        64191,
+        72814
+      ],
+      "builder": "기타",
+      "lat": 35.18883,
+      "lng": 129.117564,
+      "subway": {
+        "station": "재송역 동해선",
+        "line": "",
+        "distance_m": 244
+      },
+      "elementary": {
+        "name": "송수초등학교",
+        "distance_m": 187,
+        "in_zone": false
+      },
+      "households": null
+    },
+    {
+      "name": "SKVIEW",
+      "region": "부산 해운대구 좌동",
+      "region_key": "해운대구",
+      "built_year": 1998,
+      "units": [
+        {
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 14700
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 20500
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 28800
+        }
+      ],
+      "price_history": [
+        21800,
+        23381,
+        28550,
+        28100
+      ],
+      "builder": "기타",
+      "lat": 35.165278,
+      "lng": 129.184184,
+      "subway": {
+        "station": "장산역 부산2호선",
+        "line": "",
+        "distance_m": 834
+      },
+      "elementary": {
+        "name": "동백초등학교",
+        "distance_m": 327,
+        "in_zone": false
+      },
+      "households": null
+    },
+    {
+      "name": "더샵센텀파크1차",
+      "region": "부산 해운대구 재송동",
+      "region_key": "해운대구",
+      "built_year": 2005,
+      "units": [
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 110300
+        },
+        {
+          "label": "101㎡(31평)",
+          "area_m2": 101,
+          "recent_price": 123500
+        },
+        {
+          "label": "125㎡(38평)",
+          "area_m2": 125,
+          "recent_price": 170000
+        },
+        {
+          "label": "127㎡(38평)",
+          "area_m2": 127,
+          "recent_price": 156000
+        },
+        {
+          "label": "152㎡(46평)",
+          "area_m2": 152,
+          "recent_price": 158000
+        },
+        {
+          "label": "175㎡(53평)",
+          "area_m2": 175,
+          "recent_price": 262000
+        }
+      ],
+      "price_history": [
+        153125,
+        169740,
+        128045,
+        131760
+      ],
+      "builder": "포스코이앤씨",
+      "lat": 35.178381,
+      "lng": 129.122008,
+      "subway": {
+        "station": "센텀역 동해선",
+        "line": "",
+        "distance_m": 254
+      },
+      "elementary": {
+        "name": "센텀초등학교",
+        "distance_m": 326,
+        "in_zone": false
+      },
+      "households": null
+    },
+    {
+      "name": "수성범어W",
+      "region": "대구 수성구 범어동",
+      "region_key": "수성구",
+      "built_year": 2023,
+      "units": [
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 172300
+        },
+        {
+          "label": "103㎡(31평)",
+          "area_m2": 103,
+          "recent_price": 247000
+        }
+      ],
+      "price_history": [
+        159033,
+        142042,
+        166462,
+        165690
+      ],
+      "builder": "기타",
+      "lat": 35.857924,
+      "lng": 128.628709,
+      "subway": {
+        "station": "범어역 대구2호선",
+        "line": "",
+        "distance_m": 210
+      },
+      "elementary": {
+        "name": "대구동도초등학교",
+        "distance_m": 438,
+        "in_zone": false
+      },
+      "households": null
+    },
+    {
+      "name": "e편한세상범어",
+      "region": "대구 수성구 범어동",
+      "region_key": "수성구",
+      "built_year": 2015,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 57700
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 76000
+        }
+      ],
+      "price_history": [
+        72136,
+        75960,
+        72850,
+        69425
+      ],
+      "builder": "DL이앤씨",
+      "lat": 35.866515,
+      "lng": 128.619945,
+      "subway": {
+        "station": "대구은행역 대구2호선",
+        "line": "",
+        "distance_m": 915
+      },
+      "elementary": {
+        "name": "대구동천초등학교 행정실",
+        "distance_m": 508,
+        "in_zone": false
+      },
+      "households": null
+    },
+    {
+      "name": "범어센트럴푸르지오",
+      "region": "대구 수성구 범어동",
+      "region_key": "수성구",
+      "built_year": 2019,
+      "units": [
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 120000
+        }
+      ],
+      "price_history": [
+        119550,
+        130250,
+        118328,
+        119750
+      ],
+      "builder": "대우건설",
+      "lat": 35.860564,
+      "lng": 128.623279,
+      "subway": {
+        "station": "범어역 대구2호선",
+        "line": "",
+        "distance_m": 361
+      },
+      "elementary": {
+        "name": "범미가",
+        "distance_m": 127,
+        "in_zone": false
+      },
+      "households": null
+    },
+    {
+      "name": "도마e편한세상포레나",
+      "region": "대전 서구 도마동",
+      "region_key": "서구",
+      "built_year": 2022,
+      "units": [
+        {
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 25200
+        },
+        {
+          "label": "50㎡(15평)",
+          "area_m2": 50,
+          "recent_price": 27000
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 39400
+        },
+        {
+          "label": "75㎡(23평)",
+          "area_m2": 75,
+          "recent_price": 47200
+        },
+        {
+          "label": "84㎡(25평)",
+          "area_m2": 84,
+          "recent_price": 58000
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 60000
+        }
+      ],
+      "price_history": [
+        48078,
+        45294,
+        49068,
+        46489
+      ],
+      "builder": "DL이앤씨",
+      "lat": 36.313095,
+      "lng": 127.383424,
+      "elementary": {
+        "name": "대전유천초등학교 체육관",
+        "distance_m": 669,
+        "in_zone": false
+      },
+      "households": null
+    },
+    {
+      "name": "경성큰마을",
+      "region": "대전 서구 갈마동",
+      "region_key": "서구",
+      "built_year": 1995,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 31300
+        },
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 36500
+        }
+      ],
+      "price_history": [
+        32463,
+        33720,
+        34000,
+        31300
+      ],
+      "builder": "기타",
+      "lat": 36.344689,
+      "lng": 127.37687,
+      "subway": {
+        "station": "탄방역 대전1호선",
+        "line": "",
+        "distance_m": 697
+      },
+      "elementary": {
+        "name": "대전둔원초등학교",
+        "distance_m": 261,
+        "in_zone": false
+      },
+      "households": null
+    },
+    {
+      "name": "샘머리2차",
+      "region": "대전 서구 둔산동",
+      "region_key": "서구",
+      "built_year": 1998,
+      "units": [
+        {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 52000
+        }
+      ],
+      "price_history": [
+        45959,
+        43142,
+        47982,
+        49333
+      ],
+      "builder": "기타",
+      "lat": 36.361312,
+      "lng": 127.393306,
+      "subway": {
+        "station": "정부청사역 대전1호선",
+        "line": "",
+        "distance_m": 1161
+      },
+      "elementary": {
+        "name": "대전샘머리초등학교",
+        "distance_m": 215,
+        "in_zone": false
+      },
+      "households": null
     }
   ]
 }
