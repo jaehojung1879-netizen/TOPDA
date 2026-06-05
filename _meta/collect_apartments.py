@@ -58,7 +58,7 @@ def estimate_commute(lng, lat):
         out[hub] = int(round(8 + km / 26.0 * 60))  # 기본 8분 + 이동
     return out
 
-MOLIT = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade"
+MOLIT = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev/getRTMSDataSvcAptTradeDev"
 MONTHS_BACK = 6           # 최근 6개월 실거래
 TOP_PER_REGION = 3        # 지역별 거래 많은 상위 단지 수
 APARTMENTS_JSON = os.path.join(L.SITE_ASSETS, "apartments.json")
@@ -182,7 +182,7 @@ def merge(existing, fresh):
 
 
 def main():
-    service_key = L.key("DATA_GO_KR_KEY", required=True)
+    service_key = L.key(L.DATA_GO_KEYS, required=True)
     months = recent_months(MONTHS_BACK)
     fresh = []
     for region, lawd in L.LAWD.items():

@@ -36,3 +36,10 @@ R-ONE **통계표 목록**에서 확인해 채워야 합니다. 채우기 전에
 - 모든 수집기는 **실패·빈 결과 시 기존 JSON을 덮어쓰지 않습니다**(`save_json_safe`).
 - `apartments.json` 병합은 큐레이션 값(세대수·노선 등)을 보존하고 가격·좌표만 갱신합니다.
 - 외부 파이썬 의존성 없음(표준 라이브러리만) — CI에서 `pip install` 불필요.
+
+## 문제해결 (2026-06 갱신)
+- **첫 실행 시 `환경변수 ... 가 없습니다` 오류** → Secret 이름 불일치입니다. 아래 **표준 이름**으로 등록하세요(Kakao는 이미 정상):
+  - 국토부: `DATA_GO_KR_KEY` · 한국부동산원: `REB_RONE_KEY`
+  - 코드가 별칭도 인식합니다 — 국토부: `DATA_GO_KR_SERVICE_KEY/DATA_GO_KR/PUBLIC_DATA_KEY/MOLIT_KEY`, R-ONE: `R_ONE_KEY/R_ONE/RONE_KEY/REB_KEY`
+- **국토부 엔드포인트**: 활용신청한 상세자료(`RTMSDataSvcAptTradeDev`)에 맞춰 호출합니다. 키는 **Decoding(일반 인증키)** 사용.
+- `DATA_GO_KR_KEY`는 hex 형태(특수문자 없음)라 인코딩 이슈가 없습니다.

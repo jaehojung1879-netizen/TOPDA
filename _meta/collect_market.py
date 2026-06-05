@@ -60,7 +60,7 @@ def fetch_series(metric, cls_id, start, end, api_key):
 
 
 def main():
-    api_key = L.key("REB_RONE_KEY", required=True)
+    api_key = L.key(L.RONE_KEYS, required=True)
     if not is_configured():
         print("[skip] R-ONE CONFIG(STATBL_ID/ITM_ID/REGIONS) 미설정 — 기존 market.json 유지")
         print("       reb.or.kr/r-one 통계표 목록에서 식별자를 채운 뒤 다시 실행하세요.")

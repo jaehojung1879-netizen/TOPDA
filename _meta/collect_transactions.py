@@ -10,7 +10,7 @@ import sys
 
 import lib_pdata as L
 
-MOLIT = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTrade/getRTMSDataSvcAptTrade"
+MOLIT = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev/getRTMSDataSvcAptTradeDev"
 MONTHS_BACK = 6
 TX_JSON = os.path.join(L.SITE_ASSETS, "transactions.json")
 
@@ -52,7 +52,7 @@ def fetch(lawd_cd, region_name, ym, service_key):
 
 
 def main():
-    service_key = L.key("DATA_GO_KR_KEY", required=True)
+    service_key = L.key(L.DATA_GO_KEYS, required=True)
     months = recent_months(MONTHS_BACK)
     all_deals = []
     for region, lawd in L.LAWD.items():
