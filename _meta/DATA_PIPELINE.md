@@ -27,10 +27,14 @@
 | `collect_market.py` | R-ONE | `market.json`(지역별 매매·전세 지수·전세가율) |
 | `lib_pdata.py` | 공용 유틸 | — |
 
-## 4) R-ONE 설정 (필수 1회)
-`collect_market.py`의 `CONFIG`(STATBL_ID·ITM_ID)와 `REGIONS`(지역코드)를
-R-ONE **통계표 목록**에서 확인해 채워야 합니다. 채우기 전에는 기존 `market.json`을
-보존합니다(빈 결과로 덮어쓰지 않음).
+## 4) R-ONE (지역 시세 대시보드)
+`collect_market.py`는 통계표를 **STATBL_ID로 호출하고 지역코드는 지정하지 않아**,
+R-ONE이 돌려주는 **전 지역(전국·시도·시군구)** 을 자동 수집합니다(→ 구 단위까지).
+- 매매가격지수(아파트): `A_2024_00045`
+- 전세가격지수(아파트): `A_2024_00050`
+- 전세가율(매매가격대비 전세가격비율): `METRICS["jeonse_ratio"]` 비어 있음 →
+  R-ONE easyStat에서 해당 통계표를 찾아 URL의 `A_2024_xxxxx`를 넣으면 자동 반영됩니다.
+- 매매가격지수 수집 실패 시 기존 `market.json` 보존.
 
 ## 안전장치
 - 모든 수집기는 **실패·빈 결과 시 기존 JSON을 덮어쓰지 않습니다**(`save_json_safe`).

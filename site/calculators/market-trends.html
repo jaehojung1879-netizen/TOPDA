@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>지역 시세·전세가율 대시보드 — 톺다</title>
-<meta name="description" content="한국부동산원 R-ONE 통계 기반 지역별 매매·전세 가격지수 추이, 전세가율, 거래량을 한 화면에서. 지역을 골라 시장 흐름을 확인하세요." />
+<meta name="description" content="한국부동산원 R-ONE 통계 기반으로 시·도부터 시·군·구까지 아파트 매매·전세 가격지수와 전세가율을 확인하는 지역 시세 대시보드." />
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -48,13 +48,17 @@
   <div class="article-header">
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 지역 시세 대시보드</div>
     <h1>지역 시세·전세가율 대시보드</h1>
-    <div class="meta"><span>한국부동산원 R-ONE 통계 기반 · 매매·전세 가격지수·전세가율·거래량</span></div>
+    <div class="meta"><span>한국부동산원 R-ONE 통계 기반 · 시·도→시·군·구 매매·전세 가격지수·전세가율</span></div>
   </div>
 
   <div class="mkt-controls">
     <div class="mkt-field">
-      <label for="mkt-region">지역</label>
-      <select id="mkt-region"></select>
+      <label for="mkt-sido">시·도</label>
+      <select id="mkt-sido"></select>
+    </div>
+    <div class="mkt-field">
+      <label for="mkt-gu">시·군·구</label>
+      <select id="mkt-gu"></select>
     </div>
   </div>
 
@@ -69,10 +73,6 @@
       <h3>전세가율 (%)</h3>
       <canvas id="chartRatio"></canvas>
     </div>
-    <div class="mkt-chart" style="grid-column:1/-1;">
-      <h3>월 거래량 (건)</h3>
-      <canvas id="chartTrades"></canvas>
-    </div>
   </div>
 
   <section style="margin-top:40px;">
@@ -80,7 +80,6 @@
     <ul class="ref-list">
       <li><strong>매매·전세 가격지수</strong> — 기준시점=100. 100보다 크면 기준 대비 상승, 추세 기울기로 상승/하락 속도를 봅니다.</li>
       <li><strong>전세가율</strong> — 전세가 ÷ 매매가 × 100. 높을수록 갭(매매−전세)이 작아 갭투자 부담은 작지만, 역전세·깡통전세 위험도 함께 살펴야 합니다.</li>
-      <li><strong>거래량</strong> — 시장 활성도. 거래량이 늘며 가격이 오르면 추세의 신뢰도가 높습니다.</li>
     </ul>
   </section>
 
@@ -88,7 +87,6 @@
     <h2 style="margin-bottom:10px;">출처</h2>
     <ul class="source-list">
       <li>한국부동산원 R-ONE 부동산통계 OpenAPI (www.reb.or.kr/r-one) — 매매·전세 가격지수, 전세가율</li>
-      <li>국토교통부 실거래가 공개시스템 — 거래량</li>
     </ul>
     <div class="callout callout-warn" style="margin-top:16px;">
       <div class="icon">⚠</div>
@@ -107,23 +105,29 @@
 (function () {
   'use strict';
   var DATA = null, charts = {};
-  var sel = document.getElementById('mkt-region');
+  var sidoSel = document.getElementById('mkt-sido');
+  var guSel = document.getElementById('mkt-gu');
   var statsEl = document.getElementById('mktStats');
 
   function fmtDelta(cur, prev) {
+    if (cur == null || prev == null) return '';
     var d = cur - prev;
     var cls = Math.abs(d) < 0.05 ? 'flat' : (d > 0 ? 'up' : 'down');
     var sign = d > 0 ? '+' : '';
     return '<span class="delta ' + cls + '">' + sign + d.toFixed(2) + ' (전월 대비)</span>';
   }
+  function lastVal(s, key) {
+    for (var i = s.length - 1; i >= 0; i--) if (s[i][key] != null) return s[i][key];
+    return null;
+  }
 
   function renderStats(s) {
-    var last = s[s.length - 1], prev = s[s.length - 2] || last;
+    var last = s[s.length - 1] || {}, prev = s[s.length - 2] || last;
+    var si = lastVal(s, 'sale_index'), ji = lastVal(s, 'jeonse_index'), jr = lastVal(s, 'jeonse_ratio');
     var cards = [
-      { lbl: '매매가격지수', num: last.sale_index.toFixed(1), d: fmtDelta(last.sale_index, prev.sale_index) },
-      { lbl: '전세가격지수', num: last.jeonse_index.toFixed(1), d: fmtDelta(last.jeonse_index, prev.jeonse_index) },
-      { lbl: '전세가율', num: last.jeonse_ratio.toFixed(1) + '%', d: fmtDelta(last.jeonse_ratio, prev.jeonse_ratio) },
-      { lbl: '월 거래량', num: last.trades.toLocaleString() + '건', d: fmtDelta(last.trades, prev.trades) },
+      { lbl: '매매가격지수', num: si == null ? '—' : si.toFixed(1), d: fmtDelta(last.sale_index, prev.sale_index) },
+      { lbl: '전세가격지수', num: ji == null ? '—' : ji.toFixed(1), d: fmtDelta(last.jeonse_index, prev.jeonse_index) },
+      { lbl: '전세가율', num: jr == null ? '— (집계 예정)' : jr.toFixed(1) + '%', d: fmtDelta(last.jeonse_ratio, prev.jeonse_ratio) },
     ];
     statsEl.innerHTML = cards.map(function (c) {
       return '<div class="mkt-stat"><div class="lbl">' + c.lbl + '</div><div class="num">' + c.num + '</div>' + c.d + '</div>';
@@ -140,35 +144,46 @@
         scales: { x: { grid: { display: false } } } },
     });
   }
-  function bar(id, labels, data) {
-    if (charts[id]) charts[id].destroy();
-    charts[id] = new Chart(document.getElementById(id).getContext('2d'), {
-      type: 'bar',
-      data: { labels: labels, datasets: [{ label: '거래량', data: data, backgroundColor: 'rgba(37,99,235,0.5)', borderRadius: 4 }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } },
+  function sidoOrder(a, b) { if (a === '전국') return -1; if (b === '전국') return 1; return a < b ? -1 : 1; }
+
+  function fillGu() {
+    var sido = sidoSel.value;
+    var inSido = DATA.regions.filter(function (r) { return r.sido === sido; });
+    // 시도 대표(전체) 먼저, 그다음 구
+    inSido.sort(function (a, b) {
+      var aTop = a.key === sido, bTop = b.key === sido;
+      if (aTop !== bTop) return aTop ? -1 : 1;
+      return a.name < b.name ? -1 : 1;
     });
+    guSel.innerHTML = inSido.map(function (r) { return '<option value="' + r.key + '">' + r.name + '</option>'; }).join('');
   }
 
   function render() {
-    var region = DATA.regions.find(function (r) { return r.key === sel.value; }) || DATA.regions[0];
+    var region = DATA.regions.find(function (r) { return r.key === guSel.value; })
+      || DATA.regions.find(function (r) { return r.sido === sidoSel.value; }) || DATA.regions[0];
     var s = region.series, labels = s.map(function (x) { return x.month; });
+    document.querySelectorAll('.mkt-chart h3')[0].textContent = region.key + ' · 매매·전세 가격지수';
     renderStats(s);
     line('chartIndex', labels, [
       { label: '매매', data: s.map(function (x) { return x.sale_index; }), borderColor: '#dc2626', backgroundColor: 'rgba(220,38,38,0.08)', fill: true, tension: 0.3, pointRadius: 2 },
       { label: '전세', data: s.map(function (x) { return x.jeonse_index; }), borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.06)', fill: true, tension: 0.3, pointRadius: 2 },
     ]);
     line('chartRatio', labels, [
-      { label: '전세가율', data: s.map(function (x) { return x.jeonse_ratio; }), borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.10)', fill: true, tension: 0.3, pointRadius: 2 },
+      { label: '전세가율', data: s.map(function (x) { return x.jeonse_ratio; }), borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.10)', fill: true, tension: 0.3, pointRadius: 2, spanGaps: true },
     ]);
-    bar('chartTrades', labels, s.map(function (x) { return x.trades; }));
   }
 
   fetch('../assets/market.json?t=' + Date.now(), { cache: 'no-store' })
     .then(function (r) { if (!r.ok) throw new Error('load'); return r.json(); })
     .then(function (j) {
       DATA = j;
-      sel.innerHTML = j.regions.map(function (r) { return '<option value="' + r.key + '">' + r.key + '</option>'; }).join('');
-      sel.addEventListener('change', render);
+      var sidos = [];
+      j.regions.forEach(function (r) { if (sidos.indexOf(r.sido) < 0) sidos.push(r.sido); });
+      sidos.sort(sidoOrder);
+      sidoSel.innerHTML = sidos.map(function (s) { return '<option value="' + s + '">' + s + '</option>'; }).join('');
+      sidoSel.addEventListener('change', function () { fillGu(); render(); });
+      guSel.addEventListener('change', render);
+      fillGu();
       render();
     })
     .catch(function () {
