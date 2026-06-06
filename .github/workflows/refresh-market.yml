@@ -1,0 +1,44 @@
+name: Refresh market stats (R-ONE)
+
+# 한국부동산원 R-ONE 지역 시세(매매·전세 가격지수·전세가율)만 수집 → site/assets/market.json.
+# 가볍고 빠름. 국토부 실거래/Kakao 수집(refresh-listings)과 분리해 독립 실행한다.
+on:
+  schedule:
+    - cron: "0 20 * * *"   # 매일 05:00 KST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-market
+  cancel-in-progress: false
+
+jobs:
+  market:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Collect market stats (R-ONE)
+        working-directory: _meta
+        env:
+          R_ONE: ${{ secrets.R_ONE }}
+          REB_RONE_KEY: ${{ secrets.REB_RONE_KEY }}
+        run: python collect_market.py
+
+      - name: Commit market.json
+        run: |
+          git config user.name "topda-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -n "$(git status --porcelain site/assets/market.json)" ]; then
+            git add site/assets/market.json
+            git commit -m "지역 시세 자동 갱신 ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "변경 없음 — 커밋 생략"
+          fi
