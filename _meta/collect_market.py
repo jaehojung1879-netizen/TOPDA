@@ -1,96 +1,125 @@
 #!/usr/bin/env python3
 """한국부동산원 R-ONE 부동산통계 → site/assets/market.json 갱신.
 
-R-ONE OpenAPI
+R-ONE OpenAPI (SttsApiTblData.do)
   GET https://www.reb.or.kr/r-one/openapi/SttsApiTblData.do
-  params: KEY, Type=json, STATBL_ID, DTACYCLE_CD(MM=월), CLS_ID(지역), ITM_ID,
-          START_WRTTIME(YYYYMM), END_WRTTIME(YYYYMM), pIndex, pSize
-  resp:   { "SttsApiTblData": [ {..head..}, {"row":[ {WRTTIME_DESC, DTA_VAL, CLS_NM, ...} ]} ] }
+  params: KEY, Type=json, STATBL_ID, DTACYCLE_CD=MM, START_WRTTIME, END_WRTTIME, pIndex, pSize
+  - CLS_ID(지역)를 지정하지 않으면 모든 지역(전국·시도·시군구) 행이 반환됨 → 자동으로 구 단위까지 수집.
+  resp: { "SttsApiTblData": [ {..head..}, {"row":[ {CLS_NM, WRTTIME_IDTFR_ID, DTA_VAL, ...} ]} ] }
 
-⚠ STATBL_ID / ITM_ID / CLS_ID 는 R-ONE '통계표 목록'에서 골라야 합니다.
-  (OpenAPI 활용신청 후 reb.or.kr/r-one → 통계표별 식별자 확인)
-  아래 CONFIG의 빈 값을 채우기 전까지는 기존 market.json을 보존합니다.
+통계표 ID (월간, 아파트)
+  매매가격지수 : A_2024_00045
+  전세가격지수 : A_2024_00050
+  전세가율(매매가격대비 전세가격비율) : R-ONE easyStat URL의 A_2024_xxxxx 확인 후 입력
 """
 import datetime as dt
 import os
+import re
 import sys
 
 import lib_pdata as L
 
 RONE = "https://www.reb.or.kr/r-one/openapi/SttsApiTblData.do"
 MARKET_JSON = os.path.join(L.SITE_ASSETS, "market.json")
+MONTHS = 13
 
-# ── 채워 넣을 설정 ─────────────────────────────────────────────
-# STATBL_ID: 통계표 ID(예: 아파트 매매가격지수, 전세가격지수, 전세가율)
-# ITM_ID:    항목 ID,  CLS_ID: 지역분류 코드(시군구)
-CONFIG = {
-    "sale_index":   {"STATBL_ID": "", "ITM_ID": ""},   # 아파트 매매가격지수
-    "jeonse_index": {"STATBL_ID": "", "ITM_ID": ""},   # 아파트 전세가격지수
-    "jeonse_ratio": {"STATBL_ID": "", "ITM_ID": ""},   # 아파트 전세가율
+# 월간 아파트 통계표 ID
+METRICS = {
+    "sale_index":   "A_2024_00045",  # 매매가격지수_아파트
+    "jeonse_index": "A_2024_00050",  # 전세가격지수_아파트
+    "jeonse_ratio": "",              # 매매가격대비 전세가격비율_아파트 (확인 후 입력)
 }
-# 지역분류코드(CLS_ID) → 표시 이름. R-ONE 지역코드로 채우세요.
-REGIONS = {
-    # "11710": "서울 송파구",
-}
-MONTHS = 13  # 최근 13개월
 
 
-def is_configured():
-    return all(c["STATBL_ID"] for c in CONFIG.values()) and bool(REGIONS)
+def norm_month(s):
+    s = str(s or "")
+    m = re.search(r"(\d{4})\D*(\d{2})", s)  # "202605" / "2026년 05월" / "2026.05"
+    return f"{m.group(1)}-{m.group(2)}" if m else None
 
 
-def fetch_series(metric, cls_id, start, end, api_key):
-    cfg = CONFIG[metric]
-    j = L.get_json(RONE, {
-        "KEY": api_key, "Type": "json", "DTACYCLE_CD": "MM",
-        "STATBL_ID": cfg["STATBL_ID"], "ITM_ID": cfg["ITM_ID"], "CLS_ID": cls_id,
-        "START_WRTTIME": start, "END_WRTTIME": end, "pIndex": 1, "pSize": 100,
-    })
-    rows = []
-    for block in j.get("SttsApiTblData", []):
-        rows += block.get("row", []) if isinstance(block, dict) else []
+def fetch_metric(statbl_id, start, end, api_key):
+    """STATBL_ID 한 표의 전 지역 시계열 → {지역명: {month: value}}."""
     out = {}
-    for r in rows:
-        t = str(r.get("WRTTIME_DESC") or r.get("WRTTIME_IDTFR_ID") or "")[:7].replace(".", "-")
-        try:
-            out[t] = float(r.get("DTA_VAL"))
-        except (TypeError, ValueError):
-            continue
+    page = 1
+    while page <= 12:
+        j = L.get_json(RONE, {
+            "KEY": api_key, "Type": "json", "STATBL_ID": statbl_id, "DTACYCLE_CD": "MM",
+            "START_WRTTIME": start, "END_WRTTIME": end, "pIndex": page, "pSize": 1000,
+        })
+        rows = []
+        for block in (j.get("SttsApiTblData") or []):
+            if isinstance(block, dict) and block.get("row"):
+                rows = block["row"]
+        if not rows:
+            break
+        for r in rows:
+            region = (r.get("CLS_NM") or "").strip()
+            mon = norm_month(r.get("WRTTIME_IDTFR_ID") or r.get("WRTTIME_DESC"))
+            if not region or not mon:
+                continue
+            try:
+                val = float(r.get("DTA_VAL"))
+            except (TypeError, ValueError):
+                continue
+            out.setdefault(region, {})[mon] = val
+        if len(rows) < 1000:
+            break
+        page += 1
     return out
+
+
+def split_region(name):
+    """'서울 송파구' → (sido='서울', leaf='송파구'). 공백 없으면 시도/전국 등 상위로 취급."""
+    parts = name.split()
+    if len(parts) >= 2:
+        return parts[0], " ".join(parts[1:])
+    return name, None
 
 
 def main():
     api_key = L.key(L.RONE_KEYS, required=True)
-    if not is_configured():
-        print("[skip] R-ONE CONFIG(STATBL_ID/ITM_ID/REGIONS) 미설정 — 기존 market.json 유지")
-        print("       reb.or.kr/r-one 통계표 목록에서 식별자를 채운 뒤 다시 실행하세요.")
-        return
     end = dt.date.today().strftime("%Y%m")
     start = (dt.date.today().replace(day=1) - dt.timedelta(days=31 * MONTHS)).strftime("%Y%m")
-    regions_out = []
-    for cls_id, name in REGIONS.items():
-        try:
-            sale = fetch_series("sale_index", cls_id, start, end, api_key)
-            jeon = fetch_series("jeonse_index", cls_id, start, end, api_key)
-            ratio = fetch_series("jeonse_ratio", cls_id, start, end, api_key)
-        except Exception as e:  # noqa: BLE001
-            print(f"  ! {name} 수집 실패: {e}", file=sys.stderr)
+
+    metric_data = {}
+    for metric, statbl in METRICS.items():
+        if not statbl:
+            print(f"[skip] {metric}: STATBL_ID 미설정")
             continue
-        months = sorted(set(sale) | set(jeon) | set(ratio))[-MONTHS:]
-        series = [{
-            "month": m,
-            "sale_index": sale.get(m), "jeonse_index": jeon.get(m),
-            "jeonse_ratio": ratio.get(m), "trades": None,
-        } for m in months]
+        try:
+            metric_data[metric] = fetch_metric(statbl, start, end, api_key)
+            print(f"[{metric}] 지역 {len(metric_data[metric])}개 수집")
+        except Exception as e:  # noqa: BLE001
+            print(f"  ! {metric} 수집 실패: {e}", file=sys.stderr)
+
+    if not metric_data.get("sale_index"):
+        print("매매가격지수 수집 실패 — 기존 market.json 유지")
+        return
+
+    # 지역 합집합 → 월별 시계열 병합
+    regions = sorted(set().union(*[set(d) for d in metric_data.values()]))
+    out_regions = []
+    for region in regions:
+        sido, leaf = split_region(region)
+        months = sorted(set().union(*[set(metric_data.get(m, {}).get(region, {})) for m in METRICS]))[-MONTHS:]
+        series = []
+        for mo in months:
+            series.append({
+                "month": mo,
+                "sale_index": metric_data.get("sale_index", {}).get(region, {}).get(mo),
+                "jeonse_index": metric_data.get("jeonse_index", {}).get(region, {}).get(mo),
+                "jeonse_ratio": metric_data.get("jeonse_ratio", {}).get(region, {}).get(mo),
+            })
         if series:
-            regions_out.append({"key": name, "series": series})
-            print(f"[{name}] {len(series)}개월")
-    if not regions_out:
+            out_regions.append({"key": region, "sido": sido, "name": leaf or (region + " 전체"), "series": series})
+
+    if not out_regions:
         print("수집 결과 없음 — 기존 market.json 유지")
         return
     data = {
-        "_meta": {"source": "한국부동산원 R-ONE", "note": "R-ONE OpenAPI 자동 수집"},
-        "as_of": dt.date.today().strftime("%Y-%m"), "regions": regions_out,
+        "_meta": {"source": "한국부동산원 R-ONE 전국주택가격동향(월간, 아파트)",
+                  "note": "매매가격지수 A_2024_00045 · 전세가격지수 A_2024_00050"},
+        "as_of": dt.date.today().strftime("%Y-%m"), "regions": out_regions,
     }
     L.save_json_safe(MARKET_JSON, data, min_items_key="regions")
 

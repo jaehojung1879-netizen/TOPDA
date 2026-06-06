@@ -1,0 +1,56 @@
+name: Refresh listings (실거래·단지)
+
+# 국토부 실거래가 + Kakao(좌표·역·학교) + K-apt(세대수·준공) 수집 →
+# site/assets/apartments.json (맞춤찾기) · transactions.json (실거래 조회).
+# Kakao 지오코딩 등으로 시간이 걸려 R-ONE(refresh-market)과 분리한다.
+on:
+  schedule:
+    - cron: "0 19 * * *"   # 매일 04:00 KST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-listings
+  cancel-in-progress: false
+
+jobs:
+  listings:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Collect apartments (국토부 실거래 + Kakao + K-apt)
+        working-directory: _meta
+        env:
+          DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
+          DATA_GO_APT_BASIC_INFO: ${{ secrets.DATA_GO_APT_BASIC_INFO }}
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+        run: python collect_apartments.py
+        continue-on-error: true
+
+      - name: Collect transactions (국토부 실거래 원장)
+        working-directory: _meta
+        env:
+          DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+        run: python collect_transactions.py
+        continue-on-error: true
+
+      - name: Commit listings data
+        run: |
+          git config user.name "topda-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -n "$(git status --porcelain site/assets/apartments.json site/assets/transactions.json)" ]; then
+            git add site/assets/apartments.json site/assets/transactions.json
+            git commit -m "실거래·단지 자동 갱신 ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "변경 없음 — 커밋 생략"
+          fi
