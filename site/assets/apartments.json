@@ -18,7 +18,7 @@
       "id": "ap-helio",
       "name": "헬리오시티",
       "region": "서울 송파구 가락동",
-      "region_key": "송파구",
+      "region_key": "서울 송파구",
       "built_year": 2018,
       "households": 9510,
       "subway": {
@@ -95,13 +95,15 @@
       "jeonse_ratio": 51.8,
       "parking_per_household": 1.37,
       "mgmt_fee_per_pyeong": 11121,
-      "builder": "HDC현대산업"
+      "builder": "HDC현대산업",
+      "sido": "서울",
+      "sigungu": "송파구"
     },
     {
       "id": "ap-grace",
       "name": "고덕그라시움",
       "region": "서울 강동구 고덕동",
-      "region_key": "강동구",
+      "region_key": "서울 강동구",
       "built_year": 2019,
       "households": 4932,
       "subway": {
@@ -163,13 +165,15 @@
       "jeonse_ratio": 55.9,
       "parking_per_household": 1.35,
       "mgmt_fee_per_pyeong": 9436,
-      "builder": "대림"
+      "builder": "대림",
+      "sido": "서울",
+      "sigungu": "강동구"
     },
     {
       "id": "ap-mapo",
       "name": "마포래미안푸르지오",
       "region": "서울 마포구 아현동",
-      "region_key": "마포구",
+      "region_key": "서울 마포구",
       "built_year": 2014,
       "households": 3885,
       "subway": {
@@ -211,13 +215,15 @@
       "jeonse_ratio": 53.7,
       "parking_per_household": 1.15,
       "mgmt_fee_per_pyeong": 9649,
-      "builder": "삼성물산"
+      "builder": "삼성물산",
+      "sido": "서울",
+      "sigungu": "마포구"
     },
     {
       "id": "ap-prestige",
       "name": "마포프레스티지자이",
       "region": "서울 마포구 염리동",
-      "region_key": "마포구",
+      "region_key": "서울 마포구",
       "built_year": 2021,
       "households": 1694,
       "subway": {
@@ -259,13 +265,15 @@
       "jeonse_ratio": 56.2,
       "parking_per_household": 1.23,
       "mgmt_fee_per_pyeong": 8017,
-      "builder": "GS건설"
+      "builder": "GS건설",
+      "sido": "서울",
+      "sigungu": "마포구"
     },
     {
       "id": "ap-oksu",
       "name": "e편한세상옥수파크힐스",
       "region": "서울 성동구 옥수동",
-      "region_key": "성동구",
+      "region_key": "서울 성동구",
       "built_year": 2016,
       "households": 1976,
       "subway": {
@@ -307,13 +315,15 @@
       "jeonse_ratio": 53.4,
       "parking_per_household": 1.44,
       "mgmt_fee_per_pyeong": 9967,
-      "builder": "DL이앤씨"
+      "builder": "DL이앤씨",
+      "sido": "서울",
+      "sigungu": "성동구"
     },
     {
       "id": "ap-kumho",
       "name": "e편한세상금호파크힐스",
       "region": "서울 성동구 금호동",
-      "region_key": "성동구",
+      "region_key": "서울 성동구",
       "built_year": 2019,
       "households": 1330,
       "subway": {
@@ -355,13 +365,15 @@
       "jeonse_ratio": 53.2,
       "parking_per_household": 1.49,
       "mgmt_fee_per_pyeong": 11323,
-      "builder": "DL이앤씨"
+      "builder": "DL이앤씨",
+      "sido": "서울",
+      "sigungu": "성동구"
     },
     {
       "id": "ap-tenzhill",
       "name": "텐즈힐",
       "region": "서울 성동구 하왕십리동",
-      "region_key": "성동구",
+      "region_key": "서울 성동구",
       "built_year": 2014,
       "households": 1702,
       "subway": {
@@ -403,13 +415,15 @@
       "jeonse_ratio": 55.6,
       "parking_per_household": 1.18,
       "mgmt_fee_per_pyeong": 7287,
-      "builder": "기타"
+      "builder": "기타",
+      "sido": "서울",
+      "sigungu": "성동구"
     },
     {
       "id": "ap-els",
       "name": "잠실엘스",
       "region": "서울 송파구 잠실동",
-      "region_key": "송파구",
+      "region_key": "서울 송파구",
       "built_year": 2008,
       "households": 5678,
       "subway": {
@@ -451,13 +465,15 @@
       "jeonse_ratio": 50.1,
       "parking_per_household": 1.16,
       "mgmt_fee_per_pyeong": 6797,
-      "builder": "기타"
+      "builder": "기타",
+      "sido": "서울",
+      "sigungu": "송파구"
     },
     {
       "id": "ap-parkrio",
       "name": "파크리오",
       "region": "서울 송파구 신천동",
-      "region_key": "송파구",
+      "region_key": "서울 송파구",
       "built_year": 2008,
       "households": 6864,
       "subway": {
@@ -514,13 +530,15 @@
       "jeonse_ratio": 50.8,
       "parking_per_household": 1.07,
       "mgmt_fee_per_pyeong": 6650,
-      "builder": "기타"
+      "builder": "기타",
+      "sido": "서울",
+      "sigungu": "송파구"
     },
     {
       "id": "ap-banpojai",
       "name": "반포자이",
       "region": "서울 서초구 반포동",
-      "region_key": "서초구",
+      "region_key": "서울 서초구",
       "built_year": 2009,
       "households": 3410,
       "subway": {
@@ -587,13 +605,15 @@
       "jeonse_ratio": 48.9,
       "parking_per_household": 1.13,
       "mgmt_fee_per_pyeong": 10712,
-      "builder": "GS건설"
+      "builder": "GS건설",
+      "sido": "서울",
+      "sigungu": "서초구"
     },
     {
       "id": "ap-daechi",
       "name": "래미안대치팰리스",
       "region": "서울 강남구 대치동",
-      "region_key": "강남구",
+      "region_key": "서울 강남구",
       "built_year": 2015,
       "households": 1608,
       "subway": {
@@ -635,13 +655,15 @@
       "jeonse_ratio": 48.1,
       "parking_per_household": 1.39,
       "mgmt_fee_per_pyeong": 8998,
-      "builder": "삼성물산"
+      "builder": "삼성물산",
+      "sido": "서울",
+      "sigungu": "강남구"
     },
     {
       "id": "ap-gyeonghui",
       "name": "경희궁자이",
       "region": "서울 종로구 홍파동",
-      "region_key": "종로구",
+      "region_key": "서울 종로구",
       "built_year": 2017,
       "households": 2533,
       "subway": {
@@ -683,13 +705,15 @@
       "jeonse_ratio": 56.6,
       "parking_per_household": 1.34,
       "mgmt_fee_per_pyeong": 7890,
-      "builder": "GS건설"
+      "builder": "GS건설",
+      "sido": "서울",
+      "sigungu": "종로구"
     },
     {
       "id": "ap-mokdong7",
       "name": "목동신시가지7단지",
       "region": "서울 양천구 목동",
-      "region_key": "양천구",
+      "region_key": "서울 양천구",
       "built_year": 1986,
       "households": 2550,
       "subway": {
@@ -731,13 +755,15 @@
       "jeonse_ratio": 56.0,
       "parking_per_household": 1.05,
       "mgmt_fee_per_pyeong": 10701,
-      "builder": "기타"
+      "builder": "기타",
+      "sido": "서울",
+      "sigungu": "양천구"
     },
     {
       "id": "ap-dangsan",
       "name": "당산센트럴아이파크",
       "region": "서울 영등포구 당산동",
-      "region_key": "영등포구",
+      "region_key": "서울 영등포구",
       "built_year": 2020,
       "households": 802,
       "subway": {
@@ -779,13 +805,15 @@
       "jeonse_ratio": 56.8,
       "parking_per_household": 1.29,
       "mgmt_fee_per_pyeong": 7648,
-      "builder": "HDC현대산업"
+      "builder": "HDC현대산업",
+      "sido": "서울",
+      "sigungu": "영등포구"
     },
     {
       "id": "ap-heukseok",
       "name": "흑석한강센트레빌",
       "region": "서울 동작구 흑석동",
-      "region_key": "동작구",
+      "region_key": "서울 동작구",
       "built_year": 2011,
       "households": 658,
       "subway": {
@@ -822,13 +850,15 @@
       "jeonse_ratio": 56.2,
       "parking_per_household": 1.02,
       "mgmt_fee_per_pyeong": 10331,
-      "builder": "동부건설"
+      "builder": "동부건설",
+      "sido": "서울",
+      "sigungu": "동작구"
     },
     {
       "id": "ap-dmc",
       "name": "DMC래미안e편한세상",
       "region": "서울 서대문구 남가좌동",
-      "region_key": "서대문구",
+      "region_key": "서울 서대문구",
       "built_year": 2012,
       "households": 3293,
       "subway": {
@@ -885,13 +915,15 @@
       "jeonse_ratio": 59.6,
       "parking_per_household": 1.25,
       "mgmt_fee_per_pyeong": 8432,
-      "builder": "삼성물산"
+      "builder": "삼성물산",
+      "sido": "서울",
+      "sigungu": "서대문구"
     },
     {
       "id": "ap-sanggye7",
       "name": "상계주공7단지",
       "region": "서울 노원구 상계동",
-      "region_key": "노원구",
+      "region_key": "서울 노원구",
       "built_year": 1988,
       "households": 2634,
       "subway": {
@@ -933,13 +965,15 @@
       "jeonse_ratio": 63.8,
       "parking_per_household": 1.0,
       "mgmt_fee_per_pyeong": 6502,
-      "builder": "기타"
+      "builder": "기타",
+      "sido": "서울",
+      "sigungu": "노원구"
     },
     {
       "id": "ap-polaris",
       "name": "북서울자이폴라리스",
       "region": "서울 노원구 월계동",
-      "region_key": "노원구",
+      "region_key": "서울 노원구",
       "built_year": 2020,
       "households": 1192,
       "subway": {
@@ -981,13 +1015,15 @@
       "jeonse_ratio": 60.8,
       "parking_per_household": 1.47,
       "mgmt_fee_per_pyeong": 8849,
-      "builder": "GS건설"
+      "builder": "GS건설",
+      "sido": "서울",
+      "sigungu": "노원구"
     },
     {
       "id": "ap-gwanggyo",
       "name": "광교자연앤힐스테이트",
       "region": "경기 수원시 영통구 이의동",
-      "region_key": "수원시",
+      "region_key": "경기 수원시",
       "built_year": 2012,
       "households": 1764,
       "subway": {
@@ -1029,13 +1065,15 @@
       "jeonse_ratio": 61.9,
       "parking_per_household": 1.12,
       "mgmt_fee_per_pyeong": 6865,
-      "builder": "현대건설"
+      "builder": "현대건설",
+      "sido": "경기",
+      "sigungu": "수원시"
     },
     {
       "id": "ap-parkview",
       "name": "분당파크뷰",
       "region": "경기 성남시 분당구 정자동",
-      "region_key": "성남시",
+      "region_key": "경기 성남시",
       "built_year": 2004,
       "households": 1829,
       "subway": {
@@ -1077,13 +1115,15 @@
       "jeonse_ratio": 54.5,
       "parking_per_household": 0.97,
       "mgmt_fee_per_pyeong": 7848,
-      "builder": "기타"
+      "builder": "기타",
+      "sido": "경기",
+      "sigungu": "성남시"
     },
     {
       "id": "ap-seongbok",
       "name": "성복역롯데캐슬골드타운",
       "region": "경기 용인시 수지구 성복동",
-      "region_key": "용인시",
+      "region_key": "경기 용인시",
       "built_year": 2019,
       "households": 2356,
       "subway": {
@@ -1125,13 +1165,15 @@
       "jeonse_ratio": 59.3,
       "parking_per_household": 1.3,
       "mgmt_fee_per_pyeong": 11320,
-      "builder": "롯데건설"
+      "builder": "롯데건설",
+      "sido": "경기",
+      "sigungu": "용인시"
     },
     {
       "id": "ap-misa",
       "name": "미사강변더샵리버포레",
       "region": "경기 하남시 망월동",
-      "region_key": "하남시",
+      "region_key": "경기 하남시",
       "built_year": 2016,
       "households": 1188,
       "subway": {
@@ -1173,13 +1215,15 @@
       "jeonse_ratio": 61.0,
       "parking_per_household": 1.24,
       "mgmt_fee_per_pyeong": 7731,
-      "builder": "포스코이앤씨"
+      "builder": "포스코이앤씨",
+      "sido": "경기",
+      "sigungu": "하남시"
     },
     {
       "id": "ap-gwangmyeong",
       "name": "광명아크포레자이위브",
       "region": "경기 광명시 광명동",
-      "region_key": "광명시",
+      "region_key": "경기 광명시",
       "built_year": 2021,
       "households": 2104,
       "subway": {
@@ -1241,13 +1285,15 @@
       "jeonse_ratio": 57.4,
       "parking_per_household": 1.22,
       "mgmt_fee_per_pyeong": 10485,
-      "builder": "GS건설"
+      "builder": "GS건설",
+      "sido": "경기",
+      "sigungu": "광명시"
     },
     {
       "id": "ap-dongtan",
       "name": "동탄2시범한화꿈에그린",
       "region": "경기 화성시 청계동",
-      "region_key": "화성시",
+      "region_key": "경기 화성시",
       "built_year": 2015,
       "households": 1817,
       "subway": {
@@ -1289,13 +1335,15 @@
       "jeonse_ratio": 61.7,
       "parking_per_household": 1.37,
       "mgmt_fee_per_pyeong": 8737,
-      "builder": "한화"
+      "builder": "한화",
+      "sido": "경기",
+      "sigungu": "화성시"
     },
     {
       "id": "ap-kintex",
       "name": "킨텍스원시티",
       "region": "경기 고양시 일산서구 대화동",
-      "region_key": "고양시",
+      "region_key": "경기 고양시",
       "built_year": 2019,
       "households": 2208,
       "subway": {
@@ -1337,13 +1385,15 @@
       "jeonse_ratio": 60.8,
       "parking_per_household": 1.42,
       "mgmt_fee_per_pyeong": 7154,
-      "builder": "기타"
+      "builder": "기타",
+      "sido": "경기",
+      "sigungu": "고양시"
     },
     {
       "id": "ap-songdo",
       "name": "송도더샵퍼스트파크",
       "region": "인천 연수구 송도동",
-      "region_key": "연수구",
+      "region_key": "인천 연수구",
       "built_year": 2017,
       "households": 1769,
       "subway": {
@@ -1385,13 +1435,15 @@
       "jeonse_ratio": 62.6,
       "parking_per_household": 1.23,
       "mgmt_fee_per_pyeong": 8603,
-      "builder": "포스코이앤씨"
+      "builder": "포스코이앤씨",
+      "sido": "인천",
+      "sigungu": "연수구"
     },
     {
       "id": "ap-bupyeong",
       "name": "부평역해링턴플레이스",
       "region": "인천 부평구 부평동",
-      "region_key": "부평구",
+      "region_key": "인천 부평구",
       "built_year": 2021,
       "households": 1409,
       "subway": {
@@ -1433,13 +1485,15 @@
       "jeonse_ratio": 61.9,
       "parking_per_household": 1.28,
       "mgmt_fee_per_pyeong": 11354,
-      "builder": "기타"
+      "builder": "기타",
+      "sido": "인천",
+      "sigungu": "부평구"
     },
     {
       "id": "ap-haeundae",
       "name": "해운대두산위브더제니스",
       "region": "부산 해운대구 우동",
-      "region_key": "해운대구",
+      "region_key": "부산 해운대구",
       "built_year": 2011,
       "households": 1788,
       "subway": {
@@ -1476,13 +1530,15 @@
       "jeonse_ratio": 61.2,
       "parking_per_household": 1.09,
       "mgmt_fee_per_pyeong": 10924,
-      "builder": "두산건설"
+      "builder": "두산건설",
+      "sido": "부산",
+      "sigungu": "해운대구"
     },
     {
       "id": "ap-suseong",
       "name": "수성롯데캐슬더퍼스트",
       "region": "대구 수성구 범어동",
-      "region_key": "수성구",
+      "region_key": "대구 수성구",
       "built_year": 2016,
       "households": 1299,
       "subway": {
@@ -1519,13 +1575,15 @@
       "jeonse_ratio": 58.8,
       "parking_per_household": 1.32,
       "mgmt_fee_per_pyeong": 10771,
-      "builder": "롯데건설"
+      "builder": "롯데건설",
+      "sido": "대구",
+      "sigungu": "수성구"
     },
     {
       "id": "ap-dunsan",
       "name": "둔산크로바",
       "region": "대전 서구 둔산동",
-      "region_key": "서구",
+      "region_key": "대전 서구",
       "built_year": 1992,
       "households": 1632,
       "subway": {
@@ -1562,12 +1620,14 @@
       "jeonse_ratio": 62.6,
       "parking_per_household": 0.74,
       "mgmt_fee_per_pyeong": 11446,
-      "builder": "기타"
+      "builder": "기타",
+      "sido": "대전",
+      "sigungu": "서구"
     },
     {
       "name": "까치마을",
       "region": "서울 강남구 수서동",
-      "region_key": "강남구",
+      "region_key": "서울 강남구",
       "built_year": 1993,
       "units": [
         {
@@ -1611,12 +1671,14 @@
         "여의도": 43,
         "광화문": 40
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "강남구"
     },
     {
       "name": "개포자이프레지던스",
       "region": "서울 강남구 개포동",
-      "region_key": "강남구",
+      "region_key": "서울 강남구",
       "built_year": 2023,
       "units": [
         {
@@ -1690,12 +1752,14 @@
         "여의도": 39,
         "광화문": 37
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "강남구"
     },
     {
       "name": "성원대치2단지아파트",
       "region": "서울 강남구 개포동",
-      "region_key": "강남구",
+      "region_key": "서울 강남구",
       "built_year": 1992,
       "units": [
         {
@@ -1739,12 +1803,14 @@
         "여의도": 39,
         "광화문": 36
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "강남구"
     },
     {
       "name": "래미안퍼스티지",
       "region": "서울 서초구 반포동",
-      "region_key": "서초구",
+      "region_key": "서울 서초구",
       "built_year": 2009,
       "units": [
         {
@@ -1798,12 +1864,14 @@
         "여의도": 24,
         "광화문": 26
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "서초구"
     },
     {
       "name": "래미안 리더스원",
       "region": "서울 서초구 서초동",
-      "region_key": "서초구",
+      "region_key": "서울 서초구",
       "built_year": 2020,
       "units": [
         {
@@ -1852,12 +1920,14 @@
         "여의도": 31,
         "광화문": 31
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "서초구"
     },
     {
       "name": "리센츠",
       "region": "서울 송파구 잠실동",
-      "region_key": "송파구",
+      "region_key": "서울 송파구",
       "built_year": 2008,
       "units": [
         {
@@ -1911,12 +1981,14 @@
         "여의도": 41,
         "광화문": 35
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "송파구"
     },
     {
       "name": "선사현대아파트",
       "region": "서울 강동구 암사동",
-      "region_key": "강동구",
+      "region_key": "서울 강동구",
       "built_year": 2000,
       "units": [
         {
@@ -1965,12 +2037,14 @@
         "여의도": 50,
         "광화문": 39
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "강동구"
     },
     {
       "name": "롯데캐슬퍼스트",
       "region": "서울 강동구 암사동",
-      "region_key": "강동구",
+      "region_key": "서울 강동구",
       "built_year": 2008,
       "units": [
         {
@@ -2029,12 +2103,14 @@
         "여의도": 53,
         "광화문": 42
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "강동구"
     },
     {
       "name": "한화오벨리스크",
       "region": "서울 마포구 도화동",
-      "region_key": "마포구",
+      "region_key": "서울 마포구",
       "built_year": 2004,
       "units": [
         {
@@ -2118,12 +2194,14 @@
         "여의도": 14,
         "광화문": 18
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "마포구"
     },
     {
       "name": "대흥동태영아파트",
       "region": "서울 마포구 대흥동",
-      "region_key": "마포구",
+      "region_key": "서울 마포구",
       "built_year": 1999,
       "units": [
         {
@@ -2167,12 +2245,14 @@
         "여의도": 15,
         "광화문": 18
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "마포구"
     },
     {
       "name": "도화동현대",
       "region": "서울 마포구 도화동",
-      "region_key": "마포구",
+      "region_key": "서울 마포구",
       "built_year": 1996,
       "units": [
         {
@@ -2231,12 +2311,14 @@
         "여의도": 16,
         "광화문": 17
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "마포구"
     },
     {
       "name": "라봄성동",
       "region": "서울 성동구 마장동",
-      "region_key": "성동구",
+      "region_key": "서울 성동구",
       "built_year": 2025,
       "units": [
         {
@@ -2272,12 +2354,14 @@
         "여의도": 34,
         "광화문": 21
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "성동구"
     },
     {
       "name": "벽산",
       "region": "서울 성동구 금호동1가",
-      "region_key": "성동구",
+      "region_key": "서울 성동구",
       "built_year": 2001,
       "units": [
         {
@@ -2326,12 +2410,14 @@
         "여의도": 30,
         "광화문": 19
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "성동구"
     },
     {
       "name": "센트라스",
       "region": "서울 성동구 하왕십리동",
-      "region_key": "성동구",
+      "region_key": "서울 성동구",
       "built_year": 2016,
       "units": [
         {
@@ -2380,12 +2466,14 @@
         "여의도": 32,
         "광화문": 19
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "성동구"
     },
     {
       "name": "창신쌍용2",
       "region": "서울 종로구 창신동",
-      "region_key": "종로구",
+      "region_key": "서울 종로구",
       "built_year": 1993,
       "units": [
         {
@@ -2439,12 +2527,14 @@
         "여의도": 31,
         "광화문": 16
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "종로구"
     },
     {
       "name": "두산",
       "region": "서울 종로구 창신동",
-      "region_key": "종로구",
+      "region_key": "서울 종로구",
       "built_year": 1999,
       "units": [
         {
@@ -2483,12 +2573,14 @@
         "여의도": 31,
         "광화문": 16
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "종로구"
     },
     {
       "name": "그린나래",
       "region": "서울 종로구 평창동",
-      "region_key": "종로구",
+      "region_key": "서울 종로구",
       "built_year": 2026,
       "units": [
         {
@@ -2514,12 +2606,14 @@
         "여의도": 32,
         "광화문": 17
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "종로구"
     },
     {
       "name": "목동신시가지7",
       "region": "서울 양천구 목동",
-      "region_key": "양천구",
+      "region_key": "서울 양천구",
       "built_year": 1986,
       "units": [
         {
@@ -2583,12 +2677,14 @@
         "여의도": 20,
         "광화문": 33
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "양천구"
     },
     {
       "name": "목동신시가지3",
       "region": "서울 양천구 목동",
-      "region_key": "양천구",
+      "region_key": "서울 양천구",
       "built_year": 1986,
       "units": [
         {
@@ -2652,12 +2748,14 @@
         "여의도": 19,
         "광화문": 31
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "양천구"
     },
     {
       "name": "신트리4",
       "region": "서울 양천구 신정동",
-      "region_key": "양천구",
+      "region_key": "서울 양천구",
       "built_year": 2000,
       "units": [
         {
@@ -2701,12 +2799,14 @@
         "여의도": 23,
         "광화문": 38
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "양천구"
     },
     {
       "name": "우성1",
       "region": "서울 영등포구 대림동",
-      "region_key": "영등포구",
+      "region_key": "서울 영등포구",
       "built_year": 1985,
       "units": [
         {
@@ -2760,12 +2860,14 @@
         "여의도": 16,
         "광화문": 33
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "영등포구"
     },
     {
       "name": "현대3차",
       "region": "서울 영등포구 양평동3가",
-      "region_key": "영등포구",
+      "region_key": "서울 영등포구",
       "built_year": 1991,
       "units": [
         {
@@ -2824,12 +2926,14 @@
         "여의도": 14,
         "광화문": 27
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "영등포구"
     },
     {
       "name": "삼성래미안",
       "region": "서울 영등포구 신길동",
-      "region_key": "영등포구",
+      "region_key": "서울 영등포구",
       "built_year": 2004,
       "units": [
         {
@@ -2888,12 +2992,14 @@
         "여의도": 13,
         "광화문": 29
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "영등포구"
     },
     {
       "name": "극동(105)",
       "region": "서울 동작구 사당동",
-      "region_key": "동작구",
+      "region_key": "서울 동작구",
       "built_year": 1993,
       "units": [
         {
@@ -2952,12 +3058,14 @@
         "여의도": 21,
         "광화문": 29
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "동작구"
     },
     {
       "name": "신동아리버파크",
       "region": "서울 동작구 노량진동",
-      "region_key": "동작구",
+      "region_key": "서울 동작구",
       "built_year": 2001,
       "units": [
         {
@@ -3001,12 +3109,14 @@
         "여의도": 14,
         "광화문": 25
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "동작구"
     },
     {
       "name": "홍은동벽산",
       "region": "서울 서대문구 홍은동",
-      "region_key": "서대문구",
+      "region_key": "서울 서대문구",
       "built_year": 1997,
       "units": [
         {
@@ -3055,12 +3165,14 @@
         "여의도": 27,
         "광화문": 17
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "서대문구"
     },
     {
       "name": "문화촌현대",
       "region": "서울 서대문구 홍제동",
-      "region_key": "서대문구",
+      "region_key": "서울 서대문구",
       "built_year": 2002,
       "units": [
         {
@@ -3099,12 +3211,14 @@
         "여의도": 27,
         "광화문": 16
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "서대문구"
     },
     {
       "name": "상계주공6(고층)",
       "region": "서울 노원구 상계동",
-      "region_key": "노원구",
+      "region_key": "서울 노원구",
       "built_year": 1988,
       "units": [
         {
@@ -3168,12 +3282,14 @@
         "여의도": 52,
         "광화문": 36
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "노원구"
     },
     {
       "name": "주공2",
       "region": "서울 노원구 월계동",
-      "region_key": "노원구",
+      "region_key": "서울 노원구",
       "built_year": 1992,
       "units": [
         {
@@ -3227,12 +3343,14 @@
         "여의도": 46,
         "광화문": 29
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "노원구"
     },
     {
       "name": "중계그린1단지",
       "region": "서울 노원구 중계동",
-      "region_key": "노원구",
+      "region_key": "서울 노원구",
       "built_year": 1990,
       "units": [
         {
@@ -3286,12 +3404,14 @@
         "여의도": 50,
         "광화문": 34
       },
-      "households": null
+      "households": null,
+      "sido": "서울",
+      "sigungu": "노원구"
     },
     {
       "name": "황골마을주공1",
       "region": "경기 수원시영통구 영통동",
-      "region_key": "수원시영통구",
+      "region_key": "경기 수원시영통구",
       "built_year": 1997,
       "units": [
         {
@@ -3335,12 +3455,14 @@
         "여의도": 82,
         "광화문": 90
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "수원시영통구"
     },
     {
       "name": "매탄위브하늘채",
       "region": "경기 수원시영통구 매탄동",
-      "region_key": "수원시영통구",
+      "region_key": "경기 수원시영통구",
       "built_year": 2008,
       "units": [
         {
@@ -3399,12 +3521,14 @@
         "여의도": 79,
         "광화문": 88
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "수원시영통구"
     },
     {
       "name": "벽적골9단지주공",
       "region": "경기 수원시영통구 영통동",
-      "region_key": "수원시영통구",
+      "region_key": "경기 수원시영통구",
       "built_year": 1999,
       "units": [
         {
@@ -3448,12 +3572,14 @@
         "여의도": 84,
         "광화문": 93
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "수원시영통구"
     },
     {
       "name": "한솔마을(5단지)(주공)",
       "region": "경기 성남시분당구 정자동",
-      "region_key": "성남시분당구",
+      "region_key": "경기 성남시분당구",
       "built_year": 1994,
       "units": [
         {
@@ -3507,12 +3633,14 @@
         "여의도": 64,
         "광화문": 68
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "성남시분당구"
     },
     {
       "name": "양지마을(5단지)(한양501-514)",
       "region": "경기 성남시분당구 수내동",
-      "region_key": "성남시분당구",
+      "region_key": "경기 성남시분당구",
       "built_year": 1992,
       "units": [
         {
@@ -3561,12 +3689,14 @@
         "여의도": 62,
         "광화문": 65
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "성남시분당구"
     },
     {
       "name": "매화마을공무원2",
       "region": "경기 성남시분당구 야탑동",
-      "region_key": "성남시분당구",
+      "region_key": "경기 성남시분당구",
       "built_year": 1995,
       "units": [
         {
@@ -3610,12 +3740,14 @@
         "여의도": 59,
         "광화문": 60
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "성남시분당구"
     },
     {
       "name": "보원",
       "region": "경기 용인시수지구 풍덕천동",
-      "region_key": "용인시수지구",
+      "region_key": "경기 용인시수지구",
       "built_year": 1994,
       "units": [
         {
@@ -3649,12 +3781,14 @@
         "여의도": 68,
         "광화문": 75
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "용인시수지구"
     },
     {
       "name": "동아아파트",
       "region": "경기 용인시수지구 풍덕천동",
-      "region_key": "용인시수지구",
+      "region_key": "경기 용인시수지구",
       "built_year": 1994,
       "units": [
         {
@@ -3688,12 +3822,14 @@
         "여의도": 68,
         "광화문": 74
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "용인시수지구"
     },
     {
       "name": "삼익아파트",
       "region": "경기 용인시수지구 풍덕천동",
-      "region_key": "용인시수지구",
+      "region_key": "경기 용인시수지구",
       "built_year": 1994,
       "units": [
         {
@@ -3727,12 +3863,14 @@
         "여의도": 68,
         "광화문": 74
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "용인시수지구"
     },
     {
       "name": "미사강변브라운스톤엔에이치에프",
       "region": "경기 하남시 풍산동",
-      "region_key": "하남시",
+      "region_key": "경기 하남시",
       "built_year": 2018,
       "units": [
         {
@@ -3776,12 +3914,14 @@
         "여의도": 63,
         "광화문": 52
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "하남시"
     },
     {
       "name": "대명강변타운",
       "region": "경기 하남시 신장동",
-      "region_key": "하남시",
+      "region_key": "경기 하남시",
       "built_year": 2007,
       "units": [
         {
@@ -3820,12 +3960,14 @@
         "여의도": 69,
         "광화문": 58
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "하남시"
     },
     {
       "name": "부영",
       "region": "경기 하남시 창우동",
-      "region_key": "하남시",
+      "region_key": "경기 하남시",
       "built_year": 1994,
       "units": [
         {
@@ -3864,12 +4006,14 @@
         "여의도": 69,
         "광화문": 59
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "하남시"
     },
     {
       "name": "주공1",
       "region": "경기 광명시 하안동",
-      "region_key": "광명시",
+      "region_key": "경기 광명시",
       "built_year": 1989,
       "units": [
         {
@@ -3913,12 +4057,14 @@
         "여의도": 26,
         "광화문": 42
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "광명시"
     },
     {
       "name": "이편한세상센트레빌",
       "region": "경기 광명시 하안동",
-      "region_key": "광명시",
+      "region_key": "경기 광명시",
       "built_year": 2010,
       "units": [
         {
@@ -3977,12 +4123,14 @@
         "여의도": 26,
         "광화문": 43
       },
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "광명시"
     },
     {
       "name": "창릉호반써밋",
       "region": "경기 고양시일산서구 동산동",
-      "region_key": "고양시일산서구",
+      "region_key": "경기 고양시일산서구",
       "built_year": 2012,
       "units": [
         {
@@ -3998,12 +4146,14 @@
         80853
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "고양시일산서구"
     },
     {
       "name": "샘터마을2",
       "region": "경기 고양시일산서구 행신동",
-      "region_key": "고양시일산서구",
+      "region_key": "경기 고양시일산서구",
       "built_year": 1996,
       "units": [
         {
@@ -4029,12 +4179,14 @@
         34233
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "고양시일산서구"
     },
     {
       "name": "지축역한림풀에버",
       "region": "경기 고양시일산서구 지축동",
-      "region_key": "고양시일산서구",
+      "region_key": "경기 고양시일산서구",
       "built_year": 2020,
       "units": [
         {
@@ -4055,12 +4207,14 @@
         81214
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "고양시일산서구"
     },
     {
       "name": "e편한세상송도",
       "region": "인천 연수구 송도동",
-      "region_key": "연수구",
+      "region_key": "인천 연수구",
       "built_year": 2018,
       "units": [
         {
@@ -4104,12 +4258,14 @@
         "여의도": 77,
         "광화문": 92
       },
-      "households": null
+      "households": null,
+      "sido": "인천",
+      "sigungu": "연수구"
     },
     {
       "name": "송도더샵센트럴시티",
       "region": "인천 연수구 송도동",
-      "region_key": "연수구",
+      "region_key": "인천 연수구",
       "built_year": 2018,
       "units": [
         {
@@ -4158,12 +4314,14 @@
         "여의도": 75,
         "광화문": 91
       },
-      "households": null
+      "households": null,
+      "sido": "인천",
+      "sigungu": "연수구"
     },
     {
       "name": "우성2",
       "region": "인천 연수구 연수동",
-      "region_key": "연수구",
+      "region_key": "인천 연수구",
       "built_year": 1994,
       "units": [
         {
@@ -4207,12 +4365,14 @@
         "여의도": 64,
         "광화문": 80
       },
-      "households": null
+      "households": null,
+      "sido": "인천",
+      "sigungu": "연수구"
     },
     {
       "name": "e편한세상부평그랑힐스",
       "region": "인천 부평구 청천동",
-      "region_key": "부평구",
+      "region_key": "인천 부평구",
       "built_year": 2024,
       "units": [
         {
@@ -4266,12 +4426,14 @@
         "여의도": 54,
         "광화문": 66
       },
-      "households": null
+      "households": null,
+      "sido": "인천",
+      "sigungu": "부평구"
     },
     {
       "name": "뉴서울",
       "region": "인천 부평구 부개동",
-      "region_key": "부평구",
+      "region_key": "인천 부평구",
       "built_year": 1989,
       "units": [
         {
@@ -4310,12 +4472,14 @@
         "여의도": 47,
         "광화문": 60
       },
-      "households": null
+      "households": null,
+      "sido": "인천",
+      "sigungu": "부평구"
     },
     {
       "name": "부평캐슬&더샵퍼스트",
       "region": "인천 부평구 산곡동",
-      "region_key": "부평구",
+      "region_key": "인천 부평구",
       "built_year": 2024,
       "units": [
         {
@@ -4364,12 +4528,14 @@
         "여의도": 53,
         "광화문": 66
       },
-      "households": null
+      "households": null,
+      "sido": "인천",
+      "sigungu": "부평구"
     },
     {
       "name": "센텀이편한세상",
       "region": "부산 해운대구 재송동",
-      "region_key": "해운대구",
+      "region_key": "부산 해운대구",
       "built_year": 2006,
       "units": [
         {
@@ -4407,12 +4573,14 @@
         "distance_m": 187,
         "in_zone": false
       },
-      "households": null
+      "households": null,
+      "sido": "부산",
+      "sigungu": "해운대구"
     },
     {
       "name": "SKVIEW",
       "region": "부산 해운대구 좌동",
-      "region_key": "해운대구",
+      "region_key": "부산 해운대구",
       "built_year": 1998,
       "units": [
         {
@@ -4450,12 +4618,14 @@
         "distance_m": 327,
         "in_zone": false
       },
-      "households": null
+      "households": null,
+      "sido": "부산",
+      "sigungu": "해운대구"
     },
     {
       "name": "더샵센텀파크1차",
       "region": "부산 해운대구 재송동",
-      "region_key": "해운대구",
+      "region_key": "부산 해운대구",
       "built_year": 2005,
       "units": [
         {
@@ -4508,12 +4678,14 @@
         "distance_m": 326,
         "in_zone": false
       },
-      "households": null
+      "households": null,
+      "sido": "부산",
+      "sigungu": "해운대구"
     },
     {
       "name": "수성범어W",
       "region": "대구 수성구 범어동",
-      "region_key": "수성구",
+      "region_key": "대구 수성구",
       "built_year": 2023,
       "units": [
         {
@@ -4546,12 +4718,14 @@
         "distance_m": 438,
         "in_zone": false
       },
-      "households": null
+      "households": null,
+      "sido": "대구",
+      "sigungu": "수성구"
     },
     {
       "name": "e편한세상범어",
       "region": "대구 수성구 범어동",
-      "region_key": "수성구",
+      "region_key": "대구 수성구",
       "built_year": 2015,
       "units": [
         {
@@ -4584,12 +4758,14 @@
         "distance_m": 508,
         "in_zone": false
       },
-      "households": null
+      "households": null,
+      "sido": "대구",
+      "sigungu": "수성구"
     },
     {
       "name": "범어센트럴푸르지오",
       "region": "대구 수성구 범어동",
-      "region_key": "수성구",
+      "region_key": "대구 수성구",
       "built_year": 2019,
       "units": [
         {
@@ -4617,12 +4793,14 @@
         "distance_m": 127,
         "in_zone": false
       },
-      "households": null
+      "households": null,
+      "sido": "대구",
+      "sigungu": "수성구"
     },
     {
       "name": "도마e편한세상포레나",
       "region": "대전 서구 도마동",
-      "region_key": "서구",
+      "region_key": "대전 서구",
       "built_year": 2022,
       "units": [
         {
@@ -4670,12 +4848,14 @@
         "distance_m": 669,
         "in_zone": false
       },
-      "households": null
+      "households": null,
+      "sido": "대전",
+      "sigungu": "서구"
     },
     {
       "name": "경성큰마을",
       "region": "대전 서구 갈마동",
-      "region_key": "서구",
+      "region_key": "대전 서구",
       "built_year": 1995,
       "units": [
         {
@@ -4708,12 +4888,14 @@
         "distance_m": 261,
         "in_zone": false
       },
-      "households": null
+      "households": null,
+      "sido": "대전",
+      "sigungu": "서구"
     },
     {
       "name": "샘머리2차",
       "region": "대전 서구 둔산동",
-      "region_key": "서구",
+      "region_key": "대전 서구",
       "built_year": 1998,
       "units": [
         {
@@ -4741,12 +4923,14 @@
         "distance_m": 215,
         "in_zone": false
       },
-      "households": null
+      "households": null,
+      "sido": "대전",
+      "sigungu": "서구"
     },
     {
       "name": "고양원흥동일스위트",
       "region": "경기 고양시일산서구 도내동",
-      "region_key": "고양시일산서구",
+      "region_key": "경기 고양시일산서구",
       "built_year": 2018,
       "units": [
         {
@@ -4762,7 +4946,9 @@
         95917
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "sido": "경기",
+      "sigungu": "고양시일산서구"
     }
   ]
 }

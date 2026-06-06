@@ -42,7 +42,7 @@ def fetch(lawd_cd, region_name, ym, service_key):
         except ValueError:
             continue
         deals.append({
-            "apt": g("aptNm"), "region_key": region_name.split()[-1],
+            "apt": g("aptNm"), "region_key": region_name, "sido": region_name.split()[0],
             "region": f"{region_name} {g('umdNm')}",
             "area_m2": round(area, 1), "pyeong": round(area / 3.3058),
             "price": price, "floor": int(g("floor") or 0),

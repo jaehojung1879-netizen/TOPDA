@@ -105,8 +105,8 @@ def estimate_commute(lng, lat):
     return out
 
 MOLIT = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev/getRTMSDataSvcAptTradeDev"
-MONTHS_BACK = 6           # 최근 6개월 실거래
-TOP_PER_REGION = 3        # 지역별 거래 많은 상위 단지 수
+MONTHS_BACK = 4           # 최근 4개월 실거래 (호출량·시간 절감)
+TOP_PER_REGION = 10       # 지역별 거래 많은 상위 단지 수
 APARTMENTS_JSON = os.path.join(L.SITE_ASSETS, "apartments.json")
 
 
@@ -171,12 +171,15 @@ def aggregate(region_name, items):
         for d in deals:
             by_month[d["ym"]].append(d["price"])
         history = [round(sum(v) / len(v)) for _, v in sorted(by_month.items())][-4:]
+        parts = region_name.split()
+        sido = parts[0]
+        sigungu = " ".join(parts[1:]) if len(parts) > 1 else region_name
         out.append({
             "name": apt, "region": f"{region_name} {deals[-1]['umd']}",
-            "region_key": region_name.split()[-1],
+            "region_key": region_name,  # "서울 강남구" — 시도+시군구로 모호함 제거
+            "sido": sido, "sigungu": sigungu,
             "built_year": int(deals[-1]["build_year"] or 0) or None,
             "units": units, "price_history": history, "builder": builder_of(apt),
-            # 전세가율(R-ONE/전세 실거래)·세대당 주차·관리비(K-apt)는 후속 보강 대상
             "_addr": f"{region_name} {deals[-1]['umd']} {deals[-1]['jibun']}",
         })
     return out
@@ -222,6 +225,9 @@ def merge(existing, fresh):
                 cur["households"] = f["households"]
             if f.get("builder") and f["builder"] != "기타":
                 cur["builder"] = f["builder"]
+            for k in ("region_key", "sido", "sigungu", "region"):
+                if f.get(k):
+                    cur[k] = f[k]
         else:
             f.pop("_addr", None)
             if not f.get("households"):
