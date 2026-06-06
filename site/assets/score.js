@@ -19,7 +19,7 @@
   'use strict';
 
   // 가격 단위: 만원 (예: 195000 = 19.5억). 예산 입력은 억 단위로 받아 만원으로 변환.
-  const WEIGHTS = { budget: 25, subway: 20, school: 20, stability: 15, scale: 10, age: 10 };
+  const WEIGHTS = { appreciation: 25, subway: 20, school: 20, stability: 15, scale: 10, age: 10 };
 
   // 전용면적(㎡) → 평형 밴드
   const AREA_BANDS = [
@@ -85,10 +85,25 @@
     return clamp(s, 20, 100);
   }
 
-  // 예산 적합도: 매물가가 예산 이내에서 여유 있을수록 높음. 예산=매물가면 50점, 충분히 저렴하면 100점.
-  function scoreBudget(priceManwon, budgetManwon) {
-    if (!budgetManwon) return null;
-    return clamp(50 + (1 - priceManwon / budgetManwon) * 150, 0, 100);
+  // 가격 모멘텀: 최근 실거래 추세(price_history). 상승할수록 높음. 표본 부족 시 null.
+  function scoreMomentum(history) {
+    if (!Array.isArray(history) || history.length < 2) return null;
+    const first = history[0], last = history[history.length - 1];
+    if (!first) return null;
+    const annual = ((last - first) / first) * 2; // 윈도우(수개월) 대략 연환산
+    return clamp(50 + annual * 250, 0, 100); // +20%/yr→100, +10%→75, 0→50, -10%→25
+  }
+
+  // 미래 가치(상승 잠재력): 가격 모멘텀 중심 + 전세가율(낮을수록 상급지 경향) 보정.
+  // 예산은 점수가 아니라 '필터'로만 사용한다(쌀수록 가점하지 않음).
+  function scoreAppreciation(apt) {
+    const mom = scoreMomentum(apt.price_history);
+    const jr = apt.jeonse_ratio;
+    const jrScore = (jr == null) ? null : clamp(100 - (jr - 45) / (70 - 45) * 100, 0, 100); // 45%→100, 70%→0
+    if (mom == null && jrScore == null) return null;
+    if (jrScore == null) return mom;
+    if (mom == null) return jrScore;
+    return 0.65 * mom + 0.35 * jrScore;
   }
 
   // area_type 밴드에 해당하는 평형들 (지정 없으면 전체)
@@ -158,7 +173,7 @@
     const price = rep ? rep.recent_price : null;
 
     const sub = {
-      budget: price != null ? scoreBudget(price, f.budget_max) : null,
+      appreciation: scoreAppreciation(apt),
       subway: apt.subway ? scoreSubway(apt.subway.distance_m) : null,
       school: apt.elementary ? scoreSchool(apt.elementary.distance_m) : null,
       stability: scoreStability(apt.price_history),
@@ -185,10 +200,10 @@
       reasons.push({ t: `🏙 ${apt.households.toLocaleString()}세대 대단지`, s: sub.scale });
     if ((y - apt.built_year) <= 7)
       reasons.push({ t: `🏗 준공 ${apt.built_year}년 신축급`, s: sub.age });
-    if (sub.budget != null && price <= f.budget_max * 0.85)
-      reasons.push({ t: `💰 예산 대비 ${Math.round((1 - price / f.budget_max) * 100)}% 여유`, s: sub.budget });
+    if (scoreMomentum(apt.price_history) >= 68)
+      reasons.push({ t: `📈 최근 실거래 상승세`, s: sub.appreciation || 70 });
     if (sub.stability >= 80)
-      reasons.push({ t: `📈 실거래가 안정적`, s: sub.stability });
+      reasons.push({ t: `🛡 실거래가 안정적`, s: sub.stability });
     if (f.commute_hub && apt.commute && apt.commute[f.commute_hub] != null && apt.commute[f.commute_hub] <= 30)
       reasons.push({ t: `🏢 ${f.commute_hub} ${apt.commute[f.commute_hub]}분`, s: 100 - apt.commute[f.commute_hub] });
     if (apt.parking_per_household != null && apt.parking_per_household >= 1.3)
@@ -198,7 +213,7 @@
     let reasonTexts = reasons.slice(0, 3).map((r) => r.t);
     if (!reasonTexts.length) {
       // 강점이 뚜렷하지 않으면 최고 점수 항목으로 한 줄
-      const labels = { budget: '예산 적합', subway: '교통', school: '학군', stability: '실거래 안정', scale: '단지 규모', age: '연식' };
+      const labels = { appreciation: '상승 잠재력', subway: '교통', school: '학군', stability: '실거래 안정', scale: '단지 규모', age: '연식' };
       const best = Object.keys(sub).filter((k) => sub[k] != null).sort((a, b) => sub[b] - sub[a])[0];
       if (best) reasonTexts = [`${labels[best]} 항목이 가장 우수`];
     }
@@ -246,7 +261,7 @@
 
   return {
     WEIGHTS, AREA_BANDS, FILTER_LABELS, bandOf, walkMin,
-    scoreSubway, scoreSchool, scoreScale, scoreAge, scoreStability, scoreBudget,
+    scoreSubway, scoreSchool, scoreScale, scoreAge, scoreStability, scoreAppreciation, scoreMomentum,
     candidateUnits, representativeUnit, failedFilters, passesFilters,
     evaluate, search, nearMatches, formatEok,
   };
