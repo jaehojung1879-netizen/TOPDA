@@ -117,8 +117,12 @@
       </div>
 
       <div class="finder-field">
-        <label for="f-region">지역</label>
-        <select id="f-region" name="region"><option value="all">전체</option></select>
+        <label for="f-sido">지역 — 시·도</label>
+        <select id="f-sido" name="sido"><option value="all">전체</option></select>
+      </div>
+      <div class="finder-field">
+        <label for="f-gu">지역 — 시·군·구</label>
+        <select id="f-gu" name="gu"><option value="all">전체</option></select>
       </div>
 
       <div class="finder-field">
@@ -270,7 +274,8 @@
   var resultsEl = document.getElementById('finderResults');
   var countEl = document.getElementById('finderCount');
   var relaxedEl = document.getElementById('finderRelaxed');
-  var regionSel = document.getElementById('f-region');
+  var sidoSel = document.getElementById('f-sido');
+  var guSel = document.getElementById('f-gu');
   var familySel = document.getElementById('f-family');
   var areaSel = document.getElementById('f-area');
   var DATA = [];
@@ -284,7 +289,8 @@
     var f = {};
     var budget = num(form.budget.value);
     if (budget) f.budget_max = Math.round(budget * 10000); // 억 → 만원
-    if (regionSel.value && regionSel.value !== 'all') f.region = regionSel.value;
+    if (guSel.value && guSel.value !== 'all') f.region = guSel.value;          // "서울 강남구"
+    else if (sidoSel.value && sidoSel.value !== 'all') f.region = sidoSel.value; // "서울" (구 전체)
     if (areaSel.value && areaSel.value !== 'all') f.area_type = areaSel.value;
     var age = num(form.max_age_years.value); if (age) f.max_age_years = age;
     var sub = num(form.subway_distance_max.value); if (sub) f.subway_distance_max = sub;
@@ -393,16 +399,32 @@
     form.reset(); render();
   });
 
+  function sidoOf(a) { return a.sido || (a.region_key || '').split(' ')[0]; }
+  function guOf(a) { return a.sigungu || (a.region_key || '').split(' ').slice(1).join(' '); }
+
+  function fillGu() {
+    var sido = sidoSel.value;
+    guSel.innerHTML = '<option value="all">전체</option>';
+    if (!sido || sido === 'all') return;
+    var gus = [];
+    DATA.forEach(function (a) {
+      if (sidoOf(a) === sido) { var g = a.region_key; if (g && gus.indexOf(g) < 0) gus.push(g); }
+    });
+    gus.sort().forEach(function (key) {
+      var o = document.createElement('option'); o.value = key; o.textContent = guOf({ region_key: key }); guSel.appendChild(o);
+    });
+  }
+  sidoSel.addEventListener('change', function () { fillGu(); render(); });
+
   // 데이터 로드 (상대경로 — custom domain·서브경로 모두 안전)
   fetch('../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })
     .then(function (res) { if (!res.ok) throw new Error('load'); return res.json(); })
     .then(function (json) {
       DATA = json.apartments || [];
-      // 지역 드롭다운 채우기
-      var regions = [];
-      DATA.forEach(function (a) { if (regions.indexOf(a.region_key) < 0) regions.push(a.region_key); });
-      regions.sort().forEach(function (r) {
-        var o = document.createElement('option'); o.value = r; o.textContent = r; regionSel.appendChild(o);
+      var sidos = [];
+      DATA.forEach(function (a) { var s = sidoOf(a); if (s && sidos.indexOf(s) < 0) sidos.push(s); });
+      sidos.sort().forEach(function (s) {
+        var o = document.createElement('option'); o.value = s; o.textContent = s; sidoSel.appendChild(o);
       });
       render();
     })

@@ -23,11 +23,16 @@ RONE = "https://www.reb.or.kr/r-one/openapi/SttsApiTblData.do"
 MARKET_JSON = os.path.join(L.SITE_ASSETS, "market.json")
 MONTHS = 13
 
-# 월간 아파트 통계표 ID
+# 월간 아파트 통계표 ID (지수)
 METRICS = {
     "sale_index":   "A_2024_00045",  # 매매가격지수_아파트
     "jeonse_index": "A_2024_00050",  # 전세가격지수_아파트
-    "jeonse_ratio": "",              # 매매가격대비 전세가격비율_아파트 (확인 후 입력)
+}
+# 평균가격 통계표 → 전세가율(전세평균/매매평균) 계산용
+#  매매 평균가격: A_2024_00188 (확인). 전세 평균가격: 추정(검증으로 비정상 자동 배제).
+AVG = {
+    "sale_avg":   "A_2024_00188",
+    "jeonse_avg": "A_2024_00190",
 }
 
 
@@ -96,19 +101,40 @@ def main():
         print("매매가격지수 수집 실패 — 기존 market.json 유지")
         return
 
+    # 평균가격 → 전세가율(전세평균/매매평균) 계산. 추정 통계표가 틀리면 비정상값으로 자동 배제.
+    avg_data = {}
+    for key, statbl in AVG.items():
+        try:
+            avg_data[key] = fetch_metric(statbl, start, end, api_key)
+        except Exception as e:  # noqa: BLE001
+            print(f"  ! {key} 수집 실패: {e}", file=sys.stderr)
+    ratio = {}  # {region: {month: 전세가율}}
+    sale_avg, jeonse_avg = avg_data.get("sale_avg", {}), avg_data.get("jeonse_avg", {})
+    for region, smonths in sale_avg.items():
+        for mo, sv in smonths.items():
+            jv = jeonse_avg.get(region, {}).get(mo)
+            if sv and jv and jv < sv:
+                r = round(jv / sv * 100, 1)
+                if 25 <= r <= 100:  # 전세가율 정상 범위만 채택
+                    ratio.setdefault(region, {})[mo] = r
+    print(f"[jeonse_ratio] 계산된 지역 {len(ratio)}개")
+
     # 지역 합집합 → 월별 시계열 병합
-    regions = sorted(set().union(*[set(d) for d in metric_data.values()]))
+    regions = sorted(set().union(*[set(metric_data.get('sale_index', {})), set(metric_data.get('jeonse_index', {}))]))
     out_regions = []
     for region in regions:
         sido, leaf = split_region(region)
-        months = sorted(set().union(*[set(metric_data.get(m, {}).get(region, {})) for m in METRICS]))[-MONTHS:]
+        months = sorted(set().union(
+            set(metric_data.get('sale_index', {}).get(region, {})),
+            set(metric_data.get('jeonse_index', {}).get(region, {})),
+        ))[-MONTHS:]
         series = []
         for mo in months:
             series.append({
                 "month": mo,
                 "sale_index": metric_data.get("sale_index", {}).get(region, {}).get(mo),
                 "jeonse_index": metric_data.get("jeonse_index", {}).get(region, {}).get(mo),
-                "jeonse_ratio": metric_data.get("jeonse_ratio", {}).get(region, {}).get(mo),
+                "jeonse_ratio": ratio.get(region, {}).get(mo),
             })
         if series:
             out_regions.append({"key": region, "sido": sido, "name": leaf or (region + " 전체"), "series": series})
