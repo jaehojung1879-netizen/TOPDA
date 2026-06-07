@@ -8,11 +8,13 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260609" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260610" />
 <style>
   .tx-controls { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px; }
   .tx-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; color:var(--text-muted); }
-  .tx-field select { padding:10px 12px; border:1px solid var(--border,#d1d5db); border-radius:10px; font-size:0.95rem; font-family:inherit; background:#fff; min-width:150px; }
+  .tx-field select, .tx-field input { padding:10px 12px; border:1px solid var(--border,#d1d5db); border-radius:10px; font-size:0.95rem; font-family:inherit; background:#fff; min-width:150px; width:100%; box-sizing:border-box; }
+  .tx-link { color:var(--accent,#2563eb); text-decoration:none; font-weight:600; }
+  .tx-link:hover { text-decoration:underline; }
   .tx-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:20px; }
   .tx-stat { border:1px solid var(--border,#e5e7eb); border-radius:14px; padding:14px 16px; background:#fff; }
   .tx-stat .lbl { font-size:0.78rem; color:var(--text-muted); }
@@ -34,15 +36,22 @@
   <div class="container row">
     <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
     <nav class="nav">
-      <a href="../index.html" data-nav>홈</a>
+      <a href="../guides.html" data-nav>가이드</a>
       <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../market.html" data-nav>시세정보</a>
       <a href="../checklists/index.html" data-nav>체크리스트</a>
-      <a href="../about.html" data-nav>소개</a>
     </nav>
-    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    <button class="nav-toggle" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
   </div>
   <div class="mobile-menu" data-mobile-menu>
-    <a href="../index.html">홈</a><a href="../calculators/index.html">계산기</a><a href="../checklists/index.html">체크리스트</a><a href="../about.html">소개</a>
+    <a href="../guides.html">가이드</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../market.html">시세정보</a>
+    <a href="../checklists/index.html">체크리스트</a>
+    <a href="../board.html">게시판</a>
+    <a href="../about.html">안내</a>
   </div>
 </header>
 
@@ -50,10 +59,14 @@
   <div class="article-header">
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 실거래가 조회</div>
     <h1>실거래가 조회</h1>
-    <div class="meta"><span>국토교통부 실거래가 기반 · 지역·단지·평형별 최근 매매 실거래</span></div>
+    <div class="meta"><span>지역·단지·평형별 최근 매매 거래를 검색하고 그래프로 확인</span></div>
   </div>
 
   <div class="tx-controls">
+    <div class="tx-field" style="flex:1; min-width:200px;">
+      <label for="tx-search">단지명 검색</label>
+      <input id="tx-search" type="search" placeholder="예: 헬리오시티, 래미안" autocomplete="off" />
+    </div>
     <div class="tx-field"><label for="tx-region">지역</label><select id="tx-region"></select></div>
     <div class="tx-field"><label for="tx-apt">단지</label><select id="tx-apt"><option value="">전체</option></select></div>
     <div class="tx-field"><label for="tx-area">평형</label>
@@ -90,11 +103,12 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../assets/app.js?v=20260609"></script>
+<script src="../assets/app.js?v=20260610"></script>
 <script>
 (function () {
   'use strict';
   var DATA = [], chart = null;
+  var searchEl = document.getElementById('tx-search');
   var regionSel = document.getElementById('tx-region');
   var aptSel = document.getElementById('tx-apt');
   var areaSel = document.getElementById('tx-area');
@@ -102,6 +116,11 @@
   var statsEl = document.getElementById('txStats');
   var countEl = document.getElementById('txCount');
   var chartBox = document.getElementById('txChartBox');
+
+  function debounce(fn, ms) {
+    var t; return function () { clearTimeout(t); var a = arguments, c = this; t = setTimeout(function () { fn.apply(c, a); }, ms); };
+  }
+  function escapeHtml(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
   function won(m) { var e = m / 10000; return (Number.isInteger(e) ? e : e.toFixed(1)) + '억'; }
   function areaBand(m2) { return m2 < 60 ? 'small' : m2 < 85 ? 'ms' : m2 < 102 ? 'mid' : 'large'; }
@@ -113,15 +132,20 @@
       if ((region === 'all' || d.region_key === region) && names.indexOf(d.apt) < 0) names.push(d.apt);
     });
     names.sort();
-    aptSel.innerHTML = '<option value="">전체</option>' + names.map(function (n) { return '<option value="' + n + '">' + n + '</option>'; }).join('');
+    aptSel.innerHTML = '<option value="">전체</option>' + names.map(function (n) { return '<option value="' + escapeHtml(n) + '">' + escapeHtml(n) + '</option>'; }).join('');
   }
 
   function filtered() {
     var region = regionSel.value, apt = aptSel.value, area = areaSel.value;
+    var q = (searchEl.value || '').trim().toLowerCase();
     return DATA.filter(function (d) {
       if (region !== 'all' && d.region_key !== region) return false;
       if (apt && d.apt !== apt) return false;
       if (area !== 'all' && areaBand(d.area_m2) !== area) return false;
+      if (q) {
+        var hay = (d.apt + ' ' + (d.region || '') + ' ' + (d.region_key || '')).toLowerCase();
+        if (hay.indexOf(q) < 0) return false;
+      }
       return true;
     });
   }
@@ -159,12 +183,14 @@
     renderStats(list);
     renderChart(list);
     body.innerHTML = list.slice(0, 300).map(function (d) {
-      return '<tr><td>' + d.date + '</td><td>' + d.apt + '</td><td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
+      var aptUrl = 'search.html?apt=' + encodeURIComponent(d.apt);
+      return '<tr><td>' + d.date + '</td><td><a class="tx-link" href="' + aptUrl + '" title="이 단지를 맞춤찾기에서 보기">' + escapeHtml(d.apt) + '</a></td><td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
         '<td class="num">' + won(d.price) + '</td><td class="hide-sm">' + d.floor + '층</td><td class="hide-sm">' + (d.build_year || '—') + '</td></tr>';
     }).join('');
     countEl.textContent = list.length + '건 중 최근 ' + Math.min(300, list.length) + '건 표시';
   }
 
+  searchEl.addEventListener('input', debounce(render, 200));
   regionSel.addEventListener('change', function () { fillApts(); render(); });
   aptSel.addEventListener('change', render);
   areaSel.addEventListener('change', render);
