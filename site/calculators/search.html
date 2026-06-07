@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260608" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260609" />
 <style>
   .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
   .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
@@ -76,6 +76,7 @@
   }
   .finder-howto { border: 1px solid var(--border, #e5e7eb); border-radius: 12px; padding: 12px 16px; background: var(--surface-2, #f8fafc); }
   .finder-howto summary { font-weight: 700; cursor: pointer; }
+  .finder-sample-note { color: var(--text-muted); font-size: 0.8rem; margin-top: 16px; }
   @media (max-width: 860px) {
     .finder-layout { grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
     .finder-panel { position: static; padding: 16px; }
@@ -105,7 +106,7 @@
   <div class="article-header" style="margin-bottom: 8px;">
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 맞춤 내집 찾기</div>
     <h1 style="margin-bottom: 4px;">맞춤 내집 찾기</h1>
-    <p class="finder-intro" style="margin: 0;">조건만 넣으면 미래 가치·역세권·학군 등 6개 지표로 단지를 점수화해 추천합니다. <button type="button" class="finder-howto-toggle" data-finder-howto>점수 산정 방식 ▾</button></p>
+    <p class="finder-intro" style="margin: 0;">조건만 넣으면 미래 가치·역세권·학군 등으로 단지를 점수화해 추천합니다. <strong>예산을 입력하면 그 가격대에 가까운 단지</strong>가 먼저 노출됩니다. <button type="button" class="finder-howto-toggle" data-finder-howto>점수 산정 방식 ▾</button></p>
   </div>
 
   <div class="finder-layout">
@@ -226,23 +227,25 @@
   </div>
 
   <details id="finderHowto" class="finder-howto" style="margin-top: 32px;">
-    <summary>종합점수 산정 방식 · 데이터 출처</summary>
+    <summary>종합점수 산정 방식</summary>
     <div class="table-wrap" style="margin-top: 12px;">
       <table class="data">
-        <thead><tr><th>항목</th><th>비중</th><th>평가</th></tr></thead>
+        <thead><tr><th>항목</th><th>평가</th></tr></thead>
         <tbody>
-          <tr><td>미래 가치</td><td>25%</td><td>실거래 가격 추세·전세가율 보정. 예산은 필터만.</td></tr>
-          <tr><td>역세권</td><td>20%</td><td>도보 300m 이하 만점.</td></tr>
-          <tr><td>학군</td><td>20%</td><td>초등학교 150m 이하(초품아) 만점.</td></tr>
-          <tr><td>실거래 안정</td><td>15%</td><td>변동계수 낮을수록 가점.</td></tr>
-          <tr><td>단지규모</td><td>10%</td><td>2,000세대 이상 만점.</td></tr>
-          <tr><td>연식</td><td>10%</td><td>준공 2년 이내 만점.</td></tr>
+          <tr><td>예산 적합도</td><td>입력한 예산에 가까운 가격일수록 가점 (예산 입력 시).</td></tr>
+          <tr><td>미래 가치</td><td>실거래 가격 추세·전세가율 보정.</td></tr>
+          <tr><td>역세권</td><td>도보 300m 이하 만점.</td></tr>
+          <tr><td>학군</td><td>초등학교 150m 이하(초품아) 만점.</td></tr>
+          <tr><td>실거래 안정</td><td>가격 변동이 작을수록 가점.</td></tr>
+          <tr><td>단지규모</td><td>2,000세대 이상 만점.</td></tr>
+          <tr><td>연식</td><td>준공 2년 이내 만점.</td></tr>
         </tbody>
       </table>
     </div>
-    <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 8px;">입력하지 않은 조건의 비중은 나머지 항목으로 자동 재배분.</p>
-    <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 8px;">데이터: 국토부 실거래·K-apt·학교알리미·카카오맵. 계약 전 실거래·현장·권리관계는 별도 확인.</p>
+    <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 8px;">입력하지 않은 조건의 비중은 나머지 항목으로 자동 재배분됩니다.</p>
   </details>
+
+  <p class="finder-sample-note">표시 정보는 참고용 예시이며, 계약 전 실거래가·현장·권리관계를 반드시 직접 확인하세요.</p>
 </main>
 
 <footer class="site-footer">
@@ -251,8 +254,8 @@
   </div>
 </footer>
 
-<script src="../assets/score.js?v=20260608"></script>
-<script src="../assets/app.js?v=20260608"></script>
+<script src="../assets/score.js?v=20260609"></script>
+<script src="../assets/app.js?v=20260609"></script>
 <script>
 (function () {
   'use strict';
@@ -305,7 +308,8 @@
     var a = r.apt;
     var reasons = r.reasons.map(function (t) { return '<span class="apt-chip">' + esc(t) + '</span>'; }).join('');
     var relaxed = r.relaxed ? '<div class="apt-relaxed">⚠ 입력 조건 중 <strong>' + esc(r.relaxed.join(', ')) + '</strong> 은(는) 충족하지 못했지만 그 외 조건이 우수해 추천합니다.</div>' : '';
-    var bars = barRow('상승가치', r.sub.appreciation) + barRow('역세권', r.sub.subway) + barRow('학군', r.sub.school)
+    var bars = (r.sub.fit != null ? barRow('예산적합', r.sub.fit) : '')
+      + barRow('상승가치', r.sub.appreciation) + barRow('역세권', r.sub.subway) + barRow('학군', r.sub.school)
       + barRow('실거래', r.sub.stability) + barRow('규모', r.sub.scale) + barRow('연식', r.sub.age);
     var sub = a.subway && a.subway.distance_m != null
       ? a.subway.distance_m + 'm · ' + esc(a.subway.station || '') + ' (도보 ' + S.walkMin(a.subway.distance_m) + '분' + (a.subway.line ? ', ' + esc(a.subway.line) : '') + ')'
@@ -427,7 +431,7 @@
     })
     .catch(function () {
       countEl.textContent = '';
-      resultsEl.innerHTML = '<div class="finder-empty">데이터를 불러오지 못했습니다. 로컬에서 열 때는 <code>file://</code>가 아니라 간이 웹서버(예: <code>python -m http.server</code>)로 실행하세요.</div>';
+      resultsEl.innerHTML = '<div class="finder-empty">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
     });
 })();
 </script>
