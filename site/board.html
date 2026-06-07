@@ -20,9 +20,9 @@
 <meta name="twitter:title" content="게시판 — 톺다" />
 <meta name="twitter:description" content="부동산 거래 경험·질문·정보를 자유롭게 나누는 톺다 게시판입니다. 비밀글로도 작성할 수 있습니다." />
 <meta name="twitter:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
-<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260607"></script>
+<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260608"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="assets/styles.css?v=20260607" />
+<link rel="stylesheet" href="assets/styles.css?v=20260608" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -76,10 +76,10 @@
 </header>
 
 <main class="container-narrow">
-  <div class="article-header">
+  <div class="article-header" style="margin-bottom: 12px;">
     <div class="breadcrumb"><a href="index.html">홈</a> / 게시판</div>
-    <h1>게시판</h1>
-    <p class="lead">부동산 거래 경험, 궁금한 점, 알아두면 좋은 정보를 자유롭게 나눠주세요. 비밀글로 작성하면 본인 기기에서만 보입니다.</p>
+    <h1 style="margin-bottom: 4px;">게시판</h1>
+    <p class="lead" style="margin: 0;">자유 · 질문 · 후기 · 정보 · 수정 요청을 한 곳에서. 작성 시 카테고리를 선택하세요.</p>
   </div>
 
   <div class="fb-app" data-fb-app data-key-public="board:public" data-key-secret="board:secret">
@@ -90,24 +90,27 @@
           <button class="fb-tab active" data-fb-tab="public">전체 공개글</button>
           <button class="fb-tab" data-fb-tab="mine">내 비밀글 <span class="count" data-fb-secret-count>0</span></button>
         </div>
-        <button class="fb-write-btn" data-fb-open aria-label="새 글 작성">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 5v14M5 12h14"/>
-          </svg>
-          작성
-        </button>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <select class="fb-cat-filter" data-fb-cat-filter aria-label="카테고리 필터"></select>
+          <button class="fb-write-btn" data-fb-open aria-label="새 글 작성">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            작성
+          </button>
+        </div>
       </div>
       <ul class="fb-list" data-fb-list-public></ul>
       <ul class="fb-list" data-fb-list-mine hidden></ul>
-      <p class="fb-empty" data-fb-empty>등록된 글이 아직 없습니다. 우측 ‘작성’ 버튼으로 첫 글을 남겨주세요.</p>
+      <p class="fb-empty" data-fb-empty>등록된 글이 아직 없습니다. ‘작성’ 버튼으로 첫 글을 남겨주세요.</p>
     </section>
   </div>
 
-  <div class="callout callout-info" style="margin-top: 32px;">
+  <div class="callout callout-info" style="margin-top: 24px;">
     <div class="icon">i</div>
     <div class="body">
-      <strong>이 게시판의 동작 방식</strong>
-      개인정보 보호를 위해 별도 서버 없이 운영합니다. 공개글은 같은 기기에 표시되며, 비밀글은 작성한 브라우저에서만 보입니다. 개인정보·민감정보는 입력하지 마세요.
+      <strong>서버 없이 동작하는 게시판</strong>
+      글은 브라우저에 저장됩니다(같은 기기에서만 표시). 사이트 업데이트와 무관하게 유지됩니다. 개인정보·민감정보는 입력하지 마세요.
     </div>
   </div>
 </main>
@@ -124,12 +127,16 @@
     </div>
     <form data-fb-form class="fb-modal-body">
       <div class="field">
+        <label for="fb-category">카테고리</label>
+        <select id="fb-category" name="category" required></select>
+      </div>
+      <div class="field">
         <label for="fb-title">제목</label>
-        <input id="fb-title" name="title" type="text" maxlength="80" required placeholder="예: 첫 전세 계약 후기 공유합니다" />
+        <input id="fb-title" name="title" type="text" maxlength="80" required placeholder="예: 첫 전세 계약 후기" />
       </div>
       <div class="field">
         <label for="fb-author">이름 또는 닉네임 (선택)</label>
-        <input id="fb-author" name="author" type="text" maxlength="20" placeholder="익명도 가능" />
+        <input id="fb-author" name="author" type="text" maxlength="20" placeholder="익명도 가능 — 한 번 적으면 다음에도 기억" />
       </div>
       <div class="field">
         <label for="fb-page">관련 링크·페이지 (선택)</label>
@@ -183,7 +190,7 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=20260607"></script>
-<script src="assets/feedback.js?v=20260607"></script>
+<script src="assets/app.js?v=20260608"></script>
+<script src="assets/feedback.js?v=20260608"></script>
 </body>
 </html>

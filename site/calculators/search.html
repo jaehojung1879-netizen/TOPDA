@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260611" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260608" />
 <style>
   .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
   .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
@@ -70,9 +70,15 @@
   .apt-bar .fill { height: 100%; background: var(--accent, #2563eb); border-radius: 4px; }
   .finder-empty { border: 1px dashed var(--border, #d1d5db); border-radius: 14px; padding: 28px; text-align: center; color: var(--text-muted); }
   .finder-relaxed-banner { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; }
+  .finder-howto-toggle {
+    background: none; border: 0; padding: 0; margin-left: 4px;
+    color: var(--accent, #2563eb); font-weight: 600; cursor: pointer; font-size: inherit;
+  }
+  .finder-howto { border: 1px solid var(--border, #e5e7eb); border-radius: 12px; padding: 12px 16px; background: var(--surface-2, #f8fafc); }
+  .finder-howto summary { font-weight: 700; cursor: pointer; }
   @media (max-width: 860px) {
-    .finder-layout { grid-template-columns: 1fr; }
-    .finder-panel { position: static; }
+    .finder-layout { grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+    .finder-panel { position: static; padding: 16px; }
     .finder-results { grid-template-columns: 1fr; }
   }
 </style>
@@ -96,11 +102,10 @@
 </header>
 
 <main class="container">
-  <div class="article-header">
+  <div class="article-header" style="margin-bottom: 8px;">
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 맞춤 내집 찾기</div>
-    <h1>맞춤 내집 찾기</h1>
-    <p class="finder-intro">예산·지역·평형·연식·역거리·초등학교 거리·세대수에 더해 <strong>직장까지 통근시간·세대당 주차·전세가율</strong>까지, <strong>원하는 조건만</strong> 넣어보세요.
-    조건에 맞는 단지를 찾아 <strong>미래 가치(상승 잠재력)·역세권·학군·실거래 안정성·단지규모·연식</strong>을 가중 합산한 종합점수로 추천 순위를 매겨 드립니다. 예산은 <strong>필터</strong>로만 쓰여요(쌀수록 점수 주지 않음).</p>
+    <h1 style="margin-bottom: 4px;">맞춤 내집 찾기</h1>
+    <p class="finder-intro" style="margin: 0;">조건만 넣으면 미래 가치·역세권·학군 등 6개 지표로 단지를 점수화해 추천합니다. <button type="button" class="finder-howto-toggle" data-finder-howto>점수 산정 방식 ▾</button></p>
   </div>
 
   <div class="finder-layout">
@@ -220,42 +225,24 @@
     </section>
   </div>
 
-  <section style="margin-top: 56px;">
-    <h2 style="margin-bottom: 12px;">종합점수는 이렇게 계산됩니다</h2>
-    <div class="table-wrap">
+  <details id="finderHowto" class="finder-howto" style="margin-top: 32px;">
+    <summary>종합점수 산정 방식 · 데이터 출처</summary>
+    <div class="table-wrap" style="margin-top: 12px;">
       <table class="data">
-        <thead><tr><th>항목</th><th>비중</th><th>평가 방식</th></tr></thead>
+        <thead><tr><th>항목</th><th>비중</th><th>평가</th></tr></thead>
         <tbody>
-          <tr><td>미래 가치 (상승 잠재력)</td><td>25%</td><td>최근 실거래 가격 추세(상승 모멘텀) + 전세가율 보정. <strong>예산은 점수가 아니라 필터로만</strong> 사용 — 가격대를 골랐다면 그 안에서 더 싸다고 가점하지 않습니다</td></tr>
-          <tr><td>역세권</td><td>20%</td><td>도보 300m 이하 만점, 1.5km 이상 0점</td></tr>
-          <tr><td>초등학교 접근성</td><td>20%</td><td>150m 이하(초품아) 만점, 1.2km 이상 0점</td></tr>
-          <tr><td>최근 실거래 안정성</td><td>15%</td><td>최근 실거래가 변동계수가 낮을수록(가격이 안정적일수록) 가점</td></tr>
-          <tr><td>단지규모</td><td>10%</td><td>2,000세대 이상 만점, 300세대 이하 최소점</td></tr>
-          <tr><td>연식</td><td>10%</td><td>준공 2년 이내 만점, 35년 이상 최소점</td></tr>
+          <tr><td>미래 가치</td><td>25%</td><td>실거래 가격 추세·전세가율 보정. 예산은 필터만.</td></tr>
+          <tr><td>역세권</td><td>20%</td><td>도보 300m 이하 만점.</td></tr>
+          <tr><td>학군</td><td>20%</td><td>초등학교 150m 이하(초품아) 만점.</td></tr>
+          <tr><td>실거래 안정</td><td>15%</td><td>변동계수 낮을수록 가점.</td></tr>
+          <tr><td>단지규모</td><td>10%</td><td>2,000세대 이상 만점.</td></tr>
+          <tr><td>연식</td><td>10%</td><td>준공 2년 이내 만점.</td></tr>
         </tbody>
       </table>
     </div>
-    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">입력하지 않은 조건은 순위에 영향을 주지 않으며, 그 비중은 나머지 항목으로 자동 재배분됩니다.</p>
-  </section>
-
-  <section style="margin-top: 40px;">
-    <h2 style="margin-bottom: 12px;">데이터는 어디서 오나요?</h2>
-    <ul class="ref-list">
-      <li><strong>실거래가</strong> — 국토교통부 실거래가 공개시스템 OpenAPI (data.go.kr ‘아파트 매매 실거래 상세자료’)</li>
-      <li><strong>세대수·준공연도</strong> — 공동주택관리정보시스템 K-apt (k-apt.go.kr)</li>
-      <li><strong>초등학교 위치·통학구역</strong> — 학교알리미(schoolinfo.go.kr) + 학구도 안내 서비스</li>
-      <li><strong>역·학교까지 도보 거리</strong> — 카카오맵/네이버 지도 길찾기 API (단지 좌표 → 최단 도보)</li>
-      <li><strong>주소 → 좌표</strong> — 도로명주소 API(juso.go.kr) / 국토정보플랫폼 V-World</li>
-    </ul>
-    <div class="callout callout-warn" style="margin-top: 16px;">
-      <div class="icon">⚠</div>
-      <div class="body">
-        <strong>현재는 예시(샘플) 데이터로 동작합니다.</strong>
-        실제 서비스에서는 위 공공 API를 주기적으로 수집·정제해 <code>apartments.json</code>으로 빌드합니다.
-        표시된 시세·거리는 참고용이며, 계약 전 반드시 실거래가·현장·권리관계를 직접 확인하세요.
-      </div>
-    </div>
-  </section>
+    <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 8px;">입력하지 않은 조건의 비중은 나머지 항목으로 자동 재배분.</p>
+    <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 8px;">데이터: 국토부 실거래·K-apt·학교알리미·카카오맵. 계약 전 실거래·현장·권리관계는 별도 확인.</p>
+  </details>
 </main>
 
 <footer class="site-footer">
@@ -264,8 +251,8 @@
   </div>
 </footer>
 
-<script src="../assets/score.js?v=20260612"></script>
-<script src="../assets/app.js?v=20260611"></script>
+<script src="../assets/score.js?v=20260608"></script>
+<script src="../assets/app.js?v=20260608"></script>
 <script>
 (function () {
   'use strict';
@@ -415,6 +402,16 @@
     });
   }
   sidoSel.addEventListener('change', function () { fillGu(); render(); });
+
+  // 점수 산정 방식 토글
+  var howtoBtn = document.querySelector('[data-finder-howto]');
+  var howtoEl = document.getElementById('finderHowto');
+  if (howtoBtn && howtoEl) {
+    howtoBtn.addEventListener('click', function () {
+      howtoEl.open = !howtoEl.open;
+      if (howtoEl.open) howtoEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
 
   // 데이터 로드 (상대경로 — custom domain·서브경로 모두 안전)
   fetch('../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })

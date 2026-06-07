@@ -3035,3 +3035,155 @@ function calcJeonseLoanByAgency(deposit, opts) {
   });
   recalcAll();
 })();
+
+/* =========================================================
+ * Topda Extras (2026-06-08)
+ *  1) 폼 자동저장 — data-autosave="key" 가 붙은 form/section의 input/select 값을
+ *     localStorage('topda:autosave:<key>')에 저장 → 다음 방문 시 자동 복원.
+ *     사이트 업데이트(PR 배포)와 무관하게 브라우저에 유지됩니다.
+ *  2) 음성 읽기 — [data-tts-target="<selector>"] 버튼을 누르면 해당 영역의
+ *     텍스트를 한국어 음성으로 읽어줍니다 (Web Speech Synthesis).
+ *     별도 버튼이 없는 페이지에도 floating 버튼으로 결과/주요 영역을 자동 부착.
+ * ========================================================= */
+(function () {
+  'use strict';
+
+  /* ---------- 1) 폼 자동저장 ---------- */
+  function autosaveInit() {
+    // 명시 [data-autosave] + 자동 [data-calc] (계산기 공통)
+    var nodes = Array.prototype.slice.call(document.querySelectorAll('[data-autosave]'));
+    document.querySelectorAll('[data-calc]').forEach(function (n) {
+      if (!n.hasAttribute('data-autosave')) {
+        n.setAttribute('data-autosave', 'calc:' + n.getAttribute('data-calc'));
+        nodes.push(n);
+      }
+    });
+    nodes.forEach(function (root) {
+      var key = 'topda:autosave:' + root.getAttribute('data-autosave');
+      var fields = root.querySelectorAll('input, select, textarea');
+      // 복원
+      try {
+        var saved = JSON.parse(localStorage.getItem(key) || 'null');
+        if (saved && typeof saved === 'object') {
+          fields.forEach(function (el) {
+            if (!el.name && !el.id) return;
+            var k = el.name || el.id;
+            if (!(k in saved)) return;
+            if (el.type === 'checkbox' || el.type === 'radio') {
+              if (el.type === 'radio') { if (el.value === saved[k]) el.checked = true; }
+              else el.checked = !!saved[k];
+            } else {
+              el.value = saved[k];
+            }
+            // 변경 이벤트 트리거로 재계산되게
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+          });
+        }
+      } catch (e) {}
+      // 저장 (debounce)
+      var t;
+      function persist() {
+        clearTimeout(t);
+        t = setTimeout(function () {
+          var data = {};
+          fields.forEach(function (el) {
+            var k = el.name || el.id;
+            if (!k) return;
+            if (el.type === 'checkbox') data[k] = !!el.checked;
+            else if (el.type === 'radio') { if (el.checked) data[k] = el.value; }
+            else data[k] = el.value;
+          });
+          try { localStorage.setItem(key, JSON.stringify(data)); } catch (e) {}
+        }, 250);
+      }
+      root.addEventListener('input', persist);
+      root.addEventListener('change', persist);
+    });
+  }
+
+  /* ---------- 2) 음성 읽기 (TTS) ---------- */
+  var synth = window.speechSynthesis;
+  var supportsTTS = !!synth;
+  var koVoice = null;
+  function pickKoVoice() {
+    if (!supportsTTS) return null;
+    if (koVoice) return koVoice;
+    var voices = synth.getVoices();
+    koVoice = voices.find(function (v) { return /ko(-|_)?KR/i.test(v.lang); })
+           || voices.find(function (v) { return /korean/i.test(v.name || ''); })
+           || null;
+    return koVoice;
+  }
+  if (supportsTTS) {
+    synth.onvoiceschanged = function () { koVoice = null; pickKoVoice(); };
+    pickKoVoice();
+  }
+
+  function cleanText(node) {
+    if (!node) return '';
+    var clone = node.cloneNode(true);
+    // 스크립트·스타일·SVG·아이콘 제거, 버튼 자체도 제거
+    clone.querySelectorAll('script, style, svg, .tts-btn, [data-tts-skip]').forEach(function (n) { n.remove(); });
+    var text = (clone.innerText || clone.textContent || '')
+      .replace(/[​-‍﻿]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return text.slice(0, 1200); // 안전 상한
+  }
+
+  function speak(text, btn) {
+    if (!supportsTTS) { alert('이 브라우저는 음성 읽기를 지원하지 않습니다.'); return; }
+    if (synth.speaking) {
+      synth.cancel();
+      if (btn) btn.setAttribute('aria-pressed', 'false');
+      return;
+    }
+    if (!text) return;
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ko-KR';
+    var v = pickKoVoice();
+    if (v) u.voice = v;
+    u.rate = 1.0; u.pitch = 1.0;
+    u.onend = function () { if (btn) btn.setAttribute('aria-pressed', 'false'); };
+    u.onerror = function () { if (btn) btn.setAttribute('aria-pressed', 'false'); };
+    if (btn) btn.setAttribute('aria-pressed', 'true');
+    synth.speak(u);
+  }
+
+  function ttsButtonsInit() {
+    // 명시적 버튼
+    document.querySelectorAll('[data-tts-target]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var sel = btn.getAttribute('data-tts-target');
+        var node = document.querySelector(sel);
+        speak(cleanText(node), btn);
+      });
+    });
+    // 자동 부착: 결과 영역 우상단에 작은 버튼
+    //  - 명시 [data-tts-auto] + 계산기 .calc-result 영역(첫 번째만)
+    var autoSet = new Set();
+    document.querySelectorAll('[data-tts-auto]').forEach(function (n) { autoSet.add(n); });
+    var firstCalcResult = document.querySelector('.calc-result');
+    if (firstCalcResult) autoSet.add(firstCalcResult);
+    autoSet.forEach(function (el) {
+      if (el.querySelector('.tts-btn')) return;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'tts-btn';
+      btn.setAttribute('aria-label', '결과 읽어주기');
+      btn.setAttribute('aria-pressed', 'false');
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M19 5a9 9 0 010 14"/></svg><span>읽기</span>';
+      btn.addEventListener('click', function () { speak(cleanText(el), btn); });
+      el.style.position = el.style.position || 'relative';
+      el.appendChild(btn);
+    });
+  }
+
+  // 페이지 떠나면 음성 중단
+  window.addEventListener('beforeunload', function () { if (supportsTTS && synth.speaking) synth.cancel(); });
+
+  function init() { autosaveInit(); ttsButtonsInit(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();

@@ -1488,16 +1488,49 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 
 /* 기존 FAB는 페이지에서 제거됨 (스타일은 유지하되 사용 안 함) */
 
-/* ===== Hero Calc Card (홈 상단 종합 계산기 강조) ===== */
+/* ===== Board category filter + category badges ===== */
+.fb-cat-filter {
+  padding: 7px 10px; border: 1px solid var(--border, #d1d5db);
+  border-radius: 999px; font-size: 0.82rem; background: #fff;
+  font-family: inherit; cursor: pointer; max-width: 150px;
+}
+@media (max-width: 540px) {
+  .fb-tabs-row { flex-wrap: wrap; gap: 8px; }
+  .fb-cat-filter { font-size: 0.78rem; padding: 6px 8px; }
+}
+.badge-cat {
+  font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+  display: inline-block; margin-right: 4px; letter-spacing: -0.01em;
+}
+.badge-cat[data-cat="free"]     { background: #eff6ff; color: #1d4ed8; }
+.badge-cat[data-cat="question"] { background: #fef3c7; color: #92400e; }
+.badge-cat[data-cat="review"]   { background: #ecfdf5; color: #047857; }
+.badge-cat[data-cat="tip"]      { background: #f5f3ff; color: #6d28d9; }
+.badge-cat[data-cat="fix"]      { background: #fee2e2; color: #b91c1c; }
+.badge-cat[data-cat="etc"]      { background: #f1f5f9; color: #475569; }
+
+/* ===== Hero Calc Card (홈 상단 종합 계산기 + 맞춤찾기 나란히) ===== */
+.hero-calc-grid {
+  display: grid; gap: 12px; margin-bottom: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) {
+  .hero-calc-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+}
 .hero-calc-card {
-  display: flex; gap: 16px;
-  padding: 22px; margin-bottom: 16px;
+  display: flex; gap: 14px;
+  padding: 18px; margin-bottom: 0;
   background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
   color: #fff; border-radius: 16px;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 12px 24px -12px rgba(30,58,138,0.45);
   align-items: center;
 }
+.hero-calc-card-alt {
+  background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+  box-shadow: 0 12px 24px -12px rgba(13,148,136,0.45);
+}
+.hero-calc-card-alt:hover { box-shadow: 0 18px 30px -14px rgba(13,148,136,0.55); }
 .hero-calc-card:hover { transform: translateY(-2px); box-shadow: 0 18px 30px -14px rgba(30,58,138,0.55); }
 .hero-calc-icon {
   width: 56px; height: 56px; border-radius: 16px;
@@ -2431,3 +2464,19 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   .calc-result .row { font-size: 0.72rem; }
   .radio-group label { flex-basis: calc(50% - 5px); }
 }
+
+/* ===== TTS button (auto-attached, 결과 영역 우상단) ===== */
+.tts-btn {
+  position: absolute; top: 10px; right: 10px;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 9px; border-radius: 999px;
+  background: rgba(255,255,255,0.92); color: var(--accent, #2563eb);
+  border: 1px solid var(--border, #d1d5db);
+  font-size: 0.72rem; font-weight: 600; cursor: pointer;
+  z-index: 5;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.tts-btn:hover { background: var(--accent, #2563eb); color: #fff; border-color: var(--accent, #2563eb); }
+.tts-btn[aria-pressed="true"] { background: var(--accent, #2563eb); color: #fff; border-color: var(--accent, #2563eb); }
+.tts-btn svg { width: 12px; height: 12px; }
+@media print { .tts-btn { display: none !important; } }
