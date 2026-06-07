@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260608" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260609" />
 <style>
   .tx-controls { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px; }
   .tx-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; color:var(--text-muted); }
@@ -82,16 +82,7 @@
   </div>
   <p style="color:var(--text-muted); font-size:0.82rem; margin-top:10px;" id="txCount"></p>
 
-  <section style="margin-top:36px;">
-    <h2 style="margin-bottom:10px;">출처·안내</h2>
-    <ul class="source-list">
-      <li>국토교통부 실거래가 공개시스템 OpenAPI (data.go.kr) — 아파트 매매 실거래 상세자료</li>
-    </ul>
-    <div class="callout callout-warn" style="margin-top:14px;">
-      <div class="icon">⚠</div>
-      <div class="body"><strong>현재는 예시 데이터로 동작합니다.</strong> 실제 서비스에서는 실거래가 OpenAPI를 정기 수집해 <code>transactions.json</code>으로 빌드합니다. 신고가 취소·정정 거래가 포함될 수 있으니 계약 전 원자료를 확인하세요.</div>
-    </div>
-  </section>
+  <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 32px;">국토교통부 실거래가 자료. 신고가 취소·정정 거래가 포함될 수 있어 계약 전 원자료 확인을 권합니다.</p>
 </main>
 
 <footer class="site-footer">
@@ -99,7 +90,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../assets/app.js?v=20260608"></script>
+<script src="../assets/app.js?v=20260609"></script>
 <script>
 (function () {
   'use strict';
@@ -190,7 +181,7 @@
       render();
     })
     .catch(function () {
-      statsEl.innerHTML = '<div class="tx-stat">데이터를 불러오지 못했습니다. 로컬에서는 <code>python -m http.server</code>로 실행하세요.</div>';
+      statsEl.innerHTML = '<div class="tx-stat">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
     });
 })();
 </script>

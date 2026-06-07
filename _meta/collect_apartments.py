@@ -242,7 +242,13 @@ def main():
     service_key = L.key(L.DATA_GO_KEYS, required=True)
     kapt_key = L.key(L.KAPT_KEYS)  # 선택: 세대수·준공 보강 (없으면 건너뜀)
     months = recent_months(MONTHS_BACK)
+    # 기존(큐레이션) 단지를 먼저 읽어, 이미 좌표·세대수가 있는 단지는 외부 보강 호출을 생략한다.
+    # Kakao 지오코딩(단지당 3회)이 전 지역에 걸쳐 누적되면 워크플로가 30분 한도를 초과하므로,
+    # 가격만 신규 실거래로 갱신하고 위치/세대수는 기존 값을 재사용한다(신규 단지만 보강).
+    existing = L.load_json(APARTMENTS_JSON, default={"apartments": []})
+    existing_by_name = {a.get("name"): a for a in existing.get("apartments", [])}
     fresh = []
+    enriched_n = 0
     for region, lawd in L.LAWD.items():
         region_items = []
         for ym in months:
@@ -250,15 +256,29 @@ def main():
                 region_items += fetch_region(lawd, ym, service_key)
             except Exception as e:  # noqa: BLE001
                 print(f"  ! {region} {ym} 수집 실패: {e}", file=sys.stderr)
-        if region_items:
-            agg = aggregate(region, region_items)
-            kmap = kapt_map(lawd, kapt_key) if kapt_key else {}
-            for a in agg:
+        if not region_items:
+            continue
+        agg = aggregate(region, region_items)
+        # 이 지역에 좌표/세대수가 없는 신규 단지가 있을 때만 K-apt 목록을 1회 호출
+        needs_kapt = any(
+            not (existing_by_name.get(a["name"]) or {}).get("households") for a in agg
+        )
+        kmap = kapt_map(lawd, kapt_key) if (kapt_key and needs_kapt) else {}
+        for a in agg:
+            cur = existing_by_name.get(a["name"]) or {}
+            if cur.get("lat") and cur.get("lng"):
+                # 큐레이션된 위치·통근·역/학교 정보 재사용 (Kakao 호출 생략)
+                for k in ("lat", "lng", "subway", "elementary", "commute"):
+                    if cur.get(k) is not None:
+                        a[k] = cur[k]
+            else:
                 try:
                     enrich_location(a)
+                    enriched_n += 1
                 except Exception as e:  # noqa: BLE001
                     print(f"  ! {a['name']} 위치 보강 실패: {e}", file=sys.stderr)
-                # K-apt 세대수·준공 보강
+            # K-apt 세대수·준공 보강 — 기존 세대수가 없을 때만
+            if not cur.get("households"):
                 code = kmap.get(_norm_name(a["name"]))
                 if code:
                     hh, yr = kapt_info(code, kapt_key)
@@ -266,12 +286,12 @@ def main():
                         a["households"] = hh
                     if yr and not a.get("built_year"):
                         a["built_year"] = yr
-            fresh += agg
-            print(f"[{region}] 거래 {len(region_items)}건 → 단지 {len(agg)}개")
+        fresh += agg
+        print(f"[{region}] 거래 {len(region_items)}건 → 단지 {len(agg)}개")
     if not fresh:
         print("수집 결과 없음 — 기존 apartments.json 유지")
         return
-    existing = L.load_json(APARTMENTS_JSON, default={"apartments": []})
+    print(f"신규 위치 보강(Kakao) 호출 단지 수: {enriched_n}")
     merged = merge(existing, fresh)
     L.save_json_safe(APARTMENTS_JSON, merged, min_items_key="apartments")
 

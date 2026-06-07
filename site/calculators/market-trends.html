@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>지역 시세·전세가율 대시보드 — 톺다</title>
-<meta name="description" content="한국부동산원 R-ONE 통계 기반으로 시·도부터 시·군·구까지 아파트 매매·전세 가격지수와 전세가율을 확인하는 지역 시세 대시보드." />
+<meta name="description" content="시·도부터 시·군·구까지 아파트 매매·전세 가격지수와 전세가율을 확인하는 지역 시세 대시보드." />
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -48,7 +48,7 @@
   <div class="article-header">
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 지역 시세 대시보드</div>
     <h1>지역 시세·전세가율 대시보드</h1>
-    <div class="meta"><span>한국부동산원 R-ONE 통계 기반 · 시·도→시·군·구 매매·전세 가격지수·전세가율</span></div>
+    <div class="meta"><span>시·도→시·군·구 아파트 매매·전세 가격지수·전세가율을 한눈에</span></div>
   </div>
 
   <div class="mkt-controls">
@@ -83,16 +83,7 @@
     </ul>
   </section>
 
-  <section style="margin-top:28px;">
-    <h2 style="margin-bottom:10px;">출처</h2>
-    <ul class="source-list">
-      <li>한국부동산원 R-ONE 부동산통계 OpenAPI (www.reb.or.kr/r-one) — 매매·전세 가격지수, 전세가율</li>
-    </ul>
-    <div class="callout callout-warn" style="margin-top:16px;">
-      <div class="icon">⚠</div>
-      <div class="body"><strong>현재는 예시 데이터로 동작합니다.</strong> 실제 서비스에서는 R-ONE OpenAPI를 정기 수집해 <code>market.json</code>으로 빌드합니다. 투자 판단의 근거로 삼기 전 1차 통계를 확인하세요.</div>
-    </div>
-  </section>
+  <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 32px;">표시 수치는 참고용 예시이며, 투자 판단 전 공식 통계를 확인하세요. 출처: 한국부동산원.</p>
 </main>
 
 <footer class="site-footer">
@@ -187,7 +178,7 @@
       render();
     })
     .catch(function () {
-      statsEl.innerHTML = '<div class="mkt-stat">데이터를 불러오지 못했습니다. 로컬에서는 <code>python -m http.server</code>로 실행하세요.</div>';
+      statsEl.innerHTML = '<div class="mkt-stat">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
     });
 })();
 </script>
