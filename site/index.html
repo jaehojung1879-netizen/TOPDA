@@ -24,10 +24,10 @@
 <link rel="alternate" hreflang="x-default" href="https://jaehojung1879-netizen.github.io/TOPDA/index.html" />
 <meta name="naver-site-verification" content="NAVER_SITE_VERIFICATION_PLACEHOLDER" />
 <meta name="google-site-verification" content="GOOGLE_SITE_VERIFICATION_PLACEHOLDER" />
-<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260607"></script>
+<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260608"></script>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="assets/styles.css?v=20260607" />
+<link rel="stylesheet" href="assets/styles.css?v=20260608" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -185,20 +185,35 @@
       <h2>계산기</h2>
       <a href="calculators/index.html" class="strip-link">전체 계산기 →</a>
     </div>
-    <a href="calculators/total-cost-dashboard.html" class="hero-calc-card">
-      <div class="hero-calc-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 3v9l6 3"/>
-        </svg>
-      </div>
-      <div class="hero-calc-body">
-        <div class="hero-calc-tag">대표 도구</div>
-        <h3>종합 계산기</h3>
-        <p>매수·매도·전세·임대·상속·증여 6가지 시나리오를 한 화면에서. 취득세·양도세·DSR·RTI까지 자동 산정.</p>
-        <span class="hero-calc-cta">대시보드 열기 →</span>
-      </div>
-    </a>
+    <div class="hero-calc-grid">
+      <a href="calculators/total-cost-dashboard.html" class="hero-calc-card">
+        <div class="hero-calc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 3v9l6 3"/>
+          </svg>
+        </div>
+        <div class="hero-calc-body">
+          <div class="hero-calc-tag">대표 도구</div>
+          <h3>종합 계산기</h3>
+          <p>매매·전세 등 상황별 비용을 한눈에.</p>
+          <span class="hero-calc-cta">열기 →</span>
+        </div>
+      </a>
+      <a href="calculators/search.html" class="hero-calc-card hero-calc-card-alt">
+        <div class="hero-calc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+          </svg>
+        </div>
+        <div class="hero-calc-body">
+          <div class="hero-calc-tag">핵심 도구</div>
+          <h3>맞춤 내집 찾기</h3>
+          <p>조건만 넣으면 단지를 점수로 추천.</p>
+          <span class="hero-calc-cta">조건 입력 →</span>
+        </div>
+      </a>
+    </div>
 
     <div class="tool-row tool-row-4">
       <a href="calculators/acquisition-tax.html" class="tool-card">
@@ -369,28 +384,6 @@
   </div>
 </section>
 
-<!-- ===== Highlight: 맞춤 내집 찾기 ===== -->
-<section class="banner-row">
-  <div class="container">
-    <a href="calculators/search.html" class="big-banner">
-      <div class="big-banner-text">
-        <div class="big-banner-eyebrow">톺다의 새로운 핵심 도구</div>
-        <div class="big-banner-title">맞춤 내집 찾기 —<br/>조건만 넣으면 단지를 점수로 추천</div>
-        <div class="big-banner-cta">예산·역세권·학군으로 찾아보기 →</div>
-      </div>
-      <div class="big-banner-art" aria-hidden="true">
-        <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="20" y="44" width="22" height="42" rx="2" fill="#fff" opacity="0.18"/>
-          <rect x="48" y="28" width="24" height="58" rx="2" fill="#fff" opacity="0.30"/>
-          <rect x="78" y="50" width="20" height="36" rx="2" fill="#fff" opacity="0.18"/>
-          <circle cx="60" cy="40" r="13" stroke="#fff" stroke-width="4" fill="none"/>
-          <path d="M70 50l10 10" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-        </svg>
-      </div>
-    </a>
-  </div>
-</section>
-
 <!-- ===== Tools: checklists ===== -->
 <section class="home-tools" style="padding-top: 28px;">
   <div class="container">
@@ -522,6 +515,6 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=20260607"></script>
+<script src="assets/app.js?v=20260608"></script>
 </body>
 </html>
