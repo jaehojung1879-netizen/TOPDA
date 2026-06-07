@@ -94,8 +94,25 @@
     return clamp(50 + annual * 250, 0, 100); // +20%/yr→100, +10%→75, 0→50, -10%→25
   }
 
+  // 예산 적합도(가격 근접): 입력 예산에 가까운 가격일수록 높은 점수.
+  //  - 예산 초과 평형은 필터에서 이미 제외됨 → 여기선 예산 이하 중 '가장 가까운' 가격을 본다.
+  //  - 너무 싼 단지는 점수가 낮아져 예산대에 맞는 단지가 우선 노출된다.
+  function scoreFit(price, budgetManwon) {
+    if (price == null || !budgetManwon) return null;
+    const ratio = clamp(price / budgetManwon, 0, 1); // 예산 대비 비율 (≤1)
+    // 0.9↑ → 100, 0.5 → 약 56, 0.3 → 25
+    return clamp(25 + (ratio - 0.3) / (0.9 - 0.3) * 75, 25, 100);
+  }
+
+  // 예산 이하 평형 중 예산에 가장 가까운(=가장 비싼) 가격. 없으면 null.
+  function maxWithinBudget(units, budgetManwon) {
+    if (!budgetManwon || !units || !units.length) return null;
+    const within = units.filter((u) => u.recent_price <= budgetManwon);
+    if (!within.length) return null;
+    return Math.max.apply(null, within.map((u) => u.recent_price));
+  }
+
   // 미래 가치(상승 잠재력): 가격 모멘텀 중심 + 전세가율(낮을수록 상급지 경향) 보정.
-  // 예산은 점수가 아니라 '필터'로만 사용한다(쌀수록 가점하지 않음).
   function scoreAppreciation(apt) {
     const mom = scoreMomentum(apt.price_history);
     const jr = apt.jeonse_ratio;
@@ -180,13 +197,20 @@
       scale: scoreScale(apt.households),
       age: scoreAge(apt.built_year, y),
     };
+    // 예산을 입력한 경우에만 '예산 적합도(가격 근접)'를 점수에 포함한다.
+    const weights = Object.assign({}, WEIGHTS);
+    if (f.budget_max) {
+      const near = maxWithinBudget(apt.units || [], f.budget_max);
+      sub.fit = scoreFit(near, f.budget_max);
+      weights.fit = 25; // 예산 입력 시 가격 근접도를 비중 높게 반영
+    }
 
     // 사용 가능한 항목만으로 가중 평균 (재정규화)
     let wsum = 0, ssum = 0;
-    Object.keys(WEIGHTS).forEach((k) => {
+    Object.keys(weights).forEach((k) => {
       if (sub[k] == null) return;
-      wsum += WEIGHTS[k];
-      ssum += WEIGHTS[k] * sub[k];
+      wsum += weights[k];
+      ssum += weights[k] * sub[k];
     });
     const total = wsum ? ssum / wsum : 0;
 
@@ -262,6 +286,7 @@
   return {
     WEIGHTS, AREA_BANDS, FILTER_LABELS, bandOf, walkMin,
     scoreSubway, scoreSchool, scoreScale, scoreAge, scoreStability, scoreAppreciation, scoreMomentum,
+    scoreFit, maxWithinBudget,
     candidateUnits, representativeUnit, failedFilters, passesFilters,
     evaluate, search, nearMatches, formatEok,
   };
