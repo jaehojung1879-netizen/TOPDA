@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260609" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260610" />
 <style>
   .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
   .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
@@ -90,15 +90,22 @@
   <div class="container row">
     <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
     <nav class="nav">
-      <a href="../index.html" data-nav>홈</a>
+      <a href="../guides.html" data-nav>가이드</a>
       <a href="../calculators/index.html" data-nav class="active">계산기</a>
+      <a href="../market.html" data-nav>시세정보</a>
       <a href="../checklists/index.html" data-nav>체크리스트</a>
-      <a href="../about.html" data-nav>소개</a>
     </nav>
-    <button class="nav-toggle btn-secondary btn" data-nav-toggle aria-label="메뉴 열기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    <button class="nav-toggle" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
   </div>
   <div class="mobile-menu" data-mobile-menu>
-    <a href="../index.html">홈</a><a href="../calculators/index.html">계산기</a><a href="../checklists/index.html">체크리스트</a><a href="../about.html">소개</a>
+    <a href="../guides.html">가이드</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../market.html">시세정보</a>
+    <a href="../checklists/index.html">체크리스트</a>
+    <a href="../board.html">게시판</a>
+    <a href="../about.html">안내</a>
   </div>
 </header>
 
@@ -115,11 +122,28 @@
       <h2>조건 입력</h2>
 
       <div class="finder-field">
+        <label for="f-search">단지명·키워드 검색</label>
+        <input id="f-search" name="search" type="search" placeholder="예: 헬리오시티, 래미안" />
+        <span class="finder-hint">단지·지역명으로 빠르게 찾기</span>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-sort">정렬</label>
+        <select id="f-sort" name="sort">
+          <option value="score">종합점수 높은 순</option>
+          <option value="price_asc">가격 낮은 순</option>
+          <option value="price_desc">가격 높은 순</option>
+          <option value="recent">최근 거래 순</option>
+          <option value="momentum">상승 모멘텀 순</option>
+        </select>
+      </div>
+
+      <div class="finder-field">
         <label for="f-budget">예산 (최대)</label>
         <div class="finder-suffix" data-suffix="억">
           <input id="f-budget" name="budget" type="number" min="0" step="0.5" inputmode="decimal" placeholder="예: 15" />
         </div>
-        <span class="finder-hint">이 금액 이하 평형이 있는 단지만 추천합니다.</span>
+        <span class="finder-hint">이 금액 이하 평형이 있는 단지만 추천</span>
       </div>
 
       <div class="finder-field">
@@ -254,8 +278,8 @@
   </div>
 </footer>
 
-<script src="../assets/score.js?v=20260609"></script>
-<script src="../assets/app.js?v=20260609"></script>
+<script src="../assets/score.js?v=20260610"></script>
+<script src="../assets/app.js?v=20260610"></script>
 <script>
 (function () {
   'use strict';
@@ -268,7 +292,10 @@
   var guSel = document.getElementById('f-gu');
   var familySel = document.getElementById('f-family');
   var areaSel = document.getElementById('f-area');
+  var searchInp = document.getElementById('f-search');
+  var sortSel = document.getElementById('f-sort');
   var DATA = [];
+  var DEALS = [];   // 실거래 원장 (transactions.json) — 단지 enrich용
 
   var fmt = S.formatEok;
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -292,7 +319,101 @@
     }
     var park = num(form.parking_min.value); if (park) f.parking_min = park;
     var ratio = num(form.jeonse_ratio_max.value); if (ratio) f.jeonse_ratio_max = ratio;
+    var q = (searchInp.value || '').trim();
+    if (q) f._search = q.toLowerCase();
     return f;
+  }
+
+  // 자유 검색 필터: 단지명·지역·시도·시군구 어디든 매치
+  function matchesSearch(a, q) {
+    if (!q) return true;
+    var hay = ((a.name || '') + ' ' + (a.region || '') + ' ' + (a.region_key || '') + ' ' + (a.builder || '')).toLowerCase();
+    return hay.indexOf(q) >= 0;
+  }
+
+  // 정렬 모드별 비교 함수
+  function comparator(mode) {
+    if (mode === 'price_asc')  return function (a, b) { return (a.price || Infinity) - (b.price || Infinity); };
+    if (mode === 'price_desc') return function (a, b) { return (b.price || 0) - (a.price || 0); };
+    if (mode === 'recent') {
+      return function (a, b) {
+        var ad = (DEALS_BY_APT[a.apt.name] || {}).latest || '';
+        var bd = (DEALS_BY_APT[b.apt.name] || {}).latest || '';
+        return bd < ad ? -1 : bd > ad ? 1 : b.total - a.total;
+      };
+    }
+    if (mode === 'momentum') {
+      return function (a, b) {
+        var am = S.scoreMomentum(a.apt.price_history) || 0;
+        var bm = S.scoreMomentum(b.apt.price_history) || 0;
+        return bm - am;
+      };
+    }
+    return function (a, b) { return b.total - a.total; };
+  }
+
+  var DEALS_BY_APT = {};   // 단지명 → {latest:거래일, prices:[]}
+
+  // 실거래(transactions.json) 데이터를 단지(apartments.json)에 enrich.
+  // 단지가 apartments.json에 없으면 가벼운 placeholder를 생성해 finder에 노출시킨다.
+  function enrichWithDeals() {
+    if (!DEALS.length) return;
+    var byName = {};
+    DATA.forEach(function (a) { byName[a.name] = a; });
+    var newApts = {};
+    DEALS.forEach(function (d) {
+      var apt = byName[d.apt];
+      if (!apt) {
+        // transactions에만 있는 단지 — 최소 정보로 추가
+        if (!newApts[d.apt]) {
+          var parts = (d.region || '').split(' ');
+          newApts[d.apt] = {
+            name: d.apt, region: d.region || '', region_key: d.region_key || (parts.slice(0, 2).join(' ')),
+            sido: parts[0] || '', sigungu: parts.slice(1, 2).join(' ') || (d.region_key || ''),
+            built_year: d.build_year || null, units: [], price_history: [],
+            _from_deals: true,
+          };
+        }
+        apt = newApts[d.apt];
+      }
+      // 단지명별 거래 집계
+      var key = d.apt;
+      if (!DEALS_BY_APT[key]) DEALS_BY_APT[key] = { latest: '', prices: [] };
+      var agg = DEALS_BY_APT[key];
+      if (d.date > agg.latest) agg.latest = d.date;
+      agg.prices.push({ area_m2: d.area_m2, price: d.price, date: d.date });
+      // units 보강(없으면)
+      if (!apt.units || !apt.units.length) {
+        // 평형 밴드별로 가장 최신 거래만 채택
+        if (!apt._unitMap) apt._unitMap = {};
+        var band = Math.round(d.area_m2);
+        var slot = apt._unitMap[band];
+        if (!slot || slot.date < d.date) {
+          apt._unitMap[band] = { area_m2: band, recent_price: d.price, date: d.date, label: band + '㎡(' + Math.round(band / 3.3058) + '평)' };
+        }
+      }
+    });
+    // units finalize
+    Object.keys(newApts).forEach(function (n) {
+      var a = newApts[n];
+      if (a._unitMap) {
+        a.units = Object.keys(a._unitMap).map(function (k) { return a._unitMap[k]; })
+          .sort(function (x, y) { return x.area_m2 - y.area_m2; })
+          .map(function (u) { return { label: u.label, area_m2: u.area_m2, recent_price: u.recent_price }; });
+        delete a._unitMap;
+      }
+      // 가격 이력: 같은 단지의 평균 거래가를 월별로
+      var months = {};
+      (DEALS_BY_APT[n] && DEALS_BY_APT[n].prices || []).forEach(function (p) {
+        var mo = p.date.slice(0, 7);
+        if (!months[mo]) months[mo] = [];
+        months[mo].push(p.price);
+      });
+      a.price_history = Object.keys(months).sort().slice(-4).map(function (mo) {
+        var arr = months[mo]; return Math.round(arr.reduce(function (s, x) { return s + x; }, 0) / arr.length);
+      });
+      DATA.push(a);
+    });
   }
   var curHub = '';
 
@@ -348,28 +469,34 @@
   function render() {
     if (!DATA.length) return;
     var f = readFilters();
+    var q = f._search; delete f._search;
+    var mode = sortSel.value || 'score';
     curHub = f.commute_hub || '';
-    // 조건을 하나도 넣지 않으면 전체를 점수로 나열하지 않는다(안내만 표시).
-    if (Object.keys(f).length === 0) {
+    var hasFilter = Object.keys(f).length > 0 || !!q;
+    if (!hasFilter) {
       relaxedEl.innerHTML = '';
       countEl.textContent = '';
-      resultsEl.innerHTML = '<div class="finder-empty">왼쪽에서 <strong>예산·지역·평형·통근 등 원하는 조건을 하나 이상</strong> 넣고 <strong>추천 받기</strong>를 눌러보세요.<br/>조건에 맞는 단지를 종합점수 순으로 추천해 드립니다.</div>';
+      resultsEl.innerHTML = '<div class="finder-empty">왼쪽에서 <strong>키워드 검색이나 조건을 하나 이상</strong> 입력해보세요<br/>조건에 맞는 단지를 종합점수 순으로 추천해 드립니다</div>';
       return;
     }
-    var list = S.search(DATA, f);
+    // 단지 풀: 검색어가 있으면 우선 좁힌다
+    var pool = q ? DATA.filter(function (a) { return matchesSearch(a, q); }) : DATA;
+    var list = S.search(pool, f);
+    list.sort(comparator(mode));
     relaxedEl.innerHTML = '';
     if (list.length) {
-      countEl.innerHTML = '조건에 맞는 단지 <span class="em">' + list.length + '곳</span> · 점수 높은 순';
-      resultsEl.innerHTML = list.map(function (r, i) { return card(r, i + 1); }).join('');
+      var label = (mode === 'score') ? '점수 높은 순' : (mode === 'price_asc') ? '가격 낮은 순' : (mode === 'price_desc') ? '가격 높은 순' : (mode === 'recent') ? '최근 거래 순' : '상승 모멘텀 순';
+      countEl.innerHTML = '조건에 맞는 단지 <span class="em">' + list.length + '곳</span> · ' + label;
+      resultsEl.innerHTML = list.slice(0, 60).map(function (r, i) { return card(r, i + 1); }).join('');
     } else {
-      var near = S.nearMatches(DATA, f, null, 1);
+      var near = S.nearMatches(pool, f, null, 1);
       if (near.length) {
         countEl.innerHTML = '정확히 맞는 단지가 없어 <span class="em">조건을 한 가지만 완화</span>한 추천이에요';
-        relaxedEl.innerHTML = '<div class="finder-relaxed-banner">입력하신 조건을 모두 만족하는 단지는 없었습니다. 아래는 조건 1개만 완화하면 맞는 단지입니다 — 필터를 조금 넓혀보세요.</div>';
-        resultsEl.innerHTML = near.map(function (r, i) { return card(r, i + 1); }).join('');
+        relaxedEl.innerHTML = '<div class="finder-relaxed-banner">입력하신 조건을 모두 만족하는 단지는 없었습니다. 아래는 조건 1개만 완화하면 맞는 단지입니다 — 필터를 조금 넓혀보세요</div>';
+        resultsEl.innerHTML = near.slice(0, 30).map(function (r, i) { return card(r, i + 1); }).join('');
       } else {
         countEl.textContent = '조건에 맞는 단지가 없습니다';
-        resultsEl.innerHTML = '<div class="finder-empty">조건을 완화해 다시 시도해보세요. (예: 예산을 높이거나 거리 제한을 넓히기)</div>';
+        resultsEl.innerHTML = '<div class="finder-empty">조건을 완화해 다시 시도해보세요</div>';
       }
     }
   }
@@ -417,22 +544,45 @@
     });
   }
 
-  // 데이터 로드 (상대경로 — custom domain·서브경로 모두 안전)
-  fetch('../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })
-    .then(function (res) { if (!res.ok) throw new Error('load'); return res.json(); })
-    .then(function (json) {
-      DATA = json.apartments || [];
-      var sidos = [];
-      DATA.forEach(function (a) { var s = sidoOf(a); if (s && sidos.indexOf(s) < 0) sidos.push(s); });
-      sidos.sort().forEach(function (s) {
-        var o = document.createElement('option'); o.value = s; o.textContent = s; sidoSel.appendChild(o);
-      });
-      render();
-    })
-    .catch(function () {
+  // URL ?apt= 딥링크 처리: 실거래가 페이지에서 단지 클릭 → 자동 검색
+  function applyUrlParams() {
+    var params = new URLSearchParams(location.search);
+    var apt = params.get('apt');
+    if (apt) { searchInp.value = apt; }
+    var region = params.get('region'); if (region) {
+      // sidoSel/guSel은 데이터 로드 후 채워짐 — 일단 검색어로 잡고, 후에 select 동기화
+      searchInp.value = (searchInp.value ? searchInp.value + ' ' : '') + region;
+    }
+  }
+
+  searchInp.addEventListener('input', render);
+  sortSel.addEventListener('change', render);
+
+  // 데이터 로드: apartments + transactions(있으면) 병합
+  Promise.all([
+    fetch('../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('apt'); return r.json(); })
+      .catch(function () { return { apartments: [] }; }),
+    fetch('../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('deals'); return r.json(); })
+      .catch(function () { return { deals: [] }; }),
+  ]).then(function (results) {
+    DATA = (results[0].apartments || []).slice();
+    DEALS = results[1].deals || [];
+    enrichWithDeals();
+    if (!DATA.length) {
       countEl.textContent = '';
-      resultsEl.innerHTML = '<div class="finder-empty">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
+      resultsEl.innerHTML = '<div class="finder-empty">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요</div>';
+      return;
+    }
+    var sidos = [];
+    DATA.forEach(function (a) { var s = sidoOf(a); if (s && sidos.indexOf(s) < 0) sidos.push(s); });
+    sidos.sort().forEach(function (s) {
+      var o = document.createElement('option'); o.value = s; o.textContent = s; sidoSel.appendChild(o);
     });
+    applyUrlParams();
+    render();
+  });
 })();
 </script>
 </body>
