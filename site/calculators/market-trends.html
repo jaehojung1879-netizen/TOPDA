@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260610" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260611" />
 <style>
   .mkt-controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 20px; }
   .mkt-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; color:var(--text-muted); }
@@ -98,10 +98,12 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../assets/app.js?v=20260610"></script>
+<script src="../assets/region.js?v=20260611"></script>
+<script src="../assets/app.js?v=20260611"></script>
 <script>
 (function () {
   'use strict';
+  var R = window.TopdaRegion;
   var DATA = null, charts = {};
   var sidoSel = document.getElementById('mkt-sido');
   var guSel = document.getElementById('mkt-gu');
@@ -142,16 +144,22 @@
         scales: { x: { grid: { display: false } } } },
     });
   }
-  function sidoOrder(a, b) { if (a === '전국') return -1; if (b === '전국') return 1; return a < b ? -1 : 1; }
+  // 시·도 정렬: 전국 → 서울 → 경기 → 부산 → 인천 → 대구 → 광주 → 대전 → 울산 → 세종 → 그 외 가나다순
+  function sidoOrder(a, b) {
+    if (a === '전국') return -1; if (b === '전국') return 1;
+    var pa = R.priority(a), pb = R.priority(b);
+    if (pa !== pb) return pa - pb;
+    return String(a).localeCompare(String(b), 'ko');
+  }
 
   function fillGu() {
     var sido = sidoSel.value;
     var inSido = DATA.regions.filter(function (r) { return r.sido === sido; });
-    // 시도 대표(전체) 먼저, 그다음 구
+    // 시도 대표(전체) 먼저, 그다음 구 가나다순
     inSido.sort(function (a, b) {
       var aTop = a.key === sido, bTop = b.key === sido;
       if (aTop !== bTop) return aTop ? -1 : 1;
-      return a.name < b.name ? -1 : 1;
+      return String(a.name).localeCompare(String(b.name), 'ko');
     });
     guSel.innerHTML = inSido.map(function (r) { return '<option value="' + r.key + '">' + r.name + '</option>'; }).join('');
   }

@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260610" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260611" />
 <style>
   .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
   .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
@@ -278,8 +278,9 @@
   </div>
 </footer>
 
-<script src="../assets/score.js?v=20260610"></script>
-<script src="../assets/app.js?v=20260610"></script>
+<script src="../assets/score.js?v=20260611"></script>
+<script src="../assets/region.js?v=20260611"></script>
+<script src="../assets/app.js?v=20260611"></script>
 <script>
 (function () {
   'use strict';
@@ -517,7 +518,8 @@
     form.reset(); render();
   });
 
-  function sidoOf(a) { return a.sido || (a.region_key || '').split(' ')[0]; }
+  var R = window.TopdaRegion;
+  function sidoOf(a) { return R.normSido(a.sido || (a.region_key || '').split(' ')[0]); }
   function guOf(a) { return a.sigungu || (a.region_key || '').split(' ').slice(1).join(' '); }
 
   function fillGu() {
@@ -528,9 +530,10 @@
     DATA.forEach(function (a) {
       if (sidoOf(a) === sido) { var g = a.region_key; if (g && gus.indexOf(g) < 0) gus.push(g); }
     });
-    gus.sort().forEach(function (key) {
-      var o = document.createElement('option'); o.value = key; o.textContent = guOf({ region_key: key }); guSel.appendChild(o);
-    });
+    gus.sort(function (a, b) { return guOf({ region_key: a }).localeCompare(guOf({ region_key: b }), 'ko'); })
+      .forEach(function (key) {
+        var o = document.createElement('option'); o.value = key; o.textContent = guOf({ region_key: key }); guSel.appendChild(o);
+      });
   }
   sidoSel.addEventListener('change', function () { fillGu(); render(); });
 
@@ -577,7 +580,8 @@
     }
     var sidos = [];
     DATA.forEach(function (a) { var s = sidoOf(a); if (s && sidos.indexOf(s) < 0) sidos.push(s); });
-    sidos.sort().forEach(function (s) {
+    // 시·도 정렬: 전체 → 서울 → 경기 → 부산 → 인천 → 대구 → 광주 → 대전 → 울산 → 세종 → 그 외
+    R.sortSidos(sidos).forEach(function (s) {
       var o = document.createElement('option'); o.value = s; o.textContent = s; sidoSel.appendChild(o);
     });
     applyUrlParams();

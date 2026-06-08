@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260610" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260611" />
 <style>
   .tx-controls { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px; }
   .tx-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; color:var(--text-muted); }
@@ -62,12 +62,15 @@
     <div class="meta"><span>지역·단지·평형별 최근 매매 거래를 검색하고 그래프로 확인</span></div>
   </div>
 
+  <p class="tx-asof" id="txAsof" style="color:var(--text-muted); font-size:0.85rem; margin: 6px 0 14px;">데이터 기준일 확인 중…</p>
+
   <div class="tx-controls">
     <div class="tx-field" style="flex:1; min-width:200px;">
       <label for="tx-search">단지명 검색</label>
       <input id="tx-search" type="search" placeholder="예: 헬리오시티, 래미안" autocomplete="off" />
     </div>
-    <div class="tx-field"><label for="tx-region">지역</label><select id="tx-region"></select></div>
+    <div class="tx-field"><label for="tx-sido">시·도</label><select id="tx-sido"></select></div>
+    <div class="tx-field"><label for="tx-gu">시·군·구</label><select id="tx-gu"></select></div>
     <div class="tx-field"><label for="tx-apt">단지</label><select id="tx-apt"><option value="">전체</option></select></div>
     <div class="tx-field"><label for="tx-area">평형</label>
       <select id="tx-area">
@@ -76,6 +79,14 @@
         <option value="ms">국민평형(60~85㎡)</option>
         <option value="mid">중형(85~102㎡)</option>
         <option value="large">대형(102㎡~)</option>
+      </select>
+    </div>
+    <div class="tx-field"><label for="tx-window">최근 기간</label>
+      <select id="tx-window">
+        <option value="180">6개월</option>
+        <option value="90">3개월</option>
+        <option value="365">1년</option>
+        <option value="0" selected>전체</option>
       </select>
     </div>
   </div>
@@ -103,45 +114,93 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../assets/app.js?v=20260610"></script>
+<script src="../assets/region.js?v=20260611"></script>
+<script src="../assets/app.js?v=20260611"></script>
 <script>
 (function () {
   'use strict';
+  var R = window.TopdaRegion;
   var DATA = [], chart = null;
   var searchEl = document.getElementById('tx-search');
-  var regionSel = document.getElementById('tx-region');
+  var sidoSel = document.getElementById('tx-sido');
+  var guSel = document.getElementById('tx-gu');
   var aptSel = document.getElementById('tx-apt');
   var areaSel = document.getElementById('tx-area');
+  var windowSel = document.getElementById('tx-window');
   var body = document.getElementById('txBody');
   var statsEl = document.getElementById('txStats');
   var countEl = document.getElementById('txCount');
+  var asofEl = document.getElementById('txAsof');
   var chartBox = document.getElementById('txChartBox');
 
   function debounce(fn, ms) {
     var t; return function () { clearTimeout(t); var a = arguments, c = this; t = setTimeout(function () { fn.apply(c, a); }, ms); };
   }
   function escapeHtml(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-
   function won(m) { var e = m / 10000; return (Number.isInteger(e) ? e : e.toFixed(1)) + '억'; }
   function areaBand(m2) { return m2 < 60 ? 'small' : m2 < 85 ? 'ms' : m2 < 102 ? 'mid' : 'large'; }
+  function daysSince(dateStr) {
+    if (!dateStr) return null;
+    var d = new Date(dateStr); if (isNaN(d)) return null;
+    return Math.floor((Date.now() - d.getTime()) / 86400000);
+  }
+  function ago(days) {
+    if (days == null) return '';
+    if (days < 1) return '오늘';
+    if (days < 7) return days + '일 전';
+    if (days < 30) return Math.floor(days / 7) + '주 전';
+    if (days < 365) return Math.floor(days / 30) + '개월 전';
+    return Math.floor(days / 365) + '년 전';
+  }
 
+  function sidoOf(d) { return R.normSido(d.sido || (d.region_key || '').split(' ')[0] || (d.region || '').split(' ')[0]); }
+  function sigunguOf(d) {
+    var k = d.region_key || '';
+    var parts = k.split(' ');
+    return parts.length >= 2 ? parts.slice(1).join(' ') : '';
+  }
+
+  function fillSido() {
+    var set = {};
+    DATA.forEach(function (d) { var s = sidoOf(d); if (s) set[s] = true; });
+    R.fillSidoSelect(sidoSel, Object.keys(set));
+    if (sidoSel.options.length > 1) sidoSel.value = 'all';
+  }
+  function fillGu() {
+    var sido = sidoSel.value;
+    if (!sido || sido === 'all') {
+      R.fillSigunguSelect(guSel, [], true);
+      return;
+    }
+    var set = {};
+    DATA.forEach(function (d) {
+      if (sidoOf(d) === sido) { var g = sigunguOf(d); if (g) set[g] = true; }
+    });
+    R.fillSigunguSelect(guSel, Object.keys(set), true);
+  }
   function fillApts() {
-    var region = regionSel.value;
+    var sido = sidoSel.value, gu = guSel.value;
     var names = [];
     DATA.forEach(function (d) {
-      if ((region === 'all' || d.region_key === region) && names.indexOf(d.apt) < 0) names.push(d.apt);
+      if (sido !== 'all' && sidoOf(d) !== sido) return;
+      if (gu && gu !== 'all' && sigunguOf(d) !== gu) return;
+      if (names.indexOf(d.apt) < 0) names.push(d.apt);
     });
     names.sort();
     aptSel.innerHTML = '<option value="">전체</option>' + names.map(function (n) { return '<option value="' + escapeHtml(n) + '">' + escapeHtml(n) + '</option>'; }).join('');
   }
 
   function filtered() {
-    var region = regionSel.value, apt = aptSel.value, area = areaSel.value;
+    var sido = sidoSel.value, gu = guSel.value, apt = aptSel.value, area = areaSel.value;
     var q = (searchEl.value || '').trim().toLowerCase();
+    var winDays = parseInt(windowSel.value, 10) || 0;
+    var cutoff = winDays ? new Date(Date.now() - winDays * 86400000).toISOString().slice(0, 10) : '';
     return DATA.filter(function (d) {
-      if (region !== 'all' && d.region_key !== region) return false;
+      if (sido !== 'all' && sidoOf(d) !== sido) return false;
+      if (gu && gu !== 'all' && sigunguOf(d) !== gu) return false;
       if (apt && d.apt !== apt) return false;
       if (area !== 'all' && areaBand(d.area_m2) !== area) return false;
+      if (cutoff && d.date < cutoff) return false;
       if (q) {
         var hay = (d.apt + ' ' + (d.region || '') + ' ' + (d.region_key || '')).toLowerCase();
         if (hay.indexOf(q) < 0) return false;
@@ -152,10 +211,11 @@
 
   function renderStats(list) {
     var n = list.length;
-    var recent = list[0] ? won(list[0].price) + ' (' + list[0].date + ')' : '—';
+    var sorted = list.slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    var recent = sorted[0] ? won(sorted[0].price) + ' · ' + sorted[0].date + ' (' + ago(daysSince(sorted[0].date)) + ')' : '—';
     var avg = n ? won(Math.round(list.reduce(function (a, b) { return a + b.price; }, 0) / n)) : '—';
     var hi = n ? won(Math.max.apply(null, list.map(function (d) { return d.price; }))) : '—';
-    var cards = [['거래 건수', n + '건'], ['최근 실거래', recent], ['평균가', avg], ['최고가', hi]];
+    var cards = [['거래 건수', n.toLocaleString() + '건'], ['최근 실거래', recent], ['평균가', avg], ['최고가', hi]];
     statsEl.innerHTML = cards.map(function (c) { return '<div class="tx-stat"><div class="lbl">' + c[0] + '</div><div class="num">' + c[1] + '</div></div>'; }).join('');
   }
 
@@ -180,34 +240,46 @@
 
   function render() {
     var list = filtered();
+    list.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
     renderStats(list);
     renderChart(list);
     body.innerHTML = list.slice(0, 300).map(function (d) {
       var aptUrl = 'search.html?apt=' + encodeURIComponent(d.apt);
-      return '<tr><td>' + d.date + '</td><td><a class="tx-link" href="' + aptUrl + '" title="이 단지를 맞춤찾기에서 보기">' + escapeHtml(d.apt) + '</a></td><td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
+      var when = ago(daysSince(d.date));
+      return '<tr><td>' + d.date + ' <span style="color:var(--text-muted); font-size:0.78rem;">(' + when + ')</span></td>' +
+        '<td><a class="tx-link" href="' + aptUrl + '" title="이 단지를 맞춤찾기에서 보기">' + escapeHtml(d.apt) + '</a></td>' +
+        '<td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
         '<td class="num">' + won(d.price) + '</td><td class="hide-sm">' + d.floor + '층</td><td class="hide-sm">' + (d.build_year || '—') + '</td></tr>';
     }).join('');
-    countEl.textContent = list.length + '건 중 최근 ' + Math.min(300, list.length) + '건 표시';
+    countEl.textContent = list.length.toLocaleString() + '건 중 최근 ' + Math.min(300, list.length).toLocaleString() + '건 표시';
   }
 
   searchEl.addEventListener('input', debounce(render, 200));
-  regionSel.addEventListener('change', function () { fillApts(); render(); });
+  sidoSel.addEventListener('change', function () { fillGu(); fillApts(); render(); });
+  guSel.addEventListener('change', function () { fillApts(); render(); });
   aptSel.addEventListener('change', render);
   areaSel.addEventListener('change', render);
+  windowSel.addEventListener('change', render);
 
   fetch('../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
     .then(function (r) { if (!r.ok) throw new Error('load'); return r.json(); })
     .then(function (j) {
       DATA = j.deals || [];
-      var regions = [];
-      DATA.forEach(function (d) { if (regions.indexOf(d.region_key) < 0) regions.push(d.region_key); });
-      regions.sort();
-      regionSel.innerHTML = '<option value="all">전체</option>' + regions.map(function (r) { return '<option value="' + r + '">' + r + '</option>'; }).join('');
+      // 최신 거래일 표시
+      var latest = '';
+      for (var i = 0; i < DATA.length; i++) if (DATA[i].date > latest) latest = DATA[i].date;
+      if (asofEl) {
+        var d = daysSince(latest);
+        asofEl.innerHTML = '실거래 최신 갱신 <strong>' + (latest || '—') + '</strong>' + (d != null ? ' (' + ago(d) + ')' : '') + ' · 총 ' + DATA.length.toLocaleString() + '건';
+      }
+      fillSido();
+      fillGu();
       fillApts();
       render();
     })
     .catch(function () {
       statsEl.innerHTML = '<div class="tx-stat">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
+      if (asofEl) asofEl.textContent = '';
     });
 })();
 </script>
