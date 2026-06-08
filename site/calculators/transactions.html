@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260611" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260612" />
 <style>
   .tx-controls { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px; }
   .tx-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; color:var(--text-muted); }
@@ -27,7 +27,32 @@
   table.tx th { background:var(--surface-2,#f8fafc); font-size:0.82rem; color:var(--text-muted); position:sticky; top:0; }
   table.tx td.num { text-align:right; font-variant-numeric:tabular-nums; font-weight:600; }
   .tx-wrap { max-height:520px; overflow:auto; border:1px solid var(--border,#e5e7eb); border-radius:14px; }
+  table.tx tbody tr { cursor: pointer; transition: background 0.12s; }
+  table.tx tbody tr:hover { background: var(--accent-soft, #eff6ff); }
   @media (max-width:600px){ table.tx .hide-sm { display:none; } }
+
+  /* 단지 상세 모달 */
+  .tx-modal { position:fixed; inset:0; display:none; z-index:1000; }
+  .tx-modal.open { display:block; }
+  .tx-modal-backdrop { position:absolute; inset:0; background:rgba(15,23,42,0.5); }
+  .tx-modal-panel {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:min(720px, calc(100vw - 32px)); max-height:90vh; overflow:auto;
+    background:#fff; border-radius:18px; padding:24px;
+    box-shadow: 0 20px 60px -16px rgba(15,23,42,0.4);
+  }
+  .tx-modal-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:16px; }
+  .tx-modal-head h2 { margin:0; font-size:1.25rem; letter-spacing:-0.02em; }
+  .tx-modal-sub { margin:4px 0 0; color:var(--text-muted); font-size:0.88rem; }
+  .tx-modal-close { background:none; border:0; padding:4px; cursor:pointer; color:var(--text-muted); }
+  .tx-modal-close:hover { color:var(--text); }
+  .tx-modal-meta { display:grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap:10px; margin-bottom:18px; }
+  .tx-modal-meta .item { background:var(--surface-2, #f8fafc); border-radius:10px; padding:10px 12px; }
+  .tx-modal-meta .lbl { font-size:0.74rem; color:var(--text-muted); }
+  .tx-modal-meta .val { font-size:1.05rem; font-weight:700; margin-top:2px; font-variant-numeric:tabular-nums; }
+  .tx-modal-chart { margin-bottom:18px; }
+  .tx-modal-chart h3, .tx-modal-list h3 { font-size:0.95rem; margin:0 0 10px; }
+  .tx-modal-chart canvas { width:100% !important; height:200px !important; }
 </style>
 </head>
 <body>
@@ -65,13 +90,12 @@
   <p class="tx-asof" id="txAsof" style="color:var(--text-muted); font-size:0.85rem; margin: 6px 0 14px;">데이터 기준일 확인 중…</p>
 
   <div class="tx-controls">
-    <div class="tx-field" style="flex:1; min-width:200px;">
+    <div class="tx-field" style="flex:2; min-width:240px;">
       <label for="tx-search">단지명 검색</label>
-      <input id="tx-search" type="search" placeholder="예: 헬리오시티, 래미안" autocomplete="off" />
+      <input id="tx-search" type="search" placeholder="단지명 또는 지역을 검색하세요 (예: 헬리오시티, 강남구)" autocomplete="off" />
     </div>
     <div class="tx-field"><label for="tx-sido">시·도</label><select id="tx-sido"></select></div>
     <div class="tx-field"><label for="tx-gu">시·군·구</label><select id="tx-gu"></select></div>
-    <div class="tx-field"><label for="tx-apt">단지</label><select id="tx-apt"><option value="">전체</option></select></div>
     <div class="tx-field"><label for="tx-area">평형</label>
       <select id="tx-area">
         <option value="all">전체</option>
@@ -81,21 +105,14 @@
         <option value="large">대형(102㎡~)</option>
       </select>
     </div>
-    <div class="tx-field"><label for="tx-window">최근 기간</label>
+    <div class="tx-field"><label for="tx-window">기간</label>
       <select id="tx-window">
-        <option value="180">6개월</option>
-        <option value="90">3개월</option>
-        <option value="365">1년</option>
-        <option value="0" selected>전체</option>
+        <option value="90">최근 3개월</option>
+        <option value="180" selected>최근 6개월</option>
+        <option value="365">최근 1년</option>
+        <option value="0">전체</option>
       </select>
     </div>
-  </div>
-
-  <div class="tx-stats" id="txStats"></div>
-
-  <div class="tx-chart" id="txChartBox" style="display:none;">
-    <h3 id="txChartTitle">단지 실거래가 추이</h3>
-    <canvas id="txChart"></canvas>
   </div>
 
   <div class="tx-wrap">
@@ -109,29 +126,59 @@
   <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 32px;">국토교통부 실거래가 자료. 신고가 취소·정정 거래가 포함될 수 있어 계약 전 원자료 확인을 권합니다.</p>
 </main>
 
+<!-- 단지 상세 모달 -->
+<div class="tx-modal" id="txModal" aria-hidden="true">
+  <div class="tx-modal-backdrop" data-tx-close></div>
+  <div class="tx-modal-panel" role="dialog" aria-labelledby="txModalTitle">
+    <div class="tx-modal-head">
+      <div>
+        <h2 id="txModalTitle">—</h2>
+        <p id="txModalSub" class="tx-modal-sub">—</p>
+      </div>
+      <button class="tx-modal-close" data-tx-close aria-label="닫기">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="tx-modal-body">
+      <div class="tx-modal-meta" id="txModalMeta"></div>
+      <div class="tx-modal-chart">
+        <h3>최근 실거래가 추이</h3>
+        <canvas id="txModalChart"></canvas>
+      </div>
+      <div class="tx-modal-list">
+        <h3>거래 내역</h3>
+        <div class="tx-wrap" style="max-height: 320px;">
+          <table class="tx">
+            <thead><tr><th>거래일</th><th>전용(평)</th><th class="num">금액</th><th class="hide-sm">층</th></tr></thead>
+            <tbody id="txModalBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer class="site-footer">
   <div class="container"><p class="disclaimer">© 톺다. 일반 정보 제공용입니다.</p></div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../assets/region.js?v=20260611"></script>
-<script src="../assets/app.js?v=20260611"></script>
+<script src="../assets/region.js?v=20260612"></script>
+<script src="../assets/app.js?v=20260612"></script>
 <script>
 (function () {
   'use strict';
   var R = window.TopdaRegion;
-  var DATA = [], chart = null;
+  var DATA = [], APARTMENTS = {}, modalChart = null;
   var searchEl = document.getElementById('tx-search');
   var sidoSel = document.getElementById('tx-sido');
   var guSel = document.getElementById('tx-gu');
-  var aptSel = document.getElementById('tx-apt');
   var areaSel = document.getElementById('tx-area');
   var windowSel = document.getElementById('tx-window');
   var body = document.getElementById('txBody');
-  var statsEl = document.getElementById('txStats');
   var countEl = document.getElementById('txCount');
   var asofEl = document.getElementById('txAsof');
-  var chartBox = document.getElementById('txChartBox');
+  var modal = document.getElementById('txModal');
 
   function debounce(fn, ms) {
     var t; return function () { clearTimeout(t); var a = arguments, c = this; t = setTimeout(function () { fn.apply(c, a); }, ms); };
@@ -178,27 +225,15 @@
     });
     R.fillSigunguSelect(guSel, Object.keys(set), true);
   }
-  function fillApts() {
-    var sido = sidoSel.value, gu = guSel.value;
-    var names = [];
-    DATA.forEach(function (d) {
-      if (sido !== 'all' && sidoOf(d) !== sido) return;
-      if (gu && gu !== 'all' && sigunguOf(d) !== gu) return;
-      if (names.indexOf(d.apt) < 0) names.push(d.apt);
-    });
-    names.sort();
-    aptSel.innerHTML = '<option value="">전체</option>' + names.map(function (n) { return '<option value="' + escapeHtml(n) + '">' + escapeHtml(n) + '</option>'; }).join('');
-  }
 
   function filtered() {
-    var sido = sidoSel.value, gu = guSel.value, apt = aptSel.value, area = areaSel.value;
+    var sido = sidoSel.value, gu = guSel.value, area = areaSel.value;
     var q = (searchEl.value || '').trim().toLowerCase();
     var winDays = parseInt(windowSel.value, 10) || 0;
     var cutoff = winDays ? new Date(Date.now() - winDays * 86400000).toISOString().slice(0, 10) : '';
     return DATA.filter(function (d) {
       if (sido !== 'all' && sidoOf(d) !== sido) return false;
       if (gu && gu !== 'all' && sigunguOf(d) !== gu) return false;
-      if (apt && d.apt !== apt) return false;
       if (area !== 'all' && areaBand(d.area_m2) !== area) return false;
       if (cutoff && d.date < cutoff) return false;
       if (q) {
@@ -209,78 +244,114 @@
     });
   }
 
-  function renderStats(list) {
-    var n = list.length;
-    var sorted = list.slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; });
-    var recent = sorted[0] ? won(sorted[0].price) + ' · ' + sorted[0].date + ' (' + ago(daysSince(sorted[0].date)) + ')' : '—';
-    var avg = n ? won(Math.round(list.reduce(function (a, b) { return a + b.price; }, 0) / n)) : '—';
-    var hi = n ? won(Math.max.apply(null, list.map(function (d) { return d.price; }))) : '—';
-    var cards = [['거래 건수', n.toLocaleString() + '건'], ['최근 실거래', recent], ['평균가', avg], ['최고가', hi]];
-    statsEl.innerHTML = cards.map(function (c) { return '<div class="tx-stat"><div class="lbl">' + c[0] + '</div><div class="num">' + c[1] + '</div></div>'; }).join('');
-  }
-
-  function renderChart(list) {
-    if (aptSel.value && list.length > 1) {
-      chartBox.style.display = '';
-      document.getElementById('txChartTitle').textContent = aptSel.value + ' 실거래가 추이';
-      var pts = list.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; })
-        .map(function (d) { return { x: d.date, y: d.price / 10000 }; });
-      if (chart) chart.destroy();
-      chart = new Chart(document.getElementById('txChart').getContext('2d'), {
-        type: 'line',
-        data: { datasets: [{ label: '실거래가(억)', data: pts, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.08)', fill: true, tension: 0.2, pointRadius: 3 }] },
-        options: { responsive: true, maintainAspectRatio: false, parsing: false,
-          plugins: { legend: { display: false } },
-          scales: { x: { type: 'category', labels: pts.map(function (p) { return p.x; }) }, y: { ticks: { callback: function (v) { return v + '억'; } } } } },
-      });
-    } else {
-      chartBox.style.display = 'none';
-    }
-  }
-
   function render() {
     var list = filtered();
     list.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
-    renderStats(list);
-    renderChart(list);
-    body.innerHTML = list.slice(0, 300).map(function (d) {
-      var aptUrl = 'search.html?apt=' + encodeURIComponent(d.apt);
+    var top = list.slice(0, 200);
+    body.innerHTML = top.map(function (d) {
       var when = ago(daysSince(d.date));
-      return '<tr><td>' + d.date + ' <span style="color:var(--text-muted); font-size:0.78rem;">(' + when + ')</span></td>' +
-        '<td><a class="tx-link" href="' + aptUrl + '" title="이 단지를 맞춤찾기에서 보기">' + escapeHtml(d.apt) + '</a></td>' +
+      var aptName = escapeHtml(d.apt);
+      return '<tr data-apt="' + aptName + '">' +
+        '<td>' + d.date + ' <span style="color:var(--text-muted); font-size:0.78rem;">(' + when + ')</span></td>' +
+        '<td><span class="tx-link">' + aptName + '</span></td>' +
         '<td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
-        '<td class="num">' + won(d.price) + '</td><td class="hide-sm">' + d.floor + '층</td><td class="hide-sm">' + (d.build_year || '—') + '</td></tr>';
+        '<td class="num">' + won(d.price) + '</td>' +
+        '<td class="hide-sm">' + d.floor + '층</td>' +
+        '<td class="hide-sm">' + (d.build_year || '—') + '</td></tr>';
     }).join('');
-    countEl.textContent = list.length.toLocaleString() + '건 중 최근 ' + Math.min(300, list.length).toLocaleString() + '건 표시';
+    countEl.textContent = list.length.toLocaleString() + '건 중 최근 ' + top.length.toLocaleString() + '건 표시';
   }
 
+  // ── 단지 상세 모달 ─────────────────────────────────────
+  function openModal(aptName) {
+    var deals = DATA.filter(function (d) { return d.apt === aptName; })
+      .sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    if (!deals.length) return;
+    var first = deals[0], last = deals[deals.length - 1];
+    var apt = APARTMENTS[aptName] || {};
+    document.getElementById('txModalTitle').textContent = aptName;
+    document.getElementById('txModalSub').textContent = (last.region || first.region || apt.region || '');
+
+    // 메타 정보
+    var prices = deals.map(function (d) { return d.price; });
+    var avg = Math.round(prices.reduce(function (a, b) { return a + b; }, 0) / prices.length);
+    var hi = Math.max.apply(null, prices);
+    var lo = Math.min.apply(null, prices);
+    var built = last.build_year || apt.built_year;
+    var meta = [
+      { lbl: '최근 거래', val: won(last.price) + ' · ' + last.date + ' (' + ago(daysSince(last.date)) + ')' },
+      { lbl: '거래 건수', val: deals.length.toLocaleString() + '건' },
+      { lbl: '평균가', val: won(avg) },
+      { lbl: '최고가', val: won(hi) },
+      { lbl: '최저가', val: won(lo) },
+    ];
+    if (built) meta.push({ lbl: '준공', val: built + '년' });
+    if (apt.households) meta.push({ lbl: '세대수', val: apt.households.toLocaleString() + '세대' });
+    if (apt.subway && apt.subway.station) meta.push({ lbl: '가까운 역', val: apt.subway.station + ' ' + apt.subway.distance_m + 'm' });
+    if (apt.elementary && apt.elementary.name) meta.push({ lbl: '초등학교', val: apt.elementary.name + ' ' + apt.elementary.distance_m + 'm' });
+    document.getElementById('txModalMeta').innerHTML = meta.map(function (m) {
+      return '<div class="item"><div class="lbl">' + escapeHtml(m.lbl) + '</div><div class="val">' + escapeHtml(m.val) + '</div></div>';
+    }).join('');
+
+    // 추이 차트
+    var pts = deals.map(function (d) { return { x: d.date, y: d.price / 10000 }; });
+    if (modalChart) modalChart.destroy();
+    modalChart = new Chart(document.getElementById('txModalChart').getContext('2d'), {
+      type: 'line',
+      data: { datasets: [{ label: '실거래가(억)', data: pts, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.10)', fill: true, tension: 0.25, pointRadius: 3 }] },
+      options: { responsive: true, maintainAspectRatio: false, parsing: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (ctx) { return won(ctx.parsed.y * 10000) + ' · ' + ctx.parsed.x; } } } },
+        scales: { x: { type: 'category', labels: pts.map(function (p) { return p.x; }) }, y: { ticks: { callback: function (v) { return v + '억'; } } } } },
+    });
+
+    // 거래 내역 리스트 (최신 → 과거)
+    var listHtml = deals.slice().reverse().map(function (d) {
+      return '<tr><td>' + d.date + '</td><td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
+        '<td class="num">' + won(d.price) + '</td><td class="hide-sm">' + d.floor + '층</td></tr>';
+    }).join('');
+    document.getElementById('txModalBody').innerHTML = listHtml;
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  body.addEventListener('click', function (e) {
+    var tr = e.target.closest('tr[data-apt]'); if (!tr) return;
+    openModal(tr.dataset.apt);
+  });
+  document.querySelectorAll('[data-tx-close]').forEach(function (b) { b.addEventListener('click', closeModal); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+
   searchEl.addEventListener('input', debounce(render, 200));
-  sidoSel.addEventListener('change', function () { fillGu(); fillApts(); render(); });
-  guSel.addEventListener('change', function () { fillApts(); render(); });
-  aptSel.addEventListener('change', render);
+  sidoSel.addEventListener('change', function () { fillGu(); render(); });
+  guSel.addEventListener('change', render);
   areaSel.addEventListener('change', render);
   windowSel.addEventListener('change', render);
 
-  fetch('../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
-    .then(function (r) { if (!r.ok) throw new Error('load'); return r.json(); })
-    .then(function (j) {
-      DATA = j.deals || [];
-      // 최신 거래일 표시
-      var latest = '';
-      for (var i = 0; i < DATA.length; i++) if (DATA[i].date > latest) latest = DATA[i].date;
-      if (asofEl) {
-        var d = daysSince(latest);
-        asofEl.innerHTML = '실거래 최신 갱신 <strong>' + (latest || '—') + '</strong>' + (d != null ? ' (' + ago(d) + ')' : '') + ' · 총 ' + DATA.length.toLocaleString() + '건';
-      }
-      fillSido();
-      fillGu();
-      fillApts();
-      render();
-    })
-    .catch(function () {
-      statsEl.innerHTML = '<div class="tx-stat">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
-      if (asofEl) asofEl.textContent = '';
-    });
+  // 데이터 로드: transactions + apartments(보강용)
+  Promise.all([
+    fetch('../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : { deals: [] }; }).catch(function () { return { deals: [] }; }),
+    fetch('../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : { apartments: [] }; }).catch(function () { return { apartments: [] }; }),
+  ]).then(function (results) {
+    DATA = results[0].deals || [];
+    (results[1].apartments || []).forEach(function (a) { APARTMENTS[a.name] = a; });
+    var latest = '';
+    for (var i = 0; i < DATA.length; i++) if (DATA[i].date > latest) latest = DATA[i].date;
+    if (asofEl) {
+      var d = daysSince(latest);
+      asofEl.innerHTML = '실거래 최신 갱신 <strong>' + (latest || '—') + '</strong>' + (d != null ? ' (' + ago(d) + ')' : '') + ' · 총 ' + DATA.length.toLocaleString() + '건';
+    }
+    fillSido();
+    fillGu();
+    render();
+  });
 })();
 </script>
 </body>

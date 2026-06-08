@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260611" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260612" />
 <style>
   .loan-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
   .loan-tabs label { flex: 1; min-width: 140px; }
@@ -192,16 +192,23 @@
         <span class="hint">대상 임차보증금 한도가 다릅니다(HF·HUG: 수도권 7억 / 그외 5억 이하).</span>
       </div>
       <div class="field">
+        <label for="j-income">부부합산 연소득 (세전)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="j-income" name="jIncome" type="text" inputmode="numeric" data-format="won" value="80,000,000" />
+        </div>
+        <span class="hint">HF·HUG는 부부합산 연소득 <strong>1억 이하</strong>(청년·신혼 1.3억). SGI는 소득 제한이 없습니다.</span>
+      </div>
+      <div class="field">
         <label class="check-item" style="padding:0; cursor:pointer;">
           <input type="checkbox" name="youth"/>
           <span class="text">청년·신혼부부
-            <span class="note">HF·HUG는 보증비율이 80% → 90%로 우대됩니다.</span>
+            <span class="note">HF·HUG는 보증비율 80% → 90%, 소득 한도 1억 → 1.3억으로 완화됩니다.</span>
           </span>
         </label>
       </div>
       <div class="callout callout-info" style="margin-bottom:0;">
         <div class="icon">i</div>
-        <div class="body"><strong>전세자금대출 원금은 DSR 산정에서 제외</strong>됩니다(보증부). 한도는 보증기관의 보증비율·최대한도가 좌우합니다.</div>
+        <div class="body"><strong>전세대출 원금은 DSR 산정에서 제외</strong>됩니다(보증부). 한도는 보증기관의 보증비율·최대한도·소득 조건이 좌우합니다.</div>
       </div>
     </div>
 
@@ -228,11 +235,11 @@
     <h3 style="margin:18px 0 8px; font-size:1rem;">전세자금대출 = 보증기관별 비교</h3>
     <div class="table-wrap">
       <table class="data">
-        <thead><tr><th>보증기관</th><th>보증비율</th><th>최대한도</th><th>대상 보증금</th><th>특징</th></tr></thead>
+        <thead><tr><th>보증기관</th><th>보증비율</th><th>최대한도</th><th>대상 보증금</th><th>소득 한도</th><th>특징</th></tr></thead>
         <tbody>
-          <tr><td>주택금융공사(HF)</td><td>80%(청년·신혼 90%)</td><td>4억 원</td><td>수도권 7억 / 그외 5억</td><td>금리·보증료 저렴, 1주택 수도권 2억 제한</td></tr>
-          <tr><td>주택도시보증공사(HUG)</td><td>80%(그외 90%)</td><td>4억 원</td><td>수도권 7억 / 그외 5억</td><td>대출+반환보증 일괄(전세금안심대출)</td></tr>
-          <tr><td>SGI서울보증</td><td>80%</td><td>5억 원</td><td>상한 관대(아파트 고액 가능)</td><td>고액 전세 가능, 심사 빠른 편</td></tr>
+          <tr><td>주택금융공사(HF)</td><td>80%(청년·신혼 90%)</td><td>4억 원</td><td>수도권 7억 / 그외 5억</td><td>부부합산 1억<br/>(청년·신혼 1.3억)</td><td>금리·보증료 저렴, 1주택 수도권 2억 제한</td></tr>
+          <tr><td>주택도시보증공사(HUG)</td><td>80%(그외 90%)</td><td>4억 원</td><td>수도권 7억 / 그외 5억</td><td>부부합산 1억<br/>(청년·신혼 1.3억)</td><td>대출+반환보증 일괄(전세금안심대출)</td></tr>
+          <tr><td>SGI서울보증</td><td>80%</td><td>5억 원</td><td>상한 관대</td><td>제한 없음</td><td>고액 전세 가능, 소득 제한 없음, 심사 빠른 편</td></tr>
         </tbody>
       </table>
     </div>
@@ -258,7 +265,7 @@
   <div class="container"><p class="disclaimer">© 톺다. 일반 정보 제공용입니다.</p></div>
 </footer>
 
-<script src="../assets/rates.js?v=20260611"></script>
-<script src="../assets/app.js?v=20260611"></script>
+<script src="../assets/rates.js?v=20260612"></script>
+<script src="../assets/app.js?v=20260612"></script>
 </body>
 </html>

@@ -434,7 +434,7 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
   border-radius: var(--radius-lg);
   padding: 26px 28px 28px;
   box-shadow: var(--shadow);
-  position: static;
+  position: relative;
   /* 한글 라벨이 좁은 칸에서 글자 단위로 쪼개지지 않도록(예: 총부채원리금상환비율) */
   word-break: keep-all;
 }
@@ -2501,16 +2501,16 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 
 /* ===== TTS button (auto-attached, 결과 영역 우상단) ===== */
 .tts-btn {
-  position: absolute; top: 10px; right: 10px;
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 4px 9px; border-radius: 999px;
-  background: rgba(255,255,255,0.92); color: var(--accent, #2563eb);
-  border: 1px solid var(--border, #d1d5db);
-  font-size: 0.72rem; font-weight: 600; cursor: pointer;
-  z-index: 5;
+  position: absolute; top: 12px; right: 12px;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: 6px;
+  background: transparent; color: var(--text-muted);
+  border: 1px solid var(--border);
+  font-size: 0.7rem; font-weight: 600; cursor: pointer;
+  z-index: 5; line-height: 1;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
-.tts-btn:hover { background: var(--accent, #2563eb); color: #fff; border-color: var(--accent, #2563eb); }
-.tts-btn[aria-pressed="true"] { background: var(--accent, #2563eb); color: #fff; border-color: var(--accent, #2563eb); }
-.tts-btn svg { width: 12px; height: 12px; }
+.tts-btn:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.tts-btn[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+.tts-btn svg { width: 11px; height: 11px; }
 @media print { .tts-btn { display: none !important; } }

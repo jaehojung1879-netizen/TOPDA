@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260611" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260612" />
 <style>
   .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
   .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
@@ -278,9 +278,9 @@
   </div>
 </footer>
 
-<script src="../assets/score.js?v=20260611"></script>
-<script src="../assets/region.js?v=20260611"></script>
-<script src="../assets/app.js?v=20260611"></script>
+<script src="../assets/score.js?v=20260612"></script>
+<script src="../assets/region.js?v=20260612"></script>
+<script src="../assets/app.js?v=20260612"></script>
 <script>
 (function () {
   'use strict';
@@ -426,6 +426,23 @@
     return '<div class="apt-bar"><span>' + label + '</span><span class="track"><span class="fill" style="width:' + w + '%"></span></span><span>' + w + '</span></div>';
   }
 
+  // 단지별 가장 최근 거래일 ("YYYY-MM-DD") — DEALS_BY_APT 기반
+  function latestDealOf(aptName) {
+    var x = DEALS_BY_APT[aptName];
+    return x ? x.latest : '';
+  }
+  function daysSince(s) {
+    if (!s) return null; var d = new Date(s); if (isNaN(d)) return null;
+    return Math.floor((Date.now() - d.getTime()) / 86400000);
+  }
+  function ago(days) {
+    if (days == null) return '';
+    if (days < 1) return '오늘';
+    if (days < 30) return days + '일 전';
+    if (days < 365) return Math.floor(days / 30) + '개월 전';
+    return Math.floor(days / 365) + '년 전';
+  }
+
   function card(r, rank) {
     var a = r.apt;
     var reasons = r.reasons.map(function (t) { return '<span class="apt-chip">' + esc(t) + '</span>'; }).join('');
@@ -441,6 +458,10 @@
       : '정보 없음';
     var house = a.households ? a.households.toLocaleString() + '세대' : '세대수 미상';
     if (a.builder && a.builder !== '기타') house += (a.households ? ' · ' : '') + esc(a.builder);
+    // 가격 옆 최근 실거래 표시 (가격이 곧 최근 실거래가이므로, 거래 일자만 작게)
+    var latest = latestDealOf(a.name);
+    var dealNote = latest ? esc(r.rep ? r.rep.label : '') + ' · ' + latest + ' (' + ago(daysSince(latest)) + ')'
+                          : esc(r.rep ? r.rep.label : '') + ' 최근 실거래';
     return '' +
       '<article class="apt-card">' +
         '<span class="rank">' + rank + '위</span>' +
@@ -448,7 +469,7 @@
           '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(a.region) + '</div></div>' +
           '<div class="apt-score"><div class="num">' + r.total + '</div><div class="lbl">종합점수</div></div>' +
         '</div>' +
-        '<div class="apt-price">' + fmt(r.price) + ' <small>' + esc(r.rep ? r.rep.label : '') + ' 최근 실거래</small></div>' +
+        '<div class="apt-price">' + fmt(r.price) + ' <small>' + dealNote + '</small></div>' +
         '<div class="apt-units">' + (a.units || []).map(function (u) {
           return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(u.label) + ' ' + fmt(u.recent_price) + '</span>';
         }).join('') + '</div>' +
@@ -488,13 +509,15 @@
     if (list.length) {
       var label = (mode === 'score') ? '점수 높은 순' : (mode === 'price_asc') ? '가격 낮은 순' : (mode === 'price_desc') ? '가격 높은 순' : (mode === 'recent') ? '최근 거래 순' : '상승 모멘텀 순';
       countEl.innerHTML = '조건에 맞는 단지 <span class="em">' + list.length + '곳</span> · ' + label;
-      resultsEl.innerHTML = list.slice(0, 60).map(function (r, i) { return card(r, i + 1); }).join('');
+      // 더 많은 단지가 보이도록 200곳까지 노출
+      resultsEl.innerHTML = list.slice(0, 200).map(function (r, i) { return card(r, i + 1); }).join('');
     } else {
-      var near = S.nearMatches(pool, f, null, 1);
+      // 조건을 1~2개 완화한 근접 추천
+      var near = S.nearMatches(pool, f, null, 2);
       if (near.length) {
-        countEl.innerHTML = '정확히 맞는 단지가 없어 <span class="em">조건을 한 가지만 완화</span>한 추천이에요';
-        relaxedEl.innerHTML = '<div class="finder-relaxed-banner">입력하신 조건을 모두 만족하는 단지는 없었습니다. 아래는 조건 1개만 완화하면 맞는 단지입니다 — 필터를 조금 넓혀보세요</div>';
-        resultsEl.innerHTML = near.slice(0, 30).map(function (r, i) { return card(r, i + 1); }).join('');
+        countEl.innerHTML = '정확히 맞는 단지가 없어 <span class="em">조건을 조금 완화</span>한 추천이에요';
+        relaxedEl.innerHTML = '<div class="finder-relaxed-banner">입력하신 조건을 모두 만족하는 단지는 없었지만, 조건을 1~2개 완화하면 맞는 단지들입니다 — 필터를 조금 넓혀보세요</div>';
+        resultsEl.innerHTML = near.slice(0, 100).map(function (r, i) { return card(r, i + 1); }).join('');
       } else {
         countEl.textContent = '조건에 맞는 단지가 없습니다';
         resultsEl.innerHTML = '<div class="finder-empty">조건을 완화해 다시 시도해보세요</div>';

@@ -260,11 +260,11 @@
       .sort((a, b) => b.total - a.total);
   }
 
-  // 정확히 일치하는 단지가 없을 때: 조건을 1개만 완화하면 맞는 "근접 추천"
+  // 정확히 일치하는 단지가 없을 때: 조건을 1~2개 완화하면 맞는 "근접 추천"
   function nearMatches(apartments, filters, y, maxFails) {
     y = y || nowYear();
     const f = filters || {};
-    maxFails = maxFails || 1;
+    maxFails = maxFails || 2;
     return (apartments || [])
       .map((apt) => ({ apt, fails: failedFilters(apt, f, y) }))
       .filter((x) => x.fails.length > 0 && x.fails.length <= maxFails)
