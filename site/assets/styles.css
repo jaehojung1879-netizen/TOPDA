@@ -1512,6 +1512,37 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 .badge-cat[data-cat="fix"]      { background: #fee2e2; color: #b91c1c; }
 .badge-cat[data-cat="etc"]      { background: #f1f5f9; color: #475569; }
 
+/* ===== Sector cards (홈 계산기 섹션 — 섹터별 대표) ===== */
+.sector-row {
+  display: grid; gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 12px;
+}
+@media (min-width: 640px) { .sector-row { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .sector-row { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.sector-card {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 14px 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s, background 0.18s;
+  text-decoration: none;
+}
+.sector-card:hover {
+  transform: translateY(-2px); border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 10px 20px -10px rgba(30,58,138,0.32);
+}
+.sector-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em;
+  color: var(--accent); text-transform: uppercase;
+}
+.sector-name {
+  font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em;
+}
+
 /* ===== Hero Calc Card (홈 상단 종합 계산기 + 맞춤찾기 나란히) ===== */
 .hero-calc-grid {
   display: grid; gap: 12px; margin-bottom: 16px;
@@ -1523,17 +1554,17 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 .hero-calc-card {
   display: flex; gap: 14px;
   padding: 18px; margin-bottom: 0;
-  background: linear-gradient(135deg, #334155 0%, #475569 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
   color: #fff; border-radius: 16px;
   transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 12px 24px -12px rgba(15, 23, 42, 0.35);
+  box-shadow: 0 12px 24px -12px rgba(30,58,138,0.45);
   align-items: center;
 }
 .hero-calc-card-alt {
-  background: linear-gradient(135deg, #1f2937 0%, #334155 100%);
-  box-shadow: 0 12px 24px -12px rgba(15, 23, 42, 0.45);
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  box-shadow: 0 12px 24px -12px rgba(30,64,175,0.45);
 }
-.hero-calc-card-alt:hover { box-shadow: 0 18px 30px -14px rgba(15, 23, 42, 0.55); }
+.hero-calc-card-alt:hover { box-shadow: 0 18px 30px -14px rgba(30,64,175,0.55); }
 .hero-calc-card:hover { transform: translateY(-2px); box-shadow: 0 18px 30px -14px rgba(30,58,138,0.55); }
 .hero-calc-icon {
   width: 56px; height: 56px; border-radius: 16px;

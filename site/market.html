@@ -4,19 +4,41 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>시세정보 — 톺다</title>
-<meta name="description" content="지역 시세 · 실거래가 · 맞춤 내집 찾기를 한 곳에서" />
+<meta name="description" content="맞춤 내집 찾기 · 실거래가 · 지역 시세를 한 곳에서" />
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="canonical" href="https://jaehojung1879-netizen.github.io/TOPDA/market.html" />
 <link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://jaehojung1879-netizen.github.io/TOPDA/feed.xml" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="시세정보 — 톺다" />
-<meta property="og:description" content="지역 시세 · 실거래가 · 맞춤 내집 찾기를 한 곳에서" />
+<meta property="og:description" content="맞춤 내집 찾기 · 실거래가 · 지역 시세를 한 곳에서" />
 <meta property="og:url" content="https://jaehojung1879-netizen.github.io/TOPDA/market.html" />
 <meta property="og:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
-<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260610"></script>
+<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260611"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="assets/styles.css?v=20260610" />
+<link rel="stylesheet" href="assets/styles.css?v=20260611" />
+<style>
+  .market-hero { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 8px 0 28px; }
+  .market-hero-card {
+    display: flex; gap: 16px; align-items: center;
+    padding: 24px; border-radius: 18px;
+    background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
+    color: #fff; box-shadow: 0 16px 32px -14px rgba(30,58,138,0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .market-hero-card:hover { transform: translateY(-2px); }
+  .market-hero-icon { width: 64px; height: 64px; border-radius: 18px; background: rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .market-hero-icon svg { width: 32px; height: 32px; color: #fff; }
+  .market-hero-body { flex: 1; min-width: 0; }
+  .market-hero-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    background: rgba(255,255,255,0.22); display: inline-block; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
+  .market-hero-body h2 { font-size: 1.4rem; color: #fff; margin: 0 0 6px; letter-spacing: -0.02em; }
+  .market-hero-body p { font-size: 0.95rem; color: rgba(255,255,255,0.92); margin: 0; }
+  .market-hero-cta { margin-top: 10px; display: inline-flex; align-items: center; gap: 4px; font-weight: 700; }
+  .market-asof { font-size: 0.85rem; color: var(--text-muted); margin: 8px 0 0; }
+  .market-asof .em { color: var(--text); font-weight: 700; }
+  @media (min-width: 640px) { .market-hero-body h2 { font-size: 1.6rem; } }
+</style>
 </head>
 <body>
 
@@ -44,22 +66,36 @@
 </header>
 
 <main class="container">
-  <div class="article-header">
+  <div class="article-header" style="margin-bottom: 4px;">
     <div class="breadcrumb"><a href="index.html">홈</a> / 시세정보</div>
-    <h1>시세정보</h1>
+    <h1 style="margin-bottom: 4px;">시세정보</h1>
     <div class="meta"><span>지역별 시세 · 단지 실거래 · 맞춤 추천을 한 곳에서</span></div>
+    <p class="market-asof" id="marketAsof">데이터 기준일 확인 중…</p>
   </div>
 
+  <!-- 맞춤찾기를 시세정보의 메인으로 -->
+  <section class="market-hero">
+    <a class="market-hero-card" href="calculators/search.html">
+      <div class="market-hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+        </svg>
+      </div>
+      <div class="market-hero-body">
+        <span class="market-hero-tag">핵심 도구</span>
+        <h2>맞춤 내집 찾기</h2>
+        <p>예산·지역·역세권·학군 조건만 넣으면 단지를 점수로 추천</p>
+        <span class="market-hero-cta">조건 입력하고 찾기 →</span>
+      </div>
+    </a>
+  </section>
+
   <section class="hub-section">
+    <div class="hub-section-head">
+      <span class="hub-section-tag">데이터 도구</span>
+      <h2>거래·시세 더 보기</h2>
+    </div>
     <div class="hub-grid">
-      <a class="hub-tool" href="calculators/search.html">
-        <div class="hub-tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
-        <div class="hub-tool-body">
-          <h3>맞춤 내집 찾기</h3>
-          <p>예산·지역·역세권·학군으로 단지 추천</p>
-          <span class="hub-tool-link">찾기 →</span>
-        </div>
-      </a>
       <a class="hub-tool" href="calculators/transactions.html">
         <div class="hub-tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
         <div class="hub-tool-body">
@@ -86,6 +122,27 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=20260610"></script>
+<script src="assets/app.js?v=20260611"></script>
+<script>
+(function () {
+  // 데이터 갱신일 표시 — transactions.json 의 최신 거래일을 함께 보여준다
+  Promise.all([
+    fetch('assets/transactions.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+    fetch('assets/apartments.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+  ]).then(function (results) {
+    var tx = results[0], ap = results[1];
+    var el = document.getElementById('marketAsof');
+    if (!el) return;
+    var parts = [];
+    if (tx && tx.deals && tx.deals.length) {
+      var latest = '';
+      for (var i = 0; i < tx.deals.length; i++) { if (tx.deals[i].date > latest) latest = tx.deals[i].date; }
+      if (latest) parts.push('실거래 최신 <span class="em">' + latest + '</span> · 총 ' + tx.deals.length.toLocaleString() + '건');
+    }
+    if (ap && ap._meta && ap._meta.as_of) parts.push('단지 데이터 ' + ap._meta.as_of);
+    el.innerHTML = parts.length ? parts.join(' · ') : '데이터 기준일 정보 없음';
+  });
+})();
+</script>
 </body>
 </html>
