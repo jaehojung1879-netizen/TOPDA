@@ -2914,20 +2914,29 @@ function calcMortgageLimit(input) {
   return { ltvLimit, priceCap, dsrLimit, limit, binding, stressedRate, availAnnual };
 }
 
-// 전세대출 한도: 보증기관별 비교. 한도 = min(보증금×보증비율, 기관 최대한도). 대상 보증금 초과 시 이용 제한.
+// 전세대출 한도: 보증기관별 비교. 한도 = min(보증금×보증비율, 기관 최대한도).
+// 보증금 한도 초과·소득 한도 초과 시 이용 불가(eligible=false).
 function calcJeonseLoanByAgency(deposit, opts) {
   opts = opts || {};
   const R = (window.TOPDA_RATES && window.TOPDA_RATES.loan && window.TOPDA_RATES.loan.jeonseAgencies) || [];
   if (!deposit || deposit <= 0) return [];
+  const income = opts.income || 0; // 부부합산 연소득(원)
   return R.map((a) => {
     const ratio = opts.youth && a.ratioYouth ? a.ratioYouth : a.ratio;
     const depositCap = opts.metro ? a.depositCapMetro : a.depositCapOther;
-    const eligible = deposit <= depositCap;
+    const incomeCap = opts.youth && a.incomeCapYouth ? a.incomeCapYouth : a.incomeCap;
+    const depositOk = deposit <= depositCap;
+    const incomeOk = !incomeCap || !income || income <= incomeCap;
+    const eligible = depositOk && incomeOk;
     const byRatio = deposit * (ratio / 100);
     const limit = eligible ? Math.min(byRatio, a.maxAmount) : 0;
+    const reasons = [];
+    if (!depositOk) reasons.push('보증금 한도 초과');
+    if (!incomeOk) reasons.push('소득 한도 초과(' + Math.round(incomeCap / 100000000 * 10) / 10 + '억)');
     return {
       key: a.key, name: a.name, ratioApplied: ratio, maxAmount: a.maxAmount,
-      depositCap, eligible, limit, fee: a.fee, note: a.note,
+      depositCap, incomeCap, depositOk, incomeOk, eligible, limit, fee: a.fee, note: a.note,
+      ineligibleReason: reasons.join(' · '),
     };
   }).sort((x, y) => y.limit - x.limit);
 }
@@ -3011,7 +3020,9 @@ function calcJeonseLoanByAgency(deposit, opts) {
     const deposit = fmt.parseWon(root.querySelector('[name="deposit"]').value);
     const metro = (root.querySelector('[name="jArea"]:checked')?.value || 'metro') === 'metro';
     const youth = root.querySelector('[name="youth"]')?.checked || false;
-    const list = calcJeonseLoanByAgency(deposit, { metro, youth });
+    const incomeEl = root.querySelector('[name="jIncome"]');
+    const income = incomeEl ? fmt.parseWon(incomeEl.value) : 0;
+    const list = calcJeonseLoanByAgency(deposit, { metro, youth, income });
     const box = root.querySelector('[data-out="agencyList"]');
     if (!box) return;
     if (!deposit) { box.innerHTML = '<p style="color:var(--text-muted)">임차보증금을 입력하세요.</p>'; setText('jBest', fmt.won(0)); return; }
@@ -3019,11 +3030,15 @@ function calcJeonseLoanByAgency(deposit, opts) {
     box.innerHTML = list.map((a, idx) => {
       const pct = a.eligible ? (a.ratioApplied + '%') : '대상 외';
       const self = Math.max(0, deposit - a.limit);
+      const incomeRow = a.incomeCap
+        ? '<div class="agency-meta">소득 한도 부부합산 ≤ ' + fmt.won(a.incomeCap) + (a.incomeOk ? ' <span style="color:#059669;">✓ 충족</span>' : ' <span style="color:#dc2626;">× 초과</span>') + '</div>'
+        : '<div class="agency-meta">소득 제한 없음 <span style="color:#059669;">✓</span></div>';
       return '<div class="agency-card' + (idx === 0 && a.eligible ? ' is-best' : '') + '">' +
         '<div class="agency-top"><span class="agency-name">' + a.name + (idx === 0 && a.eligible ? ' <span class="agency-best">최대</span>' : '') + '</span>' +
         '<span class="agency-limit">' + fmt.won(a.limit) + '</span></div>' +
         '<div class="agency-meta">보증비율 ' + pct + ' · 최대 ' + fmt.won(a.maxAmount) + ' · 대상 보증금 ' + (isFinite(a.depositCap) ? '≤' + fmt.won(a.depositCap) : '제한 적음') + '</div>' +
-        (a.eligible ? '<div class="agency-meta">내 보증금 중 자기부담 ≈ ' + fmt.won(self) + ' · 보증료 ' + (a.fee || '—') + '</div>' : '<div class="agency-meta agency-warn">이 보증금은 대상 한도를 초과해 이용이 어렵습니다.</div>') +
+        incomeRow +
+        (a.eligible ? '<div class="agency-meta">내 보증금 중 자기부담 ≈ ' + fmt.won(self) + ' · 보증료 ' + (a.fee || '—') + '</div>' : '<div class="agency-meta agency-warn">' + (a.ineligibleReason || '이용이 어렵습니다') + '</div>') +
         (a.note ? '<div class="agency-note">' + a.note + '</div>' : '') +
         '</div>';
     }).join('');

@@ -83,18 +83,22 @@
         note: '2025.10.16~ 수도권·규제지역 주담대는 스트레스 3.0%p로 강화. 필요 시 직접 조정.',
       },
       // 전세자금대출 보증기관 비교 (한도=보증금×비율, 기관 최대한도 이내)
+      // incomeCap: 부부합산 연소득 상한(원). null이면 소득 무관(SGI). youth/신혼 시 한도 완화.
       jeonseAgencies: [
         { key: 'HF', name: '주택금융공사(HF)', ratio: 80, ratioYouth: 90, maxAmount: 400000000,
           depositCapMetro: 700000000, depositCapOther: 500000000, fee: '연 0.04~0.18%',
-          note: '수도권·규제 1주택자 2억 한도, 공시가 126% 초과 보증 제한(2025.8~)' },
+          incomeCap: 100000000, incomeCapYouth: 130000000,
+          note: '부부합산 연소득 1억 이하(청년·신혼 1.3억). 수도권·규제 1주택자 2억 한도, 공시가 126% 초과 보증 제한(2025.8~)' },
         { key: 'HUG', name: '주택도시보증공사(HUG)', ratio: 80, ratioYouth: 90, maxAmount: 400000000,
           depositCapMetro: 700000000, depositCapOther: 500000000, fee: '연 0.111~0.211%',
-          note: '전세금안심대출보증(대출+반환보증 일괄). 비수도권 보증비율 90%' },
+          incomeCap: 100000000, incomeCapYouth: 130000000,
+          note: '부부합산 연소득 1억 이하(청년·신혼 1.3억). 전세금안심대출보증(대출+반환보증 일괄)' },
         { key: 'SGI', name: 'SGI서울보증', ratio: 80, ratioYouth: 80, maxAmount: 500000000,
           depositCapMetro: Infinity, depositCapOther: Infinity, fee: '연 0.183~0.208%',
-          note: '아파트 등 고액 전세 가능. 보증금 상한이 가장 관대(심사 빠른 편)' },
+          incomeCap: null, incomeCapYouth: null,
+          note: '소득 제한 없음. 아파트 등 고액 전세 가능. 보증금 상한이 가장 관대(심사 빠른 편)' },
       ],
-      jeonseNote: '전세자금대출 원금은 DSR 산정에서 제외(보증부)됩니다. 청년·신혼은 우대 비율(최대 90%) 적용.',
+      jeonseNote: '전세대출 원금은 DSR 산정에서 제외(보증부). 청년·신혼은 우대 비율(최대 90%)·소득 한도 완화 적용.',
     },
 
     // ── 아래는 reference: 각 계산기 코드에 동일 값 존재(점진 이관 대상) ──
