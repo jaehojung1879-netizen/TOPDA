@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260612" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260613" />
 <style>
   .tx-controls { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px; }
   .tx-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; color:var(--text-muted); }
@@ -84,7 +84,7 @@
   <div class="article-header">
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 실거래가 조회</div>
     <h1>실거래가 조회</h1>
-    <div class="meta"><span>지역·단지·평형별 최근 매매 거래를 검색하고 그래프로 확인</span></div>
+    <div class="meta"><span>지역·단지·평형별 매매 실거래를 검색하고 단지별 추이를 확인</span></div>
   </div>
 
   <p class="tx-asof" id="txAsof" style="color:var(--text-muted); font-size:0.85rem; margin: 6px 0 14px;">데이터 기준일 확인 중…</p>
@@ -108,9 +108,9 @@
     <div class="tx-field"><label for="tx-window">기간</label>
       <select id="tx-window">
         <option value="90">최근 3개월</option>
-        <option value="180" selected>최근 6개월</option>
+        <option value="180">최근 6개월</option>
         <option value="365">최근 1년</option>
-        <option value="0">전체</option>
+        <option value="0" selected>전체</option>
       </select>
     </div>
   </div>
@@ -163,8 +163,8 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../assets/region.js?v=20260612"></script>
-<script src="../assets/app.js?v=20260612"></script>
+<script src="../assets/region.js?v=20260613"></script>
+<script src="../assets/app.js?v=20260613"></script>
 <script>
 (function () {
   'use strict';
@@ -247,7 +247,7 @@
   function render() {
     var list = filtered();
     list.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
-    var top = list.slice(0, 200);
+    var top = list.slice(0, 500);   // 표시량 200 → 500 (검색 대상 확대)
     body.innerHTML = top.map(function (d) {
       var when = ago(daysSince(d.date));
       var aptName = escapeHtml(d.apt);
@@ -259,7 +259,7 @@
         '<td class="hide-sm">' + d.floor + '층</td>' +
         '<td class="hide-sm">' + (d.build_year || '—') + '</td></tr>';
     }).join('');
-    countEl.textContent = list.length.toLocaleString() + '건 중 최근 ' + top.length.toLocaleString() + '건 표시';
+    countEl.textContent = list.length.toLocaleString() + '건 중 ' + top.length.toLocaleString() + '건 표시';
   }
 
   // ── 단지 상세 모달 ─────────────────────────────────────
@@ -293,15 +293,57 @@
       return '<div class="item"><div class="lbl">' + escapeHtml(m.lbl) + '</div><div class="val">' + escapeHtml(m.val) + '</div></div>';
     }).join('');
 
-    // 추이 차트
-    var pts = deals.map(function (d) { return { x: d.date, y: d.price / 10000 }; });
+    // 추이 차트 — 월별 평균으로 집계해 점이 균등 간격으로 찍히게 한다.
+    // (일자 단위로 찍으면 거래일 사이 빈 일자가 노출돼 시각적으로 '뚝뚝' 끊겨 보임)
+    var monthly = {};
+    deals.forEach(function (d) {
+      var mo = (d.date || '').slice(0, 7); if (!mo) return;
+      if (!monthly[mo]) monthly[mo] = { sum: 0, n: 0, lo: Infinity, hi: 0 };
+      monthly[mo].sum += d.price; monthly[mo].n += 1;
+      if (d.price < monthly[mo].lo) monthly[mo].lo = d.price;
+      if (d.price > monthly[mo].hi) monthly[mo].hi = d.price;
+    });
+    var months = Object.keys(monthly).sort();
+    // 빈 월도 채워 라인 끊김 방지 (월 간격이 비어 있어도 보간)
+    function fillMonths(arr) {
+      if (arr.length < 2) return arr;
+      var out = [arr[0]];
+      for (var i = 1; i < arr.length; i++) {
+        var prev = arr[i - 1], cur = arr[i];
+        var py = +prev.slice(0, 4), pm = +prev.slice(5, 7);
+        var cy = +cur.slice(0, 4), cm = +cur.slice(5, 7);
+        var totalMonths = (cy - py) * 12 + (cm - pm);
+        for (var k = 1; k < totalMonths; k++) {
+          pm += 1; if (pm > 12) { pm = 1; py += 1; }
+          out.push(String(py) + '-' + (pm < 10 ? '0' + pm : '' + pm));
+        }
+        out.push(cur);
+      }
+      return out;
+    }
+    var allMonths = fillMonths(months);
+    var avgSeries = allMonths.map(function (mo) { return monthly[mo] ? Math.round(monthly[mo].sum / monthly[mo].n / 10000 * 10) / 10 : null; });
     if (modalChart) modalChart.destroy();
     modalChart = new Chart(document.getElementById('txModalChart').getContext('2d'), {
       type: 'line',
-      data: { datasets: [{ label: '실거래가(억)', data: pts, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.10)', fill: true, tension: 0.25, pointRadius: 3 }] },
-      options: { responsive: true, maintainAspectRatio: false, parsing: false,
-        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (ctx) { return won(ctx.parsed.y * 10000) + ' · ' + ctx.parsed.x; } } } },
-        scales: { x: { type: 'category', labels: pts.map(function (p) { return p.x; }) }, y: { ticks: { callback: function (v) { return v + '억'; } } } } },
+      data: {
+        labels: allMonths,
+        datasets: [{
+          label: '월평균 실거래가(억)', data: avgSeries,
+          borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.10)',
+          fill: true, tension: 0.25, pointRadius: 3, spanGaps: true,
+        }],
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (ctx) {
+          var mo = ctx.label, m = monthly[mo];
+          if (!m) return mo + ' 거래 없음';
+          var avg = won(Math.round(m.sum / m.n));
+          return mo + ' · 평균 ' + avg + ' · 건수 ' + m.n + (m.lo !== m.hi ? ' (' + won(m.lo) + '~' + won(m.hi) + ')' : '');
+        } } } },
+        scales: { x: { grid: { display: false } }, y: { ticks: { callback: function (v) { return v + '억'; } } } },
+      },
     });
 
     // 거래 내역 리스트 (최신 → 과거)

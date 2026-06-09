@@ -386,7 +386,7 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 @media (min-width: 768px) { .calc-layout { gap: 28px; } }
 @media (min-width: 1024px) { .calc-layout { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 40px; } }
 
-.calc-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); }
+.calc-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px 28px 28px; box-shadow: var(--shadow-sm); }
 .field { margin-bottom: 20px; }
 .field label { display: block; font-size: 0.92rem; font-weight: 600; margin-bottom: 8px; color: var(--text); }
 .field .hint { display: block; font-size: 0.82rem; color: var(--text-muted); margin-top: 6px; }
@@ -432,16 +432,13 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 26px 28px 28px;
+  padding: 24px 28px 28px;
   box-shadow: var(--shadow);
   position: relative;
-  /* 한글 라벨이 좁은 칸에서 글자 단위로 쪼개지지 않도록(예: 총부채원리금상환비율) */
+  /* form 패널과 top padding을 동일하게 맞춰, 좌·우 첫 콘텐츠가 수평 정렬되도록 */
   word-break: keep-all;
 }
-/* 2단일 때 결과는 우측에 따라오되, 내용 전체가 잘림 없이 보이도록 내부 스크롤은 두지 않는다. */
-@media (min-width: 768px) {
-  .calc-result { position: sticky; top: 88px; }
-}
+/* 2단일 때도 sticky를 두지 않는다 — 스크롤 시 좌·우 top이 어긋나 보이는 문제 해결 */
 .calc-result h3 { font-size: 0.92rem; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; letter-spacing: -0.01em; }
 .calc-result .total { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 24px; color: var(--accent); font-variant-numeric: tabular-nums; }
 .calc-result .breakdown { border-top: 1px solid var(--border); padding-top: 20px; }
