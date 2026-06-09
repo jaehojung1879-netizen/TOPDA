@@ -152,6 +152,9 @@
   };
 
   // ── 통과하지 못한 필터 목록 (입력한 조건만 검사) ──
+  // 정책: 단지에 해당 데이터가 '없는' 경우는 fail로 보지 않는다(관대 모드).
+  // 실거래 자료에만 등장하는 단지(좌표/세대수/역/학교 정보 없음)도 검색·점수 산정에서
+  // 자동으로 누락되지 않고 결과에 노출된다.
   function failedFilters(apt, f, y) {
     const fails = [];
     if (f.region && f.region !== 'all') {
@@ -161,19 +164,23 @@
     if (f.area_type && f.area_type !== 'all' && cand.length === 0) fails.push('area_type');
     if (f.budget_max) {
       const prices = cand.length ? cand : (apt.units || []);
-      const minP = Math.min.apply(null, prices.map((u) => u.recent_price));
-      if (!(minP <= f.budget_max)) fails.push('budget_max');
+      if (prices.length) {
+        const minP = Math.min.apply(null, prices.map((u) => u.recent_price));
+        if (!(minP <= f.budget_max)) fails.push('budget_max');
+      }
     }
-    if (f.max_age_years && (y - apt.built_year) > f.max_age_years) fails.push('max_age_years');
-    if (f.subway_distance_max && (!apt.subway || apt.subway.distance_m > f.subway_distance_max)) fails.push('subway_distance_max');
-    if (f.elementary_distance_max && (!apt.elementary || apt.elementary.distance_m > f.elementary_distance_max)) fails.push('elementary_distance_max');
-    if (f.min_households && (apt.households || 0) < f.min_households) fails.push('min_households');
+    // 연식/거리/세대수/통근/주차/전세가율: 데이터가 '있는데' 조건 미달인 경우만 fail.
+    // 데이터가 비어 있으면 해당 단지는 그 조건을 무시하고 결과에 포함시킨다.
+    if (f.max_age_years && apt.built_year && (y - apt.built_year) > f.max_age_years) fails.push('max_age_years');
+    if (f.subway_distance_max && apt.subway && apt.subway.distance_m != null && apt.subway.distance_m > f.subway_distance_max) fails.push('subway_distance_max');
+    if (f.elementary_distance_max && apt.elementary && apt.elementary.distance_m != null && apt.elementary.distance_m > f.elementary_distance_max) fails.push('elementary_distance_max');
+    if (f.min_households && apt.households && apt.households < f.min_households) fails.push('min_households');
     if (f.commute_hub && f.commute_max) {
       const c = apt.commute && apt.commute[f.commute_hub];
-      if (c == null || c > f.commute_max) fails.push('commute');
+      if (c != null && c > f.commute_max) fails.push('commute');
     }
-    if (f.parking_min && (apt.parking_per_household == null || apt.parking_per_household < f.parking_min)) fails.push('parking_min');
-    if (f.jeonse_ratio_max && (apt.jeonse_ratio == null || apt.jeonse_ratio > f.jeonse_ratio_max)) fails.push('jeonse_ratio_max');
+    if (f.parking_min && apt.parking_per_household != null && apt.parking_per_household < f.parking_min) fails.push('parking_min');
+    if (f.jeonse_ratio_max && apt.jeonse_ratio != null && apt.jeonse_ratio > f.jeonse_ratio_max) fails.push('jeonse_ratio_max');
     return fails;
   }
 

@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260612" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260613" />
 <style>
   .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
   .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
@@ -278,9 +278,9 @@
   </div>
 </footer>
 
-<script src="../assets/score.js?v=20260612"></script>
-<script src="../assets/region.js?v=20260612"></script>
-<script src="../assets/app.js?v=20260612"></script>
+<script src="../assets/score.js?v=20260613"></script>
+<script src="../assets/region.js?v=20260613"></script>
+<script src="../assets/app.js?v=20260613"></script>
 <script>
 (function () {
   'use strict';
@@ -365,13 +365,20 @@
     DEALS.forEach(function (d) {
       var apt = byName[d.apt];
       if (!apt) {
-        // transactions에만 있는 단지 — 최소 정보로 추가
+        // transactions에만 있는 단지 — 실거래 원장의 sido/region_key/region을 그대로 사용
         if (!newApts[d.apt]) {
-          var parts = (d.region || '').split(' ');
+          var rk = d.region_key || '';
+          var rkParts = rk.split(' ');
+          var sido = d.sido || rkParts[0] || '';
+          var sigungu = rkParts.slice(1).join(' ');
           newApts[d.apt] = {
-            name: d.apt, region: d.region || '', region_key: d.region_key || (parts.slice(0, 2).join(' ')),
-            sido: parts[0] || '', sigungu: parts.slice(1, 2).join(' ') || (d.region_key || ''),
-            built_year: d.build_year || null, units: [], price_history: [],
+            name: d.apt,
+            region: d.region || rk,
+            region_key: rk,
+            sido: sido,
+            sigungu: sigungu,
+            built_year: d.build_year || null,
+            units: [], price_history: [],
             _from_deals: true,
           };
         }

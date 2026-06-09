@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260612" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260613" />
 <style>
   .mkt-controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 20px; }
   .mkt-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; color:var(--text-muted); }
@@ -69,6 +69,11 @@
     </div>
   </div>
 
+  <div class="callout callout-warn" id="mktSampleNote" style="display:none; margin-bottom:16px;">
+    <div class="icon">⚠</div>
+    <div class="body"><strong>현재 표시 데이터는 예시(샘플)입니다.</strong> 한국부동산원 R-ONE 통계 자동 갱신을 준비 중이며, 실제 시세는 다를 수 있습니다.</div>
+  </div>
+
   <div class="mkt-stats" id="mktStats"></div>
 
   <div class="mkt-charts">
@@ -98,8 +103,8 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../assets/region.js?v=20260612"></script>
-<script src="../assets/app.js?v=20260612"></script>
+<script src="../assets/region.js?v=20260613"></script>
+<script src="../assets/app.js?v=20260613"></script>
 <script>
 (function () {
   'use strict';
@@ -183,6 +188,13 @@
     .then(function (r) { if (!r.ok) throw new Error('load'); return r.json(); })
     .then(function (j) {
       DATA = j;
+      // _meta 에 '샘플'/'예시'라 명시되어 있거나 disclaimer 가 '예시' 포함이면 워닝 노출
+      var meta = (j && j._meta) || {};
+      var sampleStr = (meta.note || '') + ' ' + (meta.disclaimer || '');
+      if (/샘플|예시|sample/i.test(sampleStr)) {
+        var note = document.getElementById('mktSampleNote');
+        if (note) note.style.display = '';
+      }
       var sidos = [];
       j.regions.forEach(function (r) { if (sidos.indexOf(r.sido) < 0) sidos.push(r.sido); });
       sidos.sort(sidoOrder);
