@@ -82,23 +82,33 @@
         nonMetro: 0.75,    // 비수도권(한시)
         note: '2025.10.16~ 수도권·규제지역 주담대는 스트레스 3.0%p로 강화. 필요 시 직접 조정.',
       },
-      // 전세자금대출 보증기관 비교 (한도=보증금×비율, 기관 최대한도 이내)
-      // incomeCap: 부부합산 연소득 상한(원). null이면 소득 무관(SGI). youth/신혼 시 한도 완화.
+      // 전세자금대출 보증기관 비교
+      //   한도 = min(
+      //     보증금 × 보증비율,
+      //     기관 최대한도,
+      //     [HF만] 소득기준 한도 = 연소득 × incomeMultiple − 타행 신용대출 × creditDeductRatio
+      //   )
+      //   incomeCap: 부부합산 연소득 상한(원). null이면 소득 무관(SGI).
+      //   ineligible 사유: 보증금 한도 초과 / 소득 한도 초과 / 산식 결과 0 이하
       jeonseAgencies: [
         { key: 'HF', name: '주택금융공사(HF)', ratio: 80, ratioYouth: 90, maxAmount: 400000000,
           depositCapMetro: 700000000, depositCapOther: 500000000, fee: '연 0.04~0.18%',
           incomeCap: 100000000, incomeCapYouth: 130000000,
-          note: '부부합산 연소득 1억 이하(청년·신혼 1.3억). 수도권·규제 1주택자 2억 한도, 공시가 126% 초과 보증 제한(2025.8~)' },
+          incomeMultiple: 4.5,        // 연소득 × 4.5 ≈ 소득기준 가용 한도(보증 가이드의 상한값 근사)
+          creditDeductRatio: 0.25,    // 타행 신용대출 잔액의 25%를 차감
+          note: '보증금×80% / 4억 / (소득×4.5 − 신용대출×0.25) 중 최소. 부부합산 1억 이하(청년·신혼 1.3억). 수도권·규제 1주택자 2억 한도.' },
         { key: 'HUG', name: '주택도시보증공사(HUG)', ratio: 80, ratioYouth: 90, maxAmount: 400000000,
           depositCapMetro: 700000000, depositCapOther: 500000000, fee: '연 0.111~0.211%',
           incomeCap: 100000000, incomeCapYouth: 130000000,
-          note: '부부합산 연소득 1억 이하(청년·신혼 1.3억). 전세금안심대출보증(대출+반환보증 일괄)' },
+          incomeMultiple: null, creditDeductRatio: 0,   // 소득 기반 산식 없음(소득 자격만 본다)
+          note: '보증금×80% / 4억 중 최소. 부부합산 1억 이하(청년·신혼 1.3억). 대출+반환보증 일괄(전세금안심대출).' },
         { key: 'SGI', name: 'SGI서울보증', ratio: 80, ratioYouth: 80, maxAmount: 500000000,
           depositCapMetro: Infinity, depositCapOther: Infinity, fee: '연 0.183~0.208%',
           incomeCap: null, incomeCapYouth: null,
-          note: '소득 제한 없음. 아파트 등 고액 전세 가능. 보증금 상한이 가장 관대(심사 빠른 편)' },
+          incomeMultiple: null, creditDeductRatio: 0,
+          note: '보증금×80% / 5억 중 최소. 소득 제한 없음. 고액 전세 가능, 심사 빠른 편.' },
       ],
-      jeonseNote: '전세대출 원금은 DSR 산정에서 제외(보증부). 청년·신혼은 우대 비율(최대 90%)·소득 한도 완화 적용.',
+      jeonseNote: '전세대출은 보증부로 DSR 산정에서 원금이 제외됩니다(이자만 산입). 청년·신혼은 우대 비율(최대 90%)·소득 한도 완화 적용.',
     },
 
     // ── 아래는 reference: 각 계산기 코드에 동일 값 존재(점진 이관 대상) ──

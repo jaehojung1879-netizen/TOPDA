@@ -5,7 +5,7 @@ name: Refresh listings (실거래·단지)
 # Kakao 지오코딩 등으로 시간이 걸려 R-ONE(refresh-market)과 분리한다.
 on:
   schedule:
-    - cron: "0 19 * * *"   # 매일 04:00 KST
+    - cron: "0 15 * * *"   # 매일 00:00 KST (자정마다 갱신)
   workflow_dispatch:
 
 permissions:

@@ -1547,6 +1547,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 @media (min-width: 720px) {
   .hero-calc-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .hero-calc-grid.hero-calc-single { grid-template-columns: 1fr; }
 }
 .hero-calc-card {
   display: flex; gap: 14px;

@@ -2914,28 +2914,49 @@ function calcMortgageLimit(input) {
   return { ltvLimit, priceCap, dsrLimit, limit, binding, stressedRate, availAnnual };
 }
 
-// 전세대출 한도: 보증기관별 비교. 한도 = min(보증금×보증비율, 기관 최대한도).
-// 보증금 한도 초과·소득 한도 초과 시 이용 불가(eligible=false).
+// 전세대출 한도: 보증기관별 비교.
+//   한도 = min(보증금×보증비율, 기관 최대한도, [HF만] 소득기준 한도)
+//   소득기준 한도(HF) = 부부합산 연소득 × incomeMultiple − 타행 신용대출 × creditDeductRatio
+// 보증금 한도 초과·소득 한도 초과·산식 결과 0 이하 시 eligible=false.
 function calcJeonseLoanByAgency(deposit, opts) {
   opts = opts || {};
   const R = (window.TOPDA_RATES && window.TOPDA_RATES.loan && window.TOPDA_RATES.loan.jeonseAgencies) || [];
   if (!deposit || deposit <= 0) return [];
-  const income = opts.income || 0; // 부부합산 연소득(원)
+  const income = opts.income || 0;            // 부부합산 연소득(원)
+  const credit = opts.creditLoan || 0;        // 타행 신용대출 잔액(원)
   return R.map((a) => {
     const ratio = opts.youth && a.ratioYouth ? a.ratioYouth : a.ratio;
     const depositCap = opts.metro ? a.depositCapMetro : a.depositCapOther;
     const incomeCap = opts.youth && a.incomeCapYouth ? a.incomeCapYouth : a.incomeCap;
     const depositOk = deposit <= depositCap;
     const incomeOk = !incomeCap || !income || income <= incomeCap;
-    const eligible = depositOk && incomeOk;
-    const byRatio = deposit * (ratio / 100);
-    const limit = eligible ? Math.min(byRatio, a.maxAmount) : 0;
+
+    // 산식별 후보 한도
+    const cands = [];
+    cands.push({ k: 'byRatio', v: deposit * (ratio / 100), label: '보증금×' + ratio + '%' });
+    cands.push({ k: 'cap', v: a.maxAmount, label: '기관 최대 ' + Math.round(a.maxAmount / 100000000) + '억' });
+    // 소득기준 산식이 정의된 기관(HF)만 추가 후보
+    let incomeBased = null;
+    if (a.incomeMultiple && income > 0) {
+      incomeBased = Math.max(0, income * a.incomeMultiple - credit * (a.creditDeductRatio || 0));
+      cands.push({ k: 'income', v: incomeBased, label: '소득×' + a.incomeMultiple +
+        (credit ? ' − 신용대출×' + Math.round((a.creditDeductRatio || 0) * 100) + '%' : '') });
+    }
+    const minCand = cands.reduce((m, c) => (c.v < m.v ? c : m), cands[0]);
+    const eligible = depositOk && incomeOk && minCand.v > 0;
+    const limit = eligible ? Math.max(0, Math.round(minCand.v)) : 0;
+
     const reasons = [];
     if (!depositOk) reasons.push('보증금 한도 초과');
     if (!incomeOk) reasons.push('소득 한도 초과(' + Math.round(incomeCap / 100000000 * 10) / 10 + '억)');
+    if (depositOk && incomeOk && minCand.v <= 0) reasons.push('산식 결과가 0 이하');
+
     return {
       key: a.key, name: a.name, ratioApplied: ratio, maxAmount: a.maxAmount,
-      depositCap, incomeCap, depositOk, incomeOk, eligible, limit, fee: a.fee, note: a.note,
+      depositCap, incomeCap, depositOk, incomeOk, eligible, limit,
+      bindingLabel: eligible ? minCand.label : '',   // 가장 작은(=결정요인) 산식
+      incomeBased,                                    // HF 소득기준 한도(참고용)
+      fee: a.fee, note: a.note,
       ineligibleReason: reasons.join(' · '),
     };
   }).sort((x, y) => y.limit - x.limit);
@@ -3022,7 +3043,9 @@ function calcJeonseLoanByAgency(deposit, opts) {
     const youth = root.querySelector('[name="youth"]')?.checked || false;
     const incomeEl = root.querySelector('[name="jIncome"]');
     const income = incomeEl ? fmt.parseWon(incomeEl.value) : 0;
-    const list = calcJeonseLoanByAgency(deposit, { metro, youth, income });
+    const creditEl = root.querySelector('[name="jCredit"]');
+    const creditLoan = creditEl ? fmt.parseWon(creditEl.value) : 0;
+    const list = calcJeonseLoanByAgency(deposit, { metro, youth, income, creditLoan });
     const box = root.querySelector('[data-out="agencyList"]');
     if (!box) return;
     if (!deposit) { box.innerHTML = '<p style="color:var(--text-muted)">임차보증금을 입력하세요.</p>'; setText('jBest', fmt.won(0)); return; }
@@ -3033,11 +3056,15 @@ function calcJeonseLoanByAgency(deposit, opts) {
       const incomeRow = a.incomeCap
         ? '<div class="agency-meta">소득 한도 부부합산 ≤ ' + fmt.won(a.incomeCap) + (a.incomeOk ? ' <span style="color:#059669;">✓ 충족</span>' : ' <span style="color:#dc2626;">× 초과</span>') + '</div>'
         : '<div class="agency-meta">소득 제한 없음 <span style="color:#059669;">✓</span></div>';
+      const bindingRow = a.eligible ? '<div class="agency-meta" style="color:var(--accent,#2563eb);">결정 산식: ' + a.bindingLabel + '</div>' : '';
+      const incomeBasedRow = (a.incomeBased != null) ? '<div class="agency-meta">소득기준 한도: ' + fmt.won(Math.round(a.incomeBased)) + ' (연소득×배수 − 신용대출 차감)</div>' : '';
       return '<div class="agency-card' + (idx === 0 && a.eligible ? ' is-best' : '') + '">' +
         '<div class="agency-top"><span class="agency-name">' + a.name + (idx === 0 && a.eligible ? ' <span class="agency-best">최대</span>' : '') + '</span>' +
         '<span class="agency-limit">' + fmt.won(a.limit) + '</span></div>' +
         '<div class="agency-meta">보증비율 ' + pct + ' · 최대 ' + fmt.won(a.maxAmount) + ' · 대상 보증금 ' + (isFinite(a.depositCap) ? '≤' + fmt.won(a.depositCap) : '제한 적음') + '</div>' +
         incomeRow +
+        bindingRow +
+        incomeBasedRow +
         (a.eligible ? '<div class="agency-meta">내 보증금 중 자기부담 ≈ ' + fmt.won(self) + ' · 보증료 ' + (a.fee || '—') + '</div>' : '<div class="agency-meta agency-warn">' + (a.ineligibleReason || '이용이 어렵습니다') + '</div>') +
         (a.note ? '<div class="agency-note">' + a.note + '</div>' : '') +
         '</div>';
