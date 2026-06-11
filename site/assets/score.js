@@ -19,7 +19,8 @@
   'use strict';
 
   // 가격 단위: 만원 (예: 195000 = 19.5억). 예산 입력은 억 단위로 받아 만원으로 변환.
-  const WEIGHTS = { appreciation: 25, subway: 20, school: 20, stability: 15, scale: 10, age: 10 };
+  // 가중치 합 100. liquidity(거래 활성도) 5% 추가, 다른 항목은 비례 축소.
+  const WEIGHTS = { appreciation: 23, subway: 19, school: 19, stability: 14, scale: 10, age: 10, liquidity: 5 };
 
   // 전용면적(㎡) → 평형 밴드
   const AREA_BANDS = [
@@ -85,13 +86,32 @@
     return clamp(s, 20, 100);
   }
 
-  // 가격 모멘텀: 최근 실거래 추세(price_history). 상승할수록 높음. 표본 부족 시 null.
+  // 가격 모멘텀: 최근 실거래 추세(price_history). 선형 회귀 기울기를 이용해
+  // 단순 첫/끝점 비교보다 노이즈에 덜 휘둘리도록 한다. 표본 부족 시 null.
   function scoreMomentum(history) {
     if (!Array.isArray(history) || history.length < 2) return null;
-    const first = history[0], last = history[history.length - 1];
-    if (!first) return null;
-    const annual = ((last - first) / first) * 2; // 윈도우(수개월) 대략 연환산
+    const valid = history.filter((x) => typeof x === 'number' && x > 0);
+    if (valid.length < 2) return null;
+    const n = valid.length;
+    const mean = valid.reduce((a, b) => a + b, 0) / n;
+    if (mean <= 0) return null;
+    // 선형 회귀: x = 0,1,...,n-1, y = price
+    let sx = 0, sy = 0, sxx = 0, sxy = 0;
+    for (let i = 0; i < n; i++) { sx += i; sy += valid[i]; sxx += i * i; sxy += i * valid[i]; }
+    const slope = (n * sxy - sx * sy) / (n * sxx - sx * sx);
+    // 월 슬로프 → 연환산 비율 (× 12 / 평균)
+    const annual = (slope * 12) / mean;
     return clamp(50 + annual * 250, 0, 100); // +20%/yr→100, +10%→75, 0→50, -10%→25
+  }
+
+  // 거래 활성도(유동성): 단지에 최근 거래가 많을수록(=시장 활성) 가점.
+  // recent_tx_count: 최근 6개월 거래 건수 (외부에서 주입), 없으면 price_history 표본수로 근사.
+  function scoreLiquidity(apt) {
+    let n = apt.recent_tx_count;
+    if (n == null && Array.isArray(apt.price_history)) n = apt.price_history.length;
+    if (n == null) return null;
+    // 0건 30점, 5건 70점, 15건↑ 100점
+    return clamp(30 + (n / 15) * 70, 30, 100);
   }
 
   // 예산 적합도(가격 근접): 입력 예산에 가까운 가격일수록 높은 점수.
@@ -203,6 +223,7 @@
       stability: scoreStability(apt.price_history),
       scale: scoreScale(apt.households),
       age: scoreAge(apt.built_year, y),
+      liquidity: scoreLiquidity(apt),
     };
     // 예산을 입력한 경우에만 '예산 적합도(가격 근접)'를 점수에 포함한다.
     const weights = Object.assign({}, WEIGHTS);
@@ -293,7 +314,7 @@
   return {
     WEIGHTS, AREA_BANDS, FILTER_LABELS, bandOf, walkMin,
     scoreSubway, scoreSchool, scoreScale, scoreAge, scoreStability, scoreAppreciation, scoreMomentum,
-    scoreFit, maxWithinBudget,
+    scoreLiquidity, scoreFit, maxWithinBudget,
     candidateUnits, representativeUnit, failedFilters, passesFilters,
     evaluate, search, nearMatches, formatEok,
   };

@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260613" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260615" />
 <style>
   .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
   .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
@@ -278,9 +278,9 @@
   </div>
 </footer>
 
-<script src="../assets/score.js?v=20260613"></script>
-<script src="../assets/region.js?v=20260613"></script>
-<script src="../assets/app.js?v=20260613"></script>
+<script src="../assets/score.js?v=20260615"></script>
+<script src="../assets/region.js?v=20260615"></script>
+<script src="../assets/app.js?v=20260615"></script>
 <script>
 (function () {
   'use strict';
@@ -410,17 +410,28 @@
           .map(function (u) { return { label: u.label, area_m2: u.area_m2, recent_price: u.recent_price }; });
         delete a._unitMap;
       }
-      // 가격 이력: 같은 단지의 평균 거래가를 월별로
+      // 가격 이력: 같은 단지의 평균 거래가를 월별로 (최대 12개월)
       var months = {};
       (DEALS_BY_APT[n] && DEALS_BY_APT[n].prices || []).forEach(function (p) {
         var mo = p.date.slice(0, 7);
         if (!months[mo]) months[mo] = [];
         months[mo].push(p.price);
       });
-      a.price_history = Object.keys(months).sort().slice(-4).map(function (mo) {
+      a.price_history = Object.keys(months).sort().slice(-12).map(function (mo) {
         var arr = months[mo]; return Math.round(arr.reduce(function (s, x) { return s + x; }, 0) / arr.length);
       });
+      // 거래 활성도(유동성) — 최근 6개월 거래 건수
+      var cutoff = new Date(Date.now() - 180 * 86400000).toISOString().slice(0, 10);
+      var recent = (DEALS_BY_APT[n] && DEALS_BY_APT[n].prices || []).filter(function (p) { return p.date >= cutoff; });
+      a.recent_tx_count = recent.length;
       DATA.push(a);
+    });
+    // 큐레이션 단지에도 recent_tx_count 보강
+    DATA.forEach(function (a) {
+      if (a.recent_tx_count == null && DEALS_BY_APT[a.name]) {
+        var cut = new Date(Date.now() - 180 * 86400000).toISOString().slice(0, 10);
+        a.recent_tx_count = DEALS_BY_APT[a.name].prices.filter(function (p) { return p.date >= cut; }).length;
+      }
     });
   }
   var curHub = '';
@@ -456,7 +467,8 @@
     var relaxed = r.relaxed ? '<div class="apt-relaxed">⚠ 입력 조건 중 <strong>' + esc(r.relaxed.join(', ')) + '</strong> 은(는) 충족하지 못했지만 그 외 조건이 우수해 추천합니다.</div>' : '';
     var bars = (r.sub.fit != null ? barRow('예산적합', r.sub.fit) : '')
       + barRow('상승가치', r.sub.appreciation) + barRow('역세권', r.sub.subway) + barRow('학군', r.sub.school)
-      + barRow('실거래', r.sub.stability) + barRow('규모', r.sub.scale) + barRow('연식', r.sub.age);
+      + barRow('실거래', r.sub.stability) + barRow('거래활성', r.sub.liquidity)
+      + barRow('규모', r.sub.scale) + barRow('연식', r.sub.age);
     var sub = a.subway && a.subway.distance_m != null
       ? a.subway.distance_m + 'm · ' + esc(a.subway.station || '') + ' (도보 ' + S.walkMin(a.subway.distance_m) + '분' + (a.subway.line ? ', ' + esc(a.subway.line) : '') + ')'
       : '정보 없음';

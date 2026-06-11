@@ -8,7 +8,10 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260613" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin="" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin="" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260615" />
 <style>
   .tx-controls { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px; }
   .tx-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; color:var(--text-muted); }
@@ -53,6 +56,35 @@
   .tx-modal-chart { margin-bottom:18px; }
   .tx-modal-chart h3, .tx-modal-list h3 { font-size:0.95rem; margin:0 0 10px; }
   .tx-modal-chart canvas { width:100% !important; height:200px !important; }
+
+  /* 뷰 토글 (리스트/지도) */
+  .tx-view-toggle { display: inline-flex; gap: 0; border: 1px solid var(--border,#e5e7eb); border-radius: 10px; overflow: hidden; margin-bottom: 14px; }
+  .tx-view-toggle button { padding: 8px 14px; background: #fff; border: 0; cursor: pointer; font-size: 0.88rem; font-weight: 600; color: var(--text-muted); display: inline-flex; align-items: center; gap: 6px; }
+  .tx-view-toggle button.active { background: var(--accent, #2563eb); color: #fff; }
+  .tx-view-toggle button svg { width: 14px; height: 14px; }
+
+  /* 지도 영역 */
+  #txMap { width: 100%; height: 560px; border-radius: 14px; border: 1px solid var(--border, #e5e7eb); background: #f1f5f9; }
+  @media (max-width: 600px) { #txMap { height: 420px; } }
+  .leaflet-popup-content { font-family: inherit; margin: 10px 12px !important; }
+  .leaflet-popup-content .pop-name { font-weight: 800; font-size: 0.96rem; margin-bottom: 2px; letter-spacing: -0.02em; }
+  .leaflet-popup-content .pop-region { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; }
+  .leaflet-popup-content .pop-stat { font-size: 0.82rem; }
+  .leaflet-popup-content .pop-link { display: inline-block; margin-top: 6px; color: var(--accent, #2563eb); font-weight: 600; cursor: pointer; font-size: 0.85rem; }
+  /* 활성도 마커: 거래 건수에 따른 색상 */
+  .tx-dot {
+    border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .tx-dot.hot { background: #dc2626; }   /* 10건+ */
+  .tx-dot.warm { background: #f59e0b; }  /* 5-9건 */
+  .tx-dot.cool { background: #2563eb; }  /* 1-4건 */
+  .tx-legend {
+    position: absolute; bottom: 14px; right: 14px; z-index: 500;
+    background: #fff; border: 1px solid var(--border,#e5e7eb); border-radius: 10px;
+    padding: 8px 12px; font-size: 0.78rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .tx-legend .row { display: flex; align-items: center; gap: 6px; margin: 2px 0; }
+  .tx-legend .dot { width: 10px; height: 10px; border-radius: 50%; }
 </style>
 </head>
 <body>
@@ -115,13 +147,37 @@
     </div>
   </div>
 
-  <div class="tx-wrap">
-    <table class="tx">
-      <thead><tr><th>거래일</th><th>단지</th><th>전용(평)</th><th class="num">거래금액</th><th class="hide-sm">층</th><th class="hide-sm">준공</th></tr></thead>
-      <tbody id="txBody"></tbody>
-    </table>
+  <div class="tx-view-toggle" role="tablist">
+    <button type="button" data-view="list" class="active" role="tab" aria-selected="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h18M3 12h18M3 19h18"/></svg>
+      리스트
+    </button>
+    <button type="button" data-view="map" role="tab" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/></svg>
+      지도
+    </button>
   </div>
-  <p style="color:var(--text-muted); font-size:0.82rem; margin-top:10px;" id="txCount"></p>
+
+  <div id="txViewList">
+    <div class="tx-wrap">
+      <table class="tx">
+        <thead><tr><th>거래일</th><th>단지</th><th>전용(평)</th><th class="num">거래금액</th><th class="hide-sm">층</th><th class="hide-sm">준공</th></tr></thead>
+        <tbody id="txBody"></tbody>
+      </table>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.82rem; margin-top:10px;" id="txCount"></p>
+  </div>
+
+  <div id="txViewMap" style="display:none; position:relative;">
+    <div id="txMap" role="region" aria-label="실거래가 지도"></div>
+    <div class="tx-legend" aria-hidden="true">
+      <div class="row"><span class="dot" style="background:#dc2626;"></span>10건+ 활발</div>
+      <div class="row"><span class="dot" style="background:#f59e0b;"></span>5~9건 보통</div>
+      <div class="row"><span class="dot" style="background:#2563eb;"></span>1~4건 일부</div>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.82rem; margin-top:10px;" id="txMapCount">— 단지 표시 중</p>
+    <p style="color:var(--text-muted); font-size:0.78rem; margin-top:4px;">좌표 정보가 있는 단지만 지도에 표시됩니다. 마커를 클릭하면 단지 상세를 볼 수 있습니다.</p>
+  </div>
 
   <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 32px;">국토교통부 실거래가 자료. 신고가 취소·정정 거래가 포함될 수 있어 계약 전 원자료 확인을 권합니다.</p>
 </main>
@@ -163,8 +219,10 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../assets/region.js?v=20260613"></script>
-<script src="../assets/app.js?v=20260613"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin=""></script>
+<script src="../assets/region.js?v=20260615"></script>
+<script src="../assets/app.js?v=20260615"></script>
 <script>
 (function () {
   'use strict';
@@ -179,6 +237,12 @@
   var countEl = document.getElementById('txCount');
   var asofEl = document.getElementById('txAsof');
   var modal = document.getElementById('txModal');
+
+  // 지도 뷰
+  var map = null, markerLayer = null, mapInit = false;
+  var viewListEl = document.getElementById('txViewList');
+  var viewMapEl = document.getElementById('txViewMap');
+  var mapCountEl = document.getElementById('txMapCount');
 
   function debounce(fn, ms) {
     var t; return function () { clearTimeout(t); var a = arguments, c = this; t = setTimeout(function () { fn.apply(c, a); }, ms); };
@@ -369,11 +433,111 @@
   document.querySelectorAll('[data-tx-close]').forEach(function (b) { b.addEventListener('click', closeModal); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 
-  searchEl.addEventListener('input', debounce(render, 200));
-  sidoSel.addEventListener('change', function () { fillGu(); render(); });
-  guSel.addEventListener('change', render);
-  areaSel.addEventListener('change', render);
-  windowSel.addEventListener('change', render);
+  // ── 지도 뷰 ─────────────────────────────────────────
+  function ensureMap() {
+    if (mapInit) return;
+    if (typeof L === 'undefined') return;   // Leaflet 로딩 실패
+    map = L.map('txMap', { scrollWheelZoom: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18, attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    map.setView([36.5, 127.7], 7);   // 한반도 중앙
+    markerLayer = L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 50 });
+    map.addLayer(markerLayer);
+    mapInit = true;
+  }
+
+  // 거래 활성도(=거래 건수)별 색상
+  function dotColor(n) {
+    if (n >= 10) return '#dc2626';
+    if (n >= 5) return '#f59e0b';
+    return '#2563eb';
+  }
+  function dotRadius(n) {
+    return Math.min(16, 6 + Math.sqrt(n) * 2);   // 6 ~ 16px
+  }
+
+  function renderMap() {
+    ensureMap();
+    if (!mapInit) {
+      mapCountEl.textContent = '지도를 불러오지 못했습니다.';
+      return;
+    }
+    // 현재 필터 조건에 맞는 거래만 집계
+    var list = filtered();
+    // 단지별 거래 건수
+    var byApt = {};
+    list.forEach(function (d) {
+      if (!byApt[d.apt]) byApt[d.apt] = { count: 0, latest: '', price: 0 };
+      byApt[d.apt].count += 1;
+      if (d.date > byApt[d.apt].latest) {
+        byApt[d.apt].latest = d.date;
+        byApt[d.apt].price = d.price;
+      }
+    });
+    markerLayer.clearLayers();
+    var bounds = [], placed = 0, missing = 0;
+    Object.keys(byApt).forEach(function (name) {
+      var apt = APARTMENTS[name];
+      if (!apt || !apt.lat || !apt.lng) { missing += 1; return; }
+      var agg = byApt[name];
+      var color = dotColor(agg.count);
+      var r = dotRadius(agg.count);
+      var marker = L.circleMarker([apt.lat, apt.lng], {
+        radius: r, color: '#fff', weight: 2, fillColor: color, fillOpacity: 0.85,
+      });
+      var html = '<div class="pop-name">' + escapeHtml(name) + '</div>' +
+        '<div class="pop-region">' + escapeHtml(apt.region || '') + '</div>' +
+        '<div class="pop-stat">최근 거래 <strong>' + won(agg.price) + '</strong> · ' + agg.latest + '</div>' +
+        '<div class="pop-stat">거래 ' + agg.count + '건 (조건 내)</div>' +
+        '<div class="pop-link" data-apt="' + escapeHtml(name) + '">단지 상세 보기 →</div>';
+      marker.bindPopup(html);
+      markerLayer.addLayer(marker);
+      bounds.push([apt.lat, apt.lng]);
+      placed += 1;
+    });
+    if (bounds.length) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
+    setTimeout(function () { map.invalidateSize(); }, 100);
+    mapCountEl.innerHTML = '단지 <strong>' + placed.toLocaleString() + '개</strong> 표시' +
+      (missing ? ' · 좌표 없는 단지 ' + missing.toLocaleString() + '개 제외' : '');
+  }
+
+  // 팝업 안 '단지 상세 보기' 클릭 → 모달
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest && e.target.closest('.pop-link');
+    if (link && link.dataset.apt) {
+      e.preventDefault();
+      openModal(link.dataset.apt);
+    }
+  });
+
+  // 뷰 토글
+  function setView(v) {
+    var listOn = (v === 'list');
+    viewListEl.style.display = listOn ? '' : 'none';
+    viewMapEl.style.display = listOn ? 'none' : '';
+    document.querySelectorAll('.tx-view-toggle button').forEach(function (b) {
+      var on = b.dataset.view === v;
+      b.classList.toggle('active', on); b.setAttribute('aria-selected', on);
+    });
+    if (!listOn) renderMap();
+  }
+  document.querySelectorAll('.tx-view-toggle button').forEach(function (b) {
+    b.addEventListener('click', function () { setView(b.dataset.view); });
+  });
+
+  // 리스트/지도 모두 같은 필터를 공유 → 필터 바뀌면 활성 뷰 갱신
+  function renderActive() {
+    render();
+    var active = document.querySelector('.tx-view-toggle button.active');
+    if (active && active.dataset.view === 'map') renderMap();
+  }
+
+  searchEl.addEventListener('input', debounce(renderActive, 200));
+  sidoSel.addEventListener('change', function () { fillGu(); renderActive(); });
+  guSel.addEventListener('change', renderActive);
+  areaSel.addEventListener('change', renderActive);
+  windowSel.addEventListener('change', renderActive);
 
   // 데이터 로드: transactions + apartments(보강용)
   Promise.all([

@@ -4,7 +4,7 @@ name: Refresh market stats (R-ONE)
 # 가볍고 빠름. 국토부 실거래/Kakao 수집(refresh-listings)과 분리해 독립 실행한다.
 on:
   schedule:
-    - cron: "0 20 * * *"   # 매일 05:00 KST
+    - cron: "30 15 * * *"   # 매일 00:30 KST
   workflow_dispatch:
 
 permissions:

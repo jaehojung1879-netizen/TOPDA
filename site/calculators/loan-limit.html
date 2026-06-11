@@ -8,7 +8,7 @@
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260613" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260615" />
 <style>
   .loan-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
   .loan-tabs label { flex: 1; min-width: 140px; }
@@ -199,6 +199,13 @@
         <span class="hint">HF·HUG는 부부합산 연소득 <strong>1억 이하</strong>(청년·신혼 1.3억). SGI는 소득 제한이 없습니다.</span>
       </div>
       <div class="field">
+        <label for="j-credit">타행 신용대출 잔액 (있을 경우)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="j-credit" name="jCredit" type="text" inputmode="numeric" data-format="won" value="0" />
+        </div>
+        <span class="hint">HF 보증 한도 산식: <strong>(연소득 × 4.5) − (신용대출 × 0.25)</strong>로 차감됩니다. HUG·SGI는 영향 없음.</span>
+      </div>
+      <div class="field">
         <label class="check-item" style="padding:0; cursor:pointer;">
           <input type="checkbox" name="youth"/>
           <span class="text">청년·신혼부부
@@ -208,7 +215,7 @@
       </div>
       <div class="callout callout-info" style="margin-bottom:0;">
         <div class="icon">i</div>
-        <div class="body"><strong>전세대출 원금은 DSR 산정에서 제외</strong>됩니다(보증부). 한도는 보증기관의 보증비율·최대한도·소득 조건이 좌우합니다.</div>
+        <div class="body"><strong>전세대출은 보증부로 DSR 산정에서 원금이 제외</strong>됩니다(이자만 산입). 한도는 보증기관의 보증비율·최대한도·소득기준 산식이 좌우합니다.</div>
       </div>
     </div>
 
@@ -232,18 +239,19 @@
       <li><strong>② 가격대별 한도</strong> (수도권·규제지역 구입자금) = 15억↓ 6억 / 15~25억 4억 / 25억↑ 2억.</li>
       <li><strong>③ DSR 한도</strong> = (연소득 × DSR% − 기존 대출 연원리금)을 <strong>스트레스 금리·만기</strong>로 역산. 1금융 40% / 2금융 50%.</li>
     </ul>
-    <h3 style="margin:18px 0 8px; font-size:1rem;">전세자금대출 = 보증기관별 비교</h3>
+    <h3 style="margin:18px 0 8px; font-size:1rem;">전세자금대출 = 보증기관별 산식·비교</h3>
+    <p style="color:var(--text-muted); font-size:0.9rem; margin: 0 0 8px;">한도 = <strong>min</strong>( 보증금 × 보증비율, 기관 최대한도, <strong>[HF만]</strong> 소득기준 한도 )</p>
     <div class="table-wrap">
       <table class="data">
-        <thead><tr><th>보증기관</th><th>보증비율</th><th>최대한도</th><th>대상 보증금</th><th>소득 한도</th><th>특징</th></tr></thead>
+        <thead><tr><th>보증기관</th><th>보증비율</th><th>최대한도</th><th>대상 보증금</th><th>소득 한도</th><th>소득기준 산식</th><th>특징</th></tr></thead>
         <tbody>
-          <tr><td>주택금융공사(HF)</td><td>80%(청년·신혼 90%)</td><td>4억 원</td><td>수도권 7억 / 그외 5억</td><td>부부합산 1억<br/>(청년·신혼 1.3억)</td><td>금리·보증료 저렴, 1주택 수도권 2억 제한</td></tr>
-          <tr><td>주택도시보증공사(HUG)</td><td>80%(그외 90%)</td><td>4억 원</td><td>수도권 7억 / 그외 5억</td><td>부부합산 1억<br/>(청년·신혼 1.3억)</td><td>대출+반환보증 일괄(전세금안심대출)</td></tr>
-          <tr><td>SGI서울보증</td><td>80%</td><td>5억 원</td><td>상한 관대</td><td>제한 없음</td><td>고액 전세 가능, 소득 제한 없음, 심사 빠른 편</td></tr>
+          <tr><td>주택금융공사(HF)</td><td>80%(청년·신혼 90%)</td><td>4억 원</td><td>수도권 7억 / 그외 5억</td><td>부부합산 1억<br/>(청년·신혼 1.3억)</td><td>연소득 × 4.5<br/>− 신용대출 × 0.25</td><td>금리·보증료 저렴, 1주택 수도권 2억 제한</td></tr>
+          <tr><td>주택도시보증공사(HUG)</td><td>80%(그외 90%)</td><td>4억 원</td><td>수도권 7억 / 그외 5억</td><td>부부합산 1억<br/>(청년·신혼 1.3억)</td><td>—</td><td>대출+반환보증 일괄(전세금안심대출)</td></tr>
+          <tr><td>SGI서울보증</td><td>80%</td><td>5억 원</td><td>상한 관대</td><td>제한 없음</td><td>—</td><td>고액 전세 가능, 소득 제한 없음, 심사 빠른 편</td></tr>
         </tbody>
       </table>
     </div>
-    <p style="color:var(--text-muted); font-size:0.85rem; margin-top:8px;">전세대출 원금은 DSR에 미산입(보증부). 표·계산값은 현행 규정 기준의 참고치이며 상품별로 다릅니다.</p>
+    <p style="color:var(--text-muted); font-size:0.85rem; margin-top:8px;"><strong>전세대출은 보증부로 DSR 산정에서 원금 제외</strong>(이자만 산입). 표·산식은 현행 규정 기준의 참고치이며 상품·은행별로 세부 한도가 다릅니다.</p>
   </section>
 
   <section style="margin-top:36px;">
@@ -265,7 +273,7 @@
   <div class="container"><p class="disclaimer">© 톺다. 일반 정보 제공용입니다.</p></div>
 </footer>
 
-<script src="../assets/rates.js?v=20260613"></script>
-<script src="../assets/app.js?v=20260613"></script>
+<script src="../assets/rates.js?v=20260615"></script>
+<script src="../assets/app.js?v=20260615"></script>
 </body>
 </html>

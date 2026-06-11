@@ -24,10 +24,10 @@
 <link rel="alternate" hreflang="x-default" href="https://jaehojung1879-netizen.github.io/TOPDA/index.html" />
 <meta name="naver-site-verification" content="NAVER_SITE_VERIFICATION_PLACEHOLDER" />
 <meta name="google-site-verification" content="GOOGLE_SITE_VERIFICATION_PLACEHOLDER" />
-<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260613"></script>
+<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260615"></script>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="assets/styles.css?v=20260613" />
+<link rel="stylesheet" href="assets/styles.css?v=20260615" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -179,7 +179,7 @@
       <h2>계산기</h2>
       <a href="calculators/index.html" class="strip-link">전체 계산기 →</a>
     </div>
-    <div class="hero-calc-grid">
+    <div class="hero-calc-grid hero-calc-single">
       <a href="calculators/total-cost-dashboard.html" class="hero-calc-card">
         <div class="hero-calc-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -192,19 +192,6 @@
           <h3>종합 계산기</h3>
           <p>매매·전세 등 상황별 비용을 한눈에</p>
           <span class="hero-calc-cta">열기 →</span>
-        </div>
-      </a>
-      <a href="calculators/search.html" class="hero-calc-card hero-calc-card-alt">
-        <div class="hero-calc-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
-          </svg>
-        </div>
-        <div class="hero-calc-body">
-          <div class="hero-calc-tag">핵심 도구</div>
-          <h3>맞춤 내집 찾기</h3>
-          <p>조건만 넣으면 단지를 점수로 추천</p>
-          <span class="hero-calc-cta">조건 입력하고 찾기 →</span>
         </div>
       </a>
     </div>
@@ -234,22 +221,29 @@
   </div>
 </section>
 
-<!-- ===== Market info section ===== -->
+<!-- ===== Market info section — 맞춤찾기를 메인 hero 로 ===== -->
 <section class="home-tools" style="padding-top: 28px;">
   <div class="container">
     <div class="strip-head">
       <h2>시세정보</h2>
       <a href="market.html" class="strip-link">시세정보 전체 →</a>
     </div>
-    <div class="tool-row tool-row-4">
-      <a href="calculators/search.html" class="tool-card">
-        <div class="tool-card-icon">
+    <div class="hero-calc-grid hero-calc-single">
+      <a href="calculators/search.html" class="hero-calc-card hero-calc-card-alt">
+        <div class="hero-calc-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
           </svg>
         </div>
-        <div class="tool-card-body"><strong>맞춤 내집 찾기</strong></div>
+        <div class="hero-calc-body">
+          <div class="hero-calc-tag">핵심 도구</div>
+          <h3>맞춤 내집 찾기</h3>
+          <p>예산·지역·역세권·학군 조건만 넣으면 단지를 점수로 추천</p>
+          <span class="hero-calc-cta">조건 입력하고 찾기 →</span>
+        </div>
       </a>
+    </div>
+    <div class="tool-row tool-row-4" style="margin-top: 12px;">
       <a href="calculators/transactions.html" class="tool-card">
         <div class="tool-card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -401,6 +395,6 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=20260613"></script>
+<script src="assets/app.js?v=20260615"></script>
 </body>
 </html>
