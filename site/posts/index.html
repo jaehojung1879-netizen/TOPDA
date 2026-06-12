@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>전체 글 — 톺다</title>
+<meta name="description" content="매매·전세·대출·인테리어·이사까지 부동산 거래 가이드 전체 글 목록. 카테고리와 검색으로 빠르게 찾아보세요." />
+<!-- seo:meta -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="canonical" href="https://jaehojung1879-netizen.github.io/TOPDA/posts/index.html" />
+<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://jaehojung1879-netizen.github.io/TOPDA/feed.xml" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="전체 글 — 톺다" />
+<meta property="og:description" content="부동산 거래 가이드 전체 글 목록" />
+<meta property="og:url" content="https://jaehojung1879-netizen.github.io/TOPDA/posts/index.html" />
+<meta property="og:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
+<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260616"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260616" />
+<style>
+  .post-filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 22px; }
+  .post-search { flex: 1; min-width: 220px; }
+  .post-search input {
+    width: 100%; padding: 10px 14px; border: 1px solid var(--border-strong, #d1d5db);
+    border-radius: 10px; font-size: 0.95rem; font-family: inherit; background: #fff;
+  }
+  .post-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .post-chip {
+    padding: 7px 14px; border: 1px solid var(--border, #e5e7eb); border-radius: 999px;
+    background: #fff; font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  .post-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .post-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .post-count { font-size: 0.85rem; color: var(--text-muted); margin: 0 0 14px; }
+  .post-empty { border: 1px dashed var(--border, #d1d5db); border-radius: 14px; padding: 28px; text-align: center; color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../guides.html" data-nav class="active">가이드</a>
+      <a href="../calculators/index.html" data-nav>계산기</a>
+      <a href="../market.html" data-nav>시세정보</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../guides.html">가이드</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../market.html">시세정보</a>
+    <a href="../checklists/index.html">체크리스트</a>
+    <a href="../board.html">게시판</a>
+    <a href="../about.html">안내</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../guides.html">가이드</a> / 전체 글</div>
+    <h1>전체 글</h1>
+    <div class="meta"><span>부동산 거래 가이드 26편 — 카테고리와 검색으로 찾아보기</span></div>
+  </div>
+
+  <div class="post-filters">
+    <div class="post-search">
+      <input id="postSearch" type="search" placeholder="제목·내용으로 검색 (예: 보증금, 특약, DSR)" autocomplete="off" aria-label="글 검색" />
+    </div>
+    <div class="post-chips" role="tablist">
+      <button class="post-chip active" data-cat="all">전체</button>
+      <button class="post-chip" data-cat="매매">매매</button>
+      <button class="post-chip" data-cat="전세·월세">전세·월세</button>
+      <button class="post-chip" data-cat="대출·금융">대출·금융</button>
+      <button class="post-chip" data-cat="인테리어">인테리어</button>
+      <button class="post-chip" data-cat="이사·입주">이사·입주</button>
+    </div>
+  </div>
+
+  <p class="post-count" id="postCount"></p>
+
+  <div class="cards-grid" id="postGrid">
+    <a class="card" data-cat="매매" href="balance-day-settlement.html">
+      <span class="badge badge-accent">매매</span>
+      <h3>잔금일 정산, 빠뜨리면 손해 보는 5가지</h3>
+      <p>선수관리비·장기수선충당금·관리비 일할 정산</p>
+    </a>
+    <a class="card" data-cat="매매" href="registry-reading.html">
+      <span class="badge badge-accent">매매</span>
+      <h3>등기부등본 읽는 법</h3>
+      <p>갑구·을구·말소기준권리 5분 독해</p>
+    </a>
+    <a class="card" data-cat="매매" href="sale-contract-tips.html">
+      <span class="badge badge-accent">매매</span>
+      <h3>매매계약서 특약, 이것만은</h3>
+      <p>계약서에 꼭 넣을 특약 조항</p>
+    </a>
+    <a class="card" data-cat="매매" href="contract-viewer-sale.html">
+      <span class="badge badge-accent">매매</span>
+      <h3>표준 매매계약서 인터랙티브 뷰어</h3>
+      <p>조항별 해설을 짚어가며 읽기</p>
+    </a>
+    <a class="card" data-cat="매매" href="good-house-eye.html">
+      <span class="badge badge-accent">매매</span>
+      <h3>좋은 집 보는 눈 12가지</h3>
+      <p>현장에서 30분 안에 확인할 것들</p>
+    </a>
+    <a class="card" data-cat="매매" href="property-tour.html">
+      <span class="badge badge-accent">매매</span>
+      <h3>임장 체크리스트 30선</h3>
+      <p>임장 갈 때 챙기는 확인 항목</p>
+    </a>
+
+    <a class="card" data-cat="전세·월세" href="jeonse-protection.html">
+      <span class="badge badge-accent">전세·월세</span>
+      <h3>보증금 지키는 3종 세트</h3>
+      <p>대항력 · 우선변제권 · 보증보험</p>
+    </a>
+    <a class="card" data-cat="전세·월세" href="jeonse-scam.html">
+      <span class="badge badge-accent">전세·월세</span>
+      <h3>깡통전세·전세사기 판별법</h3>
+      <p>계약 전 위험 신호 알아채기</p>
+    </a>
+    <a class="card" data-cat="전세·월세" href="lease-contract-tips.html">
+      <span class="badge badge-accent">전세·월세</span>
+      <h3>전세 특약, 이것만은</h3>
+      <p>전세 계약 필수 특약 목록</p>
+    </a>
+    <a class="card" data-cat="전세·월세" href="lease-renewal.html">
+      <span class="badge badge-accent">전세·월세</span>
+      <h3>계약갱신요구권 정리</h3>
+      <p>행사 조건 · 거절 사유 · 5% 상한</p>
+    </a>
+    <a class="card" data-cat="전세·월세" href="lease-return.html">
+      <span class="badge badge-accent">전세·월세</span>
+      <h3>보증금 못 받을 때 — 임차권등기명령</h3>
+      <p>이사 가야 하는데 보증금이 안 나올 때</p>
+    </a>
+    <a class="card" data-cat="전세·월세" href="contract-viewer-lease.html">
+      <span class="badge badge-accent">전세·월세</span>
+      <h3>표준 주택임대차계약서 인터랙티브 뷰어</h3>
+      <p>조항별 해설을 짚어가며 읽기</p>
+    </a>
+
+    <a class="card" data-cat="대출·금융" href="dsr-explain.html">
+      <span class="badge badge-accent">대출·금융</span>
+      <h3>DSR 완벽 정리</h3>
+      <p>1금융 40% · 2금융 50% 한도 구조</p>
+    </a>
+    <a class="card" data-cat="대출·금융" href="stress-dsr.html">
+      <span class="badge badge-accent">대출·금융</span>
+      <h3>스트레스 DSR — 1.5%p 가산</h3>
+      <p>가산금리가 한도를 줄이는 방식</p>
+    </a>
+    <a class="card" data-cat="대출·금융" href="ltv-explain.html">
+      <span class="badge badge-accent">대출·금융</span>
+      <h3>LTV 완벽 정리</h3>
+      <p>담보인정비율 한도 계산 방식</p>
+    </a>
+    <a class="card" data-cat="대출·금융" href="loan-policy.html">
+      <span class="badge badge-accent">대출·금융</span>
+      <h3>정책 대출상품 정리</h3>
+      <p>디딤돌 · 보금자리 · 신생아특례 비교</p>
+    </a>
+
+    <a class="card" data-cat="인테리어" href="interior-quote.html">
+      <span class="badge badge-accent">인테리어</span>
+      <h3>인테리어 견적 비교의 정석</h3>
+      <p>견적서에서 꼭 확인할 항목</p>
+    </a>
+    <a class="card" data-cat="인테리어" href="interior-company.html">
+      <span class="badge badge-accent">인테리어</span>
+      <h3>인테리어 업체 고르는 법 8가지</h3>
+      <p>실측 · 포트폴리오 · 계약 조건</p>
+    </a>
+    <a class="card" data-cat="인테리어" href="interior-contract.html">
+      <span class="badge badge-accent">인테리어</span>
+      <h3>인테리어 표준계약서 & 대금 분할</h3>
+      <p>계약금 · 중도금 · 잔금 안전 지급</p>
+    </a>
+    <a class="card" data-cat="인테리어" href="interior-defect.html">
+      <span class="badge badge-accent">인테리어</span>
+      <h3>인테리어 하자보수 청구·분쟁 대응</h3>
+      <p>하자 발견부터 분쟁 해결까지</p>
+    </a>
+
+    <a class="card" data-cat="이사·입주" href="moving-types.html">
+      <span class="badge badge-accent">이사·입주</span>
+      <h3>일반·반포장·포장이사 차이</h3>
+      <p>유형별 가격과 책임 범위</p>
+    </a>
+    <a class="card" data-cat="이사·입주" href="moving-quote.html">
+      <span class="badge badge-accent">이사·입주</span>
+      <h3>이사 견적 — 방문 vs 비대면</h3>
+      <p>견적 방식별 장단점과 함정</p>
+    </a>
+    <a class="card" data-cat="이사·입주" href="moving-company.html">
+      <span class="badge badge-accent">이사·입주</span>
+      <h3>이사업체 고르는 법 8가지</h3>
+      <p>허가업체 확인 · 표준약관 · 보험</p>
+    </a>
+    <a class="card" data-cat="이사·입주" href="moving-day-tips.html">
+      <span class="badge badge-accent">이사·입주</span>
+      <h3>이사 당일 분쟁 안 만드는 법</h3>
+      <p>파손 · 추가요금 · 인수인계 수칙</p>
+    </a>
+    <a class="card" data-cat="이사·입주" href="storage-moving.html">
+      <span class="badge badge-accent">이사·입주</span>
+      <h3>보관이사 — 잔금일 안 맞을 때</h3>
+      <p>보관 기간 · 비용 · 주의사항</p>
+    </a>
+    <a class="card" data-cat="이사·입주" href="move-in-admin.html">
+      <span class="badge badge-accent">이사·입주</span>
+      <h3>전입신고·우편물·공과금 이전</h3>
+      <p>입주 후 행정처리 한 번에</p>
+    </a>
+  </div>
+
+  <p class="post-empty" id="postEmpty" style="display:none;">검색 결과가 없습니다 — 다른 키워드로 시도해보세요</p>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="disclaimer">© 톺다</p>
+  </div>
+</footer>
+
+<script src="../assets/app.js?v=20260616"></script>
+<script>
+(function () {
+  'use strict';
+  var grid = document.getElementById('postGrid');
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.card'));
+  var searchEl = document.getElementById('postSearch');
+  var countEl = document.getElementById('postCount');
+  var emptyEl = document.getElementById('postEmpty');
+  var chips = document.querySelectorAll('.post-chip');
+  var curCat = 'all';
+
+  function apply() {
+    var q = (searchEl.value || '').trim().toLowerCase();
+    var shown = 0;
+    cards.forEach(function (c) {
+      var catOk = curCat === 'all' || c.dataset.cat === curCat;
+      var textOk = !q || c.textContent.toLowerCase().indexOf(q) >= 0;
+      var on = catOk && textOk;
+      c.style.display = on ? '' : 'none';
+      if (on) shown += 1;
+    });
+    countEl.textContent = shown + '편' + (curCat !== 'all' ? ' · ' + curCat : '') + (q ? ' · "' + q + '" 검색' : '');
+    emptyEl.style.display = shown ? 'none' : '';
+  }
+
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      curCat = chip.dataset.cat;
+      chips.forEach(function (c) { c.classList.toggle('active', c === chip); });
+      apply();
+    });
+  });
+  searchEl.addEventListener('input', apply);
+  // URL ?cat= 딥링크 (예: posts/index.html?cat=전세·월세)
+  var params = new URLSearchParams(location.search);
+  var cat = params.get('cat');
+  if (cat) {
+    chips.forEach(function (c) {
+      if (c.dataset.cat === cat) c.click();
+    });
+  }
+  apply();
+})();
+</script>
+</body>
+</html>
