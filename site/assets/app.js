@@ -201,11 +201,17 @@ function calcAcquisitionTax(input) {
     price, homes, regulated, areaOver85, firstHome,
     acqType = 'purchase', tempTwoHome = false,
     inheritNoHome = false, giftHeavy = false,
+    unsold2026 = false, // 2026 한시: 지방 미분양 아파트 감면(85㎡↓·6억↓, 50%감면+중과제외)
   } = input;
   if (!price || price <= 0) return null;
   const eok = price / 100000000;
   // 유상취득 6~9억 누진식: 세율 = (취득가액×2/3억 − 3) / 100
   const progRate = eok <= 6 ? 0.01 : eok <= 9 ? ((eok * 2 / 3) - 3) / 100 : 0.03;
+
+  // 2026 한시 미분양 감면 적용 가능 여부 (유상취득 + 85㎡↓ + 6억↓)
+  const R = (window.TOPDA_RATES && window.TOPDA_RATES.acquisitionTax) || {};
+  const relief = R.unsold2026Relief || { areaMaxSqm: 85, priceMax: 600000000, discountRatio: 0.50, excludeHeavySurcharge: true };
+  const unsoldEligible = unsold2026 && acqType === 'purchase' && !areaOver85 && price <= relief.priceMax;
 
   let baseRate, isHeavy = false, scenario = '';
 
@@ -223,10 +229,13 @@ function calcAcquisitionTax(input) {
     scenario = '원시취득·신축(2.8%)';
   } else {
     // 유상취득(매매). 일시적 2주택은 종전주택 처분 조건 충족 시 1주택 세율 적용
-    const effHomes = (homes === 2 && tempTwoHome) ? 1 : homes;
+    // 2026 미분양 한시감면 적용 시 다주택 중과 제외 → 표준세율로
+    const effHomes = (homes === 2 && tempTwoHome) ? 1 :
+      (unsoldEligible && relief.excludeHeavySurcharge ? Math.min(homes, 1) : homes);
     if (effHomes === 1) {
       baseRate = progRate;
-      scenario = (homes === 2 && tempTwoHome) ? '일시적 2주택 → 1주택 세율 적용' : '1주택 표준세율';
+      scenario = (homes === 2 && tempTwoHome) ? '일시적 2주택 → 1주택 세율 적용'
+        : (unsoldEligible && homes >= 2 ? '미분양 한시 감면 — 다주택 중과 제외, 표준세율' : '1주택 표준세율');
     } else if (effHomes === 2) {
       if (regulated) { baseRate = 0.08; isHeavy = true; scenario = '조정대상지역 2주택 중과(8%)'; }
       else { baseRate = progRate; scenario = '비조정 2주택 표준세율'; }
@@ -247,6 +256,14 @@ function calcAcquisitionTax(input) {
   if (acqType === 'purchase' && firstHome && effHomesForFirst === 1 && !isHeavy && eok <= 12) {
     firstHomeDeduct = Math.min(2000000, acquisition);
     acquisition = acquisition - firstHomeDeduct;
+  }
+
+  // 2026 한시 미분양 50% 감면 (취득세 본세에서 차감)
+  let unsoldDeduct = 0;
+  if (unsoldEligible) {
+    unsoldDeduct = acquisition * relief.discountRatio;
+    acquisition = acquisition - unsoldDeduct;
+    scenario += ' · 미분양 한시 50% 감면';
   }
 
   // 농어촌특별세: 전용 85㎡ 초과만 과세 (85㎡ 이하 면제)
@@ -272,7 +289,7 @@ function calcAcquisitionTax(input) {
 
   return {
     baseRate, isHeavy, scenario, acqType,
-    acquisition, firstHomeDeduct,
+    acquisition, firstHomeDeduct, unsoldDeduct, unsoldEligible,
     ruralTax, localEduTax,
     total,
   };
@@ -317,8 +334,9 @@ function calcAcquisitionTax(input) {
     const tempTwoHome = root.querySelector('[name="tempTwoHome"]')?.checked || false;
     const inheritNoHome = root.querySelector('[name="inheritNoHome"]')?.checked || false;
     const giftHeavy = root.querySelector('[name="giftHeavy"]')?.checked || false;
+    const unsold2026 = root.querySelector('[name="unsold2026"]')?.checked || false;
     toggleFields(acqType);
-    const r = calcAcquisitionTax({ price, homes, regulated, areaOver85, firstHome, acqType, tempTwoHome, inheritNoHome, giftHeavy });
+    const r = calcAcquisitionTax({ price, homes, regulated, areaOver85, firstHome, acqType, tempTwoHome, inheritNoHome, giftHeavy, unsold2026 });
     if (!r) {
       setText('total', fmt.won(0));
       ['acquisition','ruralTax','localEduTax','firstHomeDeduct'].forEach(k => setText(k, fmt.won(0)));
@@ -332,6 +350,7 @@ function calcAcquisitionTax(input) {
     setText('ruralTax', r.ruralTax ? fmt.won(r.ruralTax) : (isEn ? 'Exempt' : '면제'));
     setText('localEduTax', fmt.won(r.localEduTax));
     setText('firstHomeDeduct', r.firstHomeDeduct ? '−' + fmt.won(r.firstHomeDeduct) : (isEn ? 'N/A' : '해당 없음'));
+    setText('unsoldDeduct', r.unsoldDeduct ? '−' + fmt.won(r.unsoldDeduct) : (isEn ? 'N/A' : '해당 없음'));
     setText('total', fmt.won(r.total));
     highlightRateRow(r, homes, regulated, price / 100000000);
   };
@@ -411,7 +430,12 @@ function calcBrokerageFee({ price, type }) {
 // - 다주택 중과: 2주택 +20%p, 3주택+ +30%p (조정대상지역 양도 시)
 // - 지방소득세 = 양도소득세 × 10%
 function calcTransferTax(input) {
-  const { sellPrice, buyPrice, cost, holdYears, liveYears, homes, onlyHome, regulated, multiSurcharge } = input;
+  const {
+    sellPrice, buyPrice, cost, holdYears, liveYears,
+    homes, onlyHome, regulated, multiSurcharge,
+    sellDate,        // 'YYYY-MM-DD' — 다주택 중과 한시 유예(2026-05-09까지) 자동 판단용
+    jointOwners = 1, // 공동명의 인원(1=단독, 2=부부 공동 등). 양도차익을 균등 분할 후 세액 합산
+  } = input;
   if (!sellPrice || sellPrice <= 0) return null;
 
   const rawGain = Math.max(0, sellPrice - buyPrice - cost);
@@ -470,12 +494,22 @@ function calcTransferTax(input) {
     appliedRateLabel = (t.marginalRate * 100).toFixed(0) + '% (누진)';
   }
 
-  // 다주택 중과 (조정지역 + 다주택 + 중과 적용 체크 + 단기보유 아닐 때)
+  // 다주택 중과 한시 유예 자동 판단:
+  //  보유 2년+ & 양도일 ≤ 2026-05-09 이면 조정지역·다주택이어도 중과 미적용.
+  const W = (window.TOPDA_RATES && window.TOPDA_RATES.transferTax) || {};
+  const waiverUntil = W.multiHomeSurchargeWaiverUntil || '2026-05-09';
+  const waiverMinHold = W.multiHomeSurchargeWaiverMinHoldYears || 2;
+  const sd = (sellDate && /^\d{4}-\d{2}-\d{2}$/.test(sellDate)) ? sellDate : '';
+  const surchargeWaived = sd && sd <= waiverUntil && holdYears >= waiverMinHold;
+
+  // 다주택 중과 (조정지역 + 다주택 + 중과 적용 체크 + 단기보유 아닐 때 + 한시유예 미해당)
   let surchargeRate = 0;
-  if (!shortTermRate && regulated && multiSurcharge && homes >= 2) {
+  if (!shortTermRate && regulated && multiSurcharge && homes >= 2 && !surchargeWaived) {
     surchargeRate = homes >= 3 ? 0.30 : 0.20;
     rate += surchargeRate;
     appliedRateLabel += ' + ' + (surchargeRate * 100) + '%p 중과';
+  } else if (surchargeWaived && regulated && multiSurcharge && homes >= 2) {
+    appliedRateLabel += ' (중과 한시유예 적용 — ' + waiverUntil + '까지)';
   }
 
   let incomeTax;
@@ -486,6 +520,32 @@ function calcTransferTax(input) {
   }
   incomeTax = Math.max(0, incomeTax);
 
+  // 공동명의 안분: 양도차익을 인원수로 균등 분할 후 각자 누진세율로 산출 → 합산.
+  //  단순 분할로 누진세율 구간이 낮아져 절세 효과가 발생한다.
+  //  단기보유·다주택 중과는 인원과 무관하므로 위와 동일 세율 적용.
+  const owners = Math.max(1, Math.min(4, Math.round(Number(jointOwners) || 1)));
+  let jointTotal = null, savings = 0;
+  if (owners > 1 && !exempted) {
+    const perGain = taxableGain / owners;
+    const perLtDeduct = perGain * ltDeductRate;
+    const perIncome = Math.max(0, perGain - perLtDeduct);
+    const perBasic = Math.min(2500000, perIncome);
+    const perBase = Math.max(0, perIncome - perBasic);
+    let perTax;
+    if (shortTermRate) {
+      perTax = perBase * shortTermRate;
+    } else if (surchargeRate > 0) {
+      perTax = perBase * rate;
+    } else {
+      const t = calcProgressiveTax(perBase);
+      perTax = Math.max(0, perBase * t.marginalRate - t.deduction);
+    }
+    const jointIncomeTax = perTax * owners;
+    const jointLocalTax = jointIncomeTax * 0.10;
+    jointTotal = jointIncomeTax + jointLocalTax;
+    savings = Math.max(0, (incomeTax + incomeTax * 0.10) - jointTotal);
+  }
+
   const localTax = incomeTax * 0.10;
   const total = incomeTax + localTax;
   const effective = sellPrice > 0 ? (total / sellPrice * 100) : 0;
@@ -494,6 +554,7 @@ function calcTransferTax(input) {
     exempted, taxableGainRatio, rawGain, taxableGain,
     ltDeductRate, ltDeduct, incomeAmount, basicDeduct, taxBase,
     rate, appliedRateLabel, incomeTax, localTax, total, effective,
+    surchargeWaived, jointOwners: owners, jointTotal, jointSavings: savings,
   };
 }
 
@@ -531,13 +592,21 @@ function calcProgressiveTax(base) {
     const onlyHome = root.querySelector('[name="onlyHome"]')?.checked || false;
     const regulated = root.querySelector('[name="regulated"]')?.checked || false;
     const multiSurcharge = root.querySelector('[name="multiSurcharge"]')?.checked || false;
-    const r = calcTransferTax({ sellPrice, buyPrice, cost, holdYears, liveYears, homes, onlyHome, regulated, multiSurcharge });
+    const sellDate = root.querySelector('[name="sellDate"]')?.value || '';
+    const jointOwners = Number(root.querySelector('[name="jointOwners"]')?.value || 1);
+    const r = calcTransferTax({
+      sellPrice, buyPrice, cost, holdYears, liveYears,
+      homes, onlyHome, regulated, multiSurcharge,
+      sellDate, jointOwners,
+    });
     const exemptBox = root.querySelector('[data-out="exemptBox"]');
+    const jointBox = root.querySelector('[data-out="jointBox"]');
     if (!r) {
       ['total','gain','ltDeduct','income','basicDeduct','taxBase','incomeTax','localTax'].forEach(k => setText(k, '0원'));
       setText('rate', '—');
       setText('effective', '실효세율 —');
       if (exemptBox) exemptBox.style.display = 'none';
+      if (jointBox) jointBox.style.display = 'none';
       return;
     }
     setText('gain', fmt.won(r.rawGain));
@@ -555,12 +624,28 @@ function calcProgressiveTax(base) {
         exemptBox.style.display = '';
         const msg = root.querySelector('[data-out="exemptMsg"]');
         if (msg) msg.innerHTML = '<strong>1세대 1주택 비과세 대상</strong>양도가액 12억원 이하 + 보유 2년 이상 요건을 충족합니다. 별도 세부담이 없습니다.';
+      } else if (r.surchargeWaived && regulated && multiSurcharge && homes >= 2) {
+        exemptBox.style.display = '';
+        const msg = root.querySelector('[data-out="exemptMsg"]');
+        if (msg) msg.innerHTML = '<strong>다주택 중과 한시 유예 적용</strong>양도일이 2026-05-09 이전이고 보유 2년 이상이라 중과세율(20~30%p)이 자동으로 빠졌습니다.';
       } else if (r.taxableGainRatio < 1 && r.taxableGainRatio > 0) {
         exemptBox.style.display = '';
         const msg = root.querySelector('[data-out="exemptMsg"]');
         if (msg) msg.innerHTML = '<strong>고가주택 안분과세</strong>1세대1주택이나 12억 초과. 양도차익 중 ' + (r.taxableGainRatio * 100).toFixed(1) + '%만 과세대상입니다.';
       } else {
         exemptBox.style.display = 'none';
+      }
+    }
+    // 공동명의 절세 비교
+    if (jointBox) {
+      if (r.jointTotal != null && r.jointOwners > 1 && r.jointSavings > 0) {
+        jointBox.style.display = '';
+        setText('jointSingle', fmt.won(r.total));
+        setText('jointOwnersOut', r.jointOwners + '인 공동');
+        setText('jointTotalOut', fmt.won(r.jointTotal));
+        setText('jointSavings', '−' + fmt.won(r.jointSavings) + ' 절세');
+      } else {
+        jointBox.style.display = 'none';
       }
     }
   };

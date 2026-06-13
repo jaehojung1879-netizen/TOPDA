@@ -120,8 +120,18 @@
       nonHouse: 4.0, // 비주택 본세(%)
       firstHomeDeductMax: 2000000, // 생애최초 감면 한도(원)
       ruralTaxOver85: 0.2, // 85㎡ 초과 농특세(%)
-      effectiveFrom: '2023-01-01',
-      source: '지방세법 제11·15조, 지방세특례제한법 제36조의3',
+      // 2026 한시: 지방 준공 후 미분양 아파트 — 전용 85㎡ 이하·취득가 6억 이하
+      //   취득세 50% 감면 + 다주택자 취득세 중과에서 제외 (1년 한시)
+      unsold2026Relief: {
+        areaMaxSqm: 85,
+        priceMax: 600000000,
+        discountRatio: 0.50,
+        excludeHeavySurcharge: true,
+        validUntil: '2026-12-31',
+        source: '지방세특례제한법(2026년 개정) — 지방 미분양 해소 한시 감면',
+      },
+      effectiveFrom: '2026-01-01',
+      source: '지방세법 제11·15조, 지방세특례제한법 제36조의3 (2026 미분양 한시감면 반영)',
     },
 
     // 양도소득세 (소득세법) reference
@@ -131,8 +141,11 @@
       shortTermNonHouse: { under1y: 50, under2y: 40 },
       basicDeduct: 2500000, // 기본공제(원)
       localTaxRate: 10, // 지방소득세(국세의 %)
-      effectiveFrom: '2024-01-01',
-      source: '소득세법 제55·95·104조',
+      // 다주택 양도세 중과 한시 유예: 2년 이상 보유 시 2026-05-09까지 양도하면 중과 미적용
+      multiHomeSurchargeWaiverUntil: '2026-05-09',
+      multiHomeSurchargeWaiverMinHoldYears: 2,
+      effectiveFrom: '2026-01-01',
+      source: '소득세법 제55·95·104조 (다주택 중과 한시 유예 2026.5.9까지)',
     },
 
     // 인지세 (인지세법 제3조) reference — 구간별 정액(원)
