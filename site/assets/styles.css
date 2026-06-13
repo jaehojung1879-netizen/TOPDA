@@ -853,6 +853,27 @@ table.data tr.is-active > td:first-child, table.data tr.is-active > th:first-chi
 @media (min-width: 768px) {
   .home-subtagline { font-size: 1.05rem; margin-top: 18px; }
 }
+/* 홈 통합 검색 바 */
+.home-search {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 20px; max-width: 520px;
+  background: var(--surface, #fff); border: 1px solid var(--border-strong, #d1d5db);
+  border-radius: 12px; padding: 4px 4px 4px 14px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.home-search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent,#2563eb) 16%, transparent); }
+.home-search svg { width: 18px; height: 18px; color: var(--text-muted); flex-shrink: 0; }
+.home-search input {
+  flex: 1; min-width: 0; border: 0; background: transparent; outline: none;
+  font-size: 0.98rem; font-family: inherit; color: var(--text); padding: 8px 0;
+}
+.home-search button {
+  flex-shrink: 0; border: 0; cursor: pointer;
+  background: var(--accent, #2563eb); color: #fff; font-weight: 700; font-size: 0.9rem;
+  padding: 9px 16px; border-radius: 9px; font-family: inherit;
+}
+.home-search button:hover { background: #1e40af; }
 .strip-sub { font-weight: 500; color: var(--text-muted); font-size: 0.85em; margin-left: 4px; }
 @media (max-width: 639px) { .strip-sub { display: block; margin-left: 0; margin-top: 2px; } }
 
