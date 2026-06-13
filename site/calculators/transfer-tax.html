@@ -20,9 +20,9 @@
 <meta name="twitter:title" content="양도소득세 계산기 — 톺다" />
 <meta name="twitter:description" content="주택 양도소득세 자동 계산기. 1세대1주택 비과세·고가주택 안분과세·장기보유특별공제·다주택 중과세율까지 현행 소득세법 기준으로 반영." />
 <meta name="twitter:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
-<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260619"></script>
+<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260620"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260619" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260620" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -146,6 +146,24 @@
         </div>
       </div>
 
+      <div class="field-row">
+        <div class="field">
+          <label for="t-selldate">양도일(예정일)</label>
+          <input id="t-selldate" name="sellDate" type="date" value="" />
+          <span class="hint">다주택 중과 한시 유예(2026.5.9까지) 자동 판단용. 2년 이상 보유 + 이 날짜 이전 양도면 자동 면제.</span>
+        </div>
+        <div class="field">
+          <label for="t-owners">명의(공동명의)</label>
+          <select id="t-owners" name="jointOwners">
+            <option value="1">단독 명의</option>
+            <option value="2">2인 공동(부부 등)</option>
+            <option value="3">3인 공동</option>
+            <option value="4">4인 공동</option>
+          </select>
+          <span class="hint">양도차익을 인원수로 균등 분할 → 누진 구간 낮아져 절세. 결과 패널에 비교 표시.</span>
+        </div>
+      </div>
+
       <div class="field">
         <label>주택 수 (본 양도 포함)</label>
         <div class="radio-group">
@@ -203,6 +221,16 @@
       <div class="callout callout-success" data-out="exemptBox" style="display: none; margin-top: 20px; margin-bottom: 0;">
         <div class="icon">✓</div>
         <div class="body" data-out="exemptMsg"><strong>비과세 대상</strong></div>
+      </div>
+
+      <div class="callout callout-info" data-out="jointBox" style="display: none; margin-top: 16px; margin-bottom: 0;">
+        <div class="icon">i</div>
+        <div class="body">
+          <strong>공동명의 절세 비교</strong>
+          단독 명의 <span data-out="jointSingle">0원</span> · <span data-out="jointOwnersOut">2인 공동</span> <span data-out="jointTotalOut">0원</span>
+          → <span data-out="jointSavings" style="color:#059669; font-weight:700;">−0원 절세</span>
+          <span class="note">양도차익을 인원수로 균등 분할 후 각자 누진세율로 산출. 누진 구간이 낮아져 절세됩니다. (실제로는 지분 비율·자금 출처 등도 검토 필요)</span>
+        </div>
       </div>
 
       <div class="callout callout-info" style="margin-top: 16px; margin-bottom: 0;">
@@ -407,7 +435,7 @@
     <p class="disclaimer">© 톺다.</p>
   </div>
 </footer>
-<script src="../assets/rates.js?v=20260619"></script>
-<script src="../assets/app.js?v=20260619"></script>
+<script src="../assets/rates.js?v=20260620"></script>
+<script src="../assets/app.js?v=20260620"></script>
 </body>
 </html>
