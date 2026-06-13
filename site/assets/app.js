@@ -462,16 +462,17 @@ function calcTransferTax(input) {
   // 장기보유특별공제
   let ltDeductRate = 0;
   if (!shortTermRate && holdYears >= 3) {
-    if (isOneHome && sellPrice > 1200000000) {
+    if (isOneHome && sellPrice > 1200000000 && liveYears >= 2) {
+      // 표2(1세대1주택·거주 2년 이상): 보유 연 4%(최대 40%) + 거주 연 4%(최대 40%), 합산 최대 80%
       const holdY = Math.min(holdYears, 10);
       const liveY = Math.min(liveYears, 10);
       const holdRate = holdY >= 3 ? Math.min(0.40, 0.12 + (holdY - 3) * 0.04) : 0;
       const liveRate = liveY >= 3 ? Math.min(0.40, 0.12 + (liveY - 3) * 0.04) : 0;
       ltDeductRate = Math.min(0.80, holdRate + liveRate);
     } else {
+      // 표1(일반): 보유 연 2%, 3년 6% ~ 15년 30%
       const y = Math.min(holdYears, 15);
-      ltDeductRate = Math.max(0, (y - 2) * 0.02);
-      ltDeductRate = Math.min(0.30, ltDeductRate);
+      ltDeductRate = Math.min(0.30, y * 0.02);
     }
   }
   const ltDeduct = taxableGain * ltDeductRate;
@@ -902,23 +903,30 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       return 350000;
     }
 
-    // 국민주택채권 매입률 (특별시·광역시 기준 근사, 시가표준액 구간별 — 주택도시기금)
-    function bondRate(std, asset) {
+    // 국민주택채권 매입률 (주택도시기금법 시행령 별표, 시가표준액 구간별)
+    //  region: 'metro'(특별시·광역시) | 'other'(그 밖의 지역) — 상위 구간 요율이 다름
+    function bondRate(std, asset, region) {
       const eok = std / 100000000;
+      const metro = region !== 'other';
       if (asset === 'land') {
         if (std < 5000000) return 0;
-        if (eok < 0.5) return 0.025;
-        if (eok < 1) return 0.04;
-        return 0.05;
+        if (eok < 0.5) return metro ? 0.025 : 0.020;
+        if (eok < 1) return metro ? 0.040 : 0.035;
+        return metro ? 0.050 : 0.045;
       }
       // 주택
       if (std < 20000000) return 0;
       if (eok < 0.5) return 0.013;
       if (eok < 1) return 0.019;
-      if (eok < 1.6) return 0.021;
-      if (eok < 2.6) return 0.023;
-      if (eok < 6) return 0.026;
-      return 0.031;
+      if (eok < 1.6) return metro ? 0.021 : 0.018;
+      if (eok < 2.6) return metro ? 0.023 : 0.021;
+      if (eok < 6) return metro ? 0.026 : 0.024;
+      return metro ? 0.031 : 0.026;
+    }
+
+    // 채권 매입금액은 만원 단위로 절상(5천원 미만 절사·5천원 이상 절상) — 주택도시기금법 시행령
+    function roundBond(amount) {
+      return Math.round(amount / 10000) * 10000;
     }
 
     // 법무사 보수(소유권이전) 누진 근사 — 대한법무사협회 보수표 기준
@@ -935,13 +943,13 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
 
     // 법무사·등기 부대비용 (등록면허세·취득세는 별도 본세로 이미 반영)
     //  인지세 + 등기신청 수수료 + 국민주택채권 즉시매도 할인부담 + 법무사 보수(+부가세)
-    function registrationCost(price, std, discount, self, asset) {
+    function registrationCost(price, std, discount, self, asset, region) {
       if (!price || price <= 0) return { total: 0, stamp: 0, regFee: 0, bond: 0, bondBuy: 0, rate: 0, scrivener: 0, vat: 0, std: 0 };
       if (!std || std <= 0) std = Math.round(price * 0.7);
       const stamp = stampDuty(price);
       const regFee = 15000;
-      const rate = bondRate(std, asset || 'house');
-      const bondBuy = Math.round(std * rate);
+      const rate = bondRate(std, asset || 'house', region);
+      const bondBuy = roundBond(std * rate);
       const bond = Math.round(bondBuy * (discount || 0));
       const scrivener = self ? 0 : scrivenerFee(price);
       const vat = Math.round(scrivener * 0.1);
@@ -1306,15 +1314,17 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
 
       let ltRate = 0;
       if (holdYears >= 3) {
-        if (isOne && sellPrice > 1200000000) {
+        if (isOne && sellPrice > 1200000000 && liveYears >= 2) {
+          // 표2(1세대1주택·거주 2년 이상): 보유 연 4% + 거주 연 4%, 합산 최대 80%
           const h = Math.min(holdYears, 10);
           const l = Math.min(liveYears, 10);
           const hr = h >= 3 ? Math.min(0.40, 0.12 + (h-3)*0.04) : 0;
           const lr = l >= 3 ? Math.min(0.40, 0.12 + (l-3)*0.04) : 0;
           ltRate = Math.min(0.80, hr + lr);
         } else {
+          // 표1(일반): 보유 연 2%, 3년 6% ~ 15년 30%
           const y = Math.min(holdYears, 15);
-          ltRate = Math.min(0.30, Math.max(0, (y-2) * 0.02));
+          ltRate = Math.min(0.30, y * 0.02);
         }
       }
       const ltDeduct = taxableGain * ltRate;
