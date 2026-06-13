@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>통합 검색 — 톺다</title>
+<meta name="description" content="톺다 전체에서 가이드·계산기·시세정보·체크리스트를 한 번에 검색하세요." />
+<meta name="robots" content="noindex" />
+<!-- seo:meta -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="canonical" href="https://jaehojung1879-netizen.github.io/TOPDA/find.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="통합 검색 — 톺다" />
+<meta property="og:description" content="가이드·계산기·시세정보·체크리스트를 한 번에 검색" />
+<meta property="og:url" content="https://jaehojung1879-netizen.github.io/TOPDA/find.html" />
+<meta property="og:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
+<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260619"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="assets/styles.css?v=20260619" />
+<style>
+  .find-box { margin: 4px 0 18px; }
+  .find-box input {
+    width: 100%; padding: 14px 16px; border: 1px solid var(--border-strong, #d1d5db);
+    border-radius: 12px; font-size: 1.05rem; font-family: inherit; background: #fff; box-sizing: border-box;
+  }
+  .find-box input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent,#2563eb) 16%, transparent); }
+  .find-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+  .find-chip {
+    padding: 7px 14px; border: 1px solid var(--border, #e5e7eb); border-radius: 999px;
+    background: #fff; font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  .find-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .find-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .find-count { font-size: 0.85rem; color: var(--text-muted); margin: 0 0 14px; }
+  .find-results { display: grid; gap: 10px; }
+  .find-item {
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    padding: 14px 16px; border: 1px solid var(--border, #e5e7eb); border-radius: 12px;
+    background: #fff; transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .find-item:hover { border-color: var(--accent); box-shadow: 0 8px 20px -12px rgba(30,58,138,0.3); }
+  .find-item .badge { flex-shrink: 0; }
+  .find-item h3 { font-size: 1rem; margin: 0; letter-spacing: -0.01em; }
+  .find-item p { font-size: 0.86rem; color: var(--text-muted); margin: 4px 0 0; width: 100%; }
+  .find-empty { border: 1px dashed var(--border, #d1d5db); border-radius: 14px; padding: 28px; text-align: center; color: var(--text-muted); }
+  mark { background: color-mix(in srgb, var(--accent,#2563eb) 22%, transparent); color: inherit; border-radius: 3px; padding: 0 1px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="guides.html" data-nav>가이드</a>
+      <a href="calculators/index.html" data-nav>계산기</a>
+      <a href="market.html" data-nav>시세정보</a>
+      <a href="checklists/index.html" data-nav>체크리스트</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="guides.html">가이드</a>
+    <a href="calculators/index.html">계산기</a>
+    <a href="market.html">시세정보</a>
+    <a href="checklists/index.html">체크리스트</a>
+    <a href="board.html">게시판</a>
+    <a href="about.html">안내</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="index.html">홈</a> / 검색</div>
+    <h1>통합 검색</h1>
+    <div class="meta"><span>가이드·계산기·시세정보·체크리스트를 한 번에</span></div>
+  </div>
+
+  <div class="find-box">
+    <input id="findInput" type="search" placeholder="무엇이든 검색하세요 (예: 취득세, 전세 보증금, DSR, 헬리오시티)" autocomplete="off" aria-label="통합 검색" autofocus />
+  </div>
+
+  <div class="find-chips" role="tablist">
+    <button class="find-chip active" data-type="all">전체</button>
+    <button class="find-chip" data-type="가이드">가이드</button>
+    <button class="find-chip" data-type="계산기">계산기</button>
+    <button class="find-chip" data-type="시세정보">시세정보</button>
+    <button class="find-chip" data-type="체크리스트">체크리스트</button>
+    <button class="find-chip" data-type="인테리어">인테리어</button>
+  </div>
+
+  <p class="find-count" id="findCount"></p>
+  <div class="find-results" id="findResults"></div>
+  <p class="find-empty" id="findEmpty" style="display:none;">검색 결과가 없습니다 — 다른 키워드로 시도해보세요</p>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="disclaimer">© 톺다</p>
+  </div>
+</footer>
+
+<script src="assets/app.js?v=20260619"></script>
+<script>
+(function () {
+  'use strict';
+  var input = document.getElementById('findInput');
+  var resultsEl = document.getElementById('findResults');
+  var countEl = document.getElementById('findCount');
+  var emptyEl = document.getElementById('findEmpty');
+  var chips = document.querySelectorAll('.find-chip');
+  var DATA = [];
+  var curType = 'all';
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function hl(text, q) {
+    var t = esc(text);
+    if (!q) return t;
+    try {
+      var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+      return t.replace(re, '<mark>$1</mark>');
+    } catch (e) { return t; }
+  }
+  function debounce(fn, ms) { var t; return function () { clearTimeout(t); var a = arguments; t = setTimeout(function () { fn.apply(null, a); }, ms); }; }
+
+  function score(item, q) {
+    var title = item.title.toLowerCase(), desc = (item.desc || '').toLowerCase();
+    if (title === q) return 100;
+    if (title.indexOf(q) === 0) return 80;
+    if (title.indexOf(q) >= 0) return 60;
+    if ((item.cat || '').toLowerCase().indexOf(q) >= 0) return 45;
+    if (desc.indexOf(q) >= 0) return 30;
+    return 0;
+  }
+
+  function render() {
+    var q = (input.value || '').trim().toLowerCase();
+    var list = DATA
+      .filter(function (it) { return curType === 'all' || it.type === curType; })
+      .map(function (it) { return { it: it, s: q ? score(it, q) : 50 }; })
+      .filter(function (x) { return x.s > 0; })
+      .sort(function (a, b) { return b.s - a.s; });
+
+    if (!q && curType === 'all') {
+      // 기본: 타입별로 고르게 보여주기 위해 그대로(점수 동일) — 상위 40개
+      list = list.slice(0, 40);
+    } else {
+      list = list.slice(0, 60);
+    }
+
+    var rawQ = (input.value || '').trim();
+    resultsEl.innerHTML = list.map(function (x) {
+      var it = x.it;
+      return '<a class="find-item" href="' + it.url + '">' +
+        '<span class="badge badge-accent">' + esc(it.type) + '</span>' +
+        '<h3>' + hl(it.title, rawQ) + '</h3>' +
+        (it.desc ? '<p>' + hl(it.desc, rawQ) + '</p>' : '') +
+        '</a>';
+    }).join('');
+    countEl.textContent = list.length + '개' + (curType !== 'all' ? ' · ' + curType : '') + (rawQ ? ' · "' + rawQ + '"' : '');
+    emptyEl.style.display = list.length ? 'none' : '';
+  }
+
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      curType = chip.dataset.type;
+      chips.forEach(function (c) { c.classList.toggle('active', c === chip); });
+      render();
+    });
+  });
+  input.addEventListener('input', debounce(render, 120));
+
+  fetch('assets/search-index.json?v=20260619', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : { items: [] }; })
+    .then(function (j) {
+      DATA = j.items || [];
+      // URL ?q= 딥링크 (홈/404 검색창에서 진입)
+      var params = new URLSearchParams(location.search);
+      var q = params.get('q');
+      if (q) input.value = q;
+      render();
+      input.focus();
+    })
+    .catch(function () {
+      countEl.textContent = '';
+      resultsEl.innerHTML = '<div class="find-empty">검색 데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요</div>';
+    });
+})();
+</script>
+</body>
+</html>
