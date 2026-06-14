@@ -3140,12 +3140,24 @@ function calcJeonseLoanByAgency(deposit, opts) {
     const income = incomeEl ? fmt.parseWon(incomeEl.value) : 0;
     const creditEl = root.querySelector('[name="jCredit"]');
     const creditLoan = creditEl ? fmt.parseWon(creditEl.value) : 0;
-    const list = calcJeonseLoanByAgency(deposit, { metro, youth, income, creditLoan });
+    const agencySel = root.querySelector('[name="jAgency"]:checked')?.value || 'all';
+    let list = calcJeonseLoanByAgency(deposit, { metro, youth, income, creditLoan });
+    // 보증기관을 먼저 선택했으면 해당 기관만 표시(전체 비교는 그대로 3곳)
+    if (agencySel !== 'all') list = list.filter((a) => a.key === agencySel);
     const box = root.querySelector('[data-out="agencyList"]');
     if (!box) return;
+    // 헤딩·시나리오 라벨을 선택 상태에 맞게 갱신
+    if (agencySel === 'all') {
+      setText('jHeading', '보증기관별 전세대출 한도');
+      setText('jScenario', '가장 많이 받을 수 있는 곳');
+    } else {
+      setText('jHeading', (list[0]?.name || agencySel) + ' 전세대출 한도');
+      setText('jScenario', '선택한 보증기관 기준');
+    }
     if (!deposit) { box.innerHTML = '<p style="color:var(--text-muted)">임차보증금을 입력하세요.</p>'; setText('jBest', fmt.won(0)); return; }
     setText('jBest', fmt.won(list.length ? list[0].limit : 0));
     box.innerHTML = list.map((a, idx) => {
+      const isBest = (agencySel === 'all' && idx === 0 && a.eligible);
       const pct = a.eligible ? (a.ratioApplied + '%') : '대상 외';
       const self = Math.max(0, deposit - a.limit);
       const incomeRow = a.incomeCap
@@ -3153,8 +3165,8 @@ function calcJeonseLoanByAgency(deposit, opts) {
         : '<div class="agency-meta">소득 제한 없음 <span style="color:#059669;">✓</span></div>';
       const bindingRow = a.eligible ? '<div class="agency-meta" style="color:var(--accent,#2563eb);">결정 산식: ' + a.bindingLabel + '</div>' : '';
       const incomeBasedRow = (a.incomeBased != null) ? '<div class="agency-meta">소득기준 한도: ' + fmt.won(Math.round(a.incomeBased)) + ' (연소득×배수 − 신용대출 차감)</div>' : '';
-      return '<div class="agency-card' + (idx === 0 && a.eligible ? ' is-best' : '') + '">' +
-        '<div class="agency-top"><span class="agency-name">' + a.name + (idx === 0 && a.eligible ? ' <span class="agency-best">최대</span>' : '') + '</span>' +
+      return '<div class="agency-card' + (isBest ? ' is-best' : '') + '">' +
+        '<div class="agency-top"><span class="agency-name">' + a.name + (isBest ? ' <span class="agency-best">최대</span>' : '') + '</span>' +
         '<span class="agency-limit">' + fmt.won(a.limit) + '</span></div>' +
         '<div class="agency-meta">보증비율 ' + pct + ' · 최대 ' + fmt.won(a.maxAmount) + ' · 대상 보증금 ' + (isFinite(a.depositCap) ? '≤' + fmt.won(a.depositCap) : '제한 적음') + '</div>' +
         incomeRow +
