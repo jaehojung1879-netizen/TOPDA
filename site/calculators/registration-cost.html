@@ -120,6 +120,15 @@
       </div>
 
       <div class="field">
+        <label>소재지<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택채권 매입률은 특별시·광역시와 그 밖의 지역(도·시·군)이 상위 구간에서 다릅니다. 예: 시가표준액 6억 이상 주택은 특별시·광역시 3.1%, 그 밖의 지역 2.6%.">?</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="region" value="metro" checked/><span>특별시·광역시</span></label>
+          <label><input type="radio" name="region" value="other"/><span>그 밖의 지역</span></label>
+        </div>
+        <span class="hint">채권 매입률 구간이 지역에 따라 달라집니다.</span>
+      </div>
+
+      <div class="field">
         <label for="rc-price">거래금액 (매매가)</label>
         <div class="input-suffix" data-suffix="원">
           <input id="rc-price" name="price" type="text" inputmode="numeric" data-format="won" value="800,000,000"/>
@@ -136,9 +145,9 @@
       </div>
 
       <div class="field">
-        <label for="rc-discount">국민주택채권 할인율 (고객부담률)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="대부분 채권을 즉시 매도(할인)하고 그 손실만 부담합니다. 할인율은 시장금리에 따라 매일 바뀌며 최근 8% 안팎입니다. 당일 고시는 은행·법무사에 확인하세요.">?</span></label>
+        <label for="rc-discount">국민주택채권 할인율 (고객부담률)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="대부분 채권을 즉시 매도(할인)하고 그 손실만 부담합니다. 고객부담률은 시장금리에 따라 매일 바뀌며 최근 15% 안팎입니다. 당일 정확한 값은 은행 국민주택채권 포털(우리·국민·신한 등)에서 확인하세요.">?</span></label>
         <div class="input-suffix" data-suffix="%">
-          <input id="rc-discount" name="discount" type="number" min="0" max="30" step="0.1" value="8.7"/>
+          <input id="rc-discount" name="discount" type="number" min="0" max="30" step="0.1" value="15"/>
         </div>
       </div>
 
@@ -207,24 +216,28 @@
     if (price <= 1000000000) return 150000;
     return 350000;
   }
-  // 국민주택채권 매입률 (특별시·광역시 기준 근사, 시가표준액 구간별)
-  function bondRate(std, asset) {
+  // 국민주택채권 매입률 (주택도시기금법 시행령 별표, 시가표준액 구간별)
+  //  region: 'metro'(특별시·광역시) | 'other'(그 밖의 지역)
+  function bondRate(std, asset, region) {
     const eok = std / 100000000;
+    const metro = region !== 'other';
     if (asset === 'land') {
       if (std < 5000000) return 0;
-      if (eok < 0.5) return 0.025;
-      if (eok < 1) return 0.04;
-      return 0.05;
+      if (eok < 0.5) return metro ? 0.025 : 0.020;
+      if (eok < 1) return metro ? 0.040 : 0.035;
+      return metro ? 0.050 : 0.045;
     }
     // 주택
     if (std < 20000000) return 0;
     if (eok < 0.5) return 0.013;
     if (eok < 1) return 0.019;
-    if (eok < 1.6) return 0.021;
-    if (eok < 2.6) return 0.023;
-    if (eok < 6) return 0.026;
-    return 0.031;
+    if (eok < 1.6) return metro ? 0.021 : 0.018;
+    if (eok < 2.6) return metro ? 0.023 : 0.021;
+    if (eok < 6) return metro ? 0.026 : 0.024;
+    return metro ? 0.031 : 0.026;
   }
+  // 채권 매입금액은 만원 단위로 절상(5천원 미만 절사·5천원 이상 절상)
+  const roundBond = (amount) => Math.round(amount / 10000) * 10000;
   // 법무사 보수(소유권이전) 누진 근사
   function scrivenerFee(price) {
     if (price <= 0) return 0;
@@ -242,13 +255,14 @@
     let std = parseWon($('rc-std').value);
     if (!std) std = Math.round(price * 0.7);
     const asset = document.querySelector('input[name="asset"]:checked').value;
+    const region = document.querySelector('input[name="region"]:checked').value;
     const discount = (+$('rc-discount').value || 0) / 100;
     const self = $('rc-self').checked;
 
     const stamp = stampDuty(price);
     const fee = 15000;
-    const rate = bondRate(std, asset);
-    const bondBuy = Math.round(std * rate);
+    const rate = bondRate(std, asset, region);
+    const bondBuy = roundBond(std * rate);
     const bond = Math.round(bondBuy * discount);
     const scrivener = self ? 0 : scrivenerFee(price);
     const vat = Math.round(scrivener * 0.1);

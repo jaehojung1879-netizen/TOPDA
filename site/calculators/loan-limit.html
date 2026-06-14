@@ -178,6 +178,16 @@
     <!-- ========== 전세자금대출 ========== -->
     <div class="calc-form" data-panel="jeonse" style="display:none;">
       <div class="field">
+        <label>보증기관 선택<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="전세자금대출은 어느 보증기관의 보증을 받느냐에 따라 보증비율·최대한도·소득요건·대상 보증금이 달라집니다. 먼저 기관을 고르면 해당 기관 기준으로 한도를 계산하고, ‘전체 비교’는 세 기관을 한눈에 비교합니다.">?</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="jAgency" value="all" checked/><span>전체 비교</span></label>
+          <label><input type="radio" name="jAgency" value="HF"/><span>HF(주택금융공사)</span></label>
+          <label><input type="radio" name="jAgency" value="HUG"/><span>HUG(주택도시보증)</span></label>
+          <label><input type="radio" name="jAgency" value="SGI"/><span>SGI서울보증</span></label>
+        </div>
+        <span class="hint">보증기관별로 보증비율·최대한도·소득요건이 다릅니다. 먼저 기관을 선택하거나 전체를 비교하세요.</span>
+      </div>
+      <div class="field">
         <label for="j-deposit">임차보증금 (전세금)</label>
         <div class="input-suffix" data-suffix="원">
           <input id="j-deposit" name="deposit" type="text" inputmode="numeric" data-format="won" value="500,000,000" />
@@ -220,8 +230,8 @@
     </div>
 
     <div class="calc-result" data-panel="jeonse" style="display:none;">
-      <h3>보증기관별 전세대출 한도</h3>
-      <div class="result-scenario">가장 많이 받을 수 있는 곳</div>
+      <h3 data-out="jHeading">보증기관별 전세대출 한도</h3>
+      <div class="result-scenario" data-out="jScenario">가장 많이 받을 수 있는 곳</div>
       <div class="total" data-out="jBest">0원</div>
       <div class="agency-list" data-out="agencyList" style="margin-top:16px;"></div>
       <div class="callout callout-warn" style="margin-top:16px; margin-bottom:0;">
