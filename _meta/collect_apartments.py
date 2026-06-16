@@ -21,8 +21,13 @@ from collections import defaultdict
 import lib_pdata as L
 
 # ── K-apt(공동주택) 단지정보 — 세대수·준공연도 보강 ──
-KAPT_LIST = "https://apis.data.go.kr/1613000/AptListService3/getSigunguAptList3"
-KAPT_INFO = "https://apis.data.go.kr/1613000/AptBasisInfoServiceV3/getAphusBassInfoV3"
+# data.go.kr이 버전을 올리면(예: V3→V4) 구버전 엔드포인트는 403/폐기된다.
+# V4를 우선 시도하고 V3로 폴백해 '활용신청·승인된 버전'을 자동으로 찾는다.
+KAPT_HOST = "https://apis.data.go.kr/1613000/"
+KAPT_LIST_OPS = ["AptListService4/getSigunguAptList4", "AptListService3/getSigunguAptList3"]
+KAPT_INFO_OPS = ["AptBasisInfoServiceV4/getAphusBassInfoV4", "AptBasisInfoServiceV3/getAphusBassInfoV3"]
+_list_op = None   # 작동 확인된 목록 오퍼레이션(첫 성공 후 캐시)
+_info_op = None   # 작동 확인된 기본정보 오퍼레이션(첫 성공 후 캐시)
 
 
 def clean_school(name):
@@ -42,35 +47,51 @@ def _norm_name(s):
 
 
 def kapt_map(sigungu_code, api_key):
-    """시군구 단지목록 → {정규화 단지명: kaptCode}. 권한 오류(403)면 None(이후 호출 생략 신호)."""
-    out = {}
-    try:
-        root = L.get_xml(KAPT_LIST, {"serviceKey": api_key, "sigunguCode": sigungu_code,
-                                     "numOfRows": 3000, "pageNo": 1})
-        for it in root.iter("item"):
-            code = (it.findtext("kaptCode") or "").strip()
-            name = (it.findtext("kaptName") or "").strip()
-            if code and name:
-                out[_norm_name(name)] = code
-    except L.AuthError as e:
-        print(f"  ! K-apt 권한 오류 {sigungu_code}: {e}", file=sys.stderr)
+    """시군구 단지목록 → {정규화 단지명: kaptCode}. V4→V3 순으로 시도.
+    모든 버전이 권한 오류(403)면 None(이후 호출 생략 신호), 그 외 실패는 빈 dict."""
+    global _list_op
+    ops = [_list_op] if _list_op else KAPT_LIST_OPS
+    auth_fail = False
+    for op in ops:
+        try:
+            items = L.get_items(KAPT_HOST + op, {"serviceKey": api_key, "sigunguCode": sigungu_code,
+                                                 "numOfRows": 3000, "pageNo": 1})
+            _list_op = op   # 작동 버전 캐시 (이후 이 버전만 호출)
+            out = {}
+            for it in items:
+                code = str(it.get("kaptCode") or "").strip()
+                name = str(it.get("kaptName") or "").strip()
+                if code and name:
+                    out[_norm_name(name)] = code
+            return out
+        except L.AuthError:
+            auth_fail = True   # 이 버전 권한 없음 — 다음 버전 시도
+        except Exception as e:  # noqa: BLE001 — 404(버전없음)·네트워크 등
+            print(f"  ! K-apt 목록 실패 {sigungu_code} ({op}): {e}", file=sys.stderr)
+    if auth_fail:
         return None
-    except Exception as e:  # noqa: BLE001
-        print(f"  ! K-apt 목록 실패 {sigungu_code}: {e}", file=sys.stderr)
-    return out
+    return {}
 
 
 def kapt_info(code, api_key):
-    """kaptCode → (세대수, 준공연도). 실패 시 (None, None)."""
-    try:
-        root = L.get_xml(KAPT_INFO, {"serviceKey": api_key, "kaptCode": code})
-        cnt = (root.findtext(".//kaptdaCnt") or "").strip()
-        use = (root.findtext(".//kaptUsedate") or "").strip()  # YYYYMMDD
-        households = int(cnt) if cnt.isdigit() else None
-        year = int(use[:4]) if len(use) >= 4 and use[:4].isdigit() else None
-        return households, year
-    except Exception:  # noqa: BLE001
-        return None, None
+    """kaptCode → (세대수, 준공연도). V4→V3 순으로 시도. 실패 시 (None, None)."""
+    global _info_op
+    ops = [_info_op] if _info_op else KAPT_INFO_OPS
+    for op in ops:
+        try:
+            items = L.get_items(KAPT_HOST + op, {"serviceKey": api_key, "kaptCode": code})
+            _info_op = op
+            it = items[0] if items else {}
+            cnt = str(it.get("kaptdaCnt") or "").strip()
+            use = str(it.get("kaptUsedate") or "").strip()  # YYYYMMDD
+            households = int(cnt) if cnt.isdigit() else None
+            year = int(use[:4]) if len(use) >= 4 and use[:4].isdigit() else None
+            return households, year
+        except L.AuthError:
+            continue   # 다음 버전 시도
+        except Exception:  # noqa: BLE001
+            continue
+    return None, None
 
 # 주요 업무지구 좌표 (lng, lat) — 통근시간 추정용
 HUBS = {

@@ -51,6 +51,8 @@ def _request(url, headers=None, timeout=20, retries=3):
         except urllib.error.HTTPError as e:
             if e.code in (401, 403):   # 인증·권한 오류는 재시도해도 동일 → 즉시 중단(불필요한 백오프 방지)
                 raise AuthError(f"인증/권한 오류 {e.code} — 서비스키가 해당 API에 활용신청·승인되지 않았을 수 있음 ({url[:80]}...)")
+            if e.code == 404:          # 엔드포인트 없음(버전 폐기 등) → 재시도 무의미
+                raise RuntimeError(f"404 Not Found — 엔드포인트 없음(버전 확인) ({url[:80]}...)")
             last = e
             time.sleep(2 ** i)
         except Exception as e:  # noqa: BLE001 — 네트워크 계열 전반
@@ -67,6 +69,27 @@ def get_json(base, params, headers=None, timeout=20):
 def get_xml(base, params, headers=None, timeout=20):
     url = base + ("&" if "?" in base else "?") + urllib.parse.urlencode(params)
     return ET.fromstring(_request(url, headers=headers, timeout=timeout))
+
+
+def get_items(base, params, headers=None, timeout=20):
+    """data.go.kr 응답(XML 또는 JSON 무관)에서 item들을 dict 목록으로 정규화해 반환.
+    버전·포맷이 바뀌어도(예: V4 기본 JSON) 동일하게 동작. AuthError/404는 그대로 전파."""
+    url = base + ("&" if "?" in base else "?") + urllib.parse.urlencode(params)
+    text = _request(url, headers=headers, timeout=timeout).strip()
+    if text[:1] in ("{", "["):
+        body = ((json.loads(text).get("response") or {}).get("body")) or {}
+        items = body.get("items")
+        if isinstance(items, dict):
+            item = items.get("item")
+        elif items is not None:
+            item = items
+        else:
+            item = body.get("item")
+        if item is None:
+            return []
+        return item if isinstance(item, list) else [item]
+    root = ET.fromstring(text)
+    return [{c.tag: (c.text or "").strip() for c in it} for it in root.iter("item")]
 
 
 KAKAO_KEYS = ["KAKAO_REST_API_KEY", "KAKAO_REST_KEY", "KAKAO_API_KEY"]
