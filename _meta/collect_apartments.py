@@ -107,7 +107,18 @@ def estimate_commute(lng, lat):
 MOLIT = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev/getRTMSDataSvcAptTradeDev"
 MONTHS_BACK = 4           # 최근 4개월 실거래 (호출량·시간 절감)
 TOP_PER_REGION = 10       # 지역별 거래 많은 상위 단지 수
+# Kakao 보강(지오코딩·역·학교) 1회 실행당 상한. 월초 신규 단지가 몰리면 50분 한도를 넘겨
+# 저장 전에 강제 종료→매일 처음부터 재시도(무한 루프)되므로, 한 번에 이만큼만 보강하고
+# 나머지는 다음 실행에서 점진 보강한다(merge가 기존 값을 보존하므로 안전).
+MAX_ENRICH = 200
 APARTMENTS_JSON = os.path.join(L.SITE_ASSETS, "apartments.json")
+
+
+def valid_school(elem):
+    """기존 elementary 값이 진짜 초등학교인지. '○○초등학교' 또는 약칭 '○○초'는 유효,
+    과거 키워드 검색이 잘못 넣은 '○○영어교습소·학원·유치원' 등은 무효로 본다."""
+    name = (elem or {}).get("name") or ""
+    return name.endswith("초등학교") or name.endswith("초")
 
 
 def band_label(area_m2):
@@ -116,12 +127,12 @@ def band_label(area_m2):
 
 
 def recent_months(n):
-    today = dt.date.today().replace(day=1)
+    """오늘이 속한 달을 포함해 최근 n개월(YYYYMM 내림차순). 당월을 포함해야 이번 달 거래가 누락되지 않는다."""
+    d = dt.date.today().replace(day=1)
     out = []
-    for i in range(1, n + 1):
-        d = (today - dt.timedelta(days=1)).replace(day=1)
-        today = d
+    for _ in range(n):
         out.append(d.strftime("%Y%m"))
+        d = (d - dt.timedelta(days=1)).replace(day=1)
     return out
 
 
@@ -195,7 +206,7 @@ def enrich_location(apt):
     sub = L.nearest_kakao(lng, lat, category_code="SW8")
     if sub:
         apt["subway"] = {"station": sub[0], "line": "", "distance_m": sub[1]}
-    sch = L.nearest_kakao(lng, lat, keyword="초등학교")
+    sch = L.nearest_school_kakao(lng, lat)
     if sch:
         apt["elementary"] = {"name": clean_school(sch[0]), "distance_m": sch[1], "in_zone": False}
     commute = estimate_commute(lng, lat)
@@ -249,6 +260,23 @@ def main():
     existing_by_name = {a.get("name"): a for a in existing.get("apartments", [])}
     fresh = []
     enriched_n = 0
+
+    # 사전 보정: 과거 키워드 검색이 잘못 넣은 학교(교습소·학원 등)를 카테고리 기반으로 정정.
+    # 좌표가 이미 있어 1회 호출이면 되고, 예산(MAX_ENRICH) 내에서 점진 처리한다.
+    fixed_school = 0
+    for a in existing.get("apartments", []):
+        if not valid_school(a.get("elementary")):
+            if a.get("elementary") is not None:
+                a.pop("elementary", None)  # 틀린 값은 우선 제거(잘못된 정보 노출 방지)
+                fixed_school += 1
+            if enriched_n < MAX_ENRICH and a.get("lat") and a.get("lng"):
+                sch = L.nearest_school_kakao(a["lng"], a["lat"])
+                if sch:
+                    a["elementary"] = {"name": clean_school(sch[0]), "distance_m": sch[1], "in_zone": False}
+                enriched_n += 1
+    if fixed_school:
+        print(f"학교 데이터 보정 대상 {fixed_school}건(초등학교 아님 → 제거/재조회)")
+
     for region, lawd in L.LAWD.items():
         region_items = []
         for ym in months:
@@ -267,11 +295,11 @@ def main():
         for a in agg:
             cur = existing_by_name.get(a["name"]) or {}
             if cur.get("lat") and cur.get("lng"):
-                # 큐레이션된 위치·통근·역/학교 정보 재사용 (Kakao 호출 생략)
+                # 큐레이션된 위치·통근·역/학교 정보 재사용 (Kakao 호출 생략). 학교는 사전 보정 패스에서 정정됨.
                 for k in ("lat", "lng", "subway", "elementary", "commute"):
                     if cur.get(k) is not None:
                         a[k] = cur[k]
-            else:
+            elif enriched_n < MAX_ENRICH:
                 try:
                     enrich_location(a)
                     enriched_n += 1
