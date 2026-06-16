@@ -182,7 +182,7 @@
       <div class="row"><span class="k">인지세</span><span class="v">매매계약서에 붙이는 정액 세금. 거래금액 1천만 이하 비과세 ~ 10억 초과 35만 원. (인지세법 제3조)</span></div>
       <div class="row"><span class="k">등기신청 수수료</span><span class="v">부동산 1건 기준 방문 15,000원 / 전자 13,000원. (대법원 등기 수수료)</span></div>
       <div class="row"><span class="k">국민주택채권</span><span class="v">소유권 이전 시 의무 매입. 시가표준액 × 매입률만큼 사고, 대부분 즉시 매도하므로 그 할인손실만 실제 부담합니다. (주택도시기금)</span></div>
-      <div class="row"><span class="k">법무사 보수</span><span class="v">대한법무사협회 보수표 기준 누진 + 부가세 10%. 사무소·온라인 견적에 따라 차이가 크며, 셀프 등기 시 0원.</span></div>
+      <div class="row"><span class="k">법무사 보수</span><span class="v">대한법무사협회 보수표(2024.9.12 시행) 기본보수 누진 상한 + 부가세 10%. 5천만 이하 21만 원, 5천만~1억 +0.1%, 1억~3억 +0.09%, 3억~5억 +0.08%, 5억~10억 +0.07%. 실제는 사무소 할인·교통비·난이도 가산으로 달라지며, 셀프 등기 시 0원.</span></div>
       <div class="row"><span class="k">등록면허세</span><span class="v">매매(소유권 이전)는 2011년부터 취득세에 통합되어 별도로 들지 않습니다. (전세권·근저당 설정 등기는 별도)</span></div>
     </div>
     <p style="color:var(--text-muted); font-size:0.85rem; margin-top:10px;">※ 국민주택채권 매입률·할인율과 법무사 보수는 지역·시점·사무소에 따라 달라지는 추정치입니다. 정확한 금액은 <a href="https://xn--989a00af8jnslv3dba.com/%EB%93%B1%EA%B8%B0%EB%B9%84%EC%9A%A9" target="_blank" rel="noopener">부동산계산기 등기비용</a> 및 은행·법무사 견적으로 확인하세요.</p>
@@ -238,16 +238,18 @@
   }
   // 채권 매입금액은 만원 단위로 절상(5천원 미만 절사·5천원 이상 절상)
   const roundBond = (amount) => Math.round(amount / 10000) * 10000;
-  // 법무사 보수(소유권이전) 누진 근사
+  // 법무사 기본보수(부동산 소유권이전 등기) — 대한법무사협회 보수표 2024.9.12 시행 상한 기준
+  //  5천만↓ 21만 정액 / 5천만~1억 +0.10% / 1억~3억 +0.09% / 3억~5억 +0.08% / 5억~10억 +0.07% / 10억↑ +0.05%
   function scrivenerFee(price) {
     if (price <= 0) return 0;
     let f;
-    if (price <= 50000000) f = Math.max(50000, price * 0.002);
-    else if (price <= 200000000) f = 100000 + (price - 50000000) * 0.0009;
-    else if (price <= 500000000) f = 235000 + (price - 200000000) * 0.0007;
-    else if (price <= 1000000000) f = 445000 + (price - 500000000) * 0.0005;
-    else f = 695000 + (price - 1000000000) * 0.0003;
-    return Math.round(Math.min(f, 1500000) / 1000) * 1000;
+    if (price <= 50000000) f = 210000;
+    else if (price <= 100000000) f = 210000 + (price - 50000000) * 0.0010;
+    else if (price <= 300000000) f = 260000 + (price - 100000000) * 0.0009;
+    else if (price <= 500000000) f = 440000 + (price - 300000000) * 0.0008;
+    else if (price <= 1000000000) f = 600000 + (price - 500000000) * 0.0007;
+    else f = 950000 + (price - 1000000000) * 0.0005;
+    return Math.round(f / 1000) * 1000;
   }
 
   function recalc() {
