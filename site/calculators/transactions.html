@@ -77,6 +77,13 @@
   .tx-pop .pop-region { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; }
   .tx-pop .pop-stat { font-size: 0.82rem; }
   .tx-pop .pop-link { display: inline-block; margin-top: 6px; color: var(--accent, #2563eb); font-weight: 600; cursor: pointer; font-size: 0.85rem; }
+  /* 평형 선택 칩 (모달 차트) */
+  .tx-area-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }
+  .tx-area-chips button { padding: 5px 11px; border: 1px solid var(--border, #e5e7eb); background: #fff; border-radius: 999px; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+  .tx-area-chips button .n { font-size: 0.72rem; color: var(--text-subtle, #9ca3af); font-weight: 500; }
+  .tx-area-chips button.active { background: var(--accent, #2563eb); border-color: var(--accent, #2563eb); color: #fff; }
+  .tx-area-chips button.active .n { color: rgba(255,255,255,0.8); }
+  .tx-area-chips button .swatch { width: 9px; height: 9px; border-radius: 2px; }
   /* 활성도 마커: 거래 건수에 따른 색상 */
   .tx-dot {
     border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.3);
@@ -205,6 +212,7 @@
       <div class="tx-modal-meta" id="txModalMeta"></div>
       <div class="tx-modal-chart">
         <h3>최근 실거래가 추이</h3>
+        <div class="tx-area-chips" id="txAreaChips" role="tablist" aria-label="평형 선택"></div>
         <canvas id="txModalChart"></canvas>
       </div>
       <div class="tx-modal-list">
@@ -368,17 +376,19 @@
       return '<div class="item"><div class="lbl">' + escapeHtml(m.lbl) + '</div><div class="val">' + escapeHtml(m.val) + '</div></div>';
     }).join('');
 
-    // 추이 차트 — 월별 평균으로 집계해 점이 균등 간격으로 찍히게 한다.
-    // (일자 단위로 찍으면 거래일 사이 빈 일자가 노출돼 시각적으로 '뚝뚝' 끊겨 보임)
-    var monthly = {};
-    deals.forEach(function (d) {
-      var mo = (d.date || '').slice(0, 7); if (!mo) return;
-      if (!monthly[mo]) monthly[mo] = { sum: 0, n: 0, lo: Infinity, hi: 0 };
-      monthly[mo].sum += d.price; monthly[mo].n += 1;
-      if (d.price < monthly[mo].lo) monthly[mo].lo = d.price;
-      if (d.price > monthly[mo].hi) monthly[mo].hi = d.price;
-    });
-    var months = Object.keys(monthly).sort();
+    // 추이 차트 — 평형(전용면적)별로 나눠 본다. 59㎡와 114㎡를 한 평균선에 섞으면 오해되므로
+    // 평형 밴드별 월평균 라인을 따로 그리고, 칩으로 특정 평형만 보거나 전체를 비교한다.
+    function monthlyOf(ds) {
+      var m = {};
+      ds.forEach(function (d) {
+        var mo = (d.date || '').slice(0, 7); if (!mo) return;
+        if (!m[mo]) m[mo] = { sum: 0, n: 0, lo: Infinity, hi: 0 };
+        m[mo].sum += d.price; m[mo].n += 1;
+        if (d.price < m[mo].lo) m[mo].lo = d.price;
+        if (d.price > m[mo].hi) m[mo].hi = d.price;
+      });
+      return m;
+    }
     // 빈 월도 채워 라인 끊김 방지 (월 간격이 비어 있어도 보간)
     function fillMonths(arr) {
       if (arr.length < 2) return arr;
@@ -396,37 +406,83 @@
       }
       return out;
     }
-    var allMonths = fillMonths(months);
-    var avgSeries = allMonths.map(function (mo) { return monthly[mo] ? Math.round(monthly[mo].sum / monthly[mo].n / 10000 * 10) / 10 : null; });
-    if (modalChart) modalChart.destroy();
-    modalChart = new Chart(document.getElementById('txModalChart').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: allMonths,
-        datasets: [{
-          label: '월평균 실거래가(억)', data: avgSeries,
-          borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.10)',
-          fill: true, tension: 0.25, pointRadius: 3, spanGaps: true,
-        }],
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (ctx) {
-          var mo = ctx.label, m = monthly[mo];
-          if (!m) return mo + ' 거래 없음';
-          var avg = won(Math.round(m.sum / m.n));
-          return mo + ' · 평균 ' + avg + ' · 건수 ' + m.n + (m.lo !== m.hi ? ' (' + won(m.lo) + '~' + won(m.hi) + ')' : '');
-        } } } },
-        scales: { x: { grid: { display: false } }, y: { ticks: { callback: function (v) { return v + '억'; } } } },
-      },
-    });
+    var fullMonths = fillMonths(Object.keys(monthlyOf(deals)).sort());
 
-    // 거래 내역 리스트 (최신 → 과거)
-    var listHtml = deals.slice().reverse().map(function (d) {
-      return '<tr><td>' + d.date + '</td><td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
-        '<td class="num">' + won(d.price) + '</td><td class="hide-sm">' + d.floor + '층</td></tr>';
-    }).join('');
-    document.getElementById('txModalBody').innerHTML = listHtml;
+    // 평형 밴드 그룹화 (평 기준) → 거래 많은 순 상위 7개
+    var PAL = ['#2563eb', '#dc2626', '#059669', '#d97706', '#7c3aed', '#0891b2', '#db2777'];
+    var bandMap = {};
+    deals.forEach(function (d) {
+      var key = d.pyeong;
+      if (!bandMap[key]) bandMap[key] = { key: key, deals: [], areas: [] };
+      bandMap[key].deals.push(d); bandMap[key].areas.push(d.area_m2);
+    });
+    var bands = Object.keys(bandMap).map(function (k) {
+      var b = bandMap[k];
+      b.areas.sort(function (a, c) { return a - c; });
+      b.m2 = Math.round(b.areas[Math.floor(b.areas.length / 2)]);   // 대표 ㎡(중앙값)
+      b.label = b.m2 + '㎡(' + b.key + '평)';
+      b.count = b.deals.length;
+      b.monthly = monthlyOf(b.deals);
+      return b;
+    }).sort(function (a, c) { return c.count - a.count; }).slice(0, 7);
+    bands.forEach(function (b, i) { b.color = PAL[i % PAL.length]; });
+
+    var ctx = document.getElementById('txModalChart').getContext('2d');
+    var chipsEl = document.getElementById('txAreaChips');
+    var selectedBand = 'all';
+
+    function bandSeries(b) {
+      return fullMonths.map(function (mo) { return b.monthly[mo] ? Math.round(b.monthly[mo].sum / b.monthly[mo].n / 10000 * 10) / 10 : null; });
+    }
+    function renderChart() {
+      var shown = (selectedBand === 'all') ? bands : bands.filter(function (b) { return String(b.key) === String(selectedBand); });
+      var datasets = shown.map(function (b) {
+        return { label: b.label, data: bandSeries(b), borderColor: b.color,
+          backgroundColor: shown.length === 1 ? 'rgba(37,99,235,0.10)' : 'transparent',
+          fill: shown.length === 1, tension: 0.25, pointRadius: 3, spanGaps: true, _band: b };
+      });
+      if (modalChart) modalChart.destroy();
+      modalChart = new Chart(ctx, {
+        type: 'line',
+        data: { labels: fullMonths, datasets: datasets },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { display: datasets.length > 1, position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } },
+            tooltip: { callbacks: { label: function (c) {
+              var b = c.dataset._band, m = b.monthly[c.label];
+              if (!m) return b.label + ' 거래 없음';
+              return b.label + ' · 평균 ' + won(Math.round(m.sum / m.n)) + ' · ' + m.n + '건' +
+                (m.lo !== m.hi ? ' (' + won(m.lo) + '~' + won(m.hi) + ')' : '');
+            } } },
+          },
+          scales: { x: { grid: { display: false } }, y: { ticks: { callback: function (v) { return v + '억'; } } } },
+        },
+      });
+    }
+    function renderList() {
+      var ds = (selectedBand === 'all') ? deals : deals.filter(function (d) { return String(d.pyeong) === String(selectedBand); });
+      document.getElementById('txModalBody').innerHTML = ds.slice().reverse().map(function (d) {
+        return '<tr><td>' + d.date + '</td><td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
+          '<td class="num">' + won(d.price) + '</td><td class="hide-sm">' + d.floor + '층</td></tr>';
+      }).join('');
+    }
+    function renderChips() {
+      var html = '<button data-band="all" class="' + (selectedBand === 'all' ? 'active' : '') + '">전체 <span class="n">' + deals.length + '</span></button>';
+      html += bands.map(function (b) {
+        return '<button data-band="' + b.key + '" class="' + (String(selectedBand) === String(b.key) ? 'active' : '') + '">' +
+          '<span class="swatch" style="background:' + b.color + '"></span>' + escapeHtml(b.label) + ' <span class="n">' + b.count + '</span></button>';
+      }).join('');
+      chipsEl.innerHTML = html;
+    }
+    // 평형이 하나뿐이면 칩 숨김
+    chipsEl.style.display = bands.length > 1 ? '' : 'none';
+    chipsEl.onclick = function (e) {
+      var btn = e.target.closest('button'); if (!btn) return;
+      selectedBand = btn.dataset.band;
+      renderChips(); renderChart(); renderList();
+    };
+    renderChips(); renderChart(); renderList();
 
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');

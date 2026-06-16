@@ -34,11 +34,15 @@ def clean_school(name):
 
 
 def _norm_name(s):
-    return re.sub(r"[\s()\-아파트단지]", "", s or "")
+    """단지명 정규화(매칭용). 공백·괄호·하이픈과 '아파트' 단어만 제거한다.
+    (과거 버그: 문자클래스 [아파트단지]로 개별 음절 아·파·트·단·지를 모두 지워
+     '파크리오'→'크리오'처럼 이름이 깨져 K-apt 매칭이 거의 실패했음)"""
+    s = (s or "").replace("아파트", "")
+    return re.sub(r"[\s()\-·,_]", "", s)
 
 
 def kapt_map(sigungu_code, api_key):
-    """시군구 단지목록 → {정규화 단지명: kaptCode}. 실패 시 빈 dict."""
+    """시군구 단지목록 → {정규화 단지명: kaptCode}. 권한 오류(403)면 None(이후 호출 생략 신호)."""
     out = {}
     try:
         root = L.get_xml(KAPT_LIST, {"serviceKey": api_key, "sigunguCode": sigungu_code,
@@ -48,6 +52,9 @@ def kapt_map(sigungu_code, api_key):
             name = (it.findtext("kaptName") or "").strip()
             if code and name:
                 out[_norm_name(name)] = code
+    except L.AuthError as e:
+        print(f"  ! K-apt 권한 오류 {sigungu_code}: {e}", file=sys.stderr)
+        return None
     except Exception as e:  # noqa: BLE001
         print(f"  ! K-apt 목록 실패 {sigungu_code}: {e}", file=sys.stderr)
     return out
@@ -260,6 +267,7 @@ def main():
     existing_by_name = {a.get("name"): a for a in existing.get("apartments", [])}
     fresh = []
     enriched_n = 0
+    kapt_off = False   # K-apt 403 권한 오류가 한 번 나면 이후 호출 전부 생략
 
     # 사전 보정: 과거 키워드 검색이 잘못 넣은 학교(교습소·학원 등)를 카테고리 기반으로 정정.
     # 좌표가 이미 있어 1회 호출이면 되고, 예산(MAX_ENRICH) 내에서 점진 처리한다.
@@ -291,7 +299,15 @@ def main():
         needs_kapt = any(
             not (existing_by_name.get(a["name"]) or {}).get("households") for a in agg
         )
-        kmap = kapt_map(lawd, kapt_key) if (kapt_key and needs_kapt) else {}
+        kmap = {}
+        if kapt_key and needs_kapt and not kapt_off:
+            km = kapt_map(lawd, kapt_key)
+            if km is None:   # 403 권한 오류 → 이후 전 지역 K-apt 호출 생략
+                kapt_off = True
+                print("  ※ K-apt 세대수 보강 생략 — data.go.kr에서 '공동주택 단지목록(AptListService3)'·"
+                      "'공동주택 기본정보(AptBasisInfoServiceV3)' API 활용신청·승인 필요.", file=sys.stderr)
+            else:
+                kmap = km
         for a in agg:
             cur = existing_by_name.get(a["name"]) or {}
             if cur.get("lat") and cur.get("lng"):

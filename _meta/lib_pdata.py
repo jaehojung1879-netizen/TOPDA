@@ -16,6 +16,7 @@
 import json
 import os
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -36,6 +37,10 @@ def key(names, required=False):
     return ""
 
 
+class AuthError(RuntimeError):
+    """서비스키 미승인·권한 오류(401/403). 재시도해도 동일하므로 즉시 중단 신호로 쓴다."""
+
+
 def _request(url, headers=None, timeout=20, retries=3):
     last = None
     for i in range(retries):
@@ -43,6 +48,11 @@ def _request(url, headers=None, timeout=20, retries=3):
             req = urllib.request.Request(url, headers=headers or {})
             with urllib.request.urlopen(req, timeout=timeout) as resp:
                 return resp.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            if e.code in (401, 403):   # 인증·권한 오류는 재시도해도 동일 → 즉시 중단(불필요한 백오프 방지)
+                raise AuthError(f"인증/권한 오류 {e.code} — 서비스키가 해당 API에 활용신청·승인되지 않았을 수 있음 ({url[:80]}...)")
+            last = e
+            time.sleep(2 ** i)
         except Exception as e:  # noqa: BLE001 — 네트워크 계열 전반
             last = e
             time.sleep(2 ** i)
