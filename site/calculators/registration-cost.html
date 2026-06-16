@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>등기·법무사 비용 계산기 — 톺다</title>
-<meta name="description" content="소유권 이전 등기 시 드는 인지세·국민주택채권 할인부담·등기신청 수수료·법무사 보수를 항목별로 계산합니다. 취득세는 별도." />
+<meta name="description" content="소유권 이전 등기 시 드는 취득세·지방교육세·농어촌특별세·인지세·국민주택채권 할인부담·등기신청 수수료·법무사 보수를 항목별로 합산해 총 등기비용을 계산합니다." />
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="canonical" href="https://jaehojung1879-netizen.github.io/TOPDA/calculators/registration-cost.html" />
@@ -12,13 +12,13 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="톺다" />
 <meta property="og:title" content="등기·법무사 비용 계산기 — 톺다" />
-<meta property="og:description" content="소유권 이전 등기 시 드는 인지세·국민주택채권 할인부담·등기신청 수수료·법무사 보수를 항목별로 계산합니다. 취득세는 별도." />
+<meta property="og:description" content="소유권 이전 등기 시 드는 취득세·지방교육세·농어촌특별세·인지세·국민주택채권 할인부담·등기신청 수수료·법무사 보수를 항목별로 합산해 총 등기비용을 계산합니다." />
 <meta property="og:url" content="https://jaehojung1879-netizen.github.io/TOPDA/calculators/registration-cost.html" />
 <meta property="og:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
 <meta property="og:locale" content="ko_KR" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="등기·법무사 비용 계산기 — 톺다" />
-<meta name="twitter:description" content="소유권 이전 등기 시 드는 인지세·국민주택채권 할인부담·등기신청 수수료·법무사 보수를 항목별로 계산합니다. 취득세는 별도." />
+<meta name="twitter:description" content="소유권 이전 등기 시 드는 취득세·지방교육세·농어촌특별세·인지세·국민주택채권 할인부담·등기신청 수수료·법무사 보수를 항목별로 합산해 총 등기비용을 계산합니다." />
 <meta name="twitter:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
 <script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260620"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -55,7 +55,7 @@
   "@type": "WebApplication",
   "name": "등기·법무사 비용 계산기",
   "url": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/registration-cost.html",
-  "description": "소유권 이전 등기 시 드는 인지세·국민주택채권 할인부담·등기신청 수수료·법무사 보수를 항목별로 계산합니다. 취득세는 별도.",
+  "description": "소유권 이전 등기 시 드는 취득세·지방교육세·농어촌특별세·인지세·국민주택채권 할인부담·등기신청 수수료·법무사 보수를 항목별로 합산해 총 등기비용을 계산합니다.",
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "Any",
   "browserRequirements": "Requires JavaScript",
@@ -102,9 +102,9 @@
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 등기·법무사 비용</div>
     <h1>등기·법무사 비용 계산기</h1>
     <div class="meta">
-      <span>소유권 이전 등기 부대비용 — 인지세 · 국민주택채권 · 등기수수료 · 법무사 보수</span>
+      <span>소유권 이전 총 등기비용 — 취득세 · 지방교육세 · 농특세 · 인지세 · 국민주택채권 · 등기수수료 · 법무사 보수</span>
       <span class="dot">·</span>
-      <span>취득세는 별도(취득세 계산기 참고)</span>
+      <span>취득세 정밀 조건은 취득세 계산기 참고</span>
     </div>
   </div>
 
@@ -116,7 +116,46 @@
           <label><input type="radio" name="asset" value="house" checked/><span>주택</span></label>
           <label><input type="radio" name="asset" value="land"/><span>토지·비주택</span></label>
         </div>
-        <span class="hint">국민주택채권 매입률 구간이 달라집니다.</span>
+        <span class="hint">취득세율·국민주택채권 매입률 구간이 달라집니다.</span>
+      </div>
+
+      <div class="field">
+        <label class="check-item" style="padding:0; cursor:pointer;">
+          <input type="checkbox" id="rc-incl-acq" name="inclAcq" checked/>
+          <span class="text">취득세까지 포함해 <strong>총 등기비용</strong> 계산<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="등기를 신청하려면 먼저 취득세를 신고·납부해야 합니다. 체크하면 취득세·지방교육세·농어촌특별세를 합산한 총 등기비용을 보여줍니다. 끄면 인지세·채권·법무사 등 등기 부대비용만 계산합니다.">?</span></span>
+        </label>
+        <span class="hint">등기 신고 시 함께 내는 취득세·지방교육세·농어촌특별세를 합산합니다. 감면·일시적2주택 등 정밀 조건은 <a href="acquisition-tax.html">취득세 계산기</a> 참고.</span>
+      </div>
+
+      <div class="field rc-house-acq">
+        <label>현재 주택 수 (본 거래 포함)</label>
+        <div class="radio-group">
+          <label><input type="radio" name="homes" value="1" checked/><span>1주택</span></label>
+          <label><input type="radio" name="homes" value="2"/><span>2주택</span></label>
+          <label><input type="radio" name="homes" value="3"/><span>3주택+</span></label>
+        </div>
+        <span class="hint">다주택·조정대상지역이면 취득세 중과(8~12%)가 적용됩니다.</span>
+      </div>
+
+      <div class="field rc-house-acq">
+        <label class="check-item" style="padding:0; cursor:pointer;">
+          <input type="checkbox" name="regulated"/>
+          <span class="text">조정대상지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="조정대상지역에서는 2주택 8%, 3주택 이상 12%로 취득세가 중과됩니다. 비조정지역은 3주택까지 8%, 4주택 이상 12%입니다.">?</span></span>
+        </label>
+      </div>
+
+      <div class="field rc-house-acq">
+        <label class="check-item" style="padding:0; cursor:pointer;">
+          <input type="checkbox" name="area85"/>
+          <span class="text">전용면적 85㎡ 초과<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택규모(85㎡) 초과 주택은 농어촌특별세가 더해집니다. 85㎡ 이하는 농특세가 면제됩니다.">?</span></span>
+        </label>
+      </div>
+
+      <div class="field rc-house-acq">
+        <label class="check-item" style="padding:0; cursor:pointer;">
+          <input type="checkbox" name="first"/>
+          <span class="text">생애최초 주택 구입 <span class="note">무주택 세대 + 12억 이하 → 취득세 최대 200만 원 감면</span></span>
+        </label>
       </div>
 
       <div class="field">
@@ -160,11 +199,14 @@
     </form>
 
     <div class="calc-result" id="rc-result">
-      <h3>예상 등기·법무사 비용</h3>
+      <h3 id="rc-title">예상 총 등기비용</h3>
       <div class="total" id="rc-total">—</div>
-      <p class="result-sub">취득세는 포함되지 않습니다. <a href="acquisition-tax.html">취득세 계산기 →</a></p>
+      <p class="result-sub" id="rc-sub">취득세·지방교육세·농특세 + 인지세·채권·법무사 보수까지 합산했습니다.</p>
 
       <div class="breakdown">
+        <div class="row rc-acq-row"><span class="key">취득세 <span style="color:var(--text-subtle)" id="rc-acq-note"></span></span><span class="val" id="rc-acq">—</span></div>
+        <div class="row sub rc-acq-row"><span class="key">└ 지방교육세</span><span class="val" id="rc-edu">—</span></div>
+        <div class="row sub rc-acq-row"><span class="key">└ 농어촌특별세</span><span class="val" id="rc-rural">—</span></div>
         <div class="row"><span class="key">인지세</span><span class="val" id="rc-stamp">—</span></div>
         <div class="row"><span class="key">등기신청 수수료</span><span class="val" id="rc-fee">—</span></div>
         <div class="row"><span class="key">국민주택채권 본인부담<span style="color:var(--text-subtle)"> (할인)</span></span><span class="val" id="rc-bond">—</span></div>
@@ -179,6 +221,7 @@
   <section style="margin-top:48px;">
     <h2 style="font-size:1.2rem;">계산 항목 설명</h2>
     <div class="def-list">
+      <div class="row"><span class="k">취득세·교육세·농특세</span><span class="v">등기 신청 전 신고·납부합니다. 주택은 6억↓ 1%·6~9억 누진·9억↑ 3%(다주택·조정 중과 8~12%), 토지·비주택은 4.6%. 지방교육세·농어촌특별세(85㎡ 초과)가 더해집니다. (지방세법 제11·15조) 정밀 조건은 <a href="acquisition-tax.html">취득세 계산기</a>.</span></div>
       <div class="row"><span class="k">인지세</span><span class="v">매매계약서에 붙이는 정액 세금. 거래금액 1천만 이하 비과세 ~ 10억 초과 35만 원. (인지세법 제3조)</span></div>
       <div class="row"><span class="k">등기신청 수수료</span><span class="v">부동산 1건 기준 방문 15,000원 / 전자 13,000원. (대법원 등기 수수료)</span></div>
       <div class="row"><span class="k">국민주택채권</span><span class="v">소유권 이전 시 의무 매입. 시가표준액 × 매입률만큼 사고, 대부분 즉시 매도하므로 그 할인손실만 실제 부담합니다. (주택도시기금)</span></div>
@@ -252,6 +295,24 @@
     return Math.round(f / 1000) * 1000;
   }
 
+  // 취득세(+지방교육세·농어촌특별세) 산정 — 주택은 app.js의 전역 calcAcquisitionTax 재사용,
+  //  토지·비주택은 유상취득 4.6%(취득 4% + 농특 0.2% + 교육 0.4%).
+  function acquisitionTaxes(price, asset) {
+    if (!price || price <= 0) return { acquisition: 0, localEduTax: 0, ruralTax: 0, total: 0, note: '' };
+    if (asset === 'house' && typeof calcAcquisitionTax === 'function') {
+      const homes = Number(document.querySelector('input[name="homes"]:checked')?.value || 1);
+      const regulated = $('rc-form').querySelector('input[name="regulated"]').checked;
+      const areaOver85 = $('rc-form').querySelector('input[name="area85"]').checked;
+      const firstHome = $('rc-form').querySelector('input[name="first"]').checked;
+      const a = calcAcquisitionTax({ price, homes, regulated, areaOver85, firstHome });
+      if (a) return { acquisition: a.acquisition, localEduTax: a.localEduTax, ruralTax: a.ruralTax, total: a.total,
+        note: '(' + (a.baseRate * 100).toFixed(a.baseRate * 100 % 1 ? 2 : 0) + '%)' };
+    }
+    // 토지·비주택
+    const acquisition = price * 0.04, ruralTax = price * 0.002, localEduTax = price * 0.004;
+    return { acquisition, localEduTax, ruralTax, total: acquisition + ruralTax + localEduTax, note: '(4.6%)' };
+  }
+
   function recalc() {
     const price = parseWon($('rc-price').value);
     let std = parseWon($('rc-std').value);
@@ -260,7 +321,15 @@
     const region = document.querySelector('input[name="region"]:checked').value;
     const discount = (+$('rc-discount').value || 0) / 100;
     const self = $('rc-self').checked;
+    const inclAcq = $('rc-incl-acq').checked;
 
+    // 주택 전용 취득세 입력은 주택 + 취득세 포함일 때만 노출
+    document.querySelectorAll('.rc-house-acq').forEach((el) => {
+      el.style.display = (asset === 'house' && inclAcq) ? '' : 'none';
+    });
+    document.querySelectorAll('.rc-acq-row').forEach((el) => { el.style.display = inclAcq ? '' : 'none'; });
+
+    const acq = inclAcq ? acquisitionTaxes(price, asset) : { acquisition: 0, localEduTax: 0, ruralTax: 0, total: 0, note: '' };
     const stamp = stampDuty(price);
     const fee = 15000;
     const rate = bondRate(std, asset, region);
@@ -268,9 +337,17 @@
     const bond = Math.round(bondBuy * discount);
     const scrivener = self ? 0 : scrivenerFee(price);
     const vat = Math.round(scrivener * 0.1);
-    const total = stamp + fee + bond + scrivener + vat;
+    const total = acq.total + stamp + fee + bond + scrivener + vat;
 
+    $('rc-title').textContent = inclAcq ? '예상 총 등기비용 (취득세 포함)' : '예상 등기 부대비용 (취득세 제외)';
+    $('rc-sub').textContent = inclAcq
+      ? '취득세·지방교육세·농특세 + 인지세·채권·법무사 보수까지 합산했습니다.'
+      : '취득세는 제외했습니다. 등기 신고 시 취득세를 먼저 납부해야 합니다.';
     $('rc-total').textContent = won.format(total) + '원';
+    $('rc-acq').textContent = won.format(Math.round(acq.acquisition)) + '원';
+    $('rc-acq-note').textContent = acq.note;
+    $('rc-edu').textContent = won.format(Math.round(acq.localEduTax)) + '원';
+    $('rc-rural').textContent = acq.ruralTax > 0 ? won.format(Math.round(acq.ruralTax)) + '원' : '면제 (85㎡↓)';
     $('rc-stamp').textContent = won.format(stamp) + '원';
     $('rc-fee').textContent = won.format(fee) + '원';
     $('rc-bond').textContent = won.format(bond) + '원';
