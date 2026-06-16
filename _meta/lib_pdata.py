@@ -106,6 +106,23 @@ def nearest_kakao(lng, lat, category_code=None, keyword=None, radius=1500):
         return None
 
 
+def nearest_school_kakao(lng, lat, radius=2000):
+    """가장 가까운 '초등학교'까지 (이름, 거리m). 학교 카테고리(SC4)에서 이름에 '초등학교'가
+    들어간 곳만 채택한다. 키워드 검색은 영어교습소·학원(AC5) 등을 잘못 잡으므로 쓰지 않는다."""
+    try:
+        j = get_json("https://dapi.kakao.com/v2/local/search/category.json",
+                     {"category_group_code": "SC4", "x": lng, "y": lat,
+                      "radius": radius, "sort": "distance", "size": 15},
+                     headers=kakao_headers())
+        for d in (j.get("documents") or []):
+            name = d.get("place_name", "")
+            if "초등학교" in name:
+                return name, int(float(d.get("distance") or 0))
+        return None
+    except Exception:
+        return None
+
+
 def load_json(path, default=None):
     try:
         with open(path, encoding="utf-8") as f:

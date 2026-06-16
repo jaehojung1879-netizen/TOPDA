@@ -1,8 +1,12 @@
 name: Refresh listings (실거래·단지)
 
 # 국토부 실거래가 + Kakao(좌표·역·학교) + K-apt(세대수·준공) 수집 →
-# site/assets/apartments.json (맞춤찾기) · transactions.json (실거래 조회).
-# Kakao 지오코딩 등으로 시간이 걸려 R-ONE(refresh-market)과 분리한다.
+# site/assets/transactions.json (실거래 조회) · apartments.json (맞춤찾기).
+#
+# 실거래(transactions)는 빠르고 사용자 노출 핵심이라 먼저 수집·커밋하고,
+# 단지(apartments)는 Kakao 지오코딩으로 느리므로 별도 step·타임아웃·커밋으로 분리한다.
+# 이렇게 하면 단지 수집이 오래 걸려도 실거래 갱신은 항상 반영된다(과거: 50분 통합 타임아웃에
+# 단지 수집이 먼저 예산을 다 써서 커밋 자체가 안 되던 문제).
 on:
   schedule:
     - cron: "0 15 * * *"   # 매일 00:00 KST (자정마다 갱신)
@@ -18,15 +22,39 @@ concurrency:
 jobs:
   listings:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 70
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
+      # 1) 실거래 원장 (사용자 노출 핵심) — 먼저 수집하고 즉시 커밋
+      - name: Collect transactions (국토부 실거래 원장)
+        working-directory: _meta
+        timeout-minutes: 25
+        env:
+          DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+        run: python collect_transactions.py
+        continue-on-error: true
+
+      - name: Commit transactions.json
+        run: |
+          git config user.name "topda-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -n "$(git status --porcelain site/assets/transactions.json)" ]; then
+            git add site/assets/transactions.json
+            git commit -m "실거래 자동 갱신 ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "실거래 변경 없음 — 커밋 생략"
+          fi
+
+      # 2) 단지 집계 (Kakao 지오코딩 — 느림) — 자체 타임아웃 안에서 점진 보강 후 별도 커밋
       - name: Collect apartments (국토부 실거래 + Kakao + K-apt)
         working-directory: _meta
+        timeout-minutes: 35
         env:
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_APT_BASIC_INFO: ${{ secrets.DATA_GO_APT_BASIC_INFO }}
@@ -35,22 +63,15 @@ jobs:
         run: python collect_apartments.py
         continue-on-error: true
 
-      - name: Collect transactions (국토부 실거래 원장)
-        working-directory: _meta
-        env:
-          DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
-          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
-        run: python collect_transactions.py
-        continue-on-error: true
-
-      - name: Commit listings data
+      - name: Commit apartments.json
         run: |
           git config user.name "topda-bot"
           git config user.email "actions@users.noreply.github.com"
-          if [ -n "$(git status --porcelain site/assets/apartments.json site/assets/transactions.json)" ]; then
-            git add site/assets/apartments.json site/assets/transactions.json
-            git commit -m "실거래·단지 자동 갱신 ($(date -u +%Y-%m-%d))"
+          if [ -n "$(git status --porcelain site/assets/apartments.json)" ]; then
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+            git add site/assets/apartments.json
+            git commit -m "단지 정보 자동 갱신 ($(date -u +%Y-%m-%d))"
             git push
           else
-            echo "변경 없음 — 커밋 생략"
+            echo "단지 변경 없음 — 커밋 생략"
           fi

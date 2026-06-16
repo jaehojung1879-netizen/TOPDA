@@ -71,6 +71,12 @@
   .leaflet-popup-content .pop-region { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; }
   .leaflet-popup-content .pop-stat { font-size: 0.82rem; }
   .leaflet-popup-content .pop-link { display: inline-block; margin-top: 6px; color: var(--accent, #2563eb); font-weight: 600; cursor: pointer; font-size: 0.85rem; }
+  /* Kakao 인포윈도우 팝업 */
+  .tx-pop { padding: 10px 12px; min-width: 160px; max-width: 230px; }
+  .tx-pop .pop-name { font-weight: 800; font-size: 0.96rem; margin-bottom: 2px; letter-spacing: -0.02em; }
+  .tx-pop .pop-region { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; }
+  .tx-pop .pop-stat { font-size: 0.82rem; }
+  .tx-pop .pop-link { display: inline-block; margin-top: 6px; color: var(--accent, #2563eb); font-weight: 600; cursor: pointer; font-size: 0.85rem; }
   /* 활성도 마커: 거래 건수에 따른 색상 */
   .tx-dot {
     border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.3);
@@ -238,11 +244,16 @@
   var asofEl = document.getElementById('txAsof');
   var modal = document.getElementById('txModal');
 
-  // 지도 뷰
-  var map = null, markerLayer = null, mapInit = false;
+  // 지도 뷰 — Kakao 지도 우선, 키 없거나 로딩 실패 시 Leaflet(OSM)로 자동 폴백
+  var map = null, markerLayer = null, mapInit = false;          // Leaflet
+  var kmap = null, kClusterer = null, kInfo = null, kakaoInit = false, kakaoLoading = false; // Kakao
   var viewListEl = document.getElementById('txViewList');
   var viewMapEl = document.getElementById('txViewMap');
   var mapCountEl = document.getElementById('txMapCount');
+  // 배포 시 deploy 워크플로가 __KAKAO_JS_KEY__ 를 secrets.KAKAO_JAVASCRIPT_KEY 로 치환.
+  // 치환 전(로컬·PR)에는 플레이스홀더가 남아 Kakao 대신 Leaflet 폴백을 쓴다.
+  var KAKAO_KEY = '__KAKAO_JS_KEY__';
+  var useKakao = !/^__.*__$/.test(KAKAO_KEY) && KAKAO_KEY.length >= 16;
 
   function debounce(fn, ms) {
     var t; return function () { clearTimeout(t); var a = arguments, c = this; t = setTimeout(function () { fn.apply(c, a); }, ms); };
@@ -434,20 +445,7 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 
   // ── 지도 뷰 ─────────────────────────────────────────
-  function ensureMap() {
-    if (mapInit) return;
-    if (typeof L === 'undefined') return;   // Leaflet 로딩 실패
-    map = L.map('txMap', { scrollWheelZoom: false });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18, attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
-    map.setView([36.5, 127.7], 7);   // 한반도 중앙
-    markerLayer = L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 50 });
-    map.addLayer(markerLayer);
-    mapInit = true;
-  }
-
-  // 거래 활성도(=거래 건수)별 색상
+  // 거래 활성도(=거래 건수)별 색상·크기
   function dotColor(n) {
     if (n >= 10) return '#dc2626';
     if (n >= 5) return '#f59e0b';
@@ -456,50 +454,131 @@
   function dotRadius(n) {
     return Math.min(16, 6 + Math.sqrt(n) * 2);   // 6 ~ 16px
   }
-
-  function renderMap() {
-    ensureMap();
-    if (!mapInit) {
-      mapCountEl.textContent = '지도를 불러오지 못했습니다.';
-      return;
-    }
-    // 현재 필터 조건에 맞는 거래만 집계
-    var list = filtered();
-    // 단지별 거래 건수
+  function popHtml(name, apt, agg) {
+    return '<div class="pop-name">' + escapeHtml(name) + '</div>' +
+      '<div class="pop-region">' + escapeHtml(apt.region || '') + '</div>' +
+      '<div class="pop-stat">최근 거래 <strong>' + won(agg.price) + '</strong> · ' + agg.latest + '</div>' +
+      '<div class="pop-stat">거래 ' + agg.count + '건 (조건 내)</div>' +
+      '<div class="pop-link" data-apt="' + escapeHtml(name) + '">단지 상세 보기 →</div>';
+  }
+  // 현재 필터 조건 → 단지별 거래 집계
+  function aggregateByApt() {
     var byApt = {};
-    list.forEach(function (d) {
+    filtered().forEach(function (d) {
       if (!byApt[d.apt]) byApt[d.apt] = { count: 0, latest: '', price: 0 };
       byApt[d.apt].count += 1;
-      if (d.date > byApt[d.apt].latest) {
-        byApt[d.apt].latest = d.date;
-        byApt[d.apt].price = d.price;
-      }
+      if (d.date > byApt[d.apt].latest) { byApt[d.apt].latest = d.date; byApt[d.apt].price = d.price; }
     });
+    return byApt;
+  }
+  function countMsg(placed, missing) {
+    mapCountEl.innerHTML = '단지 <strong>' + placed.toLocaleString() + '개</strong> 표시' +
+      (missing ? ' · 좌표 없는 단지 ' + missing.toLocaleString() + '개 제외' : '');
+  }
+
+  // ── Kakao 지도 ──
+  function loadKakaoSdk(cb) {
+    if (window.kakao && window.kakao.maps) { cb(); return; }
+    if (kakaoLoading) return;   // 이미 로딩 중 — onload 콜백이 렌더
+    kakaoLoading = true;
+    var s = document.createElement('script');
+    s.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=' + KAKAO_KEY + '&autoload=false&libraries=clusterer';
+    s.onload = function () { kakao.maps.load(function () { kakaoLoading = false; cb(); }); };
+    s.onerror = function () {   // SDK 로딩 실패 → Leaflet 폴백
+      kakaoLoading = false; useKakao = false; renderLeafletMap();
+    };
+    document.head.appendChild(s);
+  }
+  function circleImage(color, r) {
+    var d = r * 2;
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + d + '" height="' + d + '">' +
+      '<circle cx="' + r + '" cy="' + r + '" r="' + (r - 1) + '" fill="' + color + '" stroke="#fff" stroke-width="2"/></svg>';
+    return new kakao.maps.MarkerImage('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg),
+      new kakao.maps.Size(d, d), { offset: new kakao.maps.Point(r, r) });
+  }
+  function ensureKakaoMap() {
+    if (kakaoInit) return;
+    kmap = new kakao.maps.Map(document.getElementById('txMap'), {
+      center: new kakao.maps.LatLng(36.5, 127.7), level: 13,
+    });
+    // 휠 줌·모바일 핀치 줌 활성화(기본 on) + 줌 컨트롤
+    kmap.setZoomable(true);
+    kmap.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
+    kClusterer = new kakao.maps.MarkerClusterer({ map: kmap, averageCenter: true, minLevel: 7, gridSize: 70 });
+    kInfo = new kakao.maps.InfoWindow({ removable: true, zIndex: 3 });
+    kakaoInit = true;
+  }
+  function renderKakaoMap() {
+    ensureKakaoMap();
+    var byApt = aggregateByApt();
+    kClusterer.clear();
+    var markers = [], bounds = new kakao.maps.LatLngBounds(), placed = 0, missing = 0;
+    Object.keys(byApt).forEach(function (name) {
+      var apt = APARTMENTS[name];
+      if (!apt || !apt.lat || !apt.lng) { missing += 1; return; }
+      var agg = byApt[name];
+      var pos = new kakao.maps.LatLng(apt.lat, apt.lng);
+      var marker = new kakao.maps.Marker({ position: pos, image: circleImage(dotColor(agg.count), Math.round(dotRadius(agg.count))), title: name });
+      (function (nm, ap, ag) {
+        kakao.maps.event.addListener(marker, 'click', function () {
+          kInfo.setContent('<div class="tx-pop">' + popHtml(nm, ap, ag) + '</div>');
+          kInfo.open(kmap, marker);
+        });
+      })(name, apt, agg);
+      markers.push(marker);
+      bounds.extend(pos);
+      placed += 1;
+    });
+    kClusterer.addMarkers(markers);
+    if (placed) kmap.setBounds(bounds);
+    setTimeout(function () { kmap.relayout(); if (placed) kmap.setBounds(bounds); }, 100);
+    countMsg(placed, missing);
+  }
+
+  // ── Leaflet 지도(폴백) ──
+  function ensureLeaflet() {
+    if (mapInit) return;
+    if (typeof L === 'undefined') return;   // Leaflet 로딩 실패
+    map = L.map('txMap', { scrollWheelZoom: true });   // 휠 줌 활성화
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18, attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    map.setView([36.5, 127.7], 7);   // 한반도 중앙
+    markerLayer = L.markerClusterGroup({ chunkedLoading: true, maxClusterRadius: 50 });
+    map.addLayer(markerLayer);
+    mapInit = true;
+  }
+  function renderLeafletMap() {
+    ensureLeaflet();
+    if (!mapInit) { mapCountEl.textContent = '지도를 불러오지 못했습니다.'; return; }
+    var byApt = aggregateByApt();
     markerLayer.clearLayers();
     var bounds = [], placed = 0, missing = 0;
     Object.keys(byApt).forEach(function (name) {
       var apt = APARTMENTS[name];
       if (!apt || !apt.lat || !apt.lng) { missing += 1; return; }
       var agg = byApt[name];
-      var color = dotColor(agg.count);
-      var r = dotRadius(agg.count);
       var marker = L.circleMarker([apt.lat, apt.lng], {
-        radius: r, color: '#fff', weight: 2, fillColor: color, fillOpacity: 0.85,
+        radius: dotRadius(agg.count), color: '#fff', weight: 2, fillColor: dotColor(agg.count), fillOpacity: 0.85,
       });
-      var html = '<div class="pop-name">' + escapeHtml(name) + '</div>' +
-        '<div class="pop-region">' + escapeHtml(apt.region || '') + '</div>' +
-        '<div class="pop-stat">최근 거래 <strong>' + won(agg.price) + '</strong> · ' + agg.latest + '</div>' +
-        '<div class="pop-stat">거래 ' + agg.count + '건 (조건 내)</div>' +
-        '<div class="pop-link" data-apt="' + escapeHtml(name) + '">단지 상세 보기 →</div>';
-      marker.bindPopup(html);
+      marker.bindPopup(popHtml(name, apt, agg));
       markerLayer.addLayer(marker);
       bounds.push([apt.lat, apt.lng]);
       placed += 1;
     });
     if (bounds.length) map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
     setTimeout(function () { map.invalidateSize(); }, 100);
-    mapCountEl.innerHTML = '단지 <strong>' + placed.toLocaleString() + '개</strong> 표시' +
-      (missing ? ' · 좌표 없는 단지 ' + missing.toLocaleString() + '개 제외' : '');
+    countMsg(placed, missing);
+  }
+
+  // 디스패처: Kakao 우선, 키 없으면 Leaflet
+  function renderMap() {
+    if (useKakao) {
+      if (window.kakao && window.kakao.maps) renderKakaoMap();
+      else loadKakaoSdk(renderKakaoMap);
+    } else {
+      renderLeafletMap();
+    }
   }
 
   // 팝업 안 '단지 상세 보기' 클릭 → 모달

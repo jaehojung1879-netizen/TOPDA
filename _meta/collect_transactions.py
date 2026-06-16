@@ -16,12 +16,14 @@ TX_JSON = os.path.join(L.SITE_ASSETS, "transactions.json")
 
 
 def recent_months(n):
-    today = dt.date.today().replace(day=1)
+    """오늘이 속한 달을 포함해 최근 n개월(YYYYMM 내림차순).
+    국토부 실거래는 계약 후 신고에 시차가 있어 '현재 달'을 반드시 포함해야
+    이번 달 거래가 누락되지 않는다(예전 버그: 지난달부터 시작해 당월 누락)."""
+    d = dt.date.today().replace(day=1)
     out = []
     for _ in range(n):
-        d = (today - dt.timedelta(days=1)).replace(day=1)
-        today = d
         out.append(d.strftime("%Y%m"))
+        d = (d - dt.timedelta(days=1)).replace(day=1)
     return out
 
 

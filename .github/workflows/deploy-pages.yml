@@ -25,6 +25,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Inject Kakao JavaScript key
+        env:
+          KAKAO_JS_KEY: ${{ secrets.KAKAO_JAVASCRIPT_KEY }}
+        run: |
+          # Kakao 지도 JS 키는 도메인 제한형이라 배포본 노출이 정상.
+          # __KAKAO_JS_KEY__ 플레이스홀더를 secret 값으로 치환(미설정 시 폴백 지도 유지).
+          if [ -n "$KAKAO_JS_KEY" ]; then
+            grep -rl "__KAKAO_JS_KEY__" site | while read -r f; do
+              sed -i "s/__KAKAO_JS_KEY__/${KAKAO_JS_KEY}/g" "$f"
+            done
+            echo "Kakao JS key injected into site/"
+          else
+            echo "KAKAO_JAVASCRIPT_KEY 미설정 — 주입 생략(Leaflet 폴백 사용)"
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

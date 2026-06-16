@@ -929,16 +929,19 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       return Math.round(amount / 10000) * 10000;
     }
 
-    // 법무사 보수(소유권이전) 누진 근사 — 대한법무사협회 보수표 기준
+    // 법무사 기본보수(부동산 소유권이전 등기) — 대한법무사협회 보수표 2024.9.12 시행 상한 기준
+    //  5천만↓ 21만 정액 / 5천만~1억 +0.10% / 1억~3억 +0.09% / 3억~5억 +0.08% / 5억~10억 +0.07% / 10억↑ +0.05%
+    //  ※ 협회 표는 '기본보수 상한'이며 실제는 사무소별 할인·가산(난이도)·교통비가 더해집니다.
     function scrivenerFee(price) {
       if (price <= 0) return 0;
       let f;
-      if (price <= 50000000) f = Math.max(50000, price * 0.002);
-      else if (price <= 200000000) f = 100000 + (price - 50000000) * 0.0009;
-      else if (price <= 500000000) f = 235000 + (price - 200000000) * 0.0007;
-      else if (price <= 1000000000) f = 445000 + (price - 500000000) * 0.0005;
-      else f = 695000 + (price - 1000000000) * 0.0003;
-      return Math.round(Math.min(f, 1500000) / 1000) * 1000;
+      if (price <= 50000000) f = 210000;
+      else if (price <= 100000000) f = 210000 + (price - 50000000) * 0.0010;
+      else if (price <= 300000000) f = 260000 + (price - 100000000) * 0.0009;
+      else if (price <= 500000000) f = 440000 + (price - 300000000) * 0.0008;
+      else if (price <= 1000000000) f = 600000 + (price - 500000000) * 0.0007;
+      else f = 950000 + (price - 1000000000) * 0.0005;
+      return Math.round(f / 1000) * 1000;
     }
 
     // 법무사·등기 부대비용 (등록면허세·취득세는 별도 본세로 이미 반영)
