@@ -135,7 +135,7 @@ def estimate_commute(lng, lat):
 
 MOLIT = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev/getRTMSDataSvcAptTradeDev"
 MONTHS_BACK = 4           # 최근 4개월 실거래 (호출량·시간 절감)
-TOP_PER_REGION = 10       # 지역별 거래 많은 상위 단지 수
+TOP_PER_REGION = 20       # 지역별 거래 많은 상위 단지 수 (중위권 단지까지 포함하도록 10→20)
 # Kakao 보강(지오코딩·역·학교) 1회 실행당 상한. 월초 신규 단지가 몰리면 50분 한도를 넘겨
 # 저장 전에 강제 종료→매일 처음부터 재시도(무한 루프)되므로, 한 번에 이만큼만 보강하고
 # 나머지는 다음 실행에서 점진 보강한다(merge가 기존 값을 보존하므로 안전).
@@ -243,11 +243,16 @@ def enrich_location(apt):
         apt["commute"] = commute
 
 
+def _akey(a):
+    """단지 식별 복합키 '지역+단지명' — 동명 단지(예: 강동/종로 '아남1')가 다른 지역이면 별개로 취급."""
+    return (a.get("region_key") or "") + "|" + (a.get("name") or "")
+
+
 def merge(existing, fresh):
-    """이름 기준 병합. 기존 큐레이션(세대수·노선 등) 보존, 가격/좌표는 신규로 갱신."""
-    by_name = {a["name"]: a for a in existing.get("apartments", [])}
+    """'지역+단지명' 복합키 병합. 기존 큐레이션(세대수·노선 등) 보존, 가격/좌표는 신규로 갱신."""
+    by_key = {_akey(a): a for a in existing.get("apartments", [])}
     for f in fresh:
-        cur = by_name.get(f["name"])
+        cur = by_key.get(_akey(f))
         if cur:
             cur["units"] = f["units"] or cur.get("units")
             cur["price_history"] = f["price_history"] or cur.get("price_history")
@@ -272,8 +277,8 @@ def merge(existing, fresh):
             f.pop("_addr", None)
             if not f.get("households"):
                 f["households"] = None  # K-apt 보강 전까지 미상
-            by_name[f["name"]] = f
-    existing["apartments"] = list(by_name.values())
+            by_key[_akey(f)] = f
+    existing["apartments"] = list(by_key.values())
     existing.setdefault("_meta", {})["as_of"] = dt.date.today().strftime("%Y-%m")
     return existing
 
@@ -286,7 +291,7 @@ def main():
     # Kakao 지오코딩(단지당 3회)이 전 지역에 걸쳐 누적되면 워크플로가 30분 한도를 초과하므로,
     # 가격만 신규 실거래로 갱신하고 위치/세대수는 기존 값을 재사용한다(신규 단지만 보강).
     existing = L.load_json(APARTMENTS_JSON, default={"apartments": []})
-    existing_by_name = {a.get("name"): a for a in existing.get("apartments", [])}
+    existing_by_key = {_akey(a): a for a in existing.get("apartments", [])}
     fresh = []
     enriched_n = 0
     kapt_off = False   # K-apt 403 권한 오류가 한 번 나면 이후 호출 전부 생략
@@ -319,19 +324,19 @@ def main():
         agg = aggregate(region, region_items)
         # 이 지역에 좌표/세대수가 없는 신규 단지가 있을 때만 K-apt 목록을 1회 호출
         needs_kapt = any(
-            not (existing_by_name.get(a["name"]) or {}).get("households") for a in agg
+            not (existing_by_key.get(_akey(a)) or {}).get("households") for a in agg
         )
         kmap = {}
         if kapt_key and needs_kapt and not kapt_off:
             km = kapt_map(lawd, kapt_key)
             if km is None:   # 403 권한 오류 → 이후 전 지역 K-apt 호출 생략
                 kapt_off = True
-                print("  ※ K-apt 세대수 보강 생략 — data.go.kr에서 '공동주택 단지목록(AptListService3)'·"
-                      "'공동주택 기본정보(AptBasisInfoServiceV3)' API 활용신청·승인 필요.", file=sys.stderr)
+                print("  ※ K-apt 세대수 보강 생략 — data.go.kr에서 '공동주택 단지목록(AptListService)'·"
+                      "'공동주택 기본정보(AptBasisInfoService)' API 활용신청·승인 필요.", file=sys.stderr)
             else:
                 kmap = km
         for a in agg:
-            cur = existing_by_name.get(a["name"]) or {}
+            cur = existing_by_key.get(_akey(a)) or {}
             if cur.get("lat") and cur.get("lng"):
                 # 큐레이션된 위치·통근·역/학교 정보 재사용 (Kakao 호출 생략). 학교는 사전 보정 패스에서 정정됨.
                 for k in ("lat", "lng", "subway", "elementary", "commute"):
