@@ -22,9 +22,10 @@ import lib_pdata as L
 
 # ── K-apt(공동주택) 단지정보 — 세대수·준공연도 보강 ──
 # data.go.kr이 버전을 올리면(예: V3→V4) 구버전 엔드포인트는 403/폐기된다.
-# V4를 우선 시도하고 V3로 폴백해 '활용신청·승인된 버전'을 자동으로 찾는다.
+# 현재 승인 현황: 단지목록=AptListService3(V3), 기본정보=AptBasisInfoServiceV4(V4)로 서로 다름.
+# 확인된 버전을 먼저 시도하고 다른 버전을 폴백으로 둬, 향후 버전 변경에도 자동 대응한다.
 KAPT_HOST = "https://apis.data.go.kr/1613000/"
-KAPT_LIST_OPS = ["AptListService4/getSigunguAptList4", "AptListService3/getSigunguAptList3"]
+KAPT_LIST_OPS = ["AptListService3/getSigunguAptList3", "AptListService4/getSigunguAptList4"]
 KAPT_INFO_OPS = ["AptBasisInfoServiceV4/getAphusBassInfoV4", "AptBasisInfoServiceV3/getAphusBassInfoV3"]
 _list_op = None   # 작동 확인된 목록 오퍼레이션(첫 성공 후 캐시)
 _info_op = None   # 작동 확인된 기본정보 오퍼레이션(첫 성공 후 캐시)
