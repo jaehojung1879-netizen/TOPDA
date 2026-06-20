@@ -327,6 +327,9 @@
     });
   }
 
+  // 단지 식별은 '지역+단지명' 복합키 — 동명 단지(예: 강동/종로 '아남1')가 충돌하지 않게 한다.
+  function aptKey(regionKey, name) { return (regionKey || '') + '|' + name; }
+
   function render() {
     var list = filtered();
     list.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
@@ -334,7 +337,7 @@
     body.innerHTML = top.map(function (d) {
       var when = ago(daysSince(d.date));
       var aptName = escapeHtml(d.apt);
-      return '<tr data-apt="' + aptName + '">' +
+      return '<tr data-apt="' + aptName + '" data-region="' + escapeHtml(d.region_key || '') + '">' +
         '<td>' + d.date + ' <span style="color:var(--text-muted); font-size:0.78rem;">(' + when + ')</span></td>' +
         '<td><span class="tx-link">' + aptName + '</span></td>' +
         '<td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
@@ -346,12 +349,13 @@
   }
 
   // ── 단지 상세 모달 ─────────────────────────────────────
-  function openModal(aptName) {
-    var deals = DATA.filter(function (d) { return d.apt === aptName; })
+  function openModal(aptName, regionKey) {
+    var deals = DATA.filter(function (d) { return d.apt === aptName && (!regionKey || (d.region_key || '') === regionKey); })
       .sort(function (a, b) { return a.date < b.date ? -1 : 1; });
     if (!deals.length) return;
     var first = deals[0], last = deals[deals.length - 1];
-    var apt = APARTMENTS[aptName] || {};
+    // 좌표·역·학교 등은 같은 지역의 동명 단지만 매칭(복합키). 못 찾으면 비워둔다(잘못된 역 표시 방지).
+    var apt = APARTMENTS[aptKey(regionKey || last.region_key, aptName)] || {};
     document.getElementById('txModalTitle').textContent = aptName;
     document.getElementById('txModalSub').textContent = (last.region || first.region || apt.region || '');
 
@@ -495,7 +499,7 @@
   }
   body.addEventListener('click', function (e) {
     var tr = e.target.closest('tr[data-apt]'); if (!tr) return;
-    openModal(tr.dataset.apt);
+    openModal(tr.dataset.apt, tr.dataset.region);
   });
   document.querySelectorAll('[data-tx-close]').forEach(function (b) { b.addEventListener('click', closeModal); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
@@ -512,18 +516,19 @@
   }
   function popHtml(name, apt, agg) {
     return '<div class="pop-name">' + escapeHtml(name) + '</div>' +
-      '<div class="pop-region">' + escapeHtml(apt.region || '') + '</div>' +
+      '<div class="pop-region">' + escapeHtml((apt && apt.region) || agg.region_key || '') + '</div>' +
       '<div class="pop-stat">최근 거래 <strong>' + won(agg.price) + '</strong> · ' + agg.latest + '</div>' +
       '<div class="pop-stat">거래 ' + agg.count + '건 (조건 내)</div>' +
-      '<div class="pop-link" data-apt="' + escapeHtml(name) + '">단지 상세 보기 →</div>';
+      '<div class="pop-link" data-apt="' + escapeHtml(name) + '" data-region="' + escapeHtml(agg.region_key || '') + '">단지 상세 보기 →</div>';
   }
-  // 현재 필터 조건 → 단지별 거래 집계
+  // 현재 필터 조건 → 단지별 거래 집계 (지역+단지명 복합키로 동명 단지 분리)
   function aggregateByApt() {
     var byApt = {};
     filtered().forEach(function (d) {
-      if (!byApt[d.apt]) byApt[d.apt] = { count: 0, latest: '', price: 0 };
-      byApt[d.apt].count += 1;
-      if (d.date > byApt[d.apt].latest) { byApt[d.apt].latest = d.date; byApt[d.apt].price = d.price; }
+      var k = aptKey(d.region_key, d.apt);
+      if (!byApt[k]) byApt[k] = { count: 0, latest: '', price: 0, name: d.apt, region_key: d.region_key || '' };
+      byApt[k].count += 1;
+      if (d.date > byApt[k].latest) { byApt[k].latest = d.date; byApt[k].price = d.price; }
     });
     return byApt;
   }
@@ -569,18 +574,18 @@
     var byApt = aggregateByApt();
     kClusterer.clear();
     var markers = [], bounds = new kakao.maps.LatLngBounds(), placed = 0, missing = 0;
-    Object.keys(byApt).forEach(function (name) {
-      var apt = APARTMENTS[name];
+    Object.keys(byApt).forEach(function (k) {
+      var apt = APARTMENTS[k];
       if (!apt || !apt.lat || !apt.lng) { missing += 1; return; }
-      var agg = byApt[name];
+      var agg = byApt[k];
       var pos = new kakao.maps.LatLng(apt.lat, apt.lng);
-      var marker = new kakao.maps.Marker({ position: pos, image: circleImage(dotColor(agg.count), Math.round(dotRadius(agg.count))), title: name });
+      var marker = new kakao.maps.Marker({ position: pos, image: circleImage(dotColor(agg.count), Math.round(dotRadius(agg.count))), title: agg.name });
       (function (nm, ap, ag) {
         kakao.maps.event.addListener(marker, 'click', function () {
           kInfo.setContent('<div class="tx-pop">' + popHtml(nm, ap, ag) + '</div>');
           kInfo.open(kmap, marker);
         });
-      })(name, apt, agg);
+      })(agg.name, apt, agg);
       markers.push(marker);
       bounds.extend(pos);
       placed += 1;
@@ -610,14 +615,14 @@
     var byApt = aggregateByApt();
     markerLayer.clearLayers();
     var bounds = [], placed = 0, missing = 0;
-    Object.keys(byApt).forEach(function (name) {
-      var apt = APARTMENTS[name];
+    Object.keys(byApt).forEach(function (k) {
+      var apt = APARTMENTS[k];
       if (!apt || !apt.lat || !apt.lng) { missing += 1; return; }
-      var agg = byApt[name];
+      var agg = byApt[k];
       var marker = L.circleMarker([apt.lat, apt.lng], {
         radius: dotRadius(agg.count), color: '#fff', weight: 2, fillColor: dotColor(agg.count), fillOpacity: 0.85,
       });
-      marker.bindPopup(popHtml(name, apt, agg));
+      marker.bindPopup(popHtml(agg.name, apt, agg));
       markerLayer.addLayer(marker);
       bounds.push([apt.lat, apt.lng]);
       placed += 1;
@@ -642,7 +647,7 @@
     var link = e.target.closest && e.target.closest('.pop-link');
     if (link && link.dataset.apt) {
       e.preventDefault();
-      openModal(link.dataset.apt);
+      openModal(link.dataset.apt, link.dataset.region);
     }
   });
 
@@ -682,7 +687,7 @@
       .then(function (r) { return r.ok ? r.json() : { apartments: [] }; }).catch(function () { return { apartments: [] }; }),
   ]).then(function (results) {
     DATA = results[0].deals || [];
-    (results[1].apartments || []).forEach(function (a) { APARTMENTS[a.name] = a; });
+    (results[1].apartments || []).forEach(function (a) { APARTMENTS[aptKey(a.region_key || a.region, a.name)] = a; });
     var latest = '';
     for (var i = 0; i < DATA.length; i++) if (DATA[i].date > latest) latest = DATA[i].date;
     if (asofEl) {
