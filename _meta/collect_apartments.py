@@ -295,6 +295,8 @@ def main():
     fresh = []
     enriched_n = 0
     kapt_off = False   # K-apt 403 권한 오류가 한 번 나면 이후 호출 전부 생략
+    # K-apt 진단 카운터 — 세대수 보강이 0건이던 원인(권한/목록빈값/이름매칭)을 로그로 드러낸다.
+    kstat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0, "needed": 0}
 
     # 사전 보정: 과거 키워드 검색이 잘못 넣은 학교(교습소·학원 등)를 카테고리 기반으로 정정.
     # 좌표가 이미 있어 1회 호출이면 되고, 예산(MAX_ENRICH) 내에서 점진 처리한다.
@@ -335,6 +337,11 @@ def main():
                       "'공동주택 기본정보(AptBasisInfoService)' API 활용신청·승인 필요.", file=sys.stderr)
             else:
                 kmap = km
+                if km:
+                    kstat["list_ok"] += 1
+                    kstat["codes"] += len(km)
+                else:
+                    kstat["list_empty"] += 1
         for a in agg:
             cur = existing_by_key.get(_akey(a)) or {}
             if cur.get("lat") and cur.get("lng"):
@@ -350,11 +357,14 @@ def main():
                     print(f"  ! {a['name']} 위치 보강 실패: {e}", file=sys.stderr)
             # K-apt 세대수·준공 보강 — 기존 세대수가 없을 때만
             if not cur.get("households"):
+                kstat["needed"] += 1
                 code = kmap.get(_norm_name(a["name"]))
                 if code:
+                    kstat["matched"] += 1
                     hh, yr = kapt_info(code, kapt_key)
                     if hh:
                         a["households"] = hh
+                        kstat["filled"] += 1
                     if yr and not a.get("built_year"):
                         a["built_year"] = yr
         fresh += agg
@@ -363,6 +373,18 @@ def main():
         print("수집 결과 없음 — 기존 apartments.json 유지")
         return
     print(f"신규 위치 보강(Kakao) 호출 단지 수: {enriched_n}")
+    # K-apt 세대수 보강 결과 요약 — 0건이면 어느 단계에서 막혔는지 바로 진단된다.
+    if not kapt_key:
+        print("[K-apt] 키 없음(DATA_GO_APT_BASIC_INFO/DATA_GO_*) — 세대수 보강 건너뜀", file=sys.stderr)
+    elif kapt_off:
+        print("[K-apt] 권한 오류로 전 지역 생략 — API 활용신청·승인 필요", file=sys.stderr)
+    else:
+        print(f"[K-apt] 목록 성공 지역 {kstat['list_ok']} / 빈 지역 {kstat['list_empty']} · "
+              f"수집 단지코드 {kstat['codes']}개 · 세대수 필요 {kstat['needed']} → 이름매칭 {kstat['matched']} "
+              f"→ 세대수확보 {kstat['filled']}건")
+        if kstat["needed"] and not kstat["filled"]:
+            print("  ! 세대수 0건 — 목록은 받았으나(또는 빈값) 단지명 매칭/기본정보 조회가 실패. "
+                  "AptListService·AptBasisInfoService 버전·승인 상태 점검 필요.", file=sys.stderr)
     merged = merge(existing, fresh)
     L.save_json_safe(APARTMENTS_JSON, merged, min_items_key="apartments")
 

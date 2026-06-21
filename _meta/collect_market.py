@@ -42,8 +42,34 @@ def norm_month(s):
     return f"{m.group(1)}-{m.group(2)}" if m else None
 
 
+def rone_result(j):
+    """R-ONE 응답에서 RESULT(CODE/MESSAGE)를 찾아 (code, msg)로 반환. 없으면 (None, None).
+    정상 데이터는 RESULT가 없고, 키·통계표·기간 오류는 RESULT.CODE(ERROR-*/INFO-*)로 내려온다.
+    위치가 응답 최상위거나 SttsApiTblData[*].head 안에 들어오는 두 형태를 모두 본다."""
+    def pick(d):
+        if isinstance(d, dict) and isinstance(d.get("RESULT"), dict):
+            r = d["RESULT"]
+            return str(r.get("CODE") or "").strip(), str(r.get("MESSAGE") or r.get("MSG") or "").strip()
+        return None
+    top = pick(j)
+    if top:
+        return top
+    for block in (j.get("SttsApiTblData") or []):
+        if isinstance(block, dict):
+            got = pick(block)
+            if got:
+                return got
+            for h in (block.get("head") or []):
+                got = pick(h)
+                if got:
+                    return got
+    return None, None
+
+
 def fetch_metric(statbl_id, start, end, api_key):
-    """STATBL_ID 한 표의 전 지역 시계열 → {지역명: {month: value}}."""
+    """STATBL_ID 한 표의 전 지역 시계열 → {지역명: {month: value}}.
+    R-ONE이 RESULT 오류(키 미승인·통계표ID 오류 등)를 내려주면 즉시 RuntimeError로 올려
+    CI 로그에 실패 사유가 드러나게 한다(과거: 0개 수집을 조용히 삼켜 원인 불명이었음)."""
     out = {}
     page = 1
     while page <= 12:
@@ -51,11 +77,16 @@ def fetch_metric(statbl_id, start, end, api_key):
             "KEY": api_key, "Type": "json", "STATBL_ID": statbl_id, "DTACYCLE_CD": "MM",
             "START_WRTTIME": start, "END_WRTTIME": end, "pIndex": page, "pSize": 1000,
         })
+        code, msg = rone_result(j)
+        if code and not code.upper().startswith("INFO-0"):  # INFO-000=정상. 그 외 INFO-*/ERROR-*는 오류
+            raise RuntimeError(f"R-ONE 응답 오류 [{code}] {msg} (STATBL_ID={statbl_id})")
         rows = []
         for block in (j.get("SttsApiTblData") or []):
             if isinstance(block, dict) and block.get("row"):
                 rows = block["row"]
         if not rows:
+            if page == 1 and not out:  # 첫 페이지부터 데이터·오류 둘 다 없음 → 구조 점검용 원문 일부 출력
+                print(f"  · {statbl_id}: row 없음. 응답 키={list(j.keys())} 일부={str(j)[:200]}", file=sys.stderr)
             break
         for r in rows:
             region = (r.get("CLS_NM") or "").strip()
@@ -98,8 +129,13 @@ def main():
             print(f"  ! {metric} 수집 실패: {e}", file=sys.stderr)
 
     if not metric_data.get("sale_index"):
-        print("매매가격지수 수집 실패 — 기존 market.json 유지")
-        return
+        # 과거: 여기서 조용히 return → 워크플로는 'success'인데 데이터는 시드에 멈춰 원인 불명이었음.
+        # 이제는 비정상 종료로 CI를 빨갛게 만들어, 위 stderr 진단(RESULT 코드·응답 구조)이 드러나게 한다.
+        print("매매가격지수 수집 실패 — 기존 market.json 유지", file=sys.stderr)
+        print("  → 점검: (1) R_ONE 시크릿이 R-ONE OpenAPI에 활용신청·승인됐는지 "
+              "(2) STATBL_ID(A_2024_00045/00050)가 현재 유효한지 — R-ONE easyStat에서 확인.",
+              file=sys.stderr)
+        sys.exit(1)
 
     # 평균가격 → 전세가율(전세평균/매매평균) 계산. 추정 통계표가 틀리면 비정상값으로 자동 배제.
     avg_data = {}
@@ -117,6 +153,10 @@ def main():
                 r = round(jv / sv * 100, 1)
                 if 25 <= r <= 100:  # 전세가율 정상 범위만 채택
                     ratio.setdefault(region, {})[mo] = r
+    if not ratio:
+        # 지수는 살아있지만 전세가율이 비면(추정 AVG STATBL_ID 오류 가능) 인덱스만 저장하고 경고.
+        print("  ! 전세가율 계산 결과 없음 — AVG STATBL_ID(A_2024_00188/00190) 유효성 확인 필요. "
+              "지수는 저장하되 jeonse_ratio는 null로 둔다.", file=sys.stderr)
     print(f"[jeonse_ratio] 계산된 지역 {len(ratio)}개")
 
     # 지역 합집합 → 월별 시계열 병합
