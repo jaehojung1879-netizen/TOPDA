@@ -74,25 +74,41 @@ def kapt_map(sigungu_code, api_key):
     return {}
 
 
+_info_diag = []   # 기본정보 조회 실패 사유 샘플(첫 몇 건) — 0건일 때 원인 진단용
+
+
 def kapt_info(code, api_key):
-    """kaptCode → (세대수, 준공연도). V4→V3 순으로 시도. 실패 시 (None, None)."""
+    """kaptCode → (세대수, 준공연도). V4→V3 순으로 시도. 실패 시 (None, None).
+
+    버그 수정: 과거에는 get_items가 예외 없이 '빈 응답/세대수 없음'을 줘도 _info_op를
+    캐시해버려, 첫 호출에서 V4가 비면 V3 폴백을 영영 못 타고 전 단지 세대수가 0이 됐다.
+    이제는 '세대수를 실제로 얻은' op만 캐시하고, 못 얻으면 다음 버전을 시도한다."""
     global _info_op
     ops = [_info_op] if _info_op else KAPT_INFO_OPS
     for op in ops:
         try:
             items = L.get_items(KAPT_HOST + op, {"serviceKey": api_key, "kaptCode": code})
-            _info_op = op
-            it = items[0] if items else {}
-            cnt = str(it.get("kaptdaCnt") or "").strip()
-            use = str(it.get("kaptUsedate") or "").strip()  # YYYYMMDD
-            households = int(cnt) if cnt.isdigit() else None
-            year = int(use[:4]) if len(use) >= 4 and use[:4].isdigit() else None
-            return households, year
-        except L.AuthError:
-            continue   # 다음 버전 시도
-        except Exception:  # noqa: BLE001
+        except L.AuthError as e:
+            if len(_info_diag) < 4:
+                _info_diag.append(f"{op}: 권한오류 {e}")
             continue
+        except Exception as e:  # noqa: BLE001 — 404·네트워크 등
+            if len(_info_diag) < 4:
+                _info_diag.append(f"{op}: 예외 {e}")
+            continue
+        it = items[0] if items else {}
+        cnt = str(it.get("kaptdaCnt") or "").strip()
+        use = str(it.get("kaptUsedate") or "").strip()  # YYYYMMDD
+        households = int(cnt) if cnt.isdigit() else None
+        year = int(use[:4]) if len(use) >= 4 and use[:4].isdigit() else None
+        if households:
+            _info_op = op   # 세대수를 실제로 얻은 op만 캐시(올바른 버전 고정)
+            return households, year
+        # 응답은 왔으나 세대수가 비었다 → 진단 샘플 남기고 다른 버전 시도
+        if len(_info_diag) < 4:
+            _info_diag.append(f"{op}: items={len(items)} keys={list(it.keys())[:8]}")
     return None, None
+
 
 # 주요 업무지구 좌표 (lng, lat) — 통근시간 추정용
 HUBS = {
@@ -383,8 +399,10 @@ def main():
               f"수집 단지코드 {kstat['codes']}개 · 세대수 필요 {kstat['needed']} → 이름매칭 {kstat['matched']} "
               f"→ 세대수확보 {kstat['filled']}건")
         if kstat["needed"] and not kstat["filled"]:
-            print("  ! 세대수 0건 — 목록은 받았으나(또는 빈값) 단지명 매칭/기본정보 조회가 실패. "
-                  "AptListService·AptBasisInfoService 버전·승인 상태 점검 필요.", file=sys.stderr)
+            print("  ! 세대수 0건 — 목록·이름매칭은 됐으나 기본정보(세대수) 조회가 전부 실패. "
+                  "AptBasisInfoService 버전·승인·필드명 점검 필요.", file=sys.stderr)
+            for d in _info_diag:
+                print(f"    · 기본정보 실패 샘플: {d}", file=sys.stderr)
     merged = merge(existing, fresh)
     L.save_json_safe(APARTMENTS_JSON, merged, min_items_key="apartments")
 
