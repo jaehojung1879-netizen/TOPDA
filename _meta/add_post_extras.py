@@ -21,7 +21,7 @@ WPM = 400  # 한글 평균 분당 글자수 (요지 파악 속도)
 CATS = {
     "매매": [
         "balance-day-settlement.html", "registry-reading.html", "sale-contract-tips.html",
-        "good-house-eye.html", "property-tour.html",
+        "good-house-eye.html", "property-tour.html", "transfer-tax-guide.html",
     ],
     "전세·월세": [
         "jeonse-protection.html", "jeonse-scam.html", "lease-contract-tips.html",

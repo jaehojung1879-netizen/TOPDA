@@ -19,6 +19,7 @@ TARGETS = [
             ("sale-contract-tips.html", "매매계약서 특약, 이것만은", "계약서에 꼭 넣을 특약 조항"),
             ("good-house-eye.html", "좋은 집 보는 눈 12가지", "현장에서 30분 안에 확인할 것들"),
             ("property-tour.html", "임장 체크리스트 30선", "임장 갈 때 챙기는 확인 항목"),
+            ("transfer-tax-guide.html", "양도소득세 완벽 정리 (심화)", "비과세·장특공·세율"),
         ],
     ),
     (
