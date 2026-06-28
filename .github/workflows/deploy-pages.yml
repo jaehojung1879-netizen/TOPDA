@@ -41,7 +41,12 @@ jobs:
           fi
 
       - name: Setup Pages
+        # enablement: true → Pages 사이트가 없으면 워크플로가 직접 생성·활성화한다.
+        # (레포를 private↔public 토글하면 Pages 설정이 사라져 "Get Pages site failed"로
+        #  배포가 실패하는데, 이 옵션이 그 사이트를 자동으로 다시 만들어 복구한다.)
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
