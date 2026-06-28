@@ -1,0 +1,91 @@
+{
+  "_meta": {
+    "source": "Google News RSS (한국어) — 섹터별 부동산 검색 집계",
+    "note": "여러 보도를 자동 집계한 목록이며 투자 권유가 아닙니다. 자동 수집 전 초기값은 톺다 정리·내부 가이드 링크입니다."
+  },
+  "generated_at": "2026-06-28 00:00 KST",
+  "weekly": {
+    "as_of": "2026년 6월 4주",
+    "updated": "2026-06-28",
+    "lead": "6·27 대출규제 시행 1년, 서울 아파트값은 규제에도 1년간 약 9~15% 올랐습니다. 자금 부담에 매수세가 9억 이하·소형으로 쏠리고, 전세는 입주물량 감소 속 월세화가 빨라지고 있습니다. 한편 4·17부터 다주택·임대사업자의 수도권 규제지역 아파트 담보대출 만기연장이 원칙 금지됐습니다.",
+    "cards": [
+      {
+        "badge": "대출 규제",
+        "href": "calculators/loan-limit.html",
+        "cta": "대출한도 계산기 →",
+        "title": "규제 1년 — 한도부터 다시 계산",
+        "source": "톺다 정리",
+        "date": "2026-06-28",
+        "url": "calculators/loan-limit.html",
+        "desc": "9억 이하 거래 비중이 38%→50%로 커졌습니다. 스트레스 DSR·LTV·전세 보증기관 한도를 내 조건으로 먼저 확인하세요."
+      },
+      {
+        "badge": "집값·매수",
+        "href": "calculators/acquisition-tax.html",
+        "cta": "취득세 계산기 →",
+        "title": "소형 쏠림 — 취득 비용까지 보고 판단",
+        "source": "톺다 정리",
+        "date": "2026-06-28",
+        "url": "calculators/acquisition-tax.html",
+        "desc": "소형(40~60㎡) 상승률이 대형의 3배. 진입장벽 낮은 매물일수록 취득세·부대비용 비중이 큽니다."
+      },
+      {
+        "badge": "전월세",
+        "href": "calculators/jeonse-monthly.html",
+        "cta": "전월세 전환 계산기 →",
+        "title": "전세의 월세화 — 전환율로 비교",
+        "source": "톺다 정리",
+        "date": "2026-06-28",
+        "url": "calculators/jeonse-monthly.html",
+        "desc": "입주물량 감소·임대매물 축소로 월세 전환이 빨라지는 국면. 전세 ↔ 월세를 전환율로 따져보세요."
+      }
+    ]
+  },
+  "daily": {
+    "updated": "2026-06-28 00:00 KST",
+    "sectors": [
+      {
+        "key": "loan",
+        "name": "대출·규제",
+        "items": [
+          { "title": "6·27 대책 1년 — 스트레스 DSR 3단계로 한도 축소", "url": "posts/stress-dsr.html", "source": "톺다 정리", "date": "2026-06-28" },
+          { "title": "다주택·임대사업자 수도권 규제지역 담보대출 만기연장 원칙 금지(4·17)", "url": "posts/loan-policy.html", "source": "톺다 정리", "date": "2026-06-28" },
+          { "title": "LTV·가격대별 한도 — 내 조건으로 실제 한도 계산하기", "url": "calculators/loan-limit.html", "source": "톺다 정리", "date": "2026-06-28" }
+        ]
+      },
+      {
+        "key": "trade",
+        "name": "매매·집값",
+        "items": [
+          { "title": "9억 이하 거래 비중 38%→50% — 매수세 소형 쏠림", "url": "calculators/market-trends.html", "source": "톺다 정리", "date": "2026-06-28" },
+          { "title": "취득세·부대비용까지 더한 실제 매수 비용 보기", "url": "calculators/acquisition-tax.html", "source": "톺다 정리", "date": "2026-06-28" },
+          { "title": "자금조달계획서 — 무엇을 어떻게 적나", "url": "posts/funding-plan.html", "source": "톺다 정리", "date": "2026-06-28" }
+        ]
+      },
+      {
+        "key": "lease",
+        "name": "전세·월세",
+        "items": [
+          { "title": "입주물량 감소 속 전세의 월세화 가속", "url": "calculators/jeonse-monthly.html", "source": "톺다 정리", "date": "2026-06-28" },
+          { "title": "전세보증금 안전하게 지키는 법", "url": "posts/jeonse-protection.html", "source": "톺다 정리", "date": "2026-06-28" },
+          { "title": "전세금 반환 — 절차와 분쟁 대비", "url": "posts/lease-return.html", "source": "톺다 정리", "date": "2026-06-28" }
+        ]
+      },
+      {
+        "key": "subscription",
+        "name": "청약·분양",
+        "items": [
+          { "title": "청약가점 — 무주택·부양·통장 점수 계산", "url": "calculators/housing-subscription.html", "source": "톺다 정리", "date": "2026-06-28" }
+        ]
+      },
+      {
+        "key": "policy",
+        "name": "세금·정책",
+        "items": [
+          { "title": "양도세 — 1주택 비과세·보유기간 기준 점검", "url": "calculators/transfer-tax.html", "source": "톺다 정리", "date": "2026-06-28" },
+          { "title": "양도소득세 가이드 — 계산 순서와 절세 포인트", "url": "posts/transfer-tax-guide.html", "source": "톺다 정리", "date": "2026-06-28" }
+        ]
+      }
+    ]
+  }
+}

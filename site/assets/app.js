@@ -3068,12 +3068,17 @@ function calcJeonseLoanByAgency(deposit, opts) {
   const setText = (sel, txt) => { const el = root.querySelector('[data-out="' + sel + '"]'); if (el) el.textContent = txt; };
   const show = (el, on) => { if (el) el.style.display = on ? '' : 'none'; };
 
-  // 대출 종류 탭
-  const panels = { mortgage: root.querySelector('[data-panel="mortgage"]'), jeonse: root.querySelector('[data-panel="jeonse"]') };
+  // 대출 종류 탭 — 입력폼·결과패널이 각각 data-panel을 갖고 있으므로 둘 다 토글한다.
+  // (querySelectorAll: 과거엔 querySelector로 첫 폼만 토글해 전세 탭에서도 주담대 결과가
+  //  남아 소득을 바꿔도 한도가 안 변하는 것처럼 보였다.)
+  const panels = {
+    mortgage: root.querySelectorAll('[data-panel="mortgage"]'),
+    jeonse: root.querySelectorAll('[data-panel="jeonse"]'),
+  };
   function switchTab() {
     const t = root.querySelector('[name="loanKind"]:checked')?.value || 'mortgage';
-    show(panels.mortgage, t === 'mortgage');
-    show(panels.jeonse, t === 'jeonse');
+    panels.mortgage.forEach((el) => show(el, t === 'mortgage'));
+    panels.jeonse.forEach((el) => show(el, t === 'jeonse'));
   }
 
   // LTV 자동 채움 (지역×보유) — 사용자가 직접 수정 가능
@@ -3339,4 +3344,83 @@ function calcJeonseLoanByAgency(deposit, opts) {
   function init() { autosaveInit(); ttsButtonsInit(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
+})();
+
+/* =========================================================
+ * 홈 뉴스 렌더링 (2026-06-28)
+ *  assets/news.json 으로
+ *   1) "이번 주 부동산 핵심 이슈" — 주간 요약(lead)·카드 제목 갱신
+ *   2) "섹터별 부동산 뉴스" — 매일 자정 자동 갱신되는 섹터별 목록
+ *  을 채운다. news.json 이 없거나 비면 HTML 기본값(정적 폴백)을 그대로 둔다.
+ * ========================================================= */
+(function () {
+  'use strict';
+  var hasWeekly = document.querySelector('[data-news-cards]');
+  var hasDaily = document.querySelector('[data-news-daily]');
+  if (!hasWeekly && !hasDaily) return;   // 홈 외 페이지
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function setText(sel, txt) {
+    var el = document.querySelector(sel);
+    if (el && txt) el.textContent = txt;
+  }
+
+  function renderWeekly(w) {
+    if (!w) return;
+    setText('[data-news-asof]', w.as_of);
+    if (w.lead) {
+      var lead = document.querySelector('[data-news-lead]');
+      if (lead) lead.textContent = (/^[—-]/.test(w.lead.trim()) ? '' : '— ') + w.lead;
+    }
+    var grid = document.querySelector('[data-news-cards]');
+    if (grid && w.cards && w.cards.length) {
+      grid.innerHTML = w.cards.map(function (c) {
+        var sub = c.desc || [c.source, c.date].filter(Boolean).join(' · ');
+        return '<a class="card" href="' + esc(c.href) + '">' +
+          '<span class="badge badge-accent">' + esc(c.badge) + '</span>' +
+          '<h3>' + esc(c.title || c.badge) + '</h3>' +
+          (sub ? '<p>' + esc(sub) + '</p>' : '') +
+          '<div class="meta"><span>' + esc(c.cta || '자세히 →') + '</span></div>' +
+        '</a>';
+      }).join('');
+    }
+  }
+
+  function renderDaily(d) {
+    var wrap = document.querySelector('[data-news-daily]');
+    var list = document.querySelector('[data-news-daily-list]');
+    if (!wrap || !list || !d || !d.sectors) return;
+    var sectors = d.sectors.filter(function (s) { return s.items && s.items.length; });
+    if (!sectors.length) return;   // 폴백: 섹션 숨김 유지
+    setText('[data-news-daily-updated]', d.updated ? d.updated + ' 갱신' : null);
+    list.innerHTML = sectors.map(function (s) {
+      var items = s.items.map(function (it) {
+        var ext = /^https?:/i.test(it.url || '');
+        var meta = [it.source, it.date].filter(Boolean).join(' · ');
+        return '<li><a href="' + esc(it.url || '#') + '"' +
+          (ext ? ' target="_blank" rel="noopener"' : '') + '>' +
+          '<span class="news-title">' + esc(it.title) + '</span>' +
+          (meta ? '<span class="news-meta">' + esc(meta) + '</span>' : '') +
+          '</a></li>';
+      }).join('');
+      return '<div class="news-sector">' +
+        '<h3 class="news-sector-name">' + esc(s.name) + '</h3>' +
+        '<ul class="news-list">' + items + '</ul>' +
+      '</div>';
+    }).join('');
+    wrap.hidden = false;
+  }
+
+  fetch('assets/news.json', { cache: 'no-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      if (!data) return;
+      renderWeekly(data.weekly);
+      renderDaily(data.daily);
+    })
+    .catch(function () { /* 폴백: 정적 HTML 유지 */ });
 })();

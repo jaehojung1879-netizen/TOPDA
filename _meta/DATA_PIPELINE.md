@@ -25,6 +25,7 @@
 |---|---|---|
 | `collect_apartments.py` | 국토부 실거래 + Kakao | `apartments.json`(단지·평형·실거래가·좌표·역/학교 거리) |
 | `collect_market.py` | R-ONE | `market.json`(지역별 매매·전세 지수·전세가율) |
+| `collect_news.py` | 구글 뉴스 RSS(키 불필요) | `news.json`(홈 "이번 주 핵심 이슈" + "섹터별 부동산 뉴스") |
 | `lib_pdata.py` | 공용 유틸 | — |
 
 ## 4) R-ONE (지역 시세 대시보드)
@@ -35,6 +36,16 @@ R-ONE이 돌려주는 **전 지역(전국·시도·시군구)** 을 자동 수�
 - 전세가율(매매가격대비 전세가격비율): `METRICS["jeonse_ratio"]` 비어 있음 →
   R-ONE easyStat에서 해당 통계표를 찾아 URL의 `A_2024_xxxxx`를 넣으면 자동 반영됩니다.
 - 매매가격지수 수집 실패 시 기존 `market.json` 보존.
+
+## 5) 부동산 뉴스 (홈 핵심 이슈·섹터별 뉴스)
+`collect_news.py`는 **구글 뉴스 RSS(한국어)** 를 섹터별(대출·규제 / 매매·집값 / 전세·월세 /
+청약·분양 / 세금·정책)로 검색해 `news.json`을 만든다. **API 키가 필요 없다.**
+- 자동: 매일 00:10 KST (`.github/workflows/refresh-news.yml`) — 섹터별 뉴스는 매일,
+  주간 요약/카드는 한 주간 헤드라인을 매일 다시 집계(주차 라벨은 매주 자동 변경).
+- 수동: Actions 탭 → **Refresh real-estate news** → Run workflow
+- 로컬: `cd _meta && python collect_news.py`
+- 프런트: `site/assets/app.js`가 `assets/news.json`을 fetch해 홈을 채우고, 없으면 정적 HTML로 폴백.
+- 격리 샌드박스에서는 `news.google.com` 접근이 막혀 0건일 수 있으나, CI 러너에서는 정상 동작한다.
 
 ## 안전장치
 - 모든 수집기는 **실패·빈 결과 시 기존 JSON을 덮어쓰지 않습니다**(`save_json_safe`).

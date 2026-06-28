@@ -1,0 +1,45 @@
+name: Refresh real-estate news
+
+# 섹터별 부동산 뉴스(홈 하단) + 이번 주 핵심 이슈(홈 상단)를 구글 뉴스 RSS로 집계 →
+# site/assets/news.json. 키 불필요(공개 RSS). 매일 자정(KST)마다 갱신한다.
+#   · 섹터별 뉴스: 매일 갱신
+#   · 주간 요약/카드: 한 주간 헤드라인을 매일 다시 집계(주차 라벨은 매주 자동 변경)
+# 수집 결과가 비면 collect_news.py가 기존 news.json을 보존한다(빈 화면 방지).
+on:
+  schedule:
+    - cron: "10 15 * * *"   # 매일 00:10 KST (listings 00:00 / market 00:30 와 푸시 충돌 회피)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-news
+  cancel-in-progress: false
+
+jobs:
+  news:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Collect news (Google News RSS)
+        working-directory: _meta
+        run: python collect_news.py
+
+      - name: Commit news.json
+        run: |
+          git config user.name "topda-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -n "$(git status --porcelain site/assets/news.json)" ]; then
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+            git add site/assets/news.json
+            git commit -m "부동산 뉴스 자동 갱신 ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "뉴스 변경 없음 — 커밋 생략"
+          fi
