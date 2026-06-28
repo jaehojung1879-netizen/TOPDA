@@ -32,7 +32,7 @@ HUBS = [
     ("calculators/index.html", "계산기 전체", "취득세·양도세·DSR·대출한도 등 계산기 모음", "계산기", "calculators/index.html"),
     ("checklists/index.html", "체크리스트 전체", "거래 단계별 체크리스트 모음", "체크리스트", "checklists/index.html"),
     ("interior/index.html", "인테리어 가이드", "공정별 자재·단가·견적·하자보수", "인테리어", "interior/index.html"),
-    ("posts/index.html", "전체 글", "부동산 거래 가이드 글 26편", "가이드", "posts/index.html"),
+    ("posts/index.html", "전체 글", "부동산 거래 가이드 글 27편", "가이드", "posts/index.html"),
 ]
 
 
