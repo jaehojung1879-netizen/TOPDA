@@ -18,6 +18,7 @@ CATS = {
         ("registry-reading.html", "등기부등본 읽는 법", "갑구·을구·말소기준권리 5분 독해"),
         ("sale-contract-tips.html", "매매계약서 특약, 이것만은", "계약서에 꼭 넣을 특약 조항"),
         ("transfer-tax-guide.html", "양도소득세 완벽 정리 (심화)", "비과세·장특공·세율"),
+        ("funding-plan.html", "자금조달계획서 작성 가이드 (심화)", "자기자금·차입금·증빙·자금출처"),
         ("good-house-eye.html", "좋은 집 보는 눈 12가지", "현장에서 30분 안에 확인할 것들"),
         ("property-tour.html", "임장 체크리스트 30선", "임장 갈 때 챙기는 확인 항목"),
     ],

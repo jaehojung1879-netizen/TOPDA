@@ -13,6 +13,7 @@ R-ONE OpenAPI (SttsApiTblData.do)
   전세가율(매매가격대비 전세가격비율) : R-ONE easyStat URL의 A_2024_xxxxx 확인 후 입력
 """
 import datetime as dt
+import hashlib
 import os
 import re
 import sys
@@ -114,6 +115,13 @@ def split_region(name):
 
 def main():
     api_key = L.key(L.RONE_KEYS, required=True)
+    # 시크릿 지문(값 비노출): 길이 + sha256 앞 10자리. GitHub은 시크릿 원문을 ***로 가리므로
+    # 실제로 어떤 값이 들어갔는지 알 수 없는데, 이 지문으로 '정상 키와 동일한지'를 안전하게 대조한다.
+    # 정상 키 38c5…64a → len=32, sha256[:10]=c5a0744b65. 다르면 시크릿 값이 잘못 들어간 것.
+    fp = hashlib.sha256(api_key.encode()).hexdigest()[:10]
+    print(f"[R_ONE 키 점검] 길이={len(api_key)} 지문(sha256[:10])={fp} "
+          f"(정상 키라면 길이=32·지문=c5a0744b65)")
+
     end = dt.date.today().strftime("%Y%m")
     start = (dt.date.today().replace(day=1) - dt.timedelta(days=31 * MONTHS)).strftime("%Y%m")
 
@@ -132,7 +140,18 @@ def main():
         # 과거: 여기서 조용히 return → 워크플로는 'success'인데 데이터는 시드에 멈춰 원인 불명이었음.
         # 이제는 비정상 종료로 CI를 빨갛게 만들어, 위 stderr 진단(RESULT 코드·응답 구조)이 드러나게 한다.
         print("매매가격지수 수집 실패 — 기존 market.json 유지", file=sys.stderr)
-        print("  → 점검: (1) R_ONE 시크릿이 R-ONE OpenAPI에 활용신청·승인됐는지 "
+        # 키 문제 vs STATBL_ID 문제 분리 프로브: 문서 예시 표(A_2024_00001)로 1회 호출해본다.
+        #   · 프로브도 ERROR-290 → '인증키(시크릿 값)' 문제 (위 지문으로 정상키와 대조).
+        #   · 프로브는 정상인데 00045/00050만 실패 → 'STATBL_ID' 문제(표 ID 교체 필요).
+        try:
+            probe = fetch_metric("A_2024_00001", start, end, api_key)
+            print(f"  · 프로브(A_2024_00001) 결과: 지역 {len(probe)}개 — 키는 유효, "
+                  f"매매/전세 STATBL_ID(00045·00050)가 잘못됐을 가능성이 큼.", file=sys.stderr)
+        except Exception as e:  # noqa: BLE001
+            print(f"  · 프로브(A_2024_00001)도 실패: {e}", file=sys.stderr)
+            print("    → 표가 아니라 '인증키' 문제. 위 [R_ONE 키 점검] 지문이 c5a0744b65가 아니면 "
+                  "시크릿 값이 정상 키와 다른 것이니 R_ONE 시크릿을 38c5…64a로 다시 저장하세요.", file=sys.stderr)
+        print("  → 점검: (1) R_ONE 시크릿 값이 정상 키와 동일한지(지문 대조) "
               "(2) STATBL_ID(A_2024_00045/00050)가 현재 유효한지 — R-ONE easyStat에서 확인.",
               file=sys.stderr)
         sys.exit(1)
