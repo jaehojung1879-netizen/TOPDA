@@ -24,10 +24,10 @@
 <link rel="alternate" hreflang="x-default" href="https://jaehojung1879-netizen.github.io/TOPDA/index.html" />
 <meta name="naver-site-verification" content="NAVER_SITE_VERIFICATION_PLACEHOLDER" />
 <meta name="google-site-verification" content="GOOGLE_SITE_VERIFICATION_PLACEHOLDER" />
-<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260620"></script>
+<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260628"></script>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="assets/styles.css?v=20260620" />
+<link rel="stylesheet" href="assets/styles.css?v=20260628" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -338,15 +338,15 @@
   <div class="container">
     <div class="strip-head">
       <h2>이번 주 부동산 핵심 이슈</h2>
-      <span class="strip-sub">2026년 6월 4주 · 톺다가 주요 기사를 종합해 정리</span>
+      <span class="strip-sub"><span data-news-asof>2026년 6월 4주</span> · 톺다가 주요 기사를 종합해 정리</span>
     </div>
 
     <div class="callout" style="margin-bottom:20px;">
       <div class="icon">📌</div>
-      <div class="body"><strong>한눈에</strong> — 6·27 대출규제 시행 1년, 서울 아파트값은 규제에도 1년간 약 9~15% 올랐습니다. 자금 부담에 매수세가 <strong>9억 이하·소형</strong>으로 쏠리고, 전세는 입주물량 감소 속 <strong>월세화</strong>가 빨라지고 있습니다. 한편 4·17부터 다주택·임대사업자의 수도권 규제지역 아파트 담보대출 <strong>만기연장이 원칙 금지</strong>됐습니다.</div>
+      <div class="body"><strong>한눈에</strong> <span data-news-lead>— 6·27 대출규제 시행 1년, 서울 아파트값은 규제에도 1년간 약 9~15% 올랐습니다. 자금 부담에 매수세가 9억 이하·소형으로 쏠리고, 전세는 입주물량 감소 속 월세화가 빨라지고 있습니다. 한편 4·17부터 다주택·임대사업자의 수도권 규제지역 아파트 담보대출 만기연장이 원칙 금지됐습니다.</span></div>
     </div>
 
-    <div class="cards-grid">
+    <div class="cards-grid" data-news-cards>
       <a class="card" href="calculators/loan-limit.html">
         <span class="badge badge-accent">대출 규제</span>
         <h3>규제 1년 — 한도부터 다시 계산</h3>
@@ -372,6 +372,20 @@
       <a href="https://www.news1.kr/realestate/general/6024386" target="_blank" rel="noopener">뉴스1</a> ·
       <a href="https://www.newspim.com/news/view/20260626000915" target="_blank" rel="noopener">뉴스핌</a> ·
       금융위 「2026년도 가계부채 관리방안」. 시세 흐름은 <a href="calculators/market-trends.html">지역 시세 대시보드</a>에서 확인하세요.
+    </p>
+  </div>
+</section>
+
+<!-- ===== Sector news (daily auto-update) ===== -->
+<section class="section home-news" data-news-daily hidden>
+  <div class="container">
+    <div class="strip-head">
+      <h2>섹터별 부동산 뉴스</h2>
+      <span class="strip-sub"><span data-news-daily-updated>매일 자정 자동 업데이트</span> · 대출 · 매매 · 전월세 · 청약 · 세금</span>
+    </div>
+    <div class="news-sectors" data-news-daily-list></div>
+    <p style="color:var(--text-muted); font-size:0.8rem; margin-top:14px;">
+      여러 언론 보도를 자동 집계한 목록(구글 뉴스)이며 투자 권유가 아닙니다. 제목·언론사는 원문 기준이고, 매일 00:00(KST) 갱신됩니다.
     </p>
   </div>
 </section>
@@ -413,6 +427,6 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=20260620"></script>
+<script src="assets/app.js?v=20260628"></script>
 </body>
 </html>

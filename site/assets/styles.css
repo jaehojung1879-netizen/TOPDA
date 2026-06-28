@@ -331,7 +331,10 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 }
 .callout .icon { flex-shrink: 0; font-weight: 700; }
 .callout .body { flex: 1; }
-.callout .body strong { display: block; margin-bottom: 4px; font-weight: 700; }
+/* 콜아웃의 '머리말' 강조(맨 앞 strong)만 블록으로 띄운다.
+   문장 중간 <strong>까지 block 처리하면 줄이 토막나 보이므로 첫 자식에만 적용. */
+.callout .body strong { font-weight: 700; }
+.callout .body > strong:first-child { display: block; margin-bottom: 4px; }
 .callout-info { background: var(--accent-soft); border-color: #c7d2fe; }
 .callout-info .icon { color: var(--accent); }
 .callout-warn { background: var(--warning-soft); border-color: #fde68a; }
@@ -876,6 +879,36 @@ table.data tr.is-active > td:first-child, table.data tr.is-active > th:first-chi
 .home-search button:hover { background: #1e40af; }
 .strip-sub { font-weight: 500; color: var(--text-muted); font-size: 0.85em; margin-left: 4px; }
 @media (max-width: 639px) { .strip-sub { display: block; margin-left: 0; margin-top: 2px; } }
+
+/* ===== Sector news (홈 하단, 매일 자동 갱신) ===== */
+.home-news[hidden] { display: none; }
+.news-sectors {
+  display: grid; gap: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) { .news-sectors { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .news-sectors { grid-template-columns: repeat(3, 1fr); } }
+.news-sector {
+  border: 1px solid var(--border, #e5e7eb); border-radius: var(--radius, 14px);
+  background: var(--surface, #fff); padding: 16px 18px;
+}
+.news-sector-name {
+  font-size: 0.92rem; font-weight: 800; margin: 0 0 10px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border, #e5e7eb);
+  color: var(--accent, #2563eb);
+}
+.news-list { list-style: none; margin: 0; padding: 0; }
+.news-list li + li { margin-top: 4px; }
+.news-list a {
+  display: block; padding: 7px 0; text-decoration: none; color: var(--text);
+  border-bottom: 1px dashed transparent;
+}
+.news-list a:hover { color: var(--accent, #2563eb); }
+.news-title {
+  display: block; font-size: 0.92rem; line-height: 1.45; font-weight: 600;
+  word-break: keep-all;
+}
+.news-meta { display: block; font-size: 0.76rem; color: var(--text-muted); margin-top: 2px; }
 
 /* ===== Hub sections (calculator/checklist index) ===== */
 .hub-section { padding: 24px 0 16px; }
