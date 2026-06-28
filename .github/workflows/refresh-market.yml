@@ -29,6 +29,8 @@ jobs:
         env:
           R_ONE: ${{ secrets.R_ONE }}
           REB_RONE_KEY: ${{ secrets.REB_RONE_KEY }}
+          # 전세가율 직접 통계표 ID(아파트 매매가격대비 전세가격비율). 설정 시 평균가격 역산 대신 사용.
+          RONE_RATIO_STATBL_ID: ${{ vars.RONE_RATIO_STATBL_ID }}
         run: python collect_market.py
 
       - name: Commit market.json
@@ -41,4 +43,28 @@ jobs:
             git push
           else
             echo "변경 없음 — 커밋 생략"
+          fi
+
+      # 상업용부동산(상가·오피스) 임대시세 — 분기 통계지만 매일 호출(미변경 시 커밋 생략).
+      # RONE_COMM_TABLES(JSON: 유형→지표→STATBL_ID) 변수 미설정이면 수집기가 스킵하고 예시 보존.
+      - name: Collect commercial rents (R-ONE 상업용 임대동향)
+        working-directory: _meta
+        env:
+          R_ONE: ${{ secrets.R_ONE }}
+          REB_RONE_KEY: ${{ secrets.REB_RONE_KEY }}
+          RONE_COMM_TABLES: ${{ vars.RONE_COMM_TABLES }}
+        run: python collect_commercial.py
+        continue-on-error: true
+
+      - name: Commit commercial.json
+        run: |
+          git config user.name "topda-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -n "$(git status --porcelain site/assets/commercial.json)" ]; then
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+            git add site/assets/commercial.json
+            git commit -m "상업용 임대시세 자동 갱신 ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "상업용 변경 없음 — 커밋 생략"
           fi

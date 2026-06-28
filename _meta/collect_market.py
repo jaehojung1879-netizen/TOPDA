@@ -36,6 +36,11 @@ AVG = {
     "jeonse_avg": "A_2024_00190",
 }
 
+# 전세가율 직접 통계표(아파트 매매가격대비 전세가격비율, 월간).
+#  R-ONE easyStat에서 확인한 STATBL_ID를 GitHub 변수/시크릿 RONE_RATIO_STATBL_ID 로 주입하면
+#  평균가격 역산(AVG) 대신 이 표를 그대로 사용한다(더 정확). 미설정이면 AVG 폴백.
+RATIO_STATBL = os.environ.get("RONE_RATIO_STATBL_ID", "").strip()
+
 
 def norm_month(s):
     s = str(s or "")
@@ -156,27 +161,41 @@ def main():
               file=sys.stderr)
         sys.exit(1)
 
-    # 평균가격 → 전세가율(전세평균/매매평균) 계산. 추정 통계표가 틀리면 비정상값으로 자동 배제.
-    avg_data = {}
-    for key, statbl in AVG.items():
+    # 전세가율: (1순위) 직접 통계표 RONE_RATIO_STATBL_ID, (2순위) 평균가격 역산(AVG).
+    ratio = {}  # {region: {month: 전세가율(%)}}
+    if RATIO_STATBL:
         try:
-            avg_data[key] = fetch_metric(statbl, start, end, api_key)
+            direct = fetch_metric(RATIO_STATBL, start, end, api_key)
+            for region, months in direct.items():
+                for mo, v in months.items():
+                    if v and 10 <= v <= 100:  # 전세가율 정상 범위만 채택
+                        ratio.setdefault(region, {})[mo] = round(v, 1)
+            print(f"[jeonse_ratio] 직접 통계표({RATIO_STATBL}) 지역 {len(ratio)}개")
         except Exception as e:  # noqa: BLE001
-            print(f"  ! {key} 수집 실패: {e}", file=sys.stderr)
-    ratio = {}  # {region: {month: 전세가율}}
-    sale_avg, jeonse_avg = avg_data.get("sale_avg", {}), avg_data.get("jeonse_avg", {})
-    for region, smonths in sale_avg.items():
-        for mo, sv in smonths.items():
-            jv = jeonse_avg.get(region, {}).get(mo)
-            if sv and jv and jv < sv:
-                r = round(jv / sv * 100, 1)
-                if 25 <= r <= 100:  # 전세가율 정상 범위만 채택
-                    ratio.setdefault(region, {})[mo] = r
+            print(f"  ! 직접 전세가율 통계표({RATIO_STATBL}) 수집 실패: {e} — AVG 역산으로 폴백", file=sys.stderr)
+
     if not ratio:
-        # 지수는 살아있지만 전세가율이 비면(추정 AVG STATBL_ID 오류 가능) 인덱스만 저장하고 경고.
-        print("  ! 전세가율 계산 결과 없음 — AVG STATBL_ID(A_2024_00188/00190) 유효성 확인 필요. "
+        # 평균가격 → 전세가율(전세평균/매매평균) 계산. 추정 통계표가 틀리면 비정상값으로 자동 배제.
+        avg_data = {}
+        for key, statbl in AVG.items():
+            try:
+                avg_data[key] = fetch_metric(statbl, start, end, api_key)
+            except Exception as e:  # noqa: BLE001
+                print(f"  ! {key} 수집 실패: {e}", file=sys.stderr)
+        sale_avg, jeonse_avg = avg_data.get("sale_avg", {}), avg_data.get("jeonse_avg", {})
+        for region, smonths in sale_avg.items():
+            for mo, sv in smonths.items():
+                jv = jeonse_avg.get(region, {}).get(mo)
+                if sv and jv and jv < sv:
+                    r = round(jv / sv * 100, 1)
+                    if 25 <= r <= 100:  # 전세가율 정상 범위만 채택
+                        ratio.setdefault(region, {})[mo] = r
+    if not ratio:
+        # 지수는 살아있지만 전세가율이 비면(STATBL_ID 미설정·오류) 인덱스만 저장하고 경고.
+        print("  ! 전세가율 계산 결과 없음 — 직접 통계표 RONE_RATIO_STATBL_ID 설정을 권장. "
+              "(미설정 시 AVG A_2024_00188/00190 역산을 시도하나 추정 ID라 빌 수 있음) "
               "지수는 저장하되 jeonse_ratio는 null로 둔다.", file=sys.stderr)
-    print(f"[jeonse_ratio] 계산된 지역 {len(ratio)}개")
+    print(f"[jeonse_ratio] 최종 지역 {len(ratio)}개")
 
     # 지역 합집합 → 월별 시계열 병합
     regions = sorted(set().union(*[set(metric_data.get('sale_index', {})), set(metric_data.get('jeonse_index', {}))]))
