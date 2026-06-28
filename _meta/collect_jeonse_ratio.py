@@ -54,6 +54,7 @@ def main():
     key = L.key(L.DATA_GO_KEYS, required=True)
     months = recent_months(MONTHS_BACK)
     regions = []
+    total_jeonse = 0      # 전세 표본 총합 — 0이면 전월세 API 미승인 가능성
     for region, lawd in L.LAWD.items():
         sale, jeonse = [], []
         for ym in months:
@@ -66,6 +67,7 @@ def main():
                 dep = _num(it.get("deposit"))
                 if dep and rent == 0:        # 순수 전세만(월세 제외)
                     jeonse.append(dep)
+        total_jeonse += len(jeonse)
         if len(sale) < MIN_SAMPLES or len(jeonse) < MIN_SAMPLES:
             print(f"[{region}] 표본 부족(매매 {len(sale)}·전세 {len(jeonse)}) — 제외")
             continue
@@ -92,6 +94,11 @@ def main():
         print(f"[{region}] 전세가율 {ratio}% (매매중위 {int(sale_med)}만 / 전세중위 {int(jeonse_med)}만)")
 
     if not regions:
+        if total_jeonse == 0:
+            print("‼ 전세 표본 0건 — 국토부 '아파트 전월세 실거래가'(RTMSDataSvcAptRent) API가 "
+                  "서비스키에 활용신청·승인되지 않았을 가능성이 큽니다(매매는 정상 수집). "
+                  "data.go.kr에서 해당 API를 같은 계정으로 활용신청하면 다음 실행부터 채워집니다.",
+                  file=sys.stderr)
         print("수집 결과 없음 — 기존 jeonse_ratio.json 유지")
         return
     regions.sort(key=lambda r: r["jeonse_ratio"], reverse=True)

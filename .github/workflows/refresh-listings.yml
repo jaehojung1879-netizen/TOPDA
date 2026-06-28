@@ -75,6 +75,32 @@ jobs:
             echo "전세가율 변경 없음 — 커밋 생략"
           fi
 
+      # 1.7) 단지 세대수 보강 (K-apt 전용, Kakao 미사용 — 빠름).
+      # 과거: 세대수 보강이 느린 Kakao 지오코딩 뒤에 있어 35분 타임아웃에 밀려 거의 못 채웠다.
+      # 이제 별도 스텝으로 먼저 끝까지 돌려 세대수를 채우고 커밋한다.
+      - name: Enrich household counts (K-apt)
+        working-directory: _meta
+        timeout-minutes: 25
+        env:
+          DATA_GO_APT_BASIC_INFO: ${{ secrets.DATA_GO_APT_BASIC_INFO }}
+          DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+        run: python collect_households.py
+        continue-on-error: true
+
+      - name: Commit household counts
+        run: |
+          git config user.name "topda-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -n "$(git status --porcelain site/assets/apartments.json)" ]; then
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+            git add site/assets/apartments.json
+            git commit -m "단지 세대수 자동 보강 ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "세대수 변경 없음 — 커밋 생략"
+          fi
+
       # 2) 단지 집계 (Kakao 지오코딩 — 느림) — 자체 타임아웃 안에서 점진 보강 후 별도 커밋
       - name: Collect apartments (국토부 실거래 + Kakao + K-apt)
         working-directory: _meta

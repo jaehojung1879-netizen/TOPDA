@@ -62,6 +62,11 @@
     <div class="meta"><span data-jr-meta>국토교통부 아파트 매매·전세 실거래 중위가 기준 · 매일 자동 갱신</span></div>
   </div>
 
+  <div class="callout callout-warn" data-jr-seed style="display:none;">
+    <div class="icon">⚠</div>
+    <div class="body"><strong>예시 데이터입니다.</strong> 전세(전월세) 실거래 API 승인 후 실제 값으로 자동 갱신됩니다. 아래 숫자는 화면 예시이며 실제 시세가 아닙니다.</div>
+  </div>
+
   <div class="callout callout-info">
     <div class="icon">i</div>
     <div class="body"><strong>전세가율 = 전세 중위 보증금 ÷ 매매 중위가</strong> 지역별 최근 3개월 실거래(순수 전세)로 계산합니다. 전세가율이 <strong>높을수록</strong> 매매가 대비 전세 부담이 크고 <strong>역전세·갭 위험</strong>을 살펴야 합니다.</div>
@@ -209,6 +214,7 @@
         return;
       }
       ALL = data.regions;
+      if (data.seed) { var sb = document.querySelector('[data-jr-seed]'); if (sb) sb.style.display = ''; }
       if (data.as_of) {
         var m = document.querySelector('[data-jr-meta]');
         if (m) m.textContent = '국토교통부 실거래 중위가 기준 · ' + data.as_of + ' · 매일 자동 갱신';
