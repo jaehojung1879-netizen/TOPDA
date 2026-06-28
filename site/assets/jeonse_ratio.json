@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "source": "국토교통부 아파트 매매·전월세 실거래가 OpenAPI",
+    "method": "지역별 최근 3개월 실거래 중위가 기준 전세가율(전세 중위 보증금 ÷ 매매 중위가)",
+    "currency_unit": "만원",
+    "note": "초기 예시값입니다. 매일 실거래 수집으로 자동 갱신됩니다. 순수 전세(월세 0)만 사용."
+  },
+  "as_of": "2026-06",
+  "months": ["202606", "202605", "202604"],
+  "regions": [
+    { "key": "인천 미추홀구", "sido": "인천", "name": "인천 미추홀구", "lat": 37.4636, "lng": 126.6505, "sale_median": 33000, "jeonse_median": 23100, "jeonse_ratio": 70.0, "sale_n": 142, "jeonse_n": 188 },
+    { "key": "인천 부평구", "sido": "인천", "name": "인천 부평구", "lat": 37.5070, "lng": 126.7219, "sale_median": 38000, "jeonse_median": 26220, "jeonse_ratio": 69.0, "sale_n": 165, "jeonse_n": 201 },
+    { "key": "서울 노원구", "sido": "서울", "name": "서울 노원구", "lat": 37.6542, "lng": 127.0568, "sale_median": 62000, "jeonse_median": 38440, "jeonse_ratio": 62.0, "sale_n": 210, "jeonse_n": 245 },
+    { "key": "서울 도봉구", "sido": "서울", "name": "서울 도봉구", "lat": 37.6688, "lng": 127.0471, "sale_median": 58000, "jeonse_median": 34800, "jeonse_ratio": 60.0, "sale_n": 98, "jeonse_n": 121 },
+    { "key": "경기 부천시", "sido": "경기", "name": "경기 부천시", "lat": 37.5035, "lng": 126.7660, "sale_median": 45000, "jeonse_median": 26550, "jeonse_ratio": 59.0, "sale_n": 188, "jeonse_n": 233 },
+    { "key": "서울 강서구", "sido": "서울", "name": "서울 강서구", "lat": 37.5509, "lng": 126.8495, "sale_median": 82000, "jeonse_median": 45100, "jeonse_ratio": 55.0, "sale_n": 176, "jeonse_n": 198 },
+    { "key": "서울 성동구", "sido": "서울", "name": "서울 성동구", "lat": 37.5634, "lng": 127.0369, "sale_median": 145000, "jeonse_median": 76850, "jeonse_ratio": 53.0, "sale_n": 132, "jeonse_n": 150 },
+    { "key": "서울 마포구", "sido": "서울", "name": "서울 마포구", "lat": 37.5663, "lng": 126.9019, "sale_median": 138000, "jeonse_median": 71760, "jeonse_ratio": 52.0, "sale_n": 121, "jeonse_n": 144 },
+    { "key": "서울 송파구", "sido": "서울", "name": "서울 송파구", "lat": 37.5145, "lng": 127.1059, "sale_median": 185000, "jeonse_median": 90650, "jeonse_ratio": 49.0, "sale_n": 240, "jeonse_n": 268 },
+    { "key": "경기 성남시 분당구", "sido": "경기", "name": "경기 성남시 분당구", "lat": 37.3828, "lng": 127.1188, "sale_median": 130000, "jeonse_median": 62400, "jeonse_ratio": 48.0, "sale_n": 158, "jeonse_n": 175 },
+    { "key": "서울 서초구", "sido": "서울", "name": "서울 서초구", "lat": 37.4836, "lng": 127.0327, "sale_median": 280000, "jeonse_median": 131600, "jeonse_ratio": 47.0, "sale_n": 145, "jeonse_n": 160 },
+    { "key": "서울 강남구", "sido": "서울", "name": "서울 강남구", "lat": 37.5172, "lng": 127.0473, "sale_median": 300000, "jeonse_median": 138000, "jeonse_ratio": 46.0, "sale_n": 198, "jeonse_n": 220 }
+  ]
+}

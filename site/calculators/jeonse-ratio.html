@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>전세가율 지도 — 톺다</title>
+<meta name="description" content="국토교통부 아파트 매매·전세 실거래 중위가로 계산한 지역별 전세가율을 지도와 순위표로 확인합니다. 전세가율이 높을수록 매매가 대비 전세보증금 부담·갭 위험이 큽니다." />
+<!-- seo:meta -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260629" />
+<style>
+  .jr-controls { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:18px; }
+  .jr-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; color:var(--text-muted); }
+  .jr-field select { padding:10px 12px; border:1px solid var(--border,#d1d5db); border-radius:10px; font-size:0.95rem; font-family:inherit; background:#fff; min-width:150px; }
+  #jrMap { height:460px; border-radius:14px; border:1px solid var(--border,#e5e7eb); overflow:hidden; z-index:0; }
+  .jr-legend { background:#fff; padding:8px 10px; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,.15); font-size:0.78rem; line-height:1.5; }
+  .jr-legend .row { display:flex; align-items:center; gap:6px; }
+  .jr-legend .dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+  .jr-table-wrap { overflow-x:auto; margin-top:22px; }
+  table.jr { width:100%; border-collapse:collapse; font-size:0.9rem; }
+  table.jr th, table.jr td { padding:10px 12px; text-align:right; border-bottom:1px solid var(--border,#eee); white-space:nowrap; }
+  table.jr th { font-weight:700; color:var(--text-muted); text-align:right; background:var(--surface-2,#f8fafc); }
+  table.jr th:first-child, table.jr td:first-child { text-align:left; }
+  table.jr td.ratio { font-weight:800; font-variant-numeric:tabular-nums; }
+  .jr-bar { display:inline-block; height:8px; border-radius:4px; vertical-align:middle; margin-left:8px; }
+  .leaflet-popup-content { font-family:inherit; margin:10px 12px !important; }
+  .leaflet-popup-content .pop-name { font-weight:800; font-size:0.95rem; margin-bottom:4px; }
+  .leaflet-popup-content .pop-stat { font-size:0.82rem; line-height:1.6; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../guides.html" data-nav>가이드</a>
+      <a href="../calculators/index.html" data-nav>계산기</a>
+      <a href="../market.html" data-nav class="active">시세정보</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../guides.html">가이드</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../market.html">시세정보</a>
+    <a href="../checklists/index.html">체크리스트</a>
+    <a href="../board.html">게시판</a>
+    <a href="../about.html">안내</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../market.html">시세정보</a> / 전세가율 지도</div>
+    <h1>전세가율 지도</h1>
+    <div class="meta"><span data-jr-meta>국토교통부 아파트 매매·전세 실거래 중위가 기준 · 매일 자동 갱신</span></div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="icon">i</div>
+    <div class="body"><strong>전세가율 = 전세 중위 보증금 ÷ 매매 중위가</strong> 지역별 최근 3개월 실거래(순수 전세)로 계산합니다. 전세가율이 <strong>높을수록</strong> 매매가 대비 전세 부담이 크고 <strong>역전세·갭 위험</strong>을 살펴야 합니다.</div>
+  </div>
+
+  <div class="jr-controls">
+    <div class="jr-field">
+      <label for="jr-sido">시·도</label>
+      <select id="jr-sido"><option value="">전체</option></select>
+    </div>
+    <div class="jr-field">
+      <label for="jr-sort">정렬</label>
+      <select id="jr-sort">
+        <option value="ratio-desc">전세가율 높은 순</option>
+        <option value="ratio-asc">전세가율 낮은 순</option>
+        <option value="sale-desc">매매 중위가 높은 순</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="jrMap"></div>
+  <p data-jr-empty style="display:none; color:var(--text-muted); margin-top:14px;">실거래 데이터를 준비 중입니다. 매일 자동 수집 후 표시됩니다.</p>
+
+  <div class="jr-table-wrap">
+    <table class="jr">
+      <thead><tr><th>지역</th><th>전세가율</th><th>매매 중위가</th><th>전세 중위가</th><th>표본(매매/전세)</th></tr></thead>
+      <tbody data-jr-rows></tbody>
+    </table>
+  </div>
+
+  <section style="margin-top:36px;">
+    <h2 style="margin-bottom:12px;">읽는 법 · 출처</h2>
+    <ul class="ref-list">
+      <li><strong>중위가</strong>를 쓰는 이유 — 평균은 초고가·초저가 거래에 휘둘리므로, 지역 대표값으로 중앙값을 사용합니다.</li>
+      <li><strong>순수 전세</strong>(월세 0)만 집계해 보증금 기준 전세가율을 계산합니다. 표본이 적은 지역(각 5건 미만)은 제외됩니다.</li>
+      <li>지역 구성(평형·연식)이 매매·전세에서 다를 수 있어 <strong>참고용 근사치</strong>입니다. 단지·평형 단위는 <a href="transactions.html">실거래가 조회</a>에서 확인하세요.</li>
+    </ul>
+    <div class="callout callout-warn" style="margin-top:16px;">
+      <div class="icon">⚠</div>
+      <div class="body"><strong>면책</strong> 본 자료는 일반 정보 제공용입니다. 출처: 국토교통부 아파트 매매·전월세 실거래가 OpenAPI. 신고 시차로 최근 거래는 누락·정정될 수 있습니다.</div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container"><p class="disclaimer">© 톺다. 일반 정보 제공용입니다.</p></div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="../assets/app.js?v=20260629"></script>
+<script>
+(function () {
+  var map, layer;
+  var sidoSel = document.getElementById('jr-sido');
+  var sortSel = document.getElementById('jr-sort');
+  var rowsEl = document.querySelector('[data-jr-rows]');
+  var emptyEl = document.querySelector('[data-jr-empty]');
+  var ALL = [];
+
+  function won(man) {            // 만원 → "x억 y,zzz만"
+    man = Math.round(man || 0);
+    var eok = Math.floor(man / 10000), rest = man % 10000;
+    if (eok > 0) return eok + '억' + (rest ? ' ' + rest.toLocaleString() : '');
+    return man.toLocaleString() + '만';
+  }
+  function color(r) {            // 전세가율 색상 스케일
+    if (r >= 70) return '#dc2626';
+    if (r >= 60) return '#ea580c';
+    if (r >= 55) return '#f59e0b';
+    if (r >= 50) return '#16a34a';
+    return '#2563eb';
+  }
+
+  function initMap() {
+    if (typeof L === 'undefined') throw new Error('Leaflet 미로드');
+    map = L.map('jrMap', { scrollWheelZoom: false }).setView([36.8, 127.8], 7);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18, attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    var legend = L.control({ position: 'bottomright' });
+    legend.onAdd = function () {
+      var d = L.DomUtil.create('div', 'jr-legend');
+      d.innerHTML = '<strong>전세가율</strong>' +
+        [['#dc2626', '70%+'], ['#ea580c', '60–70%'], ['#f59e0b', '55–60%'], ['#16a34a', '50–55%'], ['#2563eb', '~50%']]
+          .map(function (x) { return '<div class="row"><span class="dot" style="background:' + x[0] + '"></span>' + x[1] + '</div>'; }).join('');
+      return d;
+    };
+    legend.addTo(map);
+    layer = L.layerGroup().addTo(map);
+  }
+
+  function filtered() {
+    var s = sidoSel.value;
+    var list = ALL.filter(function (r) { return !s || r.sido === s; });
+    var sort = sortSel.value;
+    list.sort(function (a, b) {
+      if (sort === 'ratio-asc') return a.jeonse_ratio - b.jeonse_ratio;
+      if (sort === 'sale-desc') return b.sale_median - a.sale_median;
+      return b.jeonse_ratio - a.jeonse_ratio;
+    });
+    return list;
+  }
+
+  function renderMarkers(list) {
+    if (!map || !layer) return;     // 지도 미초기화(라이브러리 로드 실패 등) 시 표만 표시
+    layer.clearLayers();
+    var pts = [];
+    list.forEach(function (r) {
+      if (r.lat == null || r.lng == null) return;
+      pts.push([r.lat, r.lng]);
+      L.circleMarker([r.lat, r.lng], {
+        radius: 9, color: '#fff', weight: 1.5, fillColor: color(r.jeonse_ratio), fillOpacity: 0.9
+      }).addTo(layer).bindPopup(
+        '<div class="pop-name">' + r.name + '</div>' +
+        '<div class="pop-stat">전세가율 <strong>' + r.jeonse_ratio + '%</strong><br>' +
+        '매매 중위 ' + won(r.sale_median) + '원<br>' +
+        '전세 중위 ' + won(r.jeonse_median) + '원</div>'
+      );
+    });
+    if (pts.length) { try { map.fitBounds(pts, { padding: [40, 40], maxZoom: 11 }); } catch (e) {} }
+  }
+
+  function render() {
+    var list = filtered();
+    renderMarkers(list);
+    rowsEl.innerHTML = list.map(function (r) {
+      var w = Math.max(6, Math.round(r.jeonse_ratio));
+      return '<tr>' +
+        '<td>' + r.name + '</td>' +
+        '<td class="ratio" style="color:' + color(r.jeonse_ratio) + '">' + r.jeonse_ratio + '%' +
+          '<span class="jr-bar" style="width:' + w + 'px;background:' + color(r.jeonse_ratio) + '"></span></td>' +
+        '<td>' + won(r.sale_median) + '</td>' +
+        '<td>' + won(r.jeonse_median) + '</td>' +
+        '<td>' + r.sale_n + ' / ' + r.jeonse_n + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  fetch('../assets/jeonse_ratio.json', { cache: 'no-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      if (!data || !data.regions || !data.regions.length) {
+        document.getElementById('jrMap').style.display = 'none';
+        emptyEl.style.display = 'block';
+        return;
+      }
+      ALL = data.regions;
+      if (data.as_of) {
+        var m = document.querySelector('[data-jr-meta]');
+        if (m) m.textContent = '국토교통부 실거래 중위가 기준 · ' + data.as_of + ' · 매일 자동 갱신';
+      }
+      // 시도 옵션
+      var sidos = Array.from(new Set(ALL.map(function (r) { return r.sido; }))).sort();
+      sidos.forEach(function (s) {
+        var o = document.createElement('option'); o.value = s; o.textContent = s; sidoSel.appendChild(o);
+      });
+      try { initMap(); } catch (e) {           // 지도 라이브러리 실패 → 표만으로 동작
+        var mp = document.getElementById('jrMap');
+        mp.style.display = 'none';
+        var note = document.createElement('p');
+        note.style.cssText = 'color:var(--text-muted);margin-top:8px;font-size:0.85rem;';
+        note.textContent = '지도를 불러오지 못해 표로 표시합니다.';
+        mp.parentNode.insertBefore(note, mp.nextSibling);
+      }
+      render();
+      sidoSel.addEventListener('change', render);
+      sortSel.addEventListener('change', render);
+    })
+    .catch(function () {
+      document.getElementById('jrMap').style.display = 'none';
+      emptyEl.style.display = 'block';
+    });
+})();
+</script>
+</body>
+</html>

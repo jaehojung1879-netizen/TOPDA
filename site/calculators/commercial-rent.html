@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>지역별 상가 임차시세 — 톺다</title>
+<meta name="description" content="한국부동산원 상업용부동산 임대동향조사 기반 지역·유형별(오피스·중대형상가·소규모상가·집합상가) 임대료·공실률·투자수익률을 지도와 표로 비교합니다." />
+<!-- seo:meta -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260629" />
+<style>
+  .cm-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .cm-tabs label { flex:1; min-width:110px; }
+  .cm-tabs input { position:absolute; opacity:0; pointer-events:none; }
+  .cm-tabs .tab { display:block; text-align:center; padding:10px 12px; border:1px solid var(--border,#e5e7eb); border-radius:10px; font-weight:700; cursor:pointer; background:#fff; color:var(--text-muted); font-size:0.92rem; }
+  .cm-tabs input:checked + .tab { border-color:var(--accent,#2563eb); color:var(--accent,#2563eb); background:color-mix(in srgb,var(--accent,#2563eb) 8%,#fff); }
+  .cm-controls { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:16px; }
+  .cm-field label { display:block; font-size:0.82rem; font-weight:600; margin-bottom:6px; color:var(--text-muted); }
+  .cm-field select { padding:10px 12px; border:1px solid var(--border,#d1d5db); border-radius:10px; font-size:0.95rem; font-family:inherit; background:#fff; min-width:150px; }
+  #cmMap { height:440px; border-radius:14px; border:1px solid var(--border,#e5e7eb); overflow:hidden; z-index:0; }
+  .cm-legend { background:#fff; padding:8px 10px; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,.15); font-size:0.78rem; }
+  .cm-legend .row { display:flex; align-items:center; gap:6px; }
+  .cm-legend .dot { width:11px; height:11px; border-radius:50%; }
+  .cm-table-wrap { overflow-x:auto; margin-top:22px; }
+  table.cm { width:100%; border-collapse:collapse; font-size:0.9rem; }
+  table.cm th, table.cm td { padding:10px 12px; text-align:right; border-bottom:1px solid var(--border,#eee); white-space:nowrap; }
+  table.cm th { font-weight:700; color:var(--text-muted); background:var(--surface-2,#f8fafc); }
+  table.cm th:first-child, table.cm td:first-child { text-align:left; }
+  .cm-seed-note { font-size:0.82rem; }
+  .leaflet-popup-content { font-family:inherit; margin:10px 12px !important; }
+  .leaflet-popup-content .pop-name { font-weight:800; font-size:0.95rem; margin-bottom:4px; }
+  .leaflet-popup-content .pop-stat { font-size:0.82rem; line-height:1.6; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="../guides.html" data-nav>가이드</a>
+      <a href="../calculators/index.html" data-nav>계산기</a>
+      <a href="../market.html" data-nav class="active">시세정보</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../guides.html">가이드</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../market.html">시세정보</a>
+    <a href="../checklists/index.html">체크리스트</a>
+    <a href="../board.html">게시판</a>
+    <a href="../about.html">안내</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../market.html">시세정보</a> / 상가 임차시세</div>
+    <h1>지역별 상가 임차시세</h1>
+    <div class="meta"><span data-cm-meta>한국부동산원 상업용부동산 임대동향조사 기준 · 분기 갱신</span></div>
+  </div>
+
+  <div class="callout callout-warn" data-cm-seed style="display:none;">
+    <div class="icon">⚠</div>
+    <div class="body cm-seed-note"><strong>예시 데이터입니다.</strong> 한국부동산원 R-ONE 상업용 임대 통계표 ID를 연동(<code>RONE_COMM_TABLES</code>)하면 실제 분기 데이터로 자동 갱신됩니다.</div>
+  </div>
+
+  <div class="cm-tabs" data-cm-types></div>
+
+  <div class="cm-controls">
+    <div class="cm-field">
+      <label for="cm-metric">지도 색상 기준</label>
+      <select id="cm-metric">
+        <option value="rent">임대료 (원/㎡·월)</option>
+        <option value="vacancy">공실률 (%)</option>
+        <option value="yield">투자수익률 (%)</option>
+      </select>
+    </div>
+    <div class="cm-field">
+      <label for="cm-sort">정렬</label>
+      <select id="cm-sort">
+        <option value="rent-desc">임대료 높은 순</option>
+        <option value="vacancy-desc">공실률 높은 순</option>
+        <option value="yield-desc">수익률 높은 순</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="cmMap"></div>
+  <p data-cm-empty style="display:none; color:var(--text-muted); margin-top:14px;">상업용 임대 데이터를 준비 중입니다.</p>
+
+  <div class="cm-table-wrap">
+    <table class="cm">
+      <thead><tr><th>지역</th><th>임대료(원/㎡)</th><th>공실률</th><th>투자수익률</th></tr></thead>
+      <tbody data-cm-rows></tbody>
+    </table>
+  </div>
+
+  <section style="margin-top:36px;">
+    <h2 style="margin-bottom:12px;">지표 읽는 법 · 출처</h2>
+    <ul class="ref-list">
+      <li><strong>임대료(원/㎡·월)</strong> — 전용면적 1㎡당 월 임대료. 같은 유형이라도 상권·층·전면에 따라 크게 달라집니다.</li>
+      <li><strong>공실률(%)</strong> — 빈 점포 비율. 높을수록 임차 수요가 약하다는 신호입니다.</li>
+      <li><strong>투자수익률(%)</strong> — 분기 기준 소득수익률 + 자본수익률. 임대수익과 가치변동을 합친 지표입니다.</li>
+      <li>유형: <strong>오피스 · 중대형상가(3층↑ 또는 330㎡↑) · 소규모상가(2층↓ & 330㎡↓) · 집합상가</strong>. 개별 점포 수익성은 <a href="rti-calculator.html">RTI(임대수익) 계산기</a>로 점검하세요.</li>
+    </ul>
+    <div class="callout callout-warn" style="margin-top:16px;">
+      <div class="icon">⚠</div>
+      <div class="body"><strong>면책</strong> 본 자료는 일반 정보 제공용입니다. 출처: 한국부동산원 상업용부동산 임대동향조사. 표본조사 기반 지역 평균이라 개별 물건과 차이가 있습니다.</div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container"><p class="disclaimer">© 톺다. 일반 정보 제공용입니다.</p></div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="../assets/app.js?v=20260629"></script>
+<script>
+(function () {
+  var map, layer, DATA = null, TYPE = 'office';
+  var typesEl = document.querySelector('[data-cm-types]');
+  var metricSel = document.getElementById('cm-metric');
+  var sortSel = document.getElementById('cm-sort');
+  var rowsEl = document.querySelector('[data-cm-rows]');
+  var emptyEl = document.querySelector('[data-cm-empty]');
+
+  function fmt(metric, v) {
+    if (v == null) return '—';
+    if (metric === 'rent') return Math.round(v).toLocaleString();
+    return v.toFixed(metric === 'yield' ? 2 : 1) + '%';
+  }
+  function metricVals(metric) {
+    return DATA.regions.map(function (r) { return (r.data[TYPE] || {})[metric]; }).filter(function (v) { return v != null; });
+  }
+  function color(metric, v) {
+    var vs = metricVals(metric);
+    if (!vs.length || v == null) return '#94a3b8';
+    var min = Math.min.apply(null, vs), max = Math.max.apply(null, vs);
+    var t = max === min ? 0.5 : (v - min) / (max - min);
+    // 임대료·수익률: 높을수록 진한 파랑 / 공실률: 높을수록 진한 빨강
+    if (metric === 'vacancy') {
+      var pal = ['#bfdbfe', '#fca5a5', '#ef4444', '#b91c1c'];
+      return pal[Math.min(3, Math.floor(t * 4))];
+    }
+    var pal2 = ['#dbeafe', '#93c5fd', '#3b82f6', '#1d4ed8'];
+    return pal2[Math.min(3, Math.floor(t * 4))];
+  }
+
+  function initMap() {
+    if (typeof L === 'undefined') throw new Error('Leaflet 미로드');
+    map = L.map('cmMap', { scrollWheelZoom: false }).setView([36.5, 127.8], 7);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; OpenStreetMap' }).addTo(map);
+    layer = L.layerGroup().addTo(map);
+  }
+
+  function rows() {
+    var metric = metricSel.value;
+    var list = DATA.regions.slice();
+    var sortMetric = sortSel.value.split('-')[0];
+    list.sort(function (a, b) {
+      var av = (a.data[TYPE] || {})[sortMetric], bv = (b.data[TYPE] || {})[sortMetric];
+      return (bv == null ? -1 : bv) - (av == null ? -1 : av);
+    });
+    return { list: list, metric: metric };
+  }
+
+  function renderMarkers(list, metric) {
+    if (!map || !layer) return;
+    layer.clearLayers();
+    var pts = [];
+    list.forEach(function (r) {
+      var d = r.data[TYPE] || {};
+      if (r.lat == null || r.lng == null) return;
+      pts.push([r.lat, r.lng]);
+      L.circleMarker([r.lat, r.lng], { radius: 11, color: '#fff', weight: 1.5, fillColor: color(metric, d[metric]), fillOpacity: 0.9 })
+        .addTo(layer).bindPopup(
+          '<div class="pop-name">' + r.name + '</div>' +
+          '<div class="pop-stat">임대료 <strong>' + fmt('rent', d.rent) + '</strong> 원/㎡<br>' +
+          '공실률 ' + fmt('vacancy', d.vacancy) + '<br>투자수익률 ' + fmt('yield', d.yield) + '</div>');
+    });
+    if (pts.length) { try { map.fitBounds(pts, { padding: [40, 40], maxZoom: 8 }); } catch (e) {} }
+  }
+
+  function render() {
+    var r = rows();
+    renderMarkers(r.list, r.metric);
+    rowsEl.innerHTML = r.list.map(function (x) {
+      var d = x.data[TYPE] || {};
+      return '<tr><td>' + x.name + '</td>' +
+        '<td>' + fmt('rent', d.rent) + '</td>' +
+        '<td>' + fmt('vacancy', d.vacancy) + '</td>' +
+        '<td>' + fmt('yield', d.yield) + '</td></tr>';
+    }).join('');
+  }
+
+  fetch('../assets/commercial.json', { cache: 'no-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      if (!data || !data.regions || !data.regions.length) {
+        document.getElementById('cmMap').style.display = 'none';
+        emptyEl.style.display = 'block';
+        return;
+      }
+      DATA = data;
+      if (data.seed) document.querySelector('[data-cm-seed]').style.display = '';
+      if (data.as_of) {
+        var m = document.querySelector('[data-cm-meta]');
+        if (m) m.textContent = '한국부동산원 상업용부동산 임대동향조사 · ' + data.as_of + ' · 분기 갱신';
+      }
+      // 유형 탭
+      TYPE = (data.types[0] || {}).key || 'office';
+      typesEl.innerHTML = data.types.map(function (t, i) {
+        return '<label><input type="radio" name="cmType" value="' + t.key + '"' + (i === 0 ? ' checked' : '') + '/><span class="tab">' + t.name + '</span></label>';
+      }).join('');
+      typesEl.querySelectorAll('input[name="cmType"]').forEach(function (el) {
+        el.addEventListener('change', function () { TYPE = el.value; render(); });
+      });
+      try { initMap(); } catch (e) {
+        var mp = document.getElementById('cmMap'); mp.style.display = 'none';
+        var note = document.createElement('p');
+        note.style.cssText = 'color:var(--text-muted);margin-top:8px;font-size:0.85rem;';
+        note.textContent = '지도를 불러오지 못해 표로 표시합니다.';
+        mp.parentNode.insertBefore(note, mp.nextSibling);
+      }
+      render();
+      metricSel.addEventListener('change', render);
+      sortSel.addEventListener('change', render);
+    })
+    .catch(function () {
+      document.getElementById('cmMap').style.display = 'none';
+      emptyEl.style.display = 'block';
+    });
+})();
+</script>
+</body>
+</html>

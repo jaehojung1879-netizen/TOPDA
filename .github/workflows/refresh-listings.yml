@@ -51,6 +51,30 @@ jobs:
             echo "실거래 변경 없음 — 커밋 생략"
           fi
 
+      # 1.5) 전세가율 (매매·전세 실거래 중위가) — 전세가율 지도용. 빠르므로 실거래 직후 수집·커밋.
+      - name: Collect jeonse ratio (매매·전세 실거래 중위가)
+        working-directory: _meta
+        timeout-minutes: 20
+        env:
+          DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+        run: python collect_jeonse_ratio.py
+        continue-on-error: true
+
+      - name: Commit jeonse_ratio.json
+        run: |
+          git config user.name "topda-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -n "$(git status --porcelain site/assets/jeonse_ratio.json)" ]; then
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+            git add site/assets/jeonse_ratio.json
+            git commit -m "전세가율 자동 갱신 ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "전세가율 변경 없음 — 커밋 생략"
+          fi
+
       # 2) 단지 집계 (Kakao 지오코딩 — 느림) — 자체 타임아웃 안에서 점진 보강 후 별도 커밋
       - name: Collect apartments (국토부 실거래 + Kakao + K-apt)
         working-directory: _meta
