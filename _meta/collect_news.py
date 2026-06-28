@@ -20,7 +20,6 @@ import re
 import sys
 import urllib.parse
 import xml.etree.ElementTree as ET
-from collections import Counter
 
 # lib_pdata의 안전 저장/요청 유틸 재사용.
 sys.path.insert(0, __import__("os").path.dirname(__file__))
@@ -31,26 +30,25 @@ NEWS_JSON = os.path.join(SITE_ASSETS, "news.json")
 GNEWS = "https://news.google.com/rss/search"
 
 # 섹터별 검색 질의. 홈 하단 "섹터별 뉴스"에 그대로 노출된다.
+# 부동산 경기 전반을 읽을 수 있게 주택·임대차·공급·금융·상업용·정책으로 나눈다.
 SECTORS = [
-    {"key": "loan",         "name": "대출·규제",  "query": "부동산 대출 규제 DSR LTV 스트레스"},
-    {"key": "trade",        "name": "매매·집값",  "query": "아파트 매매 집값 시세 거래량"},
-    {"key": "lease",        "name": "전세·월세",  "query": "전세 월세 임대차 전세사기"},
-    {"key": "subscription", "name": "청약·분양",  "query": "아파트 청약 분양 경쟁률"},
-    {"key": "policy",       "name": "세금·정책",  "query": "부동산 세금 정책 양도세 종부세 취득세"},
+    {"key": "housing",    "name": "주택 매매·집값", "query": "아파트 매매 집값 거래량 주택시장"},
+    {"key": "rent",       "name": "전세·월세",      "query": "전세 월세 임대차 전세사기"},
+    {"key": "supply",     "name": "청약·분양",      "query": "아파트 청약 분양 경쟁률 입주물량"},
+    {"key": "loan",       "name": "대출·금융",      "query": "부동산 대출 DSR LTV 금리 규제"},
+    {"key": "commercial", "name": "오피스·상업용",  "query": "오피스 상가 상업용부동산 빌딩 공실률 꼬마빌딩"},
+    {"key": "policy",     "name": "정책·세제",      "query": "부동산 정책 세제 양도세 종부세 취득세"},
 ]
+
+# 섹터당 노출 기사 수(가로형 카드) — 핵심만 2~3건.
+ITEMS_PER_SECTOR = 3
 
 # 주간 카드 3종 — 기존 홈 카드의 계산기 연결을 유지하고, 제목만 최신 헤드라인으로 채운다.
 WEEKLY_CARDS = [
-    {"badge": "대출 규제", "sector": "loan",  "href": "calculators/loan-limit.html",     "cta": "대출한도 계산기 →"},
-    {"badge": "집값·매수", "sector": "trade", "href": "calculators/acquisition-tax.html", "cta": "취득세 계산기 →"},
-    {"badge": "전월세",    "sector": "lease", "href": "calculators/jeonse-monthly.html",  "cta": "전월세 전환 계산기 →"},
+    {"badge": "대출 규제", "sector": "loan",    "href": "calculators/loan-limit.html",     "cta": "대출한도 계산기 →"},
+    {"badge": "집값·매수", "sector": "housing", "href": "calculators/acquisition-tax.html", "cta": "취득세 계산기 →"},
+    {"badge": "전월세",    "sector": "rent",    "href": "calculators/jeonse-monthly.html",  "cta": "전월세 전환 계산기 →"},
 ]
-
-# 키워드 빈도 집계 시 제외할 흔한 단어.
-STOP = set("""부동산 아파트 기사 뉴스 종합 단독 속보 오늘 올해 내년 지난 관련 위해 대한
-서울 경기 전국 시장 가격 상승 하락 이상 이하 그리고 대해 따라 등 및 의 에 를 은 는 이 가
-첫 두 세 또 더 큰 중 외 한 것 수 명 곳 억 만 원 % 30 40 50 60 70 80 90""".split())
-
 
 def _fetch_feed(query, when=None, limit=12):
     """구글 뉴스 RSS 검색 → [{title, url, source, date(datetime)}] (최신순)."""
@@ -126,15 +124,6 @@ def _iso_week_label(d):
     return f"{d.year}년 {d.month}월 {week_of_month}주"
 
 
-def _top_keywords(titles, n=3):
-    cnt = Counter()
-    for t in titles:
-        for w in re.findall(r"[가-힣A-Za-z]{2,}", t):
-            if w not in STOP and len(w) >= 2:
-                cnt[w] += 1
-    return [w for w, _ in cnt.most_common(n)]
-
-
 def main():
     now = _kst_now()
 
@@ -153,7 +142,7 @@ def main():
             seen.add(k)
             merged.append(it)
         daily_sectors.append({"key": s["key"], "name": s["name"],
-                              "items": _serialize(merged, 6)})
+                              "items": _serialize(merged, ITEMS_PER_SECTOR)})
         all_recent += merged
         print(f"[ok] {s['name']}: {len(merged)}건")
 
@@ -176,14 +165,8 @@ def main():
             "url": top["url"] if top else "",
         })
 
-    kws = _top_keywords(weekly_titles or [it["title"] for it in all_recent])
-    lead = ""
-    if kws:
-        lead = "이번 주 부동산 뉴스의 핵심 키워드는 "
-        lead += " · ".join(f"‘{k}’" for k in kws) + " 입니다."
-        top_overall = (weekly_titles or [None])[0]
-        if top_overall:
-            lead += f" 가장 많이 다뤄진 이슈: “{top_overall}”."
+      # 한눈에 요약 — AI식 문장 대신 이번 주 가장 많이 다뤄진 기사 제목 한 줄.
+    lead = (weekly_titles or [it["title"] for it in all_recent] or [""])[0]
 
     weekly = {
         "as_of": _iso_week_label(now),

@@ -29,6 +29,8 @@ jobs:
         env:
           R_ONE: ${{ secrets.R_ONE }}
           REB_RONE_KEY: ${{ secrets.REB_RONE_KEY }}
+          # 전세가율 직접 통계표 ID(아파트 매매가격대비 전세가격비율). 설정 시 평균가격 역산 대신 사용.
+          RONE_RATIO_STATBL_ID: ${{ vars.RONE_RATIO_STATBL_ID }}
         run: python collect_market.py
 
       - name: Commit market.json

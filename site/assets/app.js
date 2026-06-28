@@ -3397,19 +3397,20 @@ function calcJeonseLoanByAgency(deposit, opts) {
     var sectors = d.sectors.filter(function (s) { return s.items && s.items.length; });
     if (!sectors.length) return;   // 폴백: 섹션 숨김 유지
     setText('[data-news-daily-updated]', d.updated ? d.updated + ' 갱신' : null);
+    // 섹터별 가로형 한 줄 — 핵심 기사 최대 3건만.
     list.innerHTML = sectors.map(function (s) {
-      var items = s.items.map(function (it) {
+      var cards = s.items.slice(0, 3).map(function (it) {
         var ext = /^https?:/i.test(it.url || '');
         var meta = [it.source, it.date].filter(Boolean).join(' · ');
-        return '<li><a href="' + esc(it.url || '#') + '"' +
+        return '<a class="news-card" href="' + esc(it.url || '#') + '"' +
           (ext ? ' target="_blank" rel="noopener"' : '') + '>' +
           '<span class="news-title">' + esc(it.title) + '</span>' +
           (meta ? '<span class="news-meta">' + esc(meta) + '</span>' : '') +
-          '</a></li>';
+        '</a>';
       }).join('');
-      return '<div class="news-sector">' +
-        '<h3 class="news-sector-name">' + esc(s.name) + '</h3>' +
-        '<ul class="news-list">' + items + '</ul>' +
+      return '<div class="news-row">' +
+        '<div class="news-row-label">' + esc(s.name) + '</div>' +
+        '<div class="news-row-items">' + cards + '</div>' +
       '</div>';
     }).join('');
     wrap.hidden = false;
