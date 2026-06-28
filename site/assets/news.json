@@ -3,86 +3,65 @@
     "source": "Google News RSS (한국어) — 섹터별 부동산 검색 집계",
     "note": "여러 보도를 자동 집계한 목록이며 투자 권유가 아닙니다."
   },
-  "generated_at": "2026-06-28 13:29 KST",
+  "generated_at": "2026-06-28 18:56 KST",
   "weekly": {
     "as_of": "2026년 6월 5주",
     "updated": "2026-06-28",
-    "lead": "6·27 대출규제 1년, 규제에도 서울 아파트값은 오르고 매수세는 9억 이하·소형으로 쏠리고 있습니다.",
+    "lead": "인천 집값 하락폭 확대, 전·월세는 상승세 지속",
     "cards": [
       {
         "badge": "대출 규제",
         "href": "calculators/loan-limit.html",
         "cta": "대출한도 계산기 →",
-        "title": "규제 1년 — 한도부터 다시 계산",
-        "source": "톺다 정리",
-        "date": "2026-06-28",
-        "url": "calculators/loan-limit.html",
-        "desc": "스트레스 DSR·LTV·전세 보증기관 한도를 내 조건으로 먼저 확인하세요."
+        "title": "'규제 사각지대' 사내대출 논란에…금융당국, 일단 '기업 자율규제' 유도",
+        "source": "뉴시스",
+        "date": "2026-06-25",
+        "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE43U3cxczJfTFhyQXZFdFFZY3ZEdFpvaldmdi1ER1VlUzhTbzcyNC0zSlcwamZsNG1sS3Nfbm9MZXIxbXpmY0xyWUxzRWtnNXd2aWZXNjYxMzZ4ckZULXp6dNIBeEFVX3lxTE5feFM2eEUxa0tJREJocDMtWjlvVFN4amkzSThEV1lLRVVHVS1EbHl3T2hKQVhNcEV0TXRWQTljckp1Z3h6Zk9OVWcwX3pxRlBxSm10QjZPZTRNWWIxMldZc0F3RTNRMnBkX0NSbFE3VWRUdUt5STVhVg?oc=5"
       },
       {
         "badge": "집값·매수",
         "href": "calculators/acquisition-tax.html",
         "cta": "취득세 계산기 →",
-        "title": "소형 쏠림 — 취득 비용까지 보고 판단",
-        "source": "톺다 정리",
-        "date": "2026-06-28",
-        "url": "calculators/acquisition-tax.html",
-        "desc": "진입장벽 낮은 매물일수록 취득세·부대비용 비중이 큽니다."
+        "title": "인천 집값 하락폭 확대, 전·월세는 상승세 지속",
+        "source": "경기신문",
+        "date": "2026-06-23",
+        "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9VZlFNaDFDbklvUllfZXFENkRWaXo2TDhrc2lHWEVBblRZcDlHYUJSZ1F4NXExb3Jzd0htMUN2QXVpWG9hX1NHVkc1ME9BTjFTZ1kwbVBKOFFfaEdybHJEVzln?oc=5"
       },
       {
         "badge": "전월세",
         "href": "calculators/jeonse-monthly.html",
         "cta": "전월세 전환 계산기 →",
-        "title": "전세의 월세화 — 전환율로 비교",
-        "source": "톺다 정리",
-        "date": "2026-06-28",
-        "url": "calculators/jeonse-monthly.html",
-        "desc": "전세 ↔ 월세를 전월세 전환율로 따져보세요."
+        "title": "전세사기가 바꾼 대전 청년 주거지도… '전세 기피·월세 선호'",
+        "source": "굿모닝충청",
+        "date": "2026-06-25",
+        "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFBfMTdrTTJJWW5GVzRyZE9ZWDVmVlB1UW5iQi1VU1YzNV8yaV9PQWgtbktCRmJma0pTbVZMODJVV25QQkpDekNrdW0xZjRBS0FrUE1nVjZVRXBKNmI0TVNnc3JhODJTN1NBRGlidE1MbnVldw?oc=5"
       }
     ]
   },
   "daily": {
-    "updated": "2026-06-28 13:29 KST",
+    "updated": "2026-06-28 18:56 KST",
     "sectors": [
       {
         "key": "housing",
         "name": "주택 매매·집값",
         "items": [
           {
-            "title": "서울 아파트 매매 급증… 2030세대 영끌 무주택자 비율 사상 최고치 기록한 이유는?",
-            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5Lckg3bTF4am9CdHhYUmFOUDJvTGFNWmVwd0lJSm1mbW50Ym92RWZNS1ZvNHUxLVZKVmFZNVdEN2ctUmdVUlJobXNwU0JyYkRWTUZJa0kwV2dBakEzUnQyYUZWMy1uaXltSFpCQ0U5QWU?oc=5",
-            "source": "미디어써치",
+            "title": "“강남 물렀거라~”…광명 성남 하남 용인 동탄 난리난 집값",
+            "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5HTGltelNUcjl4REdxTTYtd2hZemtMUGZ0cW1panRjX19xN3FuN2FqMUF5WHFpWWRRNExqeHJqc2Rwdmp6WTcxMFFDNFlMaDhOeFNJZ2lB?oc=5",
+            "source": "매일경제",
             "date": "2026-06-28"
           },
           {
-            "title": "“서울 막히자 동탄으로?”···풍선효과에 계약파기·갭투자까지 ‘급증’",
-            "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFBoT1I3Z3V6RUQ5ZHhjSmJxZG84STFpRWJ1LUlnVDRNNVhJaktZQkNwTXJRaVUtRXNRYkkyNGxHeE93cUs5RHFrMUZzdlViT1V0a1BKa1FqQXBjalEtVGxBc0tzSEtfVmpKX3B2ZllKWWtld9IBdEFVX3lxTFA1RTBxY3UzQmtOWEFZb1JXbUxIcWwwQm9QNDU4NzcwSUxfR2FTYlQ5UlNyZHZZZmYwa0pUWTZYcUxYX0pDNS1tc3RxMEtxZ2EzQmhmRXBsWHJEV2NFZ2VPWHAtTklzQzJCcUNpMUdqVElNTUJM?oc=5",
-            "source": "이뉴스투데이",
-            "date": "2026-06-28"
+            "title": "대출 규제가 바꾼 서울 집값…소형 아파트 전성시대",
+            "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE85Y3VyYlhidnItVDd5VEpYb2dsWTdlN1A0VHE1SUlYbmoyazRhV0JoNTRDN3VoUFlhbm42b3EyVjRkekVPYm5vVWkxWlVPRmJOTS1Ld0tpQUU?oc=5",
+            "source": "경제타임스",
+            "date": "2026-06-27"
           },
           {
-            "title": "'구리·동탄' 수도권 비규제지역까지 번진 풍선효과…거래량·집값↑",
-            "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9xWk5tRVNmTlpDZXNHcjV3WTZCdkJhWmJiUUtPZ3BlVUlrSkI3cTFuOHp0YVdNY2FvZnZaZHJvdERBYzliQ0NhcTZSaTc5dFhnM2lPcA?oc=5",
-            "source": "v.daum.net",
-            "date": "2026-06-24"
-          },
-          {
-            "title": "[오늘 부동산] 전세보다 매매…서울 아파트 거래량 6년 만에 역전",
-            "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5hbVVGQVM1VUFQUHFPeEo2TEVxRFAtVTE3UnE4M3RrM3dDU25NX256ZXZ1MG5aaER4Vnh6WFlKdnRRbWFOMXY0R0tTWFc1NnJEZDlkYUhRTdIBmwJBVV95cUxPbmE4ZkQ2Q3ZWRzlndTg5Q0cyNEJBLV9NeTlMSmxLOEwyaFFYOGdqN2tSY1NIdTB2UWg4cDU2NWFHWEo5aHl2YjdSTHpWN1ltaExobHppVHl0MUJLZGF1U0Nvb1NqM0x4UXhOdzBhSlFxTHE0SFBTbUZPX3NnN3JLcmE5STk4c01xWERWdDJNaW04Tld5dXcwUlc0a1RtTURKU1ZfM0FUalFpeGI5MWwzSHBENTF6MVk5ZjlwNzZ1cnhraGV1NWlQZERlRUJBbTNnWUtjVzZCYmc1X2FYaEJXUVRraVNlWE5aeVNybzlxeE1iN1BuRUhTSVJiR3RmRDdBY0t1RV9SOFNUQXFkdDRZWlRtendIdXFkb01B?oc=5",
-            "source": "데일리안",
-            "date": "2026-06-23"
-          },
-          {
-            "title": "서울 매매 거래량 6년만에 전세 추월..월세 가속 영향",
-            "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1nNTNoOGxtcWhCamY2NWg1VzZuM0JlNkFIS2RPMXJHdVhySkNVTXBOVVNSSnBRdk1WMTUwWUZqTnBzdks2c1c5SnFyTTdPaWVxZXRBd3kyX3lRV0VnR25QNGo3SHlmYkxfRTkzSGVn?oc=5",
-            "source": "알파경제",
-            "date": "2026-06-23"
-          },
-          {
-            "title": "\"위약금 물어줘도 남는다\"… 동탄 아파트 '계약 취소' 상반기만 351건 폭증",
-            "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBBMV9ueVZ1aHJyNHQtUTFUN2Q0OU9hQ3l4X1JNa1k3dGJ6UzNId1lfT1dRN2xZanVUZ184aWp2Vl9DOHZhemxwQml6cUU3VkdHNkdmalZhS0FIUGdic3c?oc=5",
-            "source": "더구루",
-            "date": "2026-06-24"
+            "title": "'집값 상승 전망' 연초 수준까지 짙어졌다",
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBRaXRFZ2pMTUhGNUZVUjZPZVpqd25GNFZuMHF3ZkFRR3YtN2h1Tk5JUnIzeWkxZ25OVW9FV012eVBVOG5xaHNicTJLQVRqN1hPclVqMkhiWTBBeUtJbGhsT2VYU1g0UmFmSFU2MnM4NEY?oc=5",
+            "source": "비즈워치",
+            "date": "2026-06-27"
           }
         ]
       },
@@ -107,18 +86,6 @@
             "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1TT0RRcm1WVzRkaFBIVk5iWkh2Q3h0SFMzSW1kMExaWHBlR0Q3c0syWjR0aHNxaG1lVm5Ud2FKUzNkVFY4dUdjRmdUOEk2blNwQU1ER0xxTXBGMlh2MVc4aEE0QlpOR19YQVJpRC1TRVpXSVVKNTR1bQ?oc=5",
             "source": "네이트",
             "date": "2026-06-28"
-          },
-          {
-            "title": "집값 잡자니 전월세 걱정, 넘치는 자금도 ‘변수’… 정부의 부동산 딜레마",
-            "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBmZUE2ZnRKdkI0VjNHUm9ESmRIT1dUYlg3cW5vSFFIdVNEb1lIMl9DaS1DdHkybHpUNkhJcFJMLVJmVk80dGJWQzlwOA?oc=5",
-            "source": "민중의소리",
-            "date": "2026-06-26"
-          },
-          {
-            "title": "무자본 갭투자로 138억 전세사기…40대 임대사업자 징역 2년",
-            "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1ZQUhlYm1oTUphWjFhNzR2OXc5dnhhcHppR0RGX0FlUm5yUTZhdjNTbW1GQnhwS2RBSkVwZGJNdklxVTBhUnh0TDhUcGx1V29VLTc0?oc=5",
-            "source": "네이트",
-            "date": "2026-06-28"
           }
         ]
       },
@@ -126,25 +93,66 @@
         "key": "supply",
         "name": "청약·분양",
         "items": [
-          { "title": "청약가점 — 무주택·부양·통장 점수 계산", "url": "calculators/housing-subscription.html", "source": "톺다 정리", "date": "2026-06-28" },
-          { "title": "분양가상한제 단지 청약 전략 점검", "url": "calculators/housing-subscription.html", "source": "톺다 정리", "date": "2026-06-28" }
+          {
+            "title": "[주간분양] 이주 '북서울자이 폴라리스' 1순위 청약 마감",
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBkWVctNnl3R2dKOHl5LWVXQWk1TTZpb3dfcmNFdDFOUTViZDk2ZUszeEhITkowNEZocUpNbXgtVU5QSC1ISUVJWTdldlYtZWJlZmVwZTNmT0dYZDVHZk9BSmJPVXBwN3pNa3RlVkE2aDc?oc=5",
+            "source": "신아일보",
+            "date": "2026-06-26"
+          },
+          {
+            "title": "낡은 만물상 옆 17억 신축…'장위 푸르지오 마크원' 가보니[르포]",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBtTDFsMVdXajhFZHlzOVh4NVU4S1hWdmN0LUQzSTZyTmZyb3o0ZHE2c0JRdzRBcXdQQ0RRNHppalVfMThhODlCdXNFVnhhWE0yX1NEZmxfWE1FNGtzUmpkYdIBeEFVX3lxTE43cGM4M3dZSWVveTRJOXdNVWpQU2taT0JhUlpOTUw1SFR4bmpseGxWU2FDSGdPSGwwZGdQa1BUQTdMbFNKclJvSXpnbDg1R0cxVFJoUWdqSzNFQ3NHamxTWTdXN05Sam03ZGtJN25sa01NZUYxN2VMdw?oc=5",
+            "source": "뉴시스",
+            "date": "2026-06-26"
+          },
+          {
+            "title": "서울 ‘분양=완판’ 공식 지속… 흥행 이어갈 ‘쌍용 더 플래티넘 서대문’ 분양 앞둬",
+            "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE9BaVBsRFM5c1B4cS1GcTNPVHpwdFRBSW1nSXB0d2lfYnN3b2hISFpiZmhSTjYtWmhpNFZ4dEwxX0YyVXA5ZHc?oc=5",
+            "source": "v.daum.net",
+            "date": "2026-06-25"
+          }
         ]
       },
       {
         "key": "loan",
         "name": "대출·금융",
         "items": [
-          { "title": "스트레스 DSR 3단계로 한도 축소 — 내 한도 계산", "url": "posts/stress-dsr.html", "source": "톺다 정리", "date": "2026-06-28" },
-          { "title": "다주택·임대사업자 규제지역 담보대출 만기연장 원칙 금지(4·17)", "url": "posts/loan-policy.html", "source": "톺다 정리", "date": "2026-06-28" },
-          { "title": "LTV·가격대별 한도 — 실제 한도 계산하기", "url": "calculators/loan-limit.html", "source": "톺다 정리", "date": "2026-06-28" }
+          {
+            "title": "이찬진 \"규제 필요하다\".. 사내대출 35조, 은행 가계대출도 추월한다 - 머니투데이",
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1GWkN4RUptRnFEVDYxdWFLYzVzTUNfTnB4TzVvVE13UVViWGh4UDduQ1lRUWNoOTYtWFd5bmRKUThCQUdrOVIzaXZxeXJtOGhGWVNxV19NakpFWFZoZlVsOFZFNmVOSUdQQU5KRGU3OEzSAXBBVV95cUxNRlpDeEVKbUZxRFQ2MXVhS2M1c01DX05weE81b1RNd1FVYlhoeFA3bkNZUVFjaDk2LVhXeW5kSlE4QkFHazlSM2l2cXlybThoRllTcVdfTWpKRVhWaGZVbDhWRTZlTklHUEFOSkRlNzhM?oc=5",
+            "source": "머니투데이",
+            "date": "2026-06-28"
+          },
+          {
+            "title": "'규제 사각지대' 사내대출 논란에…금융당국, 일단 '기업 자율규제' 유도",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE43U3cxczJfTFhyQXZFdFFZY3ZEdFpvaldmdi1ER1VlUzhTbzcyNC0zSlcwamZsNG1sS3Nfbm9MZXIxbXpmY0xyWUxzRWtnNXd2aWZXNjYxMzZ4ckZULXp6dNIBeEFVX3lxTE5feFM2eEUxa0tJREJocDMtWjlvVFN4amkzSThEV1lLRVVHVS1EbHl3T2hKQVhNcEV0TXRWQTljckp1Z3h6Zk9OVWcwX3pxRlBxSm10QjZPZTRNWWIxMldZc0F3RTNRMnBkX0NSbFE3VWRUdUt5STVhVg?oc=5",
+            "source": "뉴시스",
+            "date": "2026-06-25"
+          },
+          {
+            "title": "씨티 \"수도권 주택가격 상승세, 하반기에 더 가팔라질 것\" 경고",
+            "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5fa1V2M09QcVJadVNNX1pFcDVCcGtWWk5LZWlHXzY2aUdqbEVkbk1nNVVRaWJiTjYwT2tnZVhqYVdvY2hYMnVaS200ZFgzUUlIRENQTQ?oc=5",
+            "source": "v.daum.net",
+            "date": "2026-06-26"
+          }
         ]
       },
       {
         "key": "commercial",
         "name": "오피스·상업용",
         "items": [
-          { "title": "상업용부동산 임대동향 — 공실률·임대료 흐름 보기", "url": "calculators/market-trends.html", "source": "톺다 정리", "date": "2026-06-28" },
-          { "title": "임대수익률(RTI)로 상가 투자 타당성 점검", "url": "calculators/rti-calculator.html", "source": "톺다 정리", "date": "2026-06-28" }
+          {
+            "title": "가로수길 꼬마빌딩 ‘공실지옥’ 탈출하나…평당 2억대 거래 속속 체결",
+            "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9VYTY4MmxPc18wLWNvdzlJVVFCU3lQbUJmcUVZcFlRYzdCOHBRYWJqZF9NdmFEdzBtXzVJc2p1V01lTjFBWDdZVWtjNTFkT2Z3cGpMaGdkVjE?oc=5",
+            "source": "매일경제",
+            "date": "2026-06-24"
+          },
+          {
+            "title": "집값 고공행진에도 상가는 혹한기 … 경매 붙였더니 3억 → 3천만원",
+            "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBUR29hNll1SllWLWlZMHVTTXRjaDUwU2ZVdkFSUlQ1S2xzR0xYVktPd2Rfb0dPQ1o0ZmxlbU1wQjdwXzEwWlJIZDRRdm94Um9qcXJHeE1jT2dOY0RCOENZVk5qWHp3WGVmWmE5aFVFU3d0dGl5TUVYMW5VSdIBgAFBVV95cUxNN05JUmEtd3BvVDdncno5RmNhMUFVeENpTkE3V0trS2wwRFpQMXN0eWFzQXpzYmtVSzlLakVBSU8xOE1sLXZjaEppSURUNkozWUV4LW83NGJDUkxSbE1YZmgzTFFwYTRXVmxPZGxYUDhPLVA0Qi1CNkczYXZSMmhmQg?oc=5",
+            "source": "뉴데일리",
+            "date": "2026-06-23"
+          }
         ]
       },
       {
@@ -154,38 +162,20 @@
           {
             "title": "\"보유세 낮다\"…7월 부동산 세제 개편 '분수령'[하반기 집값은①]",
             "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5CYlQ2ZUE3MUNlWXdEU0h0bWVIZFdZRld4cUJPVWg2em41NDRsSFlnazVhUVlyektwOGlCaEFRU1BINElFMDY5UlFJOVg1cEt6NzR3c2Q5c0E4QUlOV1dtctIBeEFVX3lxTE5raHZMY1FGZy1Ld1ZvZ2VUTnRUQVBYY2ZSeE1zR3dFb3pwak9hMVQ1TXlpbko0MVpsQUNwU2tDRkhzVjdYMGFVbllqQlJ2ZGdMeEVuUk5ONy1QZEQ5dU9DWlZOM2h6c3hOcWl0MHIzUjdwQ3hmOTNWdg?oc=5",
-            "source": "newsis.com",
+            "source": "뉴시스",
             "date": "2026-06-26"
+          },
+          {
+            "title": "'부동산 불로소득' 정조준한 이재명 정부…종부세·양도세·장특공 손질 임박",
+            "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9WWC1Wa0h4YUJpNHcydTYya25LenhxV1dMX3hONGpOUndOT3F4aWd3anEwY0thTWhmSEZoYTVheVQwXzNmWUhxNTFrbGFoNDhGdzBieDZmcFAzTEpNcndwNXRoQWVjQXdPZUxjbEhCR3RkQQ?oc=5",
+            "source": "KB Think",
+            "date": "2026-06-22"
           },
           {
             "title": "7월 부동산 세제개편안 어떻게 나오나… 보유세·장특공제·거래세 주목",
             "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE00VHlxTTZGeW92clpQSkcyU0lsU3JmQVN5c1ZRakNpeFBnZG8xOXNzVThoSy1YQ2pBb3MzNDM0ZktGMm02eG5nQWxwSlBPTm1GQ0xXbVZKb3VVcG1xaFgydlp0MGVJR1VG0gFsQVVfeXFMTktmcFY2RzlONUNzcTFkX3JFZ1NYNkcwcEUwWkRrZmhNc1NNN0UyWjNfYjhDLXdFZ0UtNzgycEszb0pCb2pGSG5LaS0zbi1VSTN2dmw0dEZSSWtyQkg5Y29XUkQ5VmhDNE9WOC1P?oc=5",
             "source": "리얼캐스트",
             "date": "2026-06-23"
-          },
-          {
-            "title": "정치에 휘둘린 부동산 정책…집값·신뢰 다 놓쳤다",
-            "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1UZmlWbUZzaTRFekRnUV82MC1iZDJia2FfSloyNUluQmxTRm14bjZYX0hhV0NGQVlHdmNJUlJheXFUYnl4Z1d4THB0LV85a3o0ZmfSAVNBVV95cUxQTFZFbzZVUng5OTdSamlsNDlVX2FMcVdJdTliVEZxTk8zUkRxd0hiYkk3RndMNGRsZXJDZW9XT1prcVdYS2lOdjVWUkd1dWJ4WkgtQQ?oc=5",
-            "source": "서울경제",
-            "date": "2026-06-25"
-          },
-          {
-            "title": "[기획] 정부, 취득·보유·양도세 통합 수술 예고…파격적 세제개편안 될까?",
-            "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5QRjZwLVhxVGhxcVBEd3JVb3Q2dlJxb0JvdDJVeV9Tal80SXZFMFYtVXJjTVhBandHSmU1WllqVlVQRTFaOFBGYzVoSi1vVW5QQjRhVWxrQ2RaSEh1LVVnSjFHdHY?oc=5",
-            "source": "매일일보",
-            "date": "2026-06-24"
-          },
-          {
-            "title": "김용범 \"보유세·양도세 조정이 옳은 방향\"",
-            "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE15TkxtV1RUZkRMcnNoZEttdENjcWEtR1IxR014MW1TbmpyNU9pSUJ5U2Uzeml3YVNoNWFWQzhFSDkzTlJSdGdLdHNGNUlsU1NqeVRsTTFSOXNad9IBVEFVX3lxTFAxT2Z0TUZIblE5NFRXM2xJdjhHc3FmbS1nMEpaY19ZMFJ3WVVETGRIVGM3UVFESm5nVUNWR1NwaFExalZSMHRGM0wzSXpOcFhoeUNjSg?oc=5",
-            "source": "한국경제",
-            "date": "2026-06-21"
-          },
-          {
-            "title": "[이상렬의 시시각각] 세금은 부동산 잡는 수단이 아니다",
-            "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9XVHl2ZzR0SURLQVQzZHhZaUxETy1ucndzU0dBUUlocnFUc0UyS1hvbWVlZFdpbE9wQlc1ei1oZzgxRlJudllycnpnV0owY3JxazNZ?oc=5",
-            "source": "네이트",
-            "date": "2026-06-25"
           }
         ]
       }
