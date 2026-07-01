@@ -78,7 +78,10 @@ def build_breadcrumb(rel, title_text, is_en):
             else:
                 sec_url = BASE + "/" + ("en/" if is_en else "") + section + "/"
             items.append({"name": label, "url": sec_url})
-    items.append({"name": title_text, "url": BASE + "/" + rel})
+    # 섹션 인덱스 자신은 이미 items에 있으므로 중복 추가하지 않는다.
+    page_url = BASE + "/" + rel
+    if items[-1]["url"] != page_url:
+        items.append({"name": title_text, "url": page_url})
 
     elements = []
     for i, it in enumerate(items, 1):

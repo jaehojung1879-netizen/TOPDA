@@ -3347,15 +3347,16 @@ function calcJeonseLoanByAgency(deposit, opts) {
 })();
 
 /* =========================================================
- * 홈 뉴스 렌더링 (2026-06-28)
+ * 홈 뉴스 렌더링 (2026-07-01 개편)
  *  assets/news.json 으로
- *   1) "이번 주 부동산 핵심 이슈" — 주간 요약(lead)·카드 제목 갱신
+ *   1) "이번 주 부동산 핵심 이슈" — 섹터별 주간 1위 기사를 뉴스 헤드라인 목록으로
  *   2) "섹터별 부동산 뉴스" — 매일 자정 자동 갱신되는 섹터별 목록
- *  을 채운다. news.json 이 없거나 비면 HTML 기본값(정적 폴백)을 그대로 둔다.
+ *  을 채운다. news.json 이 없거나 비면 HTML 정적 폴백(collect_news.py가
+ *  마커 구간에 주입)을 그대로 둔다. 마크업은 _meta/collect_news.py와 동일해야 한다.
  * ========================================================= */
 (function () {
   'use strict';
-  var hasWeekly = document.querySelector('[data-news-cards]');
+  var hasWeekly = document.querySelector('[data-news-headlines]');
   var hasDaily = document.querySelector('[data-news-daily]');
   if (!hasWeekly && !hasDaily) return;   // 홈 외 페이지
 
@@ -3372,20 +3373,21 @@ function calcJeonseLoanByAgency(deposit, opts) {
   function renderWeekly(w) {
     if (!w) return;
     setText('[data-news-asof]', w.as_of);
-    if (w.lead) {
-      var lead = document.querySelector('[data-news-lead]');
-      if (lead) lead.textContent = (/^[—-]/.test(w.lead.trim()) ? '' : '— ') + w.lead;
-    }
-    var grid = document.querySelector('[data-news-cards]');
-    if (grid && w.cards && w.cards.length) {
-      grid.innerHTML = w.cards.map(function (c) {
-        var sub = c.desc || [c.source, c.date].filter(Boolean).join(' · ');
-        return '<a class="card" href="' + esc(c.href) + '">' +
-          '<span class="badge badge-accent">' + esc(c.badge) + '</span>' +
-          '<h3>' + esc(c.title || c.badge) + '</h3>' +
-          (sub ? '<p>' + esc(sub) + '</p>' : '') +
-          '<div class="meta"><span>' + esc(c.cta || '자세히 →') + '</span></div>' +
-        '</a>';
+    var list = document.querySelector('[data-news-headlines]');
+    // 구버전 news.json(cards)도 헤드라인으로 흡수.
+    var items = (w.headlines || w.cards || []).filter(function (it) {
+      return it && it.title && it.url;
+    });
+    if (list && items.length) {
+      list.innerHTML = items.map(function (it, i) {
+        var meta = [it.source, it.date].filter(Boolean).join(' · ');
+        return '<li><a class="headline-item" href="' + esc(it.url) + '" target="_blank" rel="noopener">' +
+          '<span class="headline-rank">' + (i + 1) + '</span>' +
+          '<span class="headline-body">' +
+            (it.badge ? '<span class="headline-badge">' + esc(it.badge) + '</span>' : '') +
+            '<span class="headline-title">' + esc(it.title) + '</span>' +
+            (meta ? '<span class="headline-meta">' + esc(meta) + '</span>' : '') +
+          '</span></a></li>';
       }).join('');
     }
   }

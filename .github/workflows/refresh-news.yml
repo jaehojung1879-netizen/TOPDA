@@ -31,13 +31,13 @@ jobs:
         working-directory: _meta
         run: python collect_news.py
 
-      - name: Commit news.json
+      - name: Commit news.json + index.html(정적 폴백)
         run: |
           git config user.name "topda-bot"
           git config user.email "actions@users.noreply.github.com"
-          if [ -n "$(git status --porcelain site/assets/news.json)" ]; then
+          if [ -n "$(git status --porcelain site/assets/news.json site/index.html)" ]; then
             git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
-            git add site/assets/news.json
+            git add site/assets/news.json site/index.html
             git commit -m "부동산 뉴스 자동 갱신 ($(date -u +%Y-%m-%d))"
             git push
           else
