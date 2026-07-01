@@ -43,12 +43,8 @@ SECTORS = [
 # 섹터당 노출 기사 수(가로형 카드) — 핵심만 2~3건.
 ITEMS_PER_SECTOR = 3
 
-# 주간 카드 3종 — 기존 홈 카드의 계산기 연결을 유지하고, 제목만 최신 헤드라인으로 채운다.
-WEEKLY_CARDS = [
-    {"badge": "대출 규제", "sector": "loan",    "href": "calculators/loan-limit.html",     "cta": "대출한도 계산기 →"},
-    {"badge": "집값·매수", "sector": "housing", "href": "calculators/acquisition-tax.html", "cta": "취득세 계산기 →"},
-    {"badge": "전월세",    "sector": "rent",    "href": "calculators/jeonse-monthly.html",  "cta": "전월세 전환 계산기 →"},
-]
+# 홈 상단 "핵심 이슈" — 섹터별 주간 1위 기사를 뉴스 헤드라인처럼 나열한다.
+SITE_INDEX = os.path.join(os.path.dirname(SITE_ASSETS), "index.html")
 
 def _fetch_feed(query, when=None, limit=12):
     """구글 뉴스 RSS 검색 → [{title, url, source, date(datetime)}] (최신순)."""
@@ -124,6 +120,96 @@ def _iso_week_label(d):
     return f"{d.year}년 {d.month}월 {week_of_month}주"
 
 
+def _esc(s):
+    return html.escape(str(s or ""), quote=True)
+
+
+def _headline_li(it, rank):
+    """홈 '핵심 이슈' 헤드라인 한 건 — assets/app.js renderWeekly()와 동일 마크업."""
+    meta = " · ".join(x for x in (it.get("source"), it.get("date")) if x)
+    return (
+        f'<li><a class="headline-item" href="{_esc(it.get("url") or "#")}"'
+        ' target="_blank" rel="noopener">'
+        f'<span class="headline-rank">{rank}</span>'
+        '<span class="headline-body">'
+        + (f'<span class="headline-badge">{_esc(it["badge"])}</span>' if it.get("badge") else "")
+        + f'<span class="headline-title">{_esc(it.get("title"))}</span>'
+        + (f'<span class="headline-meta">{_esc(meta)}</span>' if meta else "")
+        + "</span></a></li>"
+    )
+
+
+def _news_row(sector):
+    """섹터별 뉴스 한 줄 — assets/app.js renderDaily()와 동일 마크업."""
+    cards = ""
+    for it in sector["items"][:ITEMS_PER_SECTOR]:
+        meta = " · ".join(x for x in (it.get("source"), it.get("date")) if x)
+        cards += (
+            f'<a class="news-card" href="{_esc(it.get("url") or "#")}" target="_blank" rel="noopener">'
+            f'<span class="news-title">{_esc(it.get("title"))}</span>'
+            + (f'<span class="news-meta">{_esc(meta)}</span>' if meta else "")
+            + "</a>"
+        )
+    return (
+        '<div class="news-row">'
+        f'<div class="news-row-label">{_esc(sector["name"])}</div>'
+        f'<div class="news-row-items">{cards}</div>'
+        "</div>"
+    )
+
+
+def _replace_between(text, start_mark, end_mark, inner):
+    """마커 사이 내용 교체. 마커가 없으면 원문 유지(None 반환)."""
+    pat = re.compile(re.escape(start_mark) + r".*?" + re.escape(end_mark), re.S)
+    if not pat.search(text):
+        return None
+    # 치환문 안의 \, \g 등이 escape로 해석되지 않도록 함수 치환 사용.
+    return pat.sub(lambda _: start_mark + "\n" + inner + "\n" + end_mark, text)
+
+
+def inject_static(payload):
+    """news.json 내용을 site/index.html 정적 폴백(마커 구간)에도 주입.
+
+    JS(fetch) 실패·크롤러 대응용. 마커가 없으면 조용히 건너뛴다.
+    """
+    try:
+        src = open(SITE_INDEX, encoding="utf-8").read()
+    except OSError as e:
+        print(f"[warn] index.html 읽기 실패 — 정적 주입 생략: {e}")
+        return
+
+    w = payload.get("weekly") or {}
+    heads = [h for h in (w.get("headlines") or []) if h.get("title")]
+    out = src
+    if heads:
+        inner = "\n".join(_headline_li(h, i + 1) for i, h in enumerate(heads))
+        replaced = _replace_between(out, "<!-- news:weekly:static -->",
+                                    "<!-- /news:weekly:static -->", inner)
+        if replaced:
+            out = replaced
+        if w.get("as_of"):
+            asof = _esc(w["as_of"])
+            out = re.sub(r'(<span data-news-asof>)[^<]*(</span>)',
+                         lambda m: m.group(1) + asof + m.group(2), out)
+
+    d = payload.get("daily") or {}
+    sectors = [s for s in (d.get("sectors") or []) if s.get("items")]
+    if sectors:
+        inner = "\n".join(_news_row(s) for s in sectors)
+        replaced = _replace_between(out, "<!-- news:daily:static -->",
+                                    "<!-- /news:daily:static -->", inner)
+        if replaced:
+            out = replaced
+        if d.get("updated"):
+            upd = _esc(d["updated"]) + " 갱신"
+            out = re.sub(r'(<span data-news-daily-updated>)[^<]*(</span>)',
+                         lambda m: m.group(1) + upd + m.group(2), out)
+
+    if out != src:
+        open(SITE_INDEX, "w", encoding="utf-8").write(out)
+        print("[ok] index.html 정적 뉴스 폴백 갱신")
+
+
 def main():
     now = _kst_now()
 
@@ -146,33 +232,29 @@ def main():
         all_recent += merged
         print(f"[ok] {s['name']}: {len(merged)}건")
 
-    # 2) 매주: 섹터별 주간 헤드라인(카드 제목) + 한눈에 요약
-    weekly_by_sector, weekly_titles = {}, []
+    # 2) 매주: 섹터별 주간 1위 기사를 헤드라인 목록으로 (계산기 연결 없이 원문 링크)
+    headlines = []
     for s in SECTORS:
         wk = _fetch_feed(s["query"], when="7d", limit=10)
-        weekly_by_sector[s["key"]] = wk
-        weekly_titles += [it["title"] for it in wk]
-
-    cards = []
-    for c in WEEKLY_CARDS:
-        wk = weekly_by_sector.get(c["sector"]) or []
         top = wk[0] if wk else None
-        cards.append({
-            "badge": c["badge"], "href": c["href"], "cta": c["cta"],
-            "title": top["title"] if top else "",
-            "source": top["source"] if top else "",
-            "date": _fmt_date(top["date"]) if top else "",
-            "url": top["url"] if top else "",
+        if not top:  # 주간 피드가 비면 일간 수집분으로 보강
+            daily = next((d for d in daily_sectors if d["key"] == s["key"]), None)
+            if daily and daily["items"]:
+                it = daily["items"][0]
+                headlines.append({"badge": s["name"], **it})
+            continue
+        headlines.append({
+            "badge": s["name"],
+            "title": top["title"],
+            "url": top["url"],
+            "source": top["source"],
+            "date": _fmt_date(top["date"]),
         })
-
-      # 한눈에 요약 — AI식 문장 대신 이번 주 가장 많이 다뤄진 기사 제목 한 줄.
-    lead = (weekly_titles or [it["title"] for it in all_recent] or [""])[0]
 
     weekly = {
         "as_of": _iso_week_label(now),
         "updated": now.strftime("%Y-%m-%d"),
-        "lead": lead,
-        "cards": cards,
+        "headlines": headlines,
     }
 
     payload = {
@@ -194,6 +276,7 @@ def main():
             sys.exit(0)  # 첫 실행에서 빈 결과면 그냥 종료(워크플로 실패로 보지 않음)
         return
     save_json_safe(NEWS_JSON, payload)
+    inject_static(payload)
 
 
 if __name__ == "__main__":
