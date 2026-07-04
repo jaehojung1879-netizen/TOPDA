@@ -53,6 +53,18 @@ def _num(v):
 def main():
     key = L.key(L.DATA_GO_KEYS, required=True)
     months = recent_months(MONTHS_BACK)
+    # 전월세 API 승인 선확인 — 미승인(403)이면 전 지역을 헛돌지 않고 즉시 종료.
+    # (2026-07-04 확인: RTMSDataSvcAptRent 403으로 매 실행 10분을 낭비하고 결과 0건이었음)
+    try:
+        L.get_items(RENT, {"serviceKey": key, "LAWD_CD": "11680", "DEAL_YMD": months[0],
+                           "numOfRows": 1, "pageNo": 1})
+    except L.AuthError:
+        print("‼ 전월세 실거래 API(RTMSDataSvcAptRent) 미승인(403) — data.go.kr에서 "
+              "'아파트 전월세 실거래가 자료' 활용신청·승인 후 자동으로 채워집니다. 기존 파일 유지.",
+              file=sys.stderr)
+        return
+    except Exception:  # noqa: BLE001 — 일시 오류는 본 수집에서 재시도
+        pass
     regions = []
     total_jeonse = 0      # 전세 표본 총합 — 0이면 전월세 API 미승인 가능성
     # 시간 예산: 마감 전에 루프를 끊고, 수집 못 한 지역은 기존 파일 값으로 채워 저장한다.
@@ -62,16 +74,22 @@ def main():
             print(f"시간 예산 소진 — 남은 지역은 기존 값 유지 (수집 {len(regions)}개 지역)")
             break
         sale, jeonse = [], []
-        for ym in months:
-            for it in _items(TRADE, lawd, ym, key):
-                p = _num(it.get("dealAmount"))
-                if p:
-                    sale.append(p)
-            for it in _items(RENT, lawd, ym, key):
-                rent = _num(it.get("monthlyRent")) or 0
-                dep = _num(it.get("deposit"))
-                if dep and rent == 0:        # 순수 전세만(월세 제외)
-                    jeonse.append(dep)
+        wolse_rent, wolse_dep = [], []   # 월세 계약(임차 시세) — 보증금·월세 중위가용
+        for code in L.resolve_lawd_codes(region, lawd, key, months):
+            for ym in months:
+                for it in _items(TRADE, code, ym, key):
+                    p = _num(it.get("dealAmount"))
+                    if p:
+                        sale.append(p)
+                for it in _items(RENT, code, ym, key):
+                    rent = _num(it.get("monthlyRent")) or 0
+                    dep = _num(it.get("deposit"))
+                    if dep and rent == 0:        # 순수 전세만(월세 제외)
+                        jeonse.append(dep)
+                    elif rent > 0:               # 월세 — 지역 임차 시세 형성 확인용
+                        wolse_rent.append(rent)
+                        if dep:
+                            wolse_dep.append(dep)
         total_jeonse += len(jeonse)
         if len(sale) < MIN_SAMPLES or len(jeonse) < MIN_SAMPLES:
             print(f"[{region}] 표본 부족(매매 {len(sale)}·전세 {len(jeonse)}) — 제외")
@@ -84,7 +102,7 @@ def main():
             continue
         # 지도용 좌표 — 지역 중심(없으면 None, 지도엔 빠지고 표엔 남김)
         coord = L.geocode_kakao(region) if os.environ.get("KAKAO_REST_API_KEY") else None
-        regions.append({
+        entry = {
             "key": region,
             "sido": region.split()[0],
             "name": region,
@@ -95,7 +113,13 @@ def main():
             "jeonse_ratio": ratio,               # %
             "sale_n": len(sale),
             "jeonse_n": len(jeonse),
-        })
+        }
+        # 월세 시세(임차 형성) — 표본이 충분할 때만 (보증금·월세 중위, 만원)
+        if len(wolse_rent) >= MIN_SAMPLES:
+            entry["wolse_rent_median"] = int(statistics.median(wolse_rent))
+            entry["wolse_deposit_median"] = int(statistics.median(wolse_dep)) if wolse_dep else None
+            entry["wolse_n"] = len(wolse_rent)
+        regions.append(entry)
         print(f"[{region}] 전세가율 {ratio}% (매매중위 {int(sale_med)}만 / 전세중위 {int(jeonse_med)}만)")
 
     if not regions:

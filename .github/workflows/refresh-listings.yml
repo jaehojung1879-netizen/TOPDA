@@ -28,17 +28,17 @@ concurrency:
 jobs:
   listings:
     runs-on: ubuntu-latest
-    timeout-minutes: 75    # 스텝 타임아웃 합계(67분) + 커밋·셋업 여유
+    timeout-minutes: 75    # 스텝 타임아웃 합계(20+17+10+20=67분) + 커밋·셋업 여유
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      # 1) 실거래 원장 (사용자 노출 핵심) — 먼저 수집하고 즉시 커밋. 평소 ~12분.
+      # 1) 실거래 원장 (사용자 노출 핵심) — 먼저 수집하고 즉시 커밋. 80개 지역 ~16분.
       - name: Collect transactions (국토부 실거래 원장)
         working-directory: _meta
-        timeout-minutes: 18
+        timeout-minutes: 20
         env:
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
@@ -51,9 +51,9 @@ jobs:
       # 2) 전세가율 (매매·전세 실거래 중위가) — 전세가율 지도용. 평소 ~9분.
       - name: Collect jeonse ratio (매매·전세 실거래 중위가)
         working-directory: _meta
-        timeout-minutes: 15
+        timeout-minutes: 17
         env:
-          TIME_BUDGET_MIN: "13"
+          TIME_BUDGET_MIN: "15"
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
@@ -67,9 +67,9 @@ jobs:
       # 수집기가 지역 단위로 중간 저장(checkpoint)하므로 예산이 모자라도 진행분은 남는다.
       - name: Enrich household counts (K-apt)
         working-directory: _meta
-        timeout-minutes: 12
+        timeout-minutes: 10
         env:
-          TIME_BUDGET_MIN: "10"
+          TIME_BUDGET_MIN: "8"
           DATA_GO_APT_BASIC_INFO: ${{ secrets.DATA_GO_APT_BASIC_INFO }}
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
@@ -83,9 +83,9 @@ jobs:
       # 수집분을 병합·저장한 뒤 종료한다(merge가 기존 값을 보존하므로 점진 보강).
       - name: Collect apartments (국토부 실거래 + Kakao + K-apt)
         working-directory: _meta
-        timeout-minutes: 22
+        timeout-minutes: 20
         env:
-          TIME_BUDGET_MIN: "20"
+          TIME_BUDGET_MIN: "18"
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_APT_BASIC_INFO: ${{ secrets.DATA_GO_APT_BASIC_INFO }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
