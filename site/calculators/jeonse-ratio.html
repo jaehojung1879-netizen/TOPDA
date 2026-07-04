@@ -92,13 +92,15 @@
 
   <div class="jr-table-wrap">
     <table class="jr">
-      <thead><tr><th>지역</th><th>전세가율</th><th>매매 중위가</th><th>전세 중위가</th><th>표본(매매/전세)</th></tr></thead>
+      <thead><tr><th>지역</th><th>전세가율</th><th>매매 중위가</th><th>전세 중위가</th><th>월세 중위<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="최근 3개월 월세 계약의 중위 보증금/월세. 표본이 적은 지역은 표시하지 않습니다.">?</span></th><th>표본(매매/전세)</th></tr></thead>
       <tbody data-jr-rows></tbody>
     </table>
   </div>
 
   <section style="margin-top:36px;">
-    <h2 style="margin-bottom:12px;">읽는 법 · 출처</h2>
+  <details class="explain">
+    <summary>읽는 법 · 출처</summary>
+    <div class="explain-body">
     <ul class="ref-list">
       <li><strong>중위가</strong>를 쓰는 이유 — 평균은 초고가·초저가 거래에 휘둘리므로, 지역 대표값으로 중앙값을 사용합니다.</li>
       <li><strong>순수 전세</strong>(월세 0)만 집계해 보증금 기준 전세가율을 계산합니다. 표본이 적은 지역(각 5건 미만)은 제외됩니다.</li>
@@ -108,7 +110,9 @@
       <div class="icon">⚠</div>
       <div class="body"><strong>면책</strong> 본 자료는 일반 정보 제공용입니다. 출처: 국토교통부 아파트 매매·전월세 실거래가 OpenAPI. 신고 시차로 최근 거래는 누락·정정될 수 있습니다.</div>
     </div>
-  </section>
+  </div>
+  </details>
+</section>
 </main>
 
 <footer class="site-footer">
@@ -200,6 +204,9 @@
           '<span class="jr-bar" style="width:' + w + 'px;background:' + color(r.jeonse_ratio) + '"></span></td>' +
         '<td>' + won(r.sale_median) + '</td>' +
         '<td>' + won(r.jeonse_median) + '</td>' +
+        '<td>' + (r.wolse_rent_median != null
+          ? (r.wolse_deposit_median != null ? won(r.wolse_deposit_median) + ' / ' : '') + won(r.wolse_rent_median)
+          : '—') + '</td>' +
         '<td>' + r.sale_n + ' / ' + r.jeonse_n + '</td>' +
       '</tr>';
     }).join('');

@@ -7,23 +7,23 @@
 <meta name="description" content="전월세전환율을 적용해 전세를 월세로, 월세를 전세로 양방향 환산합니다. 반전세 계산도 가능." />
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-<link rel="canonical" href="https://jaehojung1879-netizen.github.io/TOPDA/calculators/jeonse-monthly.html" />
-<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://jaehojung1879-netizen.github.io/TOPDA/feed.xml" />
+<link rel="canonical" href="https://topda.kr/calculators/jeonse-monthly.html" />
+<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://topda.kr/feed.xml" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="톺다" />
 <meta property="og:title" content="월세 ↔ 전세 전환 계산기 — 톺다" />
 <meta property="og:description" content="전월세전환율을 적용해 전세를 월세로, 월세를 전세로 양방향 환산합니다. 반전세 계산도 가능." />
-<meta property="og:url" content="https://jaehojung1879-netizen.github.io/TOPDA/calculators/jeonse-monthly.html" />
-<meta property="og:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
+<meta property="og:url" content="https://topda.kr/calculators/jeonse-monthly.html" />
+<meta property="og:image" content="https://topda.kr/assets/og-default.svg" />
 <meta property="og:locale" content="ko_KR" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="월세 ↔ 전세 전환 계산기 — 톺다" />
 <meta name="twitter:description" content="전월세전환율을 적용해 전세를 월세로, 월세를 전세로 양방향 환산합니다. 반전세 계산도 가능." />
-<meta name="twitter:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
-<link rel="alternate" hreflang="ko" href="https://jaehojung1879-netizen.github.io/TOPDA/calculators/jeonse-monthly.html" />
-<link rel="alternate" hreflang="en" href="https://jaehojung1879-netizen.github.io/TOPDA/en/calculators/jeonse-monthly.html" />
-<link rel="alternate" hreflang="x-default" href="https://jaehojung1879-netizen.github.io/TOPDA/calculators/jeonse-monthly.html" />
-<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260629"></script>
+<meta name="twitter:image" content="https://topda.kr/assets/og-default.svg" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/calculators/jeonse-monthly.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/calculators/jeonse-monthly.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/jeonse-monthly.html" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css?v=20260629" />
 <script type="application/ld+json">
@@ -35,19 +35,19 @@
       "@type": "ListItem",
       "position": 1,
       "name": "홈",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/index.html"
+      "item": "https://topda.kr/index.html"
     },
     {
       "@type": "ListItem",
       "position": 2,
       "name": "계산기",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/index.html"
+      "item": "https://topda.kr/calculators/index.html"
     },
     {
       "@type": "ListItem",
       "position": 3,
       "name": "월세 ↔ 전세 전환 계산기",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/jeonse-monthly.html"
+      "item": "https://topda.kr/calculators/jeonse-monthly.html"
     }
   ]
 }
@@ -57,7 +57,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "월세 ↔ 전세 전환 계산기",
-  "url": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/jeonse-monthly.html",
+  "url": "https://topda.kr/calculators/jeonse-monthly.html",
   "description": "전월세전환율을 적용해 전세를 월세로, 월세를 전세로 양방향 환산합니다. 반전세 계산도 가능.",
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "Any",
@@ -70,7 +70,7 @@
     "priceCurrency": "KRW"
   },
   "publisher": {
-    "@id": "https://jaehojung1879-netizen.github.io/TOPDA/#organization"
+    "@id": "https://topda.kr/#organization"
   }
 }
 </script>
@@ -145,9 +145,9 @@
       </div>
 
       <div class="field">
-        <label for="jm-rate">전월세전환율 (연 %)</label>
+        <label for="jm-rate">전월세전환율 (연 %)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="한국부동산원·국토부 통계 기준 평균 5~6%. 임대차보호법상 한도는 ‘기준금리 + 2%’와 10% 중 낮은 값.">?</span></label>
         <input id="jm-rate" name="rate" type="number" min="1" max="15" step="0.1" value="5.5" />
-        <span class="hint">한국부동산원·국토부 통계 기준 평균 5~6%. 임대차보호법상 한도는 ‘기준금리 + 2%’와 10% 중 낮은 값.</span>
+        
       </div>
 
     </div>
@@ -187,7 +187,9 @@
   </div>
 
   <section style="margin-top: 64px;">
-    <h2 style="margin-bottom: 16px;">전월세전환율이 뭔가요?</h2>
+  <details class="explain">
+    <summary>전월세전환율이 뭔가요?</summary>
+    <div class="explain-body">
     <p style="color: var(--text);">전세보증금을 월세로 바꾸거나, 월세를 전세로 환산할 때 쓰는 ‘이율’입니다. 한국부동산원이 시·도별로 매월 발표합니다.</p>
     <div class="table-wrap">
       <table class="data">
@@ -203,10 +205,14 @@
       </table>
     </div>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">참고: 한국부동산원 ‘월간 주택가격동향’ 전월세전환율 (rt.molit.go.kr) · 시점·주택 유형에 따라 달라집니다.</p>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 16px;">법정 한도 — 갱신 계약에 적용</h2>
+  <details class="explain">
+    <summary>법정 한도 — 갱신 계약에 적용</summary>
+    <div class="explain-body">
     <div class="callout callout-warn">
       <div class="icon">!</div>
       <div class="body">
@@ -216,16 +222,22 @@
         신규 계약은 합의된 금액으로 자유롭게 정할 수 있습니다.
       </div>
     </div>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 16px;">반전세 vs 전세 vs 월세 — 어떤 게 유리?</h2>
+  <details class="explain">
+    <summary>반전세 vs 전세 vs 월세 — 어떤 게 유리?</summary>
+    <div class="explain-body">
     <div class="def-list">
       <div class="row"><div class="k">전세</div><div class="v">목돈은 묶이지만 매월 부담 0원. 보증금 보호(대항력·우선변제권·보증보험)만 잘 갖추면 안전. 단 ‘깡통전세’ 리스크는 본인이 떠안음.</div></div>
       <div class="row"><div class="k">반전세 (보증부월세)</div><div class="v">목돈 부담 줄이고 월세도 저렴화. 시세 상승기·금리 상승기에 임대인이 선호. 임차인 입장에서는 ‘월세 < 예금이자’면 합리적.</div></div>
       <div class="row"><div class="k">순수 월세</div><div class="v">초기 자금 최소화. 단기 거주(2년 미만)·재투자 자금이 필요한 경우. 보증금이 작아 깡통 위험은 낮지만 매월 지출이 큼.</div></div>
     </div>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top: 48px;">
     <h2 style="margin-bottom: 16px;">함께 보면 좋은 글</h2>
@@ -249,13 +261,17 @@
   </section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 12px;">출처</h2>
+  <details class="explain">
+    <summary>출처</summary>
+    <div class="explain-body">
     <ul class="source-list">
       <li>주택임대차보호법 제7조의2 (월차임 전환 시 산정률의 제한)</li>
       <li>한국부동산원 ‘월간 주택가격동향’ 전월세전환율</li>
       <li>국토교통부 부동산통계정보 (rt.molit.go.kr)</li>
     </ul>
-  </section>
+  </div>
+  </details>
+</section>
 
   <div class="callout callout-warn" style="margin-top: 32px;">
     <div class="icon">⚠</div>

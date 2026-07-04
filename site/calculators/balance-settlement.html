@@ -7,20 +7,20 @@
 <meta name="description" content="잔금일 기준으로 관리비·선수관리비·장기수선충당금·도시가스·전기 정산을 자동 계산합니다. 매수자·매도자 정산표 출력." />
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-<link rel="canonical" href="https://jaehojung1879-netizen.github.io/TOPDA/calculators/balance-settlement.html" />
-<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://jaehojung1879-netizen.github.io/TOPDA/feed.xml" />
+<link rel="canonical" href="https://topda.kr/calculators/balance-settlement.html" />
+<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://topda.kr/feed.xml" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="톺다" />
 <meta property="og:title" content="잔금일 정산 계산기 — 톺다" />
 <meta property="og:description" content="잔금일 기준으로 관리비·선수관리비·장기수선충당금·도시가스·전기 정산을 자동 계산합니다. 매수자·매도자 정산표 출력." />
-<meta property="og:url" content="https://jaehojung1879-netizen.github.io/TOPDA/calculators/balance-settlement.html" />
-<meta property="og:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
+<meta property="og:url" content="https://topda.kr/calculators/balance-settlement.html" />
+<meta property="og:image" content="https://topda.kr/assets/og-default.svg" />
 <meta property="og:locale" content="ko_KR" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="잔금일 정산 계산기 — 톺다" />
 <meta name="twitter:description" content="잔금일 기준으로 관리비·선수관리비·장기수선충당금·도시가스·전기 정산을 자동 계산합니다. 매수자·매도자 정산표 출력." />
-<meta name="twitter:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
-<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260629"></script>
+<meta name="twitter:image" content="https://topda.kr/assets/og-default.svg" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css?v=20260629" />
 <script type="application/ld+json">
@@ -32,19 +32,19 @@
       "@type": "ListItem",
       "position": 1,
       "name": "홈",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/index.html"
+      "item": "https://topda.kr/index.html"
     },
     {
       "@type": "ListItem",
       "position": 2,
       "name": "계산기",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/index.html"
+      "item": "https://topda.kr/calculators/index.html"
     },
     {
       "@type": "ListItem",
       "position": 3,
       "name": "잔금일 정산 계산기",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/balance-settlement.html"
+      "item": "https://topda.kr/calculators/balance-settlement.html"
     }
   ]
 }
@@ -54,7 +54,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "잔금일 정산 계산기",
-  "url": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/balance-settlement.html",
+  "url": "https://topda.kr/calculators/balance-settlement.html",
   "description": "잔금일 기준으로 관리비·선수관리비·장기수선충당금·도시가스·전기 정산을 자동 계산합니다. 매수자·매도자 정산표 출력.",
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "Any",
@@ -67,7 +67,7 @@
     "priceCurrency": "KRW"
   },
   "publisher": {
-    "@id": "https://jaehojung1879-netizen.github.io/TOPDA/#organization"
+    "@id": "https://topda.kr/#organization"
   }
 }
 </script>
@@ -193,7 +193,9 @@
   </div>
 
   <section style="margin-top: 64px;">
-    <h2 style="margin-bottom: 16px;">잔금일에 정산해야 하는 항목 — 빠짐없이</h2>
+  <details class="explain">
+    <summary>잔금일에 정산해야 하는 항목 — 빠짐없이</summary>
+    <div class="explain-body">
     <div class="def-list">
       <div class="row"><div class="k">선수관리비 (예치금)</div><div class="v"><strong>매수자 → 매도자</strong>. 입주 시 매도자가 관리실에 낸 보증금 성격. 관리실 영수증·확인서로 금액 확정.</div></div>
       <div class="row"><div class="k">관리비 일할</div><div class="v">잔금일 기준 일수 안분. 1일~잔금일은 매도자 부담, 잔금일+1~말일은 매수자 부담. 통상 잔금일 당일은 매수자 부담으로 처리.</div></div>
@@ -204,10 +206,14 @@
       <div class="row"><div class="k">인터넷·IPTV</div><div class="v">매도자 명의 해지 또는 양수도. 위약금 발생 가능 → 사전 협의.</div></div>
       <div class="row"><div class="k">관리비 미납</div><div class="v">관리실에서 ‘체납 확인서’ 발급. 미납분은 매도자 부담 후 입금증 사본 보관.</div></div>
     </div>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 16px;">잔금일 정산 실무 팁</h2>
+  <details class="explain">
+    <summary>잔금일 정산 실무 팁</summary>
+    <div class="explain-body">
     <div class="hub-grid">
       <div class="hub-tool" style="cursor: default;">
         <div class="hub-tool-icon">
@@ -237,7 +243,9 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top: 48px;">
     <h2 style="margin-bottom: 16px;">함께 보면 좋은 글</h2>
@@ -261,13 +269,17 @@
   </section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 12px;">출처</h2>
+  <details class="explain">
+    <summary>출처</summary>
+    <div class="explain-body">
     <ul class="source-list">
       <li>공동주택관리법 시행령 제31조 (장기수선충당금)</li>
       <li>주택임대차보호법 제10조 (임차인 보호)</li>
       <li>국토교통부 ‘공동주택 관리비 산정·부과기준’</li>
     </ul>
-  </section>
+  </div>
+  </details>
+</section>
 
   <div class="callout callout-warn" style="margin-top: 32px;">
     <div class="icon">⚠</div>

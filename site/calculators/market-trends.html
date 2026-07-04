@@ -88,7 +88,9 @@
   </div>
 
   <section style="margin-top:40px;">
-    <h2 style="margin-bottom:10px;">지표 읽는 법</h2>
+  <details class="explain">
+    <summary>지표 읽는 법</summary>
+    <div class="explain-body">
     <ul class="ref-list">
       <li><strong>매매·전세 가격지수</strong> — 기준시점=100. 100보다 크면 기준 대비 상승, 추세 기울기로 상승/하락 속도를 봅니다.</li>
       <li><strong>전세가율</strong> — 전세가 ÷ 매매가 × 100. 높을수록 갭(매매−전세)이 작아 갭투자 부담은 작지만, 역전세·깡통전세 위험도 함께 살펴야 합니다.</li>
@@ -97,7 +99,9 @@
       <div class="icon">i</div>
       <div class="body"><strong>전세가율을 지역별 지도로 보고 싶다면?</strong> 실거래 중위가로 계산한 <a href="jeonse-ratio.html">전세가율 지도</a>에서 지역별 순위와 매매·전세 중위가를 함께 확인하세요. (이 대시보드의 전세가율 지수는 한국부동산원 통계표 연동 시 채워집니다.)</div>
     </div>
-  </section>
+  </div>
+  </details>
+</section>
 
   <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 32px;">표시 수치는 참고용 예시이며, 투자 판단 전 공식 통계를 확인하세요. 출처: 한국부동산원.</p>
 </main>
@@ -114,6 +118,7 @@
   'use strict';
   var R = window.TopdaRegion;
   var DATA = null, charts = {};
+  var JR = {};   // 실거래 기반 전세가율 (jeonse_ratio.json) — R-ONE 지수가 빈 지역의 폴백
   var sidoSel = document.getElementById('mkt-sido');
   var guSel = document.getElementById('mkt-gu');
   var statsEl = document.getElementById('mktStats');
@@ -130,13 +135,23 @@
     return null;
   }
 
-  function renderStats(s) {
+  function renderStats(region, s) {
     var last = s[s.length - 1] || {}, prev = s[s.length - 2] || last;
     var si = lastVal(s, 'sale_index'), ji = lastVal(s, 'jeonse_index'), jr = lastVal(s, 'jeonse_ratio');
+    // R-ONE 전세가율이 비면 실거래 중위가 기반(jeonse_ratio.json)으로 폴백
+    var jrCard;
+    if (jr != null) {
+      jrCard = { lbl: '전세가율', num: jr.toFixed(1) + '%', d: fmtDelta(last.jeonse_ratio, prev.jeonse_ratio) };
+    } else if (JR[region.key] != null) {
+      jrCard = { lbl: '전세가율', num: JR[region.key].toFixed(1) + '%',
+                 d: '<span class="delta flat">실거래 3개월 중위가 기준</span>' };
+    } else {
+      jrCard = { lbl: '전세가율', num: '—', d: '<span class="delta flat">집계 예정</span>' };
+    }
     var cards = [
       { lbl: '매매가격지수', num: si == null ? '—' : si.toFixed(1), d: fmtDelta(last.sale_index, prev.sale_index) },
       { lbl: '전세가격지수', num: ji == null ? '—' : ji.toFixed(1), d: fmtDelta(last.jeonse_index, prev.jeonse_index) },
-      { lbl: '전세가율', num: jr == null ? '— (집계 예정)' : jr.toFixed(1) + '%', d: fmtDelta(last.jeonse_ratio, prev.jeonse_ratio) },
+      jrCard,
     ];
     statsEl.innerHTML = cards.map(function (c) {
       return '<div class="mkt-stat"><div class="lbl">' + c.lbl + '</div><div class="num">' + c.num + '</div>' + c.d + '</div>';
@@ -178,7 +193,7 @@
       || DATA.regions.find(function (r) { return r.sido === sidoSel.value; }) || DATA.regions[0];
     var s = region.series, labels = s.map(function (x) { return x.month; });
     document.querySelectorAll('.mkt-chart h3')[0].textContent = region.key + ' · 매매·전세 가격지수';
-    renderStats(s);
+    renderStats(region, s);
     line('chartIndex', labels, [
       { label: '매매', data: s.map(function (x) { return x.sale_index; }), borderColor: '#dc2626', backgroundColor: 'rgba(220,38,38,0.08)', fill: true, tension: 0.3, pointRadius: 2 },
       { label: '전세', data: s.map(function (x) { return x.jeonse_index; }), borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.06)', fill: true, tension: 0.3, pointRadius: 2 },
@@ -187,6 +202,17 @@
       { label: '전세가율', data: s.map(function (x) { return x.jeonse_ratio; }), borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.10)', fill: true, tension: 0.3, pointRadius: 2, spanGaps: true },
     ]);
   }
+
+  // 실거래 기반 전세가율(폴백) — 실패해도 대시보드는 정상 동작
+  fetch('../assets/jeonse_ratio.json?t=' + Date.now(), { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) {
+      ((j && j.regions) || []).forEach(function (r) {
+        if (r && r.key && r.jeonse_ratio != null) JR[r.key] = r.jeonse_ratio;
+      });
+      if (DATA) render();   // market.json이 먼저 로드됐다면 갱신
+    })
+    .catch(function () {});
 
   fetch('../assets/market.json?t=' + Date.now(), { cache: 'no-store' })
     .then(function (r) { if (!r.ok) throw new Error('load'); return r.json(); })

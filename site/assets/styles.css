@@ -53,6 +53,10 @@ body {
   font-size: 16px;
   font-feature-settings: "ss01", "ss02", "tnum";
   letter-spacing: -0.005em;
+  /* 한글이 단어 중간("주택금융공\n사")에서 꺾이지 않도록 어절 단위로만 줄바꿈.
+     overflow-wrap은 공백 없는 긴 토큰(URL 등)이 좁은 컨테이너를 밀어내는 것을 방지. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 @media (min-width: 768px) { body { font-size: 17px; } }
 
@@ -381,12 +385,13 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 
 /* ===== Calculator ===== */
 /* 입력은 왼쪽, 결과는 오른쪽 — 모바일 세로 화면에서도 좁게나마 항상 2단으로 함께 보인다. */
+/* 모바일: 입력 → 결과 1단 흐름(구겨 넣지 않는다). 768px+에서 좌 입력 · 우 결과 2단. */
 .calc-layout {
   display: grid; align-items: start;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
 }
-@media (min-width: 768px) { .calc-layout { gap: 28px; } }
+@media (min-width: 768px) { .calc-layout { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 28px; } }
 @media (min-width: 1024px) { .calc-layout { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 40px; } }
 
 .calc-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px 28px 28px; box-shadow: var(--shadow-sm); }
@@ -424,6 +429,12 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
   padding: 10px 14px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
   cursor: pointer; font-size: 0.92rem; font-weight: 500; color: var(--text-muted);
   transition: all 0.15s; user-select: none;
+  text-align: center; word-break: keep-all; line-height: 1.3;
+}
+/* 두 줄 라벨: 약어(HF) 크게 + 풀네임 작게 — 긴 기관명이 중간에서 잘리는 문제 방지 */
+.radio-group label span small {
+  display: block; font-size: 0.72rem; font-weight: 500; opacity: 0.72; margin-top: 1px;
+  letter-spacing: -0.01em;
 }
 .radio-group input[type="radio"] { display: none; }
 .radio-group label:hover { border-color: var(--text-muted); color: var(--text); }
@@ -465,6 +476,27 @@ table.data tr.is-active > td, table.data tr.is-active > th {
 table.data tr.is-active > td:first-child, table.data tr.is-active > th:first-child {
   box-shadow: inset 3px 0 0 var(--accent);
 }
+
+/* ===== 접이식 설명 섹션 (계산기 하단 '어떻게 계산되나'·세율표·출처) =====
+   계산기 화면은 입력·결과만 남기고, 설명은 원하는 사람만 펼쳐 본다. */
+details.explain {
+  border: 1px solid var(--border); border-radius: var(--radius-lg, 14px);
+  background: var(--surface); overflow: hidden;
+}
+details.explain summary {
+  cursor: pointer; padding: 15px 18px; font-weight: 700; font-size: 1rem;
+  color: var(--text); list-style: none; display: flex; align-items: center;
+  justify-content: space-between; gap: 10px; user-select: none;
+}
+details.explain summary::-webkit-details-marker { display: none; }
+details.explain summary::after {
+  content: "+"; font-size: 1.2rem; font-weight: 600; color: var(--text-muted);
+  line-height: 1; flex-shrink: 0;
+}
+details.explain[open] summary::after { content: "−"; }
+details.explain summary:hover { color: var(--accent); }
+details.explain .explain-body { padding: 2px 18px 18px; }
+details.explain .explain-body > :first-child { margin-top: 0; }
 
 /* ===== Footer ===== */
 .site-footer {
@@ -2541,51 +2573,17 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 .btn-add-loan:hover { background: #e0ebff; }
 
-/* ===== 모바일(<768px): 입력(좌)·결과(우) 2단을 좁게 유지하면서 깔끔하게 압축 ===== */
+/* ===== 모바일(<768px): 1단 레이아웃 — 가독성 우선, 데스크톱과 같은 크기 유지 ===== */
 @media (max-width: 767px) {
-  .calc-form, .calc-result { padding: 12px; border-radius: 12px; }
-  .field { margin-bottom: 11px; }
-  .field label { font-size: 0.8rem; margin-bottom: 4px; }
-  .field .hint, .field .eok-hint { font-size: 0.72rem; margin-top: 3px; }
-  .field input[type="text"], .field input[type="number"], .field select { padding: 8px 9px; font-size: 0.92rem; }
-  .field .input-suffix input { padding-right: 32px; }
-  .field .input-suffix::after { right: 8px; font-size: 0.78rem; }
-  /* 좁은 폭에서는 한 줄 2칸 입력을 세로로, 라디오는 2개씩 */
-  .field-row { grid-template-columns: 1fr; gap: 8px; }
-  .radio-group { gap: 5px; }
-  .radio-group label { min-width: 0; flex: 1 1 calc(50% - 5px); padding: 7px 5px; font-size: 0.8rem; }
-  .calc-result h3 { font-size: 0.76rem; margin-bottom: 2px; }
-  /* 총액은 한 줄 유지(‘원’이 다음 줄로 떨어지지 않게) + 폭에 맞춰 축소 */
-  .calc-result .total { font-size: clamp(0.95rem, 4.7vw, 1.35rem); margin-bottom: 10px; white-space: nowrap; letter-spacing: -0.02em; }
-  .calc-result .breakdown { padding-top: 10px; }
-  /* 결과 행: 키(라벨) 위 · 값 아래로 정렬해 좁은 칸에서도 깔끔하게 */
-  .calc-result .row { padding: 4px 0; font-size: 0.74rem; flex-direction: column; align-items: flex-start; gap: 0; line-height: 1.3; }
-  .calc-result .row .key { color: var(--text-muted); }
-  .calc-result .row .val { font-weight: 700; font-size: 0.82rem; }
-  .calc-result .row.sub { padding-left: 8px; }
-  .calc-result .row.sub .val { font-weight: 600; font-size: 0.78rem; }
-  .chart-wrap { min-height: 140px; max-height: 170px; }
-  .container { padding: 0 12px; }
-  /* DSR/RTI 박스: 좁은 칸에서 라벨이 글자 단위로 깨지지 않게 세로 정렬 + 폰트 축소 */
-  .dsr-box { padding: 10px; margin-top: 12px; }
-  .dsr-box-head { flex-direction: column; align-items: flex-start; gap: 1px; margin-bottom: 6px; }
-  .dsr-box-head strong { font-size: 0.76rem; line-height: 1.3; }
-  .dsr-pct { font-size: 1.05rem; }
-  .dsr-meta { font-size: 0.66rem; margin-top: 5px; }
-  .dsr-verdict { font-size: 0.72rem; line-height: 1.45; margin-top: 7px; }
-  /* 결과 영역 콜아웃·차트 범례도 한 단계 축소 */
-  .calc-result .callout { padding: 10px 12px; font-size: 0.74rem; }
-  .calc-result .callout .icon { width: 18px; height: 18px; font-size: 0.7rem; }
-  .field .check-item .text { font-size: 0.8rem; }
-  .field .check-item .note { font-size: 0.7rem; }
-}
-
-@media (max-width: 380px) {
-  .calc-layout { gap: 8px; }
-  .calc-form, .calc-result { padding: 10px; }
-  .calc-result .total { font-size: clamp(0.9rem, 4.4vw, 1.2rem); }
-  .calc-result .row { font-size: 0.72rem; }
-  .radio-group label { flex-basis: calc(50% - 5px); }
+  .calc-form, .calc-result { padding: 18px 16px; border-radius: 12px; }
+  .field { margin-bottom: 16px; }
+  /* 한 줄 2칸 입력은 세로로 */
+  .field-row { grid-template-columns: 1fr; gap: 12px; }
+  .radio-group label { min-width: 0; flex: 1 1 calc(50% - 4px); padding: 9px 8px; font-size: 0.88rem; }
+  .calc-result .total { font-size: clamp(1.5rem, 7.5vw, 2rem); }
+  .chart-wrap { min-height: 160px; max-height: 220px; }
+  .container { padding: 0 14px; }
+  .dsr-box-head { flex-direction: column; align-items: flex-start; gap: 2px; }
 }
 
 /* ===== TTS button (auto-attached, 결과 영역 우상단) ===== */

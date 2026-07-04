@@ -7,23 +7,23 @@
 <meta name="description" content="낙찰가에 인수 보증금·취득세·명도비·체납 관리비를 더해 실제 총 부담액과 시세 대비 마진을 확인합니다." />
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-<link rel="canonical" href="https://jaehojung1879-netizen.github.io/TOPDA/calculators/auction-bid.html" />
-<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://jaehojung1879-netizen.github.io/TOPDA/feed.xml" />
+<link rel="canonical" href="https://topda.kr/calculators/auction-bid.html" />
+<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://topda.kr/feed.xml" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="톺다" />
 <meta property="og:title" content="경매 입찰가 시뮬레이터 — 톺다" />
 <meta property="og:description" content="낙찰가에 인수 보증금·취득세·명도비·체납 관리비를 더해 실제 총 부담액과 시세 대비 마진을 확인합니다." />
-<meta property="og:url" content="https://jaehojung1879-netizen.github.io/TOPDA/calculators/auction-bid.html" />
-<meta property="og:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
+<meta property="og:url" content="https://topda.kr/calculators/auction-bid.html" />
+<meta property="og:image" content="https://topda.kr/assets/og-default.svg" />
 <meta property="og:locale" content="ko_KR" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="경매 입찰가 시뮬레이터 — 톺다" />
 <meta name="twitter:description" content="낙찰가에 인수 보증금·취득세·명도비·체납 관리비를 더해 실제 총 부담액과 시세 대비 마진을 확인합니다." />
-<meta name="twitter:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
-<link rel="alternate" hreflang="ko" href="https://jaehojung1879-netizen.github.io/TOPDA/calculators/auction-bid.html" />
-<link rel="alternate" hreflang="en" href="https://jaehojung1879-netizen.github.io/TOPDA/en/calculators/auction-bid.html" />
-<link rel="alternate" hreflang="x-default" href="https://jaehojung1879-netizen.github.io/TOPDA/calculators/auction-bid.html" />
-<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260629"></script>
+<meta name="twitter:image" content="https://topda.kr/assets/og-default.svg" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/calculators/auction-bid.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/calculators/auction-bid.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/auction-bid.html" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css?v=20260629" />
 <script type="application/ld+json">
@@ -35,19 +35,19 @@
       "@type": "ListItem",
       "position": 1,
       "name": "홈",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/index.html"
+      "item": "https://topda.kr/index.html"
     },
     {
       "@type": "ListItem",
       "position": 2,
       "name": "계산기",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/index.html"
+      "item": "https://topda.kr/calculators/index.html"
     },
     {
       "@type": "ListItem",
       "position": 3,
       "name": "경매 입찰가 시뮬레이터",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/auction-bid.html"
+      "item": "https://topda.kr/calculators/auction-bid.html"
     }
   ]
 }
@@ -57,7 +57,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "경매 입찰가 시뮬레이터",
-  "url": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/auction-bid.html",
+  "url": "https://topda.kr/calculators/auction-bid.html",
   "description": "낙찰가에 인수 보증금·취득세·명도비·체납 관리비를 더해 실제 총 부담액과 시세 대비 마진을 확인합니다.",
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "Any",
@@ -70,7 +70,7 @@
     "priceCurrency": "KRW"
   },
   "publisher": {
-    "@id": "https://jaehojung1879-netizen.github.io/TOPDA/#organization"
+    "@id": "https://topda.kr/#organization"
   }
 }
 </script>
@@ -203,14 +203,18 @@
   </div>
 
   <section style="margin-top: 64px;">
-    <h2 style="margin-bottom: 16px;">계산 방식</h2>
+  <details class="explain">
+    <summary>계산 방식</summary>
+    <div class="explain-body">
     <ul class="ref-list">
       <li><strong>취득세</strong> — 일반 주택 매매와 동일한 세율을 적용합니다(지방세법 제10조 1항: 취득세 과세표준은 사실상 취득가액). 1주택 6억 이하 1.0%, 6~9억 누진, 9억 초과 3.0%, 다주택·조정대상 8~12%.</li>
       <li><strong>지방교육세·농어촌특별세</strong> — 단순화를 위해 취득세의 10%를 가산해 표시합니다. 실제 세액은 면적·감면 여부에 따라 달라집니다.</li>
       <li><strong>인수 보증금</strong> — 대항력 있는 선순위 임차인이 배당받지 못한 금액. 매각물건명세서·현황조사서로 사전 확인 필요.</li>
       <li><strong>미납 관리비</strong> — 공용 부분 한정 인수. 전용 부분은 점유자 책임이 원칙입니다.</li>
     </ul>
-  </section>
+  </div>
+  </details>
+</section>
 
   <div class="callout callout-warn" style="margin-top: 32px;">
     <div class="icon">⚠</div>
