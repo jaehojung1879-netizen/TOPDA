@@ -310,6 +310,10 @@ def main():
     existing_by_key = {_akey(a): a for a in existing.get("apartments", [])}
     fresh = []
     enriched_n = 0
+    # 시간 예산: 스텝 타임아웃에 강제 종료되면 수집분 전체가 유실된다.
+    # 여유가 5분 밑으로 줄면 외부 보강(Kakao·K-apt)을 멈추고 가격 수집만 계속,
+    # 2분 밑으로 줄면 루프를 끊고 지금까지의 수집분을 병합·저장한다.
+    deadline = L.deadline_from_env()
     kapt_off = False   # K-apt 403 권한 오류가 한 번 나면 이후 호출 전부 생략
     # K-apt 진단 카운터 — 세대수 보강이 0건이던 원인(권한/목록빈값/이름매칭)을 로그로 드러낸다.
     kstat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0, "needed": 0}
@@ -318,6 +322,8 @@ def main():
     # 좌표가 이미 있어 1회 호출이면 되고, 예산(MAX_ENRICH) 내에서 점진 처리한다.
     fixed_school = 0
     for a in existing.get("apartments", []):
+        if L.out_of_time(deadline, margin_sec=300):
+            break
         if not valid_school(a.get("elementary")):
             if a.get("elementary") is not None:
                 a.pop("elementary", None)  # 틀린 값은 우선 제거(잘못된 정보 노출 방지)
@@ -331,6 +337,10 @@ def main():
         print(f"학교 데이터 보정 대상 {fixed_school}건(초등학교 아님 → 제거/재조회)")
 
     for region, lawd in L.LAWD.items():
+        if L.out_of_time(deadline, margin_sec=120):
+            print("시간 예산 소진 — 남은 지역은 다음 실행에서 갱신 (merge가 기존 값 보존)")
+            break
+        enrich_ok = not L.out_of_time(deadline, margin_sec=300)   # 보강 계속할 여유가 있나
         region_items = []
         for ym in months:
             try:
@@ -341,7 +351,7 @@ def main():
             continue
         agg = aggregate(region, region_items)
         # 이 지역에 좌표/세대수가 없는 신규 단지가 있을 때만 K-apt 목록을 1회 호출
-        needs_kapt = any(
+        needs_kapt = enrich_ok and any(
             not (existing_by_key.get(_akey(a)) or {}).get("households") for a in agg
         )
         kmap = {}
@@ -365,7 +375,7 @@ def main():
                 for k in ("lat", "lng", "subway", "elementary", "commute"):
                     if cur.get(k) is not None:
                         a[k] = cur[k]
-            elif enriched_n < MAX_ENRICH:
+            elif enrich_ok and enriched_n < MAX_ENRICH:
                 try:
                     enrich_location(a)
                     enriched_n += 1

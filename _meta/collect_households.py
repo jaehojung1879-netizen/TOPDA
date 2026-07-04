@@ -42,7 +42,15 @@ def main():
     print(f"세대수 보강 대상 {need}개 단지 / {len(by_region)}개 지역")
     stat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0}
 
+    # 시간 예산: 스텝 타임아웃으로 강제 종료되면 진행분이 통째로 유실된다(2026-07-03:
+    # 25분 내내 돌고 저장 0건). 마감 전에 멈추고, 지역 단위로 중간 저장(checkpoint)한다.
+    deadline = L.deadline_from_env()
+    saved_filled = 0   # 마지막 저장 시점의 filled — 지역마다 새 확보분이 있을 때만 저장
+
     for region, items in by_region.items():
+        if L.out_of_time(deadline, margin_sec=30):
+            print(f"시간 예산 소진 — 남은 지역은 다음 실행에서 이어서 보강 (누적 {stat['filled']}건)")
+            break
         lawd = L.LAWD[region]
         kmap = CA.kapt_map(lawd, kapt_key)
         if kmap is None:    # 403 권한 오류 → 활용신청 필요. 더 돌려도 동일하므로 중단.
@@ -57,6 +65,8 @@ def main():
             stat["list_empty"] += 1
             continue
         for a in items:
+            if L.out_of_time(deadline, margin_sec=30):
+                break
             code = kmap.get(CA._norm_name(a["name"]))
             if not code:
                 continue
@@ -68,6 +78,10 @@ def main():
             if yr and not a.get("built_year"):
                 a["built_year"] = yr
         print(f"[{region}] 매칭 진행 — 누적 세대수확보 {stat['filled']}건")
+        # 지역 단위 체크포인트 — 이후 어떤 이유로 중단돼도 여기까지의 확보분은 남는다.
+        if stat["filled"] > saved_filled:
+            if L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments"):
+                saved_filled = stat["filled"]
 
     print(f"[K-apt] 목록성공 {stat['list_ok']}/빈 {stat['list_empty']} · 단지코드 {stat['codes']}개 · "
           f"이름매칭 {stat['matched']} → 세대수확보 {stat['filled']}건")
@@ -76,9 +90,9 @@ def main():
         for d in getattr(CA, "_info_diag", []):
             print(f"    · 기본정보 실패 샘플: {d}", file=sys.stderr)
 
-    if stat["filled"]:
+    if stat["filled"] > saved_filled:
         L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments")
-    else:
+    elif not stat["filled"]:
         print("변경 없음 — 저장 생략")
 
 

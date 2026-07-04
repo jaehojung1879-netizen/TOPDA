@@ -55,7 +55,12 @@ def main():
     months = recent_months(MONTHS_BACK)
     regions = []
     total_jeonse = 0      # 전세 표본 총합 — 0이면 전월세 API 미승인 가능성
+    # 시간 예산: 마감 전에 루프를 끊고, 수집 못 한 지역은 기존 파일 값으로 채워 저장한다.
+    deadline = L.deadline_from_env()
     for region, lawd in L.LAWD.items():
+        if L.out_of_time(deadline, margin_sec=60):
+            print(f"시간 예산 소진 — 남은 지역은 기존 값 유지 (수집 {len(regions)}개 지역)")
+            break
         sale, jeonse = [], []
         for ym in months:
             for it in _items(TRADE, lawd, ym, key):
@@ -101,6 +106,14 @@ def main():
                   file=sys.stderr)
         print("수집 결과 없음 — 기존 jeonse_ratio.json 유지")
         return
+    # 부분 수집 병합: 이번에 못 돈 지역(시간 예산·표본 부족)은 기존 파일 값을 유지해
+    # 지도가 갑자기 비지 않도록 한다.
+    prev = L.load_json(OUT_JSON, default=None) or {}
+    seen = {r["key"] for r in regions}
+    kept = [r for r in (prev.get("regions") or []) if (r.get("key") or r.get("name")) not in seen]
+    if kept:
+        print(f"기존 값 유지 지역 {len(kept)}개 (이번 실행 미수집)")
+        regions += kept
     regions.sort(key=lambda r: r["jeonse_ratio"], reverse=True)
     data = {
         "_meta": {

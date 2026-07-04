@@ -3,10 +3,16 @@ name: Refresh listings (실거래·단지)
 # 국토부 실거래가 + Kakao(좌표·역·학교) + K-apt(세대수·준공) 수집 →
 # site/assets/transactions.json (실거래 조회) · apartments.json (맞춤찾기).
 #
-# 실거래(transactions)는 빠르고 사용자 노출 핵심이라 먼저 수집·커밋하고,
-# 단지(apartments)는 Kakao 지오코딩으로 느리므로 별도 step·타임아웃·커밋으로 분리한다.
-# 이렇게 하면 단지 수집이 오래 걸려도 실거래 갱신은 항상 반영된다(과거: 50분 통합 타임아웃에
-# 단지 수집이 먼저 예산을 다 써서 커밋 자체가 안 되던 문제).
+# 설계 원칙 (과거 장애에서 배운 것):
+#  1) 산출물별로 수집→즉시 커밋을 분리한다. 뒤 스텝이 실패해도 앞 산출물은 반영된다.
+#  2) 커밋·푸시는 _meta/git_commit_push.sh 로 통일한다. 다른 워크플로(뉴스·시세)가
+#     동시에 main을 푸시하면 non-fast-forward로 거절되는데(2026-06-29~07-02 연속 실패),
+#     스크립트가 rebase 후 재시도해 경합을 흡수한다.
+#  3) 스텝 타임아웃 합계는 잡 타임아웃보다 작게 유지한다(과거: 합계 105분 > 잡 70분이라
+#     마지막 단지 수집이 잡 타임아웃에 걸려 매일 취소됨).
+#  4) 수집기는 TIME_BUDGET_MIN(분) 안에서 스스로 마무리·저장한다. 스텝 타임아웃으로
+#     강제 종료되면 그 실행의 진행분이 통째로 유실되기 때문(2026-07-03 세대수 보강이
+#     25분 내내 돌고 저장 못 한 사례).
 on:
   schedule:
     - cron: "0 15 * * *"   # 매일 00:00 KST (자정마다 갱신)
@@ -22,17 +28,17 @@ concurrency:
 jobs:
   listings:
     runs-on: ubuntu-latest
-    timeout-minutes: 70
+    timeout-minutes: 75    # 스텝 타임아웃 합계(67분) + 커밋·셋업 여유
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      # 1) 실거래 원장 (사용자 노출 핵심) — 먼저 수집하고 즉시 커밋
+      # 1) 실거래 원장 (사용자 노출 핵심) — 먼저 수집하고 즉시 커밋. 평소 ~12분.
       - name: Collect transactions (국토부 실거래 원장)
         working-directory: _meta
-        timeout-minutes: 25
+        timeout-minutes: 18
         env:
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
@@ -40,22 +46,14 @@ jobs:
         continue-on-error: true
 
       - name: Commit transactions.json
-        run: |
-          git config user.name "topda-bot"
-          git config user.email "actions@users.noreply.github.com"
-          if [ -n "$(git status --porcelain site/assets/transactions.json)" ]; then
-            git add site/assets/transactions.json
-            git commit -m "실거래 자동 갱신 ($(date -u +%Y-%m-%d))"
-            git push
-          else
-            echo "실거래 변경 없음 — 커밋 생략"
-          fi
+        run: bash _meta/git_commit_push.sh "실거래 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/transactions.json
 
-      # 1.5) 전세가율 (매매·전세 실거래 중위가) — 전세가율 지도용. 빠르므로 실거래 직후 수집·커밋.
+      # 2) 전세가율 (매매·전세 실거래 중위가) — 전세가율 지도용. 평소 ~9분.
       - name: Collect jeonse ratio (매매·전세 실거래 중위가)
         working-directory: _meta
-        timeout-minutes: 20
+        timeout-minutes: 15
         env:
+          TIME_BUDGET_MIN: "13"
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
@@ -63,25 +61,15 @@ jobs:
         continue-on-error: true
 
       - name: Commit jeonse_ratio.json
-        run: |
-          git config user.name "topda-bot"
-          git config user.email "actions@users.noreply.github.com"
-          if [ -n "$(git status --porcelain site/assets/jeonse_ratio.json)" ]; then
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
-            git add site/assets/jeonse_ratio.json
-            git commit -m "전세가율 자동 갱신 ($(date -u +%Y-%m-%d))"
-            git push
-          else
-            echo "전세가율 변경 없음 — 커밋 생략"
-          fi
+        run: bash _meta/git_commit_push.sh "전세가율 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/jeonse_ratio.json
 
-      # 1.7) 단지 세대수 보강 (K-apt 전용, Kakao 미사용 — 빠름).
-      # 과거: 세대수 보강이 느린 Kakao 지오코딩 뒤에 있어 35분 타임아웃에 밀려 거의 못 채웠다.
-      # 이제 별도 스텝으로 먼저 끝까지 돌려 세대수를 채우고 커밋한다.
+      # 3) 단지 세대수 보강 (K-apt 전용, Kakao 미사용).
+      # 수집기가 지역 단위로 중간 저장(checkpoint)하므로 예산이 모자라도 진행분은 남는다.
       - name: Enrich household counts (K-apt)
         working-directory: _meta
-        timeout-minutes: 25
+        timeout-minutes: 12
         env:
+          TIME_BUDGET_MIN: "10"
           DATA_GO_APT_BASIC_INFO: ${{ secrets.DATA_GO_APT_BASIC_INFO }}
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
@@ -89,23 +77,15 @@ jobs:
         continue-on-error: true
 
       - name: Commit household counts
-        run: |
-          git config user.name "topda-bot"
-          git config user.email "actions@users.noreply.github.com"
-          if [ -n "$(git status --porcelain site/assets/apartments.json)" ]; then
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
-            git add site/assets/apartments.json
-            git commit -m "단지 세대수 자동 보강 ($(date -u +%Y-%m-%d))"
-            git push
-          else
-            echo "세대수 변경 없음 — 커밋 생략"
-          fi
+        run: bash _meta/git_commit_push.sh "단지 세대수 자동 보강 ($(date -u +%Y-%m-%d))" site/assets/apartments.json
 
-      # 2) 단지 집계 (Kakao 지오코딩 — 느림) — 자체 타임아웃 안에서 점진 보강 후 별도 커밋
+      # 4) 단지 집계 (Kakao 지오코딩 — 느림) — 예산이 줄면 보강을 먼저 멈추고,
+      # 수집분을 병합·저장한 뒤 종료한다(merge가 기존 값을 보존하므로 점진 보강).
       - name: Collect apartments (국토부 실거래 + Kakao + K-apt)
         working-directory: _meta
-        timeout-minutes: 35
+        timeout-minutes: 22
         env:
+          TIME_BUDGET_MIN: "20"
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_APT_BASIC_INFO: ${{ secrets.DATA_GO_APT_BASIC_INFO }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
@@ -114,14 +94,4 @@ jobs:
         continue-on-error: true
 
       - name: Commit apartments.json
-        run: |
-          git config user.name "topda-bot"
-          git config user.email "actions@users.noreply.github.com"
-          if [ -n "$(git status --porcelain site/assets/apartments.json)" ]; then
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
-            git add site/assets/apartments.json
-            git commit -m "단지 정보 자동 갱신 ($(date -u +%Y-%m-%d))"
-            git push
-          else
-            echo "단지 변경 없음 — 커밋 생략"
-          fi
+        run: bash _meta/git_commit_push.sh "단지 정보 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/apartments.json
