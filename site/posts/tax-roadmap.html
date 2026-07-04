@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>부동산 세금 로드맵 — 취득·보유·양도 통합 설계 — 톺다</title>
+<meta name="description" content="세금은 거래 후 계산하는 게 아니라 거래 전에 설계하는 것. 취득세→재산세·종부세→양도세를 하나의 타임라인으로 놓고 시점·명의·순서를 설계하는 법." />
+<!-- seo:meta -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="canonical" href="https://jaehojung1879-netizen.github.io/TOPDA/posts/tax-roadmap.html" />
+<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://jaehojung1879-netizen.github.io/TOPDA/feed.xml" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="톺다" />
+<meta property="og:title" content="부동산 세금 로드맵 — 취득·보유·양도 통합 설계 — 톺다" />
+<meta property="og:description" content="세금은 거래 후 계산하는 게 아니라 거래 전에 설계하는 것. 취득세→재산세·종부세→양도세를 하나의 타임라인으로 놓고 시점·명의·순서를 설계하는 법." />
+<meta property="og:url" content="https://jaehojung1879-netizen.github.io/TOPDA/posts/tax-roadmap.html" />
+<meta property="og:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
+<meta property="og:locale" content="ko_KR" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="부동산 세금 로드맵 — 취득·보유·양도 통합 설계 — 톺다" />
+<meta name="twitter:description" content="세금은 거래 후 계산하는 게 아니라 거래 전에 설계하는 것. 취득세→재산세·종부세→양도세를 하나의 타임라인으로 놓고 시점·명의·순서를 설계하는 법." />
+<meta name="twitter:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
+<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260629"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260629" /><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "홈",
+      "item": "https://jaehojung1879-netizen.github.io/TOPDA/index.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "시장·투자",
+      "item": "https://jaehojung1879-netizen.github.io/TOPDA/posts/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "부동산 세금 로드맵 — 취득·보유·양도 통합 설계",
+      "item": "https://jaehojung1879-netizen.github.io/TOPDA/posts/tax-roadmap.html"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "부동산 세금 로드맵 — 취득·보유·양도 통합 설계",
+  "description": "세금은 거래 후 계산하는 게 아니라 거래 전에 설계하는 것. 취득세→재산세·종부세→양도세를 하나의 타임라인으로 놓고 시점·명의·순서를 설계하는 법.",
+  "inLanguage": "ko",
+  "url": "https://jaehojung1879-netizen.github.io/TOPDA/posts/tax-roadmap.html",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jaehojung1879-netizen.github.io/TOPDA/posts/tax-roadmap.html"
+  },
+  "author": {
+    "@id": "https://jaehojung1879-netizen.github.io/TOPDA/#organization"
+  },
+  "publisher": {
+    "@id": "https://jaehojung1879-netizen.github.io/TOPDA/#organization"
+  }
+}
+</script>
+</head><body>
+<header class="site-header"><div class="container row"><a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>    <nav class="nav">
+      <a href="../guides.html" data-nav class="active">가이드</a>
+      <a href="../calculators/index.html" data-nav>계산기</a>
+      <a href="../market.html" data-nav>시세정보</a>
+      <a href="../checklists/index.html" data-nav>체크리스트</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+</div>  <div class="mobile-menu" data-mobile-menu>
+    <a href="../guides.html">가이드</a>
+    <a href="../calculators/index.html">계산기</a>
+    <a href="../market.html">시세정보</a>
+    <a href="../checklists/index.html">체크리스트</a>
+    <a href="../board.html">게시판</a>
+    <a href="../about.html">안내</a>
+  </div>
+</header>
+
+<main class="container-narrow">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html?cat=시장·투자">시장·투자</a> / 부동산 세금 로드맵</div>
+    <div class="tag-row"><span class="badge badge-accent">시장·투자</span><span class="badge">전문가</span></div>
+    <h1>부동산 세금 로드맵 — 취득·보유·양도 통합 설계</h1>
+    <div class="meta"><span>최근 갱신</span><span class="dot">·</span><span>11분 읽기</span></div>
+  </div>
+
+  <div class="article-summary">
+    <div class="label">한 줄 결론</div>
+    <p>세금은 거래가 끝난 뒤 계산하는 게 아니라 <strong>거래 전에 설계</strong>하는 것입니다. 취득→보유→양도를 하나의 타임라인에 놓고 <strong>시점(잔금일)·명의·순서</strong> 세 가지를 정하면 같은 거래에서도 세금이 크게 달라집니다.</p>
+  </div>
+
+  <div class="prose">
+    <h2>생애주기 세금 지도 — 전체 그림 먼저</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>단계</th><th>세목</th><th>결정적 변수</th><th>설계 포인트</th></tr></thead>
+        <tbody>
+          <tr><td>취득</td><td>취득세(+지방교육세·농특세)</td><td>주택 수 · 조정대상지역 여부 · 가액</td><td>취득 순서, 명의(단독/공동), 오피스텔 등 주택 수 산입 관리</td></tr>
+          <tr><td>보유</td><td>재산세 · 종합부동산세</td><td><strong>6월 1일 보유자</strong> · 공시가격 · 인별 합산</td><td>잔금일을 6/1 전후로 조정, 공동명의 분산</td></tr>
+          <tr><td>임대</td><td>임대소득세</td><td>보증금·월세 규모, 주택 수</td><td>등록 여부·수입금액 관리</td></tr>
+          <tr><td>양도</td><td>양도소득세(+지방소득세)</td><td>1주택 비과세 요건 · 보유/거주기간 · 다주택 여부</td><td>비과세 요건 완성 후 매도, 양도 순서·연도 분산</td></tr>
+          <tr><td>이전(무상)</td><td>증여세 · 상속세</td><td>10년 합산 공제 · 이월과세</td><td>장기 분산 증여, 부담부증여 비교</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>핵심은 각 세목이 <strong>서로 연결</strong>되어 있다는 점입니다. 취득 단계의 명의 선택이 보유세 합산과 양도세 공제에 영향을 주고, 양도 순서가 비과세 여부를 가릅니다. 그래서 "이번 거래의 세금"이 아니라 "포트폴리오 전체의 세금 경로"를 봐야 합니다.</p>
+
+    <h2>취득 단계 — 순서와 명의가 세율을 정한다</h2>
+    <ul class="ref-list">
+      <li><strong>주택 수에 따른 중과</strong> — 취득세는 주택 수와 조정대상지역 여부에 따라 기본세율(1~3%)에서 중과세율로 뜁니다. 여러 채를 계획한다면 <strong>취득 순서</strong>에 따라 총 취득세가 달라집니다.</li>
+      <li><strong>주택 수 산입 관리</strong> — 주거용 오피스텔, 분양권, 입주권, 상속주택 등은 산입 여부 규정이 각각 다릅니다. 계약 전에 내 '세법상 주택 수'부터 확정하세요.</li>
+      <li><strong>명의 설계</strong> — 공동명의는 취득 단계에선 차이가 없지만, 이후 종부세 인별 공제와 양도세 기본공제(인별 250만원)·누진세율 분산에서 효과가 납니다. 단, 대출 규제·건보료 영향도 함께 검토해야 합니다.</li>
+      <li>정확한 세율은 <a href="../calculators/acquisition-tax.html">취득세 계산기</a>로 — 지방세법 기준으로 계산됩니다.</li>
+    </ul>
+
+    <h2>보유 단계 — 달력이 절세 도구다</h2>
+    <ul class="ref-list">
+      <li><strong>과세기준일 6월 1일</strong> — 재산세·종부세는 6월 1일 현재 소유자에게 1년치가 부과됩니다. 매수자는 잔금을 <strong>6월 2일 이후</strong>로, 매도자는 <strong>5월 31일 이전</strong>으로 하는 것이 유리 — 잔금일 협상에서 실제로 돈이 오가는 조항입니다.</li>
+      <li><strong>종부세는 인별 합산</strong> — 부부가 각각 공제를 받으므로 공동명의·명의 분산이 합산 부담을 낮출 수 있습니다(1주택 단독명의 특례와의 유불리 비교 필요).</li>
+      <li><strong>공시가격 이의신청</strong> — 매년 열람 기간에 공시가격이 시세 대비 과도하면 의견 제출이 가능합니다. 보유세의 과세표준 자체를 다투는 방법입니다.</li>
+    </ul>
+
+    <h2>양도 단계 — 요건을 '완성한 뒤' 파는 것</h2>
+    <ul class="ref-list">
+      <li><strong>1주택 비과세</strong> — 고가주택 기준(12억) 이하 양도가액이면 비과세, 초과분은 안분 과세. 보유 2년(취득 당시 조정대상지역이면 거주 2년) 요건을 <strong>채우고 파는 것과 못 채우고 파는 것</strong>의 차이가 수천만원 단위입니다.</li>
+      <li><strong>일시적 2주택</strong> — 신규 주택 취득일부터 종전 주택을 기한 내(통상 3년) 양도하면 비과세 유지. 기한 계산 착오가 가장 흔한 사고입니다.</li>
+      <li><strong>장기보유특별공제</strong> — 보유·거주 기간에 비례해 양도차익 공제. 1주택자는 거주 기간이 공제율을 크게 좌우하므로 "몇 년 더 보유·거주하면 공제가 얼마나 느는지"를 매도 시점 결정에 반영하세요.</li>
+      <li><strong>양도 순서·연도 분산</strong> — 양도세는 연 단위 합산 누진입니다. 두 건을 팔 계획이면 <strong>해를 나눠</strong> 파는 것만으로 누진 구간을 낮출 수 있고, 차익 물건과 손실 물건을 <strong>같은 해에</strong> 팔면 통산됩니다.</li>
+      <li>구체 세율·공제는 <a href="transfer-tax-guide.html">양도소득세 완벽 정리</a>와 국세청 최신 안내를 함께 확인하세요.</li>
+    </ul>
+
+    <h2>이전(무상) 단계 — 10년 단위로 설계하는 게임</h2>
+    <ul class="ref-list">
+      <li><strong>증여재산공제는 10년 합산</strong> — 배우자·자녀 공제 한도는 10년마다 갱신되므로, 이전 계획이 있다면 일찍 시작할수록 공제를 여러 번 쓸 수 있습니다.</li>
+      <li><strong>이월과세</strong> — 배우자·직계존비속에게 증여받은 부동산을 일정 기간(10년) 내 양도하면 취득가액을 증여자 기준으로 계산해 절세 효과가 무효화됩니다. '증여 후 바로 매도' 전략이 막히는 지점입니다.</li>
+      <li><strong>부담부증여</strong> — 전세보증금·대출을 낀 증여는 채무 부분이 양도로 과세됩니다. 단순 증여와 총 세액을 <strong>반드시 비교 계산</strong>한 뒤 선택하세요.</li>
+    </ul>
+
+    <h2>흔한 실수 5가지</h2>
+    <ol class="ref-list">
+      <li><strong>6월 1일을 모른 채 잔금일 합의</strong> — 하루 차이로 1년치 보유세가 갈립니다</li>
+      <li><strong>일시적 2주택 기한 계산 착오</strong> — 취득일 기준·지역 규제 변화를 놓쳐 비과세 상실</li>
+      <li><strong>오피스텔·분양권의 주택 수 산입 간과</strong> — 취득세 중과와 양도세 비과세를 한꺼번에 무너뜨림</li>
+      <li><strong>거주 요건 미충족 매도</strong> — 취득 당시 조정대상지역이었다면 이후 해제돼도 거주 2년 필요</li>
+      <li><strong>계약서만 쓰고 세무 검토</strong> — 설계는 계약 <strong>전</strong>에만 가능합니다. 계약 후엔 선택지가 거의 없습니다</li>
+    </ol>
+
+    <h2>실전 루틴 — 거래 전 세금 설계 4단계</h2>
+    <ol class="ref-list">
+      <li>내 <strong>세법상 주택 수</strong> 확정 (오피스텔·분양권·입주권 포함)</li>
+      <li>이번 거래의 취득세 + 5년 보유 시 보유세 + 예상 양도세를 <strong>한 표에</strong> 계산</li>
+      <li>잔금일·명의·양도 순서의 대안 2~3개를 비교</li>
+      <li>금액이 크거나 다주택·증여가 얽히면 <strong>세무사 유료 상담</strong> — 상담료는 실수 비용의 1%도 안 됩니다</li>
+    </ol>
+
+    <h2>관련 자료</h2>
+    <ul class="ref-list">
+      <li><a href="https://www.hometax.go.kr" target="_blank" rel="noopener">국세청 홈택스 (양도세 모의계산)</a></li>
+      <li><a href="https://www.wetax.go.kr" target="_blank" rel="noopener">위택스 (취득세·재산세)</a></li>
+      <li><a href="https://www.law.go.kr/법령/소득세법" target="_blank" rel="noopener">소득세법 · 지방세법 (국가법령정보센터)</a></li>
+      <li><a href="transfer-tax-guide.html">양도소득세 완벽 정리</a> · <a href="funding-plan.html">자금조달계획서 작성 가이드</a></li>
+    </ul>
+    <p><em>세법은 개정이 매우 잦습니다. 본 글은 설계의 틀을 다루는 일반 정보이며, 실제 거래 전 반드시 최신 법령과 세무 전문가의 확인을 거치세요.</em></p>
+  </div>
+
+<!-- related-tools -->
+<section class="hub-section" style="margin-top: 40px;">
+  <div class="hub-section-head">
+    <span class="hub-section-tag">시장·투자</span>
+    <h2>이 글과 관련된 계산기</h2>
+  </div>
+  <div class="cards-grid">
+    <a class="card" href="../calculators/acquisition-tax.html">
+      <span class="badge badge-accent">관련 계산기</span>
+      <h3>취득세 계산기</h3>
+      <p>1주택·다주택·조정대상</p>
+    </a>
+    <a class="card" href="../calculators/balance-settlement.html">
+      <span class="badge badge-accent">관련 계산기</span>
+      <h3>잔금일 정산 계산기</h3>
+      <p>선수관리비·관리비 일할</p>
+    </a>
+    <a class="card" href="../calculators/brokerage-fee.html">
+      <span class="badge badge-accent">관련 계산기</span>
+      <h3>중개수수료 계산기</h3>
+      <p>거래금액별 상한요율</p>
+    </a>
+  </div>
+</section>
+<!-- related-posts -->
+<section class="hub-section" style="margin-top: 40px;">
+  <div class="hub-section-head" style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+    <div>
+      <span class="hub-section-tag">시장·투자</span>
+      <h2>함께 보면 좋은 글</h2>
+    </div>
+    <a href="index.html?cat=시장·투자" class="strip-link" style="color:var(--accent); font-weight:600; font-size:0.9rem;">전체 글 →</a>
+  </div>
+  <div class="cards-grid">
+    <a class="card" href="transfer-tax-guide.html">
+      <span class="badge badge-accent">매매</span>
+      <h3>양도소득세 완벽 정리</h3>
+      <p>비과세·장특공·세율</p>
+    </a>
+    <a class="card" href="reconstruction-invest.html">
+      <span class="badge badge-accent">시장·투자</span>
+      <h3>재건축·재개발 투자 분석</h3>
+      <p>사업 단계 · 비례율 · 분담금 구조</p>
+    </a>
+    <a class="card" href="market-cycle.html">
+      <span class="badge badge-accent">시장·투자</span>
+      <h3>부동산 사이클 읽는 법</h3>
+      <p>시장 지표 7가지로 국면 판단</p>
+    </a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer"><div class="container"><div class="row"><div><div class="brand"><span class="brand-mark"></span>톺다</div><p>부동산, 하나하나 톺아보자.</p></div><div><h4>탐색</h4><ul><li><a href="../index.html#categories">카테고리</a></li><li><a href="../calculators/index.html">계산기</a></li><li><a href="../checklists/index.html">체크리스트</a></li></ul></div><div><h4>사이트 정보</h4><ul><li><a href="../about.html">소개·운영원칙</a></li><li><a href="../about.html#disclaimer">면책고지</a></li></ul></div></div><p class="disclaimer">© 톺다.</p></div></footer>
+<script src="../assets/app.js?v=20260629"></script>
+</body></html>

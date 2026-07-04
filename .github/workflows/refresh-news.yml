@@ -31,15 +31,6 @@ jobs:
         working-directory: _meta
         run: python collect_news.py
 
+      # 커밋·푸시는 공용 스크립트 사용 — 동시 실행 워크플로와의 푸시 경합을 rebase+재시도로 흡수.
       - name: Commit news.json + index.html(정적 폴백)
-        run: |
-          git config user.name "topda-bot"
-          git config user.email "actions@users.noreply.github.com"
-          if [ -n "$(git status --porcelain site/assets/news.json site/index.html)" ]; then
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
-            git add site/assets/news.json site/index.html
-            git commit -m "부동산 뉴스 자동 갱신 ($(date -u +%Y-%m-%d))"
-            git push
-          else
-            echo "뉴스 변경 없음 — 커밋 생략"
-          fi
+        run: bash _meta/git_commit_push.sh "부동산 뉴스 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/news.json site/index.html

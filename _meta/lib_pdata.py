@@ -23,6 +23,26 @@ import xml.etree.ElementTree as ET
 
 SITE_ASSETS = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "site", "assets"))
 
+# ── 시간 예산 (워크플로 스텝 타임아웃보다 먼저 스스로 마무리·저장하기 위한 장치) ──
+# 스텝 타임아웃으로 강제 종료되면 그 실행의 진행분이 통째로 유실된다.
+# 워크플로가 TIME_BUDGET_MIN(분)을 주면, 수집기는 마감 전에 루프를 끊고 저장한다.
+_T0 = time.monotonic()
+
+
+def deadline_from_env(var="TIME_BUDGET_MIN", default_min=None):
+    """모듈 로드 시각 기준 시간 예산(분) → monotonic 마감시각. 미설정이면 None(무제한)."""
+    v = os.environ.get(var, "").strip()
+    try:
+        minutes = float(v) if v else default_min
+    except ValueError:
+        minutes = default_min
+    return None if not minutes else _T0 + minutes * 60
+
+
+def out_of_time(deadline, margin_sec=0):
+    """마감까지 margin_sec 미만 남았는지. deadline이 None이면 항상 False."""
+    return deadline is not None and time.monotonic() >= deadline - margin_sec
+
 
 def key(names, required=False):
     """환경변수 값을 가져온다. names 는 문자열 또는 후보 이름 리스트(여러 이름 중 먼저 있는 값)."""
