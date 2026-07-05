@@ -77,6 +77,17 @@ def kapt_map(sigungu_code, api_key):
 _info_diag = []   # 기본정보 조회 실패 사유 샘플(첫 몇 건) — 0건일 때 원인 진단용
 
 
+def _to_int(v):
+    """K-apt 숫자 필드 방어적 파싱. V4(JSON)는 값이 int/float/'1,234' 등 제각각이라
+    str.isdigit()만 믿으면 전부 버려진다(2026-07-04: kaptdaCnt가 응답에 있는데도
+    세대수 0건이던 원인). float 경유로 콤마·소수점 표기까지 흡수한다."""
+    try:
+        n = int(float(str(v).replace(",", "").strip()))
+        return n if n > 0 else None
+    except (TypeError, ValueError):
+        return None
+
+
 def kapt_info(code, api_key):
     """kaptCode → (세대수, 준공연도). V4→V3 순으로 시도. 실패 시 (None, None).
 
@@ -97,16 +108,16 @@ def kapt_info(code, api_key):
                 _info_diag.append(f"{op}: 예외 {e}")
             continue
         it = items[0] if items else {}
-        cnt = str(it.get("kaptdaCnt") or "").strip()
+        households = _to_int(it.get("kaptdaCnt"))
         use = str(it.get("kaptUsedate") or "").strip()  # YYYYMMDD
-        households = int(cnt) if cnt.isdigit() else None
         year = int(use[:4]) if len(use) >= 4 and use[:4].isdigit() else None
         if households:
             _info_op = op   # 세대수를 실제로 얻은 op만 캐시(올바른 버전 고정)
             return households, year
-        # 응답은 왔으나 세대수가 비었다 → 진단 샘플 남기고 다른 버전 시도
+        # 응답은 왔으나 세대수가 비었다 → 원인 진단용으로 '실제 값'을 남기고 다른 버전 시도
         if len(_info_diag) < 4:
-            _info_diag.append(f"{op}: items={len(items)} keys={list(it.keys())[:8]}")
+            _info_diag.append(f"{op}: items={len(items)} kaptdaCnt={it.get('kaptdaCnt')!r} "
+                              f"keys={list(it.keys())[:10]}")
     return None, None
 
 
@@ -342,11 +353,12 @@ def main():
             break
         enrich_ok = not L.out_of_time(deadline, margin_sec=300)   # 보강 계속할 여유가 있나
         region_items = []
-        for ym in months:
-            try:
-                region_items += fetch_region(lawd, ym, service_key)
-            except Exception as e:  # noqa: BLE001
-                print(f"  ! {region} {ym} 수집 실패: {e}", file=sys.stderr)
+        for code in L.resolve_lawd_codes(region, lawd, service_key, months):
+            for ym in months:
+                try:
+                    region_items += fetch_region(code, ym, service_key)
+                except Exception as e:  # noqa: BLE001
+                    print(f"  ! {region} {ym} 수집 실패: {e}", file=sys.stderr)
         if not region_items:
             continue
         agg = aggregate(region, region_items)

@@ -12,7 +12,7 @@ import re
 
 ROOT = os.path.join(os.path.dirname(__file__), "..", "site")
 ROOT = os.path.abspath(ROOT)
-BASE = "https://jaehojung1879-netizen.github.io/TOPDA"
+BASE = "https://topda.kr"
 SITE_NAME_KO = "톺다"
 SITE_NAME_EN = "TOPDA"
 OG_IMAGE = BASE + "/assets/og-default.svg"

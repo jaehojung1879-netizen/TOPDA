@@ -7,20 +7,20 @@
 <meta name="description" content="주택 양도소득세 자동 계산기. 1세대1주택 비과세·고가주택 안분과세·장기보유특별공제·다주택 중과세율까지 현행 소득세법 기준으로 반영." />
 <!-- seo:meta -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-<link rel="canonical" href="https://jaehojung1879-netizen.github.io/TOPDA/calculators/transfer-tax.html" />
-<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://jaehojung1879-netizen.github.io/TOPDA/feed.xml" />
+<link rel="canonical" href="https://topda.kr/calculators/transfer-tax.html" />
+<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://topda.kr/feed.xml" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="톺다" />
 <meta property="og:title" content="양도소득세 계산기 — 톺다" />
 <meta property="og:description" content="주택 양도소득세 자동 계산기. 1세대1주택 비과세·고가주택 안분과세·장기보유특별공제·다주택 중과세율까지 현행 소득세법 기준으로 반영." />
-<meta property="og:url" content="https://jaehojung1879-netizen.github.io/TOPDA/calculators/transfer-tax.html" />
-<meta property="og:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
+<meta property="og:url" content="https://topda.kr/calculators/transfer-tax.html" />
+<meta property="og:image" content="https://topda.kr/assets/og-default.svg" />
 <meta property="og:locale" content="ko_KR" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="양도소득세 계산기 — 톺다" />
 <meta name="twitter:description" content="주택 양도소득세 자동 계산기. 1세대1주택 비과세·고가주택 안분과세·장기보유특별공제·다주택 중과세율까지 현행 소득세법 기준으로 반영." />
-<meta name="twitter:image" content="https://jaehojung1879-netizen.github.io/TOPDA/assets/og-default.svg" />
-<script defer src="https://jaehojung1879-netizen.github.io/TOPDA/assets/analytics.js?v=20260629"></script>
+<meta name="twitter:image" content="https://topda.kr/assets/og-default.svg" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css?v=20260629" />
 <script type="application/ld+json">
@@ -32,19 +32,19 @@
       "@type": "ListItem",
       "position": 1,
       "name": "홈",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/index.html"
+      "item": "https://topda.kr/index.html"
     },
     {
       "@type": "ListItem",
       "position": 2,
       "name": "계산기",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/index.html"
+      "item": "https://topda.kr/calculators/index.html"
     },
     {
       "@type": "ListItem",
       "position": 3,
       "name": "양도소득세 계산기",
-      "item": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/transfer-tax.html"
+      "item": "https://topda.kr/calculators/transfer-tax.html"
     }
   ]
 }
@@ -54,7 +54,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "양도소득세 계산기",
-  "url": "https://jaehojung1879-netizen.github.io/TOPDA/calculators/transfer-tax.html",
+  "url": "https://topda.kr/calculators/transfer-tax.html",
   "description": "주택 양도소득세 자동 계산기. 1세대1주택 비과세·고가주택 안분과세·장기보유특별공제·다주택 중과세율까지 현행 소득세법 기준으로 반영.",
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "Any",
@@ -67,7 +67,7 @@
     "priceCurrency": "KRW"
   },
   "publisher": {
-    "@id": "https://jaehojung1879-netizen.github.io/TOPDA/#organization"
+    "@id": "https://topda.kr/#organization"
   }
 }
 </script>
@@ -148,9 +148,9 @@
 
       <div class="field-row">
         <div class="field">
-          <label for="t-selldate">양도일(예정일)</label>
+          <label for="t-selldate">양도일(예정일)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="다주택 중과 한시 유예(2026.5.9까지) 자동 판단용. 2년 이상 보유 + 이 날짜 이전 양도면 자동 면제.">?</span></label>
           <input id="t-selldate" name="sellDate" type="date" value="" />
-          <span class="hint">다주택 중과 한시 유예(2026.5.9까지) 자동 판단용. 2년 이상 보유 + 이 날짜 이전 양도면 자동 면제.</span>
+          
         </div>
         <div class="field">
           <label for="t-owners">명의(공동명의)</label>
@@ -245,7 +245,9 @@
   </div>
 
   <section style="margin-top: 64px;">
-    <h2 style="margin-bottom: 16px;">2025년 양도소득세 누진세율 (장기 보유 · 일반)</h2>
+  <details class="explain">
+    <summary>2025년 양도소득세 누진세율 (장기 보유 · 일반)</summary>
+    <div class="explain-body">
     <div class="table-wrap">
       <table class="data">
         <thead>
@@ -264,10 +266,14 @@
       </table>
     </div>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">출처: 소득세법 제55조 (종합소득세율 = 양도세 기본세율) </p>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 16px;">단기 보유 중과세율 (주택·조합원입주권)</h2>
+  <details class="explain">
+    <summary>단기 보유 중과세율 (주택·조합원입주권)</summary>
+    <div class="explain-body">
     <div class="table-wrap">
       <table class="data">
         <thead>
@@ -281,10 +287,14 @@
       </table>
     </div>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">출처: 소득세법 제104조 (양도소득세율) · 단기보유 시 비교과세 적용</p>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 16px;">장기보유특별공제율</h2>
+  <details class="explain">
+    <summary>장기보유특별공제율</summary>
+    <div class="explain-body">
     <div class="hub-grid">
       <div class="hub-tool" style="cursor: default;">
         <div class="hub-tool-icon">
@@ -323,10 +333,14 @@
       </table>
     </div>
     <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">출처: 소득세법 제95조 (양도소득금액) · 시행령 제159조의3</p>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 16px;">1세대 1주택 비과세 — 12억 안분 공식</h2>
+  <details class="explain">
+    <summary>1세대 1주택 비과세 — 12억 안분 공식</summary>
+    <div class="explain-body">
     <div class="callout callout-info">
       <div class="icon">i</div>
       <div class="body">
@@ -342,10 +356,14 @@
       <li><strong>일시적 2주택</strong>: 신주택 취득 후 3년 이내 종전주택 양도 시 1주택 비과세 가능</li>
       <li><strong>제외 대상</strong>: 등기 안 한 주택, 매매를 가장한 증여, 미신고 다운계약 등</li>
     </ul>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 16px;">놓치면 손해 보는 양도세 실무 팁 7가지</h2>
+  <details class="explain">
+    <summary>놓치면 손해 보는 양도세 실무 팁 7가지</summary>
+    <div class="explain-body">
     <div class="def-list">
       <div class="row"><div class="k">자본적 지출은 영수증</div><div class="v">샷시·발코니확장·시스템에어컨·보일러 교체 등은 필요경비 인정. 세금계산서·계좌이체내역을 보관해야 공제됩니다.</div></div>
       <div class="row"><div class="k">잔금일 = 양도일</div><div class="v">등기 이전이 아니라 ‘잔금 청산일’이 양도일. 12월 양도와 1월 양도는 과세연도가 달라져 세부담이 갈립니다.</div></div>
@@ -355,17 +373,23 @@
       <div class="row"><div class="k">일시적 2주택 3년</div><div class="v">신규 취득일로부터 3년 안에 종전주택을 양도하면 1주택 비과세 유지. 이사로 한 번에 두 채가 된 경우 활용.</div></div>
       <div class="row"><div class="k">분양권·입주권 주의</div><div class="v">2021.1.1 이후 취득 분양권은 ‘주택 수’에 포함. 다주택 중과 판정에 들어가니 매도 순서 전략 필요.</div></div>
     </div>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 16px;">신고·납부</h2>
+  <details class="explain">
+    <summary>신고·납부</summary>
+    <div class="explain-body">
     <ul class="ref-list">
       <li><strong>예정신고</strong>: 양도일이 속하는 달의 말일부터 <strong>2개월 이내</strong> 신고·납부 (홈택스)</li>
       <li><strong>확정신고</strong>: 같은 해 2회 이상 양도하거나 누락된 경우 다음 해 5월 종합 확정신고</li>
       <li><strong>지방소득세</strong>: 양도소득세의 10%, 시·군·구청에 별도 신고</li>
       <li><strong>가산세</strong>: 무신고 20%(부정 40%), 납부지연 일 0.022%</li>
     </ul>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top: 48px;">
     <h2 style="margin-bottom: 16px;">함께 보면 좋은 글</h2>
@@ -389,7 +413,9 @@
   </section>
 
   <section style="margin-top: 48px;">
-    <h2 style="margin-bottom: 12px;">출처</h2>
+  <details class="explain">
+    <summary>출처</summary>
+    <div class="explain-body">
     <ul class="source-list">
       <li>소득세법 제55조 (종합소득세율) · 제94조~제104조 (양도소득세)</li>
       <li>소득세법 제95조 (장기보유특별공제) · 제103조 (양도소득기본공제)</li>
@@ -397,7 +423,9 @@
       <li>지방세법 제103조의2~7 (양도소득에 대한 개인지방소득세)</li>
       <li>국세청 홈택스 양도소득세 모의계산 · 국세법령정보시스템 (txsi.hometax.go.kr)</li>
     </ul>
-  </section>
+  </div>
+  </details>
+</section>
 
   <div class="callout callout-warn" style="margin-top: 32px;">
     <div class="icon">⚠</div>

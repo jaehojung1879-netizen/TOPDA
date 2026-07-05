@@ -2918,7 +2918,7 @@ function calcInteriorEstimate({ area, grade, items }) {
       + meterRows
       + '  </section>'
       + '</div>'
-      + '<div class="pr-foot">본 보고서는 일반 정보 제공용 추정치입니다. 실제 세액·대출 한도는 과세관청 판단·금융기관 심사·개인별 조건에 따라 달라질 수 있습니다. · 톺다 jaehojung1879-netizen.github.io/TOPDA</div>';
+      + '<div class="pr-foot">본 보고서는 일반 정보 제공용 추정치입니다. 실제 세액·대출 한도는 과세관청 판단·금융기관 심사·개인별 조건에 따라 달라질 수 있습니다. · 톺다 topda.kr</div>';
     return wrap;
   }
 

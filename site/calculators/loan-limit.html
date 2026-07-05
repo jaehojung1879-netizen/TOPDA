@@ -81,12 +81,11 @@
       </div>
 
       <div class="field">
-        <label>지역</label>
+        <label>지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="규제지역·수도권 구입자금은 가격대별 한도(15억↓ 6억 / 15~25억 4억 / 25억↑ 2억)가 추가 적용됩니다.">?</span></label>
         <div class="radio-group">
           <label><input type="radio" name="region" value="regulated" checked/><span>규제지역·수도권</span></label>
           <label><input type="radio" name="region" value="non"/><span>비규제지역</span></label>
         </div>
-        <span class="hint">규제지역·수도권 구입자금은 가격대별 한도(15억↓ 6억 / 15~25억 4억 / 25억↑ 2억)가 추가 적용됩니다.</span>
       </div>
 
       <div class="field">
@@ -181,11 +180,10 @@
         <label>보증기관 선택<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="전세자금대출은 어느 보증기관의 보증을 받느냐에 따라 보증비율·최대한도·소득요건·대상 보증금이 달라집니다. 먼저 기관을 고르면 해당 기관 기준으로 한도를 계산하고, ‘전체 비교’는 세 기관을 한눈에 비교합니다.">?</span></label>
         <div class="radio-group">
           <label><input type="radio" name="jAgency" value="all" checked/><span>전체 비교</span></label>
-          <label><input type="radio" name="jAgency" value="HF"/><span>HF(주택금융공사)</span></label>
-          <label><input type="radio" name="jAgency" value="HUG"/><span>HUG(주택도시보증)</span></label>
-          <label><input type="radio" name="jAgency" value="SGI"/><span>SGI서울보증</span></label>
+          <label><input type="radio" name="jAgency" value="HF"/><span>HF<small>주택금융공사</small></span></label>
+          <label><input type="radio" name="jAgency" value="HUG"/><span>HUG<small>주택도시보증공사</small></span></label>
+          <label><input type="radio" name="jAgency" value="SGI"/><span>SGI<small>서울보증</small></span></label>
         </div>
-        <span class="hint">보증기관별로 보증비율·최대한도·소득요건이 다릅니다. 먼저 기관을 선택하거나 전체를 비교하세요.</span>
       </div>
       <div class="field">
         <label for="j-deposit">임차보증금 (전세금)</label>
@@ -209,11 +207,11 @@
         <span class="hint">HF·HUG는 부부합산 연소득 <strong>1억 이하</strong>(청년·신혼 1.3억). SGI는 소득 제한이 없습니다.</span>
       </div>
       <div class="field">
-        <label for="j-credit">타행 신용대출 잔액 (있을 경우)</label>
+        <label for="j-credit">타행 신용대출 잔액 (있을 경우)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="HF 보증 한도 산식: (연소득 × 4.5) − (신용대출 × 0.25)로 차감됩니다. HUG·SGI는 영향 없음.">?</span></label>
         <div class="input-suffix" data-suffix="원">
           <input id="j-credit" name="jCredit" type="text" inputmode="numeric" data-format="won" value="0" />
         </div>
-        <span class="hint">HF 보증 한도 산식: <strong>(연소득 × 4.5) − (신용대출 × 0.25)</strong>로 차감됩니다. HUG·SGI는 영향 없음.</span>
+        
       </div>
       <div class="field">
         <label class="check-item" style="padding:0; cursor:pointer;">
@@ -242,7 +240,9 @@
   </div>
 
   <section style="margin-top:56px;">
-    <h2 style="margin-bottom:12px;">한도는 이렇게 계산됩니다</h2>
+  <details class="explain">
+    <summary>한도는 이렇게 계산됩니다</summary>
+    <div class="explain-body">
     <h3 style="margin:8px 0 8px; font-size:1rem;">주택담보대출 = ①·②·③ 중 최소값</h3>
     <ul class="ref-list">
       <li><strong>① LTV 한도</strong> = 주택가격 × LTV%. 비규제 70%(생애최초 80%) / 규제지역 50%(생애최초 70%), 신규 규제지역은 40% 적용 사례.</li>
@@ -262,10 +262,14 @@
       </table>
     </div>
     <p style="color:var(--text-muted); font-size:0.85rem; margin-top:8px;"><strong>전세대출은 LTV 무관·DSR 원금 제외</strong>(이자만 산입). HF ‘상환능력별 한도’는 인정소득·부채·상환방식에 따라 달라지므로 계산기 값은 <strong>근사치</strong>입니다 — 정확한 금액은 <a href="https://www.hf.go.kr/ko/sub02/sub02_03_01.do" target="_blank" rel="noopener">HF 예상보증금액 조회</a>로 확인하세요. 표는 현행 규정 기준 참고치이며 상품·은행별로 다릅니다.</p>
-  </section>
+  </div>
+  </details>
+</section>
 
   <section style="margin-top:36px;">
-    <h2 style="margin-bottom:12px;">규정·출처</h2>
+  <details class="explain">
+    <summary>규정·출처</summary>
+    <div class="explain-body">
     <ul class="source-list">
       <li>금융위원회 「가계부채 관리 강화 방안」(2025.6.27) — 수도권·규제지역 주담대 6억 한도, 가격대별 차등, 생애최초 LTV 70%</li>
       <li>스트레스 DSR 3단계(2025.7.1 시행) — 수도권 1.5%p·비수도권 0.75%p, 수도권·규제지역 주담대 강화(3.0%p)</li>
@@ -276,7 +280,9 @@
       <div class="icon">⚠</div>
       <div class="body"><strong>면책</strong> 본 시뮬레이터는 일반 정보 제공용입니다. 대출 규정은 정부 대책에 따라 자주 바뀌며, 실제 한도·자격·금리는 개인 신용·소득·담보·은행 정책에 따라 달라집니다. 반드시 금융기관에 확인하세요.</div>
     </div>
-  </section>
+  </div>
+  </details>
+</section>
 </main>
 
 <footer class="site-footer">

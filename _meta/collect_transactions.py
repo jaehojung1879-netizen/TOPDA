@@ -57,13 +57,21 @@ def main():
     service_key = L.key(L.DATA_GO_KEYS, required=True)
     months = recent_months(MONTHS_BACK)
     all_deals = []
+    zero_regions = []   # 전 기간 0건 지역 — 행정구역 개편 등으로 LAWD 코드가 죽었는지 진단
     for region, lawd in L.LAWD.items():
-        for ym in months:
-            try:
-                all_deals += fetch(lawd, region, ym, service_key)
-            except Exception as e:  # noqa: BLE001
-                print(f"  ! {region} {ym} 실패: {e}", file=sys.stderr)
+        before = len(all_deals)
+        for code in L.resolve_lawd_codes(region, lawd, service_key, months):
+            for ym in months:
+                try:
+                    all_deals += fetch(code, region, ym, service_key)
+                except Exception as e:  # noqa: BLE001
+                    print(f"  ! {region} {ym} 실패: {e}", file=sys.stderr)
+        if len(all_deals) == before:
+            zero_regions.append(f"{region}({lawd})")
         print(f"[{region}] 누적 {len(all_deals)}건")
+    if zero_regions:
+        print(f"‼ 전 기간 0건 지역 {len(zero_regions)}개 — LAWD 코드 폐지·분할(행정구역 개편) 여부 점검: "
+              + ", ".join(zero_regions), file=sys.stderr)
     if not all_deals:
         print("수집 결과 없음 — 기존 transactions.json 유지")
         return
