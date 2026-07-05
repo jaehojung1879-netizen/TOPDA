@@ -19,6 +19,7 @@
   .jr-legend .row { display:flex; align-items:center; gap:6px; }
   .jr-legend .dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
   .jr-table-wrap { overflow-x:auto; margin-top:22px; }
+  @media (max-width:600px){ table.jr .hide-sm { display:none; } table.jr td, table.jr th { padding:8px 8px; font-size:0.85rem; } }
   table.jr { width:100%; border-collapse:collapse; font-size:0.9rem; }
   table.jr th, table.jr td { padding:10px 12px; text-align:right; border-bottom:1px solid var(--border,#eee); white-space:nowrap; }
   table.jr th { font-weight:700; color:var(--text-muted); text-align:right; background:var(--surface-2,#f8fafc); }
@@ -92,7 +93,7 @@
 
   <div class="jr-table-wrap">
     <table class="jr">
-      <thead><tr><th>지역</th><th>전세가율</th><th>매매 중위가</th><th>전세 중위가</th><th>월세 중위<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="최근 3개월 월세 계약의 중위 보증금/월세. 표본이 적은 지역은 표시하지 않습니다.">?</span></th><th>표본(매매/전세)</th></tr></thead>
+      <thead><tr><th>지역</th><th>전세가율</th><th>매매 중위가</th><th>전세 중위가</th><th class="hide-sm">월세 중위<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="최근 3개월 월세 계약의 중위 보증금/월세. 표본이 적은 지역은 표시하지 않습니다.">?</span></th><th class="hide-sm">표본(매매/전세)</th></tr></thead>
       <tbody data-jr-rows></tbody>
     </table>
   </div>
@@ -204,10 +205,10 @@
           '<span class="jr-bar" style="width:' + w + 'px;background:' + color(r.jeonse_ratio) + '"></span></td>' +
         '<td>' + won(r.sale_median) + '</td>' +
         '<td>' + won(r.jeonse_median) + '</td>' +
-        '<td>' + (r.wolse_rent_median != null
+        '<td class="hide-sm">' + (r.wolse_rent_median != null
           ? (r.wolse_deposit_median != null ? won(r.wolse_deposit_median) + ' / ' : '') + won(r.wolse_rent_median)
           : '—') + '</td>' +
-        '<td>' + r.sale_n + ' / ' + r.jeonse_n + '</td>' +
+        '<td class="hide-sm">' + r.sale_n + ' / ' + r.jeonse_n + '</td>' +
       '</tr>';
     }).join('');
   }

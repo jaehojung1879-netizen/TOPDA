@@ -159,6 +159,7 @@
   }
 
   function line(id, labels, datasets) {
+    if (!window.Chart) return;   // 차트 라이브러리 로드 실패 시에도 수치 카드는 유지
     if (charts[id]) charts[id].destroy();
     charts[id] = new Chart(document.getElementById(id).getContext('2d'), {
       type: 'line',
@@ -234,7 +235,13 @@
       fillGu();
       render();
     })
-    .catch(function () {
+    .catch(function (e) {
+      // 렌더 중 예외(차트 등)가 '데이터 로드 실패'로 위장되지 않게 구분 표시
+      if (DATA) {
+        try { renderStats(DATA.regions[0], DATA.regions[0].series); } catch (e2) {}
+        console.error('market-trends render error:', e);
+        return;
+      }
       statsEl.innerHTML = '<div class="mkt-stat">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</div>';
     });
 })();

@@ -3169,14 +3169,14 @@ function calcJeonseLoanByAgency(deposit, opts) {
       const pct = a.eligible ? (a.ratioApplied + '%') : '대상 외';
       const self = Math.max(0, deposit - a.limit);
       const incomeRow = a.incomeCap
-        ? '<div class="agency-meta">소득 한도 부부합산 ≤ ' + fmt.won(a.incomeCap) + (a.incomeOk ? ' <span style="color:#059669;">✓ 충족</span>' : ' <span style="color:#dc2626;">× 초과</span>') + '</div>'
+        ? '<div class="agency-meta">소득 한도 부부합산 ≤ ' + fmt.eokMan(a.incomeCap).replace('약 ', '') + (a.incomeOk ? ' <span style="color:#059669;">✓ 충족</span>' : ' <span style="color:#dc2626;">× 초과</span>') + '</div>'
         : '<div class="agency-meta">소득 제한 없음 <span style="color:#059669;">✓</span></div>';
       const bindingRow = a.eligible ? '<div class="agency-meta" style="color:var(--accent,#2563eb);">결정 산식: ' + a.bindingLabel + '</div>' : '';
-      const incomeBasedRow = (a.incomeBased != null) ? '<div class="agency-meta">상환능력별 한도(근사): ' + fmt.won(Math.round(a.incomeBased)) + ' <span style="color:var(--text-muted);">— 실제는 인정소득−부채상환예상액+우대</span></div>' : '';
+      const incomeBasedRow = (a.incomeBased != null) ? '<div class="agency-meta">상환능력별 한도(근사): ' + fmt.eokMan(Math.round(a.incomeBased)).replace('약 ', '') + ' <span style="color:var(--text-muted);">— 실제는 인정소득−부채상환예상액+우대</span></div>' : '';
       return '<div class="agency-card' + (isBest ? ' is-best' : '') + '">' +
         '<div class="agency-top"><span class="agency-name">' + a.name + (isBest ? ' <span class="agency-best">최대</span>' : '') + '</span>' +
         '<span class="agency-limit">' + fmt.won(a.limit) + '</span></div>' +
-        '<div class="agency-meta">보증비율 ' + pct + ' · 최대 ' + fmt.won(a.maxAmount) + ' · 대상 보증금 ' + (isFinite(a.depositCap) ? '≤' + fmt.won(a.depositCap) : '제한 적음') + '</div>' +
+        '<div class="agency-meta">보증비율 ' + pct + ' · 최대 ' + fmt.eokMan(a.maxAmount).replace('약 ', '') + ' · 대상 보증금 ' + (isFinite(a.depositCap) ? '≤' + fmt.eokMan(a.depositCap).replace('약 ', '') : '제한 적음') + '</div>' +
         incomeRow +
         bindingRow +
         incomeBasedRow +
@@ -3185,6 +3185,48 @@ function calcJeonseLoanByAgency(deposit, opts) {
         (a.source ? '<div class="agency-meta"><a href="' + a.source + '" target="_blank" rel="noopener" style="color:var(--accent,#2563eb);">공식 상품 안내·정확한 한도 확인 →</a></div>' : '') +
         '</div>';
     }).join('');
+
+    // HF 소득구간별 한도 미리보기 — 현재 보증금·신용대출 입력 기준, 내 소득 구간 강조.
+    const hfConf = (((window.TOPDA_RATES || {}).loan || {}).jeonseAgencies || []).find((a) => a.key === 'HF');
+    if (hfConf && (agencySel === 'all' || agencySel === 'HF')) {
+      const bands = [
+        { inc: 40000000, label: '4천만 이하' },
+        { inc: 60000000, label: '6천만 이하' },
+        { inc: 80000000, label: '8천만 이하' },
+        { inc: 100000000, label: '1억 이하' },
+        { inc: 130000000, label: '1.3억 이하*' },
+      ];
+      const ratio = youth && hfConf.ratioYouth ? hfConf.ratioYouth : hfConf.ratio;
+      const capIncome = youth && hfConf.incomeCapYouth ? hfConf.incomeCapYouth : hfConf.incomeCap;
+      const myBand = income > 0 ? bands.find((b) => income <= b.inc) : null;
+      // 모바일 표 폭을 위해 억 단위 축약 표기 (1.8억 / 4억)
+      const eok = (v) => {
+        const e = v / 100000000;
+        return (e >= 10 ? Math.round(e) : Math.round(e * 10) / 10) + '억';
+      };
+      const rows = bands.map((b) => {
+        const ib = Math.max(0, b.inc * hfConf.incomeMultiple - creditLoan * (hfConf.creditDeductRatio || 0));
+        const eligible = b.inc <= capIncome;
+        const lim = eligible ? Math.round(Math.min(deposit * ratio / 100, hfConf.maxAmount, ib)) : 0;
+        const mine = myBand && b.inc === myBand.inc;
+        return '<tr' + (mine ? ' class="is-active"' : '') + '>' +
+          '<td>' + b.label + (mine ? ' ★' : '') + '</td>' +
+          '<td>' + eok(ib) + '</td>' +
+          '<td>' + (eligible ? '<strong>' + eok(lim) + '</strong>'
+            : '<span style="color:#b45309;">청년·신혼만</span>') + '</td>' +
+          '</tr>';
+      }).join('');
+      box.innerHTML += '<div class="agency-card" style="background:var(--surface-2,#f8fafc);">' +
+        '<div class="agency-top"><span class="agency-name">HF 소득구간별 한도 미리보기</span></div>' +
+        '<div class="agency-meta">현재 입력한 보증금(' + fmt.won(deposit) + ')·신용대출 기준의 <strong>근사치</strong>입니다. ' +
+        '상환능력별 = 연소득×' + hfConf.incomeMultiple + (creditLoan ? ' − 신용대출×' + Math.round((hfConf.creditDeductRatio || 0) * 100) + '%' : '') +
+        ' · 최종 한도 = min(보증금×' + ratio + '%, ' + Math.round(hfConf.maxAmount / 100000000) + '억, 상환능력별)</div>' +
+        '<div class="table-wrap compact" style="margin-top:8px;"><table class="data" style="font-size:0.8rem;">' +
+        '<thead><tr><th>연소득(부부합산)</th><th>상환능력<span style="font-weight:500;">(근사)</span></th><th>최종 한도</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody></table></div>' +
+        '<div class="agency-note">* 1.3억 구간은 청년·신혼 전용. 정확한 금액은 <a href="https://www.hf.go.kr/ko/sub02/sub02_03_01.do" target="_blank" rel="noopener" style="color:var(--accent,#2563eb);">HF 예상보증금액 조회</a>로 확인하세요.</div>' +
+        '</div>';
+    }
   }
 
   function recalcAll() { switchTab(); recalcMortgage(); recalcJeonse(); }
@@ -3426,4 +3468,27 @@ function calcJeonseLoanByAgency(deposit, opts) {
       renderDaily(data.daily);
     })
     .catch(function () { /* 폴백: 정적 HTML 유지 */ });
+})();
+
+/* ===== 맨 위로 버튼 (전역) — 한 화면 이상 스크롤하면 우하단에 표시 ===== */
+(function () {
+  'use strict';
+  var btn = document.createElement('button');
+  btn.className = 'to-top';
+  btn.type = 'button';
+  btn.setAttribute('aria-label', '맨 위로');
+  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  document.body.appendChild(btn);
+  var ticking = false;
+  function update() {
+    ticking = false;
+    btn.classList.toggle('show', window.scrollY > window.innerHeight);
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+  update();
 })();

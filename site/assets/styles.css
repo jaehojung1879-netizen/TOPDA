@@ -58,6 +58,9 @@ body {
   word-break: keep-all;
   overflow-wrap: break-word;
 }
+/* 표 안에서는 keep-all을 풀어준다 — 긴 단지명·금액이 셀 폭을 밀어내
+   모바일에서 표가 화면을 넘는 것을 방지 (CJK 기본 줄바꿈 허용). */
+table th, table td { word-break: normal; }
 @media (min-width: 768px) { body { font-size: 17px; } }
 
 h1, h2, h3, h4, h5 { line-height: 1.35; letter-spacing: -0.02em; font-weight: 700; color: var(--text); }
@@ -2277,6 +2280,20 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 .badge-warn { background: var(--warning-soft); color: var(--warning); }
 
+/* ===== 맨 위로 버튼 (전역 — 한 화면 이상 스크롤 시 표시) ===== */
+.to-top {
+  position: fixed; right: 16px; bottom: 72px; z-index: 70;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--border-strong); background: var(--surface, #fff);
+  color: var(--text-muted); cursor: pointer;
+  box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.25);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity .2s, transform .2s, visibility .2s;
+}
+.to-top.show { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { border-color: var(--accent); color: var(--accent); }
+
 /* ===== Feedback FAB (작성 버튼) ===== */
 .fb-fab {
   position: fixed; right: 24px; bottom: 24px;
@@ -2354,6 +2371,8 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 /* 표·이미지 가로 스크롤 가드 */
 .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .table-wrap table { min-width: 480px; }
+/* 칼럼이 적은 컴팩트 표는 화면 폭에 맞춤(스크롤 불필요) */
+.table-wrap.compact table { min-width: 0; }
 
 /* ===== Accessibility: skip link ===== */
 .skip-link {

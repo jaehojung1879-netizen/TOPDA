@@ -28,7 +28,8 @@ concurrency:
 jobs:
   listings:
     runs-on: ubuntu-latest
-    timeout-minutes: 75    # 스텝 타임아웃 합계(20+17+10+20=67분) + 커밋·셋업 여유
+    timeout-minutes: 85    # 스텝 타임아웃 합계(20+17+22+20=79분) + 커밋·셋업 여유
+    # ※ 전월세 API 미승인 동안 전세가율 스텝은 선확인 후 수 초 만에 끝나므로 실제 소요는 훨씬 짧다.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -65,11 +66,12 @@ jobs:
 
       # 3) 단지 세대수 보강 (K-apt 전용, Kakao 미사용).
       # 수집기가 지역 단위로 중간 저장(checkpoint)하므로 예산이 모자라도 진행분은 남는다.
+      # 세대수 백필 가속: 신규 지역 확장으로 대상이 1,500개+ — 예산을 넉넉히 준다.
       - name: Enrich household counts (K-apt)
         working-directory: _meta
-        timeout-minutes: 10
+        timeout-minutes: 22
         env:
-          TIME_BUDGET_MIN: "8"
+          TIME_BUDGET_MIN: "20"
           DATA_GO_APT_BASIC_INFO: ${{ secrets.DATA_GO_APT_BASIC_INFO }}
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
