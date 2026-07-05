@@ -21,6 +21,7 @@ import sys
 import lib_pdata as L
 
 RONE = "https://www.reb.or.kr/r-one/openapi/SttsApiTblData.do"
+RONE_TBL_LIST = "https://www.reb.or.kr/r-one/openapi/SttsApiTbl.do"   # 통계표 목록(있으면 이름으로 자동 발견)
 MARKET_JSON = os.path.join(L.SITE_ASSETS, "market.json")
 MONTHS = 13
 
@@ -110,6 +111,81 @@ def fetch_metric(statbl_id, start, end, api_key):
     return out
 
 
+# ── STATBL_ID 자동 발견 ──
+# R-ONE 통계표는 개편 시 ID가 바뀌어 조용히 빈다(전세지수 A_2024_00050이 그 사례).
+# 이 환경에서는 R-ONE을 직접 못 부르니, CI 실행 시 수집기가 스스로 찾게 한다:
+#   1) 통계표 목록 API(SttsApiTbl.do)가 있으면 표 '이름'으로 검색해 채택 (정확)
+#   2) 목록이 없으면 sale_index 주변 후보 ID를 1개월치로 탐색해 '지수처럼 생긴' 표를 채택 (근사)
+# 채택된 ID는 로그와 market.json _meta에 남겨, 확인 후 METRICS에 고정할 수 있게 한다.
+
+def _row_get(r, key_sub):
+    for k, v in r.items():
+        if key_sub in str(k).upper():
+            return str(v or "").strip()
+    return ""
+
+
+def discover_statbl(api_key, keywords, exclude=()):
+    """통계표 목록에서 이름에 keywords가 모두 포함된 표들의 (ID, 이름) 목록. 목록 API 불가 시 None."""
+    try:
+        found = []
+        page = 1
+        while page <= 30:
+            j = L.get_json(RONE_TBL_LIST, {"KEY": api_key, "Type": "json", "pIndex": page, "pSize": 1000})
+            code, msg = rone_result(j)
+            if code and not code.upper().startswith("INFO-0"):
+                raise RuntimeError(f"[{code}] {msg}")
+            rows = []
+            for block in (j.get("SttsApiTbl") or j.get("SttsApiTblData") or []):
+                if isinstance(block, dict) and block.get("row"):
+                    rows = block["row"]
+            if not rows:
+                break
+            for r in rows:
+                name = _row_get(r, "STATBL_NM") or _row_get(r, "TBL_NM") or _row_get(r, "NM")
+                sid = _row_get(r, "STATBL_ID")
+                if sid and name and all(k in name for k in keywords) and not any(x in name for x in exclude):
+                    found.append((sid, name))
+            if len(rows) < 1000:
+                break
+            page += 1
+        return found
+    except Exception as e:  # noqa: BLE001 — 목록 API 없음/오류 → 후보 탐색 폴백
+        print(f"  · 통계표 목록 조회 불가({e}) — 후보 ID 탐색으로 폴백", file=sys.stderr)
+        return None
+
+
+def probe_index_candidates(api_key, end, sale_data, skip_ids):
+    """A_2024_00040~00070 대역에서 '전세가격지수로 보이는' 표를 탐색.
+    판정: 매매지수와 지역 30개 이상 겹치고, 값이 지수 범위(40~200)이며, 매매지수와 값이 다름."""
+    sale_regions = set(sale_data)
+    for i in range(40, 71):
+        sid = f"A_2024_{i:05d}"
+        if sid in skip_ids:
+            continue
+        try:
+            d = fetch_metric(sid, end, end, api_key)   # 최근 1개월만 — 후보당 1회 호출
+        except Exception:  # noqa: BLE001
+            continue
+        common = list(set(d) & sale_regions)
+        if len(common) < 30:
+            continue
+        vals = [v for r in common[:40] for v in d[r].values()]
+        if not vals or not all(40 <= v <= 200 for v in vals):
+            continue
+        # 매매지수 자기 자신(동일 값) 회피
+        same = 0
+        for r in common[:10]:
+            sv = list(sale_data[r].values())[-1] if sale_data.get(r) else None
+            dv = list(d[r].values())[-1] if d.get(r) else None
+            if sv is not None and dv is not None and abs(sv - dv) < 1e-9:
+                same += 1
+        if same >= 8:
+            continue
+        return sid
+    return None
+
+
 def split_region(name):
     """'서울 송파구' → (sido='서울', leaf='송파구'). 공백 없으면 시도/전국 등 상위로 취급."""
     parts = name.split()
@@ -131,6 +207,7 @@ def main():
     start = (dt.date.today().replace(day=1) - dt.timedelta(days=31 * MONTHS)).strftime("%Y%m")
 
     metric_data = {}
+    adopted = {}   # 자동 발견으로 채택한 STATBL_ID — 로그·_meta 기록용
     for metric, statbl in METRICS.items():
         if not statbl:
             print(f"[skip] {metric}: STATBL_ID 미설정")
@@ -140,6 +217,29 @@ def main():
             print(f"[{metric}] 지역 {len(metric_data[metric])}개 수집")
         except Exception as e:  # noqa: BLE001
             print(f"  ! {metric} 수집 실패: {e}", file=sys.stderr)
+
+    # 전세가격지수가 비면 자동 발견: (1) 통계표 목록 이름 검색 → (2) 후보 ID 탐색
+    if metric_data.get("sale_index") and not metric_data.get("jeonse_index"):
+        sid = None
+        tbls = discover_statbl(api_key, ("아파트", "전세가격지수"), exclude=("연립", "단독", "규모", "연령"))
+        if tbls:
+            sid = tbls[0][0]
+            print(f"[jeonse_index] 통계표 목록에서 발견: {sid} ({tbls[0][1]})")
+        if not sid:
+            sid = probe_index_candidates(api_key, end, metric_data["sale_index"],
+                                         skip_ids={METRICS["sale_index"], METRICS["jeonse_index"]})
+            if sid:
+                print(f"[jeonse_index] 후보 탐색으로 채택: {sid} — easyStat에서 표 이름 확인 후 METRICS에 고정 권장")
+        if sid:
+            try:
+                metric_data["jeonse_index"] = fetch_metric(sid, start, end, api_key)
+                adopted["jeonse_index"] = sid
+                print(f"[jeonse_index] 지역 {len(metric_data['jeonse_index'])}개 수집 (자동 발견 {sid})")
+            except Exception as e:  # noqa: BLE001
+                print(f"  ! 자동 발견 전세지수({sid}) 수집 실패: {e}", file=sys.stderr)
+        else:
+            print("  ! 전세가격지수 자동 발견 실패 — R-ONE easyStat에서 '아파트 전세가격지수' 표 ID를 "
+                  "확인해 METRICS['jeonse_index']를 갱신하세요.", file=sys.stderr)
 
     if not metric_data.get("sale_index"):
         # 과거: 여기서 조용히 return → 워크플로는 'success'인데 데이터는 시드에 멈춰 원인 불명이었음.
@@ -173,6 +273,22 @@ def main():
             print(f"[jeonse_ratio] 직접 통계표({RATIO_STATBL}) 지역 {len(ratio)}개")
         except Exception as e:  # noqa: BLE001
             print(f"  ! 직접 전세가율 통계표({RATIO_STATBL}) 수집 실패: {e} — AVG 역산으로 폴백", file=sys.stderr)
+
+    if not ratio:
+        # 직접 통계표 미설정이면 목록 API에서 '매매가격대비 전세가격비율(아파트)' 표를 자동 발견 시도
+        tbls = discover_statbl(api_key, ("아파트", "전세가격비율"), exclude=("연립", "단독"))
+        if tbls:
+            try:
+                direct = fetch_metric(tbls[0][0], start, end, api_key)
+                for region, months in direct.items():
+                    for mo, v in months.items():
+                        if v and 10 <= v <= 100:
+                            ratio.setdefault(region, {})[mo] = round(v, 1)
+                if ratio:
+                    adopted["jeonse_ratio"] = tbls[0][0]
+                    print(f"[jeonse_ratio] 통계표 목록에서 발견: {tbls[0][0]} ({tbls[0][1]}) — 지역 {len(ratio)}개")
+            except Exception as e:  # noqa: BLE001
+                print(f"  ! 자동 발견 전세가율({tbls[0][0]}) 수집 실패: {e}", file=sys.stderr)
 
     if not ratio:
         # 평균가격 → 전세가율(전세평균/매매평균) 계산. 추정 통계표가 틀리면 비정상값으로 자동 배제.
@@ -220,9 +336,12 @@ def main():
     if not out_regions:
         print("수집 결과 없음 — 기존 market.json 유지")
         return
+    meta = {"source": "한국부동산원 R-ONE 전국주택가격동향(월간, 아파트)",
+            "note": "매매가격지수 A_2024_00045 · 전세가격지수 A_2024_00050"}
+    if adopted:
+        meta["auto_discovered"] = adopted   # 자동 발견 ID — 확인 후 METRICS에 고정 권장
     data = {
-        "_meta": {"source": "한국부동산원 R-ONE 전국주택가격동향(월간, 아파트)",
-                  "note": "매매가격지수 A_2024_00045 · 전세가격지수 A_2024_00050"},
+        "_meta": meta,
         "as_of": dt.date.today().strftime("%Y-%m"), "regions": out_regions,
     }
     L.save_json_safe(MARKET_JSON, data, min_items_key="regions")
