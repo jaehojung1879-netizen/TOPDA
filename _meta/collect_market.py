@@ -144,7 +144,10 @@ def discover_statbl(api_key, keywords, exclude=()):
             for r in rows:
                 name = _row_get(r, "STATBL_NM") or _row_get(r, "TBL_NM") or _row_get(r, "NM")
                 sid = _row_get(r, "STATBL_ID")
-                if sid and name and all(k in name for k in keywords) and not any(x in name for x in exclude):
+                # 공백 제거 후 비교 — "전세가격 비율"/"매매가격대비 전세가격비율" 등 띄어쓰기 변형 흡수
+                flat = name.replace(" ", "")
+                if sid and name and all(k.replace(" ", "") in flat for k in keywords) \
+                        and not any(x in flat for x in exclude):
                     found.append((sid, name))
             if len(rows) < 1000:
                 break
@@ -275,8 +278,16 @@ def main():
             print(f"  ! 직접 전세가율 통계표({RATIO_STATBL}) 수집 실패: {e} — AVG 역산으로 폴백", file=sys.stderr)
 
     if not ratio:
-        # 직접 통계표 미설정이면 목록 API에서 '매매가격대비 전세가격비율(아파트)' 표를 자동 발견 시도
-        tbls = discover_statbl(api_key, ("아파트", "전세가격비율"), exclude=("연립", "단독"))
+        # 직접 통계표 미설정이면 목록 API에서 '매매가격대비 전세가격비율(아파트)' 표를 자동 발견 시도.
+        # 표 이름 표기가 제각각이라 키워드 조합을 여러 개 시도한다(공백은 비교 시 무시됨).
+        tbls = None
+        for kws in (("아파트", "전세가격비율"), ("아파트", "매매가격대비"), ("아파트", "전세비율"),
+                    ("전세가격비율",)):
+            tbls = discover_statbl(api_key, kws, exclude=("연립", "단독"))
+            if tbls:
+                break
+            if tbls is None:   # 목록 API 자체가 불가 — 더 시도해도 동일
+                break
         if tbls:
             try:
                 direct = fetch_metric(tbls[0][0], start, end, api_key)
@@ -289,6 +300,12 @@ def main():
                     print(f"[jeonse_ratio] 통계표 목록에서 발견: {tbls[0][0]} ({tbls[0][1]}) — 지역 {len(ratio)}개")
             except Exception as e:  # noqa: BLE001
                 print(f"  ! 자동 발견 전세가율({tbls[0][0]}) 수집 실패: {e}", file=sys.stderr)
+        elif tbls is not None:
+            # 이름 매칭 실패 — 다음 조치를 위해 '비율'이 들어간 표 이름들을 로그로 노출
+            hints = discover_statbl(api_key, ("비율",), exclude=())
+            if hints:
+                print("  · '비율' 포함 통계표 후보(이름 확인용): "
+                      + " | ".join(f"{s}:{n}" for s, n in hints[:15]), file=sys.stderr)
 
     if not ratio:
         # 평균가격 → 전세가율(전세평균/매매평균) 계산. 추정 통계표가 틀리면 비정상값으로 자동 배제.
