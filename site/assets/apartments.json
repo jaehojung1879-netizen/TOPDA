@@ -10039,7 +10039,7 @@
       "price_history": [
         117025,
         115638,
-        122850
+        124380
       ],
       "builder": "롯데건설",
       "lat": 37.58484,
@@ -15486,7 +15486,7 @@
         {
           "label": "60㎡(18평)",
           "area_m2": 60,
-          "recent_price": 78000
+          "recent_price": 81000
         },
         {
           "label": "75㎡(23평)",
@@ -15507,7 +15507,8 @@
       "price_history": [
         67148,
         66429,
-        67907
+        67907,
+        81000
       ],
       "builder": "대우건설",
       "lat": 37.268333,
@@ -15556,13 +15557,14 @@
         {
           "label": "85㎡(26평)",
           "area_m2": 85,
-          "recent_price": 87000
+          "recent_price": 88000
         }
       ],
       "price_history": [
         68420,
         69119,
-        67924
+        67924,
+        88000
       ],
       "builder": "GS건설",
       "lat": 37.272154,
@@ -15601,18 +15603,19 @@
         {
           "label": "75㎡(23평)",
           "area_m2": 75,
-          "recent_price": 78300
+          "recent_price": 85000
         },
         {
           "label": "85㎡(26평)",
           "area_m2": 85,
-          "recent_price": 85000
+          "recent_price": 91800
         }
       ],
       "price_history": [
         77969,
         80788,
-        77191
+        77191,
+        88400
       ],
       "builder": "GS건설",
       "lat": 37.274983,
@@ -15656,7 +15659,7 @@
         {
           "label": "85㎡(26평)",
           "area_m2": 85,
-          "recent_price": 60000
+          "recent_price": 64000
         },
         {
           "label": "102㎡(31평)",
@@ -15672,7 +15675,8 @@
       "price_history": [
         58017,
         59089,
-        63443
+        63443,
+        64000
       ],
       "builder": "기타",
       "lat": 37.2825,
@@ -15817,7 +15821,7 @@
       "price_history": [
         73857,
         72060,
-        76450
+        78720
       ],
       "builder": "기타",
       "lat": 37.284278,
@@ -17810,7 +17814,7 @@
       "price_history": [
         103818,
         92792,
-        92778
+        92500
       ],
       "builder": "기타",
       "lat": 37.642443,
@@ -17861,7 +17865,7 @@
         59344,
         62231,
         62017,
-        56000
+        55000
       ],
       "builder": "HDC현대산업",
       "lat": 37.67889,
@@ -17970,13 +17974,14 @@
         {
           "label": "85㎡(26평)",
           "area_m2": 85,
-          "recent_price": 54000
+          "recent_price": 43300
         }
       ],
       "price_history": [
         44425,
         46000,
-        48350
+        48350,
+        43300
       ],
       "builder": "기타",
       "lat": 37.677049,
@@ -46939,13 +46944,13 @@
         {
           "label": "50㎡(15평)",
           "area_m2": 50,
-          "recent_price": 54300
+          "recent_price": 58000
         }
       ],
       "price_history": [
         41967,
         44688,
-        45250
+        49500
       ],
       "builder": "기타",
       "households": null,
@@ -47057,7 +47062,7 @@
       "price_history": [
         34100,
         36525,
-        37250
+        35500
       ],
       "builder": "기타",
       "households": null,
@@ -48682,7 +48687,7 @@
       "price_history": [
         44700,
         44250,
-        42400,
+        42550,
         44500
       ],
       "builder": "기타",
@@ -49022,7 +49027,8 @@
       "price_history": [
         72250,
         75000,
-        64083
+        64083,
+        67000
       ],
       "builder": "기타",
       "households": 915,
@@ -58459,21 +58465,34 @@
         {
           "label": "60㎡(18평)",
           "area_m2": 60,
-          "recent_price": 127000
+          "recent_price": 70000
         },
         {
           "label": "85㎡(26평)",
           "area_m2": 85,
-          "recent_price": 130000
+          "recent_price": 153000
         }
       ],
       "price_history": [
         127100,
         125875,
-        127000
+        127000,
+        111500
       ],
       "builder": "현대건설",
-      "households": null
+      "households": null,
+      "lat": 37.601786,
+      "lng": 126.936662,
+      "subway": {
+        "station": "녹번역 3호선",
+        "line": "",
+        "distance_m": 131
+      },
+      "elementary": {
+        "name": "서울은평초등학교",
+        "distance_m": 200,
+        "in_zone": false
+      }
     },
     {
       "name": "인왕산현대",
@@ -64736,7 +64755,19 @@
         77700
       ],
       "builder": "기타",
-      "households": 969
+      "households": 969,
+      "lat": 37.592809,
+      "lng": 126.888795,
+      "subway": {
+        "station": "수색역 경의중앙선",
+        "line": "",
+        "distance_m": 1458
+      },
+      "elementary": {
+        "name": "향동숲내초등학교",
+        "distance_m": 338,
+        "in_zone": false
+      }
     },
     {
       "name": "지축역중흥S-클래스북한산파크뷰",
@@ -64763,7 +64794,19 @@
         82492
       ],
       "builder": "기타",
-      "households": 732
+      "households": 732,
+      "lat": 37.654087,
+      "lng": 126.919577,
+      "subway": {
+        "station": "지축역 3호선",
+        "line": "",
+        "distance_m": 830
+      },
+      "elementary": {
+        "name": "지축초등학교",
+        "distance_m": 350,
+        "in_zone": false
+      }
     },
     {
       "name": "지축역북한산유보라",
@@ -64790,7 +64833,19 @@
         89967
       ],
       "builder": "기타",
-      "households": 549
+      "households": 549,
+      "lat": 37.65177,
+      "lng": 126.91215,
+      "subway": {
+        "station": "지축역 3호선",
+        "line": "",
+        "distance_m": 429
+      },
+      "elementary": {
+        "name": "지축초등학교",
+        "distance_m": 353,
+        "in_zone": false
+      }
     },
     {
       "name": "지축나인포레",
@@ -64817,7 +64872,19 @@
         66677
       ],
       "builder": "기타",
-      "households": 750
+      "households": 750,
+      "lat": 37.652919,
+      "lng": 126.920888,
+      "subway": {
+        "station": "지축역 3호선",
+        "line": "",
+        "distance_m": 815
+      },
+      "elementary": {
+        "name": "지효초등학교",
+        "distance_m": 295,
+        "in_zone": false
+      }
     },
     {
       "name": "도래울센트럴더힐",
@@ -64854,7 +64921,14 @@
         67500
       ],
       "builder": "기타",
-      "households": 1386
+      "households": 1386,
+      "lat": 37.63237,
+      "lng": 126.871634,
+      "elementary": {
+        "name": "도래울초등학교",
+        "distance_m": 126,
+        "in_zone": false
+      }
     },
     {
       "name": "목련우성",
@@ -64886,7 +64960,19 @@
         75700
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.38927,
+      "lng": 126.95546,
+      "subway": {
+        "station": "범계역 4호선",
+        "line": "",
+        "distance_m": 417
+      },
+      "elementary": {
+        "name": "범계초등학교",
+        "distance_m": 246,
+        "in_zone": false
+      }
     },
     {
       "name": "인덕원마을(삼성)",
@@ -64913,7 +64999,19 @@
         128333
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.398457,
+      "lng": 126.979287,
+      "subway": {
+        "station": "인덕원역 4호선",
+        "line": "",
+        "distance_m": 408
+      },
+      "elementary": {
+        "name": "인덕원초등학교",
+        "distance_m": 132,
+        "in_zone": false
+      }
     },
     {
       "name": "목련마을2단지대우선경",
@@ -64940,7 +65038,19 @@
         69650
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.388617,
+      "lng": 126.953574,
+      "subway": {
+        "station": "범계역 4호선",
+        "line": "",
+        "distance_m": 279
+      },
+      "elementary": {
+        "name": "범계초등학교",
+        "distance_m": 122,
+        "in_zone": false
+      }
     },
     {
       "name": "래미안안양메가트리아",
@@ -64988,7 +65098,19 @@
         55500
       ],
       "builder": "삼성물산",
-      "households": 4250
+      "households": 4250,
+      "lat": 37.39443,
+      "lng": 126.932352,
+      "subway": {
+        "station": "명학역 1호선",
+        "line": "",
+        "distance_m": 1143
+      },
+      "elementary": {
+        "name": "덕천초등학교",
+        "distance_m": 437,
+        "in_zone": false
+      }
     },
     {
       "name": "아르테자이",
@@ -65041,7 +65163,19 @@
         42000
       ],
       "builder": "GS건설",
-      "households": 1021
+      "households": 1021,
+      "lat": 37.415806,
+      "lng": 126.918761,
+      "subway": {
+        "station": "관악역 1호선",
+        "line": "",
+        "distance_m": 999
+      },
+      "elementary": {
+        "name": "안양호암초등학교",
+        "distance_m": 598,
+        "in_zone": false
+      }
     },
     {
       "name": "안양씨엘포레자이",
@@ -65088,7 +65222,19 @@
         64391
       ],
       "builder": "GS건설",
-      "households": null
+      "households": null,
+      "lat": 37.38815,
+      "lng": 126.92173,
+      "subway": {
+        "station": "명학역 1호선",
+        "line": "",
+        "distance_m": 1294
+      },
+      "elementary": {
+        "name": "신안초등학교",
+        "distance_m": 630,
+        "in_zone": false
+      }
     },
     {
       "name": "석수e-편한세상",
@@ -65120,7 +65266,19 @@
         68000
       ],
       "builder": "기타",
-      "households": 1908
+      "households": 1908,
+      "lat": 37.414925,
+      "lng": 126.914104,
+      "subway": {
+        "station": "관악역 1호선",
+        "line": "",
+        "distance_m": 715
+      },
+      "elementary": {
+        "name": "삼성초등학교",
+        "distance_m": 555,
+        "in_zone": false
+      }
     },
     {
       "name": "석수엘지빌리지",
@@ -65147,7 +65305,19 @@
         75300
       ],
       "builder": "기타",
-      "households": 1872
+      "households": 1872,
+      "lat": 37.427693,
+      "lng": 126.901218,
+      "subway": {
+        "station": "석수역 1호선",
+        "line": "",
+        "distance_m": 827
+      },
+      "elementary": {
+        "name": "연현초등학교",
+        "distance_m": 293,
+        "in_zone": false
+      }
     },
     {
       "name": "삼성래미안",
@@ -65174,7 +65344,19 @@
         87500
       ],
       "builder": "삼성물산",
-      "households": null
+      "households": null,
+      "lat": 37.402323,
+      "lng": 126.924082,
+      "subway": {
+        "station": "안양역 1호선",
+        "line": "",
+        "distance_m": 138
+      },
+      "elementary": {
+        "name": "안일초등학교",
+        "distance_m": 237,
+        "in_zone": false
+      }
     },
     {
       "name": "주공뜨란채(아)",
@@ -65211,7 +65393,19 @@
         77727
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.400362,
+      "lng": 126.925882,
+      "subway": {
+        "station": "안양역 1호선",
+        "line": "",
+        "distance_m": 315
+      },
+      "elementary": {
+        "name": "안일초등학교",
+        "distance_m": 507,
+        "in_zone": false
+      }
     },
     {
       "name": "두산위브더아티움",
@@ -65248,7 +65442,19 @@
         71340
       ],
       "builder": "두산건설",
-      "households": 558
+      "households": 558,
+      "lat": 37.412332,
+      "lng": 126.91544,
+      "subway": {
+        "station": "관악역 1호선",
+        "line": "",
+        "distance_m": 1011
+      },
+      "elementary": {
+        "name": "만안초등학교",
+        "distance_m": 626,
+        "in_zone": false
+      }
     },
     {
       "name": "한라비발디",
@@ -65285,7 +65491,14 @@
         55217
       ],
       "builder": "기타",
-      "households": 1385
+      "households": 1385,
+      "lat": 37.403182,
+      "lng": 126.901874,
+      "elementary": {
+        "name": "삼봉초등학교",
+        "distance_m": 248,
+        "in_zone": false
+      }
     },
     {
       "name": "현대아이파크",
@@ -65322,7 +65535,14 @@
         66600
       ],
       "builder": "HDC현대산업",
-      "households": null
+      "households": null,
+      "lat": 37.406288,
+      "lng": 126.901471,
+      "elementary": {
+        "name": "석수초등학교",
+        "distance_m": 68,
+        "in_zone": false
+      }
     },
     {
       "name": "금호타운",
@@ -65360,7 +65580,14 @@
         28300
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.399046,
+      "lng": 126.901512,
+      "elementary": {
+        "name": "박달초등학교",
+        "distance_m": 228,
+        "in_zone": false
+      }
     },
     {
       "name": "현대아파트",
@@ -65392,7 +65619,19 @@
         68000
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.416595,
+      "lng": 126.908708,
+      "subway": {
+        "station": "관악역 1호선",
+        "line": "",
+        "distance_m": 330
+      },
+      "elementary": {
+        "name": "삼성초등학교",
+        "distance_m": 441,
+        "in_zone": false
+      }
     },
     {
       "name": "코오롱하늘채",
@@ -65429,7 +65668,19 @@
         64500
       ],
       "builder": "기타",
-      "households": 553
+      "households": 553,
+      "lat": 37.408439,
+      "lng": 126.898022,
+      "subway": {
+        "station": "광명역 1호선",
+        "line": "",
+        "distance_m": 1478
+      },
+      "elementary": {
+        "name": "석수초등학교",
+        "distance_m": 352,
+        "in_zone": false
+      }
     },
     {
       "name": "석수경남아너스빌",
@@ -65461,7 +65712,19 @@
         67467
       ],
       "builder": "기타",
-      "households": 704
+      "households": 704,
+      "lat": 37.417345,
+      "lng": 126.911618,
+      "subway": {
+        "station": "관악역 1호선",
+        "line": "",
+        "distance_m": 369
+      },
+      "elementary": {
+        "name": "삼성초등학교",
+        "distance_m": 254,
+        "in_zone": false
+      }
     },
     {
       "name": "성원1",
@@ -65493,7 +65756,19 @@
         47800
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.394619,
+      "lng": 126.914291,
+      "subway": {
+        "station": "안양역 1호선",
+        "line": "",
+        "distance_m": 1083
+      },
+      "elementary": {
+        "name": "안양서초등학교",
+        "distance_m": 385,
+        "in_zone": false
+      }
     },
     {
       "name": "율목주공",
@@ -65525,7 +65800,19 @@
         37357
       ],
       "builder": "기타",
-      "households": 339
+      "households": 339,
+      "lat": 37.393853,
+      "lng": 126.909648,
+      "subway": {
+        "station": "안양역 1호선",
+        "line": "",
+        "distance_m": 1448
+      },
+      "elementary": {
+        "name": "안양서초등학교",
+        "distance_m": 361,
+        "in_zone": false
+      }
     },
     {
       "name": "안양역한양수자인리버파크",
@@ -65562,7 +65849,19 @@
         86840
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.404935,
+      "lng": 126.921134,
+      "subway": {
+        "station": "안양역 1호선",
+        "line": "",
+        "distance_m": 387
+      },
+      "elementary": {
+        "name": "안일초등학교",
+        "distance_m": 154,
+        "in_zone": false
+      }
     },
     {
       "name": "벽산",
@@ -65599,7 +65898,19 @@
         45871
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.403376,
+      "lng": 126.906371,
+      "subway": {
+        "station": "안양역 1호선",
+        "line": "",
+        "distance_m": 1460
+      },
+      "elementary": {
+        "name": "박달초등학교",
+        "distance_m": 423,
+        "in_zone": false
+      }
     },
     {
       "name": "석수역푸르지오",
@@ -65626,7 +65937,19 @@
         84833
       ],
       "builder": "대우건설",
-      "households": 542
+      "households": 542,
+      "lat": 37.433123,
+      "lng": 126.904599,
+      "subway": {
+        "station": "석수역 1호선",
+        "line": "",
+        "distance_m": 297
+      },
+      "elementary": {
+        "name": "연현초등학교",
+        "distance_m": 890,
+        "in_zone": false
+      }
     },
     {
       "name": "주공그린빌",
@@ -65653,7 +65976,19 @@
         51283
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.420776,
+      "lng": 126.910315,
+      "subway": {
+        "station": "관악역 1호선",
+        "line": "",
+        "distance_m": 209
+      },
+      "elementary": {
+        "name": "삼성초등학교",
+        "distance_m": 192,
+        "in_zone": false
+      }
     },
     {
       "name": "팰리스카운티",
@@ -65690,7 +66025,19 @@
         77654
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.490646,
+      "lng": 126.765552,
+      "subway": {
+        "station": "중동역 1호선",
+        "line": "",
+        "distance_m": 448
+      },
+      "elementary": {
+        "name": "부천서초등학교",
+        "distance_m": 359,
+        "in_zone": false
+      }
     },
     {
       "name": "금강마을(주공)",
@@ -65733,7 +66080,19 @@
         34200
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.507646,
+      "lng": 126.76253,
+      "subway": {
+        "station": "부천시청역 7호선",
+        "line": "",
+        "distance_m": 356
+      },
+      "elementary": {
+        "name": "부광초등학교",
+        "distance_m": 76,
+        "in_zone": false
+      }
     },
     {
       "name": "한라마을(주공2)",
@@ -65760,7 +66119,19 @@
         25320
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.509716,
+      "lng": 126.762958,
+      "subway": {
+        "station": "부천시청역 7호선",
+        "line": "",
+        "distance_m": 569
+      },
+      "elementary": {
+        "name": "부천중원초등학교",
+        "distance_m": 273,
+        "in_zone": false
+      }
     },
     {
       "name": "부천아이파크",
@@ -65802,7 +66173,19 @@
         63350
       ],
       "builder": "HDC현대산업",
-      "households": null
+      "households": null,
+      "lat": 37.516445,
+      "lng": 126.766975,
+      "subway": {
+        "station": "부천시청역 7호선",
+        "line": "",
+        "distance_m": 1334
+      },
+      "elementary": {
+        "name": "부천초등학교",
+        "distance_m": 288,
+        "in_zone": false
+      }
     },
     {
       "name": "반달마을(극동신라)",
@@ -65839,7 +66222,19 @@
         35480
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.49016,
+      "lng": 126.750305,
+      "subway": {
+        "station": "송내역 1호선",
+        "line": "",
+        "distance_m": 376
+      },
+      "elementary": {
+        "name": "부인초등학교",
+        "distance_m": 144,
+        "in_zone": false
+      }
     },
     {
       "name": "역곡현대",
@@ -65879,7 +66274,19 @@
         21578
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.484738,
+      "lng": 126.801125,
+      "subway": {
+        "station": "소사역 1호선",
+        "line": "",
+        "distance_m": 529
+      },
+      "elementary": {
+        "name": "부천동초등학교",
+        "distance_m": 465,
+        "in_zone": false
+      }
     },
     {
       "name": "보람마을(아주)",
@@ -65911,7 +66318,19 @@
         60090
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.498828,
+      "lng": 126.758573,
+      "subway": {
+        "station": "부천시청역 7호선",
+        "line": "",
+        "distance_m": 806
+      },
+      "elementary": {
+        "name": "신도초등학교",
+        "distance_m": 108,
+        "in_zone": false
+      }
     },
     {
       "name": "한라마을(주공3)",
@@ -65943,7 +66362,19 @@
         44533
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.509853,
+      "lng": 126.760881,
+      "subway": {
+        "station": "부천시청역 7호선",
+        "line": "",
+        "distance_m": 639
+      },
+      "elementary": {
+        "name": "부광초등학교",
+        "distance_m": 332,
+        "in_zone": false
+      }
     },
     {
       "name": "힐스테이트중동",
@@ -65970,7 +66401,19 @@
         116860
       ],
       "builder": "현대건설",
-      "households": 999
+      "households": 999,
+      "lat": 37.503279,
+      "lng": 126.768142,
+      "subway": {
+        "station": "부천시청역 7호선",
+        "line": "",
+        "distance_m": 395
+      },
+      "elementary": {
+        "name": "부천부흥초등학교",
+        "distance_m": 505,
+        "in_zone": false
+      }
     },
     {
       "name": "설악마을(주공)",
@@ -65997,7 +66440,19 @@
         29995
       ],
       "builder": "기타",
-      "households": 1590
+      "households": 1590,
+      "lat": 37.50856,
+      "lng": 126.77152,
+      "subway": {
+        "station": "신중동역 7호선",
+        "line": "",
+        "distance_m": 783
+      },
+      "elementary": {
+        "name": "중흥초등학교",
+        "distance_m": 256,
+        "in_zone": false
+      }
     },
     {
       "name": "은하마을(주공1)",
@@ -66034,7 +66489,19 @@
         46510
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.507005,
+      "lng": 126.768107,
+      "subway": {
+        "station": "부천시청역 7호선",
+        "line": "",
+        "distance_m": 446
+      },
+      "elementary": {
+        "name": "부천부흥초등학교",
+        "distance_m": 176,
+        "in_zone": false
+      }
     },
     {
       "name": "한아름마을(삼환,동아,동성)",
@@ -66061,7 +66528,19 @@
         43643
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.495662,
+      "lng": 126.752498,
+      "subway": {
+        "station": "송내역 1호선",
+        "line": "",
+        "distance_m": 892
+      },
+      "elementary": {
+        "name": "상동초등학교",
+        "distance_m": 245,
+        "in_zone": false
+      }
     },
     {
       "name": "반달마을(선경)",
@@ -66099,7 +66578,19 @@
         22800
       ],
       "builder": "기타",
-      "households": 915
+      "households": 915,
+      "lat": 37.492891,
+      "lng": 126.749667,
+      "subway": {
+        "station": "송내역 1호선",
+        "line": "",
+        "distance_m": 659
+      },
+      "elementary": {
+        "name": "부인초등학교",
+        "distance_m": 353,
+        "in_zone": false
+      }
     },
     {
       "name": "포도마을(삼보)",
@@ -66131,7 +66622,19 @@
         72640
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.501093,
+      "lng": 126.759118,
+      "subway": {
+        "station": "부천시청역 7호선",
+        "line": "",
+        "distance_m": 586
+      },
+      "elementary": {
+        "name": "신도초등학교",
+        "distance_m": 360,
+        "in_zone": false
+      }
     },
     {
       "name": "미리내마을(롯데2)",
@@ -66163,7 +66666,19 @@
         60033
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.498474,
+      "lng": 126.773885,
+      "subway": {
+        "station": "신중동역 7호선",
+        "line": "",
+        "distance_m": 563
+      },
+      "elementary": {
+        "name": "계남초등학교",
+        "distance_m": 166,
+        "in_zone": false
+      }
     },
     {
       "name": "백송마을(풍림아이원)",
@@ -66185,7 +66700,19 @@
         57250
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.498668,
+      "lng": 126.748355,
+      "subway": {
+        "station": "상동역 7호선",
+        "line": "",
+        "distance_m": 898
+      },
+      "elementary": {
+        "name": "상동초등학교",
+        "distance_m": 255,
+        "in_zone": false
+      }
     },
     {
       "name": "미리내마을(동성)",
@@ -66217,7 +66744,19 @@
         63571
       ],
       "builder": "기타",
-      "households": 970
+      "households": 970,
+      "lat": 37.498942,
+      "lng": 126.769842,
+      "subway": {
+        "station": "신중동역 7호선",
+        "line": "",
+        "distance_m": 766
+      },
+      "elementary": {
+        "name": "계남초등학교",
+        "distance_m": 199,
+        "in_zone": false
+      }
     },
     {
       "name": "한아름마을(현대,라이프)",
@@ -66259,7 +66798,19 @@
         48214
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.495192,
+      "lng": 126.749706,
+      "subway": {
+        "station": "송내역 1호선",
+        "line": "",
+        "distance_m": 892
+      },
+      "elementary": {
+        "name": "상동초등학교",
+        "distance_m": 191,
+        "in_zone": false
+      }
     },
     {
       "name": "사랑마을(벽산,선경,삼익)",
@@ -66296,7 +66847,19 @@
         67200
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.495917,
+      "lng": 126.757874,
+      "subway": {
+        "station": "송내역 1호선",
+        "line": "",
+        "distance_m": 1008
+      },
+      "elementary": {
+        "name": "상도초등학교",
+        "distance_m": 196,
+        "in_zone": false
+      }
     },
     {
       "name": "반달마을(동아)",
@@ -66328,7 +66891,19 @@
         35888
       ],
       "builder": "기타",
-      "households": 915
+      "households": 915,
+      "lat": 37.492891,
+      "lng": 126.749667,
+      "subway": {
+        "station": "송내역 1호선",
+        "line": "",
+        "distance_m": 659
+      },
+      "elementary": {
+        "name": "부인초등학교",
+        "distance_m": 353,
+        "in_zone": false
+      }
     },
     {
       "name": "일루미스테이트",
@@ -66366,7 +66941,19 @@
         68375
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.471894,
+      "lng": 126.812058,
+      "subway": {
+        "station": "소새울역 서해선",
+        "line": "",
+        "distance_m": 1359
+      },
+      "elementary": {
+        "name": "범박초등학교",
+        "distance_m": 233,
+        "in_zone": false
+      }
     },
     {
       "name": "부천소사역푸르지오",
@@ -66398,7 +66985,19 @@
         74667
       ],
       "builder": "대우건설",
-      "households": 797
+      "households": 797,
+      "lat": 37.479506,
+      "lng": 126.798218,
+      "subway": {
+        "station": "소사역 1호선",
+        "line": "",
+        "distance_m": 430
+      },
+      "elementary": {
+        "name": "부원초등학교",
+        "distance_m": 621,
+        "in_zone": false
+      }
     },
     {
       "name": "옥길호반베르디움",
@@ -66430,7 +67029,19 @@
         74856
       ],
       "builder": "기타",
-      "households": 1420
+      "households": 1420,
+      "lat": 37.462012,
+      "lng": 126.810461,
+      "subway": {
+        "station": "소새울역 서해선",
+        "line": "",
+        "distance_m": 1370
+      },
+      "elementary": {
+        "name": "옥길산들초등학교",
+        "distance_m": 544,
+        "in_zone": false
+      }
     },
     {
       "name": "주공",
@@ -66462,7 +67073,19 @@
         35700
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.469557,
+      "lng": 126.800986,
+      "subway": {
+        "station": "소새울역 서해선",
+        "line": "",
+        "distance_m": 347
+      },
+      "elementary": {
+        "name": "소일초등학교",
+        "distance_m": 144,
+        "in_zone": false
+      }
     },
     {
       "name": "부천범박힐스테이트1단지",
@@ -66504,7 +67127,19 @@
         32233
       ],
       "builder": "현대건설",
-      "households": 1070
+      "households": 1070,
+      "lat": 37.474615,
+      "lng": 126.809716,
+      "subway": {
+        "station": "역곡역 1호선",
+        "line": "",
+        "distance_m": 1205
+      },
+      "elementary": {
+        "name": "부천일신초등학교",
+        "distance_m": 263,
+        "in_zone": false
+      }
     },
     {
       "name": "옥길브리즈힐",
@@ -66541,7 +67176,14 @@
         65482
       ],
       "builder": "기타",
-      "households": 1304
+      "households": 1304,
+      "lat": 37.46325,
+      "lng": 126.821071,
+      "elementary": {
+        "name": "옥길산들초등학교",
+        "distance_m": 404,
+        "in_zone": false
+      }
     },
     {
       "name": "옥길센트리뷰",
@@ -66573,7 +67215,14 @@
         60483
       ],
       "builder": "기타",
-      "households": 1318
+      "households": 1318,
+      "lat": 37.464399,
+      "lng": 126.818947,
+      "elementary": {
+        "name": "옥길산들초등학교",
+        "distance_m": 290,
+        "in_zone": false
+      }
     },
     {
       "name": "옥길데시앙",
@@ -66595,7 +67244,14 @@
         52158
       ],
       "builder": "기타",
-      "households": 924
+      "households": 924,
+      "lat": 37.464743,
+      "lng": 126.824204,
+      "elementary": {
+        "name": "옥길버들초등학교",
+        "distance_m": 157,
+        "in_zone": false
+      }
     },
     {
       "name": "소사에스케이뷰",
@@ -66617,7 +67273,19 @@
         55971
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.477243,
+      "lng": 126.800089,
+      "subway": {
+        "station": "소사역 1호선",
+        "line": "",
+        "distance_m": 731
+      },
+      "elementary": {
+        "name": "소사초등학교",
+        "distance_m": 480,
+        "in_zone": false
+      }
     },
     {
       "name": "래미안어반비스타",
@@ -66664,7 +67332,19 @@
         56442
       ],
       "builder": "삼성물산",
-      "households": 831
+      "households": 831,
+      "lat": 37.48224,
+      "lng": 126.76333,
+      "subway": {
+        "station": "중동역 1호선",
+        "line": "",
+        "distance_m": 504
+      },
+      "elementary": {
+        "name": "부천송일초등학교",
+        "distance_m": 117,
+        "in_zone": false
+      }
     },
     {
       "name": "부천한신더휴메트로",
@@ -66691,7 +67371,19 @@
         57000
       ],
       "builder": "기타",
-      "households": 299
+      "households": 299,
+      "lat": 37.48162,
+      "lng": 126.794939,
+      "subway": {
+        "station": "소사역 서해선",
+        "line": "",
+        "distance_m": 143
+      },
+      "elementary": {
+        "name": "부원초등학교",
+        "distance_m": 494,
+        "in_zone": false
+      }
     },
     {
       "name": "이편한세상온수역",
@@ -66718,7 +67410,19 @@
         85833
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.489493,
+      "lng": 126.821713,
+      "subway": {
+        "station": "온수역 7호선",
+        "line": "",
+        "distance_m": 333
+      },
+      "elementary": {
+        "name": "서울오정초등학교",
+        "distance_m": 398,
+        "in_zone": false
+      }
     },
     {
       "name": "중동역푸르지오2차",
@@ -66745,7 +67449,19 @@
         58167
       ],
       "builder": "대우건설",
-      "households": null
+      "households": null,
+      "lat": 37.485171,
+      "lng": 126.76737,
+      "subway": {
+        "station": "중동역 1호선",
+        "line": "",
+        "distance_m": 301
+      },
+      "elementary": {
+        "name": "부천서초등학교",
+        "distance_m": 285,
+        "in_zone": false
+      }
     },
     {
       "name": "부천범박힐스테이트4단지",
@@ -66773,7 +67489,19 @@
         37000
       ],
       "builder": "현대건설",
-      "households": 1387
+      "households": 1387,
+      "lat": 37.471784,
+      "lng": 126.807671,
+      "subway": {
+        "station": "소새울역 서해선",
+        "line": "",
+        "distance_m": 988
+      },
+      "elementary": {
+        "name": "부천일신초등학교",
+        "distance_m": 213,
+        "in_zone": false
+      }
     },
     {
       "name": "부천범박힐스테이트5단지",
@@ -66801,7 +67529,19 @@
         62000
       ],
       "builder": "현대건설",
-      "households": 836
+      "households": 836,
+      "lat": 37.469047,
+      "lng": 126.807884,
+      "subway": {
+        "station": "소새울역 서해선",
+        "line": "",
+        "distance_m": 939
+      },
+      "elementary": {
+        "name": "복사초등학교",
+        "distance_m": 192,
+        "in_zone": false
+      }
     },
     {
       "name": "범박파밀리에포레스트",
@@ -66829,7 +67569,14 @@
         57800
       ],
       "builder": "기타",
-      "households": 672
+      "households": 672,
+      "lat": 37.466855,
+      "lng": 126.815726,
+      "elementary": {
+        "name": "옥길산들초등학교",
+        "distance_m": 479,
+        "in_zone": false
+      }
     },
     {
       "name": "부천범박힐스테이트3단지",
@@ -66861,7 +67608,19 @@
         51825
       ],
       "builder": "현대건설",
-      "households": 1012
+      "households": 1012,
+      "lat": 37.472626,
+      "lng": 126.810668,
+      "subway": {
+        "station": "소새울역 서해선",
+        "line": "",
+        "distance_m": 1268
+      },
+      "elementary": {
+        "name": "범박초등학교",
+        "distance_m": 294,
+        "in_zone": false
+      }
     },
     {
       "name": "한신",
@@ -66893,7 +67652,19 @@
         31225
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.474165,
+      "lng": 126.800476,
+      "subway": {
+        "station": "소새울역 서해선",
+        "line": "",
+        "distance_m": 688
+      },
+      "elementary": {
+        "name": "소사초등학교",
+        "distance_m": 350,
+        "in_zone": false
+      }
     },
     {
       "name": "주공뜨란채",
@@ -66915,7 +67686,19 @@
         55833
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.471092,
+      "lng": 126.803162,
+      "subway": {
+        "station": "소새울역 서해선",
+        "line": "",
+        "distance_m": 593
+      },
+      "elementary": {
+        "name": "소안초등학교",
+        "distance_m": 174,
+        "in_zone": false
+      }
     },
     {
       "name": "엘에이치옥길센트럴힐",
@@ -66942,7 +67725,14 @@
         58540
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.462414,
+      "lng": 126.825415,
+      "elementary": {
+        "name": "옥길버들초등학교",
+        "distance_m": 203,
+        "in_zone": false
+      }
     },
     {
       "name": "오정휴먼시아1단지",
@@ -66964,7 +67754,14 @@
         56600
       ],
       "builder": "기타",
-      "households": 612
+      "households": 612,
+      "lat": 37.531194,
+      "lng": 126.783439,
+      "elementary": {
+        "name": "동산초등학교",
+        "distance_m": 142,
+        "in_zone": false
+      }
     },
     {
       "name": "오정휴먼시아3단지",
@@ -66992,7 +67789,14 @@
         50000
       ],
       "builder": "기타",
-      "households": 550
+      "households": 550,
+      "lat": 37.532954,
+      "lng": 126.787691,
+      "elementary": {
+        "name": "동산초등학교",
+        "distance_m": 291,
+        "in_zone": false
+      }
     },
     {
       "name": "여월휴먼시아3단지",
@@ -67014,7 +67818,19 @@
         76500
       ],
       "builder": "기타",
-      "households": 899
+      "households": 899,
+      "lat": 37.509408,
+      "lng": 126.805803,
+      "subway": {
+        "station": "까치울역 7호선",
+        "line": "",
+        "distance_m": 603
+      },
+      "elementary": {
+        "name": "성곡초등학교",
+        "distance_m": 387,
+        "in_zone": false
+      }
     },
     {
       "name": "삼두",
@@ -67046,7 +67862,19 @@
         15700
       ],
       "builder": "기타",
-      "households": 165
+      "households": 165,
+      "lat": 37.528699,
+      "lng": 126.788923,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 1493
+      },
+      "elementary": {
+        "name": "부천덕산초등학교",
+        "distance_m": 198,
+        "in_zone": false
+      }
     },
     {
       "name": "부천동도센트리움까치울숲",
@@ -67073,7 +67901,19 @@
         54967
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.519481,
+      "lng": 126.813936,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 958
+      },
+      "elementary": {
+        "name": "까치울초등학교",
+        "distance_m": 627,
+        "in_zone": false
+      }
     },
     {
       "name": "창보",
@@ -67099,7 +67939,14 @@
         37300
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.529828,
+      "lng": 126.784251,
+      "elementary": {
+        "name": "동산초등학교",
+        "distance_m": 187,
+        "in_zone": false
+      }
     },
     {
       "name": "효행복마을",
@@ -67120,7 +67967,14 @@
         6350
       ],
       "builder": "기타",
-      "households": 150
+      "households": 150,
+      "lat": 37.529979,
+      "lng": 126.780725,
+      "elementary": {
+        "name": "동산초등학교",
+        "distance_m": 411,
+        "in_zone": false
+      }
     },
     {
       "name": "여월휴먼시아(4단지)",
@@ -67141,7 +67995,19 @@
         80450
       ],
       "builder": "기타",
-      "households": 244
+      "households": 244,
+      "lat": 37.509813,
+      "lng": 126.800181,
+      "subway": {
+        "station": "부천종합운동장역 서해선",
+        "line": "",
+        "distance_m": 465
+      },
+      "elementary": {
+        "name": "성곡초등학교",
+        "distance_m": 583,
+        "in_zone": false
+      }
     },
     {
       "name": "원종승윤노블리안",
@@ -67172,7 +68038,19 @@
         45250
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.528576,
+      "lng": 126.804097,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 491
+      },
+      "elementary": {
+        "name": "부천원일초등학교",
+        "distance_m": 245,
+        "in_zone": false
+      }
     },
     {
       "name": "삼신12",
@@ -67198,7 +68076,19 @@
         18500
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.525268,
+      "lng": 126.800611,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 392
+      },
+      "elementary": {
+        "name": "부천대명초등학교",
+        "distance_m": 405,
+        "in_zone": false
+      }
     },
     {
       "name": "주왕노빌리움",
@@ -67224,7 +68114,19 @@
         36833
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.525933,
+      "lng": 126.80157,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 347
+      },
+      "elementary": {
+        "name": "부천대명초등학교",
+        "distance_m": 419,
+        "in_zone": false
+      }
     },
     {
       "name": "원종아이원시티",
@@ -67255,7 +68157,19 @@
         37000
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.52305,
+      "lng": 126.808438,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 342
+      },
+      "elementary": {
+        "name": "오정초등학교",
+        "distance_m": 464,
+        "in_zone": false
+      }
     },
     {
       "name": "오정휴먼시아2단지",
@@ -67276,7 +68190,14 @@
         63000
       ],
       "builder": "기타",
-      "households": 501
+      "households": 501,
+      "lat": 37.531063,
+      "lng": 126.786831,
+      "elementary": {
+        "name": "동산초등학교",
+        "distance_m": 163,
+        "in_zone": false
+      }
     },
     {
       "name": "길성그랑프리텔",
@@ -67301,7 +68222,19 @@
         38833
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.523083,
+      "lng": 126.806409,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 184
+      },
+      "elementary": {
+        "name": "오정초등학교",
+        "distance_m": 464,
+        "in_zone": false
+      }
     },
     {
       "name": "원종주공",
@@ -67333,7 +68266,19 @@
         27500
       ],
       "builder": "기타",
-      "households": 490
+      "households": 490,
+      "lat": 37.527882,
+      "lng": 126.80265,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 453
+      },
+      "elementary": {
+        "name": "부천원일초등학교",
+        "distance_m": 286,
+        "in_zone": false
+      }
     },
     {
       "name": "영화",
@@ -67364,7 +68309,19 @@
         17500
       ],
       "builder": "기타",
-      "households": 228
+      "households": 228,
+      "lat": 37.520321,
+      "lng": 126.799771,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 620
+      },
+      "elementary": {
+        "name": "부천여월초등학교",
+        "distance_m": 366,
+        "in_zone": false
+      }
     },
     {
       "name": "태진",
@@ -67391,7 +68348,19 @@
         19200
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.524722,
+      "lng": 126.80998,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 457
+      },
+      "elementary": {
+        "name": "오정초등학교",
+        "distance_m": 348,
+        "in_zone": false
+      }
     },
     {
       "name": "세종2",
@@ -67412,7 +68381,19 @@
         40500
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.529331,
+      "lng": 126.789235,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 1492
+      },
+      "elementary": {
+        "name": "부천덕산초등학교",
+        "distance_m": 136,
+        "in_zone": false
+      }
     },
     {
       "name": "원종동금호어울림",
@@ -67442,7 +68423,19 @@
         63167
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.528676,
+      "lng": 126.803016,
+      "subway": {
+        "station": "원종역 서해선",
+        "line": "",
+        "distance_m": 523
+      },
+      "elementary": {
+        "name": "부천원일초등학교",
+        "distance_m": 200,
+        "in_zone": false
+      }
     },
     {
       "name": "서울",
@@ -67463,7 +68456,14 @@
         13800
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.525068,
+      "lng": 126.823894,
+      "elementary": {
+        "name": "고리울초등학교",
+        "distance_m": 335,
+        "in_zone": false
+      }
     },
     {
       "name": "병점역아이파크캐슬",
@@ -67500,7 +68500,19 @@
         74004
       ],
       "builder": "롯데건설",
-      "households": null
+      "households": null,
+      "lat": 37.203574,
+      "lng": 127.027313,
+      "subway": {
+        "station": "병점역 1호선",
+        "line": "",
+        "distance_m": 630
+      },
+      "elementary": {
+        "name": "새봄초등학교",
+        "distance_m": 327,
+        "in_zone": false
+      }
     },
     {
       "name": "호반베르디움센트럴포레",
@@ -67527,7 +68539,14 @@
         69737
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.180786,
+      "lng": 127.117386,
+      "elementary": {
+        "name": "왕배초등학교",
+        "distance_m": 338,
+        "in_zone": false
+      }
     },
     {
       "name": "이편한세상동탄",
@@ -67590,7 +68609,14 @@
         69000
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.192043,
+      "lng": 127.127525,
+      "elementary": {
+        "name": "동탄목동초등학교",
+        "distance_m": 386,
+        "in_zone": false
+      }
     },
     {
       "name": "그린힐 반도유보라 아이비파크 10(1단지)",
@@ -67623,7 +68649,14 @@
         45000
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.166931,
+      "lng": 127.129623,
+      "elementary": {
+        "name": "세정초등학교",
+        "distance_m": 310,
+        "in_zone": false
+      }
     },
     {
       "name": "동탄2하우스디더레이크",
@@ -67655,7 +68688,14 @@
         92538
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.174413,
+      "lng": 127.104037,
+      "elementary": {
+        "name": "방교초등학교",
+        "distance_m": 252,
+        "in_zone": false
+      }
     },
     {
       "name": "레이크힐 반도유보라 아이비파크 10.2",
@@ -67687,7 +68727,14 @@
         56027
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.164945,
+      "lng": 127.129137,
+      "elementary": {
+        "name": "세정초등학교",
+        "distance_m": 335,
+        "in_zone": false
+      }
     },
     {
       "name": "에스케이뷰파크",
@@ -67729,7 +68776,14 @@
         68383
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.222727,
+      "lng": 127.056278,
+      "elementary": {
+        "name": "화성반월초등학교",
+        "distance_m": 272,
+        "in_zone": false
+      }
     },
     {
       "name": "동탄2디에트르포레",
@@ -67756,7 +68810,14 @@
         45383
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.175192,
+      "lng": 127.128583,
+      "elementary": {
+        "name": "화성신동초등학교",
+        "distance_m": 168,
+        "in_zone": false
+      }
     },
     {
       "name": "동탄시범다은마을 월드메르디앙 반도유보라",
@@ -67793,7 +68854,19 @@
         84621
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.202473,
+      "lng": 127.065764,
+      "subway": {
+        "station": "서동탄역 1호선",
+        "line": "",
+        "distance_m": 1443
+      },
+      "elementary": {
+        "name": "학동초등학교",
+        "distance_m": 323,
+        "in_zone": false
+      }
     },
     {
       "name": "봉담센트럴푸르지오",
@@ -67826,7 +68899,14 @@
         41920
       ],
       "builder": "대우건설",
-      "households": null
+      "households": null,
+      "lat": 37.213046,
+      "lng": 126.967495,
+      "elementary": {
+        "name": "효행초등학교",
+        "distance_m": 337,
+        "in_zone": false
+      }
     },
     {
       "name": "신동탄포레자이",
@@ -67859,7 +68939,19 @@
         95000
       ],
       "builder": "GS건설",
-      "households": null
+      "households": null,
+      "lat": 37.238708,
+      "lng": 127.065298,
+      "subway": {
+        "station": "망포역 수인분당선",
+        "line": "",
+        "distance_m": 1046
+      },
+      "elementary": {
+        "name": "율목초등학교",
+        "distance_m": 227,
+        "in_zone": false
+      }
     },
     {
       "name": "동탄호수자이파밀리에",
@@ -67901,7 +68993,14 @@
         60609
       ],
       "builder": "GS건설",
-      "households": null
+      "households": null,
+      "lat": 37.15997,
+      "lng": 127.106707,
+      "elementary": {
+        "name": "호연초등학교",
+        "distance_m": 378,
+        "in_zone": false
+      }
     },
     {
       "name": "자연앤데시앙",
@@ -67933,7 +69032,19 @@
         56887
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.207109,
+      "lng": 127.054236,
+      "subway": {
+        "station": "서동탄역 1호선",
+        "line": "",
+        "distance_m": 1279
+      },
+      "elementary": {
+        "name": "한마음초등학교",
+        "distance_m": 270,
+        "in_zone": false
+      }
     },
     {
       "name": "반정아이파크캐슬5단지",
@@ -67981,7 +69092,14 @@
         77000
       ],
       "builder": "롯데건설",
-      "households": null
+      "households": null,
+      "lat": 37.236686,
+      "lng": 127.042991,
+      "elementary": {
+        "name": "글빛초등학교",
+        "distance_m": 319,
+        "in_zone": false
+      }
     },
     {
       "name": "동탄역센트럴푸르지오",
@@ -68013,7 +69131,14 @@
         98300
       ],
       "builder": "대우건설",
-      "households": null
+      "households": null,
+      "lat": 37.197132,
+      "lng": 127.115879,
+      "elementary": {
+        "name": "청목초등학교",
+        "distance_m": 238,
+        "in_zone": false
+      }
     },
     {
       "name": "더레이크시티부영6단지",
@@ -68045,7 +69170,14 @@
         63726
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.167664,
+      "lng": 127.115688,
+      "elementary": {
+        "name": "정현초등학교",
+        "distance_m": 500,
+        "in_zone": false
+      }
     },
     {
       "name": "동탄역포레너스",
@@ -68072,7 +69204,14 @@
         74000
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.206315,
+      "lng": 127.116964,
+      "elementary": {
+        "name": "한백초등학교",
+        "distance_m": 300,
+        "in_zone": false
+      }
     },
     {
       "name": "동탄 더샵 레이크에듀타운",
@@ -68099,7 +69238,14 @@
         114900
       ],
       "builder": "포스코이앤씨",
-      "households": null
+      "households": null,
+      "lat": 37.174115,
+      "lng": 127.108643,
+      "elementary": {
+        "name": "청림초등학교",
+        "distance_m": 249,
+        "in_zone": false
+      }
     },
     {
       "name": "반정아이파크캐슬4단지",
@@ -68141,7 +69287,14 @@
         77500
       ],
       "builder": "롯데건설",
-      "households": null
+      "households": null,
+      "lat": 37.237558,
+      "lng": 127.04099,
+      "elementary": {
+        "name": "글빛초등학교",
+        "distance_m": 300,
+        "in_zone": false
+      }
     },
     {
       "name": "동탄역 시범한화 꿈에그린 프레스티지",
@@ -68188,7 +69341,19 @@
         193333
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 37.196918,
+      "lng": 127.102185,
+      "subway": {
+        "station": "동탄역 GTX-A",
+        "line": "",
+        "distance_m": 672
+      },
+      "elementary": {
+        "name": "화성청계초등학교",
+        "distance_m": 243,
+        "in_zone": false
+      }
     },
     {
       "name": "다산자이아이비플레이스",
@@ -69965,6 +71130,51 @@
       ],
       "builder": "기타",
       "households": null
+    },
+    {
+      "name": "인계한양수자인",
+      "region": "경기 수원시 팔달구 인계동",
+      "region_key": "경기 수원시 팔달구",
+      "sido": "경기",
+      "sigungu": "수원시 팔달구",
+      "built_year": 2019,
+      "units": [
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 43500
+        },
+        {
+          "label": "75㎡(23평)",
+          "area_m2": 75,
+          "recent_price": 51000
+        }
+      ],
+      "price_history": [
+        47633,
+        49000,
+        43750
+      ],
+      "builder": "기타",
+      "lat": 37.275984,
+      "lng": 127.025538,
+      "subway": {
+        "station": "매교역 수인분당선",
+        "line": "",
+        "distance_m": 1445
+      },
+      "elementary": {
+        "name": "지동초등학교",
+        "distance_m": 162,
+        "in_zone": false
+      },
+      "commute": {
+        "강남": 65,
+        "판교": 43,
+        "여의도": 74,
+        "광화문": 84
+      },
+      "households": 279
     }
   ]
 }
