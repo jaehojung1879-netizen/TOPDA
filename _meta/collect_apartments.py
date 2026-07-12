@@ -47,8 +47,24 @@ def _norm_name(s):
     return re.sub(r"[\s()\-·,_]", "", s)
 
 
+def _name_keys(s):
+    """매칭 키 후보(구체→느슨). 국토부 실거래(aptNm)와 K-apt(kaptName)의 표기 차이 흡수:
+    '개포주공6단지'↔'개포주공6', '한양1차'↔'한양1', '진주(1단지)' 등.
+    (2026-07-12: 정규화 원명 완전일치만 쓰던 시절 보강 대상 1,119개 중 29개만 매칭 —
+     남은 미보강 단지 대부분이 이 표기 차이였다)"""
+    base = _norm_name(s)
+    keys = [base]
+    for v in (re.sub(r"(\d+)(?:단지|차)$", r"\1", base),   # 끝의 '6단지'·'1차' → '6'·'1'
+              re.sub(r"(\d+)(?:단지|차)", r"\1", base),    # 중간 포함 '1차상가동' 등
+              base.replace("단지", "")):
+        if v and v != base and v not in keys:
+            keys.append(v)
+    return keys
+
+
 def kapt_map(sigungu_code, api_key):
-    """시군구 단지목록 → {정규화 단지명: kaptCode}. V4→V3 순으로 시도.
+    """시군구 단지목록 → {정규화 단지명 변형: kaptCode}. V4→V3 순으로 시도.
+    같은 키를 서로 다른 단지가 주장하면(예: '주공1'과 '주공1차'의 축약 충돌) 그 키는 버린다.
     모든 버전이 권한 오류(403)면 None(이후 호출 생략 신호), 그 외 실패는 빈 dict."""
     global _list_op
     ops = [_list_op] if _list_op else KAPT_LIST_OPS
@@ -62,8 +78,16 @@ def kapt_map(sigungu_code, api_key):
             for it in items:
                 code = str(it.get("kaptCode") or "").strip()
                 name = str(it.get("kaptName") or "").strip()
-                if code and name:
-                    out[_norm_name(name)] = code
+                if not (code and name):
+                    continue
+                for k in _name_keys(name):
+                    cur = out.get(k)
+                    if cur is None:
+                        out[k] = code
+                    elif cur != code:
+                        # 충돌 키('주공1차'·'주공1단지' → '주공1')는 삭제하지 않고 표식으로
+                        # 남긴다. 삭제하면 포함 매칭이 살아남은 쪽을 유일 후보로 오인한다.
+                        out[k] = ""
             return out
         except L.AuthError:
             auth_fail = True   # 이 버전 권한 없음 — 다음 버전 시도
@@ -72,6 +96,25 @@ def kapt_map(sigungu_code, api_key):
     if auth_fail:
         return None
     return {}
+
+
+def kapt_match(kmap, name):
+    """단지명 → kaptCode. ① 정규화 변형 완전일치 ② 유일한 포함 관계 순으로 시도.
+    포함 매칭(K-apt가 법정동 접두를 붙이는 '일원동우성7차' vs 실거래 '우성7' 류)은
+    오매칭 방지를 위해 한글 포함 3자 이상 + 시군구 내 후보 코드가 정확히 1개일 때만 채택한다."""
+    keys = _name_keys(name)
+    for k in keys:
+        code = kmap.get(k)
+        if code:
+            return code
+        if code == "":   # 이 이름은 시군구 내 복수 단지로 축약됨 — 어느 쪽인지 알 수 없다
+            return None
+    probe = keys[-1]
+    if len(probe) >= 3 and re.search(r"[가-힣]", probe):
+        hits = {c for k, c in kmap.items() if probe in k or (len(k) >= 3 and k in probe)}
+        if len(hits) == 1 and "" not in hits:
+            return next(iter(hits))
+    return None
 
 
 _info_diag = []   # 기본정보 조회 실패 사유 샘플(첫 몇 건) — 0건일 때 원인 진단용
@@ -108,7 +151,8 @@ def kapt_info(code, api_key):
                 _info_diag.append(f"{op}: 예외 {e}")
             continue
         it = items[0] if items else {}
-        households = _to_int(it.get("kaptdaCnt"))
+        # kaptdaCnt(세대수)가 0으로 오는 단지가 있다(2026-07-12 확인) — 호수(hoCnt)로 폴백.
+        households = _to_int(it.get("kaptdaCnt")) or _to_int(it.get("hoCnt"))
         use = str(it.get("kaptUsedate") or "").strip()  # YYYYMMDD
         year = int(use[:4]) if len(use) >= 4 and use[:4].isdigit() else None
         if households:
@@ -117,7 +161,7 @@ def kapt_info(code, api_key):
         # 응답은 왔으나 세대수가 비었다 → 원인 진단용으로 '실제 값'을 남기고 다른 버전 시도
         if len(_info_diag) < 4:
             _info_diag.append(f"{op}: items={len(items)} kaptdaCnt={it.get('kaptdaCnt')!r} "
-                              f"keys={list(it.keys())[:10]}")
+                              f"hoCnt={it.get('hoCnt')!r} keys={list(it.keys())[:12]}")
     return None, None
 
 
@@ -396,7 +440,7 @@ def main():
             # K-apt 세대수·준공 보강 — 기존 세대수가 없을 때만
             if not cur.get("households"):
                 kstat["needed"] += 1
-                code = kmap.get(_norm_name(a["name"]))
+                code = kapt_match(kmap, a["name"])
                 if code:
                     kstat["matched"] += 1
                     hh, yr = kapt_info(code, kapt_key)
