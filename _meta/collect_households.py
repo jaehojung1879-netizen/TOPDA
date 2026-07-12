@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""단지 세대수·준공연도 보강 (K-apt 전용, Kakao 미사용) → site/assets/apartments.json
+"""단지 세대수·준공연도 보강 (K-apt 전용, Kakao 미사용)
+  → site/assets/apartments.json  (맞춤찾기 큐레이션 단지)
+  → site/assets/households.json  (실거래 원장에만 있는 단지 — 종합검색·정적 페이지용)
 
 문제: collect_apartments.py는 신규 단지 Kakao 지오코딩(단지당 3회)이 느려 35분 타임아웃에
 먼저 걸리고, 그 뒤에 오던 K-apt 세대수 보강이 거의 실행되지 못했다(전 1193개 중 30개만 채워짐).
@@ -7,7 +9,12 @@
 해결: 세대수 보강만 떼어 별도 스텝으로 빠르게 끝까지 돌린다. 좌표·역·학교 없이
   지역목록(AptListService) 1회/지역 + 기본정보(AptBasisInfoService) 1회/단지
 만 호출하므로 가볍다. 권한(403)·이름매칭·세대수응답 단계별 카운터로 원인을 즉시 진단한다.
+
+2026-07 확장: 실거래(transactions.json)에만 있는 단지는 apartments.json 밖이라 세대수가
+영영 안 붙었다(왕십리자이 민원). 지역 목록(kmap)을 이미 손에 든 김에 그 지역의
+실거래-전용 단지도 함께 보강해 households.json에 축적한다. 우선순위는 큐레이션 단지 먼저.
 """
+import datetime as dt
 import os
 import sys
 
@@ -16,6 +23,25 @@ import lib_pdata as L
 import collect_apartments as CA
 
 APARTMENTS_JSON = CA.APARTMENTS_JSON
+TRANSACTIONS_JSON = os.path.join(L.SITE_ASSETS, "transactions.json")
+HOUSEHOLDS_JSON = os.path.join(L.SITE_ASSETS, "households.json")
+
+
+def deals_only_names(apts):
+    """실거래 원장에만 있는 단지명을 지역별로. {region_key: [name, ...]}"""
+    tx = L.load_json(TRANSACTIONS_JSON, default=None) or {}
+    in_apts = {(a.get("region_key"), a.get("name")) for a in apts}
+    out = {}
+    seen = set()
+    for d in tx.get("deals", []):
+        rk, name = d.get("region_key"), d.get("apt")
+        if not (rk and name) or rk not in L.LAWD:
+            continue
+        if (rk, name) in in_apts or (rk, name) in seen:
+            continue
+        seen.add((rk, name))
+        out.setdefault(rk, []).append(name)
+    return out
 
 
 def main():
@@ -38,17 +64,32 @@ def main():
         if rk in L.LAWD:
             by_region.setdefault(rk, []).append(a)
 
+    # 실거래 원장에만 있는 단지(왕십리자이 류) — 이미 확보한 것은 제외.
+    hh_data = L.load_json(HOUSEHOLDS_JSON, default=None) or {
+        "_meta": {"source": "K-apt 공동주택 기본정보(AptBasisInfoService)",
+                  "note": "실거래 원장에만 있는 단지의 세대수·준공연도. '지역|단지명' 키."},
+        "map": {},
+    }
+    hh_map = hh_data.setdefault("map", {})
+    extra_by_region = deals_only_names(apts)
+    extra_need = 0
+    for rk, names in extra_by_region.items():
+        names[:] = [n for n in names if f"{rk}|{n}" not in hh_map]
+        extra_need += len(names)
+
     need = sum(len(v) for v in by_region.values())
-    print(f"세대수 보강 대상 {need}개 단지 / {len(by_region)}개 지역")
-    stat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0}
+    regions = list(dict.fromkeys(list(by_region) + list(extra_by_region)))
+    print(f"세대수 보강 대상 — 큐레이션 {need}개 · 실거래전용 {extra_need}개 / {len(regions)}개 지역")
+    stat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0, "extra_filled": 0}
     unmatched = []   # 이름매칭 실패 샘플 — 매칭률이 낮을 때 표기 차이를 바로 볼 수 있게
 
     # 시간 예산: 스텝 타임아웃으로 강제 종료되면 진행분이 통째로 유실된다(2026-07-03:
     # 25분 내내 돌고 저장 0건). 마감 전에 멈추고, 지역 단위로 중간 저장(checkpoint)한다.
     deadline = L.deadline_from_env()
-    saved_filled = 0   # 마지막 저장 시점의 filled — 지역마다 새 확보분이 있을 때만 저장
+    saved_filled = 0        # apartments.json 마지막 저장 시점의 filled
+    saved_extra = 0         # households.json 마지막 저장 시점의 extra_filled
 
-    for region, items in by_region.items():
+    for region in regions:
         if L.out_of_time(deadline, margin_sec=30):
             print(f"시간 예산 소진 — 남은 지역은 다음 실행에서 이어서 보강 (누적 {stat['filled']}건)")
             break
@@ -65,7 +106,8 @@ def main():
         else:
             stat["list_empty"] += 1
             continue
-        for a in items:
+        # 1) 큐레이션 단지(맞춤찾기 노출) 먼저
+        for a in by_region.get(region, []):
             if L.out_of_time(deadline, margin_sec=30):
                 break
             code = CA.kapt_match(kmap, a["name"])
@@ -80,24 +122,46 @@ def main():
                 stat["filled"] += 1
             if yr and not a.get("built_year"):
                 a["built_year"] = yr
-        print(f"[{region}] 매칭 진행 — 누적 세대수확보 {stat['filled']}건")
+        # 2) 실거래 원장에만 있는 단지 — households.json에 축적
+        for name in extra_by_region.get(region, []):
+            if L.out_of_time(deadline, margin_sec=30):
+                break
+            code = CA.kapt_match(kmap, name)
+            if not code:
+                continue
+            stat["matched"] += 1
+            hh, yr = CA.kapt_info(code, kapt_key)
+            if hh:
+                entry = {"households": hh}
+                if yr:
+                    entry["built_year"] = yr
+                hh_map[f"{region}|{name}"] = entry
+                stat["extra_filled"] += 1
+        print(f"[{region}] 매칭 진행 — 누적 세대수확보 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}")
         # 지역 단위 체크포인트 — 이후 어떤 이유로 중단돼도 여기까지의 확보분은 남는다.
         if stat["filled"] > saved_filled:
             if L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments"):
                 saved_filled = stat["filled"]
+        if stat["extra_filled"] > saved_extra:
+            hh_data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
+            if L.save_json_safe(HOUSEHOLDS_JSON, hh_data):
+                saved_extra = stat["extra_filled"]
 
     print(f"[K-apt] 목록성공 {stat['list_ok']}/빈 {stat['list_empty']} · 단지코드 {stat['codes']}개 · "
-          f"이름매칭 {stat['matched']} → 세대수확보 {stat['filled']}건")
+          f"이름매칭 {stat['matched']} → 세대수확보 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}건")
     if unmatched:
         print(f"  · 미매칭 샘플({len(unmatched)}): {', '.join(unmatched)}", file=sys.stderr)
-    if need and not stat["filled"]:
+    if (need or extra_need) and not (stat["filled"] or stat["extra_filled"]):
         print("  ! 세대수 0건 — 위 단계 카운터로 원인 확인(권한/목록빈값/이름매칭/기본정보응답).", file=sys.stderr)
         for d in getattr(CA, "_info_diag", []):
             print(f"    · 기본정보 실패 샘플: {d}", file=sys.stderr)
 
     if stat["filled"] > saved_filled:
         L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments")
-    elif not stat["filled"]:
+    if stat["extra_filled"] > saved_extra:
+        hh_data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
+        L.save_json_safe(HOUSEHOLDS_JSON, hh_data)
+    if not (stat["filled"] or stat["extra_filled"]):
         print("변경 없음 — 저장 생략")
 
 

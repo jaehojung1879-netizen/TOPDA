@@ -79,7 +79,7 @@ jobs:
         continue-on-error: true
 
       - name: Commit household counts
-        run: bash _meta/git_commit_push.sh "단지 세대수 자동 보강 ($(date -u +%Y-%m-%d))" site/assets/apartments.json
+        run: bash _meta/git_commit_push.sh "단지 세대수 자동 보강 ($(date -u +%Y-%m-%d))" site/assets/apartments.json site/assets/households.json
 
       # 4) 단지 집계 (Kakao 지오코딩 — 느림) — 예산이 줄면 보강을 먼저 멈추고,
       # 수집분을 병합·저장한 뒤 종료한다(merge가 기존 값을 보존하므로 점진 보강).
@@ -97,3 +97,14 @@ jobs:
 
       - name: Commit apartments.json
         run: bash _meta/git_commit_push.sh "단지 정보 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/apartments.json
+
+      # 5) 지역별 정적 단지 페이지 (SEO — 네이버·구글에 단지명이 정적 HTML로 노출).
+      # 데이터 파일만 읽으므로 API 키 불필요, 수 초 내 종료.
+      - name: Build static region pages (SEO)
+        working-directory: _meta
+        timeout-minutes: 4
+        run: python build_apt_pages.py
+        continue-on-error: true
+
+      - name: Commit region pages
+        run: bash _meta/git_commit_push.sh "지역별 단지 페이지 자동 생성 ($(date -u +%Y-%m-%d))" site/apt site/sitemap.xml
