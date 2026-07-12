@@ -50,18 +50,111 @@ def _num(v):
         return None
 
 
+# 광역시 공통 구명 — R-ONE 시군구 목록은 시도 없이 평면이라 '남구'가 어느 광역시인지
+# 알 수 없다. 이런 이름은 구 단위 매칭을 건너뛰고 시도 단위 지수로 폴백한다.
+AMBIGUOUS_GU = {"중구", "동구", "서구", "남구", "북구", "강서구"}
+
+
+def _rone_ratio_lookup():
+    """market.json(R-ONE) → {지역명: 최신 전세가율}. 시도·시군구 평면 이름."""
+    market = L.load_json(os.path.join(L.SITE_ASSETS, "market.json"), default=None) or {}
+    out = {}
+    for r in market.get("regions", []):
+        series = r.get("series") or []
+        if not series:
+            continue
+        ratio = series[-1].get("jeonse_ratio")
+        if ratio and 20 <= ratio <= 100:
+            out[r.get("key") or ""] = round(float(ratio), 1)
+    return out
+
+
+def _region_ratio(region_key, rone):
+    """'경기 수원시 영통구' → 영통구 → 수원시 → 경기 순으로 R-ONE 전세가율 탐색."""
+    parts = region_key.split()
+    for p in reversed(parts[1:]):        # 구 → 시 (구체적인 것 먼저)
+        if p in rone and p not in AMBIGUOUS_GU:
+            return rone[p], p
+    sido = parts[0]
+    if sido in rone:
+        return rone[sido], sido
+    return None, None
+
+
+def estimate_from_rone(months):
+    """전월세 API 미승인 동안의 폴백: 실거래 매매 중위가(실측) × R-ONE 전세가율(실측 통계)
+    로 전세 중위가를 추정한다. 예시(seed)값 대신 근거 있는 추정치를 표시하기 위함.
+    transactions.json은 같은 워크플로 앞 스텝에서 방금 수집된 것을 재사용(API 호출 0회)."""
+    tx = L.load_json(os.path.join(L.SITE_ASSETS, "transactions.json"), default=None) or {}
+    deals = tx.get("deals", [])
+    rone = _rone_ratio_lookup()
+    if not deals or not rone:
+        return []
+    cutoff = min(months)  # YYYYMM — 최근 N개월만
+    by_region = {}
+    for d in deals:
+        rk, p, date = d.get("region_key"), d.get("price"), str(d.get("date") or "")
+        if rk and p and date[:7].replace("-", "") >= cutoff:
+            by_region.setdefault(rk, []).append(p)
+    prev = L.load_json(OUT_JSON, default=None) or {}
+    prev_coord = {(r.get("key") or r.get("name")): (r.get("lat"), r.get("lng"))
+                  for r in (prev.get("regions") or [])}
+    regions = []
+    for rk, sales in by_region.items():
+        if len(sales) < MIN_SAMPLES:
+            continue
+        ratio, matched = _region_ratio(rk, rone)
+        if not ratio:
+            continue
+        sale_med = statistics.median(sales)
+        lat, lng = prev_coord.get(rk) or (None, None)
+        if lat is None and os.environ.get("KAKAO_REST_API_KEY"):
+            coord = L.geocode_kakao(rk)
+            if coord:
+                lng, lat = round(coord[0], 6), round(coord[1], 6)
+        regions.append({
+            "key": rk, "sido": rk.split()[0], "name": rk, "lat": lat, "lng": lng,
+            "sale_median": int(sale_med),
+            "jeonse_median": int(sale_med * ratio / 100),   # 추정: 매매중위 × R-ONE 전세가율
+            "jeonse_ratio": ratio,
+            "ratio_region": matched,                        # 전세가율을 가져온 R-ONE 지역 단위
+            "sale_n": len(sales), "jeonse_n": None,
+        })
+        print(f"[{rk}] R-ONE 추정 전세가율 {ratio}% (매매중위 {int(sale_med)}만 · 비율출처 {matched})")
+    return regions
+
+
 def main():
     key = L.key(L.DATA_GO_KEYS, required=True)
     months = recent_months(MONTHS_BACK)
-    # 전월세 API 승인 선확인 — 미승인(403)이면 전 지역을 헛돌지 않고 즉시 종료.
-    # (2026-07-04 확인: RTMSDataSvcAptRent 403으로 매 실행 10분을 낭비하고 결과 0건이었음)
+    # 전월세 API 승인 선확인 — 미승인(403)이면 전 지역을 헛돌지 않고 R-ONE 추정 폴백으로 전환.
+    # (2026-07-04 확인: RTMSDataSvcAptRent 403으로 매 실행 10분을 낭비하고 결과 0건이었음.
+    #  2026-07-12까지 미승인 지속 → 시드 예시값 대신 실측 기반 추정치를 채운다)
     try:
         L.get_items(RENT, {"serviceKey": key, "LAWD_CD": "11680", "DEAL_YMD": months[0],
                            "numOfRows": 1, "pageNo": 1})
     except L.AuthError:
         print("‼ 전월세 실거래 API(RTMSDataSvcAptRent) 미승인(403) — data.go.kr에서 "
-              "'아파트 전월세 실거래가 자료' 활용신청·승인 후 자동으로 채워집니다. 기존 파일 유지.",
-              file=sys.stderr)
+              "'아파트 전월세 실거래가 자료' 활용신청·승인 후 실거래 기반으로 자동 전환됩니다. "
+              "그때까지 매매 실거래 중위가 × R-ONE 전세가율 추정치로 채웁니다.", file=sys.stderr)
+        regions = estimate_from_rone(months)
+        if not regions:
+            print("추정 폴백도 실패(실거래/R-ONE 데이터 없음) — 기존 파일 유지")
+            return
+        regions.sort(key=lambda r: r["jeonse_ratio"], reverse=True)
+        data = {
+            "_meta": {
+                "source": "국토교통부 아파트 매매 실거래가 + 한국부동산원 R-ONE 전세가율",
+                "method": "매매 중위가(최근 3개월 실거래) × R-ONE 지역 전세가율 → 전세 중위가 추정",
+                "currency_unit": "만원",
+                "note": "전월세 실거래 API 승인 전 추정치. 승인 후 실거래 중위가 기준으로 자동 전환.",
+            },
+            "as_of": dt.date.today().strftime("%Y-%m"),
+            "months": months,
+            "estimated": True,
+            "regions": regions,
+        }
+        L.save_json_safe(OUT_JSON, data, min_items_key="regions")
         return
     except Exception:  # noqa: BLE001 — 일시 오류는 본 수집에서 재시도
         pass

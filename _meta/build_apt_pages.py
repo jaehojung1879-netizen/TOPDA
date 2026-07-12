@@ -54,7 +54,42 @@ def load():
     tx = L.load_json(os.path.join(L.SITE_ASSETS, "transactions.json"), default={}) or {}
     apts = (L.load_json(os.path.join(L.SITE_ASSETS, "apartments.json"), default={}) or {}).get("apartments", [])
     hh = ((L.load_json(os.path.join(L.SITE_ASSETS, "households.json"), default={}) or {}).get("map", {}))
-    return tx.get("deals", []), apts, hh
+    market = (L.load_json(os.path.join(L.SITE_ASSETS, "market.json"), default={}) or {}).get("regions", [])
+    return tx.get("deals", []), apts, hh, market
+
+
+# 광역시 공통 구명 — R-ONE 지역 목록은 시도 없이 평면이라 어느 광역시인지 특정 불가.
+AMBIGUOUS_GU = {"중구", "동구", "서구", "남구", "북구", "강서구"}
+
+
+def market_summary(region_key, market):
+    """R-ONE(market.json)에서 지역 매칭 → {sale_yoy, jeonse_yoy, jeonse_ratio, month, matched}."""
+    by_name = {r.get("key"): r for r in market if r.get("series")}
+    parts = region_key.split()
+    hit = None
+    for p in reversed(parts[1:]):
+        if p in by_name and p not in AMBIGUOUS_GU:
+            hit = by_name[p]
+            break
+    if hit is None and parts[0] in by_name:
+        hit = by_name[parts[0]]
+    if hit is None:
+        return None
+    series = hit["series"]
+    last = series[-1]
+    base = series[-13] if len(series) >= 13 else series[0]
+
+    def yoy(f):
+        a, b = last.get(f), base.get(f)
+        if a and b:
+            return (a / b - 1) * 100
+        return None
+
+    return {
+        "sale_yoy": yoy("sale_index"), "jeonse_yoy": yoy("jeonse_index"),
+        "jeonse_ratio": last.get("jeonse_ratio"), "month": last.get("month"),
+        "matched": hit.get("key"), "n_months": min(len(series) - 1, 12),
+    }
 
 
 def build_region_rows(deals, apts, hh_map):
@@ -114,6 +149,10 @@ tr:last-child td{border-bottom:0}
 .muted{color:var(--sub)}
 a.deep{font-size:12px;color:var(--brand);text-decoration:none}
 .note{font-size:12.5px;color:var(--sub);margin:14px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:0 0 14px}
+.stat{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.stat .k{font-size:12px;color:var(--sub)}
+.stat .v{font-size:17px;font-weight:700;margin-top:2px}
 footer{margin:24px 0 16px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--sub)}
 ul.idx{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
 ul.idx a{display:block;padding:8px 10px;border:1px solid var(--line);border-radius:8px;color:var(--ink);text-decoration:none;font-size:14px}
@@ -157,7 +196,42 @@ def trend_html(r):
     return f'<span class="{cls}">{sign}{t:.1f}%</span> <span class="muted">({r["trend_months"]}개월)</span>'
 
 
-def region_page(rk, rows, as_of):
+def summary_html(rk, ms):
+    """R-ONE 지수 요약 카드 + 한 줄 해설(검색엔진에 잡히는 지역 시황 텍스트)."""
+    if not ms:
+        return ""
+
+    def pct(v):
+        if v is None:
+            return '<span class="muted">—</span>'
+        cls = "up" if v >= 0.05 else ("down" if v <= -0.05 else "flat")
+        return f'<span class="{cls}">{"+" if v > 0 else ""}{v:.1f}%</span>'
+
+    ratio = f'{ms["jeonse_ratio"]:.1f}%' if ms.get("jeonse_ratio") else "—"
+    scope = "" if ms["matched"] in rk else f' <span class="muted">({esc(ms["matched"])} 기준)</span>'
+    cards = (
+        '<div class="stats">'
+        f'<div class="stat"><div class="k">매매가격지수 {ms["n_months"]}개월</div><div class="v">{pct(ms["sale_yoy"])}</div></div>'
+        f'<div class="stat"><div class="k">전세가격지수 {ms["n_months"]}개월</div><div class="v">{pct(ms["jeonse_yoy"])}</div></div>'
+        f'<div class="stat"><div class="k">전세가율</div><div class="v">{ratio}{scope}</div></div>'
+        '</div>'
+    )
+    parts = []
+    if ms["sale_yoy"] is not None:
+        d = "상승" if ms["sale_yoy"] > 0.05 else ("하락" if ms["sale_yoy"] < -0.05 else "보합")
+        parts.append(f'매매가격지수는 최근 {ms["n_months"]}개월간 {ms["sale_yoy"]:+.1f}% {d}')
+    if ms["jeonse_yoy"] is not None:
+        parts.append(f'전세가격지수는 {ms["jeonse_yoy"]:+.1f}% 변동')
+    if ms.get("jeonse_ratio"):
+        parts.append(f'전세가율은 {ms["jeonse_ratio"]:.1f}%')
+    prose = ""
+    if parts:
+        prose = (f'<p class="lead">{esc(rk)} 아파트 ' + ", ".join(parts)
+                 + f'입니다 <span class="muted">(한국부동산원 R-ONE, {esc(ms["month"] or "")} 기준)</span>.</p>\n')
+    return cards + prose
+
+
+def region_page(rk, rows, as_of, ms=None):
     url = f"{BASE}/apt/{urllib.parse.quote(slug(rk))}.html"
     top = [r["name"] for r in rows[:5]]
     title = f"{rk} 아파트 실거래가·세대수·시세 추이 — 톺다"
@@ -203,6 +277,7 @@ def region_page(rk, rows, as_of):
         f'<h1>{esc(rk)} 아파트 실거래가·세대수</h1>\n'
         f'<p class="lead">최근 4개월 국토교통부 실거래 기준 {len(rows)}개 단지 · {esc(as_of)} 갱신. '
         '추이는 월별 ㎡당 평균가 기준으로, 어느 평형이 거래됐는지에 따른 왜곡을 제거한 값입니다.</p>\n'
+        + summary_html(rk, ms)
         + table +
         ('<p class="note">표 하단 거래 1건 단지는 표본이 적어 추이를 표시하지 않습니다.</p>\n' if thin_rows else '')
         + f'<script type="application/ld+json">{ld}</script>\n'
@@ -248,7 +323,7 @@ def update_sitemap(region_rows, today):
 
 
 def main():
-    deals, apts, hh_map = load()
+    deals, apts, hh_map, market = load()
     if not deals:
         print("transactions.json 비어 있음 — 페이지 생성 생략")
         return
@@ -261,7 +336,7 @@ def main():
     for rk, rows in region_rows.items():
         path = os.path.join(APT_DIR, f"{slug(rk)}.html")
         with open(path, "w", encoding="utf-8") as f:
-            f.write(region_page(rk, rows, as_of))
+            f.write(region_page(rk, rows, as_of, market_summary(rk, market)))
     with open(os.path.join(APT_DIR, "index.html"), "w", encoding="utf-8") as f:
         f.write(index_page(region_rows, as_of))
     update_sitemap(region_rows, dt.date.today().strftime("%Y-%m-%d"))
