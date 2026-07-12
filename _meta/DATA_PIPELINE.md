@@ -24,6 +24,8 @@
 | 파일 | 입력 | 출력 |
 |---|---|---|
 | `collect_apartments.py` | 국토부 실거래 + Kakao | `apartments.json`(단지·평형·실거래가·좌표·역/학교 거리) |
+| `collect_households.py` | K-apt | `apartments.json` 세대수·준공 + `households.json`(실거래 전용 단지 세대수) |
+| `build_apt_pages.py` | 위 JSON 3종(키 불필요) | `site/apt/*.html` 지역별 정적 단지 페이지(네이버·구글 SEO) + `site/sitemap.xml` |
 | `collect_market.py` | R-ONE | `market.json`(지역별 매매·전세 지수·전세가율) |
 | `collect_news.py` | 구글 뉴스 RSS(키 불필요) | `news.json`(홈 "이번 주 핵심 이슈" + "섹터별 부동산 뉴스") |
 | `lib_pdata.py` | 공용 유틸 | — |

@@ -277,11 +277,16 @@ def aggregate(region_name, items):
         for area, ds in sorted(by_area.items()):
             ds.sort(key=lambda d: d["ym"])
             units.append({"label": band_label(area), "area_m2": area, "recent_price": ds[-1]["price"]})
-        # 가격이력: 월별 평균(최근 4개월)
+        # 가격이력: 월별 ㎡당가 평균 × 대표면적(거래 중위 면적).
+        # 단순 월별 가격 평균은 평형 혼합에 왜곡된다 — 2026-07 왕십리자이 민원:
+        # 2~3월은 85㎡만, 4월은 52㎡만 거래돼 실제 상승(㎡당 +30%)이 -24% 폭락으로 표시됐다.
+        areas = sorted(d["area"] for d in deals)
+        rep_area = areas[len(areas) // 2]
         by_month = defaultdict(list)
         for d in deals:
-            by_month[d["ym"]].append(d["price"])
-        history = [round(sum(v) / len(v)) for _, v in sorted(by_month.items())][-4:]
+            if d["area"] > 0:
+                by_month[d["ym"]].append(d["price"] / d["area"])
+        history = [round(sum(v) / len(v) * rep_area) for _, v in sorted(by_month.items())][-4:]
         parts = region_name.split()
         sido = parts[0]
         sigungu = " ".join(parts[1:]) if len(parts) > 1 else region_name

@@ -410,15 +410,20 @@
           .map(function (u) { return { label: u.label, area_m2: u.area_m2, recent_price: u.recent_price }; });
         delete a._unitMap;
       }
-      // 가격 이력: 같은 단지의 평균 거래가를 월별로 (최대 12개월)
+      // 가격 이력: 월별 ㎡당가 평균 × 대표면적(거래 중위 면적) — 최대 12개월.
+      // 단순 가격 평균은 평형 혼합에 왜곡된다(왕십리자이: 85㎡→52㎡ 거래 전환이
+      // 실제 상승장을 -24% 폭락으로 보이게 해 상승가치 점수가 무너졌던 민원).
+      var allPrices = (DEALS_BY_APT[n] && DEALS_BY_APT[n].prices || []).filter(function (p) { return p.area_m2 > 0; });
+      var areas = allPrices.map(function (p) { return p.area_m2; }).sort(function (x, y) { return x - y; });
+      var repArea = areas.length ? areas[Math.floor(areas.length / 2)] : 0;
       var months = {};
-      (DEALS_BY_APT[n] && DEALS_BY_APT[n].prices || []).forEach(function (p) {
+      allPrices.forEach(function (p) {
         var mo = p.date.slice(0, 7);
         if (!months[mo]) months[mo] = [];
-        months[mo].push(p.price);
+        months[mo].push(p.price / p.area_m2);
       });
       a.price_history = Object.keys(months).sort().slice(-12).map(function (mo) {
-        var arr = months[mo]; return Math.round(arr.reduce(function (s, x) { return s + x; }, 0) / arr.length);
+        var arr = months[mo]; return Math.round(arr.reduce(function (s, x) { return s + x; }, 0) / arr.length * repArea);
       });
       // 거래 활성도(유동성) — 최근 6개월 거래 건수
       var cutoff = new Date(Date.now() - 180 * 86400000).toISOString().slice(0, 10);
@@ -603,7 +608,7 @@
   searchInp.addEventListener('input', render);
   sortSel.addEventListener('change', render);
 
-  // 데이터 로드: apartments + transactions(있으면) 병합
+  // 데이터 로드: apartments + transactions(있으면) 병합 + 세대수 보강(households.json)
   Promise.all([
     fetch('../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error('apt'); return r.json(); })
@@ -611,10 +616,21 @@
     fetch('../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error('deals'); return r.json(); })
       .catch(function () { return { deals: [] }; }),
+    fetch('../assets/households.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('hh'); return r.json(); })
+      .catch(function () { return { map: {} }; }),
   ]).then(function (results) {
     DATA = (results[0].apartments || []).slice();
     DEALS = results[1].deals || [];
     enrichWithDeals();
+    // 실거래 원장에만 있는 단지(placeholder)의 세대수·준공연도 — K-apt 보강분 병합
+    var HH = (results[2] && results[2].map) || {};
+    DATA.forEach(function (a) {
+      var e = HH[(a.region_key || '') + '|' + (a.name || '')];
+      if (!e) return;
+      if (!a.households && e.households) a.households = e.households;
+      if (!a.built_year && e.built_year) a.built_year = e.built_year;
+    });
     if (!DATA.length) {
       countEl.textContent = '';
       resultsEl.innerHTML = '<div class="finder-empty">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요</div>';
