@@ -81,19 +81,77 @@ def latest(series):
     return series[max(series.keys())]
 
 
-def main():
-    raw = os.environ.get("RONE_COMM_TABLES", "").strip()
-    if not raw:
-        print("[skip] RONE_COMM_TABLES 미설정 — 상업용 임대 통계표 ID가 없어 수집 생략. "
-              "기존 commercial.json(예시) 보존.", file=sys.stderr)
-        return
-    try:
-        tables = json.loads(raw)
-    except json.JSONDecodeError as e:
-        print(f"[skip] RONE_COMM_TABLES JSON 파싱 실패: {e}", file=sys.stderr)
-        return
+# ── 통계표 자동 발견 (RONE_COMM_TABLES 미설정 시) ──
+# 전세지수·전세가율에서 검증된 방식: 통계표 목록(SttsApiTbl.do)을 한 번 내려받아
+# 이름으로 유형×지표 표를 찾는다. 임대료는 '지수' 표(기준시점=100)와 혼동하지 않도록 제외.
+TYPE_KW = {"office": "오피스", "medium": "중대형", "small": "소규모", "collective": "집합"}
+METRIC_KW = {"rent": "임대료", "vacancy": "공실률", "yield": "투자수익률"}
 
+
+def _list_all_tables(api_key):
+    """R-ONE 통계표 목록 [(STATBL_ID, 이름)] — 1회 수집해 로컬에서 매칭."""
+    import collect_market as M
+    out, page = [], 1
+    while page <= 30:
+        j = L.get_json(M.RONE_TBL_LIST, {"KEY": api_key, "Type": "json", "pIndex": page, "pSize": 1000})
+        code, msg = M.rone_result(j)
+        if code and not code.upper().startswith("INFO-0"):
+            raise RuntimeError(f"[{code}] {msg}")
+        rows = []
+        for block in (j.get("SttsApiTbl") or j.get("SttsApiTblData") or []):
+            if isinstance(block, dict) and block.get("row"):
+                rows = block["row"]
+        if not rows:
+            break
+        for r in rows:
+            name = M._row_get(r, "STATBL_NM") or M._row_get(r, "TBL_NM") or M._row_get(r, "NM")
+            sid = M._row_get(r, "STATBL_ID")
+            if sid and name:
+                out.append((sid, name))
+        if len(rows) < 1000:
+            break
+        page += 1
+    return out
+
+
+def discover_tables(api_key):
+    """유형(오피스/중대형/소규모/집합) × 지표(임대료/공실률/투자수익률) 표 자동 발견."""
+    try:
+        all_tables = _list_all_tables(api_key)
+    except Exception as e:  # noqa: BLE001
+        print(f"[skip] 통계표 목록 조회 실패({e}) — 자동 발견 불가", file=sys.stderr)
+        return None
+    tables = {}
+    for tkey, tkw in TYPE_KW.items():
+        for metric, mkw in METRIC_KW.items():
+            hits = []
+            for sid, name in all_tables:
+                flat = name.replace(" ", "")
+                if tkw in flat and mkw in flat and not ("지수" in flat and metric == "rent"):
+                    hits.append((sid, name))
+            if hits:
+                tables.setdefault(tkey, {})[metric] = hits[0][0]
+                extra = f" 외 {len(hits) - 1}건" if len(hits) > 1 else ""
+                print(f"[자동발견] {tkey}/{metric}: {hits[0][0]} ({hits[0][1]}){extra}")
+    return tables or None
+
+
+def main():
     api_key = L.key(L.RONE_KEYS, required=True)
+    raw = os.environ.get("RONE_COMM_TABLES", "").strip()
+    tables = None
+    if raw:
+        try:
+            tables = json.loads(raw)
+        except json.JSONDecodeError as e:
+            print(f"! RONE_COMM_TABLES JSON 파싱 실패({e}) — 자동 발견으로 폴백", file=sys.stderr)
+    if not tables:
+        tables = discover_tables(api_key)
+    if not tables:
+        print("[skip] 상업용 임대 통계표를 찾지 못함 — 기존 commercial.json 보존. "
+              "R-ONE easyStat에서 표 ID를 확인해 RONE_COMM_TABLES 변수로 지정할 수 있습니다.",
+              file=sys.stderr)
+        return
     end = dt.date.today().strftime("%Y") + "0" + str((dt.date.today().month - 1) // 3 + 1)  # YYYYQ
     start = str(dt.date.today().year - 2) + "01"
 
@@ -132,6 +190,7 @@ def main():
             "source": "한국부동산원 R-ONE 상업용부동산 임대동향조사(분기)",
             "units": {"rent": "원/㎡·월", "vacancy": "%", "yield": "%(분기)"},
             "note": "유형: 오피스·중대형상가·소규모상가·집합상가. 지역·상권 구성에 따라 차이가 있습니다.",
+            "tables": tables,   # 사용한 STATBL_ID — 자동 발견분은 확인 후 RONE_COMM_TABLES에 고정 권장
         },
         "as_of": end,
         "types": TYPES,

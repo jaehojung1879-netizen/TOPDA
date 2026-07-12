@@ -208,6 +208,7 @@
   fetch('../assets/jeonse_ratio.json?t=' + Date.now(), { cache: 'no-store' })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (j) {
+      if (j && j.seed) return;   // 예시(seed)값은 실데이터처럼 표시하지 않는다
       ((j && j.regions) || []).forEach(function (r) {
         if (r && r.key && r.jeonse_ratio != null) JR[r.key] = r.jeonse_ratio;
       });

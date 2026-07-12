@@ -504,7 +504,7 @@
           '<span class="k">준공연도</span><span class="v">' + (a.built_year ? a.built_year + '년 (' + r.ageYears + '년차)' : '미상') + '</span>' +
           '<span class="k">세대수</span><span class="v">' + house + '</span>' +
           (curHub && a.commute && a.commute[curHub] != null ? '<span class="k">' + esc(curHub) + '까지</span><span class="v">약 ' + a.commute[curHub] + '분</span>' : '') +
-          (a.jeonse_ratio != null ? '<span class="k">전세가율</span><span class="v">' + a.jeonse_ratio + '%</span>' : '') +
+          (a.jeonse_ratio != null ? '<span class="k">전세가율</span><span class="v">' + a.jeonse_ratio + '%' + (a._jr_region ? ' <small title="지역 평균 기준">(지역)</small>' : '') + '</span>' : '') +
           (a.parking_per_household != null ? '<span class="k">세대당 주차</span><span class="v">' + a.parking_per_household.toFixed(2) + '대</span>' : '') +
         '</div>' +
         '<div class="apt-reasons">' + reasons + '</div>' +
@@ -619,6 +619,9 @@
     fetch('../assets/households.json?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error('hh'); return r.json(); })
       .catch(function () { return { map: {} }; }),
+    fetch('../assets/jeonse_ratio.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('jr'); return r.json(); })
+      .catch(function () { return { regions: [] }; }),
   ]).then(function (results) {
     DATA = (results[0].apartments || []).slice();
     DEALS = results[1].deals || [];
@@ -631,6 +634,19 @@
       if (!a.households && e.households) a.households = e.households;
       if (!a.built_year && e.built_year) a.built_year = e.built_year;
     });
+    // 단지 전세가율이 없으면 지역 전세가율로 폴백 — 상승 잠재력(전세가율 보정)과
+    // 전세가율 필터가 전 단지에서 동작하게 한다(단지별 값은 1%뿐이었음). 예시(seed)값은 쓰지 않는다.
+    var jr = results[3] || {};
+    if (!jr.seed && jr.regions && jr.regions.length) {
+      var RATIO = {};
+      jr.regions.forEach(function (r) { if (r.key && r.jeonse_ratio != null) RATIO[r.key] = r.jeonse_ratio; });
+      DATA.forEach(function (a) {
+        if (a.jeonse_ratio == null && RATIO[a.region_key] != null) {
+          a.jeonse_ratio = RATIO[a.region_key];
+          a._jr_region = true;   // 지역 평균 폴백 표시용
+        }
+      });
+    }
     if (!DATA.length) {
       countEl.textContent = '';
       resultsEl.innerHTML = '<div class="finder-empty">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요</div>';

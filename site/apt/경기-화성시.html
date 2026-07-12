@@ -29,6 +29,10 @@ tr:last-child td{border-bottom:0}
 .muted{color:var(--sub)}
 a.deep{font-size:12px;color:var(--brand);text-decoration:none}
 .note{font-size:12.5px;color:var(--sub);margin:14px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:0 0 14px}
+.stat{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.stat .k{font-size:12px;color:var(--sub)}
+.stat .v{font-size:17px;font-weight:700;margin-top:2px}
 footer{margin:24px 0 16px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--sub)}
 ul.idx{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
 ul.idx a{display:block;padding:8px 10px;border:1px solid var(--line);border-radius:8px;color:var(--ink);text-decoration:none;font-size:14px}
@@ -41,6 +45,7 @@ ul.idx a{display:block;padding:8px 10px;border:1px solid var(--line);border-radi
 <nav class="crumb"><a href="/apt/">아파트 실거래 지역별</a> › 경기 화성시</nav>
 <h1>경기 화성시 아파트 실거래가·세대수</h1>
 <p class="lead">최근 4개월 국토교통부 실거래 기준 344개 단지 · 2026-07 갱신. 추이는 월별 ㎡당 평균가 기준으로, 어느 평형이 거래됐는지에 따른 왜곡을 제거한 값입니다.</p>
+<div class="stats"><div class="stat"><div class="k">매매가격지수 12개월</div><div class="v"><span class="up">+4.8%</span></div></div><div class="stat"><div class="k">전세가격지수 12개월</div><div class="v"><span class="up">+6.5%</span></div></div><div class="stat"><div class="k">전세가율</div><div class="v">65.0%</div></div></div><p class="lead">경기 화성시 아파트 매매가격지수는 최근 12개월간 +4.8% 상승, 전세가격지수는 +6.5% 변동, 전세가율은 65.0%입니다 <span class="muted">(한국부동산원 R-ONE, 2026-05 기준)</span>.</p>
 <div class="table-wrap"><table>
 <thead><tr><th>단지</th><th>준공</th><th>세대수</th><th>최근 실거래</th><th>㎡당가 추이</th><th>거래</th></tr></thead>
 <tbody>
