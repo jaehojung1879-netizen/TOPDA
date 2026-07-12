@@ -41,6 +41,7 @@ def main():
     need = sum(len(v) for v in by_region.values())
     print(f"세대수 보강 대상 {need}개 단지 / {len(by_region)}개 지역")
     stat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0}
+    unmatched = []   # 이름매칭 실패 샘플 — 매칭률이 낮을 때 표기 차이를 바로 볼 수 있게
 
     # 시간 예산: 스텝 타임아웃으로 강제 종료되면 진행분이 통째로 유실된다(2026-07-03:
     # 25분 내내 돌고 저장 0건). 마감 전에 멈추고, 지역 단위로 중간 저장(checkpoint)한다.
@@ -67,8 +68,10 @@ def main():
         for a in items:
             if L.out_of_time(deadline, margin_sec=30):
                 break
-            code = kmap.get(CA._norm_name(a["name"]))
+            code = CA.kapt_match(kmap, a["name"])
             if not code:
+                if len(unmatched) < 10:
+                    unmatched.append(f"{region}/{a['name']}")
                 continue
             stat["matched"] += 1
             hh, yr = CA.kapt_info(code, kapt_key)
@@ -85,6 +88,8 @@ def main():
 
     print(f"[K-apt] 목록성공 {stat['list_ok']}/빈 {stat['list_empty']} · 단지코드 {stat['codes']}개 · "
           f"이름매칭 {stat['matched']} → 세대수확보 {stat['filled']}건")
+    if unmatched:
+        print(f"  · 미매칭 샘플({len(unmatched)}): {', '.join(unmatched)}", file=sys.stderr)
     if need and not stat["filled"]:
         print("  ! 세대수 0건 — 위 단계 카운터로 원인 확인(권한/목록빈값/이름매칭/기본정보응답).", file=sys.stderr)
         for d in getattr(CA, "_info_diag", []):
