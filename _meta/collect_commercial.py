@@ -20,6 +20,7 @@ RONE_COMM_TABLES 예시(유형 key → 지표 → STATBL_ID):
 import datetime as dt
 import json
 import os
+import re
 import sys
 
 import lib_pdata as L
@@ -47,18 +48,29 @@ SIDO_COORD = {
 
 
 def fetch_quarter(statbl, start, end, api_key):
-    """분기 통계표 → {지역명: {분기: 값}}."""
+    """분기 통계표 → {지역명: {분기: 값}}.
+
+    collect_market.fetch_metric과 동일하게 R-ONE 오류를 RuntimeError로 올려 CI 로그에
+    사유가 드러나게 하고, 첫 페이지부터 빈 응답이면 원문 일부를 남긴다(2026-07-15 진단:
+    분기 시점 형식이 틀려 조용히 0행이 반환됐고, 오류 표면화가 없어 원인이 가려졌음)."""
+    import collect_market as M
     out, page = {}, 1
     while page <= 12:
         j = L.get_json(RONE, {
             "KEY": api_key, "Type": "json", "STATBL_ID": statbl, "DTACYCLE_CD": "QQ",
             "START_WRTTIME": start, "END_WRTTIME": end, "pIndex": page, "pSize": 1000,
         })
+        code, msg = M.rone_result(j)
+        if code and not code.upper().startswith("INFO-0"):
+            raise RuntimeError(f"R-ONE 응답 오류 [{code}] {msg} (STATBL_ID={statbl})")
         rows = []
         for block in (j.get("SttsApiTblData") or []):
             if isinstance(block, dict) and block.get("row"):
                 rows = block["row"]
         if not rows:
+            if page == 1 and not out:
+                print(f"  · {statbl}: row 없음(분기 {start}~{end}). 응답 키={list(j.keys())} "
+                      f"일부={str(j)[:200]}", file=sys.stderr)
             break
         for r in rows:
             region = (r.get("CLS_NM") or "").strip()
@@ -127,12 +139,24 @@ def discover_tables(api_key):
             hits = []
             for sid, name in all_tables:
                 flat = name.replace(" ", "")
-                if tkw in flat and mkw in flat and not ("지수" in flat and metric == "rent"):
-                    hits.append((sid, name))
+                if tkw not in flat or mkw not in flat:
+                    continue
+                if "지수" in flat and metric == "rent":   # 임대료는 지수 표 제외
+                    continue
+                # 폐지된 과거 시계열(예: 투자수익률 '(2002년~2012년)') 배제 — 닫힌 연도범위 표.
+                # 현재 진행형 시계열은 '~)'로 끝나므로(예: '(2024년3분기~)') 그쪽을 선호한다.
+                if re.search(r"\(\d{4}년[^)]*~\d{4}년", flat):
+                    continue
+                current = "~)" in flat or "분기~" in flat
+                hits.append((0 if current else 1, sid, name))
             if hits:
-                tables.setdefault(tkey, {})[metric] = hits[0][0]
+                hits.sort()   # 현재 진행형(0) 우선
+                _, sid, name = hits[0]
+                tables.setdefault(tkey, {})[metric] = sid
                 extra = f" 외 {len(hits) - 1}건" if len(hits) > 1 else ""
-                print(f"[자동발견] {tkey}/{metric}: {hits[0][0]} ({hits[0][1]}){extra}")
+                print(f"[자동발견] {tkey}/{metric}: {sid} ({name}){extra}")
+            else:
+                print(f"[자동발견] {tkey}/{metric}: 매칭 없음", file=sys.stderr)
     return tables or None
 
 
@@ -152,8 +176,12 @@ def main():
               "R-ONE easyStat에서 표 ID를 확인해 RONE_COMM_TABLES 변수로 지정할 수 있습니다.",
               file=sys.stderr)
         return
-    end = dt.date.today().strftime("%Y") + "0" + str((dt.date.today().month - 1) // 3 + 1)  # YYYYQ
-    start = str(dt.date.today().year - 2) + "01"
+    # R-ONE 분기 시점 식별자는 'YYYYQ'(예: 2024년 3분기 = '20243'). 과거엔 'YYYY0Q'(6자리)
+    # 형식을 보내 전 표에서 0행이 반환됐다(2026-07-15 원인). 범위를 넉넉히 잡고(미래 분기는
+    # 빈 응답) latest()가 최신 분기를 고르게 한다.
+    y = dt.date.today().year
+    start = f"{y - 3}1"   # 3년 전 1분기
+    end = f"{y}4"         # 올해 4분기까지
 
     # {region: {type: {metric: value}}}
     agg = {}
