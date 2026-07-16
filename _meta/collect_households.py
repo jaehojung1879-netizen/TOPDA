@@ -28,7 +28,8 @@ HOUSEHOLDS_JSON = os.path.join(L.SITE_ASSETS, "households.json")
 
 
 def deals_only_names(apts):
-    """실거래 원장에만 있는 단지명을 지역별로. {region_key: [name, ...]}"""
+    """실거래 원장에만 있는 단지를 지역별로. {region_key: [(name, dong), ...]}
+    dong(법정동)은 세대수 매칭 정확도를 높이는 데 쓴다(일반명 충돌 해소)."""
     tx = L.load_json(TRANSACTIONS_JSON, default=None) or {}
     in_apts = {(a.get("region_key"), a.get("name")) for a in apts}
     out = {}
@@ -40,7 +41,8 @@ def deals_only_names(apts):
         if (rk, name) in in_apts or (rk, name) in seen:
             continue
         seen.add((rk, name))
-        out.setdefault(rk, []).append(name)
+        dong = CA._dong_of({"region": d.get("region"), "region_key": rk})
+        out.setdefault(rk, []).append((name, dong))
     return out
 
 
@@ -73,14 +75,14 @@ def main():
     hh_map = hh_data.setdefault("map", {})
     extra_by_region = deals_only_names(apts)
     extra_need = 0
-    for rk, names in extra_by_region.items():
-        names[:] = [n for n in names if f"{rk}|{n}" not in hh_map]
-        extra_need += len(names)
+    for rk, entries in extra_by_region.items():
+        entries[:] = [(n, d) for (n, d) in entries if f"{rk}|{n}" not in hh_map]
+        extra_need += len(entries)
 
     need = sum(len(v) for v in by_region.values())
     regions = list(dict.fromkeys(list(by_region) + list(extra_by_region)))
     print(f"세대수 보강 대상 — 큐레이션 {need}개 · 실거래전용 {extra_need}개 / {len(regions)}개 지역")
-    stat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0, "extra_filled": 0}
+    stat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0, "extra_filled": 0, "dong_ok": 0}
     unmatched = []   # 이름매칭 실패 샘플 — 매칭률이 낮을 때 표기 차이를 바로 볼 수 있게
 
     # 시간 예산: 스텝 타임아웃으로 강제 종료되면 진행분이 통째로 유실된다(2026-07-03:
@@ -100,17 +102,18 @@ def main():
                   "'공동주택 기본정보(AptBasisInfoService)' API를 같은 계정으로 활용신청·승인하세요. "
                   "승인 후 다시 실행하면 세대수가 채워집니다.", file=sys.stderr)
             break
-        if kmap:
+        if kmap.get("n"):
             stat["list_ok"] += 1
-            stat["codes"] += len(kmap)
+            stat["codes"] += kmap["n"]
+            stat["dong_ok"] += kmap.get("n_dong", 0)
         else:
             stat["list_empty"] += 1
             continue
-        # 1) 큐레이션 단지(맞춤찾기 노출) 먼저
+        # 1) 큐레이션 단지(맞춤찾기 노출) 먼저 — 법정동 병용 매칭
         for a in by_region.get(region, []):
             if L.out_of_time(deadline, margin_sec=30):
                 break
-            code = CA.kapt_match(kmap, a["name"])
+            code = CA.kapt_match(kmap, a["name"], CA._dong_of(a))
             if not code:
                 if len(unmatched) < 10:
                     unmatched.append(f"{region}/{a['name']}")
@@ -122,11 +125,11 @@ def main():
                 stat["filled"] += 1
             if yr and not a.get("built_year"):
                 a["built_year"] = yr
-        # 2) 실거래 원장에만 있는 단지 — households.json에 축적
-        for name in extra_by_region.get(region, []):
+        # 2) 실거래 원장에만 있는 단지 — households.json에 축적 (법정동 병용)
+        for name, dong in extra_by_region.get(region, []):
             if L.out_of_time(deadline, margin_sec=30):
                 break
-            code = CA.kapt_match(kmap, name)
+            code = CA.kapt_match(kmap, name, dong)
             if not code:
                 continue
             stat["matched"] += 1
@@ -147,8 +150,9 @@ def main():
             if L.save_json_safe(HOUSEHOLDS_JSON, hh_data):
                 saved_extra = stat["extra_filled"]
 
-    print(f"[K-apt] 목록성공 {stat['list_ok']}/빈 {stat['list_empty']} · 단지코드 {stat['codes']}개 · "
-          f"이름매칭 {stat['matched']} → 세대수확보 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}건")
+    print(f"[K-apt] 목록성공 {stat['list_ok']}/빈 {stat['list_empty']} · 단지코드 {stat['codes']}개"
+          f"(법정동보유 {stat['dong_ok']}) · 이름매칭 {stat['matched']} → "
+          f"세대수확보 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}건")
     if unmatched:
         print(f"  · 미매칭 샘플({len(unmatched)}): {', '.join(unmatched)}", file=sys.stderr)
     if (need or extra_need) and not (stat["filled"] or stat["extra_filled"]):

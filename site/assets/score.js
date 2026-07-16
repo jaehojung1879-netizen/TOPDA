@@ -134,7 +134,7 @@
     return Math.max.apply(null, within.map((u) => u.recent_price));
   }
 
-  // 미래 가치(상승 잠재력): 가격 모멘텀 중심 + 전세가율(낮을수록 상급지 경향) 보정.
+  // 상승기대: 가격 모멘텀 중심 + 전세가율(낮을수록 상급지 경향) 보정.
   function scoreAppreciation(apt) {
     const mom = scoreMomentum(apt.price_history);
     const jr = apt.jeonse_ratio;
@@ -267,7 +267,7 @@
     let reasonTexts = reasons.slice(0, 3).map((r) => r.t);
     if (!reasonTexts.length) {
       // 강점이 뚜렷하지 않으면 최고 점수 항목으로 한 줄
-      const labels = { appreciation: '상승 잠재력', subway: '교통', school: '학군', stability: '실거래 안정', scale: '단지 규모', age: '연식' };
+      const labels = { appreciation: '상승기대', subway: '교통', school: '학군', stability: '실거래 안정', scale: '단지 규모', age: '연식' };
       const best = Object.keys(sub).filter((k) => sub[k] != null).sort((a, b) => sub[b] - sub[a])[0];
       if (best) reasonTexts = [`${labels[best]} 항목이 가장 우수`];
     }

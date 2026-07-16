@@ -62,10 +62,32 @@ def _name_keys(s):
     return keys
 
 
+def _kapt_dong(it):
+    """K-apt 목록 항목에서 읍면동명 추출. V3/V4 필드명이 다를 수 있어 방어적으로 시도."""
+    for f in ("as3", "umdNm", "bjdongNm", "emdNm", "as4"):
+        v = str(it.get(f) or "").strip()
+        if v and (v.endswith("동") or v.endswith("읍") or v.endswith("면") or v.endswith("가")):
+            return v
+    # 주소 문자열에서 '○○동/읍/면/가' 추출 (폴백)
+    addr = str(it.get("kaptAddr") or it.get("doroJuso") or it.get("as3") or "")
+    m = re.search(r"([가-힣]+[0-9]?(?:동|읍|면|가))(?:\s|$)", addr)
+    return m.group(1) if m else ""
+
+
+def _put(d, k, code):
+    """변형키→코드 등록. 다른 단지가 같은 키를 주장하면 ''(모호) 표식."""
+    cur = d.get(k)
+    if cur is None:
+        d[k] = code
+    elif cur != code:
+        d[k] = ""
+
+
 def kapt_map(sigungu_code, api_key):
-    """시군구 단지목록 → {정규화 단지명 변형: kaptCode}. V4→V3 순으로 시도.
-    같은 키를 서로 다른 단지가 주장하면(예: '주공1'과 '주공1차'의 축약 충돌) 그 키는 버린다.
-    모든 버전이 권한 오류(403)면 None(이후 호출 생략 신호), 그 외 실패는 빈 dict."""
+    """시군구 단지목록 → {"sig": {변형키: 코드|''}, "dong": {동: {변형키: 코드|''}}, "n": 단지수}.
+    같은 키를 서로 다른 단지가 주장하면(예: '주공1'과 '주공1차'의 축약 충돌) ''로 표식.
+    동(洞) 단위 색인을 함께 만들어 일반명 충돌('벽산'·'두산' 등)을 법정동으로 푼다.
+    모든 버전이 권한 오류(403)면 None(이후 호출 생략 신호), 그 외 실패는 빈 구조."""
     global _list_op
     ops = [_list_op] if _list_op else KAPT_LIST_OPS
     auth_fail = False
@@ -74,47 +96,75 @@ def kapt_map(sigungu_code, api_key):
             items = L.get_items(KAPT_HOST + op, {"serviceKey": api_key, "sigunguCode": sigungu_code,
                                                  "numOfRows": 3000, "pageNo": 1})
             _list_op = op   # 작동 버전 캐시 (이후 이 버전만 호출)
-            out = {}
+            sig, dong = {}, {}
+            n, n_dong = 0, 0
             for it in items:
                 code = str(it.get("kaptCode") or "").strip()
                 name = str(it.get("kaptName") or "").strip()
                 if not (code and name):
                     continue
+                n += 1
+                d = _kapt_dong(it)
+                if d:
+                    n_dong += 1
+                    dmap = dong.setdefault(d, {})
                 for k in _name_keys(name):
-                    cur = out.get(k)
-                    if cur is None:
-                        out[k] = code
-                    elif cur != code:
-                        # 충돌 키('주공1차'·'주공1단지' → '주공1')는 삭제하지 않고 표식으로
-                        # 남긴다. 삭제하면 포함 매칭이 살아남은 쪽을 유일 후보로 오인한다.
-                        out[k] = ""
-            return out
+                    _put(sig, k, code)
+                    if d:
+                        _put(dmap, k, code)
+            return {"sig": sig, "dong": dong, "n": n, "n_dong": n_dong}
         except L.AuthError:
             auth_fail = True   # 이 버전 권한 없음 — 다음 버전 시도
         except Exception as e:  # noqa: BLE001 — 404(버전없음)·네트워크 등
             print(f"  ! K-apt 목록 실패 {sigungu_code} ({op}): {e}", file=sys.stderr)
     if auth_fail:
         return None
-    return {}
+    return {"sig": {}, "dong": {}, "n": 0, "n_dong": 0}
 
 
-def kapt_match(kmap, name):
-    """단지명 → kaptCode. ① 정규화 변형 완전일치 ② 유일한 포함 관계 순으로 시도.
-    포함 매칭(K-apt가 법정동 접두를 붙이는 '일원동우성7차' vs 실거래 '우성7' 류)은
-    오매칭 방지를 위해 한글 포함 3자 이상 + 시군구 내 후보 코드가 정확히 1개일 때만 채택한다."""
-    keys = _name_keys(name)
+def _match_in(table, keys):
+    """변형키 목록으로 table(변형키→코드) 조회. ① 완전일치 ② 유일 포함관계.
+    ''(모호)를 만나면 그 경로는 포기(None). 매칭 실패 시 None."""
     for k in keys:
-        code = kmap.get(k)
+        code = table.get(k)
         if code:
             return code
-        if code == "":   # 이 이름은 시군구 내 복수 단지로 축약됨 — 어느 쪽인지 알 수 없다
+        if code == "":
             return None
     probe = keys[-1]
     if len(probe) >= 3 and re.search(r"[가-힣]", probe):
-        hits = {c for k, c in kmap.items() if probe in k or (len(k) >= 3 and k in probe)}
+        hits = {c for k, c in table.items() if probe in k or (len(k) >= 3 and k in probe)}
         if len(hits) == 1 and "" not in hits:
             return next(iter(hits))
     return None
+
+
+def kapt_match(kmap, name, dong=""):
+    """단지명(+법정동) → kaptCode.
+    ① 법정동 안에서 매칭(가장 정확 — '벽산'·'두산' 등 일반명 충돌을 동으로 해소)
+    ② 실패 시 시군구 전체에서 매칭(기존 동작, 회귀 방지 폴백).
+    실거래명이 법정동을 접두로 달고 오는 경우('대흥동태영')는 그 접두를 떼어 변형에 추가한다."""
+    # 하위호환: 옛 평면 dict가 오면 시군구 맵으로 취급
+    if "sig" not in kmap and "dong" not in kmap:
+        sig, dmap = kmap, {}
+    else:
+        sig, dmap = kmap.get("sig", {}), kmap.get("dong", {})
+
+    keys = list(_name_keys(name))
+    # 법정동 접두 제거 변형: '대흥동태영'(+동) → '태영'
+    if dong:
+        base = _norm_name(name)
+        dn = _norm_name(dong)
+        if dn and base.startswith(dn) and len(base) > len(dn):
+            for k in _name_keys(base[len(dn):]):
+                if k not in keys:
+                    keys.append(k)
+
+    if dong and dong in dmap:
+        code = _match_in(dmap[dong], keys)
+        if code:
+            return code
+    return _match_in(sig, keys)
 
 
 _info_diag = []   # 기본정보 조회 실패 사유 샘플(첫 몇 건) — 0건일 때 원인 진단용
@@ -347,6 +397,15 @@ def _akey(a):
     return (a.get("region_key") or "") + "|" + (a.get("name") or "")
 
 
+def _dong_of(a):
+    """단지의 법정동('대흥동') — region에서 region_key 접두를 뗀 마지막 토큰. 세대수 매칭 정확도용."""
+    region = a.get("region") or ""
+    rk = a.get("region_key") or ""
+    d = region[len(rk):].strip() if rk and region.startswith(rk) else region
+    parts = d.split()
+    return parts[-1] if parts else ""
+
+
 def merge(existing, fresh):
     """'지역+단지명' 복합키 병합. 기존 큐레이션(세대수·노선 등) 보존, 가격/좌표는 신규로 갱신."""
     by_key = {_akey(a): a for a in existing.get("apartments", [])}
@@ -454,9 +513,9 @@ def main():
                       "'공동주택 기본정보(AptBasisInfoService)' API 활용신청·승인 필요.", file=sys.stderr)
             else:
                 kmap = km
-                if km:
+                if km.get("n"):
                     kstat["list_ok"] += 1
-                    kstat["codes"] += len(km)
+                    kstat["codes"] += km["n"]
                 else:
                     kstat["list_empty"] += 1
         for a in agg:
@@ -475,7 +534,7 @@ def main():
             # K-apt 세대수·준공 보강 — 기존 세대수가 없을 때만
             if not cur.get("households"):
                 kstat["needed"] += 1
-                code = kapt_match(kmap, a["name"])
+                code = kapt_match(kmap, a["name"], _dong_of(a))
                 if code:
                     kstat["matched"] += 1
                     hh, yr = kapt_info(code, kapt_key)

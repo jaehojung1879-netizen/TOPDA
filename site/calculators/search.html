@@ -113,7 +113,7 @@
   <div class="article-header" style="margin-bottom: 8px;">
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../market.html">시세정보</a> / 맞춤 내집 찾기</div>
     <h1 style="margin-bottom: 4px;">맞춤 내집 찾기</h1>
-    <p class="finder-intro" style="margin: 0;">조건만 넣으면 미래 가치·역세권·학군 등으로 단지를 점수화해 추천합니다. <strong>예산을 입력하면 그 가격대에 가까운 단지</strong>가 먼저 노출됩니다. <button type="button" class="finder-howto-toggle" data-finder-howto>점수 산정 방식 ▾</button></p>
+    <p class="finder-intro" style="margin: 0;">조건만 넣으면 상승기대·역세권·학군 등으로 단지를 점수화해 추천합니다. <strong>예산을 입력하면 그 가격대에 가까운 단지</strong>가 먼저 노출됩니다. <button type="button" class="finder-howto-toggle" data-finder-howto>점수 산정 방식 ▾</button></p>
   </div>
 
   <div class="finder-layout">
@@ -252,21 +252,30 @@
 
   <details id="finderHowto" class="finder-howto" style="margin-top: 32px;">
     <summary>종합점수 산정 방식</summary>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin: 12px 0 8px;">
+      각 항목을 0~100점으로 매긴 뒤 <strong>아래 가중치로 가중평균</strong>한 값이 종합점수(0~100)입니다.
+      데이터가 없거나 입력하지 않은 항목은 계산에서 빼고, 그 비중은 나머지 항목으로 자동 재배분됩니다.
+    </p>
     <div class="table-wrap" style="margin-top: 12px;">
       <table class="data">
-        <thead><tr><th>항목</th><th>평가</th></tr></thead>
+        <thead><tr><th>항목</th><th>가중치</th><th>점수 산식(0~100)</th></tr></thead>
         <tbody>
-          <tr><td>예산 적합도</td><td>입력한 예산에 가까운 가격일수록 가점 (예산 입력 시).</td></tr>
-          <tr><td>미래 가치</td><td>실거래 가격 추세·전세가율 보정.</td></tr>
-          <tr><td>역세권</td><td>도보 300m 이하 만점.</td></tr>
-          <tr><td>학군</td><td>초등학교 150m 이하(초품아) 만점.</td></tr>
-          <tr><td>실거래 안정</td><td>가격 변동이 작을수록 가점.</td></tr>
-          <tr><td>단지규모</td><td>2,000세대 이상 만점.</td></tr>
-          <tr><td>연식</td><td>준공 2년 이내 만점.</td></tr>
+          <tr><td>상승기대</td><td>23%</td><td>최근 실거래 <strong>㎡당 가격</strong>의 추세(선형회귀 기울기→연환산)를 65%, <strong>전세가율</strong>(낮을수록 상급지 경향)을 35%로 합산. 연 +20%면 만점, 0%면 50점.</td></tr>
+          <tr><td>역세권</td><td>19%</td><td>가장 가까운 지하철역 도보거리. 300m 이하 100점, 1.5km 이상 0점(선형).</td></tr>
+          <tr><td>학군</td><td>19%</td><td>가장 가까운 초등학교 거리. 150m 이하(초품아) 100점, 1.2km 이상 0점(선형).</td></tr>
+          <tr><td>실거래 안정</td><td>14%</td><td>최근 실거래가의 변동계수(표준편차÷평균)가 작을수록 가점. 표본 2건 미만은 중립(60점).</td></tr>
+          <tr><td>단지규모</td><td>10%</td><td>세대수 2,000 이상 100점, 300 이하 20점(선형).</td></tr>
+          <tr><td>연식</td><td>10%</td><td>준공 2년 이내 100점, 35년 이상 10점(선형).</td></tr>
+          <tr><td>거래활성</td><td>5%</td><td>최근 6개월 거래 건수. 15건 이상 100점, 0건 30점.</td></tr>
+          <tr><td>예산 적합도</td><td>25%<br/><span style="font-size:0.8em;color:var(--text-muted)">예산 입력 시</span></td><td>예산 이하 평형 중 가장 가까운 가격일수록 가점. 예산을 입력하면 이 항목이 추가되고 비중이 가장 큽니다.</td></tr>
         </tbody>
       </table>
     </div>
-    <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 8px;">입력하지 않은 조건의 비중은 나머지 항목으로 자동 재배분됩니다.</p>
+    <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 8px;">
+      ※ 가격 추세는 어떤 평형이 거래됐는지에 따른 왜곡을 없애기 위해 <strong>월별 ㎡당 평균가</strong> 기준으로 계산합니다.
+      전세가율은 단지별 실거래가 없으면 <strong>지역 평균</strong>을 사용하며 카드에 '(지역)'으로 표시됩니다.
+      본 점수는 공개 실거래·공공데이터 기반의 <strong>참고 지표</strong>이며 투자 수익을 보장하지 않습니다.
+    </p>
   </details>
 
   <p class="finder-sample-note">표시 정보는 참고용 예시이며, 계약 전 실거래가·현장·권리관계를 반드시 직접 확인하세요.</p>
@@ -412,7 +421,7 @@
       }
       // 가격 이력: 월별 ㎡당가 평균 × 대표면적(거래 중위 면적) — 최대 12개월.
       // 단순 가격 평균은 평형 혼합에 왜곡된다(왕십리자이: 85㎡→52㎡ 거래 전환이
-      // 실제 상승장을 -24% 폭락으로 보이게 해 상승가치 점수가 무너졌던 민원).
+      // 실제 상승장을 -24% 폭락으로 보이게 해 상승기대 점수가 무너졌던 민원).
       var allPrices = (DEALS_BY_APT[n] && DEALS_BY_APT[n].prices || []).filter(function (p) { return p.area_m2 > 0; });
       var areas = allPrices.map(function (p) { return p.area_m2; }).sort(function (x, y) { return x - y; });
       var repArea = areas.length ? areas[Math.floor(areas.length / 2)] : 0;
@@ -441,7 +450,7 @@
   }
   var curHub = '';
 
-  var SPEC_LABELS = { appreciation: '상승 잠재력', subway: '역세권', school: '학군', stability: '실거래 안정', scale: '단지규모', age: '연식' };
+  var SPEC_LABELS = { appreciation: '상승기대', subway: '역세권', school: '학군', stability: '실거래 안정', scale: '단지규모', age: '연식' };
 
   function barRow(label, val) {
     if (val == null) return '';
@@ -471,7 +480,7 @@
     var reasons = r.reasons.map(function (t) { return '<span class="apt-chip">' + esc(t) + '</span>'; }).join('');
     var relaxed = r.relaxed ? '<div class="apt-relaxed">⚠ 입력 조건 중 <strong>' + esc(r.relaxed.join(', ')) + '</strong> 은(는) 충족하지 못했지만 그 외 조건이 우수해 추천합니다.</div>' : '';
     var bars = (r.sub.fit != null ? barRow('예산적합', r.sub.fit) : '')
-      + barRow('상승가치', r.sub.appreciation) + barRow('역세권', r.sub.subway) + barRow('학군', r.sub.school)
+      + barRow('상승기대', r.sub.appreciation) + barRow('역세권', r.sub.subway) + barRow('학군', r.sub.school)
       + barRow('실거래', r.sub.stability) + barRow('거래활성', r.sub.liquidity)
       + barRow('규모', r.sub.scale) + barRow('연식', r.sub.age);
     var sub = a.subway && a.subway.distance_m != null
@@ -634,7 +643,7 @@
       if (!a.households && e.households) a.households = e.households;
       if (!a.built_year && e.built_year) a.built_year = e.built_year;
     });
-    // 단지 전세가율이 없으면 지역 전세가율로 폴백 — 상승 잠재력(전세가율 보정)과
+    // 단지 전세가율이 없으면 지역 전세가율로 폴백 — 상승기대(전세가율 보정)과
     // 전세가율 필터가 전 단지에서 동작하게 한다(단지별 값은 1%뿐이었음). 예시(seed)값은 쓰지 않는다.
     var jr = results[3] || {};
     if (!jr.seed && jr.regions && jr.regions.length) {
