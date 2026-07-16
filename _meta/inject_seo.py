@@ -15,7 +15,8 @@ ROOT = os.path.abspath(ROOT)
 BASE = "https://topda.kr"
 SITE_NAME_KO = "톺다"
 SITE_NAME_EN = "TOPDA"
-OG_IMAGE = BASE + "/assets/og-default.svg"
+LOGO = BASE + "/assets/images/brand/logo.png"
+OG_IMAGE = LOGO
 ANALYTICS = BASE + "/assets/analytics.js"
 
 # KR <-> EN 1:1 대응이 명확한 페이지만 hreflang 부여
@@ -169,6 +170,7 @@ def process(rel, full):
 
     # ----- 메타 블록 -----
     lines = ["<!-- seo:meta -->"]
+    lines.append('<link rel="icon" href="%s" type="image/png" />' % LOGO)
     lines.append('<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />')
     lines.append('<link rel="canonical" href="%s" />' % canonical)
     lines.append('<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="%s/feed.xml" />' % BASE)

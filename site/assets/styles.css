@@ -117,10 +117,11 @@ html, body { overflow-x: hidden; }
 @media (min-width: 768px) { .brand { font-size: 1.25rem; } }
 .brand-mark {
   display: inline-block; width: 26px; height: 26px;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%232563eb'/><g fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'><circle cx='25' cy='27' r='9'/><path d='M25 36 L 22 44'/><path d='M27 40 L 35 48 L 51 26'/></g></svg>");
+  background-image: url("images/brand/logo.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  border-radius: 6px;
   flex-shrink: 0;
 }
 @media (min-width: 768px) { .brand-mark { width: 28px; height: 28px; } }
@@ -713,7 +714,10 @@ details.explain .explain-body > :first-child { margin-top: 0; }
 
 /* ===== Print ===== */
 @media print {
-  .site-header, .site-footer, .cl-actions, .cl-tabs, .nav-toggle, .mobile-menu { display: none !important; }
+  /* 헤더는 숨기지 않고 로고만 남긴다 — 인쇄물에서도 톺다 브랜드가 보이게. */
+  .site-header { display: block !important; position: static !important; background: #fff !important; backdrop-filter: none !important; box-shadow: none !important; border-bottom: 1px solid #ddd !important; margin-bottom: 12px; }
+  .site-header .nav { display: none !important; }
+  .site-footer, .cl-actions, .cl-tabs, .nav-toggle, .mobile-menu { display: none !important; }
   body { background: #fff; font-size: 11pt; }
   .container, .container-narrow { max-width: 100% !important; padding: 0 !important; }
   .cl-app { border: 0 !important; }
@@ -2532,7 +2536,8 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   display: flex; justify-content: space-between; align-items: baseline;
   border-bottom: 2px solid #1e3a8a; padding-bottom: 5px; margin-bottom: 7px;
 }
-#print-report .pr-brand { font-weight: 800; color: #1e3a8a; font-size: 10.5pt; }
+#print-report .pr-brand { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; color: #1e3a8a; font-size: 10.5pt; }
+#print-report .pr-logo { width: 16pt; height: 16pt; object-fit: contain; }
 #print-report .pr-date { color: #555; font-size: 9pt; }
 #print-report .pr-title { font-size: 14pt; font-weight: 800; margin: 0 0 9px; }
 #print-report .pr-cols { display: flex; gap: 16px; align-items: flex-start; }

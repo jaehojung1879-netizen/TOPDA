@@ -2907,7 +2907,7 @@ function calcInteriorEstimate({ area, grade, items }) {
     const wrap = document.createElement('div');
     wrap.id = 'print-report';
     wrap.innerHTML =
-      '<div class="pr-head"><span class="pr-brand">톺다 · 부동산 계산 보고서</span><span class="pr-date">' + ymd + '</span></div>'
+      '<div class="pr-head"><span class="pr-brand"><img class="pr-logo" alt="" src="https://topda.kr/assets/images/brand/logo.png" />톺다 · 부동산 계산 보고서</span><span class="pr-date">' + ymd + '</span></div>'
       + '<h1 class="pr-title">' + esc(title) + '</h1>'
       + '<div class="pr-cols">'
       + '  <section class="pr-block"><h2>입력 요약</h2><table class="pr-table">' + (inputRows || '<tr><td>—</td></tr>') + '</table></section>'
