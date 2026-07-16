@@ -126,8 +126,16 @@ def _list_all_tables(api_key):
     return out
 
 
-def discover_tables(api_key):
-    """유형(오피스/중대형/소규모/집합) × 지표(임대료/공실률/투자수익률) 표 자동 발견."""
+MAX_PROBE = 4   # 후보당 실호출 검증 상한(호출량 절제 — 이름만으론 실제 데이터 유무를 알 수 없다)
+
+
+def discover_tables(api_key, probe_start, probe_end):
+    """유형(오피스/중대형/소규모/집합) × 지표(임대료/공실률/투자수익률) 표 자동 발견.
+
+    이름으로만 고르면 동명 이표(같은 조사의 개편 전/후 ID 등) 중 '이름은 최신인데
+    실제로는 빈 표'를 채택할 수 있다(2026-07-16 확인: [INFO-200] 해당 데이터 없음 —
+    후보 10개 중 데이터가 실제로 채워진 표가 다른 ID였음). 후보를 우선순위대로
+    최근 분기 1회 조회해 데이터가 실제로 나오는 첫 표를 채택한다."""
     try:
         all_tables = _list_all_tables(api_key)
     except Exception as e:  # noqa: BLE001
@@ -149,12 +157,25 @@ def discover_tables(api_key):
                     continue
                 current = "~)" in flat or "분기~" in flat
                 hits.append((0 if current else 1, sid, name))
-            if hits:
-                hits.sort()   # 현재 진행형(0) 우선
-                _, sid, name = hits[0]
+            hits.sort()   # 현재 진행형(0) 우선
+            picked = None
+            for _, sid, name in hits[:MAX_PROBE]:
+                try:
+                    data = fetch_quarter(sid, probe_start, probe_end, api_key)
+                except Exception as e:  # noqa: BLE001
+                    print(f"  · {tkey}/{metric} 후보 {sid} 검증 실패: {e}", file=sys.stderr)
+                    continue
+                if data:
+                    picked = (sid, name)
+                    break
+                print(f"  · {tkey}/{metric} 후보 {sid} ({name}) — 데이터 없음, 다음 후보 시도", file=sys.stderr)
+            if picked:
+                sid, name = picked
                 tables.setdefault(tkey, {})[metric] = sid
-                extra = f" 외 {len(hits) - 1}건" if len(hits) > 1 else ""
+                extra = f" (검증 통과, 후보 {len(hits)}건 중)" if len(hits) > 1 else ""
                 print(f"[자동발견] {tkey}/{metric}: {sid} ({name}){extra}")
+            elif hits:
+                print(f"[자동발견] {tkey}/{metric}: 후보 {len(hits)}건 모두 데이터 없음", file=sys.stderr)
             else:
                 print(f"[자동발견] {tkey}/{metric}: 매칭 없음", file=sys.stderr)
     return tables or None
@@ -162,6 +183,13 @@ def discover_tables(api_key):
 
 def main():
     api_key = L.key(L.RONE_KEYS, required=True)
+    # R-ONE 분기 시점 식별자는 'YYYYQ'(예: 2024년 3분기 = '20243'). 과거엔 'YYYY0Q'(6자리)
+    # 형식을 보내 전 표에서 0행이 반환됐다(2026-07-15 원인). 범위를 넉넉히 잡고(미래 분기는
+    # 빈 응답) latest()가 최신 분기를 고르게 한다.
+    y = dt.date.today().year
+    start = f"{y - 3}1"   # 3년 전 1분기
+    end = f"{y}4"         # 올해 4분기까지
+
     raw = os.environ.get("RONE_COMM_TABLES", "").strip()
     tables = None
     if raw:
@@ -170,18 +198,12 @@ def main():
         except json.JSONDecodeError as e:
             print(f"! RONE_COMM_TABLES JSON 파싱 실패({e}) — 자동 발견으로 폴백", file=sys.stderr)
     if not tables:
-        tables = discover_tables(api_key)
+        tables = discover_tables(api_key, start, end)
     if not tables:
         print("[skip] 상업용 임대 통계표를 찾지 못함 — 기존 commercial.json 보존. "
               "R-ONE easyStat에서 표 ID를 확인해 RONE_COMM_TABLES 변수로 지정할 수 있습니다.",
               file=sys.stderr)
         return
-    # R-ONE 분기 시점 식별자는 'YYYYQ'(예: 2024년 3분기 = '20243'). 과거엔 'YYYY0Q'(6자리)
-    # 형식을 보내 전 표에서 0행이 반환됐다(2026-07-15 원인). 범위를 넉넉히 잡고(미래 분기는
-    # 빈 응답) latest()가 최신 분기를 고르게 한다.
-    y = dt.date.today().year
-    start = f"{y - 3}1"   # 3년 전 1분기
-    end = f"{y}4"         # 올해 4분기까지
 
     # {region: {type: {metric: value}}}
     agg = {}
