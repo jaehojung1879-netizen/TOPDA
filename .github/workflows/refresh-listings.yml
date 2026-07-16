@@ -75,6 +75,8 @@ jobs:
           DATA_GO_APT_BASIC_INFO: ${{ secrets.DATA_GO_APT_BASIC_INFO }}
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+          # 실거래 전용 단지의 좌표·역·초등학교 점진 보강용(K-apt 주소 → 지오코딩)
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
         run: python collect_households.py
         continue-on-error: true
 

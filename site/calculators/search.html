@@ -635,13 +635,16 @@
     DATA = (results[0].apartments || []).slice();
     DEALS = results[1].deals || [];
     enrichWithDeals();
-    // 실거래 원장에만 있는 단지(placeholder)의 세대수·준공연도 — K-apt 보강분 병합
+    // 실거래 원장에만 있는 단지(placeholder)의 세대수·준공연도·좌표·역·학교 — K-apt/Kakao 보강분 병합
     var HH = (results[2] && results[2].map) || {};
     DATA.forEach(function (a) {
       var e = HH[(a.region_key || '') + '|' + (a.name || '')];
       if (!e) return;
       if (!a.households && e.households) a.households = e.households;
       if (!a.built_year && e.built_year) a.built_year = e.built_year;
+      if (a.lat == null && e.lat != null) { a.lat = e.lat; a.lng = e.lng; }
+      if (!a.subway && e.subway && e.subway.station) a.subway = { station: e.subway.station, line: '', distance_m: e.subway.distance_m };
+      if (!a.elementary && e.elementary && e.elementary.name) a.elementary = { name: e.elementary.name, distance_m: e.elementary.distance_m, in_zone: false };
     });
     // 단지 전세가율이 없으면 지역 전세가율로 폴백 — 상승기대(전세가율 보정)과
     // 전세가율 필터가 전 단지에서 동작하게 한다(단지별 값은 1%뿐이었음). 예시(seed)값은 쓰지 않는다.

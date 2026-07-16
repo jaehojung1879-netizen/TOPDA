@@ -546,6 +546,11 @@
     s.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=' + KAKAO_KEY + '&autoload=false&libraries=clusterer';
     s.onload = function () { kakao.maps.load(function () { kakaoLoading = false; cb(); }); };
     s.onerror = function () {   // SDK 로딩 실패 → Leaflet 폴백
+      // 키가 주입돼 있는데 실패하면 대부분 카카오 콘솔 Web 플랫폼 도메인 미등록(또는 REST 키 오용).
+      if (window.console && console.warn) {
+        console.warn('[톺다 지도] Kakao SDK 로딩 실패 — developers.kakao.com > 내 애플리케이션 > 플랫폼 > Web에 '
+          + location.origin + ' 등록 여부와 JavaScript 키인지 확인하세요. Leaflet 지도로 대체합니다.');
+      }
       kakaoLoading = false; useKakao = false; renderLeafletMap();
     };
     document.head.appendChild(s);

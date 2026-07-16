@@ -126,10 +126,11 @@
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="../assets/kmap.js?v=20260716"></script>
 <script src="../assets/app.js?v=20260629"></script>
 <script>
 (function () {
-  var map, layer, DATA = null, TYPE = 'office';
+  var MAP = null, PENDING = null, DATA = null, TYPE = 'office';
   var typesEl = document.querySelector('[data-cm-types]');
   var metricSel = document.getElementById('cm-metric');
   var sortSel = document.getElementById('cm-sort');
@@ -159,10 +160,11 @@
   }
 
   function initMap() {
-    if (typeof L === 'undefined') throw new Error('Leaflet 미로드');
-    map = L.map('cmMap', { scrollWheelZoom: false }).setView([36.5, 127.8], 7);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; OpenStreetMap' }).addTo(map);
-    layer = L.layerGroup().addTo(map);
+    TopdaKMap.init('cmMap', { center: [36.5, 127.8], level: 13, zoom: 7, maxZoom: 8 }, function (a) {
+      if (!a) { document.getElementById('cmMap').style.display = 'none'; return; }
+      MAP = a;
+      if (PENDING) renderMarkers(PENDING.list, PENDING.metric);   // 어댑터 늦은 준비 대응
+    });
   }
 
   function rows() {
@@ -177,20 +179,22 @@
   }
 
   function renderMarkers(list, metric) {
-    if (!map || !layer) return;
-    layer.clearLayers();
+    PENDING = { list: list, metric: metric };
+    if (!MAP) return;
+    MAP.clear();
     var pts = [];
     list.forEach(function (r) {
       var d = r.data[TYPE] || {};
       if (r.lat == null || r.lng == null) return;
       pts.push([r.lat, r.lng]);
-      L.circleMarker([r.lat, r.lng], { radius: 11, color: '#fff', weight: 1.5, fillColor: color(metric, d[metric]), fillOpacity: 0.9 })
-        .addTo(layer).bindPopup(
-          '<div class="pop-name">' + r.name + '</div>' +
+      MAP.addCircle(r.lat, r.lng, {
+        radius: 11, fillColor: color(metric, d[metric]), title: r.name,
+        popupHtml: '<div class="pop-name">' + r.name + '</div>' +
           '<div class="pop-stat">임대료 <strong>' + fmt('rent', d.rent) + '</strong> 원/㎡<br>' +
-          '공실률 ' + fmt('vacancy', d.vacancy) + '<br>투자수익률 ' + fmt('yield', d.yield) + '</div>');
+          '공실률 ' + fmt('vacancy', d.vacancy) + '<br>투자수익률 ' + fmt('yield', d.yield) + '</div>',
+      });
     });
-    if (pts.length) { try { map.fitBounds(pts, { padding: [40, 40], maxZoom: 8 }); } catch (e) {} }
+    MAP.fitBounds(pts);
   }
 
   function render() {
