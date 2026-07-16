@@ -182,7 +182,8 @@ def _to_int(v):
 
 
 def kapt_info(code, api_key):
-    """kaptCode → (세대수, 준공연도). V4→V3 순으로 시도. 실패 시 (None, None).
+    """kaptCode → (세대수, 준공연도, 주소). V4→V3 순으로 시도. 실패 시 (None, None, None).
+    주소(kaptAddr)는 실거래 전용 단지의 좌표·역·학교 보강(Kakao 지오코딩)에 쓴다.
 
     버그 수정: 과거에는 get_items가 예외 없이 '빈 응답/세대수 없음'을 줘도 _info_op를
     캐시해버려, 첫 호출에서 V4가 비면 V3 폴백을 영영 못 타고 전 단지 세대수가 0이 됐다.
@@ -207,12 +208,13 @@ def kapt_info(code, api_key):
         year = int(use[:4]) if len(use) >= 4 and use[:4].isdigit() else None
         if households:
             _info_op = op   # 세대수를 실제로 얻은 op만 캐시(올바른 버전 고정)
-            return households, year
+            addr = str(it.get("kaptAddr") or it.get("doroJuso") or "").strip() or None
+            return households, year, addr
         # 응답은 왔으나 세대수가 비었다 → 원인 진단용으로 '실제 값'을 남기고 다른 버전 시도
         if len(_info_diag) < 4:
             _info_diag.append(f"{op}: items={len(items)} kaptdaCnt={it.get('kaptdaCnt')!r} "
                               f"hoCnt={it.get('hoCnt')!r} keys={list(it.keys())[:12]}")
-    return None, None
+    return None, None, None
 
 
 # 주요 업무지구 좌표 (lng, lat) — 통근시간 추정용
@@ -537,7 +539,7 @@ def main():
                 code = kapt_match(kmap, a["name"], _dong_of(a))
                 if code:
                     kstat["matched"] += 1
-                    hh, yr = kapt_info(code, kapt_key)
+                    hh, yr, _addr = kapt_info(code, kapt_key)
                     if hh:
                         a["households"] = hh
                         kstat["filled"] += 1

@@ -119,7 +119,7 @@ def main():
                     unmatched.append(f"{region}/{a['name']}")
                 continue
             stat["matched"] += 1
-            hh, yr = CA.kapt_info(code, kapt_key)
+            hh, yr, _addr = CA.kapt_info(code, kapt_key)
             if hh:
                 a["households"] = hh
                 stat["filled"] += 1
@@ -133,11 +133,13 @@ def main():
             if not code:
                 continue
             stat["matched"] += 1
-            hh, yr = CA.kapt_info(code, kapt_key)
+            hh, yr, addr = CA.kapt_info(code, kapt_key)
             if hh:
                 entry = {"households": hh}
                 if yr:
                     entry["built_year"] = yr
+                if addr:
+                    entry["addr"] = addr   # 좌표·역·학교 보강용 (아래 위치 보강 패스)
                 hh_map[f"{region}|{name}"] = entry
                 stat["extra_filled"] += 1
         print(f"[{region}] 매칭 진행 — 누적 세대수확보 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}")
@@ -150,9 +152,44 @@ def main():
             if L.save_json_safe(HOUSEHOLDS_JSON, hh_data):
                 saved_extra = stat["extra_filled"]
 
+    # ── 위치 보강 패스: 주소는 있는데 좌표가 없는 실거래 전용 단지에 Kakao 지오코딩 +
+    # 최근접 역/초등학교를 점진 채운다(단지당 3회 호출 — 회당 상한·시간예산 내).
+    # 맞춤찾기의 '역거리·초등학교 정보 없음' 공백을 해소하는 핵심 경로.
+    MAX_LOC = 150
+    loc_filled = 0
+    if os.environ.get("KAKAO_REST_API_KEY"):
+        for key_, entry in hh_map.items():
+            if loc_filled >= MAX_LOC or L.out_of_time(deadline, margin_sec=30):
+                break
+            if entry.get("lat") or not entry.get("addr"):
+                continue
+            try:
+                geo = L.geocode_kakao(entry["addr"])
+                if not geo:
+                    entry["addr_bad"] = True   # 지오코딩 불가 주소 — 재시도 방지
+                    entry.pop("addr", None)
+                    continue
+                lng, lat = geo
+                entry["lat"], entry["lng"] = round(lat, 6), round(lng, 6)
+                sub = L.nearest_kakao(lng, lat, category_code="SW8")
+                if sub:
+                    entry["subway"] = {"station": sub[0], "distance_m": sub[1]}
+                sch = L.nearest_school_kakao(lng, lat)
+                if sch:
+                    entry["elementary"] = {"name": CA.clean_school(sch[0]), "distance_m": sch[1]}
+                loc_filled += 1
+            except Exception as e:  # noqa: BLE001 — 개별 실패는 다음 단지로
+                print(f"  ! 위치 보강 실패 {key_}: {e}", file=sys.stderr)
+        if loc_filled:
+            hh_data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
+            L.save_json_safe(HOUSEHOLDS_JSON, hh_data)
+    else:
+        print("[위치보강] KAKAO_REST_API_KEY 없음 — 좌표·역·학교 보강 생략", file=sys.stderr)
+
     print(f"[K-apt] 목록성공 {stat['list_ok']}/빈 {stat['list_empty']} · 단지코드 {stat['codes']}개"
           f"(법정동보유 {stat['dong_ok']}) · 이름매칭 {stat['matched']} → "
-          f"세대수확보 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}건")
+          f"세대수확보 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}건 · "
+          f"위치보강 {loc_filled}건")
     if unmatched:
         print(f"  · 미매칭 샘플({len(unmatched)}): {', '.join(unmatched)}", file=sys.stderr)
     if (need or extra_need) and not (stat["filled"] or stat["extra_filled"]):

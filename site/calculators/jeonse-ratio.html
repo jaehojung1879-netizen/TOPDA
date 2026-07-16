@@ -126,10 +126,12 @@
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="../assets/kmap.js?v=20260716"></script>
 <script src="../assets/app.js?v=20260629"></script>
 <script>
 (function () {
-  var map, layer;
+  var MAP = null;   // TopdaKMap 어댑터 (Kakao 우선, Leaflet 폴백)
+  var PENDING = null; // 어댑터 준비 전 마지막 렌더 목록
   var sidoSel = document.getElementById('jr-sido');
   var sortSel = document.getElementById('jr-sort');
   var rowsEl = document.querySelector('[data-jr-rows]');
@@ -151,21 +153,14 @@
   }
 
   function initMap() {
-    if (typeof L === 'undefined') throw new Error('Leaflet 미로드');
-    map = L.map('jrMap', { scrollWheelZoom: false }).setView([36.8, 127.8], 7);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18, attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
-    var legend = L.control({ position: 'bottomright' });
-    legend.onAdd = function () {
-      var d = L.DomUtil.create('div', 'jr-legend');
-      d.innerHTML = '<strong>전세가율</strong>' +
+    TopdaKMap.init('jrMap', { center: [36.8, 127.8], level: 13, zoom: 7, maxZoom: 11 }, function (a) {
+      if (!a) { document.getElementById('jrMap').style.display = 'none'; return; }
+      MAP = a;
+      MAP.setLegend('<strong>전세가율</strong>' +
         [['#dc2626', '70%+'], ['#ea580c', '60–70%'], ['#f59e0b', '55–60%'], ['#16a34a', '50–55%'], ['#2563eb', '~50%']]
-          .map(function (x) { return '<div class="row"><span class="dot" style="background:' + x[0] + '"></span>' + x[1] + '</div>'; }).join('');
-      return d;
-    };
-    legend.addTo(map);
-    layer = L.layerGroup().addTo(map);
+          .map(function (x) { return '<div class="row"><span class="dot" style="background:' + x[0] + ';display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;"></span>' + x[1] + '</div>'; }).join(''));
+      if (PENDING) renderMarkers(PENDING);   // 어댑터가 늦게 준비돼도 마지막 목록을 반영
+    });
   }
 
   function filtered() {
@@ -181,22 +176,22 @@
   }
 
   function renderMarkers(list) {
-    if (!map || !layer) return;     // 지도 미초기화(라이브러리 로드 실패 등) 시 표만 표시
-    layer.clearLayers();
+    PENDING = list;
+    if (!MAP) return;               // 지도 미초기화(어댑터 준비 전) 시 표만 표시
+    MAP.clear();
     var pts = [];
     list.forEach(function (r) {
       if (r.lat == null || r.lng == null) return;
       pts.push([r.lat, r.lng]);
-      L.circleMarker([r.lat, r.lng], {
-        radius: 9, color: '#fff', weight: 1.5, fillColor: color(r.jeonse_ratio), fillOpacity: 0.9
-      }).addTo(layer).bindPopup(
-        '<div class="pop-name">' + r.name + '</div>' +
-        '<div class="pop-stat">전세가율 <strong>' + r.jeonse_ratio + '%</strong><br>' +
-        '매매 중위 ' + won(r.sale_median) + '원<br>' +
-        '전세 중위 ' + won(r.jeonse_median) + '원</div>'
-      );
+      MAP.addCircle(r.lat, r.lng, {
+        radius: 9, fillColor: color(r.jeonse_ratio), title: r.name,
+        popupHtml: '<div class="pop-name">' + r.name + '</div>' +
+          '<div class="pop-stat">전세가율 <strong>' + r.jeonse_ratio + '%</strong><br>' +
+          '매매 중위 ' + won(r.sale_median) + '원<br>' +
+          '전세 중위 ' + won(r.jeonse_median) + '원</div>',
+      });
     });
-    if (pts.length) { try { map.fitBounds(pts, { padding: [40, 40], maxZoom: 11 }); } catch (e) {} }
+    MAP.fitBounds(pts);
   }
 
   function render() {
