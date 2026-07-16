@@ -161,15 +161,18 @@ ul.idx a{display:block;padding:8px 10px;border:1px solid var(--line);border-radi
 
 
 def page_head(title, desc, canonical):
+    logo = BASE + "/assets/images/brand/logo.png"
     return (
         '<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="utf-8" />\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1" />\n'
         f'<title>{esc(title)}</title>\n'
         f'<meta name="description" content="{esc(desc)}" />\n'
+        f'<link rel="icon" href="{esc(logo)}" type="image/png" />\n'
         f'<link rel="canonical" href="{esc(canonical)}" />\n'
         f'<meta property="og:title" content="{esc(title)}" />\n'
         f'<meta property="og:description" content="{esc(desc)}" />\n'
         f'<meta property="og:url" content="{esc(canonical)}" />\n'
+        f'<meta property="og:image" content="{esc(logo)}" />\n'
         '<meta property="og:type" content="website" />\n'
         f'<style>{STYLE}</style>\n</head>\n<body>\n'
     )

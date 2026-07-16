@@ -31,11 +31,21 @@ jobs:
         run: |
           # Kakao 지도 JS 키는 도메인 제한형이라 배포본 노출이 정상.
           # __KAKAO_JS_KEY__ 플레이스홀더를 secret 값으로 치환(미설정 시 폴백 지도 유지).
+          #
+          # 견고화(2026-07-17): GitHub Secrets UI에 값을 붙여넣을 때 트레일링
+          # 개행·공백이 함께 들어가는 실수가 흔하다. 그 상태로 그대로 sed 치환하면
+          # JS 문자열 리터럴 안에 실제 개행이 섞여 `var KAKAO_KEY = '...\n';`처럼
+          # 문법 오류가 나고, <script> 블록 전체가 죽어 Leaflet 폴백조차 못 탄다
+          # ("키를 분명히 넣었는데 지도가 아예 안 뜬다"의 유력 원인). 주입 전
+          # 공백류를 전부 제거하고, sed 치환자에 특수문자(/,&,\)가 섞여도
+          # 안전하도록 이스케이프한다.
+          KAKAO_JS_KEY="$(printf '%s' "$KAKAO_JS_KEY" | tr -d '[:space:]')"
           if [ -n "$KAKAO_JS_KEY" ]; then
+            ESCAPED="$(printf '%s\n' "$KAKAO_JS_KEY" | sed -e 's/[\/&]/\\&/g')"
             grep -rl "__KAKAO_JS_KEY__" site | while read -r f; do
-              sed -i "s/__KAKAO_JS_KEY__/${KAKAO_JS_KEY}/g" "$f"
+              sed -i "s/__KAKAO_JS_KEY__/${ESCAPED}/g" "$f"
             done
-            echo "Kakao JS key injected into site/"
+            echo "Kakao JS key injected into site/ (길이=${#KAKAO_JS_KEY})"
           else
             echo "KAKAO_JAVASCRIPT_KEY 미설정 — 주입 생략(Leaflet 폴백 사용)"
           fi
