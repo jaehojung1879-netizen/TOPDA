@@ -14,28 +14,42 @@
   var sdkState = 'idle';   // idle | loading | ready | failed
   var waiters = [];
 
+  function warnFallback(reason) {
+    if (root.console && console.warn) {
+      console.warn('[톺다 지도] Kakao 지도 사용 불가(' + reason + ') — developers.kakao.com > 내 애플리케이션 > '
+        + '플랫폼 > Web에 ' + location.origin + ' 등록 여부와 JavaScript 키(REST 키 아님)인지 확인하세요. '
+        + 'Leaflet 지도로 대체합니다.');
+    }
+  }
+
   function loadSdk(cb) {
     if (root.kakao && root.kakao.maps && sdkState === 'ready') { cb(true); return; }
     waiters.push(cb);
     if (sdkState === 'loading') return;
     sdkState = 'loading';
+    var settled = false;
+    function settle(ok, reason) {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      sdkState = ok ? 'ready' : 'failed';
+      if (!ok) warnFallback(reason);
+      waiters.splice(0).forEach(function (w) { w(ok); });
+    }
+    // 스크립트는 로드됐지만 kakao.maps.load() 콜백이 영영 안 오는 경우(도메인 미등록 시
+    // 카카오 SDK가 예외를 던지지 않고 조용히 멈추는 사례가 있다) 화면이 빈 채로 굳는다.
+    // 일정 시간 내 초기화가 안 되면 강제로 Leaflet 폴백을 태운다.
+    var timer = setTimeout(function () { settle(false, 'SDK 초기화 지연 6초 초과'); }, 6000);
     var s = document.createElement('script');
     s.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=' + KAKAO_KEY + '&autoload=false';
     s.onload = function () {
-      root.kakao.maps.load(function () {
-        sdkState = 'ready';
-        waiters.splice(0).forEach(function (w) { w(true); });
-      });
-    };
-    s.onerror = function () {
-      sdkState = 'failed';
-      // 키는 주입됐는데 SDK가 거부되면 대부분 카카오 콘솔의 Web 플랫폼 도메인 미등록.
-      if (root.console && console.warn) {
-        console.warn('[톺다 지도] Kakao SDK 로딩 실패 — developers.kakao.com > 내 애플리케이션 > 플랫폼 > Web에 '
-          + location.origin + ' 등록 여부와 JavaScript 키인지 확인하세요. Leaflet 지도로 대체합니다.');
+      try {
+        kakao.maps.load(function () { settle(true); });
+      } catch (e) {
+        settle(false, 'SDK 실행 오류: ' + e.message);
       }
-      waiters.splice(0).forEach(function (w) { w(false); });
     };
+    s.onerror = function () { settle(false, 'SDK 스크립트 로딩 실패'); };
     document.head.appendChild(s);
   }
 

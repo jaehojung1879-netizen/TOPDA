@@ -542,17 +542,34 @@
     if (window.kakao && window.kakao.maps) { cb(); return; }
     if (kakaoLoading) return;   // 이미 로딩 중 — onload 콜백이 렌더
     kakaoLoading = true;
-    var s = document.createElement('script');
-    s.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=' + KAKAO_KEY + '&autoload=false&libraries=clusterer';
-    s.onload = function () { kakao.maps.load(function () { kakaoLoading = false; cb(); }); };
-    s.onerror = function () {   // SDK 로딩 실패 → Leaflet 폴백
+    var settled = false;
+    function fail(reason) {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
       // 키가 주입돼 있는데 실패하면 대부분 카카오 콘솔 Web 플랫폼 도메인 미등록(또는 REST 키 오용).
       if (window.console && console.warn) {
-        console.warn('[톺다 지도] Kakao SDK 로딩 실패 — developers.kakao.com > 내 애플리케이션 > 플랫폼 > Web에 '
-          + location.origin + ' 등록 여부와 JavaScript 키인지 확인하세요. Leaflet 지도로 대체합니다.');
+        console.warn('[톺다 지도] Kakao 지도 사용 불가(' + reason + ') — developers.kakao.com > 내 애플리케이션 > '
+          + '플랫폼 > Web에 ' + location.origin + ' 등록 여부와 JavaScript 키(REST 키 아님)인지 확인하세요. '
+          + 'Leaflet 지도로 대체합니다.');
       }
       kakaoLoading = false; useKakao = false; renderLeafletMap();
+    }
+    // 스크립트 로드는 성공했는데 kakao.maps.load() 콜백이 영영 안 오는 경우(도메인 미등록 시
+    // 조용히 멈추는 사례가 있다) 지도 영역이 빈 채로 굳는다 — 일정 시간 내 미완료 시 강제 폴백.
+    var timer = setTimeout(function () { fail('SDK 초기화 지연 6초 초과'); }, 6000);
+    var s = document.createElement('script');
+    s.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=' + KAKAO_KEY + '&autoload=false&libraries=clusterer';
+    s.onload = function () {
+      try {
+        kakao.maps.load(function () {
+          if (settled) return;
+          settled = true; clearTimeout(timer);
+          kakaoLoading = false; cb();
+        });
+      } catch (e) { fail('SDK 실행 오류: ' + e.message); }
     };
+    s.onerror = function () { fail('SDK 스크립트 로딩 실패'); };
     document.head.appendChild(s);
   }
   function circleImage(color, r) {
