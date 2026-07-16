@@ -87,12 +87,20 @@ def main():
 
     # 시간 예산: 스텝 타임아웃으로 강제 종료되면 진행분이 통째로 유실된다(2026-07-03:
     # 25분 내내 돌고 저장 0건). 마감 전에 멈추고, 지역 단위로 중간 저장(checkpoint)한다.
-    deadline = L.deadline_from_env()
+    deadline = L.deadline_from_env()   # 전체 마감(위치보강 포함) — 저장 시점 계산 등에 사용
+    # 세대수 확보 지역 루프 전용 내부 마감(전체보다 이르게). 안 두면 대상이 큰 날
+    # (2026-07-16: 실거래전용 9,596개) 지역 루프가 전체 예산을 다 써버려 아래 위치보강
+    # 패스가 시작부터 out_of_time으로 0건이 된다 — 위치보강 몫을 마지막에 확실히 남긴다.
+    region_deadline = deadline
+    if deadline is not None:
+        budget_min = float(os.environ.get("TIME_BUDGET_MIN", "20") or 20)
+        loc_budget_min = min(5.0, budget_min * 0.25)
+        region_deadline = deadline - loc_budget_min * 60
     saved_filled = 0        # apartments.json 마지막 저장 시점의 filled
     saved_extra = 0         # households.json 마지막 저장 시점의 extra_filled
 
     for region in regions:
-        if L.out_of_time(deadline, margin_sec=30):
+        if L.out_of_time(region_deadline, margin_sec=30):
             print(f"시간 예산 소진 — 남은 지역은 다음 실행에서 이어서 보강 (누적 {stat['filled']}건)")
             break
         lawd = L.LAWD[region]
@@ -111,7 +119,7 @@ def main():
             continue
         # 1) 큐레이션 단지(맞춤찾기 노출) 먼저 — 법정동 병용 매칭
         for a in by_region.get(region, []):
-            if L.out_of_time(deadline, margin_sec=30):
+            if L.out_of_time(region_deadline, margin_sec=30):
                 break
             code = CA.kapt_match(kmap, a["name"], CA._dong_of(a))
             if not code:
@@ -127,7 +135,7 @@ def main():
                 a["built_year"] = yr
         # 2) 실거래 원장에만 있는 단지 — households.json에 축적 (법정동 병용)
         for name, dong in extra_by_region.get(region, []):
-            if L.out_of_time(deadline, margin_sec=30):
+            if L.out_of_time(region_deadline, margin_sec=30):
                 break
             code = CA.kapt_match(kmap, name, dong)
             if not code:
