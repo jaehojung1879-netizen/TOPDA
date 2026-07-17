@@ -14,6 +14,7 @@
 | `REB_RONE_KEY` | 매매·전세 가격지수, 전세가율 | 한국부동산원 R-ONE(reb.or.kr/r-one) |
 | `NAVER_MAP_CLIENT_ID` / `_SECRET` | (선택) Kakao 대체 지도 | 네이버클라우드 Maps |
 | `JUSO_API_KEY`, `VWORLD_KEY` | (선택) 주소→좌표 대체 | juso.go.kr / vworld.kr |
+| `SUPABASE_URL` / `SUPABASE_ANON_KEY` | 게시판 공개글 공유(모든 방문자에게 노출) | Supabase 프로젝트 — 설정은 `_meta/SUPABASE_SETUP.md` 참고 |
 
 ## 2) 실행
 - 자동: 매일 04:00 KST (`.github/workflows/refresh-data.yml`)
