@@ -3194,10 +3194,9 @@ function calcJeonseLoanByAgency(deposit, opts) {
         { inc: 60000000, label: '6천만 이하' },
         { inc: 80000000, label: '8천만 이하' },
         { inc: 100000000, label: '1억 이하' },
-        { inc: 130000000, label: '1.3억 이하*' },
+        { inc: 130000000, label: '1.3억 이하' },
       ];
       const ratio = youth && hfConf.ratioYouth ? hfConf.ratioYouth : hfConf.ratio;
-      const capIncome = youth && hfConf.incomeCapYouth ? hfConf.incomeCapYouth : hfConf.incomeCap;
       const myBand = income > 0 ? bands.find((b) => income <= b.inc) : null;
       // 모바일 표 폭을 위해 억 단위 축약 표기 (1.8억 / 4억)
       const eok = (v) => {
@@ -3206,14 +3205,12 @@ function calcJeonseLoanByAgency(deposit, opts) {
       };
       const rows = bands.map((b) => {
         const ib = Math.max(0, b.inc * hfConf.incomeMultiple - creditLoan * (hfConf.creditDeductRatio || 0));
-        const eligible = b.inc <= capIncome;
-        const lim = eligible ? Math.round(Math.min(deposit * ratio / 100, hfConf.maxAmount, ib)) : 0;
+        const lim = Math.round(Math.min(deposit * ratio / 100, hfConf.maxAmount, ib));
         const mine = myBand && b.inc === myBand.inc;
         return '<tr' + (mine ? ' class="is-active"' : '') + '>' +
           '<td>' + b.label + (mine ? ' ★' : '') + '</td>' +
           '<td>' + eok(ib) + '</td>' +
-          '<td>' + (eligible ? '<strong>' + eok(lim) + '</strong>'
-            : '<span style="color:#b45309;">청년·신혼만</span>') + '</td>' +
+          '<td><strong>' + eok(lim) + '</strong></td>' +
           '</tr>';
       }).join('');
       box.innerHTML += '<div class="agency-card" style="background:var(--surface-2,#f8fafc);">' +
@@ -3224,7 +3221,37 @@ function calcJeonseLoanByAgency(deposit, opts) {
         '<div class="table-wrap compact" style="margin-top:8px;"><table class="data" style="font-size:0.8rem;">' +
         '<thead><tr><th>연소득(부부합산)</th><th>상환능력<span style="font-weight:500;">(근사)</span></th><th>최종 한도</th></tr></thead>' +
         '<tbody>' + rows + '</tbody></table></div>' +
-        '<div class="agency-note">* 1.3억 구간은 청년·신혼 전용. 정확한 금액은 <a href="https://www.hf.go.kr/ko/sub02/sub02_03_01.do" target="_blank" rel="noopener" style="color:var(--accent,#2563eb);">HF 예상보증금액 조회</a>로 확인하세요.</div>' +
+        '<div class="agency-note">소득에 자격 제한은 없으며, 소득이 낮으면 상환능력별 한도가 줄어들 뿐입니다. 정확한 금액은 <a href="https://www.hf.go.kr/ko/sub02/sub02_03_01.do" target="_blank" rel="noopener" style="color:var(--accent,#2563eb);">HF 예상보증금액 조회</a>로 확인하세요.</div>' +
+        '</div>';
+    }
+
+    // 기금성 전세대출(버팀목 시리즈) — 부부합산 소득 상한은 이 상품군에만 있다.
+    // 입력한 소득·보증금·지역으로 상품별 충족 여부와 예상 한도를 보여준다.
+    const fundProducts = (((window.TOPDA_RATES || {}).loan || {}).jeonseFundProducts) || [];
+    if (fundProducts.length && agencySel === 'all') {
+      const fundRows = fundProducts.map((p) => {
+        const depositCap = metro ? p.depositCapMetro : p.depositCapOther;
+        const maxAmt = metro ? p.maxMetro : p.maxOther;
+        const incomeOk = !income || income <= p.incomeCap;
+        const depositOk = deposit <= depositCap;
+        const lim = (incomeOk && depositOk) ? Math.round(Math.min(deposit * p.ratio / 100, maxAmt)) : 0;
+        const badge = !incomeOk
+          ? '<span style="color:#b45309;">소득 상한(' + fmt.eokMan(p.incomeCap).replace('약 ', '') + ') 초과</span>'
+          : !depositOk
+            ? '<span style="color:#b45309;">보증금 상한(' + fmt.eokMan(depositCap).replace('약 ', '') + ') 초과</span>'
+            : '<strong>' + fmt.eokMan(lim).replace('약 ', '') + '</strong>';
+        return '<tr><td>' + p.name + '<br/><span style="color:var(--text-muted);font-size:0.9em;">' + p.who + '</span></td>' +
+          '<td>≤' + fmt.eokMan(p.incomeCap).replace('약 ', '') + '</td>' +
+          '<td>' + badge + '</td>' +
+          '<td style="white-space:normal;">' + p.rate + '</td></tr>';
+      }).join('');
+      box.innerHTML += '<div class="agency-card" style="background:var(--surface-2,#f8fafc);">' +
+        '<div class="agency-top"><span class="agency-name">기금성 전세대출 (버팀목 시리즈)</span></div>' +
+        '<div class="agency-meta">부부합산 <strong>소득 상한은 이 상품군에만</strong> 있습니다(일반 보증은 소득 무관). 요건이 맞으면 금리가 낮아 일반 보증보다 우선 검토하세요.</div>' +
+        '<div class="table-wrap compact" style="margin-top:8px;"><table class="data" style="font-size:0.8rem;">' +
+        '<thead><tr><th>상품 · 대상</th><th>소득 상한</th><th>내 예상 한도</th><th>금리(참고)</th></tr></thead>' +
+        '<tbody>' + fundRows + '</tbody></table></div>' +
+        '<div class="agency-note">한도 = min(보증금×대출비율, 상품 최대한도). 무주택·자산 요건 등 세부 자격은 <a href="' + ((((window.TOPDA_RATES || {}).loan || {}).jeonseFundSource) || 'https://nhuf.molit.go.kr') + '" target="_blank" rel="noopener" style="color:var(--accent,#2563eb);">주택도시기금 포털</a>에서 확인하세요. 금리·요건은 고시로 수시 변경됩니다.</div>' +
         '</div>';
     }
   }
