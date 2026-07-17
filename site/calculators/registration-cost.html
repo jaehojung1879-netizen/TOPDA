@@ -365,6 +365,18 @@
   $('rc-form').addEventListener('input', recalc);
   $('rc-form').addEventListener('change', recalc);
   recalc();
+
+  // 국민주택채권 당일 할인율 자동 반영 — 수집 실패/미설정 시 기존 기본값(15%) 그대로 유지.
+  var discountTouched = false;
+  $('rc-discount').addEventListener('input', function () { discountTouched = true; });
+  fetch('../assets/bond_rate.json?t=' + Date.now(), { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) {
+      if (!j || j.seed || discountTouched || !j.customer_burden_rate_pct) return;
+      $('rc-discount').value = j.customer_burden_rate_pct;
+      recalc();
+    })
+    .catch(function () {});
 })();
 </script>
 </body>

@@ -810,6 +810,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
 
   function init() {
     let currentScn = 'sale';
+    let leaseBizTouched = false;   // 임대사업자 체크박스를 사용자가 직접 만졌으면 자동 제안을 멈춘다
     const RATES = window.TOPDA_RATES || {};
     const DSR_T1 = (RATES.dsr && RATES.dsr.tier1) || 40; // 1금융 한도(%)
     const DSR_T2 = (RATES.dsr && RATES.dsr.tier2) || 50; // 2금융 한도(%)
@@ -1208,8 +1209,13 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       if (gapField) gapField.style.display = purpose === 'gap' ? '' : 'none';
 
       const nonhouse = (getRadio('assetType') || 'house') === 'nonhouse';
-      // 비주택을 임대 목적으로 매수 → 임대사업자 대출은 DSR 대신 RTI로 심사
-      const isLeaseBiz = nonhouse && purpose === 'gap';
+      // 임대사업자 대출 여부는 명시적 체크박스로 구분(주택도 임대사업자 등록 시 RTI 적용 가능).
+      // 사용자가 직접 만지기 전까지는 비주택=체크(대부분 사업자 대출)·주택=미체크(실거주·갭투자 흔함)로 자동 제안.
+      const leaseBizField = root.querySelector('[data-lease-biz-field]');
+      const leaseBizInput = root.querySelector('[data-lease-biz]');
+      if (leaseBizField) leaseBizField.style.display = purpose === 'gap' ? '' : 'none';
+      if (leaseBizInput && purpose === 'gap' && !leaseBizTouched) leaseBizInput.checked = nonhouse;
+      const isLeaseBiz = purpose === 'gap' && getCheck('leaseBiz');
       const rtiField = root.querySelector('[data-rti-input]');
       if (rtiField) rtiField.style.display = isLeaseBiz ? '' : 'none';
       let acq;
@@ -1283,12 +1289,13 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       ]);
 
       if (isLeaseBiz) {
-        // 임대사업자 대출 → RTI
+        // 임대사업자 대출 → RTI (주택 1.25배 / 비주택 1.5배 기준)
         const annualRent = getN('saleRent') * 12;
         const annualInterest = loan * (rate / 100);
+        const rtiThreshold = nonhouse ? (RATES.rti && RATES.rti.commercial) || 1.5 : (RATES.rti && RATES.rti.residential) || 1.25;
         if (dsrBox) dsrBox.hidden = true;
         if (rtiBox) rtiBox.hidden = false;
-        renderRTI(annualRent, annualInterest, (RATES.rti && RATES.rti.commercial) || 1.5);
+        renderRTI(annualRent, annualInterest, rtiThreshold);
       } else {
         if (rtiBox) rtiBox.hidden = true;
         if (dsrBox) dsrBox.hidden = false;
@@ -1532,6 +1539,8 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       el.addEventListener('input', recalc);
       el.addEventListener('change', recalc);
     });
+    const leaseBizInput = root.querySelector('[data-lease-biz]');
+    if (leaseBizInput) leaseBizInput.addEventListener('change', () => { leaseBizTouched = true; });
     initOtherLoans();
     switchScn('sale');
   }
@@ -3009,7 +3018,21 @@ function calcMortgageLimit(input) {
   const binding = candidates.filter((c) => isFinite(c.value)).sort((a, b) => a.value - b.value)[0];
   const limit = Math.max(0, binding ? binding.value : 0);
 
-  return { ltvLimit, priceCap, dsrLimit, limit, binding, stressedRate, availAnnual };
+  // 최종 한도(LTV·가격대별·DSR 중 최소값)를 실제로 빌렸을 때의 예상 DSR —
+  // 한도 산정엔 스트레스 가산 금리를 쓰지만, 실제 상환은 스트레스 없는 실금리 기준이라
+  // (binding이 DSR이 아니라 LTV·가격대별인 경우) 실제 DSR은 40/50% 한도보다 낮게 나온다.
+  const realI = (rate || 0) / 100 / 12;
+  let realFactorAnnual;
+  if (n <= 0) realFactorAnnual = 0;
+  else if (repayType === 'principal') realFactorAnnual = 12 / n + realI * (12 - 66 / n);
+  else {
+    const m2 = realI > 0 ? realI * Math.pow(1 + realI, n) / (Math.pow(1 + realI, n) - 1) : 1 / n;
+    realFactorAnnual = m2 * 12;
+  }
+  const actualAnnualPmt = limit * realFactorAnnual;
+  const actualDsrPct = income > 0 ? (actualAnnualPmt + (existingAnnualDebt || 0)) / income * 100 : 0;
+
+  return { ltvLimit, priceCap, dsrLimit, limit, binding, stressedRate, availAnnual, actualDsrPct };
 }
 
 // 전세대출 한도: 보증기관별 비교.
@@ -3138,6 +3161,10 @@ function calcJeonseLoanByAgency(deposit, opts) {
     setText('mDsr', fmt.won(r.dsrLimit));
     setText('mStressed', r.stressedRate.toFixed(2) + '%');
     setText('mOwn', fmt.won(Math.max(0, price - r.limit)));
+    setText('mActualDsr', income > 0 ? r.actualDsrPct.toFixed(1) + '%' : '소득 입력 필요');
+    setText('mActualDsrNote', r.binding && r.binding.key === 'dsr'
+      ? 'DSR이 결정 요인 — 한도 산정 기준(스트레스 포함)과 거의 동일'
+      : (r.binding ? r.binding.label + '이 결정 요인 — DSR 한도보다 여유 있게 대출' : '—'));
   }
 
   function recalcJeonse() {
