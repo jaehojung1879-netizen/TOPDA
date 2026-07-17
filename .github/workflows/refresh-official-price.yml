@@ -1,0 +1,43 @@
+name: Refresh official price (공동주택 공시가격)
+
+# 단지 공동주택가격(시가표준액)을 점진 보강 → site/assets/official_price.json.
+# 공식 오픈API가 없어 Kakao(주소→PNU) + V-World(PNU→공시가격) 조합으로 단지당 API
+# 호출이 여러 번 걸린다. collect_households.py와 동일하게 TIME_BUDGET_MIN 안에서
+# 처리한 만큼만 저장하고 다음 실행이 이어서 채운다(전량 완료까지 여러 날 소요).
+#
+# refresh-listings(00:00)·refresh-news(00:10)·refresh-market(00:30)와 겹치지 않게
+# 00:40 KST에 배치해 git push 경합을 줄인다(그래도 충돌 시 git_commit_push.sh가 흡수).
+on:
+  schedule:
+    - cron: "40 15 * * *"   # 매일 00:40 KST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-official-price
+  cancel-in-progress: false
+
+jobs:
+  official-price:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Collect official price (Kakao PNU 변환 + V-World 공시가격)
+        working-directory: _meta
+        timeout-minutes: 20
+        env:
+          TIME_BUDGET_MIN: "18"
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+          VWORLD_KEY: ${{ secrets.VWORLD_KEY }}
+        run: python collect_official_price.py
+        continue-on-error: true
+
+      - name: Commit official_price.json
+        run: bash _meta/git_commit_push.sh "공동주택 공시가격 자동 보강 ($(date -u +%Y-%m-%d))" site/assets/official_price.json

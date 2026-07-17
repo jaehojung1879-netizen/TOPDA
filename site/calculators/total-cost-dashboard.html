@@ -41,6 +41,11 @@
     border-bottom: 1px solid var(--border, #f1f5f9);
   }
   .regstd-results .rs-deal:hover { background: var(--surface-2, #f8fafc); }
+  .regstd-results .rs-official strong { color: var(--accent, #2563eb); }
+  .regstd-results .rs-official-head {
+    padding: 6px 12px; font-size: 0.74rem; font-weight: 700; color: var(--text-muted);
+    background: var(--surface-2, #f8fafc); border-bottom: 1px solid var(--border, #f1f5f9);
+  }
   .regstd-results .rs-back { padding: 6px 12px; cursor: pointer; font-size: 0.82rem; color: var(--accent, #2563eb); font-weight: 600; }
   .regstd-picked {
     margin-top: 8px; font-size: 0.84rem; color: var(--accent, #2563eb); background: var(--accent-soft, #eff6ff);
@@ -244,7 +249,7 @@
 
         <h3 class="scn-section-title">등기·법무사</h3>
         <div class="field" data-house-only>
-          <label for="td-regStdSearch">단지 검색으로 채우기 (선택)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="단지명을 검색해 실거래 내역에서 원하는 평형·거래를 고르면 그 실거래가가 아래 시가표준액 칸에 채워집니다. 공식 시가표준액(공시가격)이 아니라 최근 실거래가 기준 추정치이며, 공시가격은 통상 이보다 낮습니다 — 정확한 값은 부동산공시가격알리미에서 확인하세요.">?</span></label>
+          <label for="td-regStdSearch">단지 검색으로 채우기 (선택)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="단지명을 검색하면 공식 공시가격(수집된 단지에 한함)과 최근 실거래가 목록이 함께 뜹니다. 공시가격이 있으면 그 값을, 없으면 실거래가(참고용 추정)를 골라 아래 시가표준액 칸에 채울 수 있습니다. 공시가격은 아직 일부 단지만 수집돼 있으며, 정확한 값은 부동산공시가격알리미에서도 확인 가능합니다.">?</span></label>
           <input id="td-regStdSearch" type="search" placeholder="단지명을 입력하세요 (예: 헬리오시티)" autocomplete="off" />
           <div class="regstd-results" id="regStdResults" hidden></div>
           <p class="regstd-picked" id="regStdPicked" hidden></p>
@@ -595,14 +600,22 @@
   var regStdInput = document.getElementById('td-regStd');
   if (!searchEl) return;
 
-  var DEALS = null, loading = null;
+  var DEALS = null, OFFICIAL = null, loading = null;
   function ensureData() {
     if (DEALS) return Promise.resolve(DEALS);
     if (loading) return loading;
-    loading = fetch('../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : { deals: [] }; })
-      .then(function (j) { DEALS = j.deals || []; return DEALS; })
-      .catch(function () { DEALS = []; return DEALS; });
+    loading = Promise.all([
+      fetch('../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : { deals: [] }; })
+        .catch(function () { return { deals: [] }; }),
+      fetch('../assets/official_price.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : { map: {} }; })
+        .catch(function () { return { map: {} }; }),
+    ]).then(function (res) {
+      DEALS = res[0].deals || [];
+      OFFICIAL = (res[1].seed ? {} : res[1].map) || {};
+      return DEALS;
+    });
     return loading;
   }
 
@@ -616,7 +629,7 @@
       var hay = (d.apt + ' ' + (d.region || '')).toLowerCase();
       if (hay.indexOf(q) < 0) return;
       var k = (d.region_key || '') + '|' + d.apt;
-      if (!byApt[k]) byApt[k] = { name: d.apt, region: d.region || d.region_key, count: 0 };
+      if (!byApt[k]) byApt[k] = { name: d.apt, region: d.region || d.region_key, regionKey: d.region_key || '', count: 0 };
       byApt[k].count += 1;
     });
     var list = Object.keys(byApt).map(function (k) { return byApt[k]; })
@@ -627,24 +640,35 @@
       return;
     }
     resultsEl.innerHTML = list.map(function (a) {
-      return '<div class="rs-apt" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region) + '">' +
+      return '<div class="rs-apt" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region) + '" data-region-key="' + esc(a.regionKey) + '">' +
         '<span class="rs-name">' + esc(a.name) + '</span><span class="rs-region">' + esc(a.region) + '</span></div>';
     }).join('');
     resultsEl.hidden = false;
   }
 
-  function renderDealList(aptName, regionLabel) {
+  function renderDealList(aptName, regionLabel, regionKey) {
     var deals = DEALS.filter(function (d) { return d.apt === aptName && (d.region || d.region_key) === regionLabel; })
       .sort(function (a, b) { return a.date < b.date ? 1 : -1; }).slice(0, 15);
-    if (!deals.length) {
-      resultsEl.innerHTML = '<div class="rs-back" data-back="1">← 목록으로</div><div class="rs-apt" style="cursor:default;color:var(--text-muted);">최근 실거래 내역이 없습니다.</div>';
+    var official = (OFFICIAL && OFFICIAL[regionKey + '|' + aptName]) || null;
+    var html = '<div class="rs-back" data-back="1">← 목록으로</div>';
+    if (official && official.units && official.units.length) {
+      html += '<div class="rs-official-head">공시가격(시가표준액) — 공식</div>' + official.units.map(function (u) {
+        return '<div class="rs-deal rs-official" data-official-price="' + u.official_price + '" data-area="' + u.area_m2 + '">' +
+          '<span>' + u.area_m2 + '㎡' + (u.stdr_year ? ' · ' + u.stdr_year + '년 공시' : '') + '</span><strong>' + won(u.official_price / 10000) + '</strong></div>';
+      }).join('');
+    }
+    if (!deals.length && !(official && official.units && official.units.length)) {
+      resultsEl.innerHTML = html + '<div class="rs-apt" style="cursor:default;color:var(--text-muted);">최근 실거래·공시가격 내역이 없습니다.</div>';
       resultsEl.hidden = false;
       return;
     }
-    resultsEl.innerHTML = '<div class="rs-back" data-back="1">← 목록으로</div>' + deals.map(function (d) {
-      return '<div class="rs-deal" data-price="' + d.price + '" data-area="' + d.area_m2 + '" data-pyeong="' + d.pyeong + '" data-date="' + d.date + '">' +
-        '<span>' + d.area_m2 + '㎡(' + d.pyeong + '평) · ' + d.date + '</span><strong>' + won(d.price) + '</strong></div>';
-    }).join('');
+    if (deals.length) {
+      html += '<div class="rs-official-head">최근 실거래가(참고용 추정)</div>' + deals.map(function (d) {
+        return '<div class="rs-deal" data-price="' + d.price + '" data-area="' + d.area_m2 + '" data-pyeong="' + d.pyeong + '" data-date="' + d.date + '">' +
+          '<span>' + d.area_m2 + '㎡(' + d.pyeong + '평) · ' + d.date + '</span><strong>' + won(d.price) + '</strong></div>';
+      }).join('');
+    }
+    resultsEl.innerHTML = html;
     resultsEl.hidden = false;
   }
 
@@ -655,10 +679,21 @@
     ensureData().then(function (deals) { renderAptList(deals, q); });
   }, 200));
 
-  var curApt = null, curRegion = null;
+  var curApt = null, curRegion = null, curRegionKey = null;
   resultsEl.addEventListener('click', function (e) {
     var back = e.target.closest('.rs-back');
     if (back) { renderAptList(DEALS, searchEl.value.trim().toLowerCase()); return; }
+    var official = e.target.closest('.rs-official');
+    if (official) {
+      regStdInput.value = Number(official.dataset.officialPrice);   // official_price.json 단위: 원(그대로)
+      regStdInput.dispatchEvent(new Event('input', { bubbles: true }));
+      pickedEl.textContent = '선택됨: ' + curApt + ' ' + official.dataset.area + '㎡ 공시가격 ' +
+        won(Number(official.dataset.officialPrice) / 10000) + ' → 시가표준액에 채움(공식 공시가격)';
+      pickedEl.hidden = false;
+      resultsEl.hidden = true;
+      searchEl.value = curApt;
+      return;
+    }
     var deal = e.target.closest('.rs-deal');
     if (deal) {
       regStdInput.value = Number(deal.dataset.price) * 10000;   // transactions.json 단위: 만원 → 원
@@ -672,8 +707,8 @@
     }
     var apt = e.target.closest('.rs-apt');
     if (apt && apt.dataset.apt) {
-      curApt = apt.dataset.apt; curRegion = apt.dataset.region;
-      renderDealList(curApt, curRegion);
+      curApt = apt.dataset.apt; curRegion = apt.dataset.region; curRegionKey = apt.dataset.regionKey;
+      renderDealList(curApt, curRegion, curRegionKey);
     }
   });
   document.addEventListener('click', function (e) {
