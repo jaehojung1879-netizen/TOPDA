@@ -162,18 +162,19 @@
   </div>
 
   <div class="tx-view-toggle" role="tablist">
-    <button type="button" data-view="list" class="active" role="tab" aria-selected="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h18M3 12h18M3 19h18"/></svg>
-      리스트
-    </button>
-    <button type="button" data-view="map" role="tab" aria-selected="false">
+    <button type="button" data-view="map" class="active" role="tab" aria-selected="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/></svg>
       지도
     </button>
+    <button type="button" data-view="list" role="tab" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h18M3 12h18M3 19h18"/></svg>
+      리스트
+    </button>
   </div>
 
-  <div id="txViewList">
-    <div class="tx-wrap">
+  <div id="txViewList" style="display:none;">
+    <p class="tx-search-hint" id="txSearchHint" style="color:var(--text-muted); font-size:0.85rem; margin:0 0 12px;">단지명 또는 시·군·구를 검색하면 목록이 표시됩니다.</p>
+    <div class="tx-wrap" id="txListWrap">
       <table class="tx">
         <thead><tr><th>거래일</th><th>단지</th><th>전용(평)</th><th class="num">거래금액</th><th class="hide-sm">층</th><th class="hide-sm">준공</th></tr></thead>
         <tbody id="txBody"></tbody>
@@ -182,7 +183,7 @@
     <p style="color:var(--text-muted); font-size:0.82rem; margin-top:10px;" id="txCount"></p>
   </div>
 
-  <div id="txViewMap" style="display:none; position:relative;">
+  <div id="txViewMap" style="position:relative;">
     <div id="txMap" role="region" aria-label="실거래가 지도"></div>
     <div class="tx-legend" aria-hidden="true">
       <div class="row"><span class="dot" style="background:#dc2626;"></span>10건+ 활발</div>
@@ -295,7 +296,8 @@
     var set = {};
     DATA.forEach(function (d) { var s = sidoOf(d); if (s) set[s] = true; });
     R.fillSidoSelect(sidoSel, Object.keys(set));
-    if (sidoSel.options.length > 1) sidoSel.value = 'all';
+    // 기본은 서울만 — 지도가 처음부터 전국을 다 그리면 무겁고, 대부분 관심 지역이 서울이라 기본값으로 좁혀둔다.
+    sidoSel.value = set['서울'] ? '서울' : 'all';
   }
   function fillGu() {
     var sido = sidoSel.value;
@@ -331,7 +333,27 @@
   // 단지 식별은 '지역+단지명' 복합키 — 동명 단지(예: 강동/종로 '아남1')가 충돌하지 않게 한다.
   function aptKey(regionKey, name) { return (regionKey || '') + '|' + name; }
 
+  var listWrapEl = document.getElementById('txListWrap');
+  var searchHintEl = document.getElementById('txSearchHint');
+
+  // 리스트는 무겁다(최대 500행) — 사용자가 단지명을 검색하거나 특정 시·군·구를 골랐을 때만 보여준다.
+  // 그 전에는 지도로 개요만 보고, 검색 시 목록이 뜨는 흐름.
+  function hasSearchContext() {
+    var q = (searchEl.value || '').trim();
+    var gu = guSel.value;
+    return !!q || (gu && gu !== 'all');
+  }
+
   function render() {
+    if (!hasSearchContext()) {
+      body.innerHTML = '';
+      listWrapEl.style.display = 'none';
+      searchHintEl.style.display = '';
+      countEl.textContent = '';
+      return;
+    }
+    listWrapEl.style.display = '';
+    searchHintEl.style.display = 'none';
     var list = filtered();
     list.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
     var top = list.slice(0, 500);   // 표시량 200 → 500 (검색 대상 확대)
@@ -717,9 +739,14 @@
       var d = daysSince(latest);
       asofEl.innerHTML = '실거래 최신 갱신 <strong>' + (latest || '—') + '</strong>' + (d != null ? ' (' + ago(d) + ')' : '') + ' · 총 ' + DATA.length.toLocaleString() + '건';
     }
+    // 맞춤 내집 찾기 등 다른 페이지에서 ?q=단지명 으로 넘어온 경우 — 검색을 채우고 리스트를 바로 보여준다
+    var qParam = '';
+    try { qParam = new URLSearchParams(location.search).get('q') || ''; } catch (e) {}
+    if (qParam) searchEl.value = qParam;
     fillSido();
     fillGu();
     render();
+    setView(qParam ? 'list' : 'map');
   });
 })();
 </script>
