@@ -16,8 +16,8 @@
 (function () {
   'use strict';
 
-  var GA4_MEASUREMENT_ID = 'G-XXXXXXXXXX';     // TODO: 실제 GA4 측정 ID로 교체
-  var NAVER_ANALYTICS_ID = 'NAVER_ANALYTICS_ID'; // TODO: 실제 네이버 애널리틱스 ID로 교체
+  var GA4_MEASUREMENT_ID = 'G-7NE57E1KLH';     // TODO: 실제 GA4 측정 ID로 교체
+  var NAVER_ANALYTICS_ID = '25db1b1d375e68'; // TODO: 실제 네이버 애널리틱스 ID로 교체
 
   var gaReady = /^G-[A-Z0-9]{6,}$/.test(GA4_MEASUREMENT_ID);
   var naverReady = NAVER_ANALYTICS_ID && NAVER_ANALYTICS_ID !== 'NAVER_ANALYTICS_ID';
