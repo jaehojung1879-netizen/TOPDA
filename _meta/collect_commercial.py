@@ -101,29 +101,11 @@ METRIC_KW = {"rent": "임대료", "vacancy": "공실률", "yield": "투자수익
 
 
 def _list_all_tables(api_key):
-    """R-ONE 통계표 목록 [(STATBL_ID, 이름)] — 1회 수집해 로컬에서 매칭."""
+    """R-ONE 통계표 목록 [(STATBL_ID, 이름)]. collect_market의 재시도 로직 재사용
+    (2026-07-17: 이 호출이 네트워크 타임아웃으로 실패해 상업용 임대 자동발견이
+    매번 스킵됐다 — 짧은 재시도로 일시적 지연에 견고하게 만들었다)."""
     import collect_market as M
-    out, page = [], 1
-    while page <= 30:
-        j = L.get_json(M.RONE_TBL_LIST, {"KEY": api_key, "Type": "json", "pIndex": page, "pSize": 1000})
-        code, msg = M.rone_result(j)
-        if code and not code.upper().startswith("INFO-0"):
-            raise RuntimeError(f"[{code}] {msg}")
-        rows = []
-        for block in (j.get("SttsApiTbl") or j.get("SttsApiTblData") or []):
-            if isinstance(block, dict) and block.get("row"):
-                rows = block["row"]
-        if not rows:
-            break
-        for r in rows:
-            name = M._row_get(r, "STATBL_NM") or M._row_get(r, "TBL_NM") or M._row_get(r, "NM")
-            sid = M._row_get(r, "STATBL_ID")
-            if sid and name:
-                out.append((sid, name))
-        if len(rows) < 1000:
-            break
-        page += 1
-    return out
+    return M._list_all_tables(api_key)
 
 
 MAX_PROBE = 4   # 후보당 실호출 검증 상한(호출량 절제 — 이름만으론 실제 데이터 유무를 알 수 없다)
