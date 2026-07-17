@@ -10191,797 +10191,2209 @@
     "서울 강남구|동부센트레빌": {
       "households": 805,
       "built_year": 2005,
-      "addr": "서울특별시 강남구 대치동 670 대치동부센트레빌"
+      "addr": "서울특별시 강남구 대치동 670 대치동부센트레빌",
+      "lat": 37.492793,
+      "lng": 127.055745,
+      "subway": {
+        "station": "도곡역 수인분당선",
+        "distance_m": 140
+      },
+      "elementary": {
+        "name": "서울대도초등학교",
+        "distance_m": 234
+      }
     },
     "서울 강남구|현대아파트3": {
       "households": 198,
       "built_year": 1986,
-      "addr": "서울특별시 강남구 개포동 177 개포현대3차"
+      "addr": "서울특별시 강남구 개포동 177 개포현대3차",
+      "lat": 37.487892,
+      "lng": 127.060956,
+      "subway": {
+        "station": "구룡역 수인분당선",
+        "distance_m": 160
+      },
+      "elementary": {
+        "name": "서울개일초등학교",
+        "distance_m": 335
+      }
     },
     "서울 강남구|삼성래미안": {
       "households": 732,
       "built_year": 2001,
-      "addr": "서울특별시 강남구 도곡동 91-5 도곡삼성래미안"
+      "addr": "서울특별시 강남구 도곡동 91-5 도곡삼성래미안",
+      "lat": 37.489818,
+      "lng": 127.050629,
+      "subway": {
+        "station": "도곡역 수인분당선",
+        "distance_m": 444
+      },
+      "elementary": {
+        "name": "서울대도초등학교",
+        "distance_m": 407
+      }
     },
     "서울 마포구|창전동현대홈타운": {
       "households": 243,
       "built_year": 2005,
-      "addr": "서울특별시 마포구 창전동 440 창전현대홈타운"
+      "addr": "서울특별시 마포구 창전동 440 창전현대홈타운",
+      "lat": 37.551021,
+      "lng": 126.93185,
+      "subway": {
+        "station": "서강대역 경의중앙선",
+        "distance_m": 346
+      },
+      "elementary": {
+        "name": "서울서강초등학교",
+        "distance_m": 515
+      }
     },
     "서울 마포구|세양청마루": {
       "households": 192,
       "built_year": 2003,
-      "addr": "서울특별시 마포구 신수동 451 신수세양청마루"
+      "addr": "서울특별시 마포구 신수동 451 신수세양청마루",
+      "lat": 37.54779,
+      "lng": 126.936716,
+      "subway": {
+        "station": "광흥창역 6호선",
+        "distance_m": 415
+      },
+      "elementary": {
+        "name": "서울신석초등학교",
+        "distance_m": 402
+      }
     },
     "서울 마포구|현대홈타운": {
       "households": 914,
       "built_year": 2000,
-      "addr": "서울특별시 마포구 도화동 353 도화현대홈타운"
+      "addr": "서울특별시 마포구 도화동 353 도화현대홈타운",
+      "lat": 37.537785,
+      "lng": 126.951787,
+      "subway": {
+        "station": "공덕역 공항철도",
+        "distance_m": 507
+      },
+      "elementary": {
+        "name": "서울원효초등학교",
+        "distance_m": 190
+      }
     },
     "인천 남동구|신동아": {
       "households": 750,
       "built_year": 1990,
-      "addr": "인천광역시 남동구 만수동 5-426 만수 신동아 아파트"
+      "addr": "인천광역시 남동구 만수동 5-426 만수 신동아 아파트",
+      "lat": 37.466506,
+      "lng": 126.737385,
+      "subway": {
+        "station": "만수역 인천2호선",
+        "distance_m": 1373
+      },
+      "elementary": {
+        "name": "인천조동초등학교",
+        "distance_m": 662
+      }
     },
     "서울 관악구|신림동신도브래뉴": {
       "households": 304,
       "built_year": 2003,
-      "addr": "서울특별시 관악구 신림동 1722 신림신도브래뉴"
+      "addr": "서울특별시 관악구 신림동 1722 신림신도브래뉴",
+      "lat": 37.48371,
+      "lng": 126.911493,
+      "subway": {
+        "station": "신대방역 2호선",
+        "distance_m": 472
+      },
+      "elementary": {
+        "name": "서울조원초등학교",
+        "distance_m": 176
+      }
     },
     "서울 양천구|아이파크": {
       "households": 590,
       "built_year": 2002,
-      "addr": "서울특별시 양천구 신정동 1296 신정동아이파크"
+      "addr": "서울특별시 양천구 신정동 1296 신정동아이파크",
+      "lat": 37.521648,
+      "lng": 126.872161,
+      "subway": {
+        "station": "오목교역 5호선",
+        "distance_m": 424
+      },
+      "elementary": {
+        "name": "서울목동초등학교",
+        "distance_m": 126
+      }
     },
     "서울 양천구|목동두산위브": {
       "households": 357,
       "built_year": 2012,
-      "addr": "서울특별시 양천구 신월동 1055 신정뉴타운두산위브"
+      "addr": "서울특별시 양천구 신월동 1055 신정뉴타운두산위브",
+      "lat": 37.518993,
+      "lng": 126.845676,
+      "subway": {
+        "station": "신정네거리역 2호선",
+        "distance_m": 652
+      },
+      "elementary": {
+        "name": "서울신남초등학교",
+        "distance_m": 314
+      }
     },
     "서울 양천구|대성유니드": {
       "households": 283,
       "built_year": 2004,
-      "addr": "서울특별시 양천구 신월동 1033 신월대성유니드"
+      "addr": "서울특별시 양천구 신월동 1033 신월대성유니드",
+      "lat": 37.520548,
+      "lng": 126.840618,
+      "subway": {
+        "station": "신정네거리역 2호선",
+        "distance_m": 1085
+      },
+      "elementary": {
+        "name": "서울강서초등학교",
+        "distance_m": 215
+      }
     },
     "서울 양천구|보람쉬움": {
       "households": 125,
       "built_year": 2003,
-      "addr": "서울특별시 양천구 신정동 921-11 신정동 보람쉬움아파트"
+      "addr": "서울특별시 양천구 신정동 921-11 신정동 보람쉬움아파트",
+      "lat": 37.52558,
+      "lng": 126.855509,
+      "subway": {
+        "station": "신정역 5호선",
+        "distance_m": 80
+      },
+      "elementary": {
+        "name": "서울양동초등학교",
+        "distance_m": 377
+      }
     },
     "서울 영등포구|두산위브": {
       "households": 271,
       "built_year": 2004,
-      "addr": "서울특별시 영등포구 영등포동 649 영등포두산위브"
+      "addr": "서울특별시 영등포구 영등포동 649 영등포두산위브",
+      "lat": 37.51486,
+      "lng": 126.913004,
+      "subway": {
+        "station": "신길역 5호선",
+        "distance_m": 354
+      },
+      "elementary": {
+        "name": "학력인정서현성인초등학교",
+        "distance_m": 361
+      }
     },
     "서울 영등포구|대림동갑을명가아파트": {
       "households": 157,
       "built_year": 2005,
-      "addr": "서울특별시 영등포구 대림동 1119 대림갑을명가"
+      "addr": "서울특별시 영등포구 대림동 1119 대림갑을명가",
+      "lat": 37.495674,
+      "lng": 126.903697,
+      "subway": {
+        "station": "대림역 7호선",
+        "distance_m": 692
+      },
+      "elementary": {
+        "name": "서울대동초등학교",
+        "distance_m": 412
+      }
     },
     "서울 영등포구|신동아파밀리에": {
       "households": 167,
       "built_year": 2008,
-      "addr": "서울특별시 영등포구 당산동1가 457 당산신동아파밀리에"
+      "addr": "서울특별시 영등포구 당산동1가 457 당산신동아파밀리에",
+      "lat": 37.519787,
+      "lng": 126.900392,
+      "subway": {
+        "station": "영등포시장역 5호선",
+        "distance_m": 533
+      },
+      "elementary": {
+        "name": "서울영중초등학교",
+        "distance_m": 549
+      }
     },
     "서울 동작구|우성2차": {
       "households": 174,
       "built_year": 1995,
-      "addr": "서울특별시 동작구 신대방동 565-21 신대방우성2차"
+      "addr": "서울특별시 동작구 신대방동 565-21 신대방우성2차",
+      "lat": 37.492922,
+      "lng": 126.910398,
+      "subway": {
+        "station": "신대방역 2호선",
+        "distance_m": 646
+      },
+      "elementary": {
+        "name": "서울신대림초등학교",
+        "distance_m": 401
+      }
     },
     "서울 동작구|경남아너스빌": {
       "households": 163,
       "built_year": 2006,
-      "addr": "서울특별시 동작구 대방동 512 대방경남아너스빌"
+      "addr": "서울특별시 동작구 대방동 512 대방경남아너스빌",
+      "lat": 37.511458,
+      "lng": 126.925701,
+      "subway": {
+        "station": "대방역 신림선",
+        "distance_m": 152
+      },
+      "elementary": {
+        "name": "서울신길초등학교",
+        "distance_m": 154
+      }
     },
     "서울 동작구|갑을명가": {
       "households": 63,
       "built_year": 2006,
-      "addr": "서울특별시 동작구 사당동 1151 사당갑을명가아파트"
+      "addr": "서울특별시 동작구 사당동 1151 사당갑을명가아파트",
+      "lat": 37.482471,
+      "lng": 126.966365,
+      "subway": {
+        "station": "남성역 7호선",
+        "distance_m": 477
+      },
+      "elementary": {
+        "name": "서울행림초등학교",
+        "distance_m": 170
+      }
     },
     "서울 동작구|두산위브트레지움": {
       "households": 451,
       "built_year": 2011,
-      "addr": "서울특별시 동작구 사당동 1131 남성두산위브트레지움"
+      "addr": "서울특별시 동작구 사당동 1131 남성두산위브트레지움",
+      "lat": 37.485393,
+      "lng": 126.97128,
+      "subway": {
+        "station": "남성역 7호선",
+        "distance_m": 74
+      },
+      "elementary": {
+        "name": "서울남성초등학교",
+        "distance_m": 413
+      }
     },
     "서울 서대문구|동부센트레빌": {
       "households": 237,
       "built_year": 2002,
-      "addr": "서울특별시 서대문구 냉천동 260 냉천동부센트레빌"
+      "addr": "서울특별시 서대문구 냉천동 260 냉천동부센트레빌",
+      "lat": 37.566607,
+      "lng": 126.960012,
+      "subway": {
+        "station": "서대문역 5호선",
+        "distance_m": 592
+      },
+      "elementary": {
+        "name": "경기초등학교",
+        "distance_m": 291
+      }
     },
     "서울 서대문구|홍은동풍림아이원": {
       "households": 333,
       "built_year": 2002,
-      "addr": "서울특별시 서대문구 홍은동 460 홍은풍림아이원"
+      "addr": "서울특별시 서대문구 홍은동 460 홍은풍림아이원",
+      "lat": 37.603645,
+      "lng": 126.948383,
+      "subway": {
+        "station": "녹번역 3호선",
+        "distance_m": 1152
+      },
+      "elementary": {
+        "name": "서울홍은초등학교",
+        "distance_m": 682
+      }
     },
     "서울 구로구|서울가든": {
       "households": 715,
       "built_year": 1989,
-      "addr": "서울특별시 구로구 고척동 141-1 고척서울가든"
+      "addr": "서울특별시 구로구 고척동 141-1 고척서울가든",
+      "lat": 37.502697,
+      "lng": 126.860598,
+      "subway": {
+        "station": "개봉역 1호선",
+        "distance_m": 909
+      },
+      "elementary": {
+        "name": "서울고척초등학교",
+        "distance_m": 373
+      }
     },
     "서울 구로구|오류동금호어울림": {
       "households": 182,
       "built_year": 2006,
-      "addr": "서울특별시 구로구 오류동 347 오류금호어울림"
+      "addr": "서울특별시 구로구 오류동 347 오류금호어울림",
+      "lat": 37.498457,
+      "lng": 126.839155,
+      "subway": {
+        "station": "오류동역 1호선",
+        "distance_m": 672
+      },
+      "elementary": {
+        "name": "서울오류초등학교",
+        "distance_m": 291
+      }
     },
     "서울 구로구|신도림현대": {
       "households": 450,
       "built_year": 1994,
-      "addr": "서울특별시 구로구 구로동 560 신도림현대"
+      "addr": "서울특별시 구로구 구로동 560 신도림현대",
+      "lat": 37.504816,
+      "lng": 126.885764,
+      "subway": {
+        "station": "구로역 1호선",
+        "distance_m": 346
+      },
+      "elementary": {
+        "name": "서울미래초등학교",
+        "distance_m": 215
+      }
     },
     "서울 구로구|오류동푸르지오": {
       "households": 378,
       "built_year": 2004,
-      "addr": "서울특별시 구로구 오류동 346 오류푸르지오"
+      "addr": "서울특별시 구로구 오류동 346 오류푸르지오",
+      "lat": 37.491608,
+      "lng": 126.841528,
+      "subway": {
+        "station": "오류동역 1호선",
+        "distance_m": 424
+      },
+      "elementary": {
+        "name": "서울오류남초등학교",
+        "distance_m": 342
+      }
     },
     "서울 구로구|우성1": {
       "households": 408,
       "built_year": 1992,
-      "addr": "서울특별시 구로구 신도림동 312-17 신도림우성1,2차"
+      "addr": "서울특별시 구로구 신도림동 312-17 신도림우성1,2차",
+      "lat": 37.511539,
+      "lng": 126.886021,
+      "subway": {
+        "station": "도림천역 2호선",
+        "distance_m": 444
+      },
+      "elementary": {
+        "name": "서울신도림초등학교",
+        "distance_m": 245
+      }
     },
     "경기 수원시 영통구|한양수자인": {
       "households": 530,
       "built_year": 2013,
-      "addr": "경기도 수원영통구 망포동 723 한양수자인에듀파크"
+      "addr": "경기도 수원영통구 망포동 723 한양수자인에듀파크",
+      "lat": 37.240533,
+      "lng": 127.057336,
+      "subway": {
+        "station": "망포역 수인분당선",
+        "distance_m": 568
+      },
+      "elementary": {
+        "name": "태장초등학교",
+        "distance_m": 242
+      }
     },
     "경기 용인시 수지구|우미이노스빌": {
       "households": 396,
       "built_year": 2004,
-      "addr": "경기도 용인수지구 동천동 869 수진마을우미이노스빌"
+      "addr": "경기도 용인수지구 동천동 869 수진마을우미이노스빌",
+      "lat": 37.335627,
+      "lng": 127.09473,
+      "subway": {
+        "station": "동천역 신분당선",
+        "distance_m": 762
+      },
+      "elementary": {
+        "name": "손곡초등학교",
+        "distance_m": 128
+      }
     },
     "경기 용인시 수지구|상현현대성우5차": {
       "households": 310,
       "built_year": 2003,
-      "addr": "경기도 용인수지구 상현동 843 현대성우5차"
+      "addr": "경기도 용인수지구 상현동 843 현대성우5차",
+      "lat": 37.308937,
+      "lng": 127.083914,
+      "subway": {
+        "station": "성복역 신분당선",
+        "distance_m": 598
+      },
+      "elementary": {
+        "name": "솔개초등학교",
+        "distance_m": 387
+      }
     },
     "경기 용인시 수지구|벽산첼시빌": {
       "households": 179,
       "built_year": 2001,
-      "addr": "경기도 용인수지구 죽전동 1111 창죽벽산첼시빌"
+      "addr": "경기도 용인수지구 죽전동 1111 창죽벽산첼시빌",
+      "lat": 37.337179,
+      "lng": 127.105852,
+      "subway": {
+        "station": "동천역 신분당선",
+        "distance_m": 274
+      },
+      "elementary": {
+        "name": "대현초등학교",
+        "distance_m": 397
+      }
     },
     "인천 부평구|부개동동도센트리움": {
       "households": 217,
       "built_year": 2014,
-      "addr": "인천광역시 부평구 부개동 308-3 부개동도센트리움"
+      "addr": "인천광역시 부평구 부개동 308-3 부개동도센트리움",
+      "lat": 37.487527,
+      "lng": 126.74205,
+      "subway": {
+        "station": "부개역 1호선",
+        "distance_m": 157
+      },
+      "elementary": {
+        "name": "인천부개초등학교",
+        "distance_m": 392
+      }
     },
     "인천 부평구|무지개": {
       "households": 330,
       "built_year": 1991,
-      "addr": "인천광역시 부평구 산곡동 191-3 산곡 무지개 아파트"
+      "addr": "인천광역시 부평구 산곡동 191-3 산곡 무지개 아파트",
+      "lat": 37.501024,
+      "lng": 126.703608,
+      "subway": {
+        "station": "산곡역 7호선",
+        "distance_m": 841
+      },
+      "elementary": {
+        "name": "인천부곡초등학교",
+        "distance_m": 386
+      }
     },
     "인천 부평구|두산위브": {
       "households": 280,
       "built_year": 2005,
-      "addr": "인천광역시 부평구 부평동 534-96 부평두산위브아파트"
+      "addr": "인천광역시 부평구 부평동 534-96 부평두산위브아파트",
+      "lat": 37.490583,
+      "lng": 126.717504,
+      "subway": {
+        "station": "부평역 인천1호선",
+        "distance_m": 526
+      },
+      "elementary": {
+        "name": "인천부평남초등학교",
+        "distance_m": 335
+      }
     },
     "서울 용산구|동원베네스트": {
       "households": 103,
       "built_year": 2005,
-      "addr": "서울특별시 용산구 이촌동 434 동원베네스트 아파트"
+      "addr": "서울특별시 용산구 이촌동 434 동원베네스트 아파트",
+      "lat": 37.526933,
+      "lng": 126.955057,
+      "subway": {
+        "station": "용산역 1호선",
+        "distance_m": 903
+      },
+      "elementary": {
+        "name": "서울한강초등학교",
+        "distance_m": 906
+      }
     },
     "서울 용산구|동부센트레빌": {
       "households": 309,
       "built_year": 2001,
-      "addr": "서울특별시 용산구 이촌동 418 이촌동부센트레빌"
+      "addr": "서울특별시 용산구 이촌동 418 이촌동부센트레빌",
+      "lat": 37.521182,
+      "lng": 126.966524,
+      "subway": {
+        "station": "이촌역 경의중앙선",
+        "distance_m": 635
+      },
+      "elementary": {
+        "name": "서울한강초등학교",
+        "distance_m": 465
+      }
     },
     "서울 용산구|한남동동원베네스트": {
       "households": 129,
       "built_year": 2010,
-      "addr": "서울특별시 용산구 한남동 522-1 동원베네스트"
+      "addr": "서울특별시 용산구 한남동 522-1 동원베네스트",
+      "lat": 37.530338,
+      "lng": 127.007715,
+      "subway": {
+        "station": "한남역 경의중앙선",
+        "distance_m": 166
+      },
+      "elementary": {
+        "name": "서울보광초등학교",
+        "distance_m": 1027
+      }
     },
     "서울 성동구|풍림아이원": {
       "households": 269,
       "built_year": 2004,
-      "addr": "서울특별시 성동구 옥수동 60 옥수강변풍림아이원"
+      "addr": "서울특별시 성동구 옥수동 60 옥수강변풍림아이원",
+      "lat": 37.542212,
+      "lng": 127.019579,
+      "subway": {
+        "station": "옥수역 경의중앙선",
+        "distance_m": 202
+      },
+      "elementary": {
+        "name": "서울옥정초등학교",
+        "distance_m": 355
+      }
     },
     "서울 성동구|중앙하이츠": {
       "households": 270,
       "built_year": 1989,
-      "addr": "서울특별시 성동구 사근동 199 사근중앙하이츠"
+      "addr": "서울특별시 성동구 사근동 199 사근중앙하이츠",
+      "lat": 37.561811,
+      "lng": 127.048653,
+      "subway": {
+        "station": "용답역 2호선",
+        "distance_m": 200
+      },
+      "elementary": {
+        "name": "서울사근초등학교",
+        "distance_m": 153
+      }
     },
     "서울 성동구|마장동중앙하이츠": {
       "households": 170,
       "built_year": 1999,
-      "addr": "서울특별시 성동구 마장동 819 왕십리중앙하이츠"
+      "addr": "서울특별시 성동구 마장동 819 왕십리중앙하이츠",
+      "lat": 37.565423,
+      "lng": 127.039099,
+      "subway": {
+        "station": "마장역 5호선",
+        "distance_m": 352
+      },
+      "elementary": {
+        "name": "서울마장초등학교",
+        "distance_m": 431
+      }
     },
     "서울 성동구|한진타운": {
       "households": 378,
       "built_year": 1994,
-      "addr": "서울특별시 성동구 성수동1가 704 성수한진타운"
+      "addr": "서울특별시 성동구 성수동1가 704 성수한진타운",
+      "lat": 37.541113,
+      "lng": 127.045298,
+      "subway": {
+        "station": "서울숲역 수인분당선",
+        "distance_m": 285
+      },
+      "elementary": {
+        "name": "서울경일초등학교",
+        "distance_m": 179
+      }
     },
     "서울 성동구|신금호": {
       "households": 169,
       "built_year": 2006,
-      "addr": "서울특별시 성동구 금호동1가 1818 신금호두산위브"
+      "addr": "서울특별시 성동구 금호동1가 1818 신금호두산위브",
+      "lat": 37.555966,
+      "lng": 127.022317,
+      "subway": {
+        "station": "신금호역 5호선",
+        "distance_m": 231
+      },
+      "elementary": {
+        "name": "서울금북초등학교",
+        "distance_m": 184
+      }
     },
     "서울 성동구|서울숲아이파크리버포레1차": {
       "households": 825,
       "built_year": 2024,
-      "addr": "서울특별시 성동구 성수동1가 721- 서울숲아이파크리버포레"
+      "addr": "서울특별시 성동구 성수동1가 721- 서울숲아이파크리버포레",
+      "lat": 37.550609,
+      "lng": 127.043054,
+      "subway": {
+        "station": "뚝섬역 2호선",
+        "distance_m": 535
+      },
+      "elementary": {
+        "name": "서울응봉초등학교",
+        "distance_m": 813
+      }
     },
     "서울 동대문구|전농동삼성래미안": {
       "households": 379,
       "built_year": 2001,
-      "addr": "서울특별시 동대문구 이문동 425 이문삼성래미안아파트"
+      "addr": "서울특별시 동대문구 이문동 425 이문삼성래미안아파트",
+      "lat": 37.600349,
+      "lng": 127.056433,
+      "subway": {
+        "station": "외대앞역 1호선",
+        "distance_m": 784
+      },
+      "elementary": {
+        "name": "서울이문초등학교",
+        "distance_m": 731
+      }
     },
     "서울 동대문구|이문동웰츠타워": {
       "households": 107,
       "built_year": 2008,
-      "addr": "서울특별시 동대문구 이문동 292-10 이문KCC웰츠타워"
+      "addr": "서울특별시 동대문구 이문동 292-10 이문KCC웰츠타워",
+      "lat": 37.598479,
+      "lng": 127.061915,
+      "subway": {
+        "station": "외대앞역 1호선",
+        "distance_m": 290
+      },
+      "elementary": {
+        "name": "서울이문초등학교",
+        "distance_m": 471
+      }
     },
     "서울 중랑구|한일써너스빌리젠시1단지(101동)": {
       "households": 128,
       "built_year": 2008,
-      "addr": "서울특별시 중랑구 망우동 479 한일써너스빌리젠시"
+      "addr": "서울특별시 중랑구 망우동 479 한일써너스빌리젠시",
+      "lat": 37.597335,
+      "lng": 127.093478,
+      "subway": {
+        "station": "망우역 경의중앙선",
+        "distance_m": 238
+      },
+      "elementary": {
+        "name": "서울중화초등학교",
+        "distance_m": 629
+      }
     },
     "서울 중랑구|경남아너스빌": {
       "households": 214,
       "built_year": 2007,
-      "addr": "서울특별시 중랑구 신내동 804 신내경남아너스빌"
+      "addr": "서울특별시 중랑구 신내동 804 신내경남아너스빌",
+      "lat": 37.603722,
+      "lng": 127.096741,
+      "subway": {
+        "station": "망우역 경춘선",
+        "distance_m": 603
+      },
+      "elementary": {
+        "name": "서울중화초등학교",
+        "distance_m": 214
+      }
     },
     "서울 중랑구|금호어울림": {
       "households": 193,
       "built_year": 2003,
-      "addr": "서울특별시 중랑구 묵동 386 묵동금호어울림"
+      "addr": "서울특별시 중랑구 묵동 386 묵동금호어울림",
+      "lat": 37.612726,
+      "lng": 127.080042,
+      "subway": {
+        "station": "먹골역 7호선",
+        "distance_m": 308
+      },
+      "elementary": {
+        "name": "서울묵현초등학교",
+        "distance_m": 705
+      }
     },
     "서울 성북구|코오롱": {
       "households": 453,
       "built_year": 1999,
-      "addr": "서울특별시 성북구 석관동 405 석관코오롱"
+      "addr": "서울특별시 성북구 석관동 405 석관코오롱",
+      "lat": 37.606283,
+      "lng": 127.065718,
+      "subway": {
+        "station": "신이문역 1호선",
+        "distance_m": 521
+      },
+      "elementary": {
+        "name": "서울석계초등학교",
+        "distance_m": 441
+      }
     },
     "서울 성북구|중앙하이츠": {
       "households": 315,
       "built_year": 1994,
-      "addr": "서울특별시 성북구 석관동 110-2 석관중앙하이츠"
+      "addr": "서울특별시 성북구 석관동 110-2 석관중앙하이츠",
+      "lat": 37.611093,
+      "lng": 127.06669,
+      "subway": {
+        "station": "석계역 1호선",
+        "distance_m": 443
+      },
+      "elementary": {
+        "name": "서울석계초등학교",
+        "distance_m": 392
+      }
     },
     "서울 성북구|돈암동해피트리": {
       "households": 192,
       "built_year": 2013,
-      "addr": "서울특별시 성북구 돈암동 642 돈암신일해피트리"
+      "addr": "서울특별시 성북구 돈암동 642 돈암신일해피트리",
+      "lat": 37.597995,
+      "lng": 127.011645,
+      "subway": {
+        "station": "정릉역 우이신설선",
+        "distance_m": 539
+      },
+      "elementary": {
+        "name": "서울정덕초등학교",
+        "distance_m": 160
+      }
     },
     "서울 성북구|동부센트레빌": {
       "households": 540,
       "built_year": 2003,
-      "addr": "서울특별시 성북구 돈암동 633 돈암동부센트레빌"
+      "addr": "서울특별시 성북구 돈암동 633 돈암동부센트레빌",
+      "lat": 37.601958,
+      "lng": 127.026323,
+      "subway": {
+        "station": "길음역 4호선",
+        "distance_m": 194
+      },
+      "elementary": {
+        "name": "서울개운초등학교",
+        "distance_m": 98
+      }
     },
     "서울 도봉구|쌍문동삼성래미안": {
       "households": 407,
       "built_year": 2002,
-      "addr": "서울특별시 도봉구 쌍문동 725 쌍문삼성래미안"
+      "addr": "서울특별시 도봉구 쌍문동 725 쌍문삼성래미안",
+      "lat": 37.646909,
+      "lng": 127.028189,
+      "subway": {
+        "station": "쌍문역 4호선",
+        "distance_m": 598
+      },
+      "elementary": {
+        "name": "서울쌍문초등학교",
+        "distance_m": 360
+      }
     },
     "서울 도봉구|방학동삼성래미안1": {
       "households": 603,
       "built_year": 2002,
-      "addr": "서울특별시 도봉구 방학동 720-18 방학삼성래미안1단지"
+      "addr": "서울특별시 도봉구 방학동 720-18 방학삼성래미안1단지",
+      "lat": 37.666978,
+      "lng": 127.047276,
+      "subway": {
+        "station": "방학역 1호선",
+        "distance_m": 265
+      },
+      "elementary": {
+        "name": "서울창도초등학교",
+        "distance_m": 377
+      }
     },
     "서울 도봉구|창동현대타운": {
       "households": 158,
       "built_year": 1999,
-      "addr": "서울특별시 도봉구 창동 812 창동현대타운(주복)"
+      "addr": "서울특별시 도봉구 창동 812 창동현대타운(주복)",
+      "lat": 37.647083,
+      "lng": 127.035226,
+      "subway": {
+        "station": "쌍문역 4호선",
+        "distance_m": 169
+      },
+      "elementary": {
+        "name": "서울창림초등학교",
+        "distance_m": 679
+      }
     },
     "서울 도봉구|서울가든": {
       "households": 348,
       "built_year": 1987,
-      "addr": "서울특별시 도봉구 도봉동 555 도봉서울가든"
+      "addr": "서울특별시 도봉구 도봉동 555 도봉서울가든",
+      "lat": 37.686553,
+      "lng": 127.041631,
+      "subway": {
+        "station": "도봉산역 1호선",
+        "distance_m": 510
+      },
+      "elementary": {
+        "name": "서울도봉초등학교",
+        "distance_m": 80
+      }
     },
     "서울 도봉구|방학동삼성래미안2": {
       "households": 288,
       "built_year": 2002,
-      "addr": "서울특별시 도봉구 방학동 715-12 방학삼성래미안2단지"
+      "addr": "서울특별시 도봉구 방학동 715-12 방학삼성래미안2단지",
+      "lat": 37.664885,
+      "lng": 127.045805,
+      "subway": {
+        "station": "방학역 1호선",
+        "distance_m": 312
+      },
+      "elementary": {
+        "name": "서울창도초등학교",
+        "distance_m": 330
+      }
     },
     "서울 도봉구|창동현대4차": {
       "households": 202,
       "built_year": 2003,
-      "addr": "서울특별시 도봉구 창동 818 창동현대4차아이파크"
+      "addr": "서울특별시 도봉구 창동 818 창동현대4차아이파크",
+      "lat": 37.658956,
+      "lng": 127.0463,
+      "subway": {
+        "station": "창동역 1호선",
+        "distance_m": 634
+      },
+      "elementary": {
+        "name": "서울자운초등학교",
+        "distance_m": 121
+      }
     },
     "서울 노원구|주공6": {
       "households": 600,
       "built_year": 1993,
-      "addr": "서울특별시 노원구 중계동 364-12 중계주공6단지"
+      "addr": "서울특별시 노원구 중계동 364-12 중계주공6단지",
+      "lat": 37.648653,
+      "lng": 127.078307,
+      "subway": {
+        "station": "중계역 7호선",
+        "distance_m": 1313
+      },
+      "elementary": {
+        "name": "서울수암초등학교",
+        "distance_m": 272
+      }
     },
     "서울 노원구|주공10": {
       "households": 330,
       "built_year": 1995,
-      "addr": "서울특별시 노원구 중계동 360-16 중계주공10단지"
+      "addr": "서울특별시 노원구 중계동 360-16 중계주공10단지",
+      "lat": 37.648095,
+      "lng": 127.07328,
+      "subway": {
+        "station": "중계역 7호선",
+        "distance_m": 875
+      },
+      "elementary": {
+        "name": "서울을지초등학교",
+        "distance_m": 288
+      }
     },
     "서울 노원구|풍림아이원": {
       "households": 484,
       "built_year": 2005,
-      "addr": "서울특별시 노원구 월계동 944 월계풍림아이원"
+      "addr": "서울특별시 노원구 월계동 944 월계풍림아이원",
+      "lat": 37.616613,
+      "lng": 127.06676,
+      "subway": {
+        "station": "석계역 6호선",
+        "distance_m": 162
+      },
+      "elementary": {
+        "name": "서울한천초등학교",
+        "distance_m": 470
+      }
     },
     "서울 노원구|주공7": {
       "households": 630,
       "built_year": 1993,
-      "addr": "서울특별시 노원구 중계동 363-1 중계주공7단지"
+      "addr": "서울특별시 노원구 중계동 363-1 중계주공7단지",
+      "lat": 37.647266,
+      "lng": 127.079636,
+      "subway": {
+        "station": "중계역 7호선",
+        "distance_m": 1391
+      },
+      "elementary": {
+        "name": "서울수암초등학교",
+        "distance_m": 177
+      }
     },
     "서울 노원구|라이프": {
       "households": 960,
       "built_year": 1993,
-      "addr": "서울특별시 노원구 중계동 366 중계라이프신동아청구아파트"
+      "addr": "서울특별시 노원구 중계동 366 중계라이프신동아청구아파트",
+      "lat": 37.652077,
+      "lng": 127.080262,
+      "subway": {
+        "station": "상계역 4호선",
+        "distance_m": 1133
+      },
+      "elementary": {
+        "name": "서울불암초등학교",
+        "distance_m": 107
+      }
     },
     "서울 노원구|주공4": {
       "households": 690,
       "built_year": 1991,
-      "addr": "서울특별시 노원구 중계동 358-2 중계주공4단지"
+      "addr": "서울특별시 노원구 중계동 358-2 중계주공4단지",
+      "lat": 37.655347,
+      "lng": 127.076921,
+      "subway": {
+        "station": "상계역 4호선",
+        "distance_m": 671
+      },
+      "elementary": {
+        "name": "서울원광초등학교",
+        "distance_m": 202
+      }
     },
     "서울 노원구|현대2차": {
       "households": 465,
       "built_year": 1993,
-      "addr": "서울특별시 노원구 상계동 1078 상계현대2차"
+      "addr": "서울특별시 노원구 상계동 1078 상계현대2차",
+      "lat": 37.672275,
+      "lng": 127.050409,
+      "subway": {
+        "station": "방학역 1호선",
+        "distance_m": 759
+      },
+      "elementary": {
+        "name": "서울상경초등학교",
+        "distance_m": 230
+      }
     },
     "서울 노원구|비콘드림힐(602)": {
       "households": 88,
       "built_year": 2005,
-      "addr": "서울특별시 노원구 중계동 602 비콘드림힐아파트"
+      "addr": "서울특별시 노원구 중계동 602 비콘드림힐아파트",
+      "lat": 37.658568,
+      "lng": 127.0759,
+      "subway": {
+        "station": "상계역 4호선",
+        "distance_m": 323
+      },
+      "elementary": {
+        "name": "서울중계초등학교",
+        "distance_m": 234
+      }
     },
     "서울 은평구|두산위브": {
       "households": 122,
       "built_year": 2005,
-      "addr": "서울특별시 은평구 증산동 255 증산동 두산위브아파트"
+      "addr": "서울특별시 은평구 증산동 255 증산동 두산위브아파트",
+      "lat": 37.584027,
+      "lng": 126.906314,
+      "subway": {
+        "station": "증산역 6호선",
+        "distance_m": 282
+      },
+      "elementary": {
+        "name": "서울증산초등학교",
+        "distance_m": 243
+      }
     },
     "서울 강서구|한솔솔파크": {
       "households": 258,
       "built_year": 2005,
-      "addr": "서울특별시 강서구 마곡동 716 마곡한솔솔파크"
+      "addr": "서울특별시 강서구 마곡동 716 마곡한솔솔파크",
+      "lat": 37.56972,
+      "lng": 126.823314,
+      "subway": {
+        "station": "마곡나루역 9호선",
+        "distance_m": 492
+      },
+      "elementary": {
+        "name": "서울송화초등학교",
+        "distance_m": 520
+      }
     },
     "서울 강서구|현대1": {
       "households": 498,
       "built_year": 1994,
-      "addr": "서울특별시 강서구 염창동 288 염창현대1차"
+      "addr": "서울특별시 강서구 염창동 288 염창현대1차",
+      "lat": 37.552852,
+      "lng": 126.875104,
+      "subway": {
+        "station": "염창역 9호선",
+        "distance_m": 651
+      },
+      "elementary": {
+        "name": "서울염동초등학교",
+        "distance_m": 240
+      }
     },
     "서울 강서구|일신건영휴먼빌": {
       "households": 166,
       "built_year": 2004,
-      "addr": "서울특별시 강서구 염창동 298 염창 일신건영휴먼빌아파트"
+      "addr": "서울특별시 강서구 염창동 298 염창 일신건영휴먼빌아파트",
+      "lat": 37.552125,
+      "lng": 126.873428,
+      "subway": {
+        "station": "염창역 9호선",
+        "distance_m": 584
+      },
+      "elementary": {
+        "name": "서울염동초등학교",
+        "distance_m": 95
+      }
     },
     "서울 강서구|신동아": {
       "households": 348,
       "built_year": 1995,
-      "addr": "서울특별시 강서구 염창동 289 염창신동아"
+      "addr": "서울특별시 강서구 염창동 289 염창신동아",
+      "lat": 37.555129,
+      "lng": 126.869051,
+      "subway": {
+        "station": "등촌역 9호선",
+        "distance_m": 577
+      },
+      "elementary": {
+        "name": "서울염경초등학교",
+        "distance_m": 189
+      }
     },
     "서울 강서구|중앙하이츠": {
       "households": 164,
       "built_year": 1999,
-      "addr": "서울특별시 강서구 가양동 1467 가양중앙하이츠"
+      "addr": "서울특별시 강서구 가양동 1467 가양중앙하이츠",
+      "lat": 37.569791,
+      "lng": 126.849264,
+      "subway": {
+        "station": "양천향교역 9호선",
+        "distance_m": 671
+      },
+      "elementary": {
+        "name": "서울탑산초등학교",
+        "distance_m": 410
+      }
     },
     "서울 강서구|월드메르디앙": {
       "households": 145,
       "built_year": 2002,
-      "addr": "서울특별시 강서구 등촌동 711- 등촌월드메르디앙"
+      "addr": "서울특별시 강서구 등촌동 711- 등촌월드메르디앙",
+      "lat": 37.564605,
+      "lng": 126.847224,
+      "subway": {
+        "station": "양천향교역 9호선",
+        "distance_m": 602
+      },
+      "elementary": {
+        "name": "서울등양초등학교",
+        "distance_m": 224
+      }
     },
     "서울 강서구|등촌동현대2차": {
       "households": 106,
       "built_year": 1993,
-      "addr": "서울특별시 강서구 염창동 249-11 염창현대2차아파트"
+      "addr": "서울특별시 강서구 염창동 249-11 염창현대2차아파트",
+      "lat": 37.551041,
+      "lng": 126.872798,
+      "subway": {
+        "station": "염창역 9호선",
+        "distance_m": 486
+      },
+      "elementary": {
+        "name": "서울염동초등학교",
+        "distance_m": 159
+      }
     },
     "부산 해운대구|롯데캐슬마스터": {
       "households": 200,
       "built_year": 2005,
-      "addr": "부산광역시 해운대구 좌동 970 좌동롯데캐슬마스터원"
+      "addr": "부산광역시 해운대구 좌동 970 좌동롯데캐슬마스터원",
+      "lat": 35.173816,
+      "lng": 129.175869,
+      "subway": {
+        "station": "장산역 부산2호선",
+        "distance_m": 441
+      },
+      "elementary": {
+        "name": "좌동초등학교",
+        "distance_m": 231
+      }
     },
     "부산 해운대구|신동아": {
       "households": 194,
       "built_year": 1991,
-      "addr": "부산광역시 해운대구 우동 496-1 우동신동아아파트"
+      "addr": "부산광역시 해운대구 우동 496-1 우동신동아아파트",
+      "lat": 35.16353,
+      "lng": 129.155252,
+      "subway": {
+        "station": "해운대역 부산2호선",
+        "distance_m": 332
+      },
+      "elementary": {
+        "name": "해동초등학교",
+        "distance_m": 748
+      }
     },
     "부산 해운대구|중동삼정그린코아": {
       "households": 228,
       "built_year": 2002,
-      "addr": "부산광역시 해운대구 중동 262-1 해운대삼정그린코아아파트"
+      "addr": "부산광역시 해운대구 중동 262-1 해운대삼정그린코아아파트",
+      "lat": 35.168582,
+      "lng": 129.173626,
+      "subway": {
+        "station": "장산역 부산2호선",
+        "distance_m": 344
+      },
+      "elementary": {
+        "name": "신도초등학교",
+        "distance_m": 572
+      }
     },
     "부산 해운대구|삼정그린코아": {
       "households": 299,
       "built_year": 1994,
-      "addr": "부산광역시 해운대구 반송동 78 반송삼정그린코아"
+      "addr": "부산광역시 해운대구 반송동 78 반송삼정그린코아",
+      "lat": 35.23096,
+      "lng": 129.160087,
+      "subway": {
+        "station": "고촌역 부산4호선",
+        "distance_m": 562
+      },
+      "elementary": {
+        "name": "운봉초등학교",
+        "distance_m": 206
+      }
     },
     "서울 서초구|서초동삼성쉐르빌2": {
       "households": 365,
       "built_year": 2002,
-      "addr": "서울특별시 서초구 서초동 1330 서초삼성쉐르빌2"
+      "addr": "서울특별시 서초구 서초동 1330 서초삼성쉐르빌2",
+      "lat": 37.49396,
+      "lng": 127.027881,
+      "subway": {
+        "station": "강남역 신분당선",
+        "distance_m": 313
+      },
+      "elementary": {
+        "name": "서울서이초등학교",
+        "distance_m": 309
+      }
     },
     "서울 서초구|월드메르디앙(오페라)": {
       "households": 47,
       "built_year": 2004,
-      "addr": "서울특별시 서초구 서초동 1450-1 월드메르디앙오페라하우스"
+      "addr": "서울특별시 서초구 서초동 1450-1 월드메르디앙오페라하우스",
+      "lat": 37.481553,
+      "lng": 127.013987,
+      "subway": {
+        "station": "남부터미널역 3호선",
+        "distance_m": 449
+      },
+      "elementary": {
+        "name": "서울신중초등학교",
+        "distance_m": 439
+      }
     },
     "서울 송파구|두산위브": {
       "households": 113,
       "built_year": 2004,
-      "addr": "서울특별시 송파구 가락동 98- 송파가락두산위브센티움"
+      "addr": "서울특별시 송파구 가락동 98- 송파가락두산위브센티움",
+      "lat": 37.494594,
+      "lng": 127.119155,
+      "subway": {
+        "station": "가락시장역 8호선",
+        "distance_m": 183
+      },
+      "elementary": {
+        "name": "서울평화초등학교",
+        "distance_m": 459
+      }
     },
     "서울 송파구|신동아": {
       "households": 134,
       "built_year": 2001,
-      "addr": "서울특별시 송파구 마천동 20 마천동신동아아파트"
+      "addr": "서울특별시 송파구 마천동 20 마천동신동아아파트",
+      "lat": 37.500426,
+      "lng": 127.144773,
+      "subway": {
+        "station": "거여역 5호선",
+        "distance_m": 792
+      },
+      "elementary": {
+        "name": "서울영풍초등학교",
+        "distance_m": 488
+      }
     },
     "서울 송파구|현대2차": {
       "households": 280,
       "built_year": 1992,
-      "addr": "서울특별시 송파구 거여동 44 거여현대2차"
+      "addr": "서울특별시 송파구 거여동 44 거여현대2차",
+      "lat": 37.494631,
+      "lng": 127.146402,
+      "subway": {
+        "station": "거여역 5호선",
+        "distance_m": 273
+      },
+      "elementary": {
+        "name": "서울영풍초등학교",
+        "distance_m": 336
+      }
     },
     "서울 송파구|현대1차": {
       "households": 497,
       "built_year": 1992,
-      "addr": "서울특별시 송파구 거여동 362 거여현대1차"
+      "addr": "서울특별시 송파구 거여동 362 거여현대1차",
+      "lat": 37.49285,
+      "lng": 127.141032,
+      "subway": {
+        "station": "거여역 5호선",
+        "distance_m": 248
+      },
+      "elementary": {
+        "name": "서울영풍초등학교",
+        "distance_m": 418
+      }
     },
     "서울 송파구|현대2": {
       "households": 108,
       "built_year": 1995,
-      "addr": "서울특별시 송파구 문정동 58 문정동현대2차아파트"
+      "addr": "서울특별시 송파구 문정동 58 문정동현대2차아파트",
+      "lat": 37.484147,
+      "lng": 127.124605,
+      "subway": {
+        "station": "문정역 8호선",
+        "distance_m": 280
+      },
+      "elementary": {
+        "name": "서울문덕초등학교",
+        "distance_m": 316
+      }
     },
     "경기 고양시 일산서구|푸르지오": {
       "households": 589,
       "built_year": 2013,
-      "addr": "경기도 고양일산서구 일산동 1945-1 일산푸르지오"
+      "addr": "경기도 고양일산서구 일산동 1945-1 일산푸르지오",
+      "lat": 37.690501,
+      "lng": 126.773105,
+      "subway": {
+        "station": "일산역 경의중앙선",
+        "distance_m": 971
+      },
+      "elementary": {
+        "name": "현산초등학교",
+        "distance_m": 289
+      }
     },
     "경기 고양시 덕양구|토당동금강KCC": {
       "households": 380,
       "built_year": 2004,
-      "addr": "경기도 고양덕양구 토당동 80 토당금강KCC"
+      "addr": "경기도 고양덕양구 토당동 80 토당금강KCC",
+      "lat": 37.627505,
+      "lng": 126.820295,
+      "subway": {
+        "station": "능곡역 경의중앙선",
+        "distance_m": 945
+      },
+      "elementary": {
+        "name": "능곡초등학교",
+        "distance_m": 506
+      }
     },
     "경기 고양시 덕양구|고양동우방유쉘아파트": {
       "households": 443,
       "built_year": 2007,
-      "addr": "경기도 고양덕양구 고양동 454 고양우방유쉘아파트"
+      "addr": "경기도 고양덕양구 고양동 454 고양우방유쉘아파트",
+      "lat": 37.700476,
+      "lng": 126.89936,
+      "elementary": {
+        "name": "고양초등학교",
+        "distance_m": 310
+      }
     },
     "경기 남양주시|쌍용예가": {
       "households": 652,
       "built_year": 2012,
-      "addr": "경기도 남양주시 별내동 1056 별내쌍용예가"
+      "addr": "경기도 남양주시 별내동 1056 별내쌍용예가",
+      "lat": 37.646851,
+      "lng": 127.119376,
+      "subway": {
+        "station": "별내역 8호선",
+        "distance_m": 849
+      },
+      "elementary": {
+        "name": "한별초등학교",
+        "distance_m": 301
+      }
     },
     "경기 남양주시|신안인스빌": {
       "households": 874,
       "built_year": 2012,
-      "addr": "경기도 남양주시 별내동 1047 별내신안인스빌"
+      "addr": "경기도 남양주시 별내동 1047 별내신안인스빌",
+      "lat": 37.648424,
+      "lng": 127.11241,
+      "subway": {
+        "station": "별내역 경춘선",
+        "distance_m": 1465
+      },
+      "elementary": {
+        "name": "한별초등학교",
+        "distance_m": 375
+      }
     },
     "경기 남양주시|남양주별내리슈빌": {
       "households": 627,
       "built_year": 2013,
-      "addr": "경기도 남양주시 별내동 914 별내리슈빌"
+      "addr": "경기도 남양주시 별내동 914 별내리슈빌",
+      "lat": 37.65839,
+      "lng": 127.120389,
+      "subway": {
+        "station": "별내별가람역 4호선",
+        "distance_m": 1111
+      },
+      "elementary": {
+        "name": "별가람초등학교",
+        "distance_m": 575
+      }
     },
     "경기 남양주시|한화꿈에그린": {
       "households": 767,
       "built_year": 2008,
-      "addr": "경기도 남양주시 다산동 3718 다산한화꿈에그린"
+      "addr": "경기도 남양주시 다산동 3718 다산한화꿈에그린",
+      "lat": 37.607914,
+      "lng": 127.167942,
+      "subway": {
+        "station": "도농역 경의중앙선",
+        "distance_m": 604
+      },
+      "elementary": {
+        "name": "남양주양정초등학교",
+        "distance_m": 202
+      }
     },
     "경기 남양주시|KCC스위첸": {
       "households": 679,
       "built_year": 2012,
-      "addr": "경기도 남양주시 별내동 1072 별내KCC스위첸"
+      "addr": "경기도 남양주시 별내동 1072 별내KCC스위첸",
+      "lat": 37.656209,
+      "lng": 127.116761,
+      "subway": {
+        "station": "별내별가람역 4호선",
+        "distance_m": 1292
+      },
+      "elementary": {
+        "name": "화접초등학교",
+        "distance_m": 319
+      }
     },
     "경기 남양주시|남양주라온프라이빗3단지": {
       "households": 283,
       "built_year": 2019,
-      "addr": "경기도 남양주시 화도읍 녹촌리 205-13 남양주라온프라이빗3단지"
+      "addr_bad": true
     },
     "경기 남양주시|마석LIG아파트": {
       "households": 444,
       "built_year": 2005,
-      "addr": "경기도 남양주시 화도읍 묵현리 47-3 마석LIG아파트"
+      "addr": "경기도 남양주시 화도읍 묵현리 47-3 마석LIG아파트",
+      "lat": 37.666416,
+      "lng": 127.304138,
+      "elementary": {
+        "name": "화도초등학교",
+        "distance_m": 502
+      }
     },
     "경기 남양주시|금곡역한신더휴": {
       "households": 406,
       "built_year": 2025,
-      "addr": "경기도 남양주시 금곡동 404-20 금곡역 한신더휴 아파트"
+      "addr": "경기도 남양주시 금곡동 404-20 금곡역 한신더휴 아파트",
+      "lat": 37.636601,
+      "lng": 127.20803,
+      "subway": {
+        "station": "금곡역 경춘선",
+        "distance_m": 94
+      },
+      "elementary": {
+        "name": "남양주금곡초등학교",
+        "distance_m": 273
+      }
     },
     "경기 남양주시|그랜드힐(2차)": {
       "households": 330,
       "built_year": 2007,
-      "addr": "경기도 남양주시 화도읍 마석우리 71-4 마석그랜드힐2차"
+      "addr": "경기도 남양주시 화도읍 마석우리 71-4 마석그랜드힐2차",
+      "lat": 37.650013,
+      "lng": 127.318763,
+      "subway": {
+        "station": "마석역 경춘선",
+        "distance_m": 696
+      },
+      "elementary": {
+        "name": "마석초등학교",
+        "distance_m": 1226
+      }
     },
     "경기 남양주시|다산 한신 더휴 7단지": {
       "households": 114,
       "built_year": 2009,
-      "addr": "경기도 남양주시 다산동 681 다산한신더휴 7단지 아파트"
+      "addr": "경기도 남양주시 다산동 681 다산한신더휴 7단지 아파트",
+      "lat": 37.598243,
+      "lng": 127.157259,
+      "subway": {
+        "station": "도농역 경의중앙선",
+        "distance_m": 1218
+      },
+      "elementary": {
+        "name": "가운초등학교",
+        "distance_m": 282
+      }
     },
     "경기 남양주시|메이플카운티": {
       "households": 154,
       "built_year": 2011,
-      "addr": "경기도 남양주시 호평동 617-2 한강메이플카운티"
+      "addr": "경기도 남양주시 호평동 617-2 한강메이플카운티",
+      "lat": 37.659959,
+      "lng": 127.24773,
+      "subway": {
+        "station": "평내호평역 경춘선",
+        "distance_m": 803
+      },
+      "elementary": {
+        "name": "구룡초등학교",
+        "distance_m": 483
+      }
     },
     "경기 안산시 단원구|휴먼빌2차": {
       "households": 500,
       "built_year": 2007,
-      "addr": "경기도 안산단원구 신길동 1447 신길온천휴먼빌2차"
+      "addr": "경기도 안산단원구 신길동 1447 신길온천휴먼빌2차",
+      "lat": 37.337425,
+      "lng": 126.774706,
+      "subway": {
+        "station": "신길온천역 4호선",
+        "distance_m": 636
+      },
+      "elementary": {
+        "name": "신길초등학교",
+        "distance_m": 536
+      }
     },
     "경기 안산시 단원구|안산메트로타운푸르지오힐스테이트": {
       "households": 1600,
       "built_year": 2018,
-      "addr": "경기도 안산단원구 선부동 1177 안산 메트로타운 푸르지오 힐스테이트 아파트"
+      "addr": "경기도 안산단원구 선부동 1177 안산 메트로타운 푸르지오 힐스테이트 아파트",
+      "lat": 37.348737,
+      "lng": 126.807107,
+      "subway": {
+        "station": "달미역 서해선",
+        "distance_m": 204
+      },
+      "elementary": {
+        "name": "안산석수초등학교",
+        "distance_m": 446
+      }
     },
     "경기 안산시 단원구|안산아이파크": {
       "households": 441,
       "built_year": 2013,
-      "addr": "경기도 안산단원구 신길동 1679 안산아이파크"
+      "addr": "경기도 안산단원구 신길동 1679 안산아이파크",
+      "lat": 37.334348,
+      "lng": 126.785703,
+      "subway": {
+        "station": "안산역 수인분당선",
+        "distance_m": 798
+      },
+      "elementary": {
+        "name": "안산대월초등학교",
+        "distance_m": 211
+      }
     },
     "경기 안산시 단원구|삼익": {
       "households": 980,
       "built_year": 1998,
-      "addr": "경기도 안산단원구 신길동 1438 삼익"
+      "addr": "경기도 안산단원구 신길동 1438 삼익",
+      "lat": 37.337664,
+      "lng": 126.777456,
+      "subway": {
+        "station": "신길온천역 4호선",
+        "distance_m": 880
+      },
+      "elementary": {
+        "name": "신길초등학교",
+        "distance_m": 331
+      }
     },
     "경기 안산시 단원구|포레나안산고잔": {
       "households": 449,
       "built_year": 2023,
-      "addr": "경기도 안산단원구 고잔동 631 포레나안산고잔아파트"
+      "addr": "경기도 안산단원구 고잔동 631 포레나안산고잔아파트",
+      "lat": 37.329249,
+      "lng": 126.836822,
+      "subway": {
+        "station": "중앙역 수인분당선",
+        "distance_m": 1469
+      },
+      "elementary": {
+        "name": "덕성초등학교",
+        "distance_m": 246
+      }
     },
     "경기 안산시 단원구|한화꿈에그린": {
       "households": 670,
       "built_year": 2006,
-      "addr": "경기도 안산단원구 원곡동 847 한화꿈에그린"
+      "addr": "경기도 안산단원구 원곡동 847 한화꿈에그린",
+      "lat": 37.3269,
+      "lng": 126.802729,
+      "subway": {
+        "station": "초지역 수인분당선",
+        "distance_m": 708
+      },
+      "elementary": {
+        "name": "관산초등학교",
+        "distance_m": 381
+      }
     },
     "경기 안산시 단원구|휴먼시아3단지": {
       "households": 344,
       "built_year": 2009,
-      "addr": "경기도 안산단원구 신길동 1518 안산신길휴먼시아3단지"
+      "addr": "경기도 안산단원구 신길동 1518 안산신길휴먼시아3단지",
+      "lat": 37.336129,
+      "lng": 126.782675,
+      "subway": {
+        "station": "안산역 수인분당선",
+        "distance_m": 1078
+      },
+      "elementary": {
+        "name": "신길초등학교",
+        "distance_m": 201
+      }
     },
     "경기 안산시 단원구|네오빌6단지": {
       "households": 1043,
       "built_year": 2000,
-      "addr": "경기도 안산단원구 고잔동 767 네오빌6단지"
+      "addr": "경기도 안산단원구 고잔동 767 네오빌6단지",
+      "lat": 37.310699,
+      "lng": 126.834207,
+      "subway": {
+        "station": "중앙역 수인분당선",
+        "distance_m": 679
+      },
+      "elementary": {
+        "name": "송호초등학교",
+        "distance_m": 139
+      }
     },
     "경기 안산시 단원구|보광그랑베르": {
       "households": 222,
       "built_year": 2015,
-      "addr": "경기도 안산단원구 선부동 1087-16 보광그랑베르"
+      "addr": "경기도 안산단원구 선부동 1087-16 보광그랑베르",
+      "lat": 37.342279,
+      "lng": 126.815421,
+      "subway": {
+        "station": "달미역 서해선",
+        "distance_m": 897
+      },
+      "elementary": {
+        "name": "정지초등학교",
+        "distance_m": 372
+      }
     },
     "경기 안산시 단원구|주공5": {
       "households": 1108,
       "built_year": 1986,
-      "addr": "경기도 안산단원구 고잔동 674 중앙주공5단지"
+      "addr": "경기도 안산단원구 고잔동 674 중앙주공5단지",
+      "lat": 37.321774,
+      "lng": 126.835742,
+      "subway": {
+        "station": "중앙역 수인분당선",
+        "distance_m": 666
+      },
+      "elementary": {
+        "name": "안산중앙초등학교",
+        "distance_m": 197
+      }
     },
     "경기 안산시 단원구|주공6": {
       "households": 590,
       "built_year": 1986,
-      "addr": "경기도 안산단원구 고잔동 676-2 고잔주공6단지"
+      "addr": "경기도 안산단원구 고잔동 676-2 고잔주공6단지",
+      "lat": 37.325807,
+      "lng": 126.836268,
+      "subway": {
+        "station": "중앙역 수인분당선",
+        "distance_m": 1094
+      },
+      "elementary": {
+        "name": "덕성초등학교",
+        "distance_m": 146
+      }
     },
     "경기 안산시 단원구|동명벽산블루밍": {
       "households": 766,
       "built_year": 2010,
-      "addr": "경기도 안산단원구 선부동 1082 안산동명벽산블루밍"
+      "addr": "경기도 안산단원구 선부동 1082 안산동명벽산블루밍",
+      "lat": 37.337769,
+      "lng": 126.81124,
+      "subway": {
+        "station": "선부역 서해선",
+        "distance_m": 389
+      },
+      "elementary": {
+        "name": "선부초등학교",
+        "distance_m": 251
+      }
     },
     "경기 안산시 단원구|군자주공9": {
       "households": 1330,
       "built_year": 1989,
-      "addr": "경기도 안산단원구 선부동 1069 군자주공9,10단지"
+      "addr_bad": true
     },
     "경기 안산시 단원구|벽산블루밍": {
       "households": 1515,
       "built_year": 2004,
-      "addr": "경기도 안산단원구 원곡동 828-5 원곡벽산블루밍"
+      "addr": "경기도 안산단원구 원곡동 828-5 원곡벽산블루밍",
+      "lat": 37.32859,
+      "lng": 126.799611,
+      "subway": {
+        "station": "안산역 4호선",
+        "distance_m": 940
+      },
+      "elementary": {
+        "name": "안산서초등학교",
+        "distance_m": 322
+      }
     },
     "경기 안산시 단원구|군자주공15(고층)": {
       "households": 1210,
       "built_year": 1992,
-      "addr": "경기도 안산단원구 선부동 1080 군자주공15단지"
+      "addr_bad": true
     },
     "경기 안산시 단원구|e편한세상선부파크플레이스1차": {
       "households": 414,
       "built_year": 2018,
-      "addr": "경기도 안산단원구 선부동 1183 e편한세상선부파크플레이스"
+      "addr": "경기도 안산단원구 선부동 1183 e편한세상선부파크플레이스",
+      "lat": 37.330447,
+      "lng": 126.807113,
+      "subway": {
+        "station": "선부역 서해선",
+        "distance_m": 508
+      },
+      "elementary": {
+        "name": "관산초등학교",
+        "distance_m": 207
+      }
     },
     "경기 안산시 단원구|경남아너스빌": {
       "households": 1370,
       "built_year": 2005,
-      "addr": "경기도 안산단원구 원곡동 938 경남아너스빌"
+      "addr": "경기도 안산단원구 원곡동 938 경남아너스빌",
+      "lat": 37.328972,
+      "lng": 126.803776,
+      "subway": {
+        "station": "선부역 서해선",
+        "distance_m": 817
+      },
+      "elementary": {
+        "name": "관산초등학교",
+        "distance_m": 237
+      }
     },
     "경기 안산시 단원구|두산위브": {
       "households": 695,
       "built_year": 2015,
-      "addr": "경기도 안산단원구 초지동 604 안산초지두산위브"
+      "addr": "경기도 안산단원구 초지동 604 안산초지두산위브",
+      "lat": 37.3113,
+      "lng": 126.760668
     },
     "경기 안산시 단원구|군자주공15(저층)": {
       "households": 1210,
       "built_year": 1992,
-      "addr": "경기도 안산단원구 선부동 1080 군자주공15단지"
+      "addr_bad": true
     },
     "경기 안산시 단원구|군자주공14": {
       "households": 770,
       "built_year": 1992,
-      "addr": "경기도 안산단원구 선부동 1079 군자주공14단지"
+      "addr": "경기도 안산단원구 선부동 1079 군자주공14단지",
+      "lat": 37.332967,
+      "lng": 126.814803,
+      "subway": {
+        "station": "선부역 서해선",
+        "distance_m": 455
+      },
+      "elementary": {
+        "name": "화랑초등학교",
+        "distance_m": 380
+      }
     },
     "경기 안산시 단원구|롯데캐슬더퍼스트": {
       "households": 469,
       "built_year": 2018,
-      "addr": "경기도 안산단원구 초지동 603-1 안산 롯데캐슬 더퍼스트 아파트"
+      "addr": "경기도 안산단원구 초지동 603-1 안산 롯데캐슬 더퍼스트 아파트",
+      "lat": 37.328124,
+      "lng": 126.806745,
+      "subway": {
+        "station": "선부역 서해선",
+        "distance_m": 754
+      },
+      "elementary": {
+        "name": "관산초등학교",
+        "distance_m": 65
+      }
     },
     "경기 안산시 단원구|푸르지오1차": {
       "households": 1008,
       "built_year": 2001,
-      "addr": "경기도 안산단원구 고잔동 781 푸르지오1차대우"
+      "addr": "경기도 안산단원구 고잔동 781 푸르지오1차대우",
+      "lat": 37.306248,
+      "lng": 126.834019,
+      "subway": {
+        "station": "중앙역 수인분당선",
+        "distance_m": 1141
+      },
+      "elementary": {
+        "name": "안산양지초등학교",
+        "distance_m": 147
+      }
     },
     "경기 안산시 단원구|산호한양": {
       "households": 1086,
       "built_year": 1993,
-      "addr": "경기도 안산단원구 선부동 1081 군자산호한양아파트"
+      "addr": "경기도 안산단원구 선부동 1081 군자산호한양아파트",
+      "lat": 37.336691,
+      "lng": 126.813283,
+      "subway": {
+        "station": "선부역 서해선",
+        "distance_m": 386
+      },
+      "elementary": {
+        "name": "선부초등학교",
+        "distance_m": 185
+      }
     },
     "경기 안산시 단원구|보네르빌리지": {
       "households": 634,
       "built_year": 2001,
-      "addr": "경기도 안산단원구 고잔동 778 보네르빌리지아파트"
+      "addr": "경기도 안산단원구 고잔동 778 보네르빌리지아파트",
+      "lat": 37.308314,
+      "lng": 126.839866,
+      "subway": {
+        "station": "중앙역 4호선",
+        "distance_m": 857
+      },
+      "elementary": {
+        "name": "송호초등학교",
+        "distance_m": 544
+      }
     },
     "경기 안산시 단원구|주공그린빌11": {
       "households": 876,
       "built_year": 2003,
-      "addr": "경기도 안산단원구 초지동 723 그린빌11단지"
+      "addr": "경기도 안산단원구 초지동 723 그린빌11단지",
+      "lat": 37.311224,
+      "lng": 126.818631,
+      "subway": {
+        "station": "고잔역 수인분당선",
+        "distance_m": 708
+      },
+      "elementary": {
+        "name": "안산진흥초등학교",
+        "distance_m": 355
+      }
     },
     "경기 안산시 단원구|안산한신더휴": {
       "households": 377,
       "built_year": 2024,
-      "addr": "경기도 안산단원구 선부동 998 안산한신더휴아파트"
+      "addr": "경기도 안산단원구 선부동 998 안산한신더휴아파트",
+      "lat": 37.339422,
+      "lng": 126.801637,
+      "subway": {
+        "station": "선부역 서해선",
+        "distance_m": 925
+      },
+      "elementary": {
+        "name": "선일초등학교",
+        "distance_m": 191
+      }
     },
     "경기 안산시 단원구|양지마을": {
       "households": 656,
       "built_year": 2001,
-      "addr": "경기도 안산단원구 고잔동 780 양지마을아파트"
+      "addr": "경기도 안산단원구 고잔동 780 양지마을아파트",
+      "lat": 37.305994,
+      "lng": 126.837095,
+      "subway": {
+        "station": "중앙역 수인분당선",
+        "distance_m": 1117
+      },
+      "elementary": {
+        "name": "안산양지초등학교",
+        "distance_m": 244
+      }
     },
     "경기 안산시 단원구|안산신길온천역휴먼빌": {
       "households": 480,
       "built_year": 2005,
-      "addr": "경기도 안산단원구 신길동 1446 신길온천역휴먼빌"
+      "addr": "경기도 안산단원구 신길동 1446 신길온천역휴먼빌",
+      "lat": 37.337024,
+      "lng": 126.772092,
+      "subway": {
+        "station": "신길온천역 4호선",
+        "distance_m": 406
+      },
+      "elementary": {
+        "name": "능길초등학교",
+        "distance_m": 692
+      }
     },
     "경기 안산시 단원구|안산8차푸르지오": {
       "households": 1348,
       "built_year": 2006,
-      "addr": "경기도 안산단원구 원곡동 937 안산8차푸르지오"
+      "addr": "경기도 안산단원구 원곡동 937 안산8차푸르지오",
+      "lat": 37.330104,
+      "lng": 126.801643,
+      "subway": {
+        "station": "선부역 서해선",
+        "distance_m": 880
+      },
+      "elementary": {
+        "name": "안산서초등학교",
+        "distance_m": 250
+      }
     },
     "경기 안산시 단원구|수정한양": {
       "households": 1870,
       "built_year": 1991,
-      "addr": "경기도 안산단원구 선부동 1086 수정한양"
+      "addr": "경기도 안산단원구 선부동 1086 수정한양",
+      "lat": 37.33935,
+      "lng": 126.815809,
+      "subway": {
+        "station": "선부역 서해선",
+        "distance_m": 752
+      },
+      "elementary": {
+        "name": "선부초등학교",
+        "distance_m": 200
+      }
     },
     "경기 안산시 단원구|효성": {
       "households": 190,
       "built_year": 1997,
-      "addr": "경기도 안산단원구 선부동 978-1 효성"
+      "addr": "경기도 안산단원구 선부동 978-1 효성",
+      "lat": 37.338194,
+      "lng": 126.799081,
+      "subway": {
+        "station": "선부역 서해선",
+        "distance_m": 1054
+      },
+      "elementary": {
+        "name": "선일초등학교",
+        "distance_m": 232
+      }
     },
     "경기 안산시 단원구|천년가리더스카이": {
       "households": 449,
       "built_year": 2020,
-      "addr": "경기도 안산단원구 와동 762 천년가 리더스카이 아파트"
+      "addr_bad": true
     },
     "경기 안산시 단원구|휴먼시아4단지": {
       "households": 396,
       "built_year": 2012,
-      "addr": "경기도 안산단원구 신길동 1537 안산신길휴먼시아4단지"
+      "addr": "경기도 안산단원구 신길동 1537 안산신길휴먼시아4단지",
+      "lat": 37.336703,
+      "lng": 126.78581,
+      "subway": {
+        "station": "안산역 수인분당선",
+        "distance_m": 1050
+      },
+      "elementary": {
+        "name": "안산대월초등학교",
+        "distance_m": 155
+      }
     },
     "경기 안산시 단원구|단원마을금강펜테리움": {
       "households": 400,
       "built_year": 2002,
-      "addr": "경기도 안산단원구 고잔동 714 단원마을금강"
+      "addr": "경기도 안산단원구 고잔동 714 단원마을금강",
+      "lat": 37.309052,
+      "lng": 126.82616,
+      "subway": {
+        "station": "고잔역 4호선",
+        "distance_m": 886
+      },
+      "elementary": {
+        "name": "슬기초등학교",
+        "distance_m": 397
+      }
     },
     "경기 안산시 단원구|휴먼시아6단지": {
       "households": 522,
       "built_year": 2009,
-      "addr": "경기도 안산단원구 신길동 1563 신길휴먼시아6단지"
+      "addr": "경기도 안산단원구 신길동 1563 신길휴먼시아6단지",
+      "lat": 37.336357,
+      "lng": 126.78914,
+      "subway": {
+        "station": "안산역 수인분당선",
+        "distance_m": 998
+      },
+      "elementary": {
+        "name": "안산대월초등학교",
+        "distance_m": 181
+      }
     },
     "경기 안산시 단원구|e편한세상선부파크플레이스2차": {
       "households": 414,
       "built_year": 2018,
-      "addr": "경기도 안산단원구 선부동 1183 e편한세상선부파크플레이스"
+      "addr": "경기도 안산단원구 선부동 1183 e편한세상선부파크플레이스",
+      "lat": 37.330447,
+      "lng": 126.807113,
+      "subway": {
+        "station": "선부역 서해선",
+        "distance_m": 508
+      },
+      "elementary": {
+        "name": "관산초등학교",
+        "distance_m": 207
+      }
     },
     "경기 평택시|평택지제역동문굿모닝힐맘시티1단지": {
       "households": 852,
       "built_year": 2019,
-      "addr": "경기도 평택시 칠원동 542 동문굿모닝힐맘시티1단지"
+      "addr": "경기도 평택시 칠원동 542 동문굿모닝힐맘시티1단지",
+      "lat": 37.026826,
+      "lng": 127.102372,
+      "elementary": {
+        "name": "평택새빛초등학교",
+        "distance_m": 309
+      }
     },
     "경기 평택시|서정스마트빌듀오3차": {
       "households": 299,
       "built_year": 2016,
-      "addr": "경기도 평택시 서정동 433-23 서정스마트빌듀오3차"
+      "addr": "경기도 평택시 서정동 433-23 서정스마트빌듀오3차",
+      "lat": 37.060459,
+      "lng": 127.054314,
+      "subway": {
+        "station": "서정리역 1호선",
+        "distance_m": 450
+      },
+      "elementary": {
+        "name": "서정리초등학교",
+        "distance_m": 345
+      }
     },
     "경기 평택시|문화": {
       "households": 500,
       "built_year": 1994,
-      "addr": "경기도 평택시 비전동 887 문화"
+      "addr": "경기도 평택시 비전동 887 문화",
+      "lat": 36.991549,
+      "lng": 127.115903,
+      "elementary": {
+        "name": "소사벌초등학교",
+        "distance_m": 424
+      }
     },
     "경기 평택시|서재자이": {
       "households": 802,
       "built_year": 2014,
-      "addr": "경기도 평택시 동삭동 715-1 서재자이"
+      "addr": "경기도 평택시 동삭동 715-1 서재자이",
+      "lat": 37.011099,
+      "lng": 127.101501,
+      "elementary": {
+        "name": "평택서재초등학교",
+        "distance_m": 812
+      }
     },
     "경기 평택시|e편한세상비전센터포레": {
       "households": 583,
       "built_year": 2022,
-      "addr": "경기도 평택시 용이동 641 e편한세상 비전 센터포레 아파트"
+      "addr": "경기도 평택시 용이동 641 e편한세상 비전 센터포레 아파트",
+      "lat": 36.999665,
+      "lng": 127.126528,
+      "elementary": {
+        "name": "현촌초등학교",
+        "distance_m": 494
+      }
     },
     "경기 평택시|평택뉴비전엘크루": {
       "households": 1396,
       "built_year": 2021,
-      "addr": "경기도 평택시 합정동  평택뉴비전엘크루"
+      "addr_bad": true
     },
     "경기 평택시|평택청북이지더원": {
       "households": 513,
       "built_year": 2016,
-      "addr": "경기도 평택시 청북읍 옥길리 1137 청북이지더원 아파트"
+      "addr": "경기도 평택시 청북읍 옥길리 1137 청북이지더원 아파트",
+      "lat": 37.022387,
+      "lng": 126.917002,
+      "elementary": {
+        "name": "평택청아초등학교",
+        "distance_m": 140
+      }
     },
     "경기 평택시|은행": {
       "households": 300,
       "built_year": 1991,
-      "addr": "경기도 평택시 비전동 800-1 은행"
+      "addr": "경기도 평택시 비전동 800-1 은행",
+      "lat": 36.999827,
+      "lng": 127.100711,
+      "elementary": {
+        "name": "자란초등학교",
+        "distance_m": 402
+      }
     },
     "경기 평택시|힐스테이트 평택 1차": {
       "households": 822,
       "built_year": 2018,
-      "addr": "경기도 평택시 세교동  힐스테이트 평택아파트"
+      "addr_bad": true
     },
     "경기 평택시|고덕국제신도시 포레스트자이": {
       "households": 755,
       "built_year": 2019,
-      "addr": "경기도 평택시 고덕동 1970-2 고덕국제신도시 포레스트자이 아파트"
+      "addr": "경기도 평택시 고덕동 1970-2 고덕국제신도시 포레스트자이 아파트",
+      "lat": 37.050851,
+      "lng": 127.045524,
+      "subway": {
+        "station": "서정리역 1호선",
+        "distance_m": 911
+      },
+      "elementary": {
+        "name": "종덕초등학교",
+        "distance_m": 274
+      }
     },
     "경기 평택시|힐스테이트고덕센트럴": {
       "households": 660,
       "built_year": 2024,
-      "addr": "경기도 평택시 고덕동 2618-3 힐스테이트 고덕 센트럴"
+      "addr": "경기도 평택시 고덕동 2618-3 힐스테이트 고덕 센트럴",
+      "lat": 37.044074,
+      "lng": 127.042487,
+      "elementary": {
+        "name": "율포초등학교",
+        "distance_m": 179
+      }
     },
     "경기 평택시|평택지제역동문굿모닝힐맘시티3단지": {
       "households": 1134,
       "built_year": 2021,
-      "addr": "경기도 평택시 칠원동 613 동문굿모닝힐맘시티3단지"
+      "addr": "경기도 평택시 칠원동 613 동문굿모닝힐맘시티3단지",
+      "lat": 37.024509,
+      "lng": 127.101488,
+      "elementary": {
+        "name": "평택새빛초등학교",
+        "distance_m": 330
+      }
     },
     "경기 평택시|힐스테이트 평택2차": {
       "households": 1443,
       "built_year": 2018,
-      "addr": "경기도 평택시 세교동 1002-1 힐스테이트평택2차"
+      "addr": "경기도 평택시 세교동 1002-1 힐스테이트평택2차",
+      "lat": 37.0203,
+      "lng": 127.082371,
+      "subway": {
+        "station": "평택지제역 1호선",
+        "distance_m": 1066
+      },
+      "elementary": {
+        "name": "평택영신초등학교",
+        "distance_m": 391
+      }
     },
     "경기 평택시|평택브라운스톤험프리스": {
       "households": 944,
       "built_year": 2016,
-      "addr": "경기도 평택시 팽성읍 안정리 360 평택브라운스톤험프리스아파트"
+      "addr": "경기도 평택시 팽성읍 안정리 360 평택브라운스톤험프리스아파트",
+      "lat": 36.965414,
+      "lng": 127.048869,
+      "elementary": {
+        "name": "평택송화초등학교",
+        "distance_m": 758
+      }
     },
     "경기 평택시|힐스테이트고덕스카이시티": {
       "households": 665,
       "built_year": 2024,
-      "addr": "경기도 평택시 고덕동 2618-1 힐스테이트 고덕 스카이시티아파트"
+      "addr": "경기도 평택시 고덕동 2618-1 힐스테이트 고덕 스카이시티아파트",
+      "lat": 37.044006,
+      "lng": 127.040326,
+      "elementary": {
+        "name": "율포초등학교",
+        "distance_m": 317
+      }
     },
     "경기 평택시|평택소사벌푸르지오": {
       "households": 566,
       "built_year": 2019,
-      "addr": "경기도 평택시 비전동 970 평택소사벌푸르지오"
+      "addr": "경기도 평택시 비전동 970 평택소사벌푸르지오",
+      "lat": 37.00816,
+      "lng": 127.102363,
+      "elementary": {
+        "name": "자란초등학교",
+        "distance_m": 568
+      }
     },
     "경기 평택시|힐스테이트평택더퍼스트": {
       "households": 1107,
       "built_year": 2024,
-      "addr": "경기도 평택시 서정동 780 힐스테이트 평택 더퍼스트"
+      "addr_bad": true
     },
     "경기 평택시|e편한세상평택": {
       "households": 632,
       "built_year": 2015,
-      "addr": "경기도 평택시 용이동 580 e편한세상평택"
+      "addr": "경기도 평택시 용이동 580 e편한세상평택",
+      "lat": 37.000631,
+      "lng": 127.128657,
+      "elementary": {
+        "name": "현촌초등학교",
+        "distance_m": 294
+      }
     },
     "경기 평택시|비전아이파크평택": {
       "households": 585,
       "built_year": 2018,
-      "addr": "경기도 평택시 용이동 639 비전아이파크평택"
+      "addr": "경기도 평택시 용이동 639 비전아이파크평택",
+      "lat": 36.998781,
+      "lng": 127.125163,
+      "elementary": {
+        "name": "용죽초등학교",
+        "distance_m": 433
+      }
     },
     "경기 평택시|SK합정": {
       "households": 227,
       "built_year": 2003,
-      "addr": "경기도 평택시 합정동 880 SK합정"
+      "addr": "경기도 평택시 합정동 880 SK합정",
+      "lat": 36.990439,
+      "lng": 127.117087,
+      "elementary": {
+        "name": "소사벌초등학교",
+        "distance_m": 538
+      }
     },
     "경기 평택시|평택비전푸르지오": {
       "households": 761,
       "built_year": 2016,
-      "addr": "경기도 평택시 용이동 648 평택비전푸르지오"
+      "addr": "경기도 평택시 용이동 648 평택비전푸르지오",
+      "lat": 36.995578,
+      "lng": 127.121101,
+      "elementary": {
+        "name": "용죽초등학교",
+        "distance_m": 290
+      }
     },
     "경기 평택시|한성": {
       "households": 486,
       "built_year": 1997,
-      "addr": "경기도 평택시 비전동 800 한성"
+      "addr": "경기도 평택시 비전동 800 한성",
+      "lat": 37.000001,
+      "lng": 127.098891,
+      "elementary": {
+        "name": "자란초등학교",
+        "distance_m": 390
+      }
     },
     "경기 평택시|힐스테이트지제역퍼스티움": {
       "households": 649,
       "built_year": 2022,
-      "addr": "경기도 평택시 동삭동 593-1 힐스테이트지제역퍼스티움"
+      "addr_bad": true
     },
     "경기 평택시|평택청북이안": {
       "households": 640,
       "built_year": 2011,
-      "addr": "경기도 평택시 청북읍 옥길리 1091 청북이안"
+      "addr": "경기도 평택시 청북읍 옥길리 1091 청북이안",
+      "lat": 37.019996,
+      "lng": 126.909224,
+      "elementary": {
+        "name": "청옥초등학교",
+        "distance_m": 265
+      }
     },
     "경기 평택시|참이슬": {
       "households": 862,
       "built_year": 1999,
-      "addr": "경기도 평택시 합정동 870 참이슬"
+      "addr": "경기도 평택시 합정동 870 참이슬",
+      "lat": 36.98998,
+      "lng": 127.118324,
+      "elementary": {
+        "name": "소사벌초등학교",
+        "distance_m": 603
+      }
     },
     "경기 평택시|이충동부영1단지": {
       "households": 400,
@@ -14327,7 +15739,2612 @@
       "households": 260,
       "built_year": 1998,
       "addr": "부산광역시 부산진구 부암동 69-5 메리움아파트"
+    },
+    "서울 강남구|청담아이파크": {
+      "households": 108,
+      "built_year": 1992,
+      "addr": "서울특별시 강남구 청담동 130 청담아이파크아파트"
+    },
+    "서울 관악구|프라비다트라움": {
+      "households": 130,
+      "built_year": 2013,
+      "addr": "서울특별시 관악구 신림동 1433-55 프라비다트라움"
+    },
+    "서울 양천구|벽산미라지타워": {
+      "households": 86,
+      "built_year": 1999,
+      "addr": "서울특별시 양천구 목동 907-14 목동벽산미라지타워"
+    },
+    "서울 노원구|수락리버시티4단지": {
+      "households": 548,
+      "built_year": 2009,
+      "addr": "서울특별시 노원구 상계동 1313 수락리버시티 4단지"
+    },
+    "경기 의정부시|힐스테이트탑석": {
+      "households": 636,
+      "built_year": 2025,
+      "addr": "경기도 의정부시 용현동 32- 힐스테이트 탑석"
+    },
+    "부산 수영구|성원상떼빌": {
+      "households": 165,
+      "built_year": 2007,
+      "addr": "부산광역시 수영구 광안동 143-1 광안역성원상떼빌"
+    },
+    "부산 부산진구|태우선파크": {
+      "households": 214,
+      "built_year": 1994,
+      "addr": "부산광역시 부산진구 당감동 659-1 태우선파크아파트"
+    },
+    "부산 부산진구|허브팰리스": {
+      "households": 126,
+      "built_year": 2021,
+      "addr": "부산광역시 부산진구 부전동 38- 허브팰리스서면"
+    },
+    "부산 부산진구|골든팰리스더리치": {
+      "households": 102,
+      "built_year": 2019,
+      "addr": "부산광역시 부산진구 범천동 974-2 골든팰리스더리치"
+    },
+    "부산 부산진구|서면서한이다음": {
+      "households": 498,
+      "built_year": 2025,
+      "addr": "부산광역시 부산진구 범천동 1123-124 서면서한이다음"
+    },
+    "부산 부산진구|연지우성스마트시티뷰": {
+      "households": 116,
+      "built_year": 2020,
+      "addr": "부산광역시 부산진구 연지동 42-4 연지우성스마트시티뷰"
+    },
+    "부산 부산진구|고원": {
+      "households": 325,
+      "built_year": 1986,
+      "addr": "부산광역시 부산진구 개금동 54-4 고원아파트"
+    },
+    "대구 수성구|시지삼주한라협화": {
+      "households": 954,
+      "built_year": 1994,
+      "addr": "대구광역시 수성구 신매동 570 시지삼주한라협화타운"
+    },
+    "대구 수성구|범물하이츠": {
+      "households": 1000,
+      "built_year": 1992,
+      "addr": "대구광역시 수성구 범물동 1261 범물하이츠"
+    },
+    "대구 수성구|유성푸르나임": {
+      "households": 235,
+      "built_year": 2007,
+      "addr": "대구광역시 수성구 수성동1가 230 유성푸르나임"
+    },
+    "대구 수성구|수성월드메르디앙": {
+      "households": 753,
+      "built_year": 2007,
+      "addr": "대구광역시 수성구 노변동 353 수성월드메르디앙"
+    },
+    "대구 수성구|우방한가람타운": {
+      "households": 272,
+      "built_year": 1995,
+      "addr": "대구광역시 수성구 수성동1가 272-11 우방한가람타운"
+    },
+    "대구 수성구|수성알파시티청아람": {
+      "households": 844,
+      "built_year": 2021,
+      "addr": "대구광역시 수성구 노변동 742 수성알파시티 청아람"
+    },
+    "대구 수성구|지산서한이다음아파트": {
+      "households": 488,
+      "built_year": 1991,
+      "addr": "대구광역시 수성구 지산동 1297-3 지산서한이다음"
+    },
+    "대구 수성구|수성해모로하이엔": {
+      "households": 795,
+      "built_year": 2024,
+      "addr": "대구광역시 수성구 파동 540-14 수성해모로하이엔"
+    },
+    "대구 수성구|만촌보성타운": {
+      "households": 661,
+      "built_year": 2002,
+      "addr": "대구광역시 수성구 만촌동 605 만촌보성타운"
+    },
+    "대구 수성구|누리타운": {
+      "households": 600,
+      "built_year": 1995,
+      "addr": "대구광역시 수성구 매호동 1330 시지누리타운"
+    },
+    "대구 수성구|신매보성타운": {
+      "households": 251,
+      "built_year": 1997,
+      "addr": "대구광역시 수성구 신매동 245 시지3차신매보성타운"
+    },
+    "대구 수성구|시지효성백년가약1단지": {
+      "households": 299,
+      "built_year": 2008,
+      "addr": "대구광역시 수성구 신매동 30-5 시지효성백년가약1단지"
+    },
+    "대구 수성구|서한화성타운": {
+      "households": 612,
+      "built_year": 1992,
+      "addr": "대구광역시 수성구 범물동 1328 범물서한화성타운"
+    },
+    "대구 수성구|수성푸르지오리버센트": {
+      "households": 714,
+      "built_year": 2024,
+      "addr": "대구광역시 수성구 중동 556 수성푸르지오리버센트 아파트"
+    },
+    "대구 수성구|만촌자이르네": {
+      "households": 607,
+      "built_year": 2023,
+      "addr": "대구광역시 수성구 만촌동 1489 만촌자이르네"
+    },
+    "대구 수성구|시지보성서한아파트": {
+      "households": 664,
+      "built_year": 1995,
+      "addr": "대구광역시 수성구 신매동 601 시지보성서한타운"
+    },
+    "대구 수성구|수성아이파크": {
+      "households": 455,
+      "built_year": 2016,
+      "addr": "대구광역시 수성구 파동 1000 대구수성아이파크"
+    },
+    "대구 수성구|메트로팔레스5": {
+      "households": 689,
+      "built_year": 2003,
+      "addr": "대구광역시 수성구 만촌동 1429-5 메트로팔레스5단지"
+    },
+    "대구 수성구|하나타운": {
+      "households": 1200,
+      "built_year": 1995,
+      "addr": "대구광역시 수성구 매호동 1331 시지하나타운"
+    },
+    "대구 수성구|한일유앤아이": {
+      "households": 490,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 매호동 979-4 매호한일유앤아이"
+    },
+    "대구 수성구|범물영남": {
+      "households": 442,
+      "built_year": 1992,
+      "addr": "대구광역시 수성구 범물동 1269 범물영남타운"
+    },
+    "대구 수성구|메트로팔레스1": {
+      "households": 804,
+      "built_year": 2003,
+      "addr": "대구광역시 수성구 만촌동 1356-3 메트로팔레스1단지"
+    },
+    "대구 수성구|지산한라타운": {
+      "households": 555,
+      "built_year": 1991,
+      "addr": "대구광역시 수성구 지산동 1275 지산한라타운"
+    },
+    "대구 수성구|수성태영데시앙": {
+      "households": 718,
+      "built_year": 2008,
+      "addr": "대구광역시 수성구 수성동4가 1017-1 수성태영데시앙"
+    },
+    "대구 수성구|지산화성파크드림": {
+      "households": 142,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 지산동 1140-3 지산화성파크드림"
+    },
+    "대구 수성구|시지동서타운": {
+      "households": 360,
+      "built_year": 1995,
+      "addr": "대구광역시 수성구 신매동 594 시지동서타운"
+    },
+    "대구 수성구|만촌삼정그린코아에듀파크": {
+      "households": 774,
+      "built_year": 2019,
+      "addr": "대구광역시 수성구 만촌동 881 만촌삼정그린코아에듀파크"
+    },
+    "대구 수성구|우방타운": {
+      "households": 460,
+      "built_year": 1991,
+      "addr": "대구광역시 수성구 지산동 1271 지산우방타운"
+    },
+    "대구 수성구|우방3차범어타운": {
+      "households": 145,
+      "built_year": 1984,
+      "addr": "대구광역시 수성구 범어동 238-46 우방3차범어타운아파트"
+    },
+    "대구 수성구|시지대백신화창신맨션": {
+      "households": 870,
+      "built_year": 1994,
+      "addr": "대구광역시 수성구 신매동 569 대백신화창신맨션"
+    },
+    "대구 수성구|시지동화아이위시": {
+      "households": 352,
+      "built_year": 2013,
+      "addr": "대구광역시 수성구 사월동 642 시지동화아이위시"
+    },
+    "대구 수성구|지산타운": {
+      "households": 630,
+      "built_year": 1991,
+      "addr": "대구광역시 수성구 지산동 1288 지산타운"
+    },
+    "대구 수성구|우방미진하이츠": {
+      "households": 661,
+      "built_year": 2000,
+      "addr": "대구광역시 수성구 범물동 670 범물우방미진하이츠"
+    },
+    "대구 수성구|궁전맨션": {
+      "households": 538,
+      "built_year": 1988,
+      "addr": "대구광역시 수성구 범어동 371 궁전맨션"
+    },
+    "대구 수성구|태왕하이츠리버뷰": {
+      "households": 288,
+      "built_year": 2004,
+      "addr": "대구광역시 수성구 수성동1가 93-1 태왕하이츠리버뷰"
+    },
+    "대구 수성구|범물보성타운": {
+      "households": 285,
+      "built_year": 1992,
+      "addr": "대구광역시 수성구 범물동 1279 범물보성타운"
+    },
+    "대구 수성구|노변대백": {
+      "households": 432,
+      "built_year": 1999,
+      "addr": "대구광역시 수성구 노변동 440 노변대백"
+    },
+    "대구 수성구|수성3가롯데캐슬": {
+      "households": 802,
+      "built_year": 2008,
+      "addr": "대구광역시 수성구 수성동3가 57 수성3가롯데캐슬"
+    },
+    "대구 수성구|시지센트레빌": {
+      "households": 120,
+      "built_year": 2024,
+      "addr": "대구광역시 수성구 시지동 602- 시지센트레빌 아파트"
+    },
+    "대구 수성구|신세계타운": {
+      "households": 930,
+      "built_year": 1989,
+      "addr": "대구광역시 수성구 수성동1가 613 신세계타운"
+    },
+    "대구 수성구|고산노변타운": {
+      "households": 885,
+      "built_year": 1996,
+      "addr": "대구광역시 수성구 시지동 498 고산노변타운"
+    },
+    "대구 수성구|아이프라임시지": {
+      "households": 301,
+      "built_year": 2008,
+      "addr": "대구광역시 수성구 시지동 262 아이프라임시지"
+    },
+    "대구 수성구|사월화성파크드림(2단지)": {
+      "households": 297,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 신매동 46 사월화성파크드림2단지"
+    },
+    "대구 수성구|골든맨션": {
+      "households": 220,
+      "built_year": 1985,
+      "addr": "대구광역시 수성구 만촌동 245- 럭키골든맨션"
+    },
+    "대구 수성구|브라운스톤범어": {
+      "households": 180,
+      "built_year": 2017,
+      "addr": "대구광역시 수성구 범어동 175-1 브라운스톤 범어"
+    },
+    "대구 수성구|동서무학": {
+      "households": 281,
+      "built_year": 1994,
+      "addr": "대구광역시 수성구 지산동 359-1 동서무학맨션"
+    },
+    "대구 수성구|범어롯데캐슬": {
+      "households": 219,
+      "built_year": 2009,
+      "addr": "대구광역시 수성구 범어동 380 범어롯데캐슬"
+    },
+    "대구 수성구|범어서한포레스트": {
+      "households": 202,
+      "built_year": 2020,
+      "addr": "대구광역시 수성구 범어동 177-1 범어서한포레스트"
+    },
+    "대구 수성구|시지3차서한이다음": {
+      "households": 383,
+      "built_year": 2018,
+      "addr": "대구광역시 수성구 사월동 650 시지3차 서한이다음"
+    },
+    "대구 수성구|시지청솔타운": {
+      "households": 750,
+      "built_year": 1995,
+      "addr": "대구광역시 수성구 신매동 580 시지청솔타운"
+    },
+    "대구 수성구|녹원맨션": {
+      "households": 542,
+      "built_year": 1989,
+      "addr": "대구광역시 수성구 지산동 761 지산녹원맨션"
+    },
+    "대구 수성구|노변청구": {
+      "households": 465,
+      "built_year": 1996,
+      "addr": "대구광역시 수성구 시지동 486 노변청구타운"
+    },
+    "대구 수성구|신화빌라트": {
+      "households": 291,
+      "built_year": 1996,
+      "addr": "대구광역시 수성구 신매동 139-1 신화빌라트"
+    },
+    "대구 수성구|범어에일린의뜰": {
+      "households": 719,
+      "built_year": 2021,
+      "addr": "대구광역시 수성구 범어동 2272 범어에일린의뜰"
+    },
+    "대구 수성구|사월화성파크드림(1단지)": {
+      "households": 188,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 신매동 10-14 사월화성파크드림1단지"
+    },
+    "대구 수성구|태왕아너스": {
+      "households": 480,
+      "built_year": 2004,
+      "addr": "대구광역시 수성구 황금동 99-1 황금동태왕아너스"
+    },
+    "대구 수성구|호반써밋수성": {
+      "households": 301,
+      "built_year": 2024,
+      "addr": "대구광역시 수성구 두산동 85 호반써밋수성"
+    },
+    "대구 수성구|범어숲화성파크드림S": {
+      "households": 404,
+      "built_year": 2013,
+      "addr": "대구광역시 수성구 범어동 2237 범어숲화성파크드림S"
+    },
+    "대구 수성구|범어라온프라이빗2차": {
+      "households": 206,
+      "built_year": 2018,
+      "addr": "대구광역시 수성구 범어동 2252 범어라온프라이빗2차아파트"
+    },
+    "대구 수성구|만촌화성파크드림2": {
+      "households": 103,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 만촌동 861-8 만촌화성파크드림 2차"
+    },
+    "대구 수성구|경남타운": {
+      "households": 312,
+      "built_year": 1982,
+      "addr": "대구광역시 수성구 범어동 320 경남타운"
+    },
+    "대구 수성구|우방청솔맨션": {
+      "households": 194,
+      "built_year": 1994,
+      "addr": "대구광역시 수성구 범어동 88 우방청솔맨션"
+    },
+    "대구 수성구|수성레이크푸르지오": {
+      "households": 332,
+      "built_year": 2022,
+      "addr": "대구광역시 수성구 두산동 81-2 수성레이크푸르지오"
+    },
+    "대구 수성구|범어삼성쉐르빌": {
+      "households": 213,
+      "built_year": 2010,
+      "addr": "대구광역시 수성구 범어동 77-7 범어삼성쉐르빌아파트"
+    },
+    "대구 수성구|천마타운": {
+      "households": 1095,
+      "built_year": 1994,
+      "addr": "대구광역시 수성구 신매동 579 시지천마타운"
+    },
+    "대구 수성구|고산역화성파크드림": {
+      "households": 126,
+      "built_year": 2019,
+      "addr": "대구광역시 수성구 시지동 378 고산역화성파크드림"
+    },
+    "대구 수성구|수성못코오롱하늘채": {
+      "households": 832,
+      "built_year": 2013,
+      "addr": "대구광역시 수성구 파동 53 수성못코오롱하늘채"
+    },
+    "대구 수성구|만촌3차화성파크드림": {
+      "households": 410,
+      "built_year": 2016,
+      "addr": "대구광역시 수성구 만촌동 860-1 만촌3차화성파크드림"
+    },
+    "대구 수성구|두레타운": {
+      "households": 780,
+      "built_year": 1995,
+      "addr": "대구광역시 수성구 매호동 1324 시지두레타운"
+    },
+    "대구 수성구|노변다숲": {
+      "households": 745,
+      "built_year": 1996,
+      "addr": "대구광역시 수성구 시지동 499 노변다숲"
+    },
+    "대구 수성구|수성우방팔레스": {
+      "households": 188,
+      "built_year": 2002,
+      "addr": "대구광역시 수성구 수성동4가 1090-1 수성우방팔레스"
+    },
+    "대구 수성구|범어월드메르디앙웨스턴카운티": {
+      "households": 600,
+      "built_year": 2008,
+      "addr": "대구광역시 수성구 범어동 966-1 범어월드메르디앙 웨스턴카운티"
+    },
+    "대구 수성구|매호청구하이츠빌": {
+      "households": 128,
+      "built_year": 2000,
+      "addr": "대구광역시 수성구 매호동 721-1 매호청구하이츠빌"
+    },
+    "대구 수성구|서한청산맨션": {
+      "households": 468,
+      "built_year": 1991,
+      "addr": "대구광역시 수성구 지산동 1269-1 서한청산맨션"
+    },
+    "대구 수성구|범어쌍용예가": {
+      "households": 400,
+      "built_year": 2009,
+      "addr": "대구광역시 수성구 범어동 808 범어쌍용예가"
+    },
+    "대구 수성구|수성SK리더스뷰": {
+      "households": 788,
+      "built_year": 2010,
+      "addr": "대구광역시 수성구 두산동 113 수성SK리더스뷰"
+    },
+    "대구 수성구|태왕유성하이빌": {
+      "households": 277,
+      "built_year": 2003,
+      "addr": "대구광역시 수성구 범어동 614-3 태왕유성하이빌"
+    },
+    "대구 수성구|보성송정타운": {
+      "households": 498,
+      "built_year": 1995,
+      "addr": "대구광역시 수성구 범물동 697-1 보성송정타운"
+    },
+    "대구 수성구|장원맨션": {
+      "households": 455,
+      "built_year": 1988,
+      "addr": "대구광역시 수성구 범어동 103 장원맨션"
+    },
+    "대구 수성구|빌리브범어120": {
+      "households": 209,
+      "built_year": 2022,
+      "addr": "대구광역시 수성구 범어동 2280 빌리브범어 120"
+    },
+    "대구 수성구|힐스테이트범어": {
+      "households": 414,
+      "built_year": 2020,
+      "addr": "대구광역시 수성구 범어동 2264 힐스테이트 범어"
+    },
+    "대구 수성구|매호효성백년가약": {
+      "households": 419,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 매호동 750 매호효성백년가약"
+    },
+    "대구 수성구|수성아크로타워": {
+      "households": 224,
+      "built_year": 2008,
+      "addr": "대구광역시 수성구 만촌동 1039-4 수성아크로타워"
+    },
+    "대구 수성구|청구성조타운": {
+      "households": 445,
+      "built_year": 1996,
+      "addr": "대구광역시 수성구 범어동 2017 청구성조타운"
+    },
+    "대구 수성구|시지효성백년가약2단지": {
+      "households": 293,
+      "built_year": 2008,
+      "addr": "대구광역시 수성구 신매동 30-6 시지효성백년가약2단지"
+    },
+    "대구 수성구|청아타운": {
+      "households": 680,
+      "built_year": 1992,
+      "addr": "대구광역시 수성구 범물동 1372 청아타운"
+    },
+    "대구 수성구|범어역우방유쉘": {
+      "households": 292,
+      "built_year": 2009,
+      "addr": "대구광역시 수성구 범어동 35-1 범어역우방유쉘아파트"
+    },
+    "대구 수성구|만촌동월드메르디앙": {
+      "households": 124,
+      "built_year": 2007,
+      "addr": "대구광역시 수성구 만촌동 1037-7 만촌월드메르디앙"
+    },
+    "대구 수성구|범어월드메르디앙이스턴카운티": {
+      "households": 260,
+      "built_year": 2008,
+      "addr": "대구광역시 수성구 범어동 2100 월드메르디앙이스턴카운티"
+    },
+    "대구 수성구|시지한신휴플러스": {
+      "households": 510,
+      "built_year": 2013,
+      "addr": "대구광역시 수성구 사월동 645 시지한신휴플러스"
+    },
+    "대구 수성구|협화맨션": {
+      "households": 552,
+      "built_year": 1991,
+      "addr": "대구광역시 수성구 지산동 1273 지산협화맨션"
+    },
+    "대구 수성구|수성영남": {
+      "households": 246,
+      "built_year": 2000,
+      "addr": "대구광역시 수성구 수성동1가 105-5 수성영남타운"
+    },
+    "대구 수성구|범어풀비체": {
+      "households": 138,
+      "built_year": 2013,
+      "addr": "대구광역시 수성구 범어동 2236 범어풀비체"
+    },
+    "대구 수성구|산장맨션": {
+      "households": 216,
+      "built_year": 1990,
+      "addr": "대구광역시 수성구 만촌동 1172-1 산장맨션"
+    },
+    "대구 수성구|범어청구하이츠": {
+      "households": 240,
+      "built_year": 2000,
+      "addr": "대구광역시 수성구 범어동 88-6 범어청구하이츠"
+    },
+    "대구 수성구|만촌역 서한포레스트": {
+      "households": 102,
+      "built_year": 2022,
+      "addr": "대구광역시 수성구 만촌동 1040-12 만촌역 서한포레스트"
+    },
+    "대구 수성구|캐슬골드파크2단지": {
+      "households": 4256,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 황금동 365 캐슬골드파크"
+    },
+    "대구 수성구|시지에덴타운": {
+      "households": 210,
+      "built_year": 1994,
+      "addr": "대구광역시 수성구 신매동 594-1 시지에덴타운"
+    },
+    "대구 수성구|만촌화성파크드림": {
+      "households": 103,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 만촌동 861-8 만촌화성파크드림 2차"
+    },
+    "대구 수성구|유림노르웨이숲": {
+      "households": 576,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 범어동 906-1 범어유림노르웨이숲"
+    },
+    "대구 수성구|화성파크뷰": {
+      "households": 228,
+      "built_year": 2004,
+      "addr": "대구광역시 수성구 파동 486-1 파동화성파크뷰"
+    },
+    "대구 수성구|정화우방팔레스": {
+      "households": 488,
+      "built_year": 2003,
+      "addr": "대구광역시 수성구 상동 72 정화우방팔레스"
+    },
+    "대구 수성구|시지월드메르디앙": {
+      "households": 603,
+      "built_year": 2009,
+      "addr": "대구광역시 수성구 시지동 41 시지월드메르디앙"
+    },
+    "대구 수성구|수성하이츠": {
+      "households": 260,
+      "built_year": 2000,
+      "addr": "대구광역시 수성구 수성동4가 1090-8 수성하이츠"
+    },
+    "대구 수성구|만촌우방팔레스": {
+      "households": 174,
+      "built_year": 2005,
+      "addr": "대구광역시 수성구 만촌동 775 만촌우방팔레스"
+    },
+    "대구 수성구|시지태왕아너스": {
+      "households": 407,
+      "built_year": 2007,
+      "addr": "대구광역시 수성구 시지동 28 시지태왕아너스"
+    },
+    "대구 수성구|범어아이파크1차아파트": {
+      "households": 418,
+      "built_year": 2024,
+      "addr": "대구광역시 수성구 범어동 2300- 범어아이파크"
+    },
+    "대구 수성구|한라하우젠트": {
+      "households": 255,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 신매동 10-31 신매한라하우젠트"
+    },
+    "대구 수성구|수성자이르네": {
+      "households": 219,
+      "built_year": 2024,
+      "addr": "대구광역시 수성구 수성동1가 894 수성자이르네"
+    },
+    "대구 수성구|수성화성파크드림": {
+      "households": 373,
+      "built_year": 2009,
+      "addr": "대구광역시 수성구 두산동 789 수성화성파크드림"
+    },
+    "대구 수성구|우방금탑": {
+      "households": 152,
+      "built_year": 1986,
+      "addr": "대구광역시 수성구 만촌동 860 우방금탑"
+    },
+    "대구 수성구|서한두레": {
+      "households": 156,
+      "built_year": 1993,
+      "addr": "대구광역시 수성구 범어동 305-3 서한두레맨션"
+    },
+    "대구 수성구|대구시지푸르지오": {
+      "households": 362,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 사월동 325 시지 푸르지오"
+    },
+    "대구 수성구|빌리브범어": {
+      "households": 227,
+      "built_year": 2019,
+      "addr": "대구광역시 수성구 범어동 2253 빌리브범어"
+    },
+    "대구 수성구|동양엘레브": {
+      "households": 209,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 수성동1가 629-12 수성동양엘레브"
+    },
+    "대구 수성구|수성데시앙리버뷰": {
+      "households": 278,
+      "built_year": 2022,
+      "addr": "대구광역시 수성구 중동 532-324 수성데시앙리버뷰아파트"
+    },
+    "대구 수성구|우방사랑마을": {
+      "households": 342,
+      "built_year": 1996,
+      "addr": "대구광역시 수성구 수성동4가 1090-7 우방사랑마을"
+    },
+    "대구 수성구|수성롯데캐슬": {
+      "households": 124,
+      "built_year": 2008,
+      "addr": "대구광역시 수성구 수성동4가 1085-28 수성롯데캐슬"
+    },
+    "대구 수성구|현대청림": {
+      "households": 350,
+      "built_year": 1999,
+      "addr": "대구광역시 수성구 범물동 630 현대청림타운"
+    },
+    "대구 수성구|범어효성해링턴플레이스": {
+      "households": 179,
+      "built_year": 2018,
+      "addr": "대구광역시 수성구 범어동 75-2 범어효성해링턴플레이스"
+    },
+    "대구 수성구|보성맨션": {
+      "households": 526,
+      "built_year": 1991,
+      "addr": "대구광역시 수성구 지산동 1270-1 지산보성맨션"
+    },
+    "대구 수성구|시지반도유보라": {
+      "households": 262,
+      "built_year": 2012,
+      "addr": "대구광역시 수성구 신매동 162 시지반도유보라"
+    },
+    "대구 수성구|범어목련": {
+      "households": 250,
+      "built_year": 1987,
+      "addr": "대구광역시 수성구 범어동 341- 범어목련아파트"
+    },
+    "대구 수성구|시지대성유니드": {
+      "households": 413,
+      "built_year": 2007,
+      "addr": "대구광역시 수성구 사월동 500 시지대성유니드"
+    },
+    "대구 수성구|시지3태왕하이츠": {
+      "households": 236,
+      "built_year": 2001,
+      "addr": "대구광역시 수성구 신매동 100 시지3차태왕하이츠"
+    },
+    "대구 수성구|송원맨션": {
+      "households": 232,
+      "built_year": 1989,
+      "addr": "대구광역시 수성구 파동 581-28 송원맨션"
+    },
+    "대구 수성구|마크팰리스범어": {
+      "households": 160,
+      "built_year": 2017,
+      "addr": "대구광역시 수성구 범어동 177-3 마크팰리스 범어"
+    },
+    "대구 수성구|청구전원타운": {
+      "households": 678,
+      "built_year": 1990,
+      "addr": "대구광역시 수성구 시지동 349 청구전원타운"
+    },
+    "대구 수성구|사월화성파크드림(3단지)": {
+      "households": 167,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 신매동 49 사월화성파크드림3단지"
+    },
+    "대구 수성구|쌍용더플래티넘범어": {
+      "households": 207,
+      "built_year": 2023,
+      "addr": "대구광역시 수성구 범어동 2283 쌍용 더 플래티넘 범어"
+    },
+    "대구 수성구|시지라온프라이빗": {
+      "households": 207,
+      "built_year": 2023,
+      "addr": "대구광역시 수성구 신매동 610 시지라온프라이빗"
+    },
+    "대구 수성구|수성2차e-편한세상": {
+      "households": 447,
+      "built_year": 2007,
+      "addr": "대구광역시 수성구 만촌동 1046-10 수성2차e-편한세상"
+    },
+    "대구 수성구|삼주타운": {
+      "households": 430,
+      "built_year": 1993,
+      "addr": "대구광역시 수성구 범물동 1382 범물삼주타운"
+    },
+    "대구 수성구|더샵수성오클레어": {
+      "households": 303,
+      "built_year": 2023,
+      "addr": "대구광역시 수성구 수성동1가 649-19 더샵수성오클레어"
+    },
+    "대구 수성구|을지맨션": {
+      "households": 213,
+      "built_year": 1987,
+      "addr": "대구광역시 수성구 범어동 314-2 서한을지맨션"
+    },
+    "대구 수성구|수성뷰웰리버파크": {
+      "households": 266,
+      "built_year": 2023,
+      "addr": "대구광역시 수성구 중동 485-1 수성뷰웰리버파크"
+    },
+    "대구 수성구|수성대백인터빌": {
+      "households": 235,
+      "built_year": 2003,
+      "addr": "대구광역시 수성구 수성동1가 259-40 수성대백인터빌"
+    },
+    "대구 수성구|영남맨션": {
+      "households": 446,
+      "built_year": 1991,
+      "addr": "대구광역시 수성구 지산동 1257-1 지산영남맨션"
+    },
+    "대구 수성구|범어청구푸른마을": {
+      "households": 378,
+      "built_year": 2000,
+      "addr": "대구광역시 수성구 범어동 614-100 범어청구푸른마을"
+    },
+    "대구 수성구|수성코오롱하늘채": {
+      "households": 439,
+      "built_year": 2009,
+      "addr": "대구광역시 수성구 수성동3가 289 수성코오롱하늘채"
+    },
+    "대구 수성구|화성파크리젠시": {
+      "households": 153,
+      "built_year": 2007,
+      "addr": "대구광역시 수성구 범어동 43-5 범어화성파크리젠시"
+    },
+    "대구 수성구|힐스테이트범어센트럴": {
+      "households": 343,
+      "built_year": 2022,
+      "addr": "대구광역시 수성구 범어동 2277 힐스테이트범어센트럴"
+    },
+    "대구 수성구|수성3가화성파크드림2단지": {
+      "households": 314,
+      "built_year": 2009,
+      "addr": "대구광역시 수성구 수성동3가 275 수성3가화성파크드림2단지"
+    },
+    "대구 수성구|신매효성백년가약청": {
+      "households": 138,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 신매동 280- 신매효성백년가약청"
+    },
+    "대구 수성구|럭키골든": {
+      "households": 220,
+      "built_year": 1985,
+      "addr": "대구광역시 수성구 만촌동 245- 럭키골든맨션"
+    },
+    "대구 수성구|유성푸르나임르노블": {
+      "households": 119,
+      "built_year": 2009,
+      "addr": "대구광역시 수성구 신매동 57-17 유성푸르나임르노블"
+    },
+    "대구 수성구|범어화성파크드림": {
+      "households": 179,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 범어동 2148 범어화성파크드림"
+    },
+    "대구 수성구|힐스테이트만촌역": {
+      "households": 658,
+      "built_year": 2024,
+      "addr": "대구광역시 수성구 만촌동 1032-1 힐스테이트 만촌역"
+    },
+    "대구 수성구|만촌역태왕디아너스": {
+      "households": 450,
+      "built_year": 2024,
+      "addr": "대구광역시 수성구 만촌동 1041-1 만촌역 태왕디아너스"
+    },
+    "대구 수성구|더트루엘수성": {
+      "households": 158,
+      "built_year": 2022,
+      "addr": "대구광역시 수성구 범물동 859-1 더트루엘수성"
+    },
+    "대구 수성구|수성그린타운": {
+      "households": 201,
+      "built_year": 2005,
+      "addr": "대구광역시 수성구 수성동1가 112-7 수성그린타운"
+    },
+    "대구 수성구|효성백년가약궁": {
+      "households": 114,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 범어동 63-100 효성백년가약궁"
+    },
+    "대구 수성구|수성태왕아너스": {
+      "households": 179,
+      "built_year": 2007,
+      "addr": "대구광역시 수성구 범어동 1266 수성태왕아너스"
+    },
+    "대구 수성구|신천지타운": {
+      "households": 425,
+      "built_year": 1991,
+      "addr": "대구광역시 수성구 황금동 272 우방신천지타운"
+    },
+    "대구 수성구|동서맨션": {
+      "households": 465,
+      "built_year": 1991,
+      "addr": "대구광역시 수성구 지산동 1269 지산동서맨션"
+    },
+    "대구 수성구|태왕리더스": {
+      "households": 527,
+      "built_year": 2004,
+      "addr": "대구광역시 수성구 사월동 510-2 시지6차태왕리더스"
+    },
+    "대구 수성구|롬바드": {
+      "households": 108,
+      "built_year": 2011,
+      "addr": "대구광역시 수성구 수성동2가 1-3 롬바드아파트"
+    },
+    "대구 수성구|매호동서타운": {
+      "households": 687,
+      "built_year": 1995,
+      "addr": "대구광역시 수성구 매호동 1040 매호동서타운"
+    },
+    "대구 수성구|범어동일하이빌": {
+      "households": 228,
+      "built_year": 2007,
+      "addr": "대구광역시 수성구 범어동 897 범어동일하이빌아파트"
+    },
+    "대구 수성구|수성서한이다음": {
+      "households": 119,
+      "built_year": 2005,
+      "addr": "대구광역시 수성구 수성동1가 269-1 수성서한이다음"
+    },
+    "대구 수성구|범어 화산샬레": {
+      "households": 169,
+      "built_year": 2014,
+      "addr": "대구광역시 수성구 범어동 2238 범어화산샬레"
+    },
+    "대구 수성구|만촌화성파크스위트": {
+      "households": 291,
+      "built_year": 2005,
+      "addr": "대구광역시 수성구 만촌동 272 만촌화성파크스위트"
+    },
+    "대구 수성구|화성고려파크뷰": {
+      "households": 112,
+      "built_year": 2003,
+      "addr": "대구광역시 수성구 황금동 505 화성고려파크뷰"
+    },
+    "대구 수성구|범어라온프라이빗": {
+      "households": 175,
+      "built_year": 2016,
+      "addr": "대구광역시 수성구 범어동 2248 범어라온프라이빗"
+    },
+    "대구 수성구|만촌태왕리더스": {
+      "households": 433,
+      "built_year": 2004,
+      "addr": "대구광역시 수성구 만촌동 995-1 만촌태왕리더스"
+    },
+    "대구 수성구|광명프레지던트": {
+      "households": 233,
+      "built_year": 1980,
+      "addr": "대구광역시 수성구 중동 411-1 광명프레지던트"
+    },
+    "대구 수성구|매호화성파크드림": {
+      "households": 143,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 매호동 986-1 매호화성파크드림"
+    },
+    "대구 수성구|삼환": {
+      "households": 150,
+      "built_year": 1979,
+      "addr": "대구광역시 수성구 수성동1가 649-17 삼환아파트"
+    },
+    "대구 수성구|신매우방타운": {
+      "households": 221,
+      "built_year": 1997,
+      "addr": "대구광역시 수성구 신매동 246 신매우방타운"
+    },
+    "대구 수성구|노변동서우방": {
+      "households": 472,
+      "built_year": 1996,
+      "addr": "대구광역시 수성구 시지동 509 노변동서우방"
+    },
+    "대구 수성구|화성맨션": {
+      "households": 436,
+      "built_year": 1991,
+      "addr": "대구광역시 수성구 지산동 1257 지산화성맨션"
+    },
+    "대구 수성구|제림은탑맨션": {
+      "households": 346,
+      "built_year": 1994,
+      "addr": "대구광역시 수성구 시지동 70 제림은탑맨션"
+    },
+    "대구 수성구|청구호반맨션": {
+      "households": 280,
+      "built_year": 1990,
+      "addr": "대구광역시 수성구 지산동 1208 청구호반맨션"
+    },
+    "대구 수성구|실리안": {
+      "households": 155,
+      "built_year": 2003,
+      "addr": "대구광역시 수성구 파동 24-9 동신실리안아파트"
+    },
+    "대구 수성구|캐슬골드파크3단지": {
+      "households": 4256,
+      "built_year": 2006,
+      "addr": "대구광역시 수성구 황금동 365 캐슬골드파크"
+    },
+    "대구 수성구|범어삼환나우빌": {
+      "households": 240,
+      "built_year": 2007,
+      "addr": "대구광역시 수성구 수성동4가 1005 범어삼환나우빌"
+    },
+    "대구 수성구|가든하이츠2": {
+      "households": 106,
+      "built_year": 1986,
+      "addr": "대구광역시 수성구 황금동 100- 가든하이츠2단지"
+    },
+    "대구 수성구|청구빌라맨션": {
+      "households": 100,
+      "built_year": 1979,
+      "addr": "대구광역시 수성구 범어동 476 청구빌라맨션"
+    },
+    "대구 수성구|매호유성푸르나임": {
+      "households": 235,
+      "built_year": 2007,
+      "addr": "대구광역시 수성구 수성동1가 230 유성푸르나임"
+    },
+    "대구 수성구|시지우방하이츠": {
+      "households": 234,
+      "built_year": 1999,
+      "addr": "대구광역시 수성구 매호동 1033 시지우방하이츠"
+    },
+    "대구 달서구|성당래미안e-편한세상3단지": {
+      "households": 822,
+      "built_year": 2009,
+      "addr": "대구광역시 달서구 성당동 839 성당래미안e편한세상3단지"
+    },
+    "대구 달서구|상인자이": {
+      "households": 646,
+      "built_year": 2007,
+      "addr": "대구광역시 달서구 상인동 142 상인자이아파트"
+    },
+    "대구 달서구|성서동서서한": {
+      "households": 974,
+      "built_year": 1994,
+      "addr": "대구광역시 달서구 이곡동 1189-2 성서동서서한타운"
+    },
+    "대구 달서구|삼성한국형": {
+      "households": 1709,
+      "built_year": 1999,
+      "addr": "대구광역시 달서구 호산동 350 성서삼성한국형아파트"
+    },
+    "대구 달서구|미리샘마을": {
+      "households": 1120,
+      "built_year": 1998,
+      "addr": "대구광역시 달서구 도원동 1444 대곡2단지미리샘마을"
+    },
+    "대구 달서구|월성보성2": {
+      "households": 551,
+      "built_year": 1991,
+      "addr": "대구광역시 달서구 월성동 277 월성보성2차"
+    },
+    "대구 달서구|이안엑소디움에이펙스": {
+      "households": 117,
+      "built_year": 2025,
+      "addr": "대구광역시 달서구 감삼동 599-51 이안엑소디움에이펙스"
+    },
+    "대구 달서구|빌리브스카이주상복합": {
+      "households": 504,
+      "built_year": 2022,
+      "addr": "대구광역시 달서구 감삼동 141-5 빌리브스카이"
+    },
+    "대구 달서구|성서6주공": {
+      "households": 464,
+      "built_year": 1998,
+      "addr": "대구광역시 달서구 용산동 414-4 성서6주공"
+    },
+    "대구 달서구|서한이다음레이크뷰": {
+      "households": 633,
+      "built_year": 2015,
+      "addr": "대구광역시 달서구 도원동 639 서한이다음 레이크뷰"
+    },
+    "대구 달서구|죽전역동화아이위시": {
+      "households": 392,
+      "built_year": 2022,
+      "addr": "대구광역시 달서구 감삼동 492-2 죽전역동화아이위시"
+    },
+    "대구 달서구|힐스테이트죽전역": {
+      "households": 393,
+      "built_year": 2024,
+      "addr": "대구광역시 달서구 감삼동 719- 힐스테이트 죽전역"
+    },
+    "대구 달서구|월성자이": {
+      "households": 480,
+      "built_year": 2006,
+      "addr": "대구광역시 달서구 월성동 1261 월성자이아파트"
+    },
+    "대구 달서구|월성주공1(고층)": {
+      "households": 1234,
+      "built_year": 1991,
+      "addr": "대구광역시 달서구 월성동 84 월성주공1단지"
+    },
+    "대구 달서구|우방청자": {
+      "households": 440,
+      "built_year": 1989,
+      "addr": "대구광역시 달서구 상인동 1473-1 우방청자아파트"
+    },
+    "대구 달서구|대곡청구": {
+      "households": 275,
+      "built_year": 2004,
+      "addr": "대구광역시 달서구 대곡동 1031 대곡청구제네스"
+    },
+    "대구 달서구|본리롯데캐슬2차": {
+      "households": 473,
+      "built_year": 2009,
+      "addr": "대구광역시 달서구 본리동 196-1 본리롯데캐슬2차"
+    },
+    "대구 달서구|상인역모아엘가파크뷰": {
+      "households": 598,
+      "built_year": 2019,
+      "addr": "대구광역시 달서구 상인동 1600 상인역모아엘가파크뷰"
+    },
+    "대구 달서구|가람마을": {
+      "households": 920,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 도원동 1439 가람마을2단지"
+    },
+    "대구 달서구|삼정브리티시용산": {
+      "households": 767,
+      "built_year": 2013,
+      "addr": "대구광역시 달서구 감삼동 702 삼정브리티시용산"
+    },
+    "대구 달서구|산새마을": {
+      "households": 1302,
+      "built_year": 1996,
+      "addr": "대구광역시 달서구 도원동 1457 대곡7단지산새마을"
+    },
+    "대구 달서구|용산2우방타운": {
+      "households": 379,
+      "built_year": 1999,
+      "addr": "대구광역시 달서구 용산동 928 용산2차우방타운"
+    },
+    "대구 달서구|성당태왕아너스메트로": {
+      "households": 222,
+      "built_year": 2022,
+      "addr": "대구광역시 달서구 성당동 223-8 성당태왕아너스메트로"
+    },
+    "대구 달서구|진천역화성파크리젠시2단지": {
+      "households": 285,
+      "built_year": 2007,
+      "addr": "대구광역시 달서구 유천동 120-1 진천역화성파크리젠시"
+    },
+    "대구 달서구|상인역신일해피트리": {
+      "households": 678,
+      "built_year": 2007,
+      "addr": "대구광역시 달서구 상인동 150-11 상인역신일해피트리"
+    },
+    "대구 달서구|성당래미안e-편한세상1단지": {
+      "households": 1036,
+      "built_year": 2009,
+      "addr": "대구광역시 달서구 본리동 74-1 성당래미안e-편한세상1단지"
+    },
+    "대구 달서구|대곡청구제네스": {
+      "households": 275,
+      "built_year": 2004,
+      "addr": "대구광역시 달서구 대곡동 1031 대곡청구제네스"
+    },
+    "대구 달서구|상인화성파크드림1단지": {
+      "households": 2420,
+      "built_year": 2010,
+      "addr": "대구광역시 달서구 상인동 1596 상인화성파크드림아파트"
+    },
+    "대구 달서구|성서2보성타운": {
+      "households": 1012,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 용산동 501-2 성서2차보성타운"
+    },
+    "대구 달서구|장기초록나라": {
+      "households": 976,
+      "built_year": 2000,
+      "addr": "대구광역시 달서구 장기동 813-1 장기초록나라"
+    },
+    "대구 달서구|진천역화성파크리젠시1단지": {
+      "households": 285,
+      "built_year": 2007,
+      "addr": "대구광역시 달서구 유천동 120-1 진천역화성파크리젠시"
+    },
+    "대구 달서구|트윈팰리스": {
+      "households": 192,
+      "built_year": 2006,
+      "addr": "대구광역시 달서구 진천동 595 진천트윈팰리스"
+    },
+    "대구 달서구|월성동코오롱하늘채1단지": {
+      "households": 823,
+      "built_year": 2007,
+      "addr": "대구광역시 달서구 월성동 1557-6 월성코오롱하늘채1단지"
+    },
+    "대구 달서구|이안월배": {
+      "households": 400,
+      "built_year": 2009,
+      "addr": "대구광역시 달서구 대천동 326-1 이안월배아파트"
+    },
+    "대구 달서구|두류센트레빌더시티": {
+      "households": 333,
+      "built_year": 2022,
+      "addr": "대구광역시 달서구 두류동 631-40 두류센트레빌더시티"
+    },
+    "대구 달서구|두산위브": {
+      "households": 690,
+      "built_year": 2009,
+      "addr": "대구광역시 달서구 성당동 840 성당두산위브아파트"
+    },
+    "대구 달서구|장기영남네오빌비스타": {
+      "households": 272,
+      "built_year": 2005,
+      "addr": "대구광역시 달서구 장기동 551 영남네오빌비스타"
+    },
+    "대구 달서구|용산2서한화성": {
+      "households": 492,
+      "built_year": 1999,
+      "addr": "대구광역시 달서구 용산동 919 용산2차서한화성타운"
+    },
+    "대구 달서구|상인푸르지오": {
+      "households": 698,
+      "built_year": 2010,
+      "addr": "대구광역시 달서구 상인동 1598 상인푸르지오"
+    },
+    "대구 달서구|한실들마을": {
+      "households": 1119,
+      "built_year": 1996,
+      "addr": "대구광역시 달서구 도원동 1429 한실들마을2차"
+    },
+    "대구 달서구|대곡이오스": {
+      "households": 201,
+      "built_year": 2003,
+      "addr": "대구광역시 달서구 대곡동 58 대곡이오스아파트"
+    },
+    "대구 달서구|나래마을": {
+      "households": 1060,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 도원동 1428 대곡나래마을"
+    },
+    "대구 달서구|상인영남화성타운": {
+      "households": 758,
+      "built_year": 1993,
+      "addr": "대구광역시 달서구 상인동 1517 상인영남화성아파트"
+    },
+    "대구 달서구|월성보성1": {
+      "households": 1185,
+      "built_year": 1991,
+      "addr": "대구광역시 달서구 월성동 364 월성보성1단지"
+    },
+    "대구 달서구|성서무지개타운": {
+      "households": 574,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 이곡동 1332 성서무지개아파트"
+    },
+    "대구 달서구|장기누림타운": {
+      "households": 356,
+      "built_year": 2002,
+      "addr": "대구광역시 달서구 장기동 812 장기누림타운"
+    },
+    "대구 달서구|힐스테이트죽전역더퍼스트": {
+      "households": 391,
+      "built_year": 2022,
+      "addr": "대구광역시 달서구 감삼동 556 힐스테이트죽전역더퍼스트"
+    },
+    "대구 달서구|용산동서우방": {
+      "households": 496,
+      "built_year": 1998,
+      "addr": "대구광역시 달서구 용산동 956 용산동서우방타운"
+    },
+    "대구 달서구|성서푸른마을": {
+      "households": 672,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 이곡동 1330 성서푸른마을아파트"
+    },
+    "대구 달서구|진천역라온프라이빗센텀": {
+      "households": 585,
+      "built_year": 2022,
+      "addr": "대구광역시 달서구 진천동 555-8 진천역라온프라이빗센텀"
+    },
+    "대구 달서구|동화로즈빌": {
+      "households": 348,
+      "built_year": 2001,
+      "addr": "대구광역시 달서구 죽전동 251 동화로즈빌"
+    },
+    "대구 달서구|죽전역태왕아너스": {
+      "households": 230,
+      "built_year": 2024,
+      "addr": "대구광역시 달서구 본리동 1-3 죽전역 태왕아너스"
+    },
+    "대구 달서구|롯데캐슬레이크": {
+      "households": 910,
+      "built_year": 2005,
+      "addr": "대구광역시 달서구 도원동 677-1 롯데캐슬레이크"
+    },
+    "대구 달서구|성당코오롱하늘채": {
+      "households": 784,
+      "built_year": 2007,
+      "addr": "대구광역시 달서구 감삼동 287-57 성당코오롱하늘채"
+    },
+    "대구 달서구|빌리브라디체": {
+      "households": 520,
+      "built_year": 2025,
+      "addr": "대구광역시 달서구 본동 1207- 빌리브라디체"
+    },
+    "대구 달서구|성서와룡타운": {
+      "households": 630,
+      "built_year": 1994,
+      "addr": "대구광역시 달서구 이곡동 1256 와룡타운"
+    },
+    "대구 달서구|상인화성파크드림2단지": {
+      "households": 2420,
+      "built_year": 2010,
+      "addr": "대구광역시 달서구 상인동 1596 상인화성파크드림아파트"
+    },
+    "대구 달서구|보성은하": {
+      "households": 1521,
+      "built_year": 1994,
+      "addr": "대구광역시 달서구 상인동 42 보성은하타운"
+    },
+    "대구 달서구|두류센트레빌더파크": {
+      "households": 433,
+      "built_year": 2024,
+      "addr": "대구광역시 달서구 두류동 2363- 두류센트레빌 더 파크"
+    },
+    "대구 달서구|월배쌍용예가": {
+      "households": 555,
+      "built_year": 2008,
+      "addr": "대구광역시 달서구 유천동 42 월배쌍용예가"
+    },
+    "대구 달서구|월성청구타운": {
+      "households": 434,
+      "built_year": 1991,
+      "addr": "대구광역시 달서구 월성동 500 월성청구타운"
+    },
+    "대구 달서구|월성화성타운": {
+      "households": 385,
+      "built_year": 1991,
+      "addr": "대구광역시 달서구 월성동 500-7 월성화성타운"
+    },
+    "대구 달서구|수목원제일풍경채": {
+      "households": 982,
+      "built_year": 2018,
+      "addr": "대구광역시 달서구 대곡동 1123 수목원제일풍경채"
+    },
+    "대구 달서구|죽전역코아루더리브": {
+      "households": 274,
+      "built_year": 2023,
+      "addr": "대구광역시 달서구 감삼동 573 죽전역코아루더리브"
+    },
+    "대구 달서구|진천태왕아너스1단지": {
+      "households": 182,
+      "built_year": 2008,
+      "addr": "대구광역시 달서구 진천동 740-1 진천태왕아너스1단지"
+    },
+    "대구 달서구|성서우방타운": {
+      "households": 765,
+      "built_year": 1994,
+      "addr": "대구광역시 달서구 이곡동 1192 성서우방타운"
+    },
+    "대구 달서구|죽전역화성파크드림": {
+      "households": 144,
+      "built_year": 2022,
+      "addr": "대구광역시 달서구 감삼동 582-5 죽전역화성파크드림"
+    },
+    "대구 달서구|본리롯데캐슬": {
+      "households": 528,
+      "built_year": 2008,
+      "addr": "대구광역시 달서구 본리동 193-3 본리롯데캐슬"
+    },
+    "대구 달서구|태왕아너스베스트": {
+      "households": 263,
+      "built_year": 2008,
+      "addr": "대구광역시 달서구 월성동 1329 태왕아너스베스트"
+    },
+    "대구 달서구|성서청구타운": {
+      "households": 940,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 용산동 416-5 성서청구타운"
+    },
+    "대구 달서구|청구블루빌": {
+      "households": 584,
+      "built_year": 2000,
+      "addr": "대구광역시 달서구 용산동 917 용산청구블루빌"
+    },
+    "대구 달서구|진천역계룡리슈빌": {
+      "households": 810,
+      "built_year": 2011,
+      "addr": "대구광역시 달서구 진천동 602 진천역계룡리슈빌"
+    },
+    "대구 달서구|상인성지한서타운": {
+      "households": 214,
+      "built_year": 1993,
+      "addr": "대구광역시 달서구 상인동 1522 상인성지아파트"
+    },
+    "대구 달서구|대곡사계절타운": {
+      "households": 1200,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 도원동 1438 사계절타운"
+    },
+    "대구 달서구|아람마을": {
+      "households": 1348,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 도원동 1440 대곡9단지아람마을"
+    },
+    "대구 달서구|월성삼정그린코아카운티": {
+      "households": 202,
+      "built_year": 2022,
+      "addr": "대구광역시 달서구 월성동 1894 월성삼정그린코아카운티"
+    },
+    "대구 달서구|성서2영남우방타운": {
+      "households": 794,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 용산동 416-1 성서2차영남우방타운"
+    },
+    "대구 달서구|월배역디엘라온프라이빗": {
+      "households": 555,
+      "built_year": 2024,
+      "addr": "대구광역시 달서구 진천동 42-3 월배역 디엘  라온프라이빗"
+    },
+    "대구 달서구|성서3동서": {
+      "households": 294,
+      "built_year": 1998,
+      "addr": "대구광역시 달서구 이곡동 1304-5 성서3차동서타운"
+    },
+    "대구 달서구|태왕아너스월성": {
+      "households": 499,
+      "built_year": 2007,
+      "addr": "대구광역시 달서구 월성동 585 태왕아너스월성"
+    },
+    "대구 달서구|상인현대동방타운": {
+      "households": 440,
+      "built_year": 1993,
+      "addr": "대구광역시 달서구 상인동 1514 상인현대동방타운"
+    },
+    "대구 달서구|용산영남": {
+      "households": 352,
+      "built_year": 1998,
+      "addr": "대구광역시 달서구 용산동 914 용산영남타운"
+    },
+    "대구 달서구|청구제네스": {
+      "households": 414,
+      "built_year": 2002,
+      "addr": "대구광역시 달서구 송현동 1943 앞산청구제네스"
+    },
+    "대구 달서구|삼정그린빌": {
+      "households": 1208,
+      "built_year": 2002,
+      "addr": "대구광역시 달서구 두류동 486-2 삼정그린빌"
+    },
+    "대구 달서구|우방죽전타운": {
+      "households": 792,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 용산동 221 우방죽전타운"
+    },
+    "대구 달서구|대곡한라하우젠트": {
+      "households": 298,
+      "built_year": 2005,
+      "addr": "대구광역시 달서구 대곡동 46 대곡한라하우젠트"
+    },
+    "대구 달서구|송현제림": {
+      "households": 222,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 송현동 110 송현제림아파트"
+    },
+    "대구 달서구|월성우방타운": {
+      "households": 421,
+      "built_year": 1991,
+      "addr": "대구광역시 달서구 월성동 500-9 월성우방타운"
+    },
+    "대구 달서구|죽전그린빌": {
+      "households": 494,
+      "built_year": 2003,
+      "addr": "대구광역시 달서구 죽전동 368 죽전그린빌"
+    },
+    "대구 달서구|성서보람타운": {
+      "households": 918,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 용산동 410-2 성서보람타운"
+    },
+    "대구 달서구|빌리브클라쎄": {
+      "households": 235,
+      "built_year": 2023,
+      "addr": "대구광역시 달서구 본동 747 빌리브 클라쎄"
+    },
+    "대구 달서구|용산자이": {
+      "households": 429,
+      "built_year": 2024,
+      "addr": "대구광역시 달서구 용산동 997 대구용산자이"
+    },
+    "대구 달서구|성서청남타운": {
+      "households": 616,
+      "built_year": 1994,
+      "addr": "대구광역시 달서구 이곡동 1194 성서청남타운"
+    },
+    "대구 달서구|대곡역화성파크드림위드": {
+      "households": 670,
+      "built_year": 2007,
+      "addr": "대구광역시 달서구 유천동 298-1 대곡역화성파크드림"
+    },
+    "대구 달서구|월배힐스테이트": {
+      "households": 730,
+      "built_year": 2008,
+      "addr": "대구광역시 달서구 대천동 413 월배힐스테이트"
+    },
+    "대구 달서구|성서2화성타운": {
+      "households": 365,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 이곡동 1300-1 성서2차화성타운"
+    },
+    "대구 달서구|월촌화성타운": {
+      "households": 452,
+      "built_year": 1999,
+      "addr": "대구광역시 달서구 상인동 821 월촌화성타운"
+    },
+    "대구 달서구|두류역서한포레스트": {
+      "households": 480,
+      "built_year": 2025,
+      "addr": "대구광역시 달서구 두류동 2369 두류역 서한포레스트"
+    },
+    "대구 달서구|한화꿈에그린": {
+      "households": 833,
+      "built_year": 2005,
+      "addr": "대구광역시 달서구 신당동 682-30 신당한화꿈에그린아파트"
+    },
+    "대구 달서구|장기파랑새마을": {
+      "households": 1216,
+      "built_year": 2000,
+      "addr": "대구광역시 달서구 장기동 814-1 장기파랑새마을아파트"
+    },
+    "대구 달서구|용산보성타운": {
+      "households": 345,
+      "built_year": 1999,
+      "addr": "대구광역시 달서구 용산동 937 용산보성타운"
+    },
+    "대구 달서구|상인평광맨션": {
+      "households": 380,
+      "built_year": 1993,
+      "addr": "대구광역시 달서구 상인동 1557 상인평광맨션"
+    },
+    "대구 달서구|한양은하": {
+      "households": 520,
+      "built_year": 1989,
+      "addr": "대구광역시 달서구 상인동 1474 한양은하"
+    },
+    "대구 달서구|상인화성하이츠": {
+      "households": 222,
+      "built_year": 1999,
+      "addr": "대구광역시 달서구 상인동 750 상인화성하이츠"
+    },
+    "대구 달서구|성서2서한타운": {
+      "households": 714,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 이곡동 1308-1 성서2차서한타운"
+    },
+    "대구 달서구|상인동화아이위시": {
+      "households": 380,
+      "built_year": 1994,
+      "addr": "대구광역시 달서구 상인동 1106-1 상인동화아이위시"
+    },
+    "대구 달서구|진천역대성스카이렉스": {
+      "households": 446,
+      "built_year": 2008,
+      "addr": "대구광역시 달서구 진천동 508 진천역대성스카이렉스"
+    },
+    "대구 달서구|대곡역화성파크드림": {
+      "households": 670,
+      "built_year": 2007,
+      "addr": "대구광역시 달서구 유천동 298-1 대곡역화성파크드림"
+    },
+    "대구 달서구|두산위브더제니스센트럴달서": {
+      "households": 316,
+      "built_year": 2024,
+      "addr": "대구광역시 달서구 본리동 360-3 두산위브더제니스 센트럴 달서"
+    },
+    "대구 달서구|삼성래미안2": {
+      "households": 317,
+      "built_year": 2001,
+      "addr": "대구광역시 달서구 대곡동 1028 삼성래미안2차아파트"
+    },
+    "대구 달서구|용산파크타운": {
+      "households": 802,
+      "built_year": 2000,
+      "addr": "대구광역시 달서구 용산동 911 용산파크타운"
+    },
+    "대구 달서구|청구타운": {
+      "households": 464,
+      "built_year": 1995,
+      "addr": "대구광역시 달서구 진천동 490 진천청구타운"
+    },
+    "대구 달서구|귀빈맨션": {
+      "households": 413,
+      "built_year": 1990,
+      "addr": "대구광역시 달서구 진천동 205-1 귀빈맨션"
+    },
+    "대구 달서구|유림노르웨이아침": {
+      "households": 178,
+      "built_year": 2008,
+      "addr": "대구광역시 달서구 본리동 352-4 유림 노르웨이아침"
+    },
+    "대구 달서구|성서우방유쉘": {
+      "households": 347,
+      "built_year": 2007,
+      "addr": "대구광역시 달서구 파호동 24 성서우방유쉘"
+    },
+    "대구 달서구|우방타운": {
+      "households": 317,
+      "built_year": 1993,
+      "addr": "대구광역시 달서구 상인동 1516 상인우방타운"
+    },
+    "대구 달서구|용산현대우방": {
+      "households": 496,
+      "built_year": 1999,
+      "addr": "대구광역시 달서구 용산동 918 용산현대우방타운"
+    },
+    "대구 달서구|평화타운": {
+      "households": 579,
+      "built_year": 1994,
+      "addr": "대구광역시 달서구 용산동 905 평화타운"
+    },
+    "대구 달서구|월배태영데시앙": {
+      "households": 431,
+      "built_year": 2009,
+      "addr": "대구광역시 달서구 대천동 497-2 월배태영데시앙"
+    },
+    "대구 달서구|월성주공1(저층)": {
+      "households": 1234,
+      "built_year": 1991,
+      "addr": "대구광역시 달서구 월성동 84 월성주공1단지"
+    },
+    "대구 달서구|한마음": {
+      "households": 996,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 용산동 419-1 성서한마음타운"
+    },
+    "대구 달서구|월배역라온프라이빗": {
+      "households": 230,
+      "built_year": 2018,
+      "addr": "대구광역시 달서구 진천동 72 월배역라온프라이빗"
+    },
+    "대구 달서구|진천역AK그랑폴리스주상복합": {
+      "households": 1669,
+      "built_year": 2013,
+      "addr": "대구광역시 달서구 유천동 597 진천역AK그랑폴리스"
+    },
+    "대구 달서구|아카시아": {
+      "households": 330,
+      "built_year": 1987,
+      "addr": "대구광역시 달서구 본리동 306-1 우방아카시아"
+    },
+    "대구 달서구|월성영남맨션": {
+      "households": 375,
+      "built_year": 1991,
+      "addr": "대구광역시 달서구 월성동 500-6 월성영남맨션"
+    },
+    "대구 달서구|월성동코오롱하늘채2단지": {
+      "households": 303,
+      "built_year": 2007,
+      "addr": "대구광역시 달서구 월성동 1551 월성코오롱하늘채2단지"
+    },
+    "대구 달서구|죽전역해링턴플레이스더원": {
+      "households": 200,
+      "built_year": 2023,
+      "addr": "대구광역시 달서구 감삼동 560-1 죽전역해링턴플레이스더원"
+    },
+    "대구 달서구|성서대백창신한라타운": {
+      "households": 876,
+      "built_year": 1994,
+      "addr": "대구광역시 달서구 이곡동 1194-2 성서대백창신한라타운"
+    },
+    "대구 달서구|빌리브죽전": {
+      "households": 176,
+      "built_year": 2023,
+      "addr": "대구광역시 달서구 죽전동 279-1 빌리브 죽전"
+    },
+    "대구 달서구|빌리브파크뷰": {
+      "households": 92,
+      "built_year": 2023,
+      "addr": "대구광역시 달서구 두류동 2355 빌리브파크뷰"
+    },
+    "대구 달서구|수목원서한이다음": {
+      "households": 849,
+      "built_year": 2018,
+      "addr": "대구광역시 달서구 대곡동 1126 수목원서한이다음"
+    },
+    "대구 달서구|용산청구타운": {
+      "households": 282,
+      "built_year": 1999,
+      "addr": "대구광역시 달서구 용산동 929 용산청구타운"
+    },
+    "대구 달서구|동백맨션": {
+      "households": 318,
+      "built_year": 1990,
+      "addr": "대구광역시 달서구 진천동 131 동백맨션"
+    },
+    "대구 달서구|삼미타운": {
+      "households": 154,
+      "built_year": 1994,
+      "addr": "대구광역시 달서구 상인동 351-2 삼미타운"
+    },
+    "대구 달서구|제림하나로": {
+      "households": 254,
+      "built_year": 1995,
+      "addr": "대구광역시 달서구 진천동 478-1 제림하나로아파트"
+    },
+    "대구 달서구|보성산호": {
+      "households": 320,
+      "built_year": 1989,
+      "addr": "대구광역시 달서구 상인동 1474-1 보성산호타운"
+    },
+    "대구 달서구|진천현대": {
+      "households": 183,
+      "built_year": 1993,
+      "addr": "대구광역시 달서구 진천동 262-2 진천현대1차아파트"
+    },
+    "대구 달서구|감삼우방맨션": {
+      "households": 120,
+      "built_year": 1997,
+      "addr": "대구광역시 달서구 감삼동 105-2 감삼우방맨션"
+    },
+    "대구 달서구|진천태왕아너스2단지": {
+      "households": 165,
+      "built_year": 2008,
+      "addr": "대구광역시 달서구 진천동 732 진천태왕아너스2단지"
+    },
+    "대구 달서구|달서코아루더리브": {
+      "households": 162,
+      "built_year": 2023,
+      "addr": "대구광역시 달서구 본동 752 달서코아루더리브"
+    },
+    "대구 달서구|죽전역해링턴플레이스더베스트": {
+      "households": 200,
+      "built_year": 2024,
+      "addr": "대구광역시 달서구 감삼동 567-1 죽전역해링턴플레이스더베스트"
+    },
+    "대전 서구|갤러리빌": {
+      "households": 180,
+      "built_year": 2004,
+      "addr": "대전광역시 서구 둔산동 1141 갤러리빌4차"
+    },
+    "대전 서구|정든": {
+      "households": 138,
+      "built_year": 1999,
+      "addr": "대전광역시 서구 정림동 124-4 정든아파트"
+    },
+    "대전 서구|리베라아이누리": {
+      "households": 171,
+      "built_year": 2009,
+      "addr": "대전광역시 서구 괴정동 426-1 리베라아이누리주상복합"
+    },
+    "대전 서구|시티팰리스": {
+      "households": 156,
+      "built_year": 2019,
+      "addr": "대전광역시 서구 갈마동 338-1 시티팰리스 8차"
+    },
+    "대전 서구|탑스빌": {
+      "households": 251,
+      "built_year": 2001,
+      "addr": "대전광역시 서구 내동 17-1 내동탑스빌아파트"
+    },
+    "대전 유성구|열매마을3단지(대우)": {
+      "households": 588,
+      "built_year": 2000,
+      "addr": "대전광역시 유성구 지족동 874 열매마을3대우아파트"
+    },
+    "대전 유성구|노은새미래숲2단지": {
+      "households": 655,
+      "built_year": 2015,
+      "addr": "대전광역시 유성구 지족동 1042 새미래숲아파트"
+    },
+    "대전 유성구|송림마을5단지(E-그리운)": {
+      "households": 613,
+      "built_year": 2006,
+      "addr": "대전광역시 유성구 하기동 545 송림마을5단지"
+    },
+    "대전 유성구|송강마을2": {
+      "households": 675,
+      "built_year": 1994,
+      "addr": "대전광역시 유성구 송강동 10-3 송강마을2단지"
+    },
+    "대전 유성구|럭키하나": {
+      "households": 720,
+      "built_year": 1993,
+      "addr": "대전광역시 유성구 신성동 153 럭키하나"
+    },
+    "대전 유성구|유성세움펠리피아주상복합": {
+      "households": 409,
+      "built_year": 2014,
+      "addr": "대전광역시 유성구 봉명동 466-2 세움펠리피아"
+    },
+    "대전 유성구|송림마을1단지(호반리젠시빌)": {
+      "households": 452,
+      "built_year": 2005,
+      "addr": "대전광역시 유성구 하기동 512 송림마을1단지"
+    },
+    "대전 유성구|대림두레": {
+      "households": 840,
+      "built_year": 1993,
+      "addr": "대전광역시 유성구 신성동 152-1 대림두레"
+    },
+    "대전 유성구|신우한아름": {
+      "households": 864,
+      "built_year": 1998,
+      "addr": "대전광역시 유성구 원내동 357 한아름"
+    },
+    "대전 유성구|드리움1단지": {
+      "households": 676,
+      "built_year": 2004,
+      "addr": "대전광역시 유성구 대정동 316-1 드리움1단지아파트"
+    },
+    "대전 유성구|도룡포레미소지움": {
+      "households": 232,
+      "built_year": 2020,
+      "addr": "대전광역시 유성구 가정동 236-2 도룡포레미소지움아파트"
+    },
+    "대전 유성구|열매마을7단지(현대1차)": {
+      "households": 887,
+      "built_year": 2000,
+      "addr": "대전광역시 유성구 지족동 919 열매마을7단지"
+    },
+    "대전 유성구|열매마을9단지(금성백조)": {
+      "households": 646,
+      "built_year": 2002,
+      "addr": "대전광역시 유성구 노은동 521 열매마을9단지"
+    },
+    "대전 유성구|호반써밋그랜드파크3BL": {
+      "households": 688,
+      "built_year": 2023,
+      "addr": "대전광역시 유성구 용산동 390 호반써밋 그랜드파크 3BL"
+    },
+    "대전 유성구|노은해랑숲마을5단지": {
+      "households": 518,
+      "built_year": 2014,
+      "addr": "대전광역시 유성구 지족동 1033 노은해랑숲마을5단지"
+    },
+    "대전 유성구|반석마을6단지(삼부르네상스2단지)": {
+      "households": 642,
+      "built_year": 2005,
+      "addr": "대전광역시 유성구 반석동 613 반석마을6단지아파트"
+    },
+    "대전 유성구|대전둔곡우미린": {
+      "households": 760,
+      "built_year": 2022,
+      "addr": "대전광역시 유성구 둔곡동 431 대전둔곡우미린아파트"
+    },
+    "대전 유성구|유성자이": {
+      "households": 350,
+      "built_year": 2010,
+      "addr": "대전광역시 유성구 봉명동 469-46 유성자이아파트"
+    },
+    "대전 유성구|트리풀시티포레아파트": {
+      "households": 439,
+      "built_year": 2017,
+      "addr": "대전광역시 유성구 지족동 1043 트리풀시티포레아파트"
+    },
+    "대전 유성구|송림마을3단지(우미이노스빌2차)": {
+      "households": 713,
+      "built_year": 2005,
+      "addr": "대전광역시 유성구 하기동 513 송림마을3단지"
+    },
+    "대전 유성구|열매마을2단지(한라)": {
+      "households": 312,
+      "built_year": 2001,
+      "addr": "대전광역시 유성구 지족동 873 열매마을2단지"
+    },
+    "대전 유성구|열매마을1단지(삼부)": {
+      "households": 516,
+      "built_year": 2001,
+      "addr": "대전광역시 유성구 지족동 853 열매마을1단지"
+    },
+    "대전 유성구|노은3지구영무예다음에코타운": {
+      "households": 615,
+      "built_year": 2017,
+      "addr": "대전광역시 유성구 지족동 1052 노은3지구 영무예다음 에코타운"
+    },
+    "대전 유성구|미메이드": {
+      "households": 737,
+      "built_year": 2006,
+      "addr": "대전광역시 유성구 교촌동 616 한승미메이드아파트"
+    },
+    "대전 유성구|레자미멀티홈": {
+      "households": 159,
+      "built_year": 2016,
+      "addr": "대전광역시 유성구 봉명동 617-3 레자미멀티-홈"
+    },
+    "대전 유성구|갑천1트리풀시티힐스테이트": {
+      "households": 1116,
+      "built_year": 2023,
+      "addr": "대전광역시 유성구 원신흥동 612 갑천1 트리풀시티 힐스테이트 아파트"
+    },
+    "대전 유성구|갑천2트리풀시티엘리프": {
+      "households": 936,
+      "built_year": 2025,
+      "addr": "대전광역시 유성구 원신흥동 660- 갑천2트리풀시티엘리프"
+    },
+    "대전 유성구|경남아너스빌2단지": {
+      "households": 315,
+      "built_year": 2008,
+      "addr": "대전광역시 유성구 용산동 716 경남아너스빌아파트"
+    },
+    "대전 유성구|장대푸르지오": {
+      "households": 562,
+      "built_year": 2006,
+      "addr": "대전광역시 유성구 장대동 479 장대푸르지오아파트"
+    },
+    "대전 유성구|운암네오미아": {
+      "households": 544,
+      "built_year": 2010,
+      "addr": "대전광역시 유성구 덕명동 524 운암네오미아아파트"
+    },
+    "대전 유성구|반석마을3단지(호반베르디움)": {
+      "households": 607,
+      "built_year": 2006,
+      "addr": "대전광역시 유성구 지족동 992 반석마을3단지"
+    },
+    "대전 유성구|유성푸르지오시티": {
+      "households": 299,
+      "built_year": 2014,
+      "addr": "대전광역시 유성구 봉명동 536-5 유성푸르지오시티"
+    },
+    "대전 유성구|인스빌리베라": {
+      "households": 540,
+      "built_year": 2012,
+      "addr": "대전광역시 유성구 원신흥동 488 인스빌리베라"
+    },
+    "대전 유성구|삼성푸른아파트": {
+      "households": 672,
+      "built_year": 1993,
+      "addr": "대전광역시 유성구 전민동 460-1 삼성푸른"
+    },
+    "대전 유성구|한화꿈에그린1차": {
+      "households": 887,
+      "built_year": 2014,
+      "addr": "대전광역시 유성구 지족동 1089 노은한화꿈에그린1단지"
+    },
+    "대전 유성구|반석마을1단지(호반리젠시빌)": {
+      "households": 536,
+      "built_year": 2005,
+      "addr": "대전광역시 유성구 지족동 977 반석마을1단지아파트"
+    },
+    "대전 유성구|리베라아이누리2": {
+      "households": 293,
+      "built_year": 2013,
+      "addr": "대전광역시 유성구 봉명동 445-4 리베라아이누리2아파트"
+    },
+    "대전 유성구|열매마을5단지(운암)": {
+      "households": 500,
+      "built_year": 2001,
+      "addr": "대전광역시 유성구 지족동 877 열매마을5단지아파트"
+    },
+    "대전 유성구|네오미아": {
+      "households": 544,
+      "built_year": 2010,
+      "addr": "대전광역시 유성구 덕명동 524 운암네오미아아파트"
+    },
+    "대전 유성구|죽동푸르지오": {
+      "households": 638,
+      "built_year": 2015,
+      "addr": "대전광역시 유성구 죽동 730 죽동푸르지오아파트"
+    },
+    "대전 유성구|월드컵패밀리타운": {
+      "households": 556,
+      "built_year": 2002,
+      "addr": "대전광역시 유성구 장대동 323-2 월드컵패밀리타운"
+    },
+    "대전 유성구|네이처뷰3단지": {
+      "households": 687,
+      "built_year": 2015,
+      "addr": "대전광역시 유성구 지족동 1050 네이처 뷰 아파트"
+    },
+    "대전 유성구|유성숲오투그란데3차": {
+      "households": 662,
+      "built_year": 2019,
+      "addr": "대전광역시 유성구 덕명동 614 유성숲오투그란데3차"
+    },
+    "대전 유성구|자연": {
+      "households": 199,
+      "built_year": 1998,
+      "addr": "대전광역시 유성구 궁동 393-3 자연"
+    },
+    "대전 유성구|CJ나인파크": {
+      "households": 168,
+      "built_year": 2008,
+      "addr": "대전광역시 유성구 봉명동 553-2 CJ나인파크"
+    },
+    "대전 유성구|에이스타운4차": {
+      "households": 162,
+      "built_year": 2018,
+      "addr": "대전광역시 유성구 봉명동 676-4 에이스타운4차아파트"
+    },
+    "대전 유성구|리베라아이누리": {
+      "households": 254,
+      "built_year": 2011,
+      "addr": "대전광역시 유성구 봉명동 448-5 리베라아이누리"
+    },
+    "대전 유성구|좋은하루3차": {
+      "households": 140,
+      "built_year": 2013,
+      "addr": "대전광역시 유성구 봉명동 540-18 좋은하루3차"
+    },
+    "대전 유성구|드림월드": {
+      "households": 592,
+      "built_year": 2002,
+      "addr": "대전광역시 유성구 장대동 344 대전 드림월드아파트"
+    },
+    "대전 유성구|앤터팰리스1차": {
+      "households": 299,
+      "built_year": 2019,
+      "addr": "대전광역시 유성구 봉명동 607-4 앤터팰리스1차"
+    },
+    "대전 유성구|한라비발디": {
+      "households": 752,
+      "built_year": 2011,
+      "addr": "대전광역시 유성구 상대동 462 도안신도시한라비발디"
+    },
+    "대전 유성구|대전노은4지구한화꿈에그린2블록": {
+      "households": 624,
+      "built_year": 2012,
+      "addr": "대전광역시 유성구 지족동 1051 노은4단지"
+    },
+    "대전 유성구|열매마을11단지(계룡리슈빌)": {
+      "households": 635,
+      "built_year": 2003,
+      "addr": "대전광역시 유성구 노은동 552-3 열매마을아파트11단지"
+    },
+    "대전 유성구|스카이뷰시티": {
+      "households": 299,
+      "built_year": 2018,
+      "addr": "대전광역시 유성구 봉명동 615-2 스카이뷰시티"
+    },
+    "대전 유성구|스카이뷰로드": {
+      "households": 198,
+      "built_year": 2015,
+      "addr": "대전광역시 유성구 봉명동 607-3 스카이뷰로드"
+    },
+    "대전 유성구|열매마을6단지(현대2차)": {
+      "households": 582,
+      "built_year": 2000,
+      "addr": "대전광역시 유성구 지족동 880 열매마을6단지"
+    },
+    "대전 유성구|초롱마을": {
+      "households": 205,
+      "built_year": 1995,
+      "addr": "대전광역시 유성구 구암동 627-1 초롱마을"
+    },
+    "대전 유성구|샘물타운": {
+      "households": 784,
+      "built_year": 1996,
+      "addr": "대전광역시 유성구 원내동 394 샘물타운"
+    },
+    "대전 유성구|드리미아": {
+      "households": 240,
+      "built_year": 2012,
+      "addr": "대전광역시 유성구 봉명동 612-2 드리미아"
+    },
+    "대전 유성구|인앤인": {
+      "households": 120,
+      "built_year": 2007,
+      "addr": "대전광역시 유성구 지족동 834 인앤인주상복합아파트"
+    },
+    "대전 유성구|반석마을2단지(계룡리슈빌)": {
+      "households": 561,
+      "built_year": 2005,
+      "addr": "대전광역시 유성구 지족동 978 반석마을2단지아파트"
+    },
+    "대전 유성구|레자미3차": {
+      "households": 467,
+      "built_year": 2013,
+      "addr": "대전광역시 유성구 봉명동 447-6 레자미3차"
+    },
+    "대전 유성구|송림마을2단지(우미이노스빌1차)": {
+      "households": 477,
+      "built_year": 2004,
+      "addr": "대전광역시 유성구 하기동 516 송림마을2단지"
+    },
+    "대전 유성구|드리움2단지": {
+      "households": 600,
+      "built_year": 2006,
+      "addr": "대전광역시 유성구 대정동 317-1 드리움아파트2단지"
+    },
+    "대전 유성구|한마을": {
+      "households": 1206,
+      "built_year": 1999,
+      "addr": "대전광역시 유성구 송강동 200-4 한마을"
+    },
+    "대전 유성구|노블레스타워": {
+      "households": 168,
+      "built_year": 2006,
+      "addr": "대전광역시 유성구 봉명동 536-10 노블레스타워"
+    },
+    "대전 유성구|노은해랑숲마을6단지": {
+      "households": 342,
+      "built_year": 2014,
+      "addr": "대전광역시 유성구 지족동 1031 노은해랑숲마을6단지"
+    },
+    "대전 유성구|열매마을8단지(계룡새미래)": {
+      "households": 814,
+      "built_year": 2001,
+      "addr": "대전광역시 유성구 노은동 520-1 열매마을8단지"
+    },
+    "대전 유성구|투유1": {
+      "households": 132,
+      "built_year": 2004,
+      "addr": "대전광역시 유성구 봉명동 692-6 투유1아파트"
+    },
+    "대전 유성구|송림마을6단지(금실풍요로운)": {
+      "households": 201,
+      "built_year": 2006,
+      "addr": "대전광역시 유성구 하기동 546 송림마을6단지"
+    },
+    "대전 유성구|한화꿈에그린2차": {
+      "households": 998,
+      "built_year": 2014,
+      "addr": "대전광역시 유성구 지족동 1093 노은한화꿈에그린2단지"
+    },
+    "대전 유성구|대덕테크노밸리2차푸르지오2단지": {
+      "households": 684,
+      "built_year": 2006,
+      "addr": "대전광역시 유성구 관평동 665 대덕테크노밸리2단지"
+    },
+    "대전 유성구|반석마을5단지(금성백조예미지)": {
+      "households": 536,
+      "built_year": 2005,
+      "addr": "대전광역시 유성구 반석동 622 반석마을5단지"
+    },
+    "대전 유성구|하우스토리네오미아": {
+      "households": 474,
+      "built_year": 2010,
+      "addr": "대전광역시 유성구 덕명동 528 하우스토리"
+    },
+    "대전 유성구|경남아너스빌1차": {
+      "households": 80,
+      "built_year": 2005,
+      "addr": "대전광역시 유성구 지족동 840-2 경남아너스빌1차 주상복합아파트"
+    },
+    "대전 유성구|노은리슈빌3": {
+      "households": 502,
+      "built_year": 2015,
+      "addr": "대전광역시 유성구 지족동 1030 노은리슈빌3아파트"
+    },
+    "대전 유성구|봉명시티빌": {
+      "households": 160,
+      "built_year": 2004,
+      "addr": "대전광역시 유성구 봉명동 640-7 봉명시티빌"
+    },
+    "대전 유성구|경남아너스빌1단지": {
+      "households": 315,
+      "built_year": 2008,
+      "addr": "대전광역시 유성구 용산동 716 경남아너스빌아파트"
+    },
+    "대전 유성구|삼정하이츠": {
+      "households": 150,
+      "built_year": 1991,
+      "addr": "대전광역시 유성구 구암동 600-2 구암삼정하이츠"
+    },
+    "대전 유성구|우성햇살": {
+      "households": 136,
+      "built_year": 1993,
+      "addr": "대전광역시 유성구 구암동 609-2 우성햇살아파트"
+    },
+    "대전 유성구|하이랜드2": {
+      "households": 149,
+      "built_year": 2011,
+      "addr": "대전광역시 유성구 봉명동 640-3 하이랜드아파트2차"
+    },
+    "대전 유성구|경남아너스빌2차": {
+      "households": 135,
+      "built_year": 2005,
+      "addr": "대전광역시 유성구 지족동 905-5 경남아너스빌2"
+    },
+    "대전 유성구|대덕테크노밸리2차푸르지오1단지": {
+      "households": 684,
+      "built_year": 2006,
+      "addr": "대전광역시 유성구 관평동 665 대덕테크노밸리2단지"
+    },
+    "대전 유성구|미성샤르망": {
+      "households": 210,
+      "built_year": 2006,
+      "addr": "대전광역시 유성구 봉명동 468-3 미성샤르망"
+    },
+    "대전 유성구|노은에코힐": {
+      "households": 356,
+      "built_year": 2015,
+      "addr": "대전광역시 유성구 지족동 1041 노은에코힐7단지"
+    },
+    "대전 유성구|가나파로스빌1차": {
+      "households": 251,
+      "built_year": 2004,
+      "addr": "대전광역시 유성구 지족동 898-1 가나파로스빌1차"
+    },
+    "대전 유성구|다솔": {
+      "households": 172,
+      "built_year": 1995,
+      "addr": "대전광역시 유성구 궁동 395-3 다솔아파트"
+    },
+    "대전 유성구|성원상떼빌": {
+      "households": 136,
+      "built_year": 2004,
+      "addr": "대전광역시 유성구 장대동 376-2 성원상떼빌아파트"
+    },
+    "대전 유성구|레자미리버뷰시티": {
+      "households": 131,
+      "built_year": 2020,
+      "addr": "대전광역시 유성구 봉명동 677-5 레자미 리버뷰시티"
+    },
+    "대전 유성구|스타빌플러스": {
+      "households": 150,
+      "built_year": 2019,
+      "addr": "대전광역시 유성구 도룡동 399-22 스타빌플러스"
+    },
+    "대전 유성구|제이파크": {
+      "households": 405,
+      "built_year": 2005,
+      "addr": "대전광역시 유성구 교촌동 617 제이파크"
+    },
+    "대전 유성구|이지": {
+      "households": 119,
+      "built_year": 2002,
+      "addr": "대전광역시 유성구 상대동 438-16 이지아파트"
+    },
+    "대전 유성구|천용아이빌": {
+      "households": 131,
+      "built_year": 2003,
+      "addr": "대전광역시 유성구 장대동 284-2 아이빌"
+    },
+    "울산 남구|남운진주맨션": {
+      "households": 158,
+      "built_year": 1988,
+      "addr": "울산광역시 남구 야음동 763-2 남운진주맨션"
+    },
+    "울산 남구|달동SKVIEW": {
+      "households": 454,
+      "built_year": 1999,
+      "addr": "울산광역시 남구 달동 809-1 달동SK VIEW 아파트"
+    },
+    "울산 남구|동광모닝스카이": {
+      "households": 247,
+      "built_year": 2014,
+      "addr": "울산광역시 남구 야음동 832-3 동광모닝스카이"
+    },
+    "울산 남구|롯데캐슬골드2단지": {
+      "households": 1051,
+      "built_year": 2008,
+      "addr": "울산광역시 남구 야음동 878 롯데캐슬골드2단지"
+    },
+    "울산 남구|번영로코아루더클래식": {
+      "households": 298,
+      "built_year": 2017,
+      "addr": "울산광역시 남구 달동 578-1 번영로코아루더클래식"
+    },
+    "울산 남구|양우내안애팰리스": {
+      "households": 217,
+      "built_year": 2016,
+      "addr": "울산광역시 남구 신정동 1903 울산 신정동 양우 내안애팰리스"
+    },
+    "울산 남구|크로바": {
+      "households": 233,
+      "built_year": 1989,
+      "addr": "울산광역시 남구 신정동 1401-15 크로바아파트"
+    },
+    "울산 남구|한신청실맨션": {
+      "households": 120,
+      "built_year": 1989,
+      "addr": "울산광역시 남구 선암동 677-6 한신청실맨션"
+    },
+    "울산 남구|문수로대공원에일린의뜰": {
+      "households": 384,
+      "built_year": 2023,
+      "addr": "울산광역시 남구 신정동 1178 문수로대공원 에일린의뜰"
+    },
+    "울산 남구|대공원I'PARK(1단지)": {
+      "households": 492,
+      "built_year": 1994,
+      "addr": "울산광역시 남구 신정동 1634 대공원 I'PARK"
+    },
+    "울산 남구|한양코아": {
+      "households": 225,
+      "built_year": 1989,
+      "addr": "울산광역시 남구 옥동 196 한양코아"
+    },
+    "울산 남구|울산대이즈플레이스": {
+      "households": 111,
+      "built_year": 2018,
+      "addr": "울산광역시 남구 무거동 1527-4 울산대이즈플레이스"
+    },
+    "울산 남구|달동현대1": {
+      "households": 450,
+      "built_year": 1990,
+      "addr": "울산광역시 남구 달동 1352-5 달동현대1차"
+    },
+    "울산 남구|협성현대": {
+      "households": 180,
+      "built_year": 1989,
+      "addr": "울산광역시 남구 무거동 931-1 협성현대"
+    },
+    "울산 남구|대공원호반베르디움2차": {
+      "households": 561,
+      "built_year": 2020,
+      "addr": "울산광역시 남구 두왕동 747-2 대공원호반베르디움2차"
+    },
+    "울산 남구|평창2차현대": {
+      "households": 601,
+      "built_year": 1994,
+      "addr": "울산광역시 남구 삼산동 1547 평창2차현대"
+    },
+    "울산 남구|울산대현시티프라디움": {
+      "households": 216,
+      "built_year": 2022,
+      "addr": "울산광역시 남구 야음동 836-1 울산대현시티프라디움"
+    },
+    "울산 남구|울산문수로동문디이스트": {
+      "households": 166,
+      "built_year": 2022,
+      "addr": "울산광역시 남구 신정동 1165-3 문수로동문디이스트"
+    },
+    "울산 남구|한라백조": {
+      "households": 285,
+      "built_year": 1993,
+      "addr": "울산광역시 남구 신정동 872-55 한라백조"
+    },
+    "울산 남구|옥동현대아파트1단지": {
+      "households": 450,
+      "built_year": 1990,
+      "addr": "울산광역시 남구 달동 1352-5 달동현대1차"
+    },
+    "울산 남구|선암동서광": {
+      "households": 700,
+      "built_year": 1997,
+      "addr": "울산광역시 남구 선암동 559-12 선암동서광"
+    },
+    "울산 남구|신선": {
+      "households": 500,
+      "built_year": 1995,
+      "addr": "울산광역시 남구 야음동 796-17 신선아파트"
+    },
+    "울산 남구|옥동롯데인벤스로얄": {
+      "households": 299,
+      "built_year": 2006,
+      "addr": "울산광역시 남구 옥동 191-69 옥동롯데인벤스로얄"
+    },
+    "울산 남구|달동주공2단지": {
+      "households": 720,
+      "built_year": 1993,
+      "addr": "울산광역시 남구 달동 119-1 달동주공2단지"
+    },
+    "울산 남구|강변센트럴하이츠": {
+      "households": 672,
+      "built_year": 2011,
+      "addr": "울산광역시 남구 신정동 319 강변센트럴하이츠"
+    },
+    "울산 남구|상개목화": {
+      "households": 293,
+      "built_year": 2002,
+      "addr": "울산광역시 남구 상개동 152-6 상개목화아파트"
+    },
+    "울산 남구|협성벽산": {
+      "households": 163,
+      "built_year": 1990,
+      "addr": "울산광역시 남구 무거동 569-4 협성벽산"
+    },
+    "울산 남구|무거청구맨션": {
+      "households": 285,
+      "built_year": 1997,
+      "addr": "울산광역시 남구 무거동 1551 무거청구맨션"
+    },
+    "울산 남구|무거한라2차": {
+      "households": 170,
+      "built_year": 1996,
+      "addr": "울산광역시 남구 무거동 1538 무거한라2차"
+    },
+    "울산 남구|극동스타클래스": {
+      "households": 188,
+      "built_year": 2009,
+      "addr": "울산광역시 남구 신정동 1875 신정극동스타클래스"
+    },
+    "울산 남구|대공원코오롱파크폴리스": {
+      "households": 202,
+      "built_year": 2009,
+      "addr": "울산광역시 남구 신정동 1873 대공원코오롱파크폴리스"
+    },
+    "울산 남구|신정지웰": {
+      "households": 200,
+      "built_year": 2018,
+      "addr": "울산광역시 남구 신정동 1911 신정지웰아파트"
+    },
+    "울산 남구|한화꿈에그린아파트2단지": {
+      "households": 336,
+      "built_year": 2010,
+      "addr": "울산광역시 남구 삼산동 324-17 한화꿈에그린2단지"
+    },
+    "울산 남구|무거현대": {
+      "households": 677,
+      "built_year": 1995,
+      "addr": "울산광역시 남구 무거동 832-2 무거현대"
+    },
+    "울산 남구|옥동서광": {
+      "households": 413,
+      "built_year": 1998,
+      "addr": "울산광역시 남구 옥동 257 옥동서광"
+    },
+    "울산 남구|도성": {
+      "households": 678,
+      "built_year": 1987,
+      "addr": "울산광역시 남구 옥동 1386 도성"
+    },
+    "울산 남구|삼신현대": {
+      "households": 690,
+      "built_year": 1991,
+      "addr": "울산광역시 남구 삼산동 1461-3 삼신현대아파트"
+    },
+    "울산 남구|울산센트럴자이": {
+      "households": 288,
+      "built_year": 2015,
+      "addr": "울산광역시 남구 달동 1364-1 울산센트럴자이아파트"
+    },
+    "울산 남구|힐스테이트수암(2단지)": {
+      "households": 154,
+      "built_year": 2019,
+      "addr": "울산광역시 남구 야음동 725 힐스테이트수암 2단지"
+    },
+    "울산 남구|무거한라4차": {
+      "households": 152,
+      "built_year": 1997,
+      "addr": "울산광역시 남구 무거동 1539 무거한라4차"
+    },
+    "울산 남구|신성미소지움1단지": {
+      "households": 1244,
+      "built_year": 2007,
+      "addr": "울산광역시 남구 신정동 1852 미소지움 아파트"
+    },
+    "울산 남구|옥동디아채": {
+      "households": 108,
+      "built_year": 2004,
+      "addr": "울산광역시 남구 신정동 1241-5 디아채1단지"
+    },
+    "울산 남구|어울림": {
+      "households": 478,
+      "built_year": 1999,
+      "addr": "울산광역시 남구 달동 775-6 어울림아파트"
+    },
+    "울산 남구|번영로롯데인벤스스위트": {
+      "households": 164,
+      "built_year": 2006,
+      "addr": "울산광역시 남구 야음동 570-1 롯데인벤스 스위트"
+    },
+    "울산 남구|신성미소지움2단지": {
+      "households": 1244,
+      "built_year": 2007,
+      "addr": "울산광역시 남구 신정동 1852 미소지움 아파트"
+    },
+    "울산 남구|대공원호반베르디움3차": {
+      "households": 173,
+      "built_year": 2019,
+      "addr": "울산광역시 남구 두왕동 747-1 대공원 호반베르디움3차"
+    },
+    "울산 남구|수암한라에이스빌": {
+      "households": 190,
+      "built_year": 2003,
+      "addr": "울산광역시 남구 야음동 701-1 한라에이스빌"
+    },
+    "울산 남구|대공원I'PARK(2단지)": {
+      "households": 492,
+      "built_year": 1994,
+      "addr": "울산광역시 남구 신정동 1634 대공원 I'PARK"
+    },
+    "울산 남구|무거한라3차": {
+      "households": 120,
+      "built_year": 1996,
+      "addr": "울산광역시 남구 무거동 1543 무거한라3차아파트"
+    },
+    "울산 남구|현대2": {
+      "households": 499,
+      "built_year": 1994,
+      "addr": "울산광역시 남구 달동 118-1 달동현대2차"
+    },
+    "울산 남구|유씨티": {
+      "households": 183,
+      "built_year": 2015,
+      "addr": "울산광역시 남구 신정동 770-15 유 씨 티"
+    },
+    "울산 남구|문수비스타동원": {
+      "households": 663,
+      "built_year": 2024,
+      "addr": "울산광역시 남구 무거동 1184-1 문수비스타동원"
+    },
+    "울산 남구|남산포스코더샵": {
+      "households": 263,
+      "built_year": 2004,
+      "addr": "울산광역시 남구 신정동 1334-38 남산 포스코더샵"
+    },
+    "울산 남구|팔레드상떼": {
+      "households": 188,
+      "built_year": 2013,
+      "addr": "울산광역시 남구 삼산동 1498-4 팔레드상떼"
+    },
+    "울산 남구|신복현대": {
+      "households": 651,
+      "built_year": 1996,
+      "addr": "울산광역시 남구 무거동 1553 신복현대아파트"
+    },
+    "울산 남구|번영로센텀파크에일린의뜰": {
+      "households": 191,
+      "built_year": 2024,
+      "addr": "울산광역시 남구 야음동 357-7 번영로 센텀파크 에일린의 뜰"
+    },
+    "울산 남구|대공원월드메르디앙": {
+      "households": 359,
+      "built_year": 2008,
+      "addr": "울산광역시 남구 신정동 1868 대공원월드메르디앙"
+    },
+    "울산 남구|공업탑하트랜드": {
+      "households": 239,
+      "built_year": 2014,
+      "addr": "울산광역시 남구 신정동 726-3 공업탑하트랜드"
+    },
+    "울산 남구|남운그린힐": {
+      "households": 315,
+      "built_year": 1988,
+      "addr": "울산광역시 남구 무거동 927-6 남운그린힐"
+    },
+    "울산 남구|옥동현대아파트2단지": {
+      "households": 499,
+      "built_year": 1994,
+      "addr": "울산광역시 남구 달동 118-1 달동현대2차"
+    },
+    "울산 남구|삼산동대성스카이렉스": {
+      "households": 268,
+      "built_year": 2010,
+      "addr": "울산광역시 남구 삼산동 1564-1 대성스카이렉스"
+    },
+    "울산 남구|일동미라주": {
+      "households": 526,
+      "built_year": 2004,
+      "addr": "울산광역시 남구 야음동 725-1 일동미라주"
+    },
+    "울산 남구|삼산리버뷰웰가": {
+      "households": 207,
+      "built_year": 2017,
+      "addr": "울산광역시 남구 삼산동 183-1 삼산 리버뷰웰가"
+    },
+    "울산 남구|디아채(101동)": {
+      "households": 108,
+      "built_year": 2004,
+      "addr": "울산광역시 남구 신정동 1241-5 디아채1단지"
+    },
+    "울산 남구|삼호시영": {
+      "households": 200,
+      "built_year": 1992,
+      "addr": "울산광역시 남구 무거동 1448-1 삼호시영"
+    },
+    "울산 남구|대명루첸": {
+      "households": 547,
+      "built_year": 2016,
+      "addr": "울산광역시 남구 신정동 815-5 대공원대명루첸아파트"
+    },
+    "울산 남구|이안신정": {
+      "households": 151,
+      "built_year": 2007,
+      "addr": "울산광역시 남구 신정동 650-17 이안신정"
+    },
+    "울산 남구|현대문화2차": {
+      "households": 350,
+      "built_year": 1998,
+      "addr": "울산광역시 남구 삼산동 1607-1 현대문화2차"
+    },
+    "울산 남구|무거동롯데캐슬": {
+      "households": 272,
+      "built_year": 2009,
+      "addr": "울산광역시 남구 무거동 1584 무거롯데캐슬"
+    },
+    "울산 남구|한라하이타운": {
+      "households": 359,
+      "built_year": 1993,
+      "addr": "울산광역시 남구 야음동 538-1 한라하이타운"
+    },
+    "울산 남구|대공원한신휴플러스": {
+      "households": 263,
+      "built_year": 2011,
+      "addr": "울산광역시 남구 옥동 1418 대공원한신휴플러스"
+    },
+    "울산 남구|울산옥현주공2": {
+      "households": 834,
+      "built_year": 2000,
+      "addr": "울산광역시 남구 무거동 478-1 옥현주공2차"
+    },
+    "울산 남구|두산위브더제니스": {
+      "households": 278,
+      "built_year": 2010,
+      "addr": "울산광역시 남구 신정동 1877 두산위브더제니스"
+    },
+    "울산 남구|대공원현대": {
+      "households": 499,
+      "built_year": 1992,
+      "addr": "울산광역시 남구 옥동 129-6 대공원현대아파트"
+    },
+    "울산 남구|크로바전원빌라": {
+      "households": 233,
+      "built_year": 1989,
+      "addr": "울산광역시 남구 신정동 1401-15 크로바아파트"
+    },
+    "울산 남구|서강파크": {
+      "households": 299,
+      "built_year": 1989,
+      "addr": "울산광역시 남구 옥동 185 서강파크2차"
+    },
+    "울산 남구|현대문화1차": {
+      "households": 387,
+      "built_year": 1996,
+      "addr": "울산광역시 남구 삼산동 1605-3 현대문화1차"
+    },
+    "울산 남구|우방유화맨션": {
+      "households": 407,
+      "built_year": 1989,
+      "addr": "울산광역시 남구 야음동 564-4 우방유화"
+    },
+    "울산 남구|무거한라1차": {
+      "households": 194,
+      "built_year": 1996,
+      "addr": "울산광역시 남구 무거동 1535-1 무거한라1차"
+    },
+    "울산 남구|옥동삼익": {
+      "households": 299,
+      "built_year": 1999,
+      "addr": "울산광역시 남구 옥동 255-2 옥동삼익"
+    },
+    "울산 남구|그랜드타운": {
+      "households": 182,
+      "built_year": 1999,
+      "addr": "울산광역시 남구 야음동 868-3 그랜드타운"
+    },
+    "울산 남구|대공원롯데인벤스가1단지": {
+      "households": 298,
+      "built_year": 2006,
+      "addr": "울산광역시 남구 옥동 130 대공원롯데인벤스"
+    },
+    "울산 남구|지산오차드힐": {
+      "households": 132,
+      "built_year": 2008,
+      "addr": "울산광역시 남구 야음동 455-4 지산오차드힐주상복합"
+    },
+    "울산 남구|옥서홈타운": {
+      "households": 150,
+      "built_year": 1995,
+      "addr": "울산광역시 남구 옥동 191-1 옥서홈타운"
+    },
+    "울산 남구|무거동한신휴플러스": {
+      "households": 260,
+      "built_year": 2014,
+      "addr": "울산광역시 남구 무거동 1603 무거동한신휴플러스"
+    },
+    "울산 남구|상아타워맨션": {
+      "households": 170,
+      "built_year": 1990,
+      "addr": "울산광역시 남구 옥동 177-2 상아타워맨션"
+    },
+    "울산 남구|삼호": {
+      "households": 400,
+      "built_year": 1992,
+      "addr": "울산광역시 남구 무거동 1183-1 삼호"
+    },
+    "울산 남구|대공원롯데인벤스가2단지": {
+      "households": 298,
+      "built_year": 2006,
+      "addr": "울산광역시 남구 옥동 130 대공원롯데인벤스"
+    },
+    "울산 남구|인블리스아파트": {
+      "households": 128,
+      "built_year": 1994,
+      "addr": "울산광역시 남구 선암동 665-1 인블리스 아파트"
+    },
+    "울산 남구|달동월드메르디앙": {
+      "households": 228,
+      "built_year": 2008,
+      "addr": "울산광역시 남구 달동 1411 달동월드메르디앙"
     }
   },
-  "as_of": "2026-07-16"
+  "as_of": "2026-07-17"
 }
