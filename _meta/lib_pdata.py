@@ -118,6 +118,8 @@ DATA_GO_KEYS = ["DATA_GO_APT_PRICE", "DATA_GO_KR_KEY", "DATA_GO_KR_SERVICE_KEY",
 # K-apt 단지 기본정보(세대수·준공) 키 — 보강용. 없으면 위 PRICE 키로 폴백.
 KAPT_KEYS = ["DATA_GO_APT_BASIC_INFO"] + DATA_GO_KEYS
 RONE_KEYS = ["R_ONE", "REB_RONE_KEY", "R_ONE_KEY", "RONE_KEY", "REB_KEY"]
+# 공동주택가격(시가표준액) — V-World 'ned/data' 서비스 키. 발급 시 등록명이 갈릴 수 있어 별칭 지원.
+VWORLD_KEYS = ["VWORLD_KEY", "V_WORLD_KEY", "VWORLD_API_KEY", "VWORLD_KR_KEY"]
 
 
 # ── 행정구역 개편 자가 탐색 ──
@@ -193,6 +195,55 @@ def geocode_kakao(address):
         return float(d["x"]), float(d["y"])
     except Exception:
         return None
+
+
+def address_to_pnu(address_text):
+    """지번·도로명 주소 문자열 → PNU(19자리) 또는 None.
+    Kakao 주소 검색 결과의 address 객체(법정동코드 10자리 + 산여부 + 본번 + 부번)로 조립한다.
+    V-World 공동주택가격 API(getApartHousingPriceAttr)의 필수 입력이 이 PNU다."""
+    try:
+        j = get_json("https://dapi.kakao.com/v2/local/search/address.json",
+                     {"query": address_text}, headers=kakao_headers())
+        docs = j.get("documents") or []
+        if not docs:
+            return None
+        addr = docs[0].get("address") or docs[0].get("road_address")
+        if not addr:
+            return None
+        b_code = str(addr.get("b_code") or "").strip()
+        main_no = str(addr.get("main_address_no") or "0").strip() or "0"
+        sub_no = str(addr.get("sub_address_no") or "0").strip() or "0"
+        mountain = "2" if str(addr.get("mountain_yn") or "N").upper() == "Y" else "1"
+        if len(b_code) != 10 or not main_no.isdigit() or not sub_no.isdigit():
+            return None
+        return b_code + mountain + main_no.zfill(4) + sub_no.zfill(4)
+    except Exception:
+        return None
+
+
+def get_apart_official_price(pnu, api_key, dong_nm=None, ho_nm=None, timeout=15):
+    """PNU(19자리) → 공동주택가격(시가표준액) 레코드 목록.
+    V-World 'ned/data' 공동주택가격 속성정보 서비스(getApartHousingPriceAttr) 호출.
+    dong_nm·ho_nm을 생략하면 그 PNU(단지)의 전 동·호 레코드가 반환된다.
+    응답 XML의 정확한 감싸는 태그명이 문서에 없어, 'pblntfPc'(공시가격) 자식을 가진
+    임의의 엘리먼트를 레코드로 취급한다(래핑 태그 이름 변화에 강함).
+    실패·빈 응답 시 빈 리스트."""
+    params = {"key": api_key, "pnu": pnu, "format": "xml", "numOfRows": 1000, "pageNo": 1}
+    if dong_nm:
+        params["dongNm"] = dong_nm
+    if ho_nm:
+        params["hoNm"] = ho_nm
+    url = "http://api.vworld.kr/ned/data/getApartHousingPriceAttr?" + urllib.parse.urlencode(params)
+    try:
+        text = _request(url, timeout=timeout)
+        root = ET.fromstring(text)
+    except Exception:
+        return []
+    records = []
+    for el in root.iter():
+        if el.find("pblntfPc") is not None:
+            records.append({child.tag: (child.text or "").strip() for child in el})
+    return records
 
 
 def nearest_kakao(lng, lat, category_code=None, keyword=None, radius=1500):

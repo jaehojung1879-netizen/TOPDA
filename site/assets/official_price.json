@@ -1,0 +1,9 @@
+{
+  "_meta": {
+    "source": "V-World 공동주택가격 속성정보(getApartHousingPriceAttr) + Kakao 주소→PNU 변환",
+    "note": "공식 오픈API가 없어 Kakao(주소→PNU)와 V-World(PNU→공시가격)를 조합. 매일 점진 보강되며, seed=수집 전 예시(빈 상태)."
+  },
+  "as_of": "2026-07-17",
+  "map": {},
+  "seed": true
+}

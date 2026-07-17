@@ -13,7 +13,8 @@
 | `KAKAO_REST_API_KEY` | 주소→좌표, 지하철·초등학교 거리 | Kakao Developers → 앱 → REST API 키 |
 | `REB_RONE_KEY` | 매매·전세 가격지수, 전세가율 | 한국부동산원 R-ONE(reb.or.kr/r-one) |
 | `NAVER_MAP_CLIENT_ID` / `_SECRET` | (선택) Kakao 대체 지도 | 네이버클라우드 Maps |
-| `JUSO_API_KEY`, `VWORLD_KEY` | (선택) 주소→좌표 대체 | juso.go.kr / vworld.kr |
+| `JUSO_API_KEY` | (선택) 주소→좌표 대체 | juso.go.kr |
+| `VWORLD_KEY` | 공동주택 공시가격(시가표준액) 조회 | V-World(vworld.kr) 오픈API 신청 → **공동주택가격 속성정보(getApartHousingPriceAttr)** |
 | `SUPABASE_URL` / `SUPABASE_ANON_KEY` | 게시판 공개글 공유(모든 방문자에게 노출) | Supabase 프로젝트 — 설정은 `_meta/SUPABASE_SETUP.md` 참고 |
 
 ## 2) 실행
@@ -30,6 +31,7 @@
 | `collect_market.py` | R-ONE | `market.json`(지역별 매매·전세 지수·전세가율) |
 | `collect_news.py` | 구글 뉴스 RSS(키 불필요) | `news.json`(홈 "이번 주 핵심 이슈" + "섹터별 부동산 뉴스") |
 | `collect_bond_rate.py` | 주택도시기금 포털 페이지 파싱(키 불필요·**공식 API 아님**) | `bond_rate.json`(제1종국민주택채권 당일 고객부담률) — 등기비용·종합계산기 할인율 입력란 자동 채움 |
+| `collect_official_price.py` | Kakao(주소→PNU) + V-World(PNU→공시가격) | `official_price.json`(단지·평형별 공동주택가격/시가표준액) — 종합계산기 시가표준액 검색 위젯에서 실거래가보다 우선 표시 |
 | `lib_pdata.py` | 공용 유틸 | — |
 
 ## 4) R-ONE (지역 시세 대시보드)
