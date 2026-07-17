@@ -3,10 +3,10 @@
     "source": "Google News RSS (한국어) — 섹터별 부동산 검색 집계",
     "note": "여러 보도를 자동 집계한 목록이며 투자 권유가 아닙니다."
   },
-  "generated_at": "2026-07-17 01:25 KST",
+  "generated_at": "2026-07-18 01:22 KST",
   "weekly": {
     "as_of": "2026년 7월 3주",
-    "updated": "2026-07-17",
+    "updated": "2026-07-18",
     "headlines": [
       {
         "badge": "주택 매매·집값",
@@ -24,16 +24,16 @@
       },
       {
         "badge": "청약·분양",
-        "title": "분양가 높아도 살 사람 산다…서울 청약 시장 '후끈'",
-        "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1rcTZHcXh1SU5kcGxVRXJVSS1NMjJPREM3VVRWNmNuU29iQUJRYW0zUDQtWW56ckQtYmJOUDBYMmYzY2EzNVhEUTJ2VXpZSGwwWHNUQVptd29CcTRDQkE?oc=5",
-        "source": "아시아타임즈",
-        "date": "2026-07-15"
+        "title": "'힐스테이트 녹번역' 당첨자 동 ·호수 발표에 '희비' 교차",
+        "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9MZC1yem5LQWNrTTdVTHJCRW1xQmNjUWxoRG9LNlVvYW8zSTdwMk9JQnpKWTliODhFTEh0Z01PX2dzNmFTSU1xSng2a1FUZk1jUWZHOFFTTzNpellpSWQtaV9PWF9XYlQ2YW9KZkRZTWdQZ9IBdkFVX3lxTFBtajJObkozZWlmMW1uMnFZOE1DQlBmTjBqV20zNUVZSm9UdUhTU2dhX0g0M0VlTHR4OXNmVG4wYzVqN213Tjc3SjBTdHYzSVZNQTluRVc2WjByQldUU3hzRlpKNFgwZm1POWJFQVpKeWFKdUlSYmc?oc=5",
+        "source": "스트레이트뉴스",
+        "date": "2026-07-13"
       },
       {
         "badge": "대출·금융",
-        "title": "[금융위 업무보고] 삼전닉스 '억'대 성과급 받은만큼 DSR 한도 못 늘린다",
-        "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE40ejM0MVB1LVh5dlpzemMycWs2bkZWOWgyTm9rcHk4blFvVklsT3RVV2hBRm5fM19oU1lWQzY1NXRHQl8xZFNWMTdDT2l2WTdWcGhlQkRzcHJrV1pxTlBHUzNHR2F3aExVQUFUNmhWbnUyZw?oc=5",
-        "source": "KB Think",
+        "title": "‘고가주택’ 대출에 추가 부담?...'건전성 부담금' 새 규제카드 나오나",
+        "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE90N2xZeHVVckhUWDVIQ2hqejZuMlBHU0h2R2tkUEJtWFR3OUZQWnlnSEVrSDRNdmVSX2JHUWI4MHRoU0xyM0lwVWZIR0hJQ1dXeVRiRnVB?oc=5",
+        "source": "중앙일보",
         "date": "2026-07-15"
       },
       {
@@ -46,12 +46,18 @@
     ]
   },
   "daily": {
-    "updated": "2026-07-17 01:25 KST",
+    "updated": "2026-07-18 01:22 KST",
     "sectors": [
       {
         "key": "housing",
         "name": "주택 매매·집값",
         "items": [
+          {
+            "title": "대출 막히고 아파트는 꿈도 못 꾸고…서울 실수요자들, 결국 ‘이곳’ 향했다",
+            "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE90UFRWaU5aeWFad1lRLUJJeThVV0ZXeERXQVlnclVTRzRzNm1EckJ0dEdxclFaLU1qQkdDcDJFc084VTBJaFdXZFIxcmJ1aFJ6UHfSAVNBVV95cUxQYUNhUzRCQnJRXzBfRmw5NkhfNEtua2ZZQW54c2h1R3Q4bjJWeG5RYi1YajdsQWNzOE04NWhBN0pRclpnZGhOX1Q4dUZDbDRQNTk3WQ?oc=5",
+            "source": "서울경제",
+            "date": "2026-07-17"
+          },
           {
             "title": "서울 아파트 막히자 빌라로 '풍선효과'…매매 46%·월세 13% 증가[부동산AtoZ]",
             "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBJcEF6b21qeEJkMHBnMTR1NmlhWDZXczVTYVZxZ2p5dzl4alhKLXFlR25oUGhHN3I2OXFFUXBoUW0teXR2M0pwU3QyRXhaa3IzTWc4SHZnX2VBSU1vTTl0ZA?oc=5",
@@ -63,12 +69,6 @@
             "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE8yREhtNVdOOEFMR2ZTRkNDMHZlTVBZN3ZqR1NucDNkM0pVdWl6NTlCYXY3XzFCZzQ3UlUwcy1oUzZFNHJDc012dnRPRlVCcW5OREozX0RjeDJBRUtSZEVmWTl3Vk84OE96OFlIQUZpd9IBb0FVX3lxTE8yREhtNVdOOEFMR2ZTRkNDMHZlTVBZN3ZqR1NucDNkM0pVdWl6NTlCYXY3XzFCZzQ3UlUwcy1oUzZFNHJDc012dnRPRlVCcW5OREozX0RjeDJBRUtSZEVmWTl3Vk84OE96OFlIQUZpdw?oc=5",
             "source": "머니투데이",
             "date": "2026-07-16"
-          },
-          {
-            "title": "[부동산라운지-7월2주] 역세권·재건축이 끌었다…서울 아파트 매매·전세 동반 상승",
-            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1hdmpDMDJuNzhQSkNsaU8xajRoMGduUVNyN0M5ckhhRnE5bVlMVWgxdFJoRjdLN2d3VFBwZXVaMC05Zm5pd1VFaDk4aE9jY2RoRFRQNXJuLXJuaEx4S1k1a1lBNXRYVXVZNDlOaEpwWGs?oc=5",
-            "source": "비즈트리뷴",
-            "date": "2026-07-16"
           }
         ]
       },
@@ -76,6 +76,12 @@
         "key": "rent",
         "name": "전세·월세",
         "items": [
+          {
+            "title": "[팩트체크] 언론이 말하지 않는 전월세 시장의 왜곡과 진실",
+            "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE5oekVMbko2aVJDWEZndEFvaUdIaWwtVE1fMTN6MjI4X1UtRTNiR3hRZk1lazhvZGVlYkpabFI3UlJ5cGN3ZjBDZTNvT1VoQmNBa2JQd2tULVVwTW1xcVNlVy0wNERjVVNhRGM5cThKdGRTZVg5ZVpn?oc=5",
+            "source": "OhmyNews",
+            "date": "2026-07-17"
+          },
           {
             "title": "세입자는 공공에 '전세금' 맡기고 집주인은 '월세' 받는다",
             "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPWlQxblVSX1FkNGhoVUlRM1BuTGl5aFJnYkhISDlSelV0WXR6NUdLYlM4eVNBbXVDSllPdUZBNF8zR1AxV0x6bUNnQkc5c3VHNDQ0UWxPdmotUjhpeERBQVN2XzB5bGM0bXZlWTJOb2g2Q2J3U0NOaEs4b0JpYlRzQw?oc=5",
@@ -87,12 +93,6 @@
             "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9qUzUxdXZyRHBKVmhHeUJneU1BUE1Jd1RlRnFoSVRtUzZMSnpsUkUyYnBEWXNxak5veTZURi00MTNrSmZLdWhWalhQWjBOVXJTNjloQ3pR?oc=5",
             "source": "헤럴드경제",
             "date": "2026-07-16"
-          },
-          {
-            "title": "전세사기 공포 여전한데...전세난에 다시 빌라로 밀리는 세입자들",
-            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1yZmxHYVRhRl81SDFkaFpud0ItUzZqVlhncFVNLTVxT2J2MTdpeVhPZTU5bUk0ZTZIYkZmZ2x1anJMcGJCd1JSV284cDJBczYtUGdIRURHeTBIUWVoRTZ3MEliWmlaejVlVUE?oc=5",
-            "source": "데일리팝",
-            "date": "2026-07-16"
           }
         ]
       },
@@ -101,22 +101,22 @@
         "name": "청약·분양",
         "items": [
           {
-            "title": "분양가 높아도 살 사람 산다…서울 청약 시장 '후끈'",
-            "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1rcTZHcXh1SU5kcGxVRXJVSS1NMjJPREM3VVRWNmNuU29iQUJRYW0zUDQtWW56ckQtYmJOUDBYMmYzY2EzNVhEUTJ2VXpZSGwwWHNUQVptd29CcTRDQkE?oc=5",
-            "source": "아시아타임즈",
-            "date": "2026-07-15"
+            "title": "춘천 신축 브랜드 단지 강세… '수천만원' 웃돈 붙고 신고가",
+            "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE8zN1BRT2FzSmkzV1hWSi1WbkhtelNuelRpbmJVRDZmMlhEZXViNUNldmhoTkNabzFPekFxYmRaMTF6eFlseldoOEpXNTZpX213VlVSVjJVR0hlY0JYYUVyWWRSS0VsNDhsNWpMX2JVNndxeHNXbktvMDdXUDlvX3PSAXNBVV95cUxPb2tfN3lIT19kUE5SUWNMeTMyWHM5U3FGSURNOXN0WldhajBYZXpXYTVFRVhUMHZwTmRfYmJhR0NIVExpMjVKOTZWMUJ3Mno2UHc0Qklqb0JkbGtuSGFDekk4a2dZbF9CdUwzUmxNOEVtZklN?oc=5",
+            "source": "땅집고",
+            "date": "2026-07-16"
           },
           {
-            "title": "'마지막 분양' 희소성에 청약 쏠림… 신흥 주거타운 막바지 공급 '흥행 예고'",
-            "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE01UW9OUkJzcnNwSm12SlZEejViak9ibmxLOFQya3dLdFB2OVVzclZvVEFtTlZSTlRxN3p0R1JhN0hnR2ZsNHY2eU5IUUh2LThyV2RZLXJDeWdUOTRIaDd5bG03a1VEQlJSZjNRUXdmNnpQUUoxQ0000gF3QVVfeXFMTTVRb05SQnNyc3BKbXZKVkR6NWJqT2JubEs4VDJrd0t0UHY5VXNyVm9UQW1OVlJOVHE3enRHUmE3SGdHZmw0djZ5TkhRSHYtOHJXZFktckN5Z1Q5NEhoN3lsbTdrVURCUlJmM1FRd2Y2elBRSjFDTTQ?oc=5",
-            "source": "핀포인트뉴스",
-            "date": "2026-07-15"
+            "title": "서울보다 4억 싼 2,306가구 — 3기신도시 창릉 본청약, 통장 쓰기 전 읽어야 할 조건들",
+            "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTFBKR0ZuQklod3BjRFpDdzd4X3gyZnJDeEpyaWhGbXJqM05HNGMzQ1NKSGoxQkFtb2dGMHA4Q0NrUmpSeklIYTdkU2pEVkxBQTNUakVkMDBMTjIxT0pIUGp5RnFnN3ZoRTBLUTFXOEFqN1F5MVJtQWMtdWtrLWI?oc=5",
+            "source": "네이버 프리미엄콘텐츠",
+            "date": "2026-07-17"
           },
           {
-            "title": "서울은 희소…경기는 대단지 청약장",
-            "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5UUEdVOWlRNWxjUTNSTlQ1NVFiQmx1Z2podktEODlON0V2bHNxTWVKdER5bm8wMnVtVkI5Tm03enhLRHFrT0I2Snc5VVYzSUpWc1Jz?oc=5",
-            "source": "네이트",
-            "date": "2026-07-15"
+            "title": "‘해링턴 스퀘어 리버파크’, 전용 150㎡ 펜트하우스 2가구 공급",
+            "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBQUWNTaXZaVlR5N3VfV1VodV9YMmlSNFNYS1Exd291c1hwTUw2dzFUZDExTVpzd1BTZ0lFVm85SXRycnhVdWtnVWZYREtZYjlWTHNMYmVZX2t4aS1TMHZaZWNfUmtiSUk?oc=5",
+            "source": "E동아",
+            "date": "2026-07-16"
           }
         ]
       },
@@ -125,22 +125,22 @@
         "name": "대출·금융",
         "items": [
           {
-            "title": "[금융위 업무보고] 삼전닉스 '억'대 성과급 받은만큼 DSR 한도 못 늘린다",
-            "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE40ejM0MVB1LVh5dlpzemMycWs2bkZWOWgyTm9rcHk4blFvVklsT3RVV2hBRm5fM19oU1lWQzY1NXRHQl8xZFNWMTdDT2l2WTdWcGhlQkRzcHJrV1pxTlBHUzNHR2F3aExVQUFUNmhWbnUyZw?oc=5",
-            "source": "KB Think",
-            "date": "2026-07-15"
+            "title": "[대출 규제 역설] 초강수 규제에 금리 인상까지…실수요자만 옥죘다",
+            "url": "https://news.google.com/rss/articles/CBMimAJBVV95cUxPWnpfUzVWUTM3WXJjblhrTy01clZFQWRIaWM2akkzd3p3SURFeWR2YTNDeGRZVnpRVUo0Z0FuZkxRLVJCMnJZTTVnNl9Fc2NWLUFma3k3SlJObk9fZzdWbFpiaDdOVjFlT3JDam96YTJvLXBYM05ucFoyWG1OdmtfX3BmZEFlSnJvUmlqTk8yQ0tSai04Y25yRVZienVJN1pOV3pwUkR2d2pGY25pTzFFQTlxR3U2MnRQck1jeG45ckwwLWVVckc3dEVhRVZteG5tdEhzU285cjFfWXEzWDNvdzV6LVU1ZUkyZTNFcHhqcmhOblBmUDRmeks5WEZ6aHhJbEpIcmdrXzNPLXNyeWh2NUFOcWdkbmVE?oc=5",
+            "source": "데일리안",
+            "date": "2026-07-16"
           },
           {
-            "title": "[부동산 토론회] 고가·다주택에 비용 더 얹자…‘관리부담금’ 제안",
-            "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9UN0pVTExHR0pPd25iOHNRMDkxNTBYdDF2bDBKaDhxZGl2T1lpVkl4LTAzd3dmVVdUWGtJbkNuQUlNMVgtQkpGY0dWTzYybW8wQ21ic3VfSnlxS3dGZEEzWG5Ncw?oc=5",
-            "source": "조세금융신문",
-            "date": "2026-07-15"
+            "title": "주거 사다리냐, 집값 폭탄이냐…청년대출 딜레마 : 네이버 블로그",
+            "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNX1J3a1VGUG95QXptN2tuU01yUE84MUVHTUJ3aVhreEZQTEwxMnpnUzJjam9FTkI5dm1SRmhvTkJqamZoMi0zU2kxOHdZa0tucFlVWGpoODNpMDRtUFQtQ043Ujk3Tm5hbVhxSjBTMU1hanVRZDRNUjlJOVB6RDREUEpld2pvZHVUS1JDaEhIYw?oc=5",
+            "source": "Naver Blog",
+            "date": "2026-07-16"
           },
           {
-            "title": "고가주택 대출 '관리부담금' 부과 제안…현행 대출규제 \"단기적으로만\"(종합)",
-            "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9xMG1RTXpoNzdtVzE5dGFPZy04OHRxN0FoaWRDa2h1bTI2MU80cTFFZzRoZ01ZdEozSXlITU95Nl9mRGpBdjF4VERHVmFrYlE?oc=5",
-            "source": "v.daum.net",
-            "date": "2026-07-15"
+            "title": "'6억 대출받으면 1200만원 부담금 내라'…정부 공식 입장은 아니지만",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1XbGdEejhLQVQwRjF6Y2tnYU1DSVVEZGVxZXpGQlhCOV9DWUIycmNVSEYtWlZmOWFCajNGUTdxOHFMOENaeWNPRXc4S2VTT1JZNEpuSjRMakRjSERNUVlOeQ?oc=5",
+            "source": "네이트",
+            "date": "2026-07-16"
           }
         ]
       },
@@ -166,10 +166,10 @@
             "date": "2026-07-16"
           },
           {
-            "title": "건설·임대업자 \"稅부담이 주택 공급 막는다, 깎아달라\"",
-            "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNMElGZUFqdWlPM1V5TDUwMy1ySlZIdmNEem9nV1FzU2RVdHpnZVRoeXJxWE1CbUcwNjBZYlBORmZJeEtaMlpjelhPV2c1WGlvSTd4RzY4ZHptdmNrNXpIaFQ2YU1XdmVaUmlRbjdyRHdoU1NlMUpwSzRrdlhiWGdQRA?oc=5",
-            "source": "edaily.co.kr",
-            "date": "2026-07-16"
+            "title": "보유세 인상 가닥…부동산 세제 ‘가액 중심’ 개편 추진",
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5XNHZuOFE3OFBFOWw5NnFfOUNZSEhxWmFKZVBlMEMtcjU1YWRRZl9sUGgySnRIcjdNN0htYmt2Nkt1cU9Hc3BJb0h5Y2FPZHdjRXZ5dFRZOTU2MS1ISmtvamtObmlGT0Z4bGlQZnJ1eWPSAXBBVV95cUxOVzR2bjhRNzhQRTlsOTZxXzlDWUhIcVphSmVQZTBDLXI1NWFkUWZfbFBoMkp0SHI3TTdIbWJrdjZLdXFPR3NwSW9IeWNhT2R3Y0V2eXRUWTk1NjEtSEprb2prTm5pRk9GeGxpUGZydXlj?oc=5",
+            "source": "소년한국일보",
+            "date": "2026-07-17"
           }
         ]
       }
