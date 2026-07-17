@@ -24,6 +24,29 @@
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css?v=20260629" />
+<style>
+  .regstd-results {
+    margin-top: 6px; border: 1px solid var(--border, #e5e7eb); border-radius: 10px;
+    max-height: 220px; overflow: auto; background: #fff;
+  }
+  .regstd-results .rs-apt {
+    padding: 8px 12px; cursor: pointer; border-bottom: 1px solid var(--border, #f1f5f9); font-size: 0.88rem;
+  }
+  .regstd-results .rs-apt:last-child { border-bottom: 0; }
+  .regstd-results .rs-apt:hover { background: var(--surface-2, #f8fafc); }
+  .regstd-results .rs-apt .rs-name { font-weight: 700; }
+  .regstd-results .rs-apt .rs-region { color: var(--text-muted); font-size: 0.82rem; margin-left: 4px; }
+  .regstd-results .rs-deal {
+    padding: 6px 12px 6px 22px; cursor: pointer; font-size: 0.84rem; display: flex; justify-content: space-between;
+    border-bottom: 1px solid var(--border, #f1f5f9);
+  }
+  .regstd-results .rs-deal:hover { background: var(--surface-2, #f8fafc); }
+  .regstd-results .rs-back { padding: 6px 12px; cursor: pointer; font-size: 0.82rem; color: var(--accent, #2563eb); font-weight: 600; }
+  .regstd-picked {
+    margin-top: 8px; font-size: 0.84rem; color: var(--accent, #2563eb); background: var(--accent-soft, #eff6ff);
+    border-radius: 8px; padding: 8px 10px;
+  }
+</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -204,9 +227,15 @@
           </div>
         </div>
 
-        <!-- 비주택 임대(RTI): 비주택 + 임대 목적일 때만 노출 -->
+        <!-- 임대 목적(갭투자/임대)일 때만 노출: 임대사업자 대출 여부를 명시적으로 구분 -->
+        <div class="field" data-lease-biz-field style="display:none;">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="leaseBiz" data-lease-biz />
+            <span class="text">임대사업자 대출로 진행<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="임대사업자 등록을 하고 임대 목적으로 담보대출을 받으면 가계 DSR이 아니라 RTI(임대업이자상환비율)로 심사됩니다. 상가·오피스텔 등 비주택은 기본 체크되어 있고(대부분 사업자 대출), 주택은 실거주 갭투자가 흔해 기본 미체크입니다 — 직접 조정하세요.">?</span></span>
+          </label>
+        </div>
         <div class="field" data-rti-input style="display:none;">
-          <label for="td-saleRent">예상 월 임대료<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="상가·오피스텔 등 비주택을 임대 목적으로 매수할 때, 임대사업자 대출은 가계 DSR 대신 RTI(임대업이자상환비율)로 심사됩니다. RTI = 연 임대수입 ÷ 연 이자비용. 비주택은 1.5배 이상이면 일반적 승인 수준입니다.">?</span></label>
+          <label for="td-saleRent">예상 월 임대료<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="RTI = 연 임대수입 ÷ 연 이자비용. 주택 1.25배, 비주택 1.5배 이상이면 일반적 승인 수준입니다.">?</span></label>
           <div class="input-suffix" data-suffix="원">
             <input id="td-saleRent" name="saleRent" type="text" inputmode="numeric" data-format="won" value="3,000,000" />
           </div>
@@ -214,12 +243,18 @@
         </div>
 
         <h3 class="scn-section-title">등기·법무사</h3>
+        <div class="field" data-house-only>
+          <label for="td-regStdSearch">단지 검색으로 채우기 (선택)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="단지명을 검색해 실거래 내역에서 원하는 평형·거래를 고르면 그 실거래가가 아래 시가표준액 칸에 채워집니다. 공식 시가표준액(공시가격)이 아니라 최근 실거래가 기준 추정치이며, 공시가격은 통상 이보다 낮습니다 — 정확한 값은 부동산공시가격알리미에서 확인하세요.">?</span></label>
+          <input id="td-regStdSearch" type="search" placeholder="단지명을 입력하세요 (예: 헬리오시티)" autocomplete="off" />
+          <div class="regstd-results" id="regStdResults" hidden></div>
+          <p class="regstd-picked" id="regStdPicked" hidden></p>
+        </div>
         <div class="field">
           <label for="td-regStd">시가표준액 (채권 매입 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택채권 매입액은 매매가가 아니라 시가표준액(공동주택가격·개별주택가격·토지 공시지가)을 기준으로 합니다. 비워두면 매매가의 70%로 추정합니다. 정확한 값은 부동산공시가격알리미·위택스에서 조회하세요.">?</span></label>
           <div class="input-suffix" data-suffix="원">
             <input id="td-regStd" name="regStd" type="text" inputmode="numeric" data-format="won" value="" />
           </div>
-          <span class="hint">모르면 비워두세요 → 매매가 × 70%로 추정.</span>
+          <span class="hint">모르면 비워두세요 → 매매가 × 70%로 추정. 위에서 단지를 검색해 채우면 최근 실거래가가 그대로 들어갑니다(공시가격과는 다를 수 있음).</span>
         </div>
         <div class="field">
           <label for="td-regDiscount">국민주택채권 할인율<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="채권을 즉시 매도(할인)할 때 본인이 부담하는 손실률(고객부담률)입니다. 시장금리에 따라 매일 바뀌며 최근 15% 안팎입니다. 당일 정확한 값은 은행 국민주택채권 포털에서 확인하세요.">?</span></label>
@@ -547,5 +582,119 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="../assets/rates.js?v=20260629"></script>
 <script src="../assets/app.js?v=20260629"></script>
+<script>
+// 단지 검색 → 시가표준액 칸 자동 채움. transactions.json(43MB)은 검색창에 처음
+// 입력할 때만 지연 로드한다(계산기 첫 진입 시 무겁게 받지 않기 위함).
+// 채워지는 값은 '최근 실거래가'이며 공식 시가표준액(공시가격)이 아니다 — 공시가격은
+// 통상 실거래가보다 낮으므로(현실화율 반영) 이 값은 참고용 상한 추정치에 가깝다.
+(function () {
+  'use strict';
+  var searchEl = document.getElementById('td-regStdSearch');
+  var resultsEl = document.getElementById('regStdResults');
+  var pickedEl = document.getElementById('regStdPicked');
+  var regStdInput = document.getElementById('td-regStd');
+  if (!searchEl) return;
+
+  var DEALS = null, loading = null;
+  function ensureData() {
+    if (DEALS) return Promise.resolve(DEALS);
+    if (loading) return loading;
+    loading = fetch('../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : { deals: [] }; })
+      .then(function (j) { DEALS = j.deals || []; return DEALS; })
+      .catch(function () { DEALS = []; return DEALS; });
+    return loading;
+  }
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function won(m) { var e = m / 10000; return (Number.isInteger(e) ? e : e.toFixed(1)) + '억'; }
+  function debounce(fn, ms) { var t; return function () { clearTimeout(t); var a = arguments; t = setTimeout(function () { fn.apply(null, a); }, ms); }; }
+
+  function renderAptList(deals, q) {
+    var byApt = {};
+    deals.forEach(function (d) {
+      var hay = (d.apt + ' ' + (d.region || '')).toLowerCase();
+      if (hay.indexOf(q) < 0) return;
+      var k = (d.region_key || '') + '|' + d.apt;
+      if (!byApt[k]) byApt[k] = { name: d.apt, region: d.region || d.region_key, count: 0 };
+      byApt[k].count += 1;
+    });
+    var list = Object.keys(byApt).map(function (k) { return byApt[k]; })
+      .sort(function (a, b) { return b.count - a.count; }).slice(0, 20);
+    if (!list.length) {
+      resultsEl.innerHTML = '<div class="rs-apt" style="color:var(--text-muted);cursor:default;">일치하는 단지가 없습니다.</div>';
+      resultsEl.hidden = false;
+      return;
+    }
+    resultsEl.innerHTML = list.map(function (a) {
+      return '<div class="rs-apt" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region) + '">' +
+        '<span class="rs-name">' + esc(a.name) + '</span><span class="rs-region">' + esc(a.region) + '</span></div>';
+    }).join('');
+    resultsEl.hidden = false;
+  }
+
+  function renderDealList(aptName, regionLabel) {
+    var deals = DEALS.filter(function (d) { return d.apt === aptName && (d.region || d.region_key) === regionLabel; })
+      .sort(function (a, b) { return a.date < b.date ? 1 : -1; }).slice(0, 15);
+    if (!deals.length) {
+      resultsEl.innerHTML = '<div class="rs-back" data-back="1">← 목록으로</div><div class="rs-apt" style="cursor:default;color:var(--text-muted);">최근 실거래 내역이 없습니다.</div>';
+      resultsEl.hidden = false;
+      return;
+    }
+    resultsEl.innerHTML = '<div class="rs-back" data-back="1">← 목록으로</div>' + deals.map(function (d) {
+      return '<div class="rs-deal" data-price="' + d.price + '" data-area="' + d.area_m2 + '" data-pyeong="' + d.pyeong + '" data-date="' + d.date + '">' +
+        '<span>' + d.area_m2 + '㎡(' + d.pyeong + '평) · ' + d.date + '</span><strong>' + won(d.price) + '</strong></div>';
+    }).join('');
+    resultsEl.hidden = false;
+  }
+
+  searchEl.addEventListener('focus', function () { ensureData(); });
+  searchEl.addEventListener('input', debounce(function () {
+    var q = searchEl.value.trim().toLowerCase();
+    if (!q) { resultsEl.hidden = true; return; }
+    ensureData().then(function (deals) { renderAptList(deals, q); });
+  }, 200));
+
+  var curApt = null, curRegion = null;
+  resultsEl.addEventListener('click', function (e) {
+    var back = e.target.closest('.rs-back');
+    if (back) { renderAptList(DEALS, searchEl.value.trim().toLowerCase()); return; }
+    var deal = e.target.closest('.rs-deal');
+    if (deal) {
+      regStdInput.value = Number(deal.dataset.price) * 10000;   // transactions.json 단위: 만원 → 원
+      regStdInput.dispatchEvent(new Event('input', { bubbles: true }));
+      pickedEl.textContent = '선택됨: ' + curApt + ' ' + deal.dataset.area + '㎡(' + deal.dataset.pyeong + '평) · ' +
+        deal.dataset.date + ' 실거래 ' + won(Number(deal.dataset.price)) + ' → 시가표준액에 채움(실거래가 기준, 공시가격 아님)';
+      pickedEl.hidden = false;
+      resultsEl.hidden = true;
+      searchEl.value = curApt;
+      return;
+    }
+    var apt = e.target.closest('.rs-apt');
+    if (apt && apt.dataset.apt) {
+      curApt = apt.dataset.apt; curRegion = apt.dataset.region;
+      renderDealList(curApt, curRegion);
+    }
+  });
+  document.addEventListener('click', function (e) {
+    if (!resultsEl.contains(e.target) && e.target !== searchEl) resultsEl.hidden = true;
+  });
+
+  // 국민주택채권 당일 할인율 자동 반영 — 수집 실패/미설정 시 기존 기본값(15%) 그대로 유지.
+  var discountInput = document.getElementById('td-regDiscount');
+  var discountTouched = false;
+  if (discountInput) {
+    discountInput.addEventListener('input', function () { discountTouched = true; });
+    fetch('../assets/bond_rate.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (!j || j.seed || discountTouched || !j.customer_burden_rate_pct) return;
+        discountInput.value = j.customer_burden_rate_pct;
+        discountInput.dispatchEvent(new Event('input', { bubbles: true }));
+      })
+      .catch(function () {});
+  }
+})();
+</script>
 </body>
 </html>

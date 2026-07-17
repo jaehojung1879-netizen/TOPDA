@@ -29,6 +29,7 @@
 | `build_apt_pages.py` | 위 JSON 3종(키 불필요) | `site/apt/*.html` 지역별 정적 단지 페이지(네이버·구글 SEO) + `site/sitemap.xml` |
 | `collect_market.py` | R-ONE | `market.json`(지역별 매매·전세 지수·전세가율) |
 | `collect_news.py` | 구글 뉴스 RSS(키 불필요) | `news.json`(홈 "이번 주 핵심 이슈" + "섹터별 부동산 뉴스") |
+| `collect_bond_rate.py` | 주택도시기금 포털 페이지 파싱(키 불필요·**공식 API 아님**) | `bond_rate.json`(제1종국민주택채권 당일 고객부담률) — 등기비용·종합계산기 할인율 입력란 자동 채움 |
 | `lib_pdata.py` | 공용 유틸 | — |
 
 ## 4) R-ONE (지역 시세 대시보드)
@@ -68,3 +69,4 @@ R-ONE이 돌려주는 **전 지역(전국·시도·시군구)** 을 자동 수�
   - 코드가 별칭도 인식합니다 — 국토부: `DATA_GO_KR_SERVICE_KEY/DATA_GO_KR/PUBLIC_DATA_KEY/MOLIT_KEY`, R-ONE: `R_ONE_KEY/R_ONE/RONE_KEY/REB_KEY`
 - **국토부 엔드포인트**: 활용신청한 상세자료(`RTMSDataSvcAptTradeDev`)에 맞춰 호출합니다. 키는 **Decoding(일반 인증키)** 사용.
 - `DATA_GO_KR_KEY`는 hex 형태(특수문자 없음)라 인코딩 이슈가 없습니다.
+- **`collect_bond_rate.py`는 공식 오픈API가 아니라 페이지 파싱**입니다(국민주택채권 할인율은 공공데이터포털에 깨끗한 API가 없음). 배포 후 첫 실행에서 Actions 로그의 `[bond_rate]` 라인을 꼭 확인하세요 — 정규식이 실제 페이지 구조와 안 맞으면 "파싱 실패" 메시지만 남고 기존 값을 유지합니다(사이트는 안 깨지지만 값이 안 바뀜). 실패 시 로그에 찍히는 "부담률/할인율 주변 텍스트"를 보고 `PATTERNS` 정규식을 조정하세요.

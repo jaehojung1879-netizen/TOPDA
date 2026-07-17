@@ -50,3 +50,13 @@ jobs:
 
       - name: Commit commercial.json
         run: bash _meta/git_commit_push.sh "상업용 임대시세 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/commercial.json
+
+      # 국민주택채권 고객부담률(할인율) — 공식 오픈API가 없어 조회 페이지를 파싱한다.
+      # 페이지 구조가 바뀌면 파싱 실패 로그만 남기고 기존 값을 그대로 둔다(save_json_safe).
+      - name: Collect bond discount rate (국민주택채권 고객부담률)
+        working-directory: _meta
+        run: python collect_bond_rate.py
+        continue-on-error: true
+
+      - name: Commit bond_rate.json
+        run: bash _meta/git_commit_push.sh "국민주택채권 할인율 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/bond_rate.json

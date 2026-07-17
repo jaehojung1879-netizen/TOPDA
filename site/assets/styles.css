@@ -2286,6 +2286,10 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   text-align: center; color: var(--text-subtle); font-size: 0.9rem;
   padding: 40px 0;
 }
+.board-notice {
+  color: var(--text-subtle); font-size: 0.8rem; margin: 20px 0 0;
+  border-top: 1px solid var(--border); padding-top: 14px;
+}
 .badge-warn { background: var(--warning-soft); color: var(--warning); }
 
 /* ===== 맨 위로 버튼 (전역 — 한 화면 이상 스크롤 시 표시) ===== */
