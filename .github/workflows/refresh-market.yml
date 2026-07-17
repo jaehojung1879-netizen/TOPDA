@@ -24,6 +24,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      # R-ONE 서버가 일시적으로 타임아웃될 수 있다(2026-07-17 사례) — continue-on-error 없이
+      # 두면 뒤의 상업용 임대시세·채권할인율 수집까지 잡 전체가 중단되므로 이 스텝만 실패해도
+      # 넘어가게 한다. 실패 시 collect_market.py가 save_json_safe로 기존 market.json을 보존한다.
       - name: Collect market stats (R-ONE)
         working-directory: _meta
         env:
@@ -32,6 +35,7 @@ jobs:
           # 전세가율 직접 통계표 ID(아파트 매매가격대비 전세가격비율). 설정 시 평균가격 역산 대신 사용.
           RONE_RATIO_STATBL_ID: ${{ vars.RONE_RATIO_STATBL_ID }}
         run: python collect_market.py
+        continue-on-error: true
 
       # 커밋·푸시는 공용 스크립트 사용 — 동시 실행 워크플로와의 푸시 경합을 rebase+재시도로 흡수.
       - name: Commit market.json
