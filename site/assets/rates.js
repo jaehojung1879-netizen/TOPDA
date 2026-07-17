@@ -94,20 +94,23 @@
       //   )
       //   ※ HF 공식 '상환능력별 보증한도 = 연간인정소득 − 연간부채상환예상액 + 우대'를 단순화한 근사치.
       //     정확한 금액은 HF 예상보증금액 조회로 확인. incomeCap=부부합산 연소득 자격상한(원), null=소득무관(SGI).
+      // ※ 일반 보증(HF·HUG·SGI)에는 '소득 자격 상한'이 없다. 소득은 HF의 상환능력별
+      //   한도 산정에만 반영된다(소득이 낮으면 한도가 줄 뿐, 자격이 박탈되지 않음).
+      //   부부합산 소득 상한(5천만~1.3억)은 아래 jeonseFundProducts(버팀목 시리즈)에만 있는 요건.
       jeonseAgencies: [
         { key: 'HF', name: '주택금융공사(HF)', ratio: 80, ratioYouth: 90, maxAmount: 400000000,
           depositCapMetro: 700000000, depositCapOther: 500000000, fee: '연 0.04~0.18%',
-          incomeCap: 100000000, incomeCapYouth: 130000000,
+          incomeCap: null, incomeCapYouth: null,   // 소득 자격 제한 없음 (한도만 소득 연동)
           incomeMultiple: 4.5,        // 상환능력별 한도 근사(연소득×4.5). 실제는 인정소득−부채상환예상액+우대
           creditDeductRatio: 0.25,    // 타행 신용대출 잔액의 25%를 차감
           source: 'https://www.hf.go.kr/ko/sub02/sub02_01_02.do',
-          note: 'min(보증금×80%, 4억, 상환능력별 소득 한도). 부부합산 1억 이하(청년·신혼 1.3억). 수도권·규제 1주택자 2억 한도. 상환능력별 한도는 근사치 — HF 예상보증금액 조회로 확인.' },
+          note: 'min(보증금×80%, 4억, 상환능력별 한도). 소득 자격 제한 없음 — 소득은 상환능력별 한도 산정에만 반영. 수도권·규제 1주택자 2억 한도. 상환능력별 한도는 근사치 — HF 예상보증금액 조회로 확인.' },
         { key: 'HUG', name: '주택도시보증공사(HUG)', ratio: 80, ratioYouth: 90, maxAmount: 400000000,
           depositCapMetro: 700000000, depositCapOther: 500000000, fee: '연 0.111~0.211%',
-          incomeCap: 100000000, incomeCapYouth: 130000000,
-          incomeMultiple: null, creditDeductRatio: 0,   // 소득은 자격요건만, 별도 소득 산식 없음
+          incomeCap: null, incomeCapYouth: null,   // 소득 자격 제한 없음
+          incomeMultiple: null, creditDeductRatio: 0,
           source: 'https://www.khug.or.kr/hug/web/ig/dl/igdl000001.jsp',
-          note: 'min(보증금×80%, 4억). 부부합산 1억 이하(청년·신혼 1.3억). 대출+반환보증 일괄(전세금안심대출).' },
+          note: 'min(보증금×80%, 4억). 소득 자격 제한 없음. 대출+반환보증 일괄(전세금안심대출).' },
         { key: 'SGI', name: 'SGI서울보증', ratio: 80, ratioYouth: 80, maxAmount: 500000000,
           depositCapMetro: Infinity, depositCapOther: Infinity, fee: '연 0.183~0.208%',
           incomeCap: null, incomeCapYouth: null,
@@ -115,7 +118,35 @@
           source: 'https://www.sgic.co.kr',
           note: 'min(보증금×80%, 5억). 소득 제한 없음. 고액 전세 가능, 심사 빠른 편.' },
       ],
-      jeonseNote: '전세대출은 LTV와 무관하며, DSR 산정 시 보증부 대출은 원금이 제외(이자만 산입)됩니다. 한도는 보증기관의 보증비율·최대한도·(HF)상환능력별 소득 한도로 결정됩니다. 청년·신혼은 우대 비율(최대 90%)·소득 한도 완화(1.3억).',
+      jeonseNote: '전세대출은 LTV와 무관하며, DSR 산정 시 보증부 대출은 원금이 제외(이자만 산입)됩니다. 일반 보증(HF·HUG·SGI)은 소득 자격 제한이 없고, 소득은 HF 상환능력별 한도 산정에만 반영됩니다. 청년·신혼은 보증비율 우대(최대 90%).',
+
+      // 기금성 전세대출 (주택도시기금 — 버팀목 시리즈). 여기에만 부부합산 소득 상한이 있다.
+      // 저리 대출이라 요건이 맞으면 일반 보증보다 우선 검토할 것. 금리·요건은 기금 고시로
+      // 수시 변경 — 상세·최신값은 주택도시기금 포털(nhuf.molit.go.kr)에서 확인.
+      jeonseFundProducts: [
+        { key: 'general', name: '버팀목 전세자금 (일반)', who: '무주택 세대주',
+          incomeCap: 50000000, ratio: 70,
+          depositCapMetro: 300000000, depositCapOther: 200000000,
+          maxMetro: 120000000, maxOther: 80000000,
+          rate: '연 2%대~3%대 (소득·보증금 구간별)',
+          note: '2자녀 이상 가구는 보증금·한도 상향' },
+        { key: 'youth', name: '청년전용 버팀목', who: '만 19~34세 무주택',
+          incomeCap: 50000000, ratio: 80,
+          depositCapMetro: 300000000, depositCapOther: 300000000,
+          maxMetro: 200000000, maxOther: 200000000,
+          rate: '연 1%대 후반~3%대' },
+        { key: 'newlywed', name: '신혼부부전용 버팀목', who: '혼인 7년 이내(예정 포함)',
+          incomeCap: 75000000, ratio: 80,
+          depositCapMetro: 400000000, depositCapOther: 300000000,
+          maxMetro: 300000000, maxOther: 200000000,
+          rate: '연 1%대 중반~3%대' },
+        { key: 'newborn', name: '신생아 특례 버팀목', who: '2년 내 출산·입양 가구',
+          incomeCap: 130000000, ratio: 80,
+          depositCapMetro: 500000000, depositCapOther: 400000000,
+          maxMetro: 300000000, maxOther: 300000000,
+          rate: '연 1%대 초반~3%대 (소득 구간별)' },
+      ],
+      jeonseFundSource: 'https://nhuf.molit.go.kr',
 
     },
 

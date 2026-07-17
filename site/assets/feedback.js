@@ -1,8 +1,9 @@
 // ===== 톺다 게시판 =====
-// - 비밀글: localStorage 'board:secret' — 이 브라우저에서만 보임(그대로 유지).
 // - 공개글: Supabase(board_posts)에 저장 — 모든 방문자에게 공유됨.
+// - 비밀글: Supabase에 secret=true로 저장 — 작성자 본인(owner_token 보유 브라우저)과
+//   운영자(관리 키 — board.html?admin=키 로 등록)만 볼 수 있다.
 //   SUPABASE_URL/ANON_KEY가 배포 시 주입되지 않은 경우(로컬·PR)는
-//   localStorage 'board:public'로 자동 폴백해 기존처럼 동작한다.
+//   localStorage 'board:public'/'board:secret'로 자동 폴백해 기존처럼 동작한다.
 // - 글 작성 시 카테고리 선택(자유·질문·후기·정보·수정요청·기타).
 // - 입력 폼은 localStorage 'board:draft'에 자동 임시저장 → 모달 다시 열어도 복원.
 // - 작성자 정보(닉네임)도 localStorage 'board:author'로 기억 → 다음 글에서 자동 채움.
@@ -15,8 +16,9 @@
   const KEY_SEC = root.dataset.keySecret || 'board:secret';
   const KEY_DRAFT = 'board:draft';
   const KEY_AUTHOR = 'board:author';
-  const KEY_TOKENS = 'board:owner_tokens';   // {postId: ownerToken} — 내가 쓴 공개글 삭제 인증용
+  const KEY_TOKENS = 'board:owner_tokens';   // {postId: ownerToken} — 내가 쓴 글 조회(비밀글)·삭제 인증용
   const KEY_MIGRATED = 'board:migrated_to_supabase';
+  const KEY_ADMIN = 'board:admin_key';       // 운영자 관리 키 (?admin=키 로 등록, ?admin=off 로 해제)
 
   // ----- Supabase 백엔드 (공개글 전용) -----
   const SUPABASE_URL = '__SUPABASE_URL__';
@@ -49,22 +51,23 @@
     const t = readTokens(); delete t[id]; localStorage.setItem(KEY_TOKENS, JSON.stringify(t));
   }
 
-  // 기존에 로컬에만 쌓여있던 공개글을 Supabase로 최초 1회 옮긴다(공유가 소급 적용되도록).
-  async function migrateLocalPublicPosts() {
+  // 기존에 로컬에만 쌓여있던 글(공개+비밀)을 Supabase로 최초 1회 옮긴다(공유가 소급 적용되도록).
+  async function migrateLocalPosts() {
     if (localStorage.getItem(KEY_MIGRATED)) return;
     const sb = await getSupabase();
     if (!sb) return;
-    const local = read(KEY_PUB);
-    if (local.length) {
+    for (const [key, isSecret] of [[KEY_PUB, false], [KEY_SEC, true]]) {
+      const local = read(key);
+      if (!local.length) continue;
       for (const p of local) {
         const token = uuid();
         const { data, error } = await sb.from('board_posts').insert({
           category: p.category || 'etc', title: p.title, author: p.author || null,
-          page: p.page || null, body: p.body, owner_token: token,
+          page: p.page || null, body: p.body, secret: isSecret, owner_token: token,
         }).select('id').single();
         if (!error && data) saveToken(data.id, token);
       }
-      localStorage.removeItem(KEY_PUB);
+      localStorage.removeItem(key);
     }
     localStorage.setItem(KEY_MIGRATED, '1');
   }
@@ -143,22 +146,52 @@
   };
   const write = (key, arr) => localStorage.setItem(key, JSON.stringify(arr));
 
-  // 공개글 캐시 — Supabase 사용 시 이 배열이 진실 소스. null이면 아직 첫 조회 전(로컬로 폴백).
-  let publicCache = null;
+  // 캐시 — Supabase 사용 시 이 배열들이 진실 소스. null이면 아직 첫 조회 전(로컬로 폴백).
+  let publicCache = null;   // 공개글 (모든 방문자 공유)
+  let mineCache = null;     // 내 비밀글 + (운영자) 전체 비밀글
+
+  function rowToPost(r) {
+    return {
+      id: r.id, ts: new Date(r.created_at).getTime(), category: r.category,
+      title: r.title, author: r.author, page: r.page, body: r.body,
+    };
+  }
+
   async function refreshPublicPosts() {
     const sb = await getSupabase();
     if (sb) {
       const { data, error } = await sb.from('board_posts_public').select('*')
         .order('created_at', { ascending: true }).limit(300);
-      if (!error && data) {
-        publicCache = data.map((r) => ({
-          id: r.id, ts: new Date(r.created_at).getTime(), category: r.category,
-          title: r.title, author: r.author, page: r.page, body: r.body,
-        }));
-      }
+      if (!error && data) publicCache = data.map(rowToPost);
     } else {
       publicCache = read(KEY_PUB);
     }
+    render();
+  }
+
+  async function refreshMinePosts() {
+    const sb = await getSupabase();
+    if (!sb) { render(); return; }
+    let mine = [];
+    // ① 내가 이 브라우저에서 쓴 글(토큰 보유) 중 비밀글
+    const tokenVals = Object.values(readTokens());
+    if (tokenVals.length) {
+      const { data } = await sb.rpc('get_posts_by_tokens', { tokens: tokenVals });
+      if (data) mine = data.filter((r) => r.secret).map(rowToPost);
+    }
+    // ② 운영자 관리 키가 있으면 모든 사용자의 비밀글도 함께
+    const adminKey = localStorage.getItem(KEY_ADMIN);
+    if (adminKey) {
+      const { data, error } = await sb.rpc('admin_list_secret_posts', { admin_key: adminKey });
+      if (!error && data) {
+        const seen = new Set(mine.map((p) => p.id));
+        data.forEach((r) => { if (!seen.has(r.id)) mine.push(rowToPost(r)); });
+      } else if (error && window.console) {
+        console.warn('[게시판] 관리 키가 유효하지 않습니다 — ?admin=off 로 해제할 수 있습니다.');
+      }
+    }
+    mine.sort((a, b) => a.ts - b.ts);
+    mineCache = mine;
     render();
   }
 
@@ -182,8 +215,9 @@
 
   function render() {
     const pubSource = publicCache !== null ? publicCache : read(KEY_PUB);
+    const secSource = (supabaseConfigured && mineCache !== null) ? mineCache : read(KEY_SEC);
     const pub = applyCat(pubSource);
-    const sec = applyCat(read(KEY_SEC));
+    const sec = applyCat(secSource);
     if (secretCountEl) secretCountEl.textContent = sec.length;
     renderList(listPub, pub, false);
     renderList(listMine, sec, true);
@@ -204,9 +238,9 @@
       const catLabel = CAT_MAP[p.category] || '기타';
       const catBadge = `<span class="badge badge-cat" data-cat="${p.category || 'etc'}">${catLabel}</span>`;
       const visBadge = isMine ? '<span class="badge badge-warn">비밀</span>' : '';
-      // 공개글이 Supabase에서 왔으면(다른 사람 글일 수 있음) 내가 쓴 글(토큰 보유)만 삭제 버튼 노출.
-      // 로컬 전용(비밀글, 또는 Supabase 미설정 폴백)은 기존처럼 항상 삭제 가능.
-      const canDelete = isMine || !supabaseConfigured || !!tokens[p.id];
+      // Supabase 모드에선 내가 쓴 글(토큰 보유)만 삭제 버튼 노출 — 운영자 열람 글도 삭제는 불가.
+      // 로컬 폴백(Supabase 미설정)은 기존처럼 항상 삭제 가능.
+      const canDelete = supabaseConfigured ? !!tokens[p.id] : true;
       const delBtn = canDelete
         ? `<button class="fb-del" data-id="${p.id}" data-mine="${isMine ? '1' : '0'}">삭제</button>` : '';
       li.innerHTML = `
@@ -299,30 +333,30 @@
       };
       if (!data.title || !data.body) return;
 
-      if (data.secret) {
-        // 비밀글은 그대로 로컬 전용
-        const entry = { id: uid(), ts: Date.now(), ...data };
-        const arr = read(KEY_SEC); arr.push(entry); write(KEY_SEC, arr);
-      } else {
+      {
         const sb = await getSupabase();
         let saved = false;
         if (sb) {
+          const token = uuid();
           const { data: row, error } = await sb.from('board_posts').insert({
             category: data.category, title: data.title, author: data.author || null,
-            page: data.page || null, body: data.body, owner_token: uuid(),
+            page: data.page || null, body: data.body, secret: data.secret, owner_token: token,
           }).select('id').single();
           if (!error && row) {
             saved = true;
-            await refreshPublicPosts();
+            saveToken(row.id, token);
+            if (data.secret) await refreshMinePosts();
+            else await refreshPublicPosts();
           } else if (window.console) {
-            console.warn('[게시판] 공개글 저장 실패 — 로컬에만 임시 저장합니다:', error);
+            console.warn('[게시판] 글 저장 실패 — 로컬에만 임시 저장합니다:', error);
           }
         }
         if (!saved) {
           // Supabase 미설정이거나 저장 실패 — 기존처럼 로컬에만 남긴다(오프라인 폴백)
           const entry = { id: uid(), ts: Date.now(), ...data };
-          const arr = read(KEY_PUB); arr.push(entry); write(KEY_PUB, arr);
-          publicCache = read(KEY_PUB);
+          const key = data.secret ? KEY_SEC : KEY_PUB;
+          const arr = read(key); arr.push(entry); write(key, arr);
+          if (!data.secret) publicCache = arr;
         }
       }
 
@@ -348,23 +382,21 @@
     const isMine = btn.dataset.mine === '1';
     if (!confirm('이 글을 삭제할까요?')) return;
 
-    if (isMine) {
-      const arr = read(KEY_SEC).filter((p) => p.id !== id);
-      write(KEY_SEC, arr);
-      render();
-      return;
-    }
-
     const sb = await getSupabase();
     if (sb) {
       const token = readTokens()[id];
       if (!token) return;   // 삭제 버튼이 애초에 안 보였겠지만 방어적으로 한 번 더 확인
       const { data: ok } = await sb.rpc('delete_board_post', { post_id: id, token });
-      if (ok) { removeToken(id); await refreshPublicPosts(); }
+      if (ok) {
+        removeToken(id);
+        if (isMine) await refreshMinePosts();
+        else await refreshPublicPosts();
+      }
     } else {
-      const arr = read(KEY_PUB).filter((p) => p.id !== id);
-      write(KEY_PUB, arr);
-      publicCache = arr;
+      const key = isMine ? KEY_SEC : KEY_PUB;
+      const arr = read(key).filter((p) => p.id !== id);
+      write(key, arr);
+      if (!isMine) publicCache = arr;
       render();
     }
   });
@@ -382,12 +414,16 @@
   catFilter?.addEventListener('change', render);
 
   // URL ?cat=xxx 로 초기 카테고리 필터 지정 (예: feedback.html → board.html?cat=fix)
+  // URL ?admin=키 로 운영자 관리 키 등록 (?admin=off 로 해제) — 비밀글 전체 열람용
   try {
     const params = new URLSearchParams(location.search);
     const c = params.get('cat');
     if (c && catFilter && CATS.some((x) => x.id === c)) catFilter.value = c;
+    const a = params.get('admin');
+    if (a === 'off') localStorage.removeItem(KEY_ADMIN);
+    else if (a) localStorage.setItem(KEY_ADMIN, a);
   } catch (e) {}
 
   render();   // 즉시 1차 렌더(로컬 폴백 기준) — Supabase 조회 완료 전에도 화면이 비지 않게
-  migrateLocalPublicPosts().then(refreshPublicPosts);
+  migrateLocalPosts().then(() => { refreshPublicPosts(); refreshMinePosts(); });
 })();

@@ -300,19 +300,21 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .article-header .meta { display: flex; flex-wrap: wrap; gap: 12px; color: var(--text-muted); font-size: 0.9rem; align-items: center; }
 .article-header .meta .dot { color: var(--text-subtle); }
 
+/* 글 요약 — 색 박스 대신 매거진 표제부(standfirst) 스타일: 위 굵은 괘선 + 아래 가는 괘선 */
 .article-summary {
-  background: var(--accent-soft); border-radius: var(--radius);
-  padding: 20px 22px; margin: 32px 0; border-left: 3px solid var(--accent);
+  background: none; border-radius: 0;
+  padding: 18px 2px; margin: 32px 0;
+  border-top: 2px solid var(--text); border-bottom: 1px solid var(--border);
 }
-.article-summary .label { font-size: 0.8rem; font-weight: 700; color: var(--accent); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
-.article-summary p { color: var(--text); font-weight: 500; }
+.article-summary .label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.08em; margin-bottom: 8px; }
+.article-summary p { color: var(--text); font-weight: 500; font-size: 1.06rem; line-height: 1.75; }
 
-.prose { font-size: 1rem; color: var(--text); }
+.prose { font-size: 1rem; color: var(--text); line-height: 1.85; }
 @media (min-width: 768px) { .prose { font-size: 1.05rem; } }
-.prose h2 { margin: 48px 0 16px; padding-top: 8px; border-top: 1px solid var(--border); padding-top: 24px; }
+.prose h2 { margin: 52px 0 16px; padding-top: 24px; border-top: 1px solid var(--border); letter-spacing: -0.01em; }
 .prose h2:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
-.prose h3 { margin: 32px 0 12px; }
-.prose p { margin-bottom: 16px; color: var(--text); }
+.prose h3 { margin: 32px 0 12px; letter-spacing: -0.01em; }
+.prose p { margin-bottom: 18px; color: var(--text); }
 .prose ul, .prose ol { padding-left: 22px; margin-bottom: 16px; }
 .prose ul li { list-style: disc; margin-bottom: 6px; }
 .prose ol li { list-style: decimal; margin-bottom: 6px; }
@@ -331,11 +333,13 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 }
 .prose hr { border: 0; border-top: 1px solid var(--border); margin: 40px 0; }
 
-/* ===== Callouts ===== */
+/* ===== Callouts =====
+   색면(파랑·노랑·빨강 박스) 남발이 기계적으로 보인다는 피드백 반영 —
+   배경은 중립(surface-2)으로 통일하고, 의미는 왼쪽 보더·아이콘 색으로만 구분한다. */
 .callout {
-  padding: 18px 20px; border-radius: var(--radius);
+  padding: 16px 20px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   margin: 24px 0; display: flex; gap: 12px;
-  border: 1px solid;
+  background: var(--surface-2); border: 0; border-left: 3px solid var(--border-strong);
 }
 .callout .icon { flex-shrink: 0; font-weight: 700; }
 .callout .body { flex: 1; }
@@ -343,13 +347,13 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
    문장 중간 <strong>까지 block 처리하면 줄이 토막나 보이므로 첫 자식에만 적용. */
 .callout .body strong { font-weight: 700; }
 .callout .body > strong:first-child { display: block; margin-bottom: 4px; }
-.callout-info { background: var(--accent-soft); border-color: #c7d2fe; }
+.callout-info { border-left-color: var(--accent); }
 .callout-info .icon { color: var(--accent); }
-.callout-warn { background: var(--warning-soft); border-color: #fde68a; }
+.callout-warn { border-left-color: var(--warning); }
 .callout-warn .icon { color: var(--warning); }
-.callout-danger { background: var(--danger-soft); border-color: #fecaca; }
+.callout-danger { border-left-color: var(--danger); }
 .callout-danger .icon { color: var(--danger); }
-.callout-success { background: var(--success-soft); border-color: #bbf7d0; }
+.callout-success { border-left-color: var(--success); }
 .callout-success .icon { color: var(--success); }
 
 /* ===== FAQ ===== */

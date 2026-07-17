@@ -29,15 +29,6 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="assets/styles.css?v=20260701" />
-<style>
-  .home-board-preview { padding: 20px 0 4px; }
-  .home-board-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-  .home-board-item { display: block; padding: 12px 16px; border: 1px solid var(--border, #e5e7eb); border-radius: 12px; background: #fff; text-decoration: none; color: inherit; }
-  .home-board-item:hover { border-color: var(--accent, #2563eb); }
-  .home-board-item .t { font-weight: 700; font-size: 0.95rem; }
-  .home-board-item .m { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
-  .home-board-empty { border: 1px dashed var(--border, #d1d5db); border-radius: 12px; padding: 18px; text-align: center; color: var(--text-muted); font-size: 0.88rem; margin-top: 12px; }
-</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -89,18 +80,6 @@
 </header>
 
 <main>
-
-<!-- ===== Board preview: 접근성 강화 — 메인 최상단 노출 ===== -->
-<section class="home-board-preview">
-  <div class="container">
-    <div class="strip-head">
-      <h2>게시판</h2>
-      <a href="board.html" class="strip-link">게시판 바로가기 →</a>
-    </div>
-    <ul class="home-board-list" id="homeBoardList" data-home-board-list></ul>
-    <p class="home-board-empty" id="homeBoardEmpty" data-home-board-empty style="display:none;">아직 등록된 글이 없습니다. '게시판 바로가기'에서 첫 글을 남겨보세요.</p>
-  </div>
-</section>
 
 <!-- ===== Hero: compact tagline ===== -->
 <section class="home-intro">
@@ -440,53 +419,5 @@
 </footer>
 
 <script src="assets/app.js?v=20260701"></script>
-<script>
-(function () {
-  'use strict';
-  // 게시판 최신 공개글 미리보기 — Supabase(설정된 경우) 또는 로컬 폴백에서 최신 3개를 가져온다.
-  var listEl = document.getElementById('homeBoardList');
-  var emptyEl = document.getElementById('homeBoardEmpty');
-  if (!listEl) return;
-  var SUPABASE_URL = '__SUPABASE_URL__';
-  var SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__';
-  var supabaseConfigured = !/^__.*__$/.test(SUPABASE_URL) && !/^__.*__$/.test(SUPABASE_ANON_KEY)
-    && SUPABASE_URL.length > 8 && SUPABASE_ANON_KEY.length > 8;
-
-  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function fmtDate(ts) {
-    var d = new Date(ts);
-    var pad = function (n) { return String(n).padStart(2, '0'); };
-    return d.getFullYear() + '.' + pad(d.getMonth() + 1) + '.' + pad(d.getDate());
-  }
-  function show(recent) {
-    if (!recent.length) { emptyEl.style.display = ''; return; }
-    emptyEl.style.display = 'none';
-    listEl.innerHTML = recent.map(function (p) {
-      var author = p.author ? esc(p.author) : '익명';
-      return '<a class="home-board-item" href="board.html">' +
-        '<div class="t">' + esc(p.title) + '</div>' +
-        '<div class="m">' + author + ' · ' + fmtDate(p.ts) + '</div>' +
-        '</a>';
-    }).join('');
-  }
-  function localFallback() {
-    var posts = [];
-    try { posts = JSON.parse(localStorage.getItem('board:public') || '[]'); } catch (e) { posts = []; }
-    show(posts.slice().reverse().slice(0, 3));
-  }
-
-  if (!supabaseConfigured) { localFallback(); return; }
-  import('https://esm.sh/@supabase/supabase-js@2.110.7')
-    .then(function (mod) {
-      var sb = mod.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      return sb.from('board_posts_public').select('*').order('created_at', { ascending: false }).limit(3);
-    })
-    .then(function (res) {
-      var rows = (res && res.data) || [];
-      show(rows.map(function (r) { return { title: r.title, author: r.author, ts: new Date(r.created_at).getTime() }; }));
-    })
-    .catch(localFallback);
-})();
-</script>
 </body>
 </html>
