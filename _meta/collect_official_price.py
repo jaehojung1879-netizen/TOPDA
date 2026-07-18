@@ -98,12 +98,17 @@ def main():
     #  처리 단지 수 제한. 진단 모드에서는 out_map을 저장하지 않는다(원인 파악만).
     diag_mode = os.environ.get("OFFICIAL_PRICE_DIAG", "").strip() in ("1", "true", "yes")
     limit = int(os.environ.get("OFFICIAL_PRICE_LIMIT", "0") or 0)
+    # 진단 모드는 원인 확인용이므로 항상 소수 건만 — limit 미지정(0)이면 5건으로 강제.
+    # (7/18 진단 실행에서 limit=0 + 시간예산 미적용이 겹쳐 20분 스텝 타임아웃으로
+    #  강제종료된 사고 재발 방지. 시간 예산도 진단 모드에서 동일하게 지킨다.)
+    if diag_mode and limit <= 0:
+        limit = 5
 
     stat = {"filled": 0, "skipped_cached": 0, "no_pnu": 0, "no_price": 0}
     processed = 0
     vworld_logged = 0   # V-World 응답 샘플은 처음 몇 건만 로그(로그 폭주 방지)
     for a in apts:
-        if not diag_mode and L.out_of_time(deadline, margin_sec=15):
+        if L.out_of_time(deadline, margin_sec=15):
             print(f"시간 예산 소진 — 남은 단지는 다음 실행에서 이어서 보강 (누적 {stat['filled']}건)")
             break
         if limit and processed >= limit:
