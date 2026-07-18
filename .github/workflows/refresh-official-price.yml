@@ -11,6 +11,15 @@ on:
   schedule:
     - cron: "40 15 * * *"   # 매일 00:40 KST
   workflow_dispatch:
+    inputs:
+      diag:
+        description: "진단 모드 (V-World 응답 본문을 로그로 남기고 저장 생략)"
+        type: boolean
+        default: false
+      limit:
+        description: "처리할 단지 수 제한 (진단용, 0=제한 없음)"
+        type: string
+        default: "0"
 
 permissions:
   contents: write
@@ -40,6 +49,8 @@ jobs:
           V_WORLD_KEY: ${{ secrets.V_WORLD_KEY }}
           VWORLD_API_KEY: ${{ secrets.VWORLD_API_KEY }}
           VWORLD_KR_KEY: ${{ secrets.VWORLD_KR_KEY }}
+          OFFICIAL_PRICE_DIAG: ${{ inputs.diag && '1' || '' }}
+          OFFICIAL_PRICE_LIMIT: ${{ inputs.limit || '0' }}
         run: python collect_official_price.py
         continue-on-error: true
 
