@@ -249,14 +249,14 @@
 
         <h3 class="scn-section-title">등기·법무사</h3>
         <div class="field">
-          <label for="td-regStd">시가표준액 (채권 매입 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택채권 매입액은 매매가가 아니라 시가표준액(공동주택가격·개별주택가격·토지 공시지가)을 기준으로 합니다. 비워두면 매매가의 70%로 추정합니다. 정확한 값은 부동산공시가격알리미·위택스에서 조회하세요.">?</span></label>
+          <label for="td-regStd">시가표준액 (채권 매입 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택채권 매입액은 매매가가 아니라 시가표준액(공동주택가격·개별주택가격·토지 공시지가)을 기준으로 합니다. 비워두면 매매가의 70%로 추정합니다.">?</span><a class="tip-link" href="https://www.realtyprice.kr/notice/main/main.do" target="_blank" rel="noopener" title="부동산공시가격알리미에서 정확한 공시가격 확인" aria-label="부동산공시가격알리미에서 정확한 공시가격 확인 (새 창)">↗</a></label>
           <div class="input-suffix" data-suffix="원">
             <input id="td-regStd" name="regStd" type="text" inputmode="numeric" data-format="won" value="" />
           </div>
-          <span class="hint">모르면 비워두세요 → 매매가 × 70%로 추정. 값을 모르면 아래 <strong>단지 검색</strong>으로 공시가격·실거래가를 불러와 채울 수 있습니다.</span>
+          <span class="hint">모르면 비워두세요 → 매매가 × 70%로 추정. 정확한 공시가격은 위 ↗ 아이콘으로 부동산공시가격알리미에서 확인하세요. 아래 <strong>단지 검색</strong>으로는 참고용 최근 실거래가를 대신 채울 수 있습니다.</span>
         </div>
         <div class="field" data-house-only>
-          <label for="td-regStdSearch">단지 검색으로 시가표준액 채우기 (선택)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="단지명을 검색하면 공식 공시가격(수집된 단지에 한함)과 최근 실거래가 목록이 함께 뜹니다. 공시가격이 있으면 그 값을, 없으면 실거래가(참고용 추정)를 골라 위 시가표준액 칸에 채울 수 있습니다. 공시가격은 아직 일부 단지만 수집돼 있으며, 정확한 값은 부동산공시가격알리미에서도 확인 가능합니다.">?</span></label>
+          <label for="td-regStdSearch">단지 검색으로 시가표준액 채우기 (선택)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="단지명을 검색하면 최근 실거래가 목록이 뜹니다. 참고용 추정치를 골라 위 시가표준액 칸에 채울 수 있습니다(공식 공시가격은 아님). 정확한 공시가격은 시가표준액 입력란 옆 ↗ 아이콘으로 부동산공시가격알리미에서 확인하세요.">?</span></label>
           <input id="td-regStdSearch" type="search" placeholder="단지명을 입력하세요 (예: 헬리오시티)" autocomplete="off" />
           <div class="regstd-results" id="regStdResults" hidden></div>
           <p class="regstd-picked" id="regStdPicked" hidden></p>
