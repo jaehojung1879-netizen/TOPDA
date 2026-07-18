@@ -238,20 +238,27 @@ def get_apart_official_price(pnu, api_key, dong_nm=None, ho_nm=None, timeout=15,
         params["dongNm"] = dong_nm
     if ho_nm:
         params["hoNm"] = ho_nm
-    url = "http://api.vworld.kr/ned/data/getApartHousingPriceAttr?" + urllib.parse.urlencode(params)
+    # 반드시 https — http://api.vworld.kr 게이트웨이는 502/연결끊김을 반환한다(2026-07-18
+    # CI 진단으로 확인). 과거 문서 예시가 http라 http로 두면 전 단지 '가격없음'이 된다.
+    url = "https://api.vworld.kr/ned/data/getApartHousingPriceAttr?" + urllib.parse.urlencode(params)
+
+    def _mask(s):
+        # 진단 문자열에 API 키가 (URL 일부로) 새지 않게 마스킹 — Actions 로그는 공개 저장소에서 누구나 본다.
+        return str(s).replace(api_key, "***") if api_key else str(s)
+
     try:
         text = _request(url, timeout=timeout)
     except Exception as e:  # noqa: BLE001
         if diag is not None:
             diag["reason"] = "request_error"
-            diag["sample"] = str(e)[:400]
+            diag["sample"] = _mask(e)[:400]
         return []
     try:
         root = ET.fromstring(text)
     except Exception as e:  # noqa: BLE001
         if diag is not None:
             diag["reason"] = "parse_error"
-            diag["sample"] = (str(e)[:120] + " | 본문: " + (text or "")[:400])
+            diag["sample"] = _mask(str(e)[:120] + " | 본문: " + (text or "")[:400])
         return []
     records = []
     for el in root.iter():
@@ -261,7 +268,7 @@ def get_apart_official_price(pnu, api_key, dong_nm=None, ho_nm=None, timeout=15,
         diag["reason"] = "ok" if records else "no_records"
         if not records:
             # 공시가격 레코드가 없을 때 응답 본문을 남긴다 — 인증오류/빈결과/구조변경 구분용.
-            diag["sample"] = (text or "")[:400]
+            diag["sample"] = _mask((text or "")[:400])
     return records
 
 
