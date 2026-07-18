@@ -566,6 +566,11 @@
           "recent_price": 470000
         },
         {
+          "label": "132㎡(40평)",
+          "area_m2": 132,
+          "recent_price": 580000
+        },
+        {
           "label": "165㎡(50평)",
           "area_m2": 165,
           "recent_price": 640000
@@ -587,9 +592,9 @@
         }
       ],
       "price_history": [
-        713499,
-        814509,
-        698624
+        572517,
+        653568,
+        565436
       ],
       "lat": 37.506352,
       "lng": 127.011035,
@@ -1898,7 +1903,7 @@
       ],
       "price_history": [
         487000,
-        421172,
+        411679,
         425005
       ],
       "builder": "삼성물산",
@@ -9572,7 +9577,7 @@
         53087,
         53461,
         54544,
-        58151
+        58718
       ],
       "builder": "기타",
       "lat": 37.668783,
@@ -31217,7 +31222,7 @@
         }
       ],
       "price_history": [
-        45456,
+        45405,
         45517,
         52150,
         54000
@@ -40470,13 +40475,13 @@
         {
           "label": "60㎡(18평)",
           "area_m2": 60,
-          "recent_price": 83000
+          "recent_price": 80400
         }
       ],
       "price_history": [
         53241,
         55358,
-        55791,
+        55645,
         59131
       ],
       "builder": "기타",
@@ -40679,7 +40684,7 @@
       "price_history": [
         58408,
         59038,
-        55664,
+        56083,
         62218
       ],
       "builder": "기타",
@@ -40856,7 +40861,7 @@
         {
           "label": "92㎡(28평)",
           "area_m2": 92,
-          "recent_price": 96000
+          "recent_price": 100000
         },
         {
           "label": "93㎡(28평)",
@@ -40878,7 +40883,7 @@
         83299,
         80137,
         81049,
-        89458
+        84166
       ],
       "builder": "기타",
       "lat": 37.617552,
@@ -47550,7 +47555,7 @@
       "price_history": [
         57520,
         60500,
-        70000
+        71250
       ],
       "builder": "기타",
       "households": 332,
@@ -50440,7 +50445,7 @@
       "price_history": [
         107249,
         105144,
-        114344,
+        114494,
         100577
       ],
       "builder": "기타",
@@ -50536,7 +50541,7 @@
         75541,
         74970,
         74622,
-        72674
+        71083
       ],
       "builder": "두산건설",
       "households": 855,
@@ -57539,7 +57544,19 @@
         32293
       ],
       "builder": "기타",
-      "households": 1086
+      "households": 1086,
+      "lat": 36.376977,
+      "lng": 127.316442,
+      "subway": {
+        "station": "노은역 대전1호선",
+        "line": "",
+        "distance_m": 340
+      },
+      "elementary": {
+        "name": "대전지족초등학교",
+        "distance_m": 447,
+        "in_zone": false
+      }
     },
     {
       "name": "오투그란데리빙포레아파트",
@@ -57577,7 +57594,14 @@
         41250
       ],
       "builder": "기타",
-      "households": 778
+      "households": 778,
+      "lat": 36.343068,
+      "lng": 127.305005,
+      "elementary": {
+        "name": "대전계산초등학교",
+        "distance_m": 525,
+        "in_zone": false
+      }
     },
     {
       "name": "진잠타운",
@@ -57704,7 +57728,19 @@
         68864
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 36.346963,
+      "lng": 127.345861,
+      "subway": {
+        "station": "유성온천역 대전1호선",
+        "line": "",
+        "distance_m": 848
+      },
+      "elementary": {
+        "name": "대전봉명초등학교",
+        "distance_m": 363,
+        "in_zone": false
+      }
     },
     {
       "name": "나래",
@@ -57742,7 +57778,14 @@
         29376
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "lat": 36.401721,
+      "lng": 127.403248,
+      "elementary": {
+        "name": "대전전민초등학교",
+        "distance_m": 484,
+        "in_zone": false
+      }
     },
     {
       "name": "중흥호반",
@@ -58112,7 +58155,14 @@
         29891
       ],
       "builder": "기타",
-      "households": 499
+      "households": 499,
+      "lat": 35.515829,
+      "lng": 129.336056,
+      "elementary": {
+        "name": "선암초등학교",
+        "distance_m": 203,
+        "in_zone": false
+      }
     },
     {
       "name": "힐스테이트수암(1단지)",
@@ -58149,7 +58199,14 @@
         80547
       ],
       "builder": "현대건설",
-      "households": 725
+      "households": 725,
+      "lat": 35.52391,
+      "lng": 129.315195,
+      "elementary": {
+        "name": "수암초등학교",
+        "distance_m": 288,
+        "in_zone": false
+      }
     },
     {
       "name": "울산호수공원대명루첸아파트",
@@ -58172,7 +58229,14 @@
         59045
       ],
       "builder": "기타",
-      "households": 817
+      "households": 817,
+      "lat": 35.520917,
+      "lng": 129.331871,
+      "elementary": {
+        "name": "야음초등학교",
+        "distance_m": 158,
+        "in_zone": false
+      }
     },
     {
       "name": "무거위브자이",
@@ -58210,7 +58274,14 @@
         81000
       ],
       "builder": "GS건설",
-      "households": 922
+      "households": 922,
+      "lat": 35.553329,
+      "lng": 129.266329,
+      "elementary": {
+        "name": "삼호초등학교",
+        "distance_m": 133,
+        "in_zone": false
+      }
     },
     {
       "name": "아데라움",
@@ -58243,7 +58314,19 @@
         48988
       ],
       "builder": "기타",
-      "households": 994
+      "households": 994,
+      "lat": 35.54585,
+      "lng": 129.346519,
+      "subway": {
+        "station": "태화강역 동해선",
+        "line": "",
+        "distance_m": 1053
+      },
+      "elementary": {
+        "name": "백합초등학교",
+        "distance_m": 310,
+        "in_zone": false
+      }
     },
     {
       "name": "굴화주공1",
@@ -58266,7 +58349,14 @@
         22500
       ],
       "builder": "기타",
-      "households": 1046
+      "households": 1046,
+      "lat": 35.554214,
+      "lng": 129.263224,
+      "elementary": {
+        "name": "삼호초등학교",
+        "distance_m": 225,
+        "in_zone": false
+      }
     },
     {
       "name": "울산옥현1주공",
@@ -65128,7 +65218,7 @@
         46798,
         44851,
         47831,
-        50600
+        50673
       ],
       "builder": "두산건설",
       "lat": 37.239636,
@@ -87823,7 +87913,19 @@
         61944
       ],
       "builder": "포스코이앤씨",
-      "households": 650
+      "households": 650,
+      "lat": 36.392102,
+      "lng": 127.304723,
+      "subway": {
+        "station": "반석역 대전1호선",
+        "line": "",
+        "distance_m": 882
+      },
+      "elementary": {
+        "name": "외삼초등학교",
+        "distance_m": 522,
+        "in_zone": false
+      }
     },
     {
       "name": "반석마을7단지(삼부르네상스1단지)",
@@ -87851,7 +87953,19 @@
         37800
       ],
       "builder": "기타",
-      "households": 834
+      "households": 834,
+      "lat": 36.396147,
+      "lng": 127.309726,
+      "subway": {
+        "station": "반석역 대전1호선",
+        "line": "",
+        "distance_m": 617
+      },
+      "elementary": {
+        "name": "외삼초등학교",
+        "distance_m": 376,
+        "in_zone": false
+      }
     },
     {
       "name": "대전노은4지구한화꿈에그린1블록",
@@ -87879,7 +87993,19 @@
         52000
       ],
       "builder": "한화 건설부문",
-      "households": 624
+      "households": 624,
+      "lat": 36.387968,
+      "lng": 127.301484,
+      "subway": {
+        "station": "반석역 대전1호선",
+        "line": "",
+        "distance_m": 1262
+      },
+      "elementary": {
+        "name": "외삼초등학교",
+        "distance_m": 969,
+        "in_zone": false
+      }
     },
     {
       "name": "삼산선경",
@@ -87917,7 +88043,14 @@
         36635
       ],
       "builder": "기타",
-      "households": 828
+      "households": 828,
+      "lat": 35.543238,
+      "lng": 129.334372,
+      "elementary": {
+        "name": "삼신초등학교",
+        "distance_m": 445,
+        "in_zone": false
+      }
     },
     {
       "name": "달동주공1단지",
@@ -91402,7 +91535,7 @@
       "price_history": [
         30565,
         29687,
-        30681,
+        30662,
         31251
       ],
       "builder": "기타",
@@ -92339,7 +92472,14 @@
         100249
       ],
       "builder": "기타",
-      "households": 672
+      "households": 672,
+      "lat": 35.548596,
+      "lng": 129.314656,
+      "elementary": {
+        "name": "월봉초등학교",
+        "distance_m": 428,
+        "in_zone": false
+      }
     }
   ]
 }
