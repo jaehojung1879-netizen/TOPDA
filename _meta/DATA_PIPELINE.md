@@ -15,6 +15,7 @@
 | `NAVER_MAP_CLIENT_ID` / `_SECRET` | (선택) Kakao 대체 지도 | 네이버클라우드 Maps |
 | `JUSO_API_KEY` | (선택) 주소→좌표 대체 | juso.go.kr |
 | `VWORLD_KEY` | 공동주택 공시가격(시가표준액) 조회 | V-World(vworld.kr) 오픈API 신청 → **공동주택가격 속성정보(getApartHousingPriceAttr)** |
+| `VWORLD_DOMAIN` | (선택) 위 키 발급 시 등록한 도메인 | V-World는 요청의 `domain` 파라미터가 키 발급 시 등록한 도메인과 달라도 응답이 실패(502 추정)할 수 있음. 키를 `topda.kr`로 등록했다면 생략 가능(기본값). 다른 도메인(예: 개인 블로그 URL)으로 등록했다면 그 값을 넣어야 함 |
 | `SUPABASE_URL` / `SUPABASE_ANON_KEY` | 게시판 공개글 공유(모든 방문자에게 노출) | Supabase 프로젝트 — 설정은 `_meta/SUPABASE_SETUP.md` 참고 |
 
 ## 2) 실행
