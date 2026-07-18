@@ -36,6 +36,10 @@ jobs:
           TIME_BUDGET_MIN: "18"
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           VWORLD_KEY: ${{ secrets.VWORLD_KEY }}
+          # lib_pdata.py VWORLD_KEYS 별칭 목록과 맞춤 — 시크릿을 어느 이름으로 등록했든 인식되게 함
+          V_WORLD_KEY: ${{ secrets.V_WORLD_KEY }}
+          VWORLD_API_KEY: ${{ secrets.VWORLD_API_KEY }}
+          VWORLD_KR_KEY: ${{ secrets.VWORLD_KR_KEY }}
         run: python collect_official_price.py
         continue-on-error: true
 
