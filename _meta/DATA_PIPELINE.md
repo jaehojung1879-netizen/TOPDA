@@ -32,8 +32,42 @@
 | `collect_market.py` | R-ONE | `market.json`(지역별 매매·전세 지수·전세가율) |
 | `collect_news.py` | 구글 뉴스 RSS(키 불필요) | `news.json`(홈 "이번 주 핵심 이슈" + "섹터별 부동산 뉴스") |
 | `collect_bond_rate.py` | 주택도시기금 포털 페이지 파싱(키 불필요·**공식 API 아님**) | `bond_rate.json`(제1종국민주택채권 당일 고객부담률) — 등기비용·종합계산기 할인율 입력란 자동 채움 |
-| `collect_official_price.py` | Kakao(주소→PNU) + V-World(PNU→공시가격) | `official_price.json`(단지·평형별 공동주택가격/시가표준액) — 종합계산기 시가표준액 검색 위젯에서 실거래가보다 우선 표시 |
+| `collect_official_price.py` | Kakao(주소→PNU) + V-World(PNU→공시가격) | `official_price.json`(단지·평형별 공동주택가격/시가표준액) — 종합계산기 시가표준액 검색 위젯에서 실거래가보다 우선 표시. **연 1회 로컬 수동 실행**(아래 6번 참고), GitHub Actions 자동 실행은 지원 안 함 |
 | `lib_pdata.py` | 공용 유틸 | — |
+
+## 6) 공동주택 공시가격 — 왜 로컬에서만 돌리나
+
+2026-07-18 확인: V-World(`api.vworld.kr`) 호출이 **GitHub Actions의 클라우드 IP에서는 항상
+502/연결끊김으로 실패**한다. 브라우저·가정용 네트워크에서는 동일 키·`domain` 파라미터로
+정상 응답하는 것을 확인했으므로 키·코드 문제가 아니라 **V-World가 클라우드 IP 대역을
+차단**하는 것으로 판단된다. data.go.kr에도 같은 데이터(`국토교통부_공동주택가격정보`)가
+등록돼 있지만 API 유형이 `LINK`라 실제로는 vworld.kr로 리다이렉트되는 카탈로그 항목일
+뿐이라 우회가 안 된다.
+
+공동주택 공시가격은 애초에 **연 1회**(매년 1월 1일 기준, 보통 4~5월 발표)만 갱신되므로
+자동화 실익도 적다. 그래서 `refresh-official-price.yml`은 자동 스케줄 없이
+`workflow_dispatch`(수동 실행)만 남겨뒀고, 정기 갱신은 사람이 다음과 같이 로컬에서
+전량 수집 후 커밋·푸시하면 된다:
+
+```bash
+cd _meta
+KAKAO_REST_API_KEY=... VWORLD_KEY=... VWORLD_DOMAIN=topda.kr \
+  TIME_BUDGET_MIN=0 python collect_official_price.py
+```
+
+`TIME_BUDGET_MIN=0`은 "무제한"을 뜻한다(CI에서만 쓰는 18분 제한을 로컬에서는 끔) —
+이미 처리된 단지는 건너뛰므로 재실행해도 안전하다. 완료되면:
+
+```bash
+cd ..
+git add site/assets/official_price.json
+git commit -m "공동주택 공시가격 연간 갱신 ($(date +%Y-%m-%d))"
+git push
+```
+
+`VWORLD_DOMAIN`은 V-World 키 발급 시 등록한 도메인과 정확히 일치해야 한다(다르면
+`INCORRECT_KEY` 에러). 등록한 도메인을 모르면 V-World 마이페이지 → 인증키 관리에서
+확인하거나, 위 API레퍼런스 페이지의 "API결과 미리보기"로 먼저 테스트해볼 것.
 
 ## 4) R-ONE (지역 시세 대시보드)
 `collect_market.py`는 통계표를 **STATBL_ID로 호출하고 지역코드는 지정하지 않아**,

@@ -2,14 +2,21 @@ name: Refresh official price (공동주택 공시가격)
 
 # 단지 공동주택가격(시가표준액)을 점진 보강 → site/assets/official_price.json.
 # 공식 오픈API가 없어 Kakao(주소→PNU) + V-World(PNU→공시가격) 조합으로 단지당 API
-# 호출이 여러 번 걸린다. collect_households.py와 동일하게 TIME_BUDGET_MIN 안에서
-# 처리한 만큼만 저장하고 다음 실행이 이어서 채운다(전량 완료까지 여러 날 소요).
+# 호출이 여러 번 걸린다.
 #
-# refresh-listings(00:00)·refresh-news(00:10)·refresh-market(00:30)와 겹치지 않게
-# 00:40 KST에 배치해 git push 경합을 줄인다(그래도 충돌 시 git_commit_push.sh가 흡수).
+# ⚠ 2026-07-18 확인: V-World(api.vworld.kr) 호출이 GitHub Actions의 클라우드 IP에서는
+# 항상 502/연결끊김으로 실패한다(브라우저·가정용 네트워크에서는 동일 키·파라미터로
+# 정상 응답 — key/domain 문제가 아니라 IP 차단으로 판단). data.go.kr에도 같은 데이터가
+# 있지만 API 유형이 LINK라 실제로는 vworld.kr로 리다이렉트되는 카탈로그 항목일 뿐,
+# 별도 채널이 아니어서 우회가 안 된다.
+#
+# 공동주택 공시가격은 애초에 연 1회(매년 1월 1일 기준, 보통 4~5월 발표)만 갱신되는
+# 데이터라 자동화의 실익이 적다 — 그래서 매일 새벽 자동 스케줄은 빼고, 수동 실행만
+# 남겨둔다. 정기 갱신은 사람이 연 1회 로컬 네트워크(IP 차단 없음)에서
+# `TIME_BUDGET_MIN=0 python collect_official_price.py`로 전량 수집 후 결과를
+# 커밋·푸시하는 방식을 권장한다(_meta/DATA_PIPELINE.md 참고). 이 워크플로는 필요할 때
+# (예: V-World 쪽 차단이 풀렸는지 재확인) 수동으로만 돌린다.
 on:
-  schedule:
-    - cron: "40 15 * * *"   # 매일 00:40 KST
   workflow_dispatch:
     inputs:
       diag:
