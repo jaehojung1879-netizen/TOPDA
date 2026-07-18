@@ -601,7 +601,7 @@
   var regStdInput = document.getElementById('td-regStd');
   if (!searchEl) return;
 
-  var DEALS = null, OFFICIAL = null, loading = null;
+  var DEALS = null, OFFICIAL = null, loading = null, DEALS_ASOF = '';
   function ensureData() {
     if (DEALS) return Promise.resolve(DEALS);
     if (loading) return loading;
@@ -614,6 +614,7 @@
         .catch(function () { return { map: {} }; }),
     ]).then(function (res) {
       DEALS = res[0].deals || [];
+      DEALS_ASOF = res[0].as_of || '';
       OFFICIAL = (res[1].seed ? {} : res[1].map) || {};
       return DEALS;
     });
@@ -664,7 +665,8 @@
       return;
     }
     if (deals.length) {
-      html += '<div class="rs-official-head">최근 실거래가(참고용 추정)</div>' + deals.map(function (d) {
+      html += '<div class="rs-official-head">최근 실거래가(참고용 추정)' +
+        (DEALS_ASOF ? ' · 기준 ' + esc(DEALS_ASOF) : '') + '</div>' + deals.map(function (d) {
         return '<div class="rs-deal" data-price="' + d.price + '" data-area="' + d.area_m2 + '" data-pyeong="' + d.pyeong + '" data-date="' + d.date + '">' +
           '<span>' + d.area_m2 + '㎡(' + d.pyeong + '평) · ' + d.date + '</span><strong>' + won(d.price) + '</strong></div>';
       }).join('');
@@ -697,10 +699,14 @@
     }
     var deal = e.target.closest('.rs-deal');
     if (deal) {
-      regStdInput.value = Number(deal.dataset.price) * 10000;   // transactions.json 단위: 만원 → 원
+      var dealWon = Number(deal.dataset.price) * 10000;   // transactions.json 단위: 만원 → 원
+      regStdInput.value = dealWon;
       regStdInput.dispatchEvent(new Event('input', { bubbles: true }));
-      pickedEl.textContent = '선택됨: ' + curApt + ' ' + deal.dataset.area + '㎡(' + deal.dataset.pyeong + '평) · ' +
-        deal.dataset.date + ' 실거래 ' + won(Number(deal.dataset.price)) + ' → 시가표준액에 채움(실거래가 기준, 공시가격 아님)';
+      pickedEl.innerHTML = '선택됨: ' + esc(curApt) + ' ' + esc(deal.dataset.area) + '㎡(' + esc(deal.dataset.pyeong) + '평) · ' +
+        esc(deal.dataset.date) + ' 실거래 ' + won(Number(deal.dataset.price)) + ' → 시가표준액에 채움(실거래가 기준, 공시가격 아님) ' +
+        '<button type="button" class="rs-use-price" data-won="' + dealWon + '" ' +
+        'style="margin-left:6px;padding:2px 8px;font-size:0.78rem;cursor:pointer;border:1px solid var(--accent,#2563eb);' +
+        'border-radius:6px;background:transparent;color:var(--accent,#2563eb);">매매가에도 적용</button>';
       pickedEl.hidden = false;
       resultsEl.hidden = true;
       searchEl.value = curApt;
@@ -715,6 +721,44 @@
   document.addEventListener('click', function (e) {
     if (!resultsEl.contains(e.target) && e.target !== searchEl) resultsEl.hidden = true;
   });
+
+  // '매매가에도 적용' — 선택한 실거래가를 매수 시나리오의 매매가 입력란에도 넣는다.
+  //  (시가표준액만 바꾸면 매매가 기본값과 어긋난 채 계산되는 걸 사용자가 놓치기 쉬움)
+  pickedEl.addEventListener('click', function (e) {
+    var btn = e.target.closest('.rs-use-price');
+    if (!btn) return;
+    var priceInput = document.getElementById('td-price');
+    if (!priceInput) return;
+    priceInput.value = Number(btn.dataset.won);
+    priceInput.dispatchEvent(new Event('input', { bubbles: true }));
+    btn.textContent = '매매가 적용됨 ✓';
+    btn.disabled = true;
+  });
+
+  // URL 파라미터 프리필 — 실거래가 페이지 등 데이터 화면에서 '이 가격으로 계산' 동선용.
+  //  ?price=매매가(원) & std=시가표준액(원) & apt=단지명 (모두 선택). 값은 숫자만 채택.
+  try {
+    var qs = new URLSearchParams(location.search);
+    var qPrice = Number(String(qs.get('price') || '').replace(/[^0-9]/g, ''));
+    var qStd = Number(String(qs.get('std') || '').replace(/[^0-9]/g, ''));
+    var qApt = (qs.get('apt') || '').trim();
+    if (qPrice > 0) {
+      var priceEl = document.getElementById('td-price');
+      if (priceEl) { priceEl.value = qPrice; priceEl.dispatchEvent(new Event('input', { bubbles: true })); }
+    }
+    if (qStd > 0) {
+      regStdInput.value = qStd;
+      regStdInput.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    if (qApt) {
+      searchEl.value = qApt;
+      if (qPrice > 0) {
+        pickedEl.textContent = qApt + ' 실거래가 ' + won(qPrice / 10000) + '를 매매가에 채웠습니다. ' +
+          '시가표준액은 비워두면 매매가 × 70%로 추정합니다.';
+        pickedEl.hidden = false;
+      }
+    }
+  } catch (e) {}
 
   // 국민주택채권 당일 할인율 자동 반영 — 수집 실패/미설정(seed) 시 기존 기본값(15%) 유지.
   // 자동 반영이 성공하면 입력란 아래에 반영 날짜를 표시해 '값이 실제로 갱신됐음'을 눈에 보이게 한다
