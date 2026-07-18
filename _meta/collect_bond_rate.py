@@ -69,42 +69,125 @@ def strip_tags(html):
     return re.sub(r"\s+", " ", text)
 
 
-def extract_rate_from_table(html):
+def _build_grid(html, max_col=20):
+    """<table> HTML → colspan·rowspan을 실제 렌더링 열 위치대로 반영한 2차원 셀 그리드.
+
+    2026-07-18 첫 실행에서 '고객부담률' 열 대신 '수익률' 열 값(3.8546% — 당시 국고채
+    3년물 수익률 3.758%와 사실상 동일)을 잘못 집어왔다. 원인으로 가장 유력한 것은
+    은행 표에 흔한 '회차'처럼 rowspan으로 헤더 두 행을 가로지르는 선행 열 — 이 열이
+    두 번째(실제 라벨) 헤더 행에는 안 나타나므로, 그 행만 보고 계산한 열 인덱스가
+    데이터 행보다 1칸씩 왼쪽으로 밀린다. colspan만 펼치고 rowspan을 무시하면 이 밀림을
+    못 잡으므로, 위에서 걸쳐온 rowspan 셀을 이번 행의 실제 칸에 그대로 끌어와 채운
+    뒤에 이번 행 고유 셀을 이어 붙인다 — 브라우저가 표를 그리는 방식과 동일하게."""
+    rows_out = []
+    pending = {}   # col_index -> [남은 행 수, 텍스트] — 위 행에서 rowspan으로 걸쳐온 셀
+    for tr in re.finditer(r"<tr[^>]*>([\s\S]*?)</tr>", html, re.I):
+        cells = []
+        for cm in re.finditer(r"<t([hd])([^>]*)>([\s\S]*?)</t[hd]>", tr.group(1), re.I):
+            attrs, inner = cm.group(2), cm.group(3)
+            text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", inner)).strip()
+            cs = re.search(r'colspan\s*=\s*["\']?(\d+)', attrs, re.I)
+            rs = re.search(r'rowspan\s*=\s*["\']?(\d+)', attrs, re.I)
+            cells.append({"text": text, "colspan": int(cs.group(1)) if cs else 1,
+                          "rowspan": int(rs.group(1)) if rs else 1})
+        if not cells and not pending:
+            continue
+        row, col, new_pending = [], 0, {}
+        it = iter(cells)
+        cur = next(it, None)
+        while col < max_col:
+            if col in pending:
+                remaining, text = pending[col]
+                row.append(text)
+                if remaining > 1:
+                    new_pending[col] = (remaining - 1, text)
+                col += 1
+                continue
+            if cur is None:
+                break
+            for k in range(cur["colspan"]):
+                if col + k >= max_col:
+                    break
+                row.append(cur["text"])
+                if cur["rowspan"] > 1:
+                    new_pending[col + k] = (cur["rowspan"] - 1, cur["text"])
+            col += cur["colspan"]
+            cur = next(it, None)
+        for k, v in pending.items():   # 이번 행 폭 밖에 남은 이전 rowspan은 다음 행으로 이월
+            if k not in new_pending and k >= col:
+                new_pending[k] = v
+        pending = new_pending
+        while row and row[-1] == "":
+            row.pop()
+        if row:
+            rows_out.append(row)
+    return rows_out
+
+
+def extract_rate_from_table(html, diag=None):
     """은행 조회 페이지의 표 구조 대응 — 헤더행의 '고객부담률/할인율' 열 위치를 찾고,
     다음 데이터행의 같은 위치 셀에서 숫자를 취한다. (헤더와 값이 떨어져 있어
-    근접 정규식으로는 매도단가·수익률 등 다른 열 숫자와 구분할 수 없기 때문.)"""
-    rows = []
-    for tr in re.finditer(r"<tr[^>]*>([\s\S]*?)</tr>", html, re.I):
-        cells = [re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", c)).strip()
-                 for c in re.findall(r"<t[hd][^>]*>([\s\S]*?)</t[hd]>", tr.group(1), re.I)]
-        if cells:
-            rows.append(cells)
+    근접 정규식으로는 매도단가·수익률 등 다른 열 숫자와 구분할 수 없기 때문.)
+
+    diag: dict를 넘기면 matched_header_row·matched_value_row를 채운다 — 성공 시에도
+    '어느 행에서 어떻게 골랐는지'를 로그로 남겨, 혹시 또 열이 밀려도 다음엔 웹서치 없이
+    로그만 보고 바로 고칠 수 있게 한다(2026-07-18 사고: 표 열 정렬 오류로 '수익률' 값을
+    '고객부담률'로 잘못 기록했으나 성공 로그가 없어 원인 파악에 외부 검색이 필요했음)."""
+    rows = _build_grid(html)
+
+    def value_at(ci, row):
+        if re.search(r"\d{4}\s*[.\-/년]\s*\d{1,2}", row[ci]):
+            return None   # 날짜 셀("2026.07.18"·"2026년 7월") — 중간 숫자 오탐 방지
+        m = re.search(r"(?<!\d)(\d{1,2}\.\d{1,4})(?!\d)\s*%?", row[ci])
+        return float(m.group(1)) if m else None
+
     for ri, row in enumerate(rows):
         for ci, cell in enumerate(row):
             if not any(kw in cell for kw in ("고객부담률", "할인율", "본인부담률")):
                 continue
-            # 같은 행의 다음 셀(라벨-값 가로 배치) → 다음 행들의 같은 열(헤더-데이터 세로 배치) 순으로 탐색
-            candidates = row[ci + 1:ci + 2]
+            # 좌우 이웃 칸과 텍스트가 완전히 같으면 이 칸은 colspan으로 펼쳐진 '그룹
+            # 헤더'(예: "매도단가/수익률/할인율" 제목행)의 일부다 — 실제 열별 라벨이
+            # 아니므로 건너뛰고 그 아래(진짜 개별 열 라벨) 행에서 다시 찾게 한다.
+            if (ci > 0 and row[ci - 1] == cell) or (ci + 1 < len(row) and row[ci + 1] == cell):
+                continue
+            # 같은 헤더 행에 '수익률' 열이 따로 있으면 그 열 인덱스를 기억해 뒀다가,
+            # 우리가 고른 값이 그 열 값과 같으면(=colspan 등으로 열이 밀려 같은 값을
+            # 집었다는 뜻) 오탐으로 보고 버린다.
+            yield_ci = next((j for j, c in enumerate(row) if "수익률" in c and j != ci), None)
+            candidates = [ci + 1] if ci + 1 < len(row) else []
             for below in rows[ri + 1:ri + 4]:
                 if ci < len(below):
-                    candidates.append(below[ci])
+                    candidates.append(("below", below, ci))
             for cand in candidates:
-                if re.search(r"\d{4}\s*[.\-/년]\s*\d{1,2}", cand):
-                    continue   # 날짜 셀("2026.07.18"·"2026년 7월") — 중간 숫자 오탐 방지
-                m = re.search(r"(?<!\d)(\d{1,2}\.\d{1,4})(?!\d)\s*%?", cand)
-                if m:
-                    return float(m.group(1))
+                if isinstance(cand, tuple):
+                    _, below_row, idx = cand
+                    val = value_at(idx, below_row)
+                    yield_val = value_at(yield_ci, below_row) if yield_ci is not None and yield_ci < len(below_row) else None
+                else:
+                    val = value_at(cand, row)
+                    yield_val = value_at(yield_ci, row) if yield_ci is not None else None
+                if val is None:
+                    continue
+                if yield_val is not None and abs(val - yield_val) < 1e-6:
+                    continue   # 수익률 열과 값이 같음 = 열 정렬 오류로 판단, 다음 후보 계속
+                if diag is not None:
+                    diag["matched_header_row"] = row
+                    diag["matched_value_row"] = below_row if isinstance(cand, tuple) else row
+                    diag["matched_col"] = idx if isinstance(cand, tuple) else cand
+                return val
     return None
 
 
-def extract_rate(html):
-    rate = extract_rate_from_table(html)
+def extract_rate(html, diag=None):
+    rate = extract_rate_from_table(html, diag=diag)
     if rate is not None:
         return rate
     text = strip_tags(html)
     for pat in PATTERNS:
         m = re.search(pat, text)
         if m:
+            if diag is not None:
+                diag["matched_via"] = "fallback_proximity_regex"
             return float(m.group(1))
     return None
 
@@ -121,14 +204,15 @@ def excerpt_around_keywords(html, keywords=("부담", "할인"), width=120):
 
 
 def main():
-    rate, used = None, None
+    rate, used, diag = None, None, {}
     for label, url in SOURCES:
         try:
             html = fetch(url)
         except Exception as e:  # noqa: BLE001
             print(f"[bond_rate] {label} 조회 실패: {e}", file=sys.stderr)
             continue
-        rate = extract_rate(html)
+        diag = {}
+        rate = extract_rate(html, diag=diag)
         if rate is not None:
             used = label
             break
@@ -149,6 +233,12 @@ def main():
     }
     save_json_safe(OUT, data)
     print(f"[bond_rate] 고객부담률 {rate}% ({used}, {data['as_of']})")
+    if diag.get("matched_via") == "fallback_proximity_regex":
+        print("[bond_rate] 표 구조 파서 실패 — 근접 정규식 폴백으로 값을 얻음(열 정렬 오류 위험 있음, 검토 권장)",
+              file=sys.stderr)
+    elif diag.get("matched_header_row") is not None:
+        print(f"[bond_rate] 매치 근거 — 헤더행: {diag['matched_header_row']} · "
+              f"값행: {diag['matched_value_row']} · 열idx: {diag['matched_col']}")
 
 
 if __name__ == "__main__":
