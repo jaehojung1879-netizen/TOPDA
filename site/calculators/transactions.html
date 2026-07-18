@@ -212,6 +212,7 @@
     </div>
     <div class="tx-modal-body">
       <div class="tx-modal-meta" id="txModalMeta"></div>
+      <p class="tx-modal-calc" id="txModalCalc" style="margin:10px 0 0;"></p>
       <div class="tx-modal-chart">
         <h3>최근 실거래가 추이</h3>
         <div class="tx-area-chips" id="txAreaChips" role="tablist" aria-label="평형 선택"></div>
@@ -402,6 +403,16 @@
     document.getElementById('txModalMeta').innerHTML = meta.map(function (m) {
       return '<div class="item"><div class="lbl">' + escapeHtml(m.lbl) + '</div><div class="val">' + escapeHtml(m.val) + '</div></div>';
     }).join('');
+
+    // 실거래 데이터 → 계산기 동선: 최근 실거래가를 매매가로 넘겨 취득세·등기비용·중개수수료까지
+    // 한 번에 계산하게 한다. (단지를 보다가 "이 가격이면 총비용이 얼마지?"로 자연스럽게 이어지는 흐름)
+    var calcUrl = 'total-cost-dashboard.html?price=' + (last.price * 10000) +
+      '&apt=' + encodeURIComponent(aptName);
+    document.getElementById('txModalCalc').innerHTML =
+      '<a href="' + calcUrl + '" style="display:inline-block;padding:8px 14px;border-radius:8px;font-weight:600;' +
+      'background:var(--accent,#2563eb);color:#fff;text-decoration:none;font-size:0.9rem;">' +
+      '최근 실거래 ' + won(last.price) + '으로 총 매수비용 계산 →</a> ' +
+      '<span style="color:var(--text-muted);font-size:0.8rem;">취득세 · 등기 · 중개수수료 · 대출한도까지 한 번에</span>';
 
     // 추이 차트 — 평형(전용면적)별로 나눠 본다. 59㎡와 114㎡를 한 평균선에 섞으면 오해되므로
     // 평형 밴드별 월평균 라인을 따로 그리고, 칩으로 특정 평형만 보거나 전체를 비교한다.
