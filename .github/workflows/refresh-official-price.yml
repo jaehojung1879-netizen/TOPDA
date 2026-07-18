@@ -49,6 +49,9 @@ jobs:
           V_WORLD_KEY: ${{ secrets.V_WORLD_KEY }}
           VWORLD_API_KEY: ${{ secrets.VWORLD_API_KEY }}
           VWORLD_KR_KEY: ${{ secrets.VWORLD_KR_KEY }}
+          # V-World 인증키 발급 시 등록한 도메인 — 요청 domain 파라미터가 이와 일치해야
+          # API가 응답한다(불일치/누락 시 502로 추정). 시크릿 미설정 시 사이트 실도메인 사용.
+          VWORLD_DOMAIN: ${{ secrets.VWORLD_DOMAIN || 'topda.kr' }}
           OFFICIAL_PRICE_DIAG: ${{ inputs.diag && '1' || '' }}
           OFFICIAL_PRICE_LIMIT: ${{ inputs.limit || '0' }}
         run: python collect_official_price.py

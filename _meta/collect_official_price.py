@@ -30,7 +30,7 @@ def area_band(m2):
     return round(m2)
 
 
-def fetch_one(region, name, vworld_key, diag=None):
+def fetch_one(region, name, vworld_key, diag=None, vworld_domain=None):
     """단지 하나 → (pnu, [{area_m2, official_price, stdr_year}, ...]) 또는 (None, [])."""
     query = f"{region} {name}"
     try:
@@ -47,7 +47,7 @@ def fetch_one(region, name, vworld_key, diag=None):
     pnu = L.address_to_pnu(addr_text)
     if not pnu:
         return None, []
-    records = L.get_apart_official_price(pnu, vworld_key, diag=diag)
+    records = L.get_apart_official_price(pnu, vworld_key, diag=diag, domain=vworld_domain)
     units = []
     for r in records:
         try:
@@ -83,6 +83,11 @@ def main():
     if not kakao_key or not vworld_key:
         print("KAKAO_REST_API_KEY/VWORLD_KEY 중 하나가 없음 — 공시가격 보강 건너뜀", file=sys.stderr)
         return
+    # V-World는 인증키 발급 시 등록한 도메인이 요청 domain 파라미터와 일치해야 정상 응답한다
+    # (문서: "인증키 URL(인증받은 도메인)이 없으면 API가 작동하지 않습니다"). 2026-07-18
+    # https 전환 후에도 전 요청이 502였던 것은 이 도메인 검증 때문일 가능성이 커, 등록한
+    # 도메인을 VWORLD_DOMAIN으로 넘길 수 있게 한다. 미설정 시 사이트 실제 도메인으로 폴백.
+    vworld_domain = os.environ.get("VWORLD_DOMAIN", "").strip() or "topda.kr"
     apts_doc = L.load_json(APARTMENTS_JSON, default={"apartments": []})
     apts = apts_doc.get("apartments") or []
     if not apts:
@@ -119,7 +124,7 @@ def main():
             continue
         processed += 1
         diag = {}
-        pnu, units = fetch_one(a.get("region", ""), a.get("name", ""), vworld_key, diag=diag)
+        pnu, units = fetch_one(a.get("region", ""), a.get("name", ""), vworld_key, diag=diag, vworld_domain=vworld_domain)
         if not pnu:
             stat["no_pnu"] += 1
             continue

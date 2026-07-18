@@ -221,7 +221,7 @@ def address_to_pnu(address_text):
         return None
 
 
-def get_apart_official_price(pnu, api_key, dong_nm=None, ho_nm=None, timeout=15, diag=None):
+def get_apart_official_price(pnu, api_key, dong_nm=None, ho_nm=None, timeout=15, diag=None, domain=None):
     """PNU(19자리) → 공동주택가격(시가표준액) 레코드 목록.
     V-World 'ned/data' 공동주택가격 속성정보 서비스(getApartHousingPriceAttr) 호출.
     dong_nm·ho_nm을 생략하면 그 PNU(단지)의 전 동·호 레코드가 반환된다.
@@ -229,17 +229,23 @@ def get_apart_official_price(pnu, api_key, dong_nm=None, ho_nm=None, timeout=15,
     임의의 엘리먼트를 레코드로 취급한다(래핑 태그 이름 변화에 강함).
     실패·빈 응답 시 빈 리스트.
 
+    domain: V-World 인증키 발급 시 등록한 도메인. V-World WMS/WFS·배경지도 API 문서에
+    공통으로 "인증키 URL(인증받은 도메인)이 없으면 API가 작동하지 않습니다"라고 명시돼
+    있다 — ned/data도 같은 인증 체계를 쓸 가능성이 높다. https 전환(2026-07-18) 후에도
+    전 요청이 502/연결끊김으로 실패한 것은 http 여부가 아니라 이 domain 파라미터 누락이
+    원인일 가능성. 값이 없으면 파라미터를 생략(기존 동작 유지, 등록 안 한 키일 수도 있음).
+
     diag: dict를 넘기면 진단 정보를 채운다 — {reason, sample}. reason은
     'request_error'|'parse_error'|'no_records'|'ok', sample은 응답 본문 앞부분(키 노출 없음).
     V-World가 인증오류·서비스 오류를 200 OK + 에러 XML/JSON로 돌려주는 일이 많아,
     '가격없음'만으로는 원인을 알 수 없으므로 호출부에서 sample을 로그로 남기게 한다."""
     params = {"key": api_key, "pnu": pnu, "format": "xml", "numOfRows": 1000, "pageNo": 1}
+    if domain:
+        params["domain"] = domain
     if dong_nm:
         params["dongNm"] = dong_nm
     if ho_nm:
         params["hoNm"] = ho_nm
-    # 반드시 https — http://api.vworld.kr 게이트웨이는 502/연결끊김을 반환한다(2026-07-18
-    # CI 진단으로 확인). 과거 문서 예시가 http라 http로 두면 전 단지 '가격없음'이 된다.
     url = "https://api.vworld.kr/ned/data/getApartHousingPriceAttr?" + urllib.parse.urlencode(params)
 
     def _mask(s):
@@ -247,7 +253,8 @@ def get_apart_official_price(pnu, api_key, dong_nm=None, ho_nm=None, timeout=15,
         return str(s).replace(api_key, "***") if api_key else str(s)
 
     try:
-        text = _request(url, timeout=timeout)
+        req_headers = {"Referer": f"https://{domain}/"} if domain else None
+        text = _request(url, headers=req_headers, timeout=timeout)
     except Exception as e:  # noqa: BLE001
         if diag is not None:
             diag["reason"] = "request_error"
