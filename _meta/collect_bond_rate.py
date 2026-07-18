@@ -17,9 +17,16 @@
 폴백으로 둔다. 은행 페이지는 EUC-KR 인코딩·비브라우저 UA 차단 가능성이 있어 자체
 fetch(UA 지정 + cp949 폴백)를 쓴다.
 
+⚠ 과거엔 표 구조 파서가 실패하면 '키워드 인근 숫자'를 그냥 집는 근접 정규식으로
+폴백했는데, 2026-07-18에 이 폴백이 두 번이나 같은 의심스러운 값(3.8546%, 실제
+고객부담률과 무관해 보이는 수치)을 만들어냈다 — 표 어디서 온 숫자인지 모르니
+틀려도 알 방법이 없었다. 그래서 폴백을 완전히 제거했다: 구조화 파서(표에서 열
+위치를 찾아 값을 취하는 방식)만 신뢰하고, 실패하면 그냥 실패로 처리해 기존 값을
+유지한다. '틀린 값'보다 '갱신 안 됨'이 안전하다는 원칙.
+
 모든 소스가 실패하면 기존 값을 그대로 유지하고(save_json_safe), 소스별 실패
 사유와 '부담/할인' 키워드 주변 텍스트를 stderr에 남긴다 — Actions 로그의
-"[bond_rate]" 라인만 보면 다음에 어떤 소스/정규식을 고치면 되는지 알 수 있게.
+"[bond_rate]" 라인만 보면 다음에 표 구조 파서를 어떻게 고쳐야 할지 알 수 있게.
 """
 import datetime as dt
 import os
@@ -45,17 +52,6 @@ SOURCES = [
     ("주택도시기금", "https://nhuf.molit.go.kr/FP/FP07/FP0705/FP070503.jsp"),
     ("KB 1종채권 매도단가/할인율", "https://okbfex.kbstar.com/quics?page=C028010"),
 ]
-
-# "고객부담률"·"할인율" 인근에서 "12.34%" 형태를 찾는다. 태그 차이에 덜 민감하도록
-# HTML 태그를 제거한 텍스트에서 찾는다. 매도단가(원)로 부담률을 역산하는 방법은
-# 선급이자·세금 보정이 빠져 은행 공표치와 어긋날 수 있어 쓰지 않는다 — 명시적
-# 부담률/할인율 숫자만 채택.
-PATTERNS = [
-    r"고객부담률[^0-9%]{0,40}(\d{1,2}\.\d{1,6})\s*%",
-    r"할인율[^0-9%]{0,40}(\d{1,2}\.\d{1,6})\s*%",
-    r"본인부담률[^0-9%]{0,40}(\d{1,2}\.\d{1,6})\s*%",
-]
-
 
 def fetch(url, timeout=15):
     """UA를 브라우저로 지정해 GET. UTF-8 → CP949(EUC-KR) 순으로 디코딩 시도.
@@ -218,17 +214,13 @@ def extract_rate_from_table(html, diag=None):
 
 
 def extract_rate(html, diag=None):
-    rate = extract_rate_from_table(html, diag=diag)
-    if rate is not None:
-        return rate
-    text = strip_tags(html)
-    for pat in PATTERNS:
-        m = re.search(pat, text)
-        if m:
-            if diag is not None:
-                diag["matched_via"] = "fallback_proximity_regex"
-            return float(m.group(1))
-    return None
+    """구조화된 표 파서(extract_rate_from_table)만 신뢰한다 — 과거에 썼던 '키워드
+    인근 숫자'식 근접 정규식 폴백은 2026-07-18에 두 번이나 같은 의심스러운 값
+    (3.8546%)을 만들어냈다. 표 어디에서 왔는지 알 수 없는 숫자를 그냥 채택하는
+    방식이라, 페이지에 있는 무관한 숫자(다른 채권 시리즈·안내문 등)를 잘못 집어도
+    구분할 방법이 없었다. 값을 못 찾으면 '틀린 값을 넣는 것'보다 '기존 값을
+    유지하는 것'이 안전하므로, 구조 파서가 실패하면 그냥 실패로 처리한다."""
+    return extract_rate_from_table(html, diag=diag)
 
 
 def excerpt_around_keywords(html, keywords=("부담", "할인"), width=120):
@@ -275,10 +267,7 @@ def main():
     }
     save_json_safe(OUT, data)
     print(f"[bond_rate] 고객부담률 {rate}% ({used}, {data['as_of']})")
-    if diag.get("matched_via") == "fallback_proximity_regex":
-        print("[bond_rate] 표 구조 파서 실패 — 근접 정규식 폴백으로 값을 얻음(열 정렬 오류 위험 있음, 검토 권장)",
-              file=sys.stderr)
-    elif diag.get("matched_header_row") is not None:
+    if diag.get("matched_header_row") is not None:
         print(f"[bond_rate] 매치 근거 — 헤더행: {diag['matched_header_row']} · "
               f"값행: {diag['matched_value_row']} · 열idx: {diag['matched_col']}")
 
