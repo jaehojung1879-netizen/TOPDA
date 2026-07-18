@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 """제1종국민주택채권 당일 할인율(고객부담률) → site/assets/bond_rate.json.
 
-⚠ 공식 오픈API가 없다. 은행·주택도시기금 포털 모두 사람이 보는 조회 페이지(HTML)만
-제공해, 이 수집기는 그 페이지를 파싱하는 방식이다.
+⚠ 공식 오픈API가 없다. 정부(주택도시기금)·은행 포털 모두 사람이 보는 조회
+페이지(HTML)만 제공해, 이 수집기는 그 페이지를 파싱하는 방식이다.
 
-소스는 여러 곳을 순서대로 시도한다 — 주택도시기금 포털은 조회 화면이 JS 위젯이라
-정적 파싱이 닿지 않는 것으로 확인돼(2026-07-17 첫 실행), 당일 수치를 정적 HTML로
-노출하는 은행 조회 페이지(우리은행·KB)를 먼저 시도한다. 은행 페이지는 EUC-KR
+2026-07-17 첫 실행에서 주택도시기금 포털(FP070509.jsp)이 실제 조회 화면이 아니라
+'청약/채권' 메뉴 목록만 반환해 JS 위젯으로 오판, 은행 페이지(우리은행·KB)를 대신
+1순위로 썼다. 이후 사용자가 실제 화면 캡처로 정확한 페이지(FP070503.jsp — '채권매도
+단가/수익률/할인율 조회', 정적 HTML로 표가 그대로 뜸)를 확인해줘 정부 원천을 다시
+1순위로 되돌렸다. 국민주택채권 할인율은 은행마다 다른 값이 아니라 한국거래소 신고
+시장단가 기반의 전국 공통 기준값이라 은행 페이지도 같은 숫자를 보여주지만, 출처
+표기는 정부 원천이 정확하므로 은행 페이지는 폴백으로만 남긴다. 은행 페이지는 EUC-KR
 인코딩·비브라우저 UA 차단 가능성이 있어 자체 fetch(UA 지정 + cp949 폴백)를 쓴다.
 
 모든 소스가 실패하면 기존 값을 그대로 유지하고(save_json_safe), 소스별 실패
@@ -26,14 +30,14 @@ OUT = os.path.join(SITE_ASSETS, "bond_rate.json")
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
 
-# 시도 순서: 정적 HTML로 당일 수치를 노출할 가능성이 높은 순.
-#  · 우리은행 매도단가/수익률/할인율 조회 — 당일 표가 기본 표시되는 고전형 페이지
-#  · KB 매도단가/할인율 조회(quics)
-#  · 주택도시기금 포털 메뉴(기존 소스 — JS 위젯이라 실패 예상이지만 구조 변경 대비 유지)
+# 시도 순서: 정부 원천(주택도시기금)을 1순위로, 은행 페이지는 폴백으로.
+#  · 주택도시기금 — 채권매도단가/수익률/할인율 조회(FP070503.jsp, 사용자 화면 캡처로
+#    실제 주소 확인함. FP070509는 메뉴 페이지라 표가 없으니 절대 혼동하지 말 것)
+#  · 우리은행·KB — 정부 사이트가 구조 변경 등으로 실패할 때 폴백(같은 전국 공통 값)
 SOURCES = [
+    ("주택도시기금", "https://nhuf.molit.go.kr/FP/FP07/FP0705/FP070503.jsp"),
     ("우리은행 1종채권 매도단가/할인율", "https://svc.wooribank.com/svc/Dream?withyou=HBNHB0036"),
     ("KB 1종채권 매도단가/할인율", "https://okbfex.kbstar.com/quics?page=C028010"),
-    ("주택도시기금 포털", "https://nhuf.molit.go.kr/FP/FP07/FP0705/FP070509.jsp"),
 ]
 
 # "고객부담률"·"할인율" 인근에서 "12.34%" 형태를 찾는다. 태그 차이에 덜 민감하도록
@@ -41,9 +45,9 @@ SOURCES = [
 # 선급이자·세금 보정이 빠져 은행 공표치와 어긋날 수 있어 쓰지 않는다 — 명시적
 # 부담률/할인율 숫자만 채택.
 PATTERNS = [
-    r"고객부담률[^0-9%]{0,40}(\d{1,2}\.\d{1,4})\s*%",
-    r"할인율[^0-9%]{0,40}(\d{1,2}\.\d{1,4})\s*%",
-    r"본인부담률[^0-9%]{0,40}(\d{1,2}\.\d{1,4})\s*%",
+    r"고객부담률[^0-9%]{0,40}(\d{1,2}\.\d{1,6})\s*%",
+    r"할인율[^0-9%]{0,40}(\d{1,2}\.\d{1,6})\s*%",
+    r"본인부담률[^0-9%]{0,40}(\d{1,2}\.\d{1,6})\s*%",
 ]
 
 
@@ -124,21 +128,41 @@ def _build_grid(html, max_col=20):
     return rows_out
 
 
+def _row_date(row):
+    """행의 셀 중 'YYYY.MM.DD'류 날짜가 있으면 ISO(YYYY-MM-DD)로, 없으면 None.
+    은행 조회 표의 '기준일' 열 값을 실제 as_of로 쓰기 위함(수집 시각의 '오늘'이
+    아니라 표가 실제로 보여주는 마지막 영업일 기준이 더 정확하다)."""
+    for cell in row:
+        m = re.search(r"(\d{4})[.\-/](\d{1,2})[.\-/](\d{1,2})", cell)
+        if m:
+            return f"{int(m.group(1)):04d}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+    return None
+
+
 def extract_rate_from_table(html, diag=None):
     """은행 조회 페이지의 표 구조 대응 — 헤더행의 '고객부담률/할인율' 열 위치를 찾고,
-    다음 데이터행의 같은 위치 셀에서 숫자를 취한다. (헤더와 값이 떨어져 있어
-    근접 정규식으로는 매도단가·수익률 등 다른 열 숫자와 구분할 수 없기 때문.)
+    그 아래 데이터행들에서 값을 취한다. (헤더와 값이 떨어져 있어 근접 정규식으로는
+    매도단가·수익률 등 다른 열 숫자와 구분할 수 없기 때문.)
 
-    diag: dict를 넘기면 matched_header_row·matched_value_row를 채운다 — 성공 시에도
-    '어느 행에서 어떻게 골랐는지'를 로그로 남겨, 혹시 또 열이 밀려도 다음엔 웹서치 없이
-    로그만 보고 바로 고칠 수 있게 한다(2026-07-18 사고: 표 열 정렬 오류로 '수익률' 값을
-    '고객부담률'로 잘못 기록했으나 성공 로그가 없어 원인 파악에 외부 검색이 필요했음)."""
+    실제 페이지(우리은행 매도단가/수익률/할인율 조회, 2026-07-18 캡처로 확인)는
+    '기준일·매도단가·수익률·할인율' 4열 표에 조회월의 여러 영업일이 날짜 오름차순
+    (7/1 → 7/2 → … → 최신)으로 나열된다. 헤더 바로 다음 행만 보면 그 달의 '가장
+    오래된' 날짜를 집게 되므로 — 헤더 아래 유효한 값을 가진 모든 행을 훑어 그중
+    '마지막'(가장 최근 날짜) 값을 채택한다.
+
+    diag: dict를 넘기면 matched_header_row·matched_value_row·matched_date를 채운다 —
+    성공 시에도 '어느 행에서 어떻게 골랐는지'를 로그로 남겨, 혹시 또 잘못돼도 다음엔
+    웹서치 없이 로그만 보고 바로 고칠 수 있게 한다(2026-07-18 사고 — 표 열 정렬 오류로
+    '수익률' 값을 '고객부담률'로 잘못 기록했으나 성공 로그가 없어 원인 파악에 외부
+    검색이 필요했음)."""
     rows = _build_grid(html)
 
     def value_at(ci, row):
+        if ci >= len(row):
+            return None
         if re.search(r"\d{4}\s*[.\-/년]\s*\d{1,2}", row[ci]):
             return None   # 날짜 셀("2026.07.18"·"2026년 7월") — 중간 숫자 오탐 방지
-        m = re.search(r"(?<!\d)(\d{1,2}\.\d{1,4})(?!\d)\s*%?", row[ci])
+        m = re.search(r"(?<!\d)(\d{1,2}\.\d{1,6})(?!\d)\s*%?", row[ci])
         return float(m.group(1)) if m else None
 
     for ri, row in enumerate(rows):
@@ -151,30 +175,39 @@ def extract_rate_from_table(html, diag=None):
             if (ci > 0 and row[ci - 1] == cell) or (ci + 1 < len(row) and row[ci + 1] == cell):
                 continue
             # 같은 헤더 행에 '수익률' 열이 따로 있으면 그 열 인덱스를 기억해 뒀다가,
-            # 우리가 고른 값이 그 열 값과 같으면(=colspan 등으로 열이 밀려 같은 값을
-            # 집었다는 뜻) 오탐으로 보고 버린다.
+            # 우리가 고른 값이 그 열 값과 같으면(=열이 밀려 같은 값을 집었다는 뜻)
+            # 오탐으로 보고 그 행만 건너뛴다.
             yield_ci = next((j for j, c in enumerate(row) if "수익률" in c and j != ci), None)
-            candidates = [ci + 1] if ci + 1 < len(row) else []
-            for below in rows[ri + 1:ri + 4]:
-                if ci < len(below):
-                    candidates.append(("below", below, ci))
-            for cand in candidates:
-                if isinstance(cand, tuple):
-                    _, below_row, idx = cand
-                    val = value_at(idx, below_row)
-                    yield_val = value_at(yield_ci, below_row) if yield_ci is not None and yield_ci < len(below_row) else None
-                else:
-                    val = value_at(cand, row)
-                    yield_val = value_at(yield_ci, row) if yield_ci is not None else None
+
+            # 라벨-값 가로 배치(예: <th>할인율</th><td>13.95%</td>) — 같은 행 다음 칸.
+            same_row_val = value_at(ci + 1, row)
+            if same_row_val is not None:
+                yield_val = value_at(yield_ci, row) if yield_ci is not None else None
+                if not (yield_val is not None and abs(same_row_val - yield_val) < 1e-6):
+                    if diag is not None:
+                        diag["matched_header_row"] = row
+                        diag["matched_value_row"] = row
+                        diag["matched_col"] = ci + 1
+                    return same_row_val
+
+            # 헤더-데이터 세로 배치 — 헤더 아래 모든 행 중 유효한 값을 가진 '마지막'
+            # 행(최신 날짜)을 채택. 오탐(수익률과 값 동일) 행은 건너뛰되 탐색은 계속한다.
+            last_val, last_row = None, None
+            for below in rows[ri + 1:]:
+                val = value_at(ci, below)
                 if val is None:
                     continue
+                yield_val = value_at(yield_ci, below) if yield_ci is not None else None
                 if yield_val is not None and abs(val - yield_val) < 1e-6:
-                    continue   # 수익률 열과 값이 같음 = 열 정렬 오류로 판단, 다음 후보 계속
+                    continue
+                last_val, last_row = val, below
+            if last_val is not None:
                 if diag is not None:
                     diag["matched_header_row"] = row
-                    diag["matched_value_row"] = below_row if isinstance(cand, tuple) else row
-                    diag["matched_col"] = idx if isinstance(cand, tuple) else cand
-                return val
+                    diag["matched_value_row"] = last_row
+                    diag["matched_col"] = ci
+                    diag["matched_date"] = _row_date(last_row)
+                return last_val
     return None
 
 
@@ -225,10 +258,13 @@ def main():
     if not (0 < rate < 50):   # 상식적 범위를 벗어나면 오탐 가능성 — 저장하지 않음
         print(f"[bond_rate] 파싱값이 비정상 범위({rate}%) — 저장하지 않음", file=sys.stderr)
         return
+    # 표에 찍힌 실제 기준일(예: 조회월의 마지막 영업일)을 as_of로 쓴다 — 수집 시각의
+    # '오늘'은 은행이 아직 그날 값을 안 올렸을 수 있어 부정확할 수 있음.
+    as_of = diag.get("matched_date") or dt.date.today().isoformat()
     data = {
         "_meta": {"source": f"{used} 조회 페이지 파싱 — 제1종국민주택채권 고객부담률(할인율)",
                   "note": "공식 오픈API가 없어 조회 페이지를 파싱함. 실패 시 기존 값 유지."},
-        "as_of": dt.date.today().isoformat(),
+        "as_of": as_of,
         "customer_burden_rate_pct": rate,
     }
     save_json_safe(OUT, data)
