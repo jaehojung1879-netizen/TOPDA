@@ -189,6 +189,7 @@
         <div class="input-suffix" data-suffix="%">
           <input id="rc-discount" name="discount" type="number" min="0" max="30" step="0.1" value="15"/>
         </div>
+        <span class="hint" id="rc-discount-note" hidden></span>
       </div>
 
       <div class="field">
@@ -366,7 +367,8 @@
   $('rc-form').addEventListener('change', recalc);
   recalc();
 
-  // 국민주택채권 당일 할인율 자동 반영 — 수집 실패/미설정 시 기존 기본값(15%) 그대로 유지.
+  // 국민주택채권 당일 할인율 자동 반영 — 수집 실패/미설정(seed) 시 기존 기본값(15%) 유지.
+  // 성공 시 입력란 아래에 반영 날짜를 표시해 자동 갱신이 실제로 됐음을 눈에 보이게 한다.
   var discountTouched = false;
   $('rc-discount').addEventListener('input', function () { discountTouched = true; });
   fetch('../assets/bond_rate.json?t=' + Date.now(), { cache: 'no-store' })
@@ -375,6 +377,12 @@
       if (!j || j.seed || discountTouched || !j.customer_burden_rate_pct) return;
       $('rc-discount').value = j.customer_burden_rate_pct;
       recalc();
+      var note = $('rc-discount-note');
+      if (note) {
+        note.textContent = '오늘 자동 반영됨: ' + j.customer_burden_rate_pct + '%' +
+          (j.as_of ? ' (' + j.as_of + ' 기준)' : '');
+        note.hidden = false;
+      }
     })
     .catch(function () {});
 })();

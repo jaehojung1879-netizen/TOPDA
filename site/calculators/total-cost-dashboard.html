@@ -248,24 +248,25 @@
         </div>
 
         <h3 class="scn-section-title">등기·법무사</h3>
-        <div class="field" data-house-only>
-          <label for="td-regStdSearch">단지 검색으로 채우기 (선택)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="단지명을 검색하면 공식 공시가격(수집된 단지에 한함)과 최근 실거래가 목록이 함께 뜹니다. 공시가격이 있으면 그 값을, 없으면 실거래가(참고용 추정)를 골라 아래 시가표준액 칸에 채울 수 있습니다. 공시가격은 아직 일부 단지만 수집돼 있으며, 정확한 값은 부동산공시가격알리미에서도 확인 가능합니다.">?</span></label>
-          <input id="td-regStdSearch" type="search" placeholder="단지명을 입력하세요 (예: 헬리오시티)" autocomplete="off" />
-          <div class="regstd-results" id="regStdResults" hidden></div>
-          <p class="regstd-picked" id="regStdPicked" hidden></p>
-        </div>
         <div class="field">
           <label for="td-regStd">시가표준액 (채권 매입 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택채권 매입액은 매매가가 아니라 시가표준액(공동주택가격·개별주택가격·토지 공시지가)을 기준으로 합니다. 비워두면 매매가의 70%로 추정합니다. 정확한 값은 부동산공시가격알리미·위택스에서 조회하세요.">?</span></label>
           <div class="input-suffix" data-suffix="원">
             <input id="td-regStd" name="regStd" type="text" inputmode="numeric" data-format="won" value="" />
           </div>
-          <span class="hint">모르면 비워두세요 → 매매가 × 70%로 추정. 위에서 단지를 검색해 채우면 최근 실거래가가 그대로 들어갑니다(공시가격과는 다를 수 있음).</span>
+          <span class="hint">모르면 비워두세요 → 매매가 × 70%로 추정. 값을 모르면 아래 <strong>단지 검색</strong>으로 공시가격·실거래가를 불러와 채울 수 있습니다.</span>
+        </div>
+        <div class="field" data-house-only>
+          <label for="td-regStdSearch">단지 검색으로 시가표준액 채우기 (선택)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="단지명을 검색하면 공식 공시가격(수집된 단지에 한함)과 최근 실거래가 목록이 함께 뜹니다. 공시가격이 있으면 그 값을, 없으면 실거래가(참고용 추정)를 골라 위 시가표준액 칸에 채울 수 있습니다. 공시가격은 아직 일부 단지만 수집돼 있으며, 정확한 값은 부동산공시가격알리미에서도 확인 가능합니다.">?</span></label>
+          <input id="td-regStdSearch" type="search" placeholder="단지명을 입력하세요 (예: 헬리오시티)" autocomplete="off" />
+          <div class="regstd-results" id="regStdResults" hidden></div>
+          <p class="regstd-picked" id="regStdPicked" hidden></p>
         </div>
         <div class="field">
           <label for="td-regDiscount">국민주택채권 할인율<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="채권을 즉시 매도(할인)할 때 본인이 부담하는 손실률(고객부담률)입니다. 시장금리에 따라 매일 바뀌며 최근 15% 안팎입니다. 당일 정확한 값은 은행 국민주택채권 포털에서 확인하세요.">?</span></label>
           <div class="input-suffix" data-suffix="%">
             <input id="td-regDiscount" name="regDiscount" type="number" min="0" max="30" step="0.1" value="15" />
           </div>
+          <span class="hint" id="td-regDiscount-note" hidden></span>
         </div>
         <div class="field">
           <label class="check-item" style="padding: 0; cursor: pointer;">
@@ -715,8 +716,11 @@
     if (!resultsEl.contains(e.target) && e.target !== searchEl) resultsEl.hidden = true;
   });
 
-  // 국민주택채권 당일 할인율 자동 반영 — 수집 실패/미설정 시 기존 기본값(15%) 그대로 유지.
+  // 국민주택채권 당일 할인율 자동 반영 — 수집 실패/미설정(seed) 시 기존 기본값(15%) 유지.
+  // 자동 반영이 성공하면 입력란 아래에 반영 날짜를 표시해 '값이 실제로 갱신됐음'을 눈에 보이게 한다
+  //  (표시가 없으면 자동 반영이 됐는지 사용자가 알 수 없어 "안 되는 것 같다"는 오해가 생김).
   var discountInput = document.getElementById('td-regDiscount');
+  var discountNote = document.getElementById('td-regDiscount-note');
   var discountTouched = false;
   if (discountInput) {
     discountInput.addEventListener('input', function () { discountTouched = true; });
@@ -726,6 +730,11 @@
         if (!j || j.seed || discountTouched || !j.customer_burden_rate_pct) return;
         discountInput.value = j.customer_burden_rate_pct;
         discountInput.dispatchEvent(new Event('input', { bubbles: true }));
+        if (discountNote) {
+          discountNote.textContent = '오늘 자동 반영됨: ' + j.customer_burden_rate_pct + '%' +
+            (j.as_of ? ' (' + j.as_of + ' 기준)' : '');
+          discountNote.hidden = false;
+        }
       })
       .catch(function () {});
   }
