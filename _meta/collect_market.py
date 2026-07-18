@@ -17,6 +17,7 @@ import hashlib
 import os
 import re
 import sys
+import time
 
 import lib_pdata as L
 
@@ -125,37 +126,63 @@ def _row_get(r, key_sub):
     return ""
 
 
+_all_tables_cache = None   # 프로세스 내 캐시 — 이 파일 안에서 discover_statbl이 3회 불려도
+                            # 전체 목록 페이지네이션은 1회만 (R-ONE 부하·타임아웃 위험 절감)
+
+
+def _list_all_tables(api_key, retries=2):
+    """R-ONE 통계표 전체 목록 [(ID, 이름)]. 일시적 타임아웃에 대비해 짧게 재시도한다
+    (2026-07-17 확인: 이 호출이 타임아웃해 상업용 임대 통계표 자동발견이 매번 실패했음)."""
+    global _all_tables_cache
+    if _all_tables_cache is not None:
+        return _all_tables_cache
+    last_err = None
+    for attempt in range(retries):
+        try:
+            out = []
+            page = 1
+            while page <= 30:
+                j = L.get_json(RONE_TBL_LIST, {"KEY": api_key, "Type": "json", "pIndex": page, "pSize": 1000})
+                code, msg = rone_result(j)
+                if code and not code.upper().startswith("INFO-0"):
+                    raise RuntimeError(f"[{code}] {msg}")
+                rows = []
+                for block in (j.get("SttsApiTbl") or j.get("SttsApiTblData") or []):
+                    if isinstance(block, dict) and block.get("row"):
+                        rows = block["row"]
+                if not rows:
+                    break
+                for r in rows:
+                    name = _row_get(r, "STATBL_NM") or _row_get(r, "TBL_NM") or _row_get(r, "NM")
+                    sid = _row_get(r, "STATBL_ID")
+                    if sid and name:
+                        out.append((sid, name))
+                if len(rows) < 1000:
+                    break
+                page += 1
+            _all_tables_cache = out
+            return out
+        except Exception as e:  # noqa: BLE001
+            last_err = e
+            if attempt + 1 < retries:
+                time.sleep(2)
+    raise last_err
+
+
 def discover_statbl(api_key, keywords, exclude=()):
     """통계표 목록에서 이름에 keywords가 모두 포함된 표들의 (ID, 이름) 목록. 목록 API 불가 시 None."""
     try:
-        found = []
-        page = 1
-        while page <= 30:
-            j = L.get_json(RONE_TBL_LIST, {"KEY": api_key, "Type": "json", "pIndex": page, "pSize": 1000})
-            code, msg = rone_result(j)
-            if code and not code.upper().startswith("INFO-0"):
-                raise RuntimeError(f"[{code}] {msg}")
-            rows = []
-            for block in (j.get("SttsApiTbl") or j.get("SttsApiTblData") or []):
-                if isinstance(block, dict) and block.get("row"):
-                    rows = block["row"]
-            if not rows:
-                break
-            for r in rows:
-                name = _row_get(r, "STATBL_NM") or _row_get(r, "TBL_NM") or _row_get(r, "NM")
-                sid = _row_get(r, "STATBL_ID")
-                # 공백 제거 후 비교 — "전세가격 비율"/"매매가격대비 전세가격비율" 등 띄어쓰기 변형 흡수
-                flat = name.replace(" ", "")
-                if sid and name and all(k.replace(" ", "") in flat for k in keywords) \
-                        and not any(x in flat for x in exclude):
-                    found.append((sid, name))
-            if len(rows) < 1000:
-                break
-            page += 1
-        return found
+        all_tables = _list_all_tables(api_key)
     except Exception as e:  # noqa: BLE001 — 목록 API 없음/오류 → 후보 탐색 폴백
         print(f"  · 통계표 목록 조회 불가({e}) — 후보 ID 탐색으로 폴백", file=sys.stderr)
         return None
+    found = []
+    for sid, name in all_tables:
+        # 공백 제거 후 비교 — "전세가격 비율"/"매매가격대비 전세가격비율" 등 띄어쓰기 변형 흡수
+        flat = name.replace(" ", "")
+        if all(k.replace(" ", "") in flat for k in keywords) and not any(x in flat for x in exclude):
+            found.append((sid, name))
+    return found
 
 
 def probe_index_candidates(api_key, end, sale_data, skip_ids):
