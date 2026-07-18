@@ -30,7 +30,7 @@ def area_band(m2):
     return round(m2)
 
 
-def fetch_one(region, name, vworld_key):
+def fetch_one(region, name, vworld_key, diag=None):
     """단지 하나 → (pnu, [{area_m2, official_price, stdr_year}, ...]) 또는 (None, [])."""
     query = f"{region} {name}"
     try:
@@ -47,7 +47,7 @@ def fetch_one(region, name, vworld_key):
     pnu = L.address_to_pnu(addr_text)
     if not pnu:
         return None, []
-    records = L.get_apart_official_price(pnu, vworld_key)
+    records = L.get_apart_official_price(pnu, vworld_key, diag=diag)
     units = []
     for r in records:
         try:
@@ -93,26 +93,47 @@ def main():
     out_map = existing.get("map") or {}
 
     deadline = L.deadline_from_env(default_min=18)
+    # 진단 모드: OFFICIAL_PRICE_DIAG=1 이면 캐시 무시하고 소수 단지만 호출 후 V-World 응답
+    #  본문을 그대로 로그로 남긴다(수동 dispatch로 빠르게 원인 확인용). OFFICIAL_PRICE_LIMIT로
+    #  처리 단지 수 제한. 진단 모드에서는 out_map을 저장하지 않는다(원인 파악만).
+    diag_mode = os.environ.get("OFFICIAL_PRICE_DIAG", "").strip() in ("1", "true", "yes")
+    limit = int(os.environ.get("OFFICIAL_PRICE_LIMIT", "0") or 0)
 
     stat = {"filled": 0, "skipped_cached": 0, "no_pnu": 0, "no_price": 0}
+    processed = 0
+    vworld_logged = 0   # V-World 응답 샘플은 처음 몇 건만 로그(로그 폭주 방지)
     for a in apts:
-        if L.out_of_time(deadline, margin_sec=15):
+        if not diag_mode and L.out_of_time(deadline, margin_sec=15):
             print(f"시간 예산 소진 — 남은 단지는 다음 실행에서 이어서 보강 (누적 {stat['filled']}건)")
             break
+        if limit and processed >= limit:
+            break
         key = f"{a.get('region_key', '')}|{a.get('name', '')}"
-        if key in out_map:
+        if key in out_map and not diag_mode:
             stat["skipped_cached"] += 1
             continue
-        pnu, units = fetch_one(a.get("region", ""), a.get("name", ""), vworld_key)
+        processed += 1
+        diag = {}
+        pnu, units = fetch_one(a.get("region", ""), a.get("name", ""), vworld_key, diag=diag)
         if not pnu:
             stat["no_pnu"] += 1
             continue
+        # V-World가 '가격없음'을 줄 때 실제 응답 본문을 남겨 인증오류/구조변경/빈결과를 구분한다.
+        if diag.get("reason") and diag["reason"] != "ok" and vworld_logged < 3:
+            print(f"[vworld] {a.get('name','')} pnu={pnu} reason={diag['reason']} "
+                  f"sample={diag.get('sample','')!r}", file=sys.stderr)
+            vworld_logged += 1
         summary = summarize(units)
         if not summary:
             stat["no_price"] += 1
             continue
         out_map[key] = {"pnu": pnu, "units": summary}
         stat["filled"] += 1
+
+    if diag_mode:
+        print(f"[진단] 처리 {processed}건 · 신규 {stat['filled']} · PNU실패 {stat['no_pnu']} · "
+              f"가격없음 {stat['no_price']} — 저장 생략(진단 모드)")
+        return
 
     print(f"공시가격 보강 — 신규 {stat['filled']}건 · 캐시생략 {stat['skipped_cached']}건 · "
           f"PNU실패 {stat['no_pnu']}건 · 가격없음 {stat['no_price']}건 · 누적 {len(out_map)}개 단지")

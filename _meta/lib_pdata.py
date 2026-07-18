@@ -221,13 +221,18 @@ def address_to_pnu(address_text):
         return None
 
 
-def get_apart_official_price(pnu, api_key, dong_nm=None, ho_nm=None, timeout=15):
+def get_apart_official_price(pnu, api_key, dong_nm=None, ho_nm=None, timeout=15, diag=None):
     """PNU(19자리) → 공동주택가격(시가표준액) 레코드 목록.
     V-World 'ned/data' 공동주택가격 속성정보 서비스(getApartHousingPriceAttr) 호출.
     dong_nm·ho_nm을 생략하면 그 PNU(단지)의 전 동·호 레코드가 반환된다.
     응답 XML의 정확한 감싸는 태그명이 문서에 없어, 'pblntfPc'(공시가격) 자식을 가진
     임의의 엘리먼트를 레코드로 취급한다(래핑 태그 이름 변화에 강함).
-    실패·빈 응답 시 빈 리스트."""
+    실패·빈 응답 시 빈 리스트.
+
+    diag: dict를 넘기면 진단 정보를 채운다 — {reason, sample}. reason은
+    'request_error'|'parse_error'|'no_records'|'ok', sample은 응답 본문 앞부분(키 노출 없음).
+    V-World가 인증오류·서비스 오류를 200 OK + 에러 XML/JSON로 돌려주는 일이 많아,
+    '가격없음'만으로는 원인을 알 수 없으므로 호출부에서 sample을 로그로 남기게 한다."""
     params = {"key": api_key, "pnu": pnu, "format": "xml", "numOfRows": 1000, "pageNo": 1}
     if dong_nm:
         params["dongNm"] = dong_nm
@@ -236,13 +241,27 @@ def get_apart_official_price(pnu, api_key, dong_nm=None, ho_nm=None, timeout=15)
     url = "http://api.vworld.kr/ned/data/getApartHousingPriceAttr?" + urllib.parse.urlencode(params)
     try:
         text = _request(url, timeout=timeout)
+    except Exception as e:  # noqa: BLE001
+        if diag is not None:
+            diag["reason"] = "request_error"
+            diag["sample"] = str(e)[:400]
+        return []
+    try:
         root = ET.fromstring(text)
-    except Exception:
+    except Exception as e:  # noqa: BLE001
+        if diag is not None:
+            diag["reason"] = "parse_error"
+            diag["sample"] = (str(e)[:120] + " | 본문: " + (text or "")[:400])
         return []
     records = []
     for el in root.iter():
         if el.find("pblntfPc") is not None:
             records.append({child.tag: (child.text or "").strip() for child in el})
+    if diag is not None:
+        diag["reason"] = "ok" if records else "no_records"
+        if not records:
+            # 공시가격 레코드가 없을 때 응답 본문을 남긴다 — 인증오류/빈결과/구조변경 구분용.
+            diag["sample"] = (text or "")[:400]
     return records
 
 
