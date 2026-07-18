@@ -2467,6 +2467,17 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 .tip:hover::before, .tip:focus::before, .tip.open::before { opacity: 1; visibility: visible; }
 @media (max-width: 600px) { .tip::after { max-width: 190px; } }
 
+/* ===== 외부 조회 바로가기 아이콘 (↗) — .tip과 같은 크기지만 실제 링크 ===== */
+.tip-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; margin-left: 5px; vertical-align: middle;
+  border-radius: 50%; background: var(--surface-2); color: var(--text-muted);
+  font-size: 0.68rem; font-weight: 800; cursor: pointer; position: relative;
+  border: 1px solid var(--border-strong); flex-shrink: 0;
+  text-decoration: none; line-height: 1;
+}
+.tip-link:hover, .tip-link:focus { background: var(--accent); color: #fff; border-color: var(--accent); outline: none; }
+
 /* ===== 계산기 결과 공유 / 인쇄 툴바 ===== */
 .calc-share {
   display: flex;
