@@ -49,7 +49,15 @@
   "publisher": {
     "@id": "https://topda.kr/#organization"
   },
-  "inLanguage": "ko"
+  "inLanguage": "ko",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://topda.kr/find.html?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
 }
 </script>
 </head>

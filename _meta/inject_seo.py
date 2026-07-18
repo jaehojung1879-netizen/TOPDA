@@ -118,6 +118,15 @@ def build_org_website(is_en):
             "url": BASE + "/",
             "publisher": {"@id": BASE + "/#organization"},
             "inLanguage": "en" if is_en else "ko",
+            # sitelinks 검색창(SearchAction). KR 홈은 /find.html?q=, EN도 동일 검색 UI 사용.
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": BASE + "/find.html?q={search_term_string}",
+                },
+                "query-input": "required name=search_term_string",
+            },
         },
     ]
 
