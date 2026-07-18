@@ -108,7 +108,8 @@ def _list_all_tables(api_key):
     return M._list_all_tables(api_key)
 
 
-MAX_PROBE = 4   # 후보당 실호출 검증 상한(호출량 절제 — 이름만으론 실제 데이터 유무를 알 수 없다)
+MAX_PROBE = 10   # 후보당 실호출 검증 상한(2026-07-18: 4로는 부족 — office/rent 등 10건
+                 # 후보 전부가 앞 4개에서 [INFO-200] 데이터없음으로 소진돼 자동발견 실패)
 
 
 def discover_tables(api_key, probe_start, probe_end):
@@ -117,7 +118,13 @@ def discover_tables(api_key, probe_start, probe_end):
     이름으로만 고르면 동명 이표(같은 조사의 개편 전/후 ID 등) 중 '이름은 최신인데
     실제로는 빈 표'를 채택할 수 있다(2026-07-16 확인: [INFO-200] 해당 데이터 없음 —
     후보 10개 중 데이터가 실제로 채워진 표가 다른 ID였음). 후보를 우선순위대로
-    최근 분기 1회 조회해 데이터가 실제로 나오는 첫 표를 채택한다."""
+    최근 분기 1회 조회해 데이터가 실제로 나오는 첫 표를 채택한다.
+
+    잡 전체 시간예산(refresh-market.yml timeout-minutes: 15, market 스텝이 먼저
+    2분가량 사용)을 넘기지 않도록 자체 마감을 둔다 — 후보 하나가 네트워크 재시도로
+    최대 66초까지 걸릴 수 있어(2026-07-18 로그: 'Remote end closed connection' 재시도로
+    38초 지연 관측) 무제한 순회는 위험하다."""
+    deadline = L.deadline_from_env(default_min=8)
     try:
         all_tables = _list_all_tables(api_key)
     except Exception as e:  # noqa: BLE001
@@ -126,6 +133,9 @@ def discover_tables(api_key, probe_start, probe_end):
     tables = {}
     for tkey, tkw in TYPE_KW.items():
         for metric, mkw in METRIC_KW.items():
+            if L.out_of_time(deadline, margin_sec=20):
+                print(f"[자동발견] 시간예산 초과 — {tkey}/{metric} 이후 탐색 중단", file=sys.stderr)
+                return tables or None
             hits = []
             for sid, name in all_tables:
                 flat = name.replace(" ", "")
@@ -142,6 +152,9 @@ def discover_tables(api_key, probe_start, probe_end):
             hits.sort()   # 현재 진행형(0) 우선
             picked = None
             for _, sid, name in hits[:MAX_PROBE]:
+                if L.out_of_time(deadline, margin_sec=20):
+                    print(f"  · {tkey}/{metric} 탐색 — 시간예산 초과로 후보 순회 중단", file=sys.stderr)
+                    break
                 try:
                     data = fetch_quarter(sid, probe_start, probe_end, api_key)
                 except Exception as e:  # noqa: BLE001
@@ -157,7 +170,10 @@ def discover_tables(api_key, probe_start, probe_end):
                 extra = f" (검증 통과, 후보 {len(hits)}건 중)" if len(hits) > 1 else ""
                 print(f"[자동발견] {tkey}/{metric}: {sid} ({name}){extra}")
             elif hits:
-                print(f"[자동발견] {tkey}/{metric}: 후보 {len(hits)}건 모두 데이터 없음", file=sys.stderr)
+                probed = min(len(hits), MAX_PROBE)
+                note = "" if probed >= len(hits) else f" (미탐색 {len(hits) - probed}건 남음)"
+                print(f"[자동발견] {tkey}/{metric}: 검증한 후보 {probed}/{len(hits)}건 모두 데이터 없음{note}",
+                      file=sys.stderr)
             else:
                 print(f"[자동발견] {tkey}/{metric}: 매칭 없음", file=sys.stderr)
     return tables or None
