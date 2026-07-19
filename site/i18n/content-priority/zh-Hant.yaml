@@ -1,0 +1,25 @@
+lang: zh-Hant
+profile: "대만·홍콩·해외 화교. 대만 국적자 매입 수요 상당, 홍콩·화교권은 자산 다변화 목적. 고가·중가 매물 병기."
+sections:
+  guides:
+    - { id: buy-process, rank: 1 }
+    - { id: acquisition-tax-guide, rank: 2 }
+    - { id: double-taxation, rank: 3 }           # 대만·홍콩 대비 한국 세제 차이 요약
+    - { id: foreigner-acq-report, rank: 4 }
+    - { id: fund-transfer, rank: 5 }
+    - { id: docs-before-buy, rank: 6 }
+    - { id: registry-reading, rank: 7 }
+    - { id: foreigner-regulation, rank: 8 }
+    - { id: lease-protection, rank: 9 }
+  calculators:
+    - { id: acquisition-tax, rank: 1 }
+    - { id: transfer-tax, rank: 2 }
+    - { id: brokerage-fee, rank: 3 }
+    - { id: balance-settlement, rank: 4 }
+    - { id: jeonse-monthly, rank: 5 }
+    - { id: loan-limit, rank: 6, hidden: true }
+    - { id: housing-subscription, rank: 7, hidden: true }
+  checklists:
+    - { id: sale-balance-day, rank: 1 }
+    - { id: lease-contract, rank: 2 }
+    - { id: moving-day, rank: 3 }

@@ -1,0 +1,24 @@
+lang: th
+profile: "체류 인구 4위. 근로자·단기체류 비중 높음. 임대차 중심 + 단기 계약·보증금 분쟁 유의."
+sections:
+  guides:
+    - { id: lease-protection, rank: 1 }
+    - { id: short-term-lease, rank: 2 }          # 단기 계약 유의사항
+    - { id: deposit-return, rank: 3 }            # 보증금 관련 분쟁 대응
+    - { id: standard-lease, rank: 4 }
+    - { id: jeonse-scam, rank: 5 }
+    - { id: jeonse-101, rank: 6 }
+    - { id: registry-reading, rank: 7 }
+    - { id: buy-process, rank: 8 }
+  calculators:
+    - { id: jeonse-monthly, rank: 1 }
+    - { id: brokerage-fee, rank: 2 }
+    - { id: balance-settlement, rank: 3 }
+    - { id: acquisition-tax, rank: 4 }
+    - { id: loan-limit, rank: 5, hidden: true }
+    - { id: transfer-tax, rank: 6, hidden: true }
+    - { id: housing-subscription, rank: 7, hidden: true }
+  checklists:
+    - { id: lease-contract, rank: 1 }
+    - { id: moving-day, rank: 2 }
+    - { id: sale-balance-day, rank: 3, hidden: true }
