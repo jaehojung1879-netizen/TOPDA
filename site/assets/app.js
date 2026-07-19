@@ -150,6 +150,32 @@
   });
 })();
 
+// ===== Foreigner loan advisory (대출 계산기 안내 배지) =====
+// 외국인은 대출·보증 이용에 제약이 크다. 대출 관련 계산기 상단에 안내 배너를 주입한다.
+// 계산 로직은 건드리지 않으며(제약 준수), 안내/링크만 추가한다.
+(function () {
+  const LOAN_PAGES = ['loan-limit', 'dsr', 'loan-compare', 'rti-calculator'];
+  const path = location.pathname;
+  if (!LOAN_PAGES.some((p) => path.indexOf('/calculators/' + p) !== -1)) return;
+  const main = document.querySelector('main');
+  if (!main || main.querySelector('.foreigner-loan-advisory')) return;
+  const en = document.documentElement.lang !== 'ko';
+  // foreigner-loan 안내 페이지 상대경로 계산
+  const loanHref = path.indexOf('/en/') !== -1 ? '../foreigner-loan.html' : '/en/foreigner-loan.html';
+  const box = document.createElement('div');
+  box.className = 'callout callout-warn foreigner-loan-advisory';
+  box.setAttribute('role', 'note');
+  box.innerHTML =
+    '<div class="icon">!</div><div class="body">' +
+    (en
+      ? '<strong>Foreigners: loan access is restricted</strong> Eligibility for mortgages, Jeonse loans, and guarantees depends on visa type, residence registration, and income proof. Policy loans and housing-subscription are generally restricted. This tool computes the same figures regardless of nationality — confirm what you can actually use in the <a href="' + loanHref + '">foreigner loan guide</a>.'
+      : '<strong>외국인 안내</strong> 외국인은 주택담보·전세자금 대출과 보증 상품 이용에 제약이 있습니다. 비자·거소증·소득증빙에 따라 취급 여부가 달라지며, 정책대출·청약은 일반적으로 제한됩니다. 계산 결과는 국적과 무관하게 동일하니, 실제 이용 가능 여부는 <a href="' + loanHref + '">외국인 대출 안내</a>에서 확인하세요.') +
+    '</div>';
+  const firstSection = main.querySelector('.article-header, section, .container, .container-narrow');
+  if (firstSection && firstSection.parentElement === main) main.insertBefore(box, firstSection.nextSibling);
+  else main.insertBefore(box, main.firstChild);
+})();
+
 // ===== Formatting =====
 const isEn = document.documentElement.lang === 'en';
 const fmt = {
