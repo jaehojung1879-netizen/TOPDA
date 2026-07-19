@@ -1,0 +1,77 @@
+{
+  "_comment": "다국어 부동산 용어집(6개 언어). 기존 en/glossary.html 을 데이터화·확장한 소스. method=처리 방식(직역/음역+설명/현지 유사개념 차용/코드 유지/약어 유지). pending=true 는 zh/vi/th 등에서 표준·법률 용어 확정을 못 해 원어민·법률 검수가 필요한 항목(리포트에 별도 명시).",
+  "updated": "2026-07-19",
+  "languages": ["ko", "en", "zh-Hans", "zh-Hant", "vi", "th"],
+  "categories": [
+    {
+      "id": "visa",
+      "label": { "ko": "비자·체류", "en": "Visa & residence" },
+      "terms": [
+        { "id": "f2", "ko": "F-2 (거주)", "method": "코드 유지", "en": "F-2 (long-term residence visa)", "zh-Hans": "F-2（居住签证）", "zh-Hant": "F-2（居留簽證）", "vi": "F-2 (thị thực cư trú dài hạn)", "th": "F-2 (วีซ่าพำนักระยะยาว)" },
+        { "id": "f4", "ko": "F-4 (재외동포)", "method": "직역", "en": "F-4 (overseas Korean)", "zh-Hans": "F-4（在外同胞）", "zh-Hant": "F-4（在外同胞）", "vi": "F-4 (người gốc Hàn ở nước ngoài)", "th": "F-4 (ชาวเกาหลีโพ้นทะเล)" },
+        { "id": "f5", "ko": "F-5 (영주)", "method": "직역", "en": "F-5 (permanent residence)", "zh-Hans": "F-5（永住）", "zh-Hant": "F-5（永久居留）", "vi": "F-5 (thường trú)", "th": "F-5 (ถิ่นที่อยู่ถาวร)" },
+        { "id": "f6", "ko": "F-6 (결혼이민)", "method": "직역", "en": "F-6 (marriage migrant)", "zh-Hans": "F-6（婚姻移民）", "zh-Hant": "F-6（婚姻移民）", "vi": "F-6 (kết hôn di trú)", "th": "F-6 (ผู้ย้ายถิ่นจากการสมรส)" },
+        { "id": "e7", "ko": "E-7 (특정활동)", "method": "직역", "en": "E-7 (specialty employment)", "zh-Hans": "E-7（特定活动就业）", "zh-Hant": "E-7（特定活動就業）", "vi": "E-7 (lao động chuyên môn)", "th": "E-7 (การจ้างงานเฉพาะทาง)" },
+        { "id": "e9", "ko": "E-9 (비전문취업)", "method": "직역", "en": "E-9 (non-professional employment)", "zh-Hans": "E-9（非专业就业）", "zh-Hant": "E-9（非專業就業）", "vi": "E-9 (lao động phổ thông)", "th": "E-9 (แรงงานทั่วไป)" },
+        { "id": "d2", "ko": "D-2 (유학)", "method": "직역", "en": "D-2 (student)", "zh-Hans": "D-2（留学）", "zh-Hant": "D-2（留學）", "vi": "D-2 (du học)", "th": "D-2 (นักศึกษา)" },
+        { "id": "geoso", "ko": "거소증 (국내거소신고증)", "method": "음역+설명", "en": "Domestic residence report card (for overseas Koreans/foreign nationals)", "zh-Hans": "国内居所申报证", "zh-Hant": "國內居所申報證", "vi": "Thẻ khai báo nơi cư trú trong nước", "th": "บัตรแจ้งถิ่นพำนักในประเทศ", "pending": true },
+        { "id": "arc", "ko": "외국인등록증", "method": "직역", "en": "Alien registration card (ARC)", "zh-Hans": "外国人登录证", "zh-Hant": "外國人登錄證", "vi": "Thẻ đăng ký người nước ngoài", "th": "บัตรลงทะเบียนคนต่างชาติ" }
+      ]
+    },
+    {
+      "id": "lease",
+      "label": { "ko": "임대차", "en": "Leasing" },
+      "terms": [
+        { "id": "jeonse", "ko": "전세", "romanization": "Jeonse", "method": "음역+설명", "en": "Jeonse — lump-sum deposit lease (no monthly rent)", "zh-Hans": "全租房（Jeonse，一次性大额押金租赁，无月租）", "zh-Hant": "全租房（Jeonse，一次性大額押金租賃，無月租）", "vi": "Jeonse — thuê nhà bằng tiền đặt cọc lớn một lần (không trả tiền hằng tháng)", "th": "Jeonse — เช่าบ้านด้วยเงินมัดจำก้อนใหญ่ครั้งเดียว (ไม่มีค่าเช่ารายเดือน)" },
+        { "id": "wolse", "ko": "월세", "romanization": "Wolse", "method": "직역", "en": "Wolse — monthly rent (+ smaller deposit)", "zh-Hans": "月租", "zh-Hant": "月租", "vi": "Wolse — tiền thuê hằng tháng (kèm cọc nhỏ hơn)", "th": "Wolse — ค่าเช่ารายเดือน (พร้อมเงินมัดจำที่น้อยกว่า)" },
+        { "id": "banjeonse", "ko": "반전세", "romanization": "Ban-jeonse", "method": "음역+설명", "en": "Semi-Jeonse — mid-size deposit + reduced monthly rent", "zh-Hans": "半全租（较大押金＋较低月租）", "zh-Hant": "半全租（較大押金＋較低月租）", "vi": "Ban-jeonse — cọc vừa + tiền thuê hằng tháng thấp", "th": "Ban-jeonse — เงินมัดจำปานกลาง + ค่าเช่ารายเดือนที่ลดลง" },
+        { "id": "bojeunggeum", "ko": "보증금", "method": "직역", "en": "Deposit (returned at lease end)", "zh-Hans": "押金／保证金", "zh-Hant": "押金／保證金", "vi": "Tiền đặt cọc", "th": "เงินมัดจำ／เงินประกัน" },
+        { "id": "gwanlibi", "ko": "관리비", "method": "직역", "en": "Maintenance / management fee", "zh-Hans": "管理费", "zh-Hant": "管理費", "vi": "Phí quản lý", "th": "ค่าส่วนกลาง／ค่าบริหารจัดการ" },
+        { "id": "jeonipsingo", "ko": "전입신고", "method": "직역", "en": "Move-in (resident) registration", "zh-Hans": "迁入申报（居民登记）", "zh-Hant": "遷入申報（居民登記）", "vi": "Khai báo chuyển đến (đăng ký cư trú)", "th": "การแจ้งย้ายเข้า (ลงทะเบียนผู้พำนัก)" },
+        { "id": "hwakjeongilja", "ko": "확정일자", "method": "직역", "en": "Fixed date stamp (on the lease)", "zh-Hans": "确定日期（合同盖章日）", "zh-Hant": "確定日期（合約蓋章日）", "vi": "Ngày xác định (đóng dấu lên hợp đồng)", "th": "วันที่กำหนดแน่นอน (ตราประทับบนสัญญา)", "pending": true },
+        { "id": "daehangnyeok", "ko": "대항력", "method": "현지 유사개념 차용", "en": "Opposing power — right to assert the lease against a new owner", "zh-Hans": "对抗力（可向新业主主张租约的权利）", "zh-Hant": "對抗力（可向新業主主張租約的權利）", "vi": "Quyền đối kháng — quyền viện dẫn hợp đồng thuê với chủ mới", "th": "สิทธิยันบุคคลภายนอก — สิทธิอ้างสัญญาเช่าต่อเจ้าของใหม่", "pending": true },
+        { "id": "useonbyeonje", "ko": "우선변제권", "method": "현지 유사개념 차용", "en": "Priority repayment right — recover deposit ahead of later creditors", "zh-Hans": "优先受偿权（先于后位债权人取回押金）", "zh-Hant": "優先受償權（先於後位債權人取回押金）", "vi": "Quyền ưu tiên hoàn trả — nhận lại cọc trước các chủ nợ sau", "th": "สิทธิได้รับชำระคืนก่อน — ได้เงินมัดจำคืนก่อนเจ้าหนี้รายหลัง", "pending": true },
+        { "id": "imdaechaboho", "ko": "주택임대차보호법", "method": "직역", "en": "Housing Lease Protection Act", "zh-Hans": "住宅租赁保护法", "zh-Hant": "住宅租賃保護法", "vi": "Luật Bảo vệ Thuê nhà ở", "th": "พระราชบัญญัติคุ้มครองการเช่าที่อยู่อาศัย", "pending": true },
+        { "id": "jeonsesagi", "ko": "전세사기", "method": "직역", "en": "Jeonse fraud", "zh-Hans": "全租诈骗", "zh-Hant": "全租詐騙", "vi": "Lừa đảo Jeonse", "th": "การฉ้อโกง Jeonse" }
+      ]
+    },
+    {
+      "id": "sale",
+      "label": { "ko": "매매·소유", "en": "Buying & ownership" },
+      "terms": [
+        { "id": "deunggibu", "ko": "등기부등본", "method": "직역", "en": "Certified copy of the property register", "zh-Hans": "不动产登记簿誊本", "zh-Hant": "不動產登記簿謄本", "vi": "Bản sao sổ đăng ký bất động sản", "th": "สำเนาทะเบียนอสังหาริมทรัพย์" },
+        { "id": "silgeoraega", "ko": "실거래가", "method": "직역", "en": "Actual (reported) transaction price", "zh-Hans": "实际成交价", "zh-Hant": "實際成交價", "vi": "Giá giao dịch thực tế", "th": "ราคาซื้อขายจริง" },
+        { "id": "gongsijiga", "ko": "공시지가/공시가격", "method": "직역", "en": "Officially assessed (published) price", "zh-Hans": "公示地价／公示价格", "zh-Hant": "公示地價／公示價格", "vi": "Giá công bố chính thức", "th": "ราคาประเมินที่ประกาศเป็นทางการ", "pending": true },
+        { "id": "chwideukse", "ko": "취득세", "method": "직역", "en": "Acquisition tax", "zh-Hans": "取得税", "zh-Hant": "取得稅", "vi": "Thuế mua/nhận bất động sản", "th": "ภาษีการได้มาซึ่งทรัพย์สิน" },
+        { "id": "jaesanse", "ko": "재산세", "method": "직역", "en": "Property tax (annual)", "zh-Hans": "财产税", "zh-Hant": "財產稅", "vi": "Thuế tài sản (hằng năm)", "th": "ภาษีทรัพย์สิน (รายปี)" },
+        { "id": "jongbuse", "ko": "종합부동산세 (종부세)", "method": "직역", "en": "Comprehensive real estate (holding) tax", "zh-Hans": "综合不动产税", "zh-Hant": "綜合不動產稅", "vi": "Thuế bất động sản tổng hợp", "th": "ภาษีอสังหาริมทรัพย์รวม", "pending": true },
+        { "id": "yangdose", "ko": "양도소득세", "method": "직역", "en": "Capital gains tax (on sale)", "zh-Hans": "转让所得税", "zh-Hant": "轉讓所得稅", "vi": "Thuế thu nhập từ chuyển nhượng", "th": "ภาษีเงินได้จากการโอน" }
+      ]
+    },
+    {
+      "id": "loan",
+      "label": { "ko": "대출·보증", "en": "Loans & guarantees" },
+      "terms": [
+        { "id": "ltv", "ko": "LTV (담보인정비율)", "method": "약어 유지", "en": "LTV — Loan-to-Value", "zh-Hans": "LTV（贷款价值比）", "zh-Hant": "LTV（貸款價值比）", "vi": "LTV — tỷ lệ vay trên giá trị", "th": "LTV — อัตราส่วนเงินกู้ต่อมูลค่า" },
+        { "id": "dti", "ko": "DTI (총부채상환비율)", "method": "약어 유지", "en": "DTI — Debt-to-Income", "zh-Hans": "DTI（总负债偿还比率）", "zh-Hant": "DTI（總負債償還比率）", "vi": "DTI — nợ trên thu nhập", "th": "DTI — หนี้ต่อรายได้" },
+        { "id": "dsr", "ko": "DSR (총부채원리금상환비율)", "method": "약어 유지", "en": "DSR — Debt Service Ratio", "zh-Hans": "DSR（总偿债比率）", "zh-Hant": "DSR（總償債比率）", "vi": "DSR — tỷ lệ trả nợ", "th": "DSR — อัตราส่วนภาระหนี้" },
+        { "id": "hug", "ko": "HUG (주택도시보증공사)", "method": "약어 유지", "en": "HUG — Housing & Urban Guarantee Corp.", "zh-Hans": "HUG（住宅城市保证公社）", "zh-Hant": "HUG（住宅都市保證公社）", "vi": "HUG — Tổng công ty Bảo lãnh Nhà ở & Đô thị", "th": "HUG — บรรษัทค้ำประกันที่อยู่อาศัยและเมือง" },
+        { "id": "hf", "ko": "HF (한국주택금융공사)", "method": "약어 유지", "en": "HF — Korea Housing Finance Corp.", "zh-Hans": "HF（韩国住宅金融公社）", "zh-Hant": "HF（韓國住宅金融公社）", "vi": "HF — Tổng công ty Tài chính Nhà ở Hàn Quốc", "th": "HF — บรรษัทการเงินที่อยู่อาศัยเกาหลี" },
+        { "id": "sgi", "ko": "SGI (서울보증보험)", "method": "약어 유지", "en": "SGI — Seoul Guarantee Insurance", "zh-Hans": "SGI（首尔保证保险）", "zh-Hant": "SGI（首爾保證保險）", "vi": "SGI — Bảo hiểm Bảo lãnh Seoul", "th": "SGI — ประกันค้ำประกันโซล" },
+        { "id": "bogeumjari", "ko": "보금자리론", "method": "음역+설명", "en": "Bogeumjari — policy mortgage (residents)", "zh-Hans": "Bogeumjari 政策性住房贷款", "zh-Hant": "Bogeumjari 政策性房貸", "vi": "Bogeumjari — vay mua nhà chính sách (cho người dân)", "th": "Bogeumjari — สินเชื่อบ้านเชิงนโยบาย (สำหรับผู้พำนัก)" },
+        { "id": "didimdol", "ko": "디딤돌대출", "method": "음역+설명", "en": "Didimdol — policy purchase loan", "zh-Hans": "Didimdol 政策购房贷款", "zh-Hant": "Didimdol 政策購房貸款", "vi": "Didimdol — vay mua nhà chính sách", "th": "Didimdol — สินเชื่อซื้อบ้านเชิงนโยบาย" },
+        { "id": "beotimmok", "ko": "버팀목대출", "method": "음역+설명", "en": "Beotimmok — policy lease (Jeonse/Wolse) loan", "zh-Hans": "Beotimmok 政策租房贷款", "zh-Hant": "Beotimmok 政策租房貸款", "vi": "Beotimmok — vay thuê nhà chính sách", "th": "Beotimmok — สินเชื่อเช่าบ้านเชิงนโยบาย" }
+      ]
+    },
+    {
+      "id": "institution",
+      "label": { "ko": "기관·서류", "en": "Institutions & documents" },
+      "terms": [
+        { "id": "molit", "ko": "국토교통부", "method": "직역", "en": "Ministry of Land, Infrastructure and Transport (MOLIT)", "zh-Hans": "国土交通部", "zh-Hant": "國土交通部", "vi": "Bộ Đất đai, Hạ tầng và Giao thông", "th": "กระทรวงที่ดิน โครงสร้างพื้นฐานและการขนส่ง" },
+        { "id": "fss", "ko": "금융감독원", "method": "직역", "en": "Financial Supervisory Service (FSS)", "zh-Hans": "金融监督院", "zh-Hant": "金融監督院", "vi": "Cơ quan Giám sát Tài chính", "th": "สำนักงานกำกับดูแลการเงิน" },
+        { "id": "deunggiso", "ko": "등기소", "method": "직역", "en": "Registry office", "zh-Hans": "登记所", "zh-Hant": "登記所", "vi": "Văn phòng đăng ký", "th": "สำนักงานทะเบียน" },
+        { "id": "junggaesa", "ko": "공인중개사", "method": "직역", "en": "Licensed real estate agent / broker", "zh-Hans": "持牌房产中介", "zh-Hant": "持牌房產仲介", "vi": "Môi giới bất động sản có giấy phép", "th": "นายหน้าอสังหาริมทรัพย์ที่มีใบอนุญาต" }
+      ]
+    }
+  ]
+}
