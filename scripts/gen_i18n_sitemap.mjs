@@ -27,7 +27,13 @@ const CALC_LANGS = {
   'transfer-tax': ['en', 'zh-Hans', 'zh-Hant'],
   'balance-settlement': ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th'],
 };
-for (const l of ['zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/calculators/index.html`, priority: '0.7' });
+for (const l of ['zh-Hans', 'zh-Hant', 'vi', 'th']) {
+  REQUIRED.push({ path: `/${l}/calculators/index.html`, priority: '0.7' });
+  REQUIRED.push({ path: `/${l}/glossary.html`, priority: '0.7' });
+}
+for (const l of ['vi', 'th']) REQUIRED.push({ path: `/${l}/jeonse.html`, priority: '0.8' });
+for (const l of ['zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/foreigner-loan.html`, priority: '0.8' });
+for (const l of ['zh-Hans', 'zh-Hant']) REQUIRED.push({ path: `/${l}/foreigner-tax.html`, priority: '0.8' });
 for (const [calc, langs] of Object.entries(CALC_LANGS)) {
   for (const l of langs) REQUIRED.push({ path: `/${l}/calculators/${calc}.html`, priority: '0.7' });
 }
