@@ -1,0 +1,27 @@
+lang: en
+profile: "미국·캐나다·호주·서구권. 실거주 + 강남·서초·용산 등 고가 주거지 선호, 매입 의향 상대적으로 높음."
+sections:
+  guides:
+    - { id: buy-process, rank: 1 }
+    - { id: acquisition-tax-guide, rank: 2 }
+    - { id: transfer-tax-guide, rank: 3 }
+    - { id: foreigner-regulation, rank: 4 }
+    - { id: double-taxation, rank: 5 }
+    - { id: registry-reading, rank: 6 }
+    - { id: jeonse-101, rank: 7 }
+    - { id: lease-protection, rank: 8 }
+    - { id: jeonse-scam, rank: 9 }
+  calculators:
+    - { id: acquisition-tax, rank: 1 }
+    - { id: transfer-tax, rank: 2 }
+    - { id: brokerage-fee, rank: 3 }
+    - { id: jeonse-monthly, rank: 4 }
+    - { id: balance-settlement, rank: 5 }
+    - { id: auction-bid, rank: 6 }
+    - { id: loan-limit, rank: 7, hidden: true }   # 외국인 주담대 제약 큼 — 배지/안내로만 노출
+    - { id: housing-subscription, rank: 8, hidden: true }  # 청약: 외국인 사실상 배제
+  checklists:
+    - { id: sale-balance-day, rank: 1 }
+    - { id: lease-contract, rank: 2 }
+    - { id: moving-day, rank: 3 }
+    - { id: interior-contract, rank: 4 }

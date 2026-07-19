@@ -1,0 +1,69 @@
+name: i18n maintenance
+
+# 다국어 유지보수 — 매월 1일 09:30 KST(00:30 UTC).
+# 기존 일일 갱신(00:00/00:10/00:30 KST = 15:00/15:10/15:30 UTC) 및
+# 대시보드(평일 07:00 KST = 22:00 UTC)와 시간대가 겹치지 않는다.
+on:
+  schedule:
+    - cron: "30 0 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: i18n-maintenance
+  cancel-in-progress: false
+
+jobs:
+  maintain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Regenerate i18n sitemap entries
+        run: node scripts/gen_i18n_sitemap.mjs
+
+      - name: i18n consistency & coverage check
+        id: check
+        run: node scripts/i18n_check.mjs
+
+      - name: External link check (non-blocking)
+        id: links
+        continue-on-error: true
+        run: node scripts/link_check.mjs
+
+      - name: Commit sitemap if changed
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if ! git diff --quiet -- site/sitemap.xml; then
+            git config user.name "topda-bot"
+            git config user.email "bot@topda.kr"
+            git add site/sitemap.xml
+            git commit -m "i18n 사이트맵 자동 갱신 ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "sitemap 변경 없음"
+          fi
+
+      - name: Open issue on i18n gaps
+        if: steps.check.outputs.has_gaps == 'true' && steps.check.outputs.error_count != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="i18n 점검: 누락/불일치 감지 ($(date -u +%Y-%m))"
+          EXISTING=$(gh issue list --state open --label i18n-maintenance --json number --jq '.[0].number' || true)
+          BODY="i18n-maintenance 워크플로가 다국어 커버리지/정합성 문제를 감지했습니다. 상세는 워크플로 실행 요약(Step Summary)을 확인하세요.\n\n- 신규 한국어 페이지의 언어판 부재\n- content-priority 매핑 누락\n- 국기/스위처/사이트맵 불일치 등"
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body "$(printf '%b' "$BODY")"
+          else
+            gh label create i18n-maintenance --color 1d76db --description "i18n 유지보수 자동 점검" 2>/dev/null || true
+            gh issue create --title "$TITLE" --label i18n-maintenance --body "$(printf '%b' "$BODY")"
+          fi

@@ -1,0 +1,24 @@
+lang: vi
+profile: "체류 인구 2위. 결혼이민·근로자 비중 높음. 매입보다 임대차(전세·월세) 실수요 압도적."
+sections:
+  guides:
+    - { id: lease-protection, rank: 1 }          # 임대차보호법 핵심(전입·확정일자·대항력·우선변제권)
+    - { id: standard-lease, rank: 2 }            # 표준임대차계약서 이해
+    - { id: jeonse-scam, rank: 3 }               # 전세사기 예방
+    - { id: deposit-return, rank: 4 }            # 보증금 반환 절차
+    - { id: jeonse-101, rank: 5 }
+    - { id: registry-reading, rank: 6 }
+    - { id: buy-process, rank: 7 }               # 매입은 하위로
+    - { id: acquisition-tax-guide, rank: 8 }
+  calculators:
+    - { id: jeonse-monthly, rank: 1 }            # 월세 환산
+    - { id: brokerage-fee, rank: 2 }             # 중개보수
+    - { id: balance-settlement, rank: 3 }
+    - { id: acquisition-tax, rank: 4 }
+    - { id: loan-limit, rank: 5, hidden: true }
+    - { id: transfer-tax, rank: 6, hidden: true }
+    - { id: housing-subscription, rank: 7, hidden: true }
+  checklists:
+    - { id: lease-contract, rank: 1 }
+    - { id: moving-day, rank: 2 }
+    - { id: sale-balance-day, rank: 3, hidden: true }

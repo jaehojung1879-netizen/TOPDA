@@ -1,0 +1,25 @@
+lang: ko
+profile: "한국어 원본(기준). 전 카테고리 균형 노출. 다른 언어 매핑의 정합성 기준선."
+sections:
+  guides:
+    - { id: buy-process, rank: 1 }
+    - { id: jeonse-101, rank: 2 }
+    - { id: lease-protection, rank: 3 }
+    - { id: acquisition-tax-guide, rank: 4 }
+    - { id: transfer-tax-guide, rank: 5 }
+    - { id: registry-reading, rank: 6 }
+    - { id: jeonse-scam, rank: 7 }
+  calculators:
+    - { id: acquisition-tax, rank: 1 }
+    - { id: loan-limit, rank: 2 }
+    - { id: balance-settlement, rank: 3 }
+    - { id: jeonse-monthly, rank: 4 }
+    - { id: brokerage-fee, rank: 5 }
+    - { id: transfer-tax, rank: 6 }
+    - { id: auction-bid, rank: 7 }
+    - { id: housing-subscription, rank: 8 }
+  checklists:
+    - { id: sale-balance-day, rank: 1 }
+    - { id: lease-contract, rank: 2 }
+    - { id: moving-day, rank: 3 }
+    - { id: interior-contract, rank: 4 }

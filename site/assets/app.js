@@ -10,50 +10,132 @@
     });
   }
 
-  // ===== Auto-inject language switch into header (if not already present) =====
+  // ===== Language switcher (globe + dropdown / mobile bottom-sheet) =====
+  // 지원 언어. 각 항목은 자국어 표기 언어명과 SVG 국기(/assets/flags/*.svg)를 쓴다.
+  // 국기는 이모지가 아닌 SVG로 관리해 일부 OS/브라우저의 이모지 국기 미렌더링을 회피한다.
+  const LANGS = [
+    { code: 'ko',      name: '한국어' },
+    { code: 'en',      name: 'English' },
+    { code: 'zh-Hans', name: '简体中文' },
+    { code: 'zh-Hant', name: '繁體中文' },
+    { code: 'vi',      name: 'Tiếng Việt' },
+    { code: 'th',      name: 'ภาษาไทย' },
+  ];
+  // 언어별 존재하는 페이지 맵(basePath 기준). 없는 언어/페이지는 해당 언어 홈으로 폴백해
+  // 죽은 링크(404)를 방지한다. 신규 페이지 추가 시 이 맵만 갱신하면 된다.
+  // (i18n-maintenance 워크플로가 이 맵과 실제 파일의 정합성을 점검한다.)
+  const PAGES = {
+    ko: { all: true, exclude: ['foreigner-loan.html', 'foreigner-tax.html', 'jeonse.html', 'glossary.html'] },
+    en: { list: ['index.html', 'jeonse.html', 'foreigner-loan.html', 'foreigner-tax.html', 'glossary.html', 'auction.html', 'about.html', 'feedback.html', 'calculators/index.html', 'calculators/acquisition-tax.html', 'calculators/brokerage-fee.html', 'calculators/jeonse-monthly.html', 'calculators/auction-bid.html'] },
+    'zh-Hans': { list: ['index.html'] },
+    'zh-Hant': { list: ['index.html'] },
+    vi: { list: ['index.html'] },
+    th: { list: ['index.html'] },
+  };
+  const LANG_PREFIX = ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th'];
+
+  function pageExists(lang, base) {
+    const m = PAGES[lang];
+    if (!m) return false;
+    if (base === '' || base === 'index.html') return true;
+    if (m.all) return !(m.exclude || []).includes(base);
+    return (m.list || []).includes(base);
+  }
+  function langHref(lang, base) {
+    let b = pageExists(lang, base) ? base : 'index.html';
+    if (b === '') b = 'index.html';
+    return lang === 'ko' ? '/' + b : '/' + lang + '/' + b;
+  }
+
   try {
     const header = document.querySelector('.site-header .row');
-    if (header && !header.querySelector('.lang-switch')) {
-      const lang = document.documentElement.lang || 'ko';
-      const path = location.pathname;
-      // KR ↔ EN 페어 결정: '/en/'을 토글
-      let krHref, enHref;
-      if (path.includes('/en/')) {
-        enHref = path.split('/').pop() || 'index.html';
-        krHref = path.replace('/en/', '/');
-      } else {
-        krHref = path.split('/').pop() || 'index.html';
-        // 한국어 페이지 대부분의 영문 대응은 en/index.html로 fallback
-        enHref = path.replace(/\/site\//, '/site/en/');
-        // 동일 경로의 en 버전이 없을 수 있으므로 단순화: en/index.html
-        const parts = path.split('/');
-        const fileName = parts.pop();
-        // 같은 파일명이 /en/ 에 있다고 가정하고 상대로 변환
-        enHref = (parts.length ? parts.join('/') + '/' : '') + 'en/' + fileName;
-        // 깊은 폴더(categories/ 등)에서는 상대경로 갱신
-        if (path.includes('/categories/') || path.includes('/calculators/') || path.includes('/checklists/') || path.includes('/posts/') || path.includes('/interior/')) {
-          // 단순 fallback: 영문 홈
-          enHref = '../en/index.html';
-        }
-      }
-      const ls = document.createElement('div');
-      ls.className = 'lang-switch';
-      const a1 = document.createElement('a');
-      a1.textContent = 'KR'; a1.setAttribute('aria-label', '한국어');
-      const a2 = document.createElement('a');
-      a2.textContent = 'EN'; a2.setAttribute('aria-label', 'English');
-      if (lang === 'en') {
-        a1.href = krHref;
-        a2.href = '#'; a2.classList.add('active');
-      } else {
-        a1.href = '#'; a1.classList.add('active');
-        a2.href = enHref;
-      }
-      ls.appendChild(a1); ls.appendChild(a2);
-      // nav-toggle 앞에 삽입
+    if (header) {
+      // 현재 언어와 base 경로(언어 접두사 제거)를 URL에서 계산 (브라우저 저장 미사용)
+      const segs = location.pathname.replace(/^\/+/, '').split('/');
+      let curLang = 'ko';
+      let base;
+      if (LANG_PREFIX.indexOf(segs[0]) !== -1) { curLang = segs[0]; base = segs.slice(1).join('/'); }
+      else { base = segs.join('/'); }
+      if (base === '') base = 'index.html';
+
+      // 기존 KR/EN 텍스트 토글이 있으면 제거하고 새 스위처로 교체
+      header.querySelectorAll('.lang-switch').forEach((el) => el.remove());
+
+      const wrap = document.createElement('div');
+      wrap.className = 'lang-switch2';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'lang-globe';
+      btn.setAttribute('aria-haspopup', 'true');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Language · 언어 선택');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z"/></svg>';
+
+      const backdrop = document.createElement('div');
+      backdrop.className = 'lang-backdrop';
+      backdrop.hidden = true;
+
+      const menu = document.createElement('div');
+      menu.className = 'lang-menu';
+      menu.setAttribute('role', 'menu');
+      menu.setAttribute('aria-label', 'Select language');
+      menu.hidden = true;
+      const head = document.createElement('div');
+      head.className = 'lang-menu-head';
+      head.textContent = 'Language · 언어';
+      menu.appendChild(head);
+
+      LANGS.forEach((l) => {
+        const a = document.createElement('a');
+        a.className = 'lang-item';
+        a.setAttribute('role', 'menuitem');
+        a.setAttribute('lang', l.code);
+        a.setAttribute('hreflang', l.code);
+        a.href = langHref(l.code, base);
+        if (l.code === curLang) { a.classList.add('is-current'); a.setAttribute('aria-current', 'true'); }
+        a.innerHTML =
+          '<img class="lang-flag" src="/assets/flags/' + l.code + '.svg" alt="" width="20" height="15" loading="lazy" />' +
+          '<span class="lang-name">' + l.name + '</span>' +
+          '<span class="lang-check" aria-hidden="true">' + (l.code === curLang ? '✓' : '') + '</span>';
+        menu.appendChild(a);
+      });
+
+      const items = () => Array.from(menu.querySelectorAll('.lang-item'));
+      const open = () => {
+        menu.hidden = false; backdrop.hidden = false;
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('lang-open');
+        const cur = menu.querySelector('.lang-item.is-current') || items()[0];
+        if (cur) cur.focus();
+      };
+      const close = () => {
+        menu.hidden = true; backdrop.hidden = true;
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('lang-open');
+      };
+      const toggle = () => (menu.hidden ? open() : close());
+
+      btn.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
+      backdrop.addEventListener('click', close);
+      document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) close(); });
+      document.addEventListener('keydown', (e) => {
+        if (menu.hidden) return;
+        const list = items();
+        const idx = list.indexOf(document.activeElement);
+        if (e.key === 'Escape') { close(); btn.focus(); }
+        else if (e.key === 'ArrowDown') { e.preventDefault(); (list[idx + 1] || list[0]).focus(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); (list[idx - 1] || list[list.length - 1]).focus(); }
+        else if (e.key === 'Home') { e.preventDefault(); list[0].focus(); }
+        else if (e.key === 'End') { e.preventDefault(); list[list.length - 1].focus(); }
+      });
+
+      wrap.appendChild(btn);
+      wrap.appendChild(menu);
       const navToggle = header.querySelector('.nav-toggle');
-      if (navToggle) header.insertBefore(ls, navToggle);
-      else header.appendChild(ls);
+      if (navToggle) header.insertBefore(wrap, navToggle);
+      else header.appendChild(wrap);
+      document.body.appendChild(backdrop);
     }
   } catch (e) {}
 
@@ -66,6 +148,32 @@
       a.classList.add('active');
     }
   });
+})();
+
+// ===== Foreigner loan advisory (대출 계산기 안내 배지) =====
+// 외국인은 대출·보증 이용에 제약이 크다. 대출 관련 계산기 상단에 안내 배너를 주입한다.
+// 계산 로직은 건드리지 않으며(제약 준수), 안내/링크만 추가한다.
+(function () {
+  const LOAN_PAGES = ['loan-limit', 'dsr', 'loan-compare', 'rti-calculator'];
+  const path = location.pathname;
+  if (!LOAN_PAGES.some((p) => path.indexOf('/calculators/' + p) !== -1)) return;
+  const main = document.querySelector('main');
+  if (!main || main.querySelector('.foreigner-loan-advisory')) return;
+  const en = document.documentElement.lang !== 'ko';
+  // foreigner-loan 안내 페이지 상대경로 계산
+  const loanHref = path.indexOf('/en/') !== -1 ? '../foreigner-loan.html' : '/en/foreigner-loan.html';
+  const box = document.createElement('div');
+  box.className = 'callout callout-warn foreigner-loan-advisory';
+  box.setAttribute('role', 'note');
+  box.innerHTML =
+    '<div class="icon">!</div><div class="body">' +
+    (en
+      ? '<strong>Foreigners: loan access is restricted</strong> Eligibility for mortgages, Jeonse loans, and guarantees depends on visa type, residence registration, and income proof. Policy loans and housing-subscription are generally restricted. This tool computes the same figures regardless of nationality — confirm what you can actually use in the <a href="' + loanHref + '">foreigner loan guide</a>.'
+      : '<strong>외국인 안내</strong> 외국인은 주택담보·전세자금 대출과 보증 상품 이용에 제약이 있습니다. 비자·거소증·소득증빙에 따라 취급 여부가 달라지며, 정책대출·청약은 일반적으로 제한됩니다. 계산 결과는 국적과 무관하게 동일하니, 실제 이용 가능 여부는 <a href="' + loanHref + '">외국인 대출 안내</a>에서 확인하세요.') +
+    '</div>';
+  const firstSection = main.querySelector('.article-header, section, .container, .container-narrow');
+  if (firstSection && firstSection.parentElement === main) main.insertBefore(box, firstSection.nextSibling);
+  else main.insertBefore(box, main.firstChild);
 })();
 
 // ===== Formatting =====

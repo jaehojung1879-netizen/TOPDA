@@ -2207,7 +2207,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 .ie-item .ie-name { font-size: 0.9rem; font-weight: 600; flex: 1; min-width: 0; }
 .ie-item .ie-unit { font-size: 0.75rem; color: var(--text-subtle); white-space: nowrap; }
 
-/* ===== Language switch (top-right, small) ===== */
+/* ===== Language switch (legacy KR/EN toggle — kept for no-JS fallback) ===== */
 .lang-switch {
   display: inline-flex; align-items: center;
   border: 1px solid var(--border); border-radius: 999px;
@@ -2223,6 +2223,65 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 .lang-switch a.active { background: var(--accent); color: #fff; }
 .lang-switch a:hover:not(.active) { color: var(--text); }
+
+/* ===== Language switcher — globe + dropdown (v2) ===== */
+.lang-switch2 { position: relative; flex-shrink: 0; display: inline-flex; }
+.lang-globe {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; padding: 0;
+  border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface); color: var(--text-muted);
+  cursor: pointer; transition: color .15s, border-color .15s, background .15s;
+}
+.lang-globe:hover { color: var(--text); border-color: var(--text-subtle); }
+.lang-globe svg { width: 19px; height: 19px; }
+.lang-globe[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); }
+
+.lang-menu {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 60;
+  min-width: 208px; padding: 6px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; box-shadow: 0 12px 32px rgba(0,0,0,.14);
+}
+.lang-menu-head {
+  font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--text-subtle); padding: 6px 10px 8px;
+}
+.lang-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: 9px;
+  color: var(--text); font-size: .92rem; line-height: 1.1;
+  text-decoration: none; transition: background .12s;
+}
+.lang-item:hover, .lang-item:focus-visible { background: var(--accent-soft); outline: none; }
+.lang-item .lang-flag {
+  width: 20px; height: 15px; border-radius: 2px; flex-shrink: 0;
+  object-fit: cover; box-shadow: 0 0 0 1px rgba(0,0,0,.08);
+}
+.lang-item .lang-name { flex: 1; min-width: 0; }
+.lang-item.is-current { font-weight: 700; }
+.lang-item .lang-check { color: var(--accent); font-weight: 800; }
+.lang-backdrop { display: none; }
+
+/* 모바일: 하단 시트 형태 */
+@media (max-width: 640px) {
+  .lang-backdrop {
+    display: block; position: fixed; inset: 0; z-index: 55;
+    background: rgba(0,0,0,.38);
+  }
+  .lang-backdrop[hidden] { display: none; }
+  .lang-menu {
+    position: fixed; top: auto; right: 0; left: 0; bottom: 0; z-index: 60;
+    min-width: 0; width: 100%; padding: 10px 12px calc(14px + env(safe-area-inset-bottom));
+    border-radius: 18px 18px 0 0; box-shadow: 0 -8px 32px rgba(0,0,0,.2);
+    animation: langSheetUp .18s ease-out;
+  }
+  .lang-menu-head { font-size: .74rem; padding: 6px 8px 10px; }
+  .lang-item { padding: 13px 10px; font-size: 1rem; }
+}
+@keyframes langSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+body.lang-open { overflow: hidden; }
+@media (min-width: 641px) { body.lang-open { overflow: auto; } }
 
 /* ===== Feedback board ===== */
 .fb-app { margin-top: 8px; }

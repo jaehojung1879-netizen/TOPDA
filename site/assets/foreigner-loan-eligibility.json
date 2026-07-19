@@ -1,0 +1,80 @@
+{
+  "_comment": "외국인 대출·보증 이용 가능 현황. 모든 항목은 공식 소스로 재확인되기 전까지 verified=false 로 둔다. 페이지에는 확정 사실로 단정하지 말고 '확인 필요'로 표기하고, 반드시 source 링크를 함께 노출한다. (프로젝트 제약: 외국인 대출 사실은 추측 금지 — 확인 후 반영)",
+  "updated": "2026-07-19",
+  "review_status": "unverified-draft",
+  "sources": {
+    "sgi": "https://www.sgic.co.kr/",
+    "hug": "https://www.khug.or.kr/",
+    "hf": "https://www.hf.go.kr/",
+    "fsc": "https://www.fsc.go.kr/",
+    "molit": "https://www.molit.go.kr/",
+    "kb": "https://obank.kbstar.com/"
+  },
+  "advisory": {
+    "ko": "외국인은 주택담보·전세자금 대출과 보증 상품 이용에 제약이 있습니다. 비자 종류·거소증·소득증빙에 따라 취급 여부가 달라지며, 정책대출·청약은 일반적으로 이용이 제한됩니다. 실제 조건은 은행·보증기관 상담으로 확정하세요.",
+    "en": "Foreigners face restrictions on mortgages, Jeonse loans, and guarantee products. Eligibility depends on visa type, alien/residence registration, and income proof; policy loans and housing-subscription are generally restricted. Confirm actual terms with the bank or guarantor."
+  },
+  "products": [
+    {
+      "id": "mortgage",
+      "category": "주택담보대출 (구입)",
+      "category_en": "Mortgage (purchase)",
+      "foreigner_status": "conditional",
+      "verified": false,
+      "summary_en": "Reported as available to F-2/F-4/F-5/F-6 and many work-visa holders (e.g. E-7) with income proof; LTV/DSR rules apply the same as for residents. Independent confirmation with each bank required.",
+      "requirements": ["비자(F-2/F-4/F-5/F-6 등)", "외국인등록증/거소증", "재직·소득증빙", "DSR 한도 준수"],
+      "source": "kb",
+      "needs_confirmation": true
+    },
+    {
+      "id": "jeonse-loan",
+      "category": "전세자금대출",
+      "category_en": "Jeonse (lump-sum lease) loan",
+      "foreigner_status": "conditional",
+      "verified": false,
+      "summary_en": "Starting point provided by site owner: foreigner Jeonse loans are commonly handled via SGI (Seoul Guarantee) guarantee rather than HUG/HF. Whether this is currently the only rail must be re-verified against SGI/HUG/HF product pages before stating as fact.",
+      "requirements": ["비자·거소증", "임대차계약서", "보증기관 심사(SGI 등)"],
+      "guarantors": {
+        "sgi": {"foreigner": "reported-primary", "verified": false},
+        "hug": {"foreigner": "unverified", "verified": false},
+        "hf": {"foreigner": "unverified", "verified": false}
+      },
+      "source": "sgi",
+      "needs_confirmation": true,
+      "owner_note": "재호님 확인 필요 사항: '외국인 전세대출은 SGI 서울보증 위주'가 현재도 유효한지 공식 확인 필요."
+    },
+    {
+      "id": "deposit-return-guarantee",
+      "category": "전세보증금 반환보증",
+      "category_en": "Deposit-return guarantee",
+      "foreigner_status": "unverified",
+      "verified": false,
+      "summary_en": "HUG 안심전세 / SGI 전세금보장신용보험 등의 외국인 임차인 취급 여부는 공식 확인 필요.",
+      "requirements": ["임차인 자격", "대상 주택 요건"],
+      "source": "hug",
+      "needs_confirmation": true
+    },
+    {
+      "id": "policy-loan",
+      "category": "정책대출 (보금자리·디딤돌·버팀목)",
+      "category_en": "Policy loans (Bogeumjari/Didimdol/Beotimmok)",
+      "foreigner_status": "generally-excluded",
+      "verified": false,
+      "summary_en": "Government policy mortgages/rent loans generally require Korean-national household conditions; foreigners are typically excluded. Treat as excluded pending official confirmation of any exceptions.",
+      "requirements": ["일반적으로 내국인 세대 요건"],
+      "source": "hf",
+      "needs_confirmation": true
+    },
+    {
+      "id": "housing-subscription",
+      "category": "주택청약 (청약가점)",
+      "category_en": "Housing subscription",
+      "foreigner_status": "generally-excluded",
+      "verified": false,
+      "summary_en": "Housing-subscription accounts/points systems are generally geared to residents meeting no-home household criteria; foreigners are typically excluded from priority allocations. Confirm before relying.",
+      "requirements": ["무주택 세대·거주 요건"],
+      "source": "molit",
+      "needs_confirmation": true
+    }
+  ]
+}

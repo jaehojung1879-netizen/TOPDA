@@ -1,0 +1,25 @@
+lang: zh-Hans
+profile: "중국 본토. 절대 수요 최다. 수도권 서남부(부천·안산·시흥) 6억 이하 아파트·다세대 중심."
+sections:
+  guides:
+    - { id: buy-process, rank: 1 }              # 중저가 아파트 매입 절차
+    - { id: acquisition-tax-guide, rank: 2 }
+    - { id: foreigner-acq-report, rank: 3 }      # 외국인 취득 신고 의무
+    - { id: fund-transfer, rank: 4 }             # 자금 반출입(중국 외환 규제 유의)
+    - { id: docs-before-buy, rank: 5 }           # 매매 전 확인 서류
+    - { id: registry-reading, rank: 6 }
+    - { id: foreigner-regulation, rank: 7 }
+    - { id: lease-protection, rank: 8 }
+    - { id: jeonse-scam, rank: 9 }
+  calculators:
+    - { id: acquisition-tax, rank: 1 }
+    - { id: brokerage-fee, rank: 2 }
+    - { id: balance-settlement, rank: 3 }
+    - { id: jeonse-monthly, rank: 4 }
+    - { id: transfer-tax, rank: 5 }
+    - { id: loan-limit, rank: 6, hidden: true }
+    - { id: housing-subscription, rank: 7, hidden: true }
+  checklists:
+    - { id: sale-balance-day, rank: 1 }
+    - { id: lease-contract, rank: 2 }
+    - { id: moving-day, rank: 3 }

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" role="img" aria-label="繁體中文">
+  <rect width="24" height="18" fill="#fe0000"/>
+  <rect width="12" height="9" fill="#000095"/>
+  <g transform="translate(6 4.5)">
+    <g fill="#fff">
+      <circle r="3.1"/>
+    </g>
+    <g fill="#000095">
+      <circle r="2.4"/>
+    </g>
+    <g fill="#fff" transform="scale(2.4)">
+      <path d="M0 -1 L0.29 -0.29 L1 0 L0.29 0.29 L0 1 L-0.29 0.29 L-1 0 L-0.29 -0.29 Z"/>
+      <path d="M0 -1 L0.29 -0.29 L1 0 L0.29 0.29 L0 1 L-0.29 0.29 L-1 0 L-0.29 -0.29 Z" transform="rotate(30)"/>
+      <path d="M0 -1 L0.29 -0.29 L1 0 L0.29 0.29 L0 1 L-0.29 0.29 L-1 0 L-0.29 -0.29 Z" transform="rotate(60)"/>
+    </g>
+    <circle r="1.6" fill="#000095"/>
+    <circle r="1.5" fill="#fff"/>
+  </g>
+</svg>
