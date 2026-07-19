@@ -19,6 +19,12 @@ const REQUIRED = [
   { path: '/vi/index.html', priority: '0.8' },
   { path: '/th/index.html', priority: '0.8' },
 ];
+// 번역 계산기 페이지(언어별 index + 3종)
+for (const l of ['zh-Hans', 'zh-Hant', 'vi', 'th']) {
+  for (const c of ['index', 'jeonse-monthly', 'brokerage-fee', 'acquisition-tax']) {
+    REQUIRED.push({ path: `/${l}/calculators/${c}.html`, priority: '0.7' });
+  }
+}
 
 if (!existsSync(SITEMAP)) {
   console.error('sitemap not found:', SITEMAP);

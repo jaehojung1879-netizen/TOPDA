@@ -27,10 +27,10 @@
   const PAGES = {
     ko: { all: true, exclude: ['foreigner-loan.html', 'foreigner-tax.html', 'jeonse.html', 'glossary.html'] },
     en: { list: ['index.html', 'jeonse.html', 'foreigner-loan.html', 'foreigner-tax.html', 'glossary.html', 'auction.html', 'about.html', 'feedback.html', 'calculators/index.html', 'calculators/acquisition-tax.html', 'calculators/brokerage-fee.html', 'calculators/jeonse-monthly.html', 'calculators/auction-bid.html'] },
-    'zh-Hans': { list: ['index.html'] },
-    'zh-Hant': { list: ['index.html'] },
-    vi: { list: ['index.html'] },
-    th: { list: ['index.html'] },
+    'zh-Hans': { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html'] },
+    'zh-Hant': { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html'] },
+    vi: { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html'] },
+    th: { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html'] },
   };
   const LANG_PREFIX = ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th'];
 
@@ -177,7 +177,9 @@
 })();
 
 // ===== Formatting =====
-const isEn = document.documentElement.lang === 'en';
+// 한국어(ko) 외의 모든 언어판(en/zh-Hans/zh-Hant/vi/th)은 통화·동적 문구를
+// 국제 표기(KRW·영문)로 렌더링한다. (한국어 원본은 '원'·국문 그대로 유지)
+const isEn = document.documentElement.lang !== 'ko';
 const fmt = {
   won: (n) => {
     if (n === null || n === undefined || isNaN(n)) return isEn ? 'KRW 0' : '0원';
@@ -2353,7 +2355,9 @@ function calcInteriorEstimate({ area, grade, items }) {
   try {
     const head = document.head;
     const lang = (document.documentElement.lang || 'ko').toLowerCase();
-    const isEnPage = lang.startsWith('en');
+    const pageLang = document.documentElement.lang || 'ko';
+    // 한국어 외 모든 언어판은 비-국문(영문 UI 문구·국제 로케일)로 처리
+    const isEnPage = !lang.startsWith('ko');
     // 페이지 식별자(관리자 편집 오버라이드 스코프·분석용)
     document.documentElement.setAttribute('data-topda-page', location.pathname);
 
@@ -2496,7 +2500,7 @@ function calcInteriorEstimate({ area, grade, items }) {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: '톺다',
-        inLanguage: isEnPage ? 'en' : 'ko',
+        inLanguage: pageLang,
         url: location.origin + location.pathname.replace(/index\.html$/, ''),
       });
     }
@@ -2538,7 +2542,7 @@ function calcInteriorEstimate({ area, grade, items }) {
         '@context': 'https://schema.org',
         '@type': 'Article',
         headline: (h1 ? h1.textContent : title).trim().slice(0, 110),
-        inLanguage: isEnPage ? 'en' : 'ko',
+        inLanguage: pageLang,
         description: desc,
         url: canonicalUrl,
         author: { '@type': 'Organization', name: '톺다' },
