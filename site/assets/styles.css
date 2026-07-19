@@ -3038,3 +3038,100 @@ table.data.cmp th:first-child, table.data.cmp td:first-child { min-width: 116px;
   padding: 0; border-radius: 0;
 }
 .g-area-desc { color: var(--text-muted); font-size: 0.95rem; margin: 10px 0 4px; max-width: 66ch; }
+
+/* ===== 거래 로드맵 (roadmap.html) ===== */
+.rm-tabs { display: flex; gap: 8px; margin: 4px 0 28px; flex-wrap: wrap; }
+.rm-tab {
+  padding: 10px 22px; border-radius: 999px;
+  border: 1px solid var(--border-strong); background: var(--surface);
+  font-weight: 600; color: var(--text-muted); font-size: 0.95rem;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.rm-tab:hover { border-color: var(--accent); color: var(--accent); }
+.rm-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.rm-flow { display: none; }
+.rm-flow.active { display: block; }
+.rm-track { display: flex; flex-direction: column; gap: 18px; }
+.rm-stage { display: grid; grid-template-columns: 44px 1fr; gap: 14px; position: relative; }
+.rm-stage::before {
+  content: ""; position: absolute; left: 21px; top: 48px; bottom: -18px;
+  width: 2px; background: var(--border);
+}
+.rm-stage:last-child::before { display: none; }
+.rm-node {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; border: 1px solid var(--border);
+  position: relative; z-index: 1; margin-top: 2px;
+}
+.rm-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 20px 22px; box-shadow: var(--shadow-sm);
+}
+.rm-stage.is-current .rm-node { background: var(--accent); border-color: var(--accent); color: #fff; }
+.rm-stage.is-current .rm-card { border-color: var(--accent); box-shadow: var(--shadow-lg); }
+.rm-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 12px; }
+.rm-when {
+  font-size: 0.78rem; font-weight: 700; color: var(--accent);
+  background: var(--accent-soft); padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+}
+.rm-head h3 { flex: 1 1 auto; font-size: 1.1rem; margin: 0; }
+.rm-mark {
+  font-size: 0.78rem; font-weight: 600; color: var(--text-muted);
+  border: 1px solid var(--border-strong); border-radius: 999px;
+  padding: 5px 12px; background: var(--surface); white-space: nowrap;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.rm-mark:hover { border-color: var(--accent); color: var(--accent); }
+.rm-stage.is-current .rm-mark { background: var(--accent); border-color: var(--accent); color: #fff; }
+.rm-todo { display: flex; flex-direction: column; gap: 6px; margin: 0 0 14px; }
+.rm-todo li { padding-left: 22px; position: relative; font-size: 0.95rem; }
+.rm-todo li::before { content: "✓"; position: absolute; left: 2px; color: var(--success); font-weight: 700; }
+.rm-miss {
+  background: var(--warning-soft); border: 1px solid #fde68a;
+  border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px;
+}
+.rm-miss-title { font-size: 0.82rem; font-weight: 700; color: var(--warning); margin-bottom: 6px; }
+.rm-miss ul { display: flex; flex-direction: column; gap: 5px; }
+.rm-miss li { font-size: 0.9rem; color: #78350f; padding-left: 14px; position: relative; line-height: 1.6; }
+.rm-miss li::before { content: "·"; position: absolute; left: 2px; font-weight: 900; }
+.rm-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.rm-links a {
+  font-size: 0.82rem; font-weight: 600; color: var(--accent);
+  background: var(--accent-soft); padding: 6px 12px; border-radius: 999px;
+  border: 1px solid transparent; transition: border-color .15s;
+}
+.rm-links a:hover { border-color: var(--accent); }
+@media (max-width: 520px) {
+  .rm-stage { grid-template-columns: 32px 1fr; gap: 10px; }
+  .rm-node { width: 32px; height: 32px; font-size: 0.85rem; }
+  .rm-stage::before { left: 15px; top: 36px; }
+  .rm-card { padding: 16px; }
+}
+
+/* ===== 홈 '이어서 하기' 위젯 (app.js가 저장 데이터 있을 때만 주입) ===== */
+.home-resume { padding: 20px 0 0; }
+.home-resume .resume-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 18px 20px; box-shadow: var(--shadow-sm);
+}
+.resume-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.resume-head h2 { font-size: 1.05rem; margin: 0; }
+.resume-head a { font-size: 0.85rem; color: var(--accent); font-weight: 600; }
+.resume-grid { display: grid; gap: 10px; }
+@media (min-width: 768px) { .resume-grid { grid-template-columns: repeat(3, 1fr); } }
+.resume-card {
+  display: block; border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 12px 14px; background: var(--surface-2); transition: border-color .15s;
+}
+.resume-card:hover { border-color: var(--accent); }
+.resume-tag {
+  display: inline-block; font-size: 0.72rem; font-weight: 700; color: var(--accent);
+  background: var(--accent-soft); border-radius: 999px; padding: 2px 8px; margin-bottom: 6px;
+}
+.resume-title { font-weight: 700; font-size: 0.95rem; display: block; }
+.resume-meta { font-size: 0.82rem; color: var(--text-muted); display: block; margin-top: 2px; }
+.resume-hint { font-size: 0.8rem; color: var(--warning); display: block; margin-top: 6px; font-weight: 600; }
+.resume-bar { height: 6px; border-radius: 999px; background: var(--border); margin-top: 8px; overflow: hidden; }
+.resume-bar > span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
