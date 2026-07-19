@@ -24,33 +24,6 @@
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css?v=20260629" />
-<style>
-  .regstd-results {
-    margin-top: 6px; border: 1px solid var(--border, #e5e7eb); border-radius: 10px;
-    max-height: 220px; overflow: auto; background: #fff;
-  }
-  .regstd-results .rs-apt {
-    padding: 8px 12px; cursor: pointer; border-bottom: 1px solid var(--border, #f1f5f9); font-size: 0.88rem;
-  }
-  .regstd-results .rs-apt:last-child { border-bottom: 0; }
-  .regstd-results .rs-apt:hover { background: var(--surface-2, #f8fafc); }
-  .regstd-results .rs-apt .rs-name { font-weight: 700; }
-  .regstd-results .rs-apt .rs-region { color: var(--text-muted); font-size: 0.82rem; margin-left: 4px; }
-  .regstd-results .rs-deal {
-    padding: 6px 12px 6px 22px; cursor: pointer; font-size: 0.84rem; display: flex; justify-content: space-between;
-    border-bottom: 1px solid var(--border, #f1f5f9);
-  }
-  .regstd-results .rs-deal:hover { background: var(--surface-2, #f8fafc); }
-  .regstd-results .rs-official-head {
-    padding: 6px 12px; font-size: 0.74rem; font-weight: 700; color: var(--text-muted);
-    background: var(--surface-2, #f8fafc); border-bottom: 1px solid var(--border, #f1f5f9);
-  }
-  .regstd-results .rs-back { padding: 6px 12px; cursor: pointer; font-size: 0.82rem; color: var(--accent, #2563eb); font-weight: 600; }
-  .regstd-picked {
-    margin-top: 8px; font-size: 0.84rem; color: var(--accent, #2563eb); background: var(--accent-soft, #eff6ff);
-    border-radius: 8px; padding: 8px 10px;
-  }
-</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -248,17 +221,11 @@
 
         <h3 class="scn-section-title">등기·법무사</h3>
         <div class="field">
-          <label for="td-regStd">시가표준액 (채권 매입 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택채권 매입액은 매매가가 아니라 시가표준액(공동주택가격·개별주택가격·토지 공시지가)을 기준으로 합니다. 비워두면 매매가의 70%로 추정합니다.">?</span><a class="tip-link" href="https://www.realtyprice.kr/notice/main/main.do" target="_blank" rel="noopener" title="부동산공시가격알리미에서 정확한 공시가격 확인" aria-label="부동산공시가격알리미에서 정확한 공시가격 확인 (새 창)">↗</a></label>
+          <label for="td-regStd">시가표준액 (채권 매입 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택채권 매입액은 매매가가 아니라 시가표준액(공동주택가격·개별주택가격·토지 공시지가)을 기준으로 합니다. 비워두면 매매가의 70%로 추정합니다.">?</span><a class="tip-link" href="https://www.realtyprice.kr/notice/main/main.do" target="_blank" rel="noopener" title="부동산공시가격알리미에서 정확한 공시가격 확인" aria-label="부동산공시가격알리미에서 정확한 공시가격 확인 (새 창)">↗ 공시가격 확인</a></label>
           <div class="input-suffix" data-suffix="원">
             <input id="td-regStd" name="regStd" type="text" inputmode="numeric" data-format="won" value="" />
           </div>
-          <span class="hint">모르면 비워두세요 → 매매가 × 70%로 추정. 정확한 공시가격은 위 ↗ 아이콘으로 부동산공시가격알리미에서 확인하세요. 아래 <strong>단지 검색</strong>으로는 참고용 최근 실거래가를 대신 채울 수 있습니다.</span>
-        </div>
-        <div class="field" data-house-only>
-          <label for="td-regStdSearch">단지 검색으로 시가표준액 채우기 (선택)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="단지명을 검색하면 최근 실거래가 목록이 뜹니다. 참고용 추정치를 골라 위 시가표준액 칸에 채울 수 있습니다(공식 공시가격은 아님). 정확한 공시가격은 시가표준액 입력란 옆 ↗ 아이콘으로 부동산공시가격알리미에서 확인하세요.">?</span></label>
-          <input id="td-regStdSearch" type="search" placeholder="단지명을 입력하세요 (예: 헬리오시티)" autocomplete="off" />
-          <div class="regstd-results" id="regStdResults" hidden></div>
-          <p class="regstd-picked" id="regStdPicked" hidden></p>
+          <span class="hint">모르면 비워두세요 → 매매가 × 70%로 추정. 정확한 공시가격은 위 아이콘으로 확인하세요.</span>
         </div>
         <div class="field">
           <label for="td-regDiscount">국민주택채권 할인율<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="채권을 즉시 매도(할인)할 때 본인이 부담하는 손실률(고객부담률)입니다. 시장금리에 따라 매일 바뀌며 최근 15% 안팎입니다. 당일 정확한 값은 은행 국민주택채권 포털에서 확인하세요.">?</span></label>
@@ -588,152 +555,26 @@
 <script src="../assets/rates.js?v=20260629"></script>
 <script src="../assets/app.js?v=20260629"></script>
 <script>
-// 단지 검색 → 시가표준액 칸 자동 채움. transactions.json(43MB)은 검색창에 처음
-// 입력할 때만 지연 로드한다(계산기 첫 진입 시 무겁게 받지 않기 위함).
-// 채워지는 값은 '최근 실거래가'이며 공식 시가표준액(공시가격)이 아니다 — 공시가격은
-// 통상 실거래가보다 낮으므로(현실화율 반영) 이 값은 참고용 상한 추정치에 가깝다.
-// (예전엔 official_price.json에서 공식 공시가격도 함께 찾아 우선 표시했으나, V-World가
-// GitHub Actions IP를 차단해 그 데이터가 항상 비어 있을 수밖에 없어 제거함 — 정확한
-// 공시가격은 시가표준액 입력란 옆 ↗ 아이콘으로 부동산공시가격알리미에서 직접 확인.)
 (function () {
   'use strict';
-  var searchEl = document.getElementById('td-regStdSearch');
-  var resultsEl = document.getElementById('regStdResults');
-  var pickedEl = document.getElementById('regStdPicked');
   var regStdInput = document.getElementById('td-regStd');
-  if (!searchEl) return;
-
-  var DEALS = null, loading = null, DEALS_ASOF = '';
-  function ensureData() {
-    if (DEALS) return Promise.resolve(DEALS);
-    if (loading) return loading;
-    loading = fetch('../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : { deals: [] }; })
-      .catch(function () { return { deals: [] }; })
-      .then(function (res) {
-        DEALS = res.deals || [];
-        DEALS_ASOF = res.as_of || '';
-        return DEALS;
-      });
-    return loading;
-  }
-
-  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function won(m) { var e = m / 10000; return (Number.isInteger(e) ? e : e.toFixed(1)) + '억'; }
-  function debounce(fn, ms) { var t; return function () { clearTimeout(t); var a = arguments; t = setTimeout(function () { fn.apply(null, a); }, ms); }; }
-
-  function renderAptList(deals, q) {
-    var byApt = {};
-    deals.forEach(function (d) {
-      var hay = (d.apt + ' ' + (d.region || '')).toLowerCase();
-      if (hay.indexOf(q) < 0) return;
-      var k = (d.region_key || '') + '|' + d.apt;
-      if (!byApt[k]) byApt[k] = { name: d.apt, region: d.region || d.region_key, regionKey: d.region_key || '', count: 0 };
-      byApt[k].count += 1;
-    });
-    var list = Object.keys(byApt).map(function (k) { return byApt[k]; })
-      .sort(function (a, b) { return b.count - a.count; }).slice(0, 20);
-    if (!list.length) {
-      resultsEl.innerHTML = '<div class="rs-apt" style="color:var(--text-muted);cursor:default;">일치하는 단지가 없습니다.</div>';
-      resultsEl.hidden = false;
-      return;
-    }
-    resultsEl.innerHTML = list.map(function (a) {
-      return '<div class="rs-apt" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region) + '" data-region-key="' + esc(a.regionKey) + '">' +
-        '<span class="rs-name">' + esc(a.name) + '</span><span class="rs-region">' + esc(a.region) + '</span></div>';
-    }).join('');
-    resultsEl.hidden = false;
-  }
-
-  function renderDealList(aptName, regionLabel) {
-    var deals = DEALS.filter(function (d) { return d.apt === aptName && (d.region || d.region_key) === regionLabel; })
-      .sort(function (a, b) { return a.date < b.date ? 1 : -1; }).slice(0, 15);
-    var html = '<div class="rs-back" data-back="1">← 목록으로</div>';
-    if (!deals.length) {
-      resultsEl.innerHTML = html + '<div class="rs-apt" style="cursor:default;color:var(--text-muted);">최근 실거래 내역이 없습니다.</div>';
-      resultsEl.hidden = false;
-      return;
-    }
-    html += '<div class="rs-official-head">최근 실거래가(참고용 추정)' +
-      (DEALS_ASOF ? ' · 기준 ' + esc(DEALS_ASOF) : '') + '</div>' + deals.map(function (d) {
-      return '<div class="rs-deal" data-price="' + d.price + '" data-area="' + d.area_m2 + '" data-pyeong="' + d.pyeong + '" data-date="' + d.date + '">' +
-        '<span>' + d.area_m2 + '㎡(' + d.pyeong + '평) · ' + d.date + '</span><strong>' + won(d.price) + '</strong></div>';
-    }).join('');
-    resultsEl.innerHTML = html;
-    resultsEl.hidden = false;
-  }
-
-  searchEl.addEventListener('focus', function () { ensureData(); });
-  searchEl.addEventListener('input', debounce(function () {
-    var q = searchEl.value.trim().toLowerCase();
-    if (!q) { resultsEl.hidden = true; return; }
-    ensureData().then(function (deals) { renderAptList(deals, q); });
-  }, 200));
-
-  var curApt = null, curRegion = null;
-  resultsEl.addEventListener('click', function (e) {
-    var back = e.target.closest('.rs-back');
-    if (back) { renderAptList(DEALS, searchEl.value.trim().toLowerCase()); return; }
-    var deal = e.target.closest('.rs-deal');
-    if (deal) {
-      var dealWon = Number(deal.dataset.price) * 10000;   // transactions.json 단위: 만원 → 원
-      regStdInput.value = dealWon;
-      regStdInput.dispatchEvent(new Event('input', { bubbles: true }));
-      pickedEl.innerHTML = '선택됨: ' + esc(curApt) + ' ' + esc(deal.dataset.area) + '㎡(' + esc(deal.dataset.pyeong) + '평) · ' +
-        esc(deal.dataset.date) + ' 실거래 ' + won(Number(deal.dataset.price)) + ' → 시가표준액에 채움(실거래가 기준, 공시가격 아님) ' +
-        '<button type="button" class="rs-use-price" data-won="' + dealWon + '" ' +
-        'style="margin-left:6px;padding:2px 8px;font-size:0.78rem;cursor:pointer;border:1px solid var(--accent,#2563eb);' +
-        'border-radius:6px;background:transparent;color:var(--accent,#2563eb);">매매가에도 적용</button>';
-      pickedEl.hidden = false;
-      resultsEl.hidden = true;
-      searchEl.value = curApt;
-      return;
-    }
-    var apt = e.target.closest('.rs-apt');
-    if (apt && apt.dataset.apt) {
-      curApt = apt.dataset.apt; curRegion = apt.dataset.region;
-      renderDealList(curApt, curRegion);
-    }
-  });
-  document.addEventListener('click', function (e) {
-    if (!resultsEl.contains(e.target) && e.target !== searchEl) resultsEl.hidden = true;
-  });
-
-  // '매매가에도 적용' — 선택한 실거래가를 매수 시나리오의 매매가 입력란에도 넣는다.
-  //  (시가표준액만 바꾸면 매매가 기본값과 어긋난 채 계산되는 걸 사용자가 놓치기 쉬움)
-  pickedEl.addEventListener('click', function (e) {
-    var btn = e.target.closest('.rs-use-price');
-    if (!btn) return;
-    var priceInput = document.getElementById('td-price');
-    if (!priceInput) return;
-    priceInput.value = Number(btn.dataset.won);
-    priceInput.dispatchEvent(new Event('input', { bubbles: true }));
-    btn.textContent = '매매가 적용됨 ✓';
-    btn.disabled = true;
-  });
 
   // URL 파라미터 프리필 — 실거래가 페이지 등 데이터 화면에서 '이 가격으로 계산' 동선용.
-  //  ?price=매매가(원) & std=시가표준액(원) & apt=단지명 (모두 선택). 값은 숫자만 채택.
+  //  ?price=매매가(원) & std=시가표준액(원) (모두 선택). 값은 숫자만 채택.
+  // (2026-07-19: 시가표준액 칸을 실거래가로 채우는 검색 기능은 제거함 — 실거래가와
+  //  공시가격(시가표준액)은 서로 다른 값이라 섞어 보여주면 오해를 준다. 공식 공시가격은
+  //  입력란 옆 '↗ 공시가격 확인' 링크로 부동산공시가격알리미에서 직접 확인해야 한다.)
   try {
     var qs = new URLSearchParams(location.search);
     var qPrice = Number(String(qs.get('price') || '').replace(/[^0-9]/g, ''));
     var qStd = Number(String(qs.get('std') || '').replace(/[^0-9]/g, ''));
-    var qApt = (qs.get('apt') || '').trim();
     if (qPrice > 0) {
       var priceEl = document.getElementById('td-price');
       if (priceEl) { priceEl.value = qPrice; priceEl.dispatchEvent(new Event('input', { bubbles: true })); }
     }
-    if (qStd > 0) {
+    if (qStd > 0 && regStdInput) {
       regStdInput.value = qStd;
       regStdInput.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-    if (qApt) {
-      searchEl.value = qApt;
-      if (qPrice > 0) {
-        pickedEl.textContent = qApt + ' 실거래가 ' + won(qPrice / 10000) + '를 매매가에 채웠습니다. ' +
-          '시가표준액은 비워두면 매매가 × 70%로 추정합니다.';
-        pickedEl.hidden = false;
-      }
     }
   } catch (e) {}
 
