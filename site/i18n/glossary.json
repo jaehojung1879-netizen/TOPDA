@@ -5,7 +5,7 @@
   "categories": [
     {
       "id": "visa",
-      "label": { "ko": "비자·체류", "en": "Visa & residence" },
+      "label": { "ko": "비자·체류", "en": "Visa & residence", "zh-Hans": "签证·居留", "zh-Hant": "簽證·居留", "vi": "Thị thực & cư trú", "th": "วีซ่าและถิ่นพำนัก" },
       "terms": [
         { "id": "f2", "ko": "F-2 (거주)", "method": "코드 유지", "en": "F-2 (long-term residence visa)", "zh-Hans": "F-2（居住签证）", "zh-Hant": "F-2（居留簽證）", "vi": "F-2 (thị thực cư trú dài hạn)", "th": "F-2 (วีซ่าพำนักระยะยาว)" },
         { "id": "f4", "ko": "F-4 (재외동포)", "method": "직역", "en": "F-4 (overseas Korean)", "zh-Hans": "F-4（在外同胞）", "zh-Hant": "F-4（在外同胞）", "vi": "F-4 (người gốc Hàn ở nước ngoài)", "th": "F-4 (ชาวเกาหลีโพ้นทะเล)" },
@@ -20,7 +20,7 @@
     },
     {
       "id": "lease",
-      "label": { "ko": "임대차", "en": "Leasing" },
+      "label": { "ko": "임대차", "en": "Leasing", "zh-Hans": "租赁", "zh-Hant": "租賃", "vi": "Thuê nhà", "th": "การเช่า" },
       "terms": [
         { "id": "jeonse", "ko": "전세", "romanization": "Jeonse", "method": "음역+설명", "en": "Jeonse — lump-sum deposit lease (no monthly rent)", "zh-Hans": "全租房（Jeonse，一次性大额押金租赁，无月租）", "zh-Hant": "全租房（Jeonse，一次性大額押金租賃，無月租）", "vi": "Jeonse — thuê nhà bằng tiền đặt cọc lớn một lần (không trả tiền hằng tháng)", "th": "Jeonse — เช่าบ้านด้วยเงินมัดจำก้อนใหญ่ครั้งเดียว (ไม่มีค่าเช่ารายเดือน)" },
         { "id": "wolse", "ko": "월세", "romanization": "Wolse", "method": "직역", "en": "Wolse — monthly rent (+ smaller deposit)", "zh-Hans": "月租", "zh-Hant": "月租", "vi": "Wolse — tiền thuê hằng tháng (kèm cọc nhỏ hơn)", "th": "Wolse — ค่าเช่ารายเดือน (พร้อมเงินมัดจำที่น้อยกว่า)" },
@@ -37,7 +37,7 @@
     },
     {
       "id": "sale",
-      "label": { "ko": "매매·소유", "en": "Buying & ownership" },
+      "label": { "ko": "매매·소유", "en": "Buying & ownership", "zh-Hans": "买卖·持有", "zh-Hant": "買賣·持有", "vi": "Mua bán & sở hữu", "th": "การซื้อขายและถือครอง" },
       "terms": [
         { "id": "deunggibu", "ko": "등기부등본", "method": "직역", "en": "Certified copy of the property register", "zh-Hans": "不动产登记簿誊本", "zh-Hant": "不動產登記簿謄本", "vi": "Bản sao sổ đăng ký bất động sản", "th": "สำเนาทะเบียนอสังหาริมทรัพย์" },
         { "id": "silgeoraega", "ko": "실거래가", "method": "직역", "en": "Actual (reported) transaction price", "zh-Hans": "实际成交价", "zh-Hant": "實際成交價", "vi": "Giá giao dịch thực tế", "th": "ราคาซื้อขายจริง" },
@@ -50,7 +50,7 @@
     },
     {
       "id": "loan",
-      "label": { "ko": "대출·보증", "en": "Loans & guarantees" },
+      "label": { "ko": "대출·보증", "en": "Loans & guarantees", "zh-Hans": "贷款·担保", "zh-Hant": "貸款·擔保", "vi": "Vay vốn & bảo lãnh", "th": "สินเชื่อและการค้ำประกัน" },
       "terms": [
         { "id": "ltv", "ko": "LTV (담보인정비율)", "method": "약어 유지", "en": "LTV — Loan-to-Value", "zh-Hans": "LTV（贷款价值比）", "zh-Hant": "LTV（貸款價值比）", "vi": "LTV — tỷ lệ vay trên giá trị", "th": "LTV — อัตราส่วนเงินกู้ต่อมูลค่า" },
         { "id": "dti", "ko": "DTI (총부채상환비율)", "method": "약어 유지", "en": "DTI — Debt-to-Income", "zh-Hans": "DTI（总负债偿还比率）", "zh-Hant": "DTI（總負債償還比率）", "vi": "DTI — nợ trên thu nhập", "th": "DTI — หนี้ต่อรายได้" },
@@ -65,7 +65,7 @@
     },
     {
       "id": "institution",
-      "label": { "ko": "기관·서류", "en": "Institutions & documents" },
+      "label": { "ko": "기관·서류", "en": "Institutions & documents", "zh-Hans": "机构·文件", "zh-Hant": "機構·文件", "vi": "Cơ quan & giấy tờ", "th": "หน่วยงานและเอกสาร" },
       "terms": [
         { "id": "molit", "ko": "국토교통부", "method": "직역", "en": "Ministry of Land, Infrastructure and Transport (MOLIT)", "zh-Hans": "国土交通部", "zh-Hant": "國土交通部", "vi": "Bộ Đất đai, Hạ tầng và Giao thông", "th": "กระทรวงที่ดิน โครงสร้างพื้นฐานและการขนส่ง" },
         { "id": "fss", "ko": "금융감독원", "method": "직역", "en": "Financial Supervisory Service (FSS)", "zh-Hans": "金融监督院", "zh-Hant": "金融監督院", "vi": "Cơ quan Giám sát Tài chính", "th": "สำนักงานกำกับดูแลการเงิน" },

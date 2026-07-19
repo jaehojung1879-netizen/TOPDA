@@ -27,10 +27,10 @@
   const PAGES = {
     ko: { all: true, exclude: ['foreigner-loan.html', 'foreigner-tax.html', 'jeonse.html', 'glossary.html'] },
     en: { list: ['index.html', 'jeonse.html', 'foreigner-loan.html', 'foreigner-tax.html', 'glossary.html', 'auction.html', 'about.html', 'feedback.html', 'calculators/index.html', 'calculators/acquisition-tax.html', 'calculators/brokerage-fee.html', 'calculators/jeonse-monthly.html', 'calculators/auction-bid.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
-    'zh-Hans': { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
-    'zh-Hant': { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
-    vi: { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/balance-settlement.html'] },
-    th: { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/balance-settlement.html'] },
+    'zh-Hans': { list: ['index.html', 'glossary.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
+    'zh-Hant': { list: ['index.html', 'glossary.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
+    vi: { list: ['index.html', 'glossary.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/balance-settlement.html'] },
+    th: { list: ['index.html', 'glossary.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/balance-settlement.html'] },
   };
   const LANG_PREFIX = ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th'];
 
