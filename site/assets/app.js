@@ -3745,3 +3745,61 @@ function calcJeonseLoanByAgency(deposit, opts) {
   }, { passive: true });
   update();
 })();
+
+/* ===== Guide TOC: 모바일 접기 + 스크롤 스파이 =====
+   .g-toc(목차) 안의 링크(#anchor)를 감지해 현재 챕터를 강조한다. */
+(function () {
+  var toc = document.querySelector('.g-toc');
+  if (!toc) return;
+
+  // 모바일에서 접기/펼치기
+  var toggle = toc.querySelector('.g-toc-toggle');
+  if (toggle) {
+    var collapsed = window.matchMedia('(max-width: 767px)').matches;
+    toc.setAttribute('data-collapsed', collapsed ? 'true' : 'false');
+    toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    toggle.addEventListener('click', function () {
+      var now = toc.getAttribute('data-collapsed') === 'true';
+      toc.setAttribute('data-collapsed', now ? 'false' : 'true');
+      toggle.setAttribute('aria-expanded', now ? 'true' : 'false');
+      toggle.textContent = now ? '접기' : '펼치기';
+    });
+  }
+
+  // 링크 클릭 시 모바일에서 목차 자동 접기
+  var links = Array.prototype.slice.call(toc.querySelectorAll('.g-toc-list a[href^="#"]'));
+  links.forEach(function (a) {
+    a.addEventListener('click', function () {
+      if (window.matchMedia('(max-width: 767px)').matches && toggle) {
+        toc.setAttribute('data-collapsed', 'true');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.textContent = '펼치기';
+      }
+    });
+  });
+
+  // 스크롤 스파이
+  var targets = links
+    .map(function (a) {
+      var id = a.getAttribute('href').slice(1);
+      var el = document.getElementById(id);
+      return el ? { link: a, el: el } : null;
+    })
+    .filter(Boolean);
+  if (!targets.length) return;
+
+  var ticking = false;
+  function spy() {
+    ticking = false;
+    var offset = 120;
+    var current = targets[0];
+    for (var i = 0; i < targets.length; i++) {
+      if (targets[i].el.getBoundingClientRect().top - offset <= 0) current = targets[i];
+    }
+    targets.forEach(function (t) { t.link.classList.toggle('is-active', t === current); });
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(spy); }
+  }, { passive: true });
+  spy();
+})();
