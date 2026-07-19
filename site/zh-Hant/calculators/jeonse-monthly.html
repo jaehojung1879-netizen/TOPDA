@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- i18n:review lang=zh-Hant — 機器初譯，需母語者校對 -->
+<title>Jeonse（全租）↔ 月租 換算器 — TOPDA</title>
+<meta name="description" content="按 Jeonse 換算率在全租押金與月租之間雙向換算。" />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="canonical" href="https://topda.kr/zh-Hant/calculators/jeonse-monthly.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="TOPDA" />
+<meta property="og:title" content="Jeonse（全租）↔ 月租 換算器 — TOPDA" />
+<meta property="og:description" content="按 Jeonse 換算率在全租押金與月租之間雙向換算。" />
+<meta property="og:url" content="https://topda.kr/zh-Hant/calculators/jeonse-monthly.html" />
+<meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
+<meta property="og:locale" content="zh_TW" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/calculators/jeonse-monthly.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/calculators/jeonse-monthly.html" />
+<link rel="alternate" hreflang="zh-Hans" href="https://topda.kr/zh-Hans/calculators/jeonse-monthly.html" />
+<link rel="alternate" hreflang="zh-Hant" href="https://topda.kr/zh-Hant/calculators/jeonse-monthly.html" />
+<link rel="alternate" hreflang="vi" href="https://topda.kr/vi/calculators/jeonse-monthly.html" />
+<link rel="alternate" hreflang="th" href="https://topda.kr/th/calculators/jeonse-monthly.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/jeonse-monthly.html" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260719"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../../assets/styles.css?v=20260719" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://topda.kr/zh-Hant/index.html"},{"@type":"ListItem","position":2,"name":"計算器","item":"https://topda.kr/zh-Hant/calculators/index.html"},{"@type":"ListItem","position":3,"name":"Jeonse（全租）↔ 月租 換算器","item":"https://topda.kr/zh-Hant/calculators/jeonse-monthly.html"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Jeonse（全租）↔ 月租 換算器","url":"https://topda.kr/zh-Hant/calculators/jeonse-monthly.html","applicationCategory":"FinanceApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","inLanguage":"zh-Hant","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"publisher":{"@id":"https://topda.kr/#organization"}}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>TOPDA</a>
+    <nav class="nav">
+      <a href="index.html" data-nav class="active">計算器</a>
+      <a href="../../en/glossary.html" data-nav>術語表</a>
+      <a href="../../en/index.html" data-nav>English</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="index.html">計算器</a>
+    <a href="../../en/glossary.html">術語表</a>
+    <a href="../index.html">首頁</a>
+    <a href="../../index.html">한국어</a>
+  </div>
+</header>
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">首頁</a> / <a href="index.html">計算器</a> / Jeonse ↔ 月租</div>
+    <h1>Jeonse（全租）↔ 月租 換算器</h1>
+    <div class="meta"><span>採用全租↔月租換算率（전월세전환율）。</span></div>
+  </div>
+  <div class="calc-layout" data-calc="jeonse-monthly">
+    <div class="calc-form">
+      <div class="field"><label>換算方向</label>
+        <div class="radio-group">
+          <label><input type="radio" name="mode" value="toMonthly" checked/><span>全租 → 月租</span></label>
+          <label><input type="radio" name="mode" value="toJeonse"/><span>月租 → 全租</span></label>
+        </div>
+      </div>
+      <div class="field"><label for="jm-deposit">目前全租押金（KRW）</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="jm-deposit" name="deposit" type="text" inputmode="numeric" data-format="won" value="500,000,000" /></div>
+      </div>
+      <div class="field" data-mode="toMonthly"><label for="jm-base">換算後保留的押金（KRW）</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="jm-base" name="baseDeposit" type="text" inputmode="numeric" data-format="won" value="100,000,000" /></div>
+        <span class="hint">不換成月租、想保留的押金。</span>
+      </div>
+      <div class="field"><label for="jm-monthly">月租（KRW）</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="jm-monthly" name="monthly" type="text" inputmode="numeric" data-format="won" value="1,000,000" /></div>
+        <span class="hint">在「月租 → 全租」方向作為輸入。</span>
+      </div>
+      <div class="field"><label for="jm-rate">換算率（%/年）</label>
+        <input id="jm-rate" name="rate" type="number" min="1" max="15" step="0.1" value="5.5" />
+        <span class="hint">法定上限 = 韓國央行基準利率+2% 與 10%/年 中較低者。</span>
+      </div>
+    </div>
+    <div class="calc-result">
+      <h3>結果</h3>
+      <div data-mode="toMonthly">
+        <div class="total"><span data-out="outMonthly">KRW 0</span> / 月</div>
+        <div class="breakdown">
+          <div class="row"><span class="key">保留押金</span><span class="val" data-out="outBaseDeposit">KRW 0</span></div>
+          <div class="row sub"><span class="key">由押金換算</span><span class="val" data-out="outConverted">KRW 0</span></div>
+        </div>
+      </div>
+      <div data-mode="toJeonse" style="display:none;">
+        <div class="total" data-out="outTotalDeposit">KRW 0</div>
+        <div class="breakdown"><div class="row sub"><span class="key">由月租換算增加</span><span class="val" data-out="outAddedDeposit">KRW 0</span></div></div>
+      </div>
+      <div class="breakdown" style="margin-top:16px;"><div class="row"><span class="key">適用換算率</span><span class="val" data-out="outRate">—</span></div></div>
+      <div class="callout callout-info" style="margin-top:24px; margin-bottom:0;"><div class="icon">i</div><div class="body">換算率由法律規定；實際市場利率可能不同。公式：月租 =（押金 − 保留）× 換算率 ÷ 12。</div></div>
+    </div>
+  </div>
+</main>
+<footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. 僅供一般資訊參考。</p></div></footer>
+<script src="../../assets/rates.js?v=20260719"></script>
+<script src="../../assets/app.js?v=20260719"></script>
+</body>
+</html>
