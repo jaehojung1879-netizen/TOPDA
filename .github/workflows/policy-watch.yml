@@ -1,0 +1,56 @@
+name: foreigner policy watch
+
+# 외국인 대출·부동산 정책 페이지 변경 감지 — 매월 1일 10:00 KST(01:00 UTC).
+# 기존 일일 갱신·대시보드(평일 07:00 KST)와 겹치지 않는다.
+# 변경 감지 시 GitHub Issue 를 생성하고, 콘텐츠 자동 반영은 하지 않는다(오판 방지, 수동 검토).
+on:
+  schedule:
+    - cron: "0 1 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: policy-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Snapshot & diff official policy pages
+        id: watch
+        run: node scripts/policy_watch.mjs
+
+      - name: Commit updated snapshots
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if ! git diff --quiet -- _meta/policy-snapshots/snapshots.json; then
+            git config user.name "topda-bot"
+            git config user.email "bot@topda.kr"
+            git add _meta/policy-snapshots/snapshots.json
+            git commit -m "정책 페이지 스냅샷 갱신 ($(date -u +%Y-%m-%d))"
+            git push
+          fi
+
+      - name: Open issue on detected change
+        if: steps.watch.outputs.changed != '0' && steps.watch.outputs.changed != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create policy-watch --color b60205 --description "외국인 정책 페이지 변경 감지" 2>/dev/null || true
+          printf '%b' "${{ steps.watch.outputs.body }}" > /tmp/body.md
+          gh issue create \
+            --title "외국인 정책 페이지 변경 감지 ($(date -u +%Y-%m-%d))" \
+            --label policy-watch \
+            --body-file /tmp/body.md
