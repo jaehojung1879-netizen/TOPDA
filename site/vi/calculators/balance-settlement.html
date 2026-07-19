@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- i18n:review lang=vi — bản dịch máy, cần người bản ngữ rà soát -->
+<title>Máy tính quyết toán ngày tất toán — TOPDA</title>
+<meta name="description" content="Tính phí quản lý chia theo ngày, phí quản lý trả trước và quỹ sửa chữa dài hạn vào ngày tất toán (ngày trả số dư)." />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="canonical" href="https://topda.kr/vi/calculators/balance-settlement.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="TOPDA" />
+<meta property="og:title" content="Máy tính quyết toán ngày tất toán — TOPDA" />
+<meta property="og:description" content="Tính phí quản lý chia theo ngày, phí quản lý trả trước và quỹ sửa chữa dài hạn vào ngày tất toán (ngày trả số dư)." />
+<meta property="og:url" content="https://topda.kr/vi/calculators/balance-settlement.html" />
+<meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
+<meta property="og:locale" content="vi_VN" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="zh-Hans" href="https://topda.kr/zh-Hans/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="zh-Hant" href="https://topda.kr/zh-Hant/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="vi" href="https://topda.kr/vi/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="th" href="https://topda.kr/th/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/balance-settlement.html" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260719"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../../assets/styles.css?v=20260719" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Trang chủ","item":"https://topda.kr/vi/index.html"},{"@type":"ListItem","position":2,"name":"Công cụ tính","item":"https://topda.kr/vi/calculators/index.html"},{"@type":"ListItem","position":3,"name":"Máy tính quyết toán ngày tất toán","item":"https://topda.kr/vi/calculators/balance-settlement.html"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Máy tính quyết toán ngày tất toán","url":"https://topda.kr/vi/calculators/balance-settlement.html","applicationCategory":"FinanceApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","inLanguage":"vi","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"publisher":{"@id":"https://topda.kr/#organization"}}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>TOPDA</a>
+    <nav class="nav">
+      <a href="index.html" data-nav class="active">Công cụ tính</a>
+      <a href="../../en/glossary.html" data-nav>Từ điển</a>
+      <a href="../../en/index.html" data-nav>English</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="index.html">Công cụ tính</a>
+    <a href="../../en/glossary.html">Từ điển</a>
+    <a href="../index.html">Trang chủ</a>
+    <a href="../../index.html">한국어</a>
+  </div>
+</header>
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">Trang chủ</a> / <a href="index.html">Công cụ tính</a> / Quyết toán ngày tất toán</div>
+    <h1>Máy tính quyết toán ngày tất toán</h1>
+    <div class="meta"><span>Chia phí quản lý theo ngày · phí trả trước · quỹ sửa chữa dài hạn</span></div>
+  </div>
+  <div class="calc-layout" data-calc="balance-settlement">
+    <div class="calc-form">
+      <h3 style="font-size:1rem; margin-bottom:12px; color:var(--text-muted);">① Phí quản lý chia theo ngày</h3>
+      <div class="field"><label for="bs-fee">Tổng phí quản lý trong tháng (KRW)</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="bs-fee" name="monthlyFee" type="text" inputmode="numeric" data-format="won" value="350,000" /></div>
+        <span class="hint">Hóa đơn của tháng ngay trước ngày tất toán.</span>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for="bs-dim">Số ngày trong tháng</label><input id="bs-dim" name="daysInMonth" type="number" min="28" max="31" value="30" /></div>
+        <div class="field"><label for="bs-dom">Số ngày bên bán sử dụng</label><input id="bs-dom" name="daysOccupiedBySeller" type="number" min="0" max="31" value="15" /><span class="hint">Từ ngày 1 đến ngày tất toán.</span></div>
+      </div>
+      <h3 style="font-size:1rem; margin:24px 0 12px; color:var(--text-muted);">② Phí trả trước & quỹ sửa chữa dài hạn</h3>
+      <div class="field"><label for="bs-prepaid">Phí quản lý trả trước (KRW)</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="bs-prepaid" name="prepaidFee" type="text" inputmode="numeric" data-format="won" value="500,000" /></div>
+        <span class="hint">Khoản cọc bên bán đã nộp khi chuyển vào; bên mua hoàn lại cho bên bán.</span>
+      </div>
+      <div class="field"><label for="bs-long">Quỹ sửa chữa dài hạn lũy kế (KRW)</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="bs-long" name="accumLongRepair" type="text" inputmode="numeric" data-format="won" value="0" /></div>
+        <span class="hint">Nếu người thuê đã trả hằng tháng, chủ nhà hoàn lại cho người thuê khi hết hợp đồng.</span>
+      </div>
+      <h3 style="font-size:1rem; margin:24px 0 12px; color:var(--text-muted);">③ Quyết toán theo chỉ số công tơ</h3>
+      <div class="field"><label for="bs-gas">Gas (phần bên bán dùng sau khi chốt chỉ số)</label><div class="input-suffix" data-suffix="KRW"><input id="bs-gas" name="gasCost" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>
+      <div class="field"><label for="bs-elec">Điện (phần bên bán dùng)</label><div class="input-suffix" data-suffix="KRW"><input id="bs-elec" name="electricCost" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>
+      <div class="field"><label for="bs-add">Khác (nước/internet chưa thanh toán)</label><div class="input-suffix" data-suffix="KRW"><input id="bs-add" name="additional" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>
+    </div>
+    <div class="calc-result">
+      <h3>Kết quả quyết toán ngày tất toán</h3>
+      <div class="total" data-out="settlement">KRW 0</div>
+      <div class="result-sub">Số tiền bên bán nhận (+) hoặc phải trả (−)</div>
+      <div class="breakdown">
+        <div class="row"><span class="key">Phần bên bán chịu (chia theo ngày)</span><span class="val" data-out="sellerShare">KRW 0</span></div>
+        <div class="row sub"><span class="key">Phần bên mua chịu (còn lại)</span><span class="val" data-out="buyerShare">KRW 0</span></div>
+        <div class="row"><span class="key">Bên mua → Bên bán (phí trả trước)</span><span class="val" data-out="prepaidOut">KRW 0</span></div>
+        <div class="row"><span class="key">Người thuê → Bên mua (quỹ sửa chữa)</span><span class="val" data-out="longRepairOut">KRW 0</span></div>
+        <div class="row sub"><span class="key">Tổng quyết toán bên bán</span><span class="val" data-out="netSeller">KRW 0</span></div>
+      </div>
+      <div class="callout callout-info" style="margin-top:20px; margin-bottom:0;"><div class="icon">i</div><div class="body">Quỹ sửa chữa dài hạn về nguyên tắc do chủ sở hữu chịu; nếu người thuê đã trả hằng tháng thì hoàn lại cho người thuê khi hết hợp đồng, không quyết toán trực tiếp vào ngày tất toán mua bán.</div></div>
+    </div>
+  </div>
+</main>
+<footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. Chỉ là thông tin chung.</p></div></footer>
+<script src="../../assets/rates.js?v=20260719"></script>
+<script src="../../assets/app.js?v=20260719"></script>
+</body>
+</html>

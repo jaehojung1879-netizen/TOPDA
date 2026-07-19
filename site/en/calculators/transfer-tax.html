@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Capital Gains Tax Calculator — TOPDA</title>
+<meta name="description" content="Calculate Korean capital gains tax on a home sale, including the 1-home exemption, long-term deduction, and multi-home surcharge." />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="canonical" href="https://topda.kr/en/calculators/transfer-tax.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="TOPDA" />
+<meta property="og:title" content="Capital Gains Tax Calculator — TOPDA" />
+<meta property="og:description" content="Calculate Korean capital gains tax on a home sale, including the 1-home exemption, long-term deduction, and multi-home surcharge." />
+<meta property="og:url" content="https://topda.kr/en/calculators/transfer-tax.html" />
+<meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/calculators/transfer-tax.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/calculators/transfer-tax.html" />
+<link rel="alternate" hreflang="zh-Hans" href="https://topda.kr/zh-Hans/calculators/transfer-tax.html" />
+<link rel="alternate" hreflang="zh-Hant" href="https://topda.kr/zh-Hant/calculators/transfer-tax.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/transfer-tax.html" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260719"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../../assets/styles.css?v=20260719" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://topda.kr/en/index.html"},{"@type":"ListItem","position":2,"name":"Calculators","item":"https://topda.kr/en/calculators/index.html"},{"@type":"ListItem","position":3,"name":"Capital Gains Tax Calculator","item":"https://topda.kr/en/calculators/transfer-tax.html"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Capital Gains Tax Calculator","url":"https://topda.kr/en/calculators/transfer-tax.html","applicationCategory":"FinanceApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"publisher":{"@id":"https://topda.kr/#organization"}}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>TOPDA</a>
+    <nav class="nav">
+      <a href="index.html" data-nav class="active">Calculators</a>
+      <a href="../../en/glossary.html" data-nav>Glossary</a>
+      <a href="../../en/index.html" data-nav>English</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="index.html">Calculators</a>
+    <a href="../../en/glossary.html">Glossary</a>
+    <a href="../index.html">Home</a>
+    <a href="../../index.html">한국어</a>
+  </div>
+</header>
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Calculators</a> / Capital Gains Tax</div>
+    <h1>Capital Gains Tax Calculator</h1>
+    <div class="meta"><span>Home sale · 1-home exemption · long-term holding deduction · multi-home surcharge</span></div>
+  </div>
+  <div class="calc-layout" data-calc="transfer-tax">
+    <div class="calc-form">
+      <div class="field"><label for="t-sell">Sale price (KRW)</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="t-sell" name="sellPrice" type="text" inputmode="numeric" data-format="won" value="1,500,000,000" /></div>
+        <span class="hint">Actual contract sale price.</span>
+      </div>
+      <div class="field"><label for="t-buy">Purchase price (KRW)</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="t-buy" name="buyPrice" type="text" inputmode="numeric" data-format="won" value="900,000,000" /></div>
+        <span class="hint">Actual price when acquired.</span>
+      </div>
+      <div class="field"><label for="t-cost">Necessary expenses (KRW)</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="t-cost" name="cost" type="text" inputmode="numeric" data-format="won" value="25,000,000" /></div>
+        <span class="hint">Acquisition tax, brokerage fee, capital expenditures (window/extension). Routine repairs do not count.</span>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for="t-hold">Holding period (years)</label><input id="t-hold" name="holdYears" type="number" min="0" max="30" step="1" value="8" /></div>
+        <div class="field"><label for="t-live">Residency period (years)</label><input id="t-live" name="liveYears" type="number" min="0" max="30" step="1" value="5" /><span class="hint">For the 1-home high-value long-term deduction.</span></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for="t-selldate">Sale (planned) date</label><input id="t-selldate" name="sellDate" type="date" value="" /></div>
+        <div class="field"><label for="t-owners">Ownership</label>
+          <select id="t-owners" name="jointOwners">
+            <option value="1">Sole</option><option value="2">2-way joint (e.g. spouses)</option><option value="3">3-way joint</option><option value="4">4-way joint</option>
+          </select>
+          <span class="hint">Splitting the gain across owners can lower the marginal bracket — see comparison below.</span>
+        </div>
+      </div>
+      <div class="field"><label>Number of homes (incl. this sale)</label>
+        <div class="radio-group">
+          <label><input type="radio" name="homes" value="1" checked/><span>1 home</span></label>
+          <label><input type="radio" name="homes" value="2"/><span>2 homes</span></label>
+          <label><input type="radio" name="homes" value="3"/><span>3+ homes</span></label>
+        </div>
+      </div>
+      <div class="field"><label class="check-item" style="padding:0; cursor:pointer;">
+        <input type="checkbox" name="onlyHome" checked/><span class="text">1-home household exemption eligible<span class="note">Held ≥ 2 years (incl. 2-year residency if acquired in a regulated area).</span></span>
+      </label></div>
+      <div class="field"><label class="check-item" style="padding:0; cursor:pointer;">
+        <input type="checkbox" name="regulated"/><span class="text">In a regulated area (at time of sale)<span class="note">Used to determine multi-home surcharge eligibility.</span></span>
+      </label></div>
+      <div class="field"><label class="check-item" style="padding:0; cursor:pointer;">
+        <input type="checkbox" name="multiSurcharge"/><span class="text">Apply multi-home surcharge<span class="note">+20%p for 2 homes, +30%p for 3+ homes in a regulated area.</span></span>
+      </label></div>
+    </div>
+    <div class="calc-result">
+      <h3>Estimated total tax due</h3>
+      <div class="total" data-out="total">KRW 0</div>
+      <div class="result-sub" data-out="effective">—</div>
+      <div class="breakdown">
+        <div class="row"><span class="key">Capital gain</span><span class="val" data-out="gain">KRW 0</span></div>
+        <div class="row sub"><span class="key">− Long-term holding deduction</span><span class="val" data-out="ltDeduct">KRW 0</span></div>
+        <div class="row sub"><span class="key">= Taxable gain amount</span><span class="val" data-out="income">KRW 0</span></div>
+        <div class="row sub"><span class="key">− Basic deduction (KRW 2.5M)</span><span class="val" data-out="basicDeduct">KRW 0</span></div>
+        <div class="row"><span class="key">Tax base</span><span class="val" data-out="taxBase">KRW 0</span></div>
+        <div class="row sub"><span class="key">Applied rate</span><span class="val" data-out="rate">—</span></div>
+        <div class="row"><span class="key">Capital gains tax</span><span class="val" data-out="incomeTax">KRW 0</span></div>
+        <div class="row sub"><span class="key">Local income tax (10%)</span><span class="val" data-out="localTax">KRW 0</span></div>
+      </div>
+      <div class="callout callout-success" data-out="exemptBox" style="display:none; margin-top:20px; margin-bottom:0;">
+        <div class="icon">✓</div><div class="body" data-out="exemptMsg"></div>
+      </div>
+      <div class="callout callout-info" data-out="jointBox" style="display:none; margin-top:16px; margin-bottom:0;">
+        <div class="icon">i</div>
+        <div class="body">
+          Sole <span data-out="jointSingle">KRW 0</span> · <span data-out="jointOwnersOut"></span> <span data-out="jointTotalOut">KRW 0</span>
+          → <span data-out="jointSavings" style="color:#059669; font-weight:700;"></span>
+        </div>
+      </div>
+      <div class="callout callout-info" style="margin-top:16px; margin-bottom:0;"><div class="icon">i</div><div class="body">Based on a standard residential home sale. Pre-sale rights, redevelopment rights, and carryover taxation are not modeled.</div></div>
+    </div>
+  </div>
+</main>
+<footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. General information only.</p></div></footer>
+<script src="../../assets/rates.js?v=20260719"></script>
+<script src="../../assets/app.js?v=20260719"></script>
+</body>
+</html>

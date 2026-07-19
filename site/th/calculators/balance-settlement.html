@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- i18n:review lang=th — แปลด้วยเครื่อง ต้องให้เจ้าของภาษาตรวจ -->
+<title>เครื่องคำนวณการชำระบัญชีวันโอนกรรมสิทธิ์ — TOPDA</title>
+<meta name="description" content="คำนวณค่าส่วนกลางแบบสัดส่วนวัน ค่าส่วนกลางที่จ่ายล่วงหน้า และกองทุนซ่อมแซมระยะยาว ณ วันโอนกรรมสิทธิ์ (วันจ่ายเงินส่วนที่เหลือ)" />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="canonical" href="https://topda.kr/th/calculators/balance-settlement.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="TOPDA" />
+<meta property="og:title" content="เครื่องคำนวณการชำระบัญชีวันโอนกรรมสิทธิ์ — TOPDA" />
+<meta property="og:description" content="คำนวณค่าส่วนกลางแบบสัดส่วนวัน ค่าส่วนกลางที่จ่ายล่วงหน้า และกองทุนซ่อมแซมระยะยาว ณ วันโอนกรรมสิทธิ์ (วันจ่ายเงินส่วนที่เหลือ)" />
+<meta property="og:url" content="https://topda.kr/th/calculators/balance-settlement.html" />
+<meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
+<meta property="og:locale" content="th_TH" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="zh-Hans" href="https://topda.kr/zh-Hans/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="zh-Hant" href="https://topda.kr/zh-Hant/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="vi" href="https://topda.kr/vi/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="th" href="https://topda.kr/th/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/balance-settlement.html" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260719"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../../assets/styles.css?v=20260719" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"หน้าแรก","item":"https://topda.kr/th/index.html"},{"@type":"ListItem","position":2,"name":"เครื่องคำนวณ","item":"https://topda.kr/th/calculators/index.html"},{"@type":"ListItem","position":3,"name":"เครื่องคำนวณการชำระบัญชีวันโอนกรรมสิทธิ์","item":"https://topda.kr/th/calculators/balance-settlement.html"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"เครื่องคำนวณการชำระบัญชีวันโอนกรรมสิทธิ์","url":"https://topda.kr/th/calculators/balance-settlement.html","applicationCategory":"FinanceApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","inLanguage":"th","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"publisher":{"@id":"https://topda.kr/#organization"}}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>TOPDA</a>
+    <nav class="nav">
+      <a href="index.html" data-nav class="active">เครื่องคำนวณ</a>
+      <a href="../../en/glossary.html" data-nav>อภิธานศัพท์</a>
+      <a href="../../en/index.html" data-nav>English</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="index.html">เครื่องคำนวณ</a>
+    <a href="../../en/glossary.html">อภิธานศัพท์</a>
+    <a href="../index.html">หน้าแรก</a>
+    <a href="../../index.html">한국어</a>
+  </div>
+</header>
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">หน้าแรก</a> / <a href="index.html">เครื่องคำนวณ</a> / ชำระบัญชีวันโอนกรรมสิทธิ์</div>
+    <h1>เครื่องคำนวณการชำระบัญชีวันโอนกรรมสิทธิ์</h1>
+    <div class="meta"><span>ค่าส่วนกลางตามสัดส่วนวัน · ค่าจ่ายล่วงหน้า · กองทุนซ่อมแซมระยะยาว</span></div>
+  </div>
+  <div class="calc-layout" data-calc="balance-settlement">
+    <div class="calc-form">
+      <h3 style="font-size:1rem; margin-bottom:12px; color:var(--text-muted);">① ค่าส่วนกลางตามสัดส่วนวัน</h3>
+      <div class="field"><label for="bs-fee">ค่าส่วนกลางรวมของเดือนนั้น (KRW)</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="bs-fee" name="monthlyFee" type="text" inputmode="numeric" data-format="won" value="350,000" /></div>
+        <span class="hint">บิลของเดือนก่อนวันโอนกรรมสิทธิ์</span>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for="bs-dim">จำนวนวันในเดือน</label><input id="bs-dim" name="daysInMonth" type="number" min="28" max="31" value="30" /></div>
+        <div class="field"><label for="bs-dom">จำนวนวันที่ผู้ขายครอบครอง</label><input id="bs-dom" name="daysOccupiedBySeller" type="number" min="0" max="31" value="15" /><span class="hint">ตั้งแต่วันที่ 1 ถึงวันโอนกรรมสิทธิ์</span></div>
+      </div>
+      <h3 style="font-size:1rem; margin:24px 0 12px; color:var(--text-muted);">② ค่าจ่ายล่วงหน้า & กองทุนซ่อมแซมระยะยาว</h3>
+      <div class="field"><label for="bs-prepaid">ค่าส่วนกลางที่จ่ายล่วงหน้า (KRW)</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="bs-prepaid" name="prepaidFee" type="text" inputmode="numeric" data-format="won" value="500,000" /></div>
+        <span class="hint">เงินมัดจำที่ผู้ขายจ่ายตอนย้ายเข้า ผู้ซื้อคืนให้ผู้ขาย</span>
+      </div>
+      <div class="field"><label for="bs-long">กองทุนซ่อมแซมระยะยาวสะสม (KRW)</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="bs-long" name="accumLongRepair" type="text" inputmode="numeric" data-format="won" value="0" /></div>
+        <span class="hint">หากผู้เช่าจ่ายรายเดือน เจ้าของจะคืนให้ผู้เช่าเมื่อสิ้นสุดสัญญา</span>
+      </div>
+      <h3 style="font-size:1rem; margin:24px 0 12px; color:var(--text-muted);">③ รายการชำระตามมิเตอร์</h3>
+      <div class="field"><label for="bs-gas">แก๊ส (ส่วนที่ผู้ขายใช้หลังจดมิเตอร์)</label><div class="input-suffix" data-suffix="KRW"><input id="bs-gas" name="gasCost" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>
+      <div class="field"><label for="bs-elec">ไฟฟ้า (ส่วนที่ผู้ขายใช้)</label><div class="input-suffix" data-suffix="KRW"><input id="bs-elec" name="electricCost" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>
+      <div class="field"><label for="bs-add">อื่นๆ (น้ำ/อินเทอร์เน็ตค้างจ่าย)</label><div class="input-suffix" data-suffix="KRW"><input id="bs-add" name="additional" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>
+    </div>
+    <div class="calc-result">
+      <h3>ผลการชำระบัญชีวันโอนกรรมสิทธิ์</h3>
+      <div class="total" data-out="settlement">KRW 0</div>
+      <div class="result-sub">จำนวนเงินที่ผู้ขายได้รับ (+) หรือต้องจ่าย (−)</div>
+      <div class="breakdown">
+        <div class="row"><span class="key">ส่วนที่ผู้ขายรับผิดชอบ (ตามสัดส่วนวัน)</span><span class="val" data-out="sellerShare">KRW 0</span></div>
+        <div class="row sub"><span class="key">ส่วนที่ผู้ซื้อรับผิดชอบ (ที่เหลือ)</span><span class="val" data-out="buyerShare">KRW 0</span></div>
+        <div class="row"><span class="key">ผู้ซื้อ → ผู้ขาย (ค่าจ่ายล่วงหน้า)</span><span class="val" data-out="prepaidOut">KRW 0</span></div>
+        <div class="row"><span class="key">ผู้เช่า → ผู้ซื้อ (กองทุนซ่อมแซม)</span><span class="val" data-out="longRepairOut">KRW 0</span></div>
+        <div class="row sub"><span class="key">ยอดชำระบัญชีรวมของผู้ขาย</span><span class="val" data-out="netSeller">KRW 0</span></div>
+      </div>
+      <div class="callout callout-info" style="margin-top:20px; margin-bottom:0;"><div class="icon">i</div><div class="body">กองทุนซ่อมแซมระยะยาวโดยหลักการเป็นภาระของเจ้าของ หากผู้เช่าจ่ายรายเดือนมาตลอด จะคืนให้ผู้เช่าเมื่อสิ้นสุดสัญญาเช่า ไม่ใช่การชำระบัญชีโดยตรงในวันโอนกรรมสิทธิ์การซื้อขาย</div></div>
+    </div>
+  </div>
+</main>
+<footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. เป็นข้อมูลทั่วไปเท่านั้น</p></div></footer>
+<script src="../../assets/rates.js?v=20260719"></script>
+<script src="../../assets/app.js?v=20260719"></script>
+</body>
+</html>

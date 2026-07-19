@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- i18n:review lang=zh-Hant — 機器初譯，需母語者校對 -->
+<title>交割日結算計算器 — TOPDA</title>
+<meta name="description" content="計算交割日（尾款日）管理費日割、預付管理費與長期維修儲備金結算。" />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="canonical" href="https://topda.kr/zh-Hant/calculators/balance-settlement.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="TOPDA" />
+<meta property="og:title" content="交割日結算計算器 — TOPDA" />
+<meta property="og:description" content="計算交割日（尾款日）管理費日割、預付管理費與長期維修儲備金結算。" />
+<meta property="og:url" content="https://topda.kr/zh-Hant/calculators/balance-settlement.html" />
+<meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
+<meta property="og:locale" content="zh_TW" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="zh-Hans" href="https://topda.kr/zh-Hans/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="zh-Hant" href="https://topda.kr/zh-Hant/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="vi" href="https://topda.kr/vi/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="th" href="https://topda.kr/th/calculators/balance-settlement.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/balance-settlement.html" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260719"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../../assets/styles.css?v=20260719" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://topda.kr/zh-Hant/index.html"},{"@type":"ListItem","position":2,"name":"計算器","item":"https://topda.kr/zh-Hant/calculators/index.html"},{"@type":"ListItem","position":3,"name":"交割日結算計算器","item":"https://topda.kr/zh-Hant/calculators/balance-settlement.html"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"交割日結算計算器","url":"https://topda.kr/zh-Hant/calculators/balance-settlement.html","applicationCategory":"FinanceApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","inLanguage":"zh-Hant","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"publisher":{"@id":"https://topda.kr/#organization"}}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>TOPDA</a>
+    <nav class="nav">
+      <a href="index.html" data-nav class="active">計算器</a>
+      <a href="../../en/glossary.html" data-nav>術語表</a>
+      <a href="../../en/index.html" data-nav>English</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="index.html">計算器</a>
+    <a href="../../en/glossary.html">術語表</a>
+    <a href="../index.html">首頁</a>
+    <a href="../../index.html">한국어</a>
+  </div>
+</header>
+<main class="container">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="../index.html">首頁</a> / <a href="index.html">計算器</a> / 交割日結算</div>
+    <h1>交割日結算計算器</h1>
+    <div class="meta"><span>管理費日割 · 預付管理費 · 長期維修儲備金</span></div>
+  </div>
+  <div class="calc-layout" data-calc="balance-settlement">
+    <div class="calc-form">
+      <h3 style="font-size:1rem; margin-bottom:12px; color:var(--text-muted);">① 管理費日割分攤</h3>
+      <div class="field"><label for="bs-fee">當月管理費總額（KRW）</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="bs-fee" name="monthlyFee" type="text" inputmode="numeric" data-format="won" value="350,000" /></div>
+        <span class="hint">交割日前一個月的帳單金額。</span>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for="bs-dim">當月天數</label><input id="bs-dim" name="daysInMonth" type="number" min="28" max="31" value="30" /></div>
+        <div class="field"><label for="bs-dom">賣方佔用天數</label><input id="bs-dom" name="daysOccupiedBySeller" type="number" min="0" max="31" value="15" /><span class="hint">從1日到交割日。</span></div>
+      </div>
+      <h3 style="font-size:1rem; margin:24px 0 12px; color:var(--text-muted);">② 預付管理費·長期維修儲備金</h3>
+      <div class="field"><label for="bs-prepaid">預付管理費（KRW）</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="bs-prepaid" name="prepaidFee" type="text" inputmode="numeric" data-format="won" value="500,000" /></div>
+        <span class="hint">賣方入住時繳納的押金性質費用，買方退還給賣方。</span>
+      </div>
+      <div class="field"><label for="bs-long">累計長期維修儲備金（KRW）</label>
+        <div class="input-suffix" data-suffix="KRW"><input id="bs-long" name="accumLongRepair" type="text" inputmode="numeric" data-format="won" value="0" /></div>
+        <span class="hint">若由房客按月繳納，租約結束時由房東退還給房客。</span>
+      </div>
+      <h3 style="font-size:1rem; margin:24px 0 12px; color:var(--text-muted);">③ 抄表結算項目</h3>
+      <div class="field"><label for="bs-gas">燃氣（抄表後賣方使用部分）</label><div class="input-suffix" data-suffix="KRW"><input id="bs-gas" name="gasCost" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>
+      <div class="field"><label for="bs-elec">電費（賣方使用部分）</label><div class="input-suffix" data-suffix="KRW"><input id="bs-elec" name="electricCost" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>
+      <div class="field"><label for="bs-add">其他（水費·網路等未繳費用）</label><div class="input-suffix" data-suffix="KRW"><input id="bs-add" name="additional" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>
+    </div>
+    <div class="calc-result">
+      <h3>交割日結算結果</h3>
+      <div class="total" data-out="settlement">KRW 0</div>
+      <div class="result-sub">賣方應收(+)或應付(−)金額</div>
+      <div class="breakdown">
+        <div class="row"><span class="key">賣方分攤管理費</span><span class="val" data-out="sellerShare">KRW 0</span></div>
+        <div class="row sub"><span class="key">買方分攤管理費</span><span class="val" data-out="buyerShare">KRW 0</span></div>
+        <div class="row"><span class="key">買方 → 賣方（預付管理費）</span><span class="val" data-out="prepaidOut">KRW 0</span></div>
+        <div class="row"><span class="key">房客 → 買方（維修儲備金）</span><span class="val" data-out="longRepairOut">KRW 0</span></div>
+        <div class="row sub"><span class="key">賣方結算合計</span><span class="val" data-out="netSeller">KRW 0</span></div>
+      </div>
+      <div class="callout callout-info" style="margin-top:20px; margin-bottom:0;"><div class="icon">i</div><div class="body">長期維修儲備金原則上由業主（房東）承擔；若房客按月隨管理費繳納，應在租約結束時退還房客，而非在買賣交割日直接結算。</div></div>
+    </div>
+  </div>
+</main>
+<footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. 僅供一般資訊參考。</p></div></footer>
+<script src="../../assets/rates.js?v=20260719"></script>
+<script src="../../assets/app.js?v=20260719"></script>
+</body>
+</html>

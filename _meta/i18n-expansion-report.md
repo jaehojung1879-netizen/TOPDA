@@ -47,7 +47,22 @@
   - 계산 로직은 `app.js` 그대로 재사용(언어 무관 동일). 생성기 `scripts/gen_calc_pages.mjs`로 일관 생성 → 신규 언어 추가 용이.
   - `app.js`의 통화/동적 문구를 한국어 외 전 언어에서 국제 표기(**KRW**·영문)로 렌더하도록 일반화(`isEn = lang !== 'ko'`).
   - jsdom 스모크 테스트로 3개 언어 계산기 실제 동작·KRW 출력·계산값 검증 완료.
-  - 남은 계산기(잔금정산·양도세·대출한도 등)와 동적 시나리오 문구의 완전 현지화는 후속 과제.
+
+- **후속 배치(잔금정산·양도세 추가 + 동적 문구 현지화)**: content-priority.yaml 순위에 따라 추가 진행.
+  - `balance-settlement`(잔금일 정산) → en/zh-Hans/zh-Hant/vi/th 5개 언어 전부 신설.
+  - `transfer-tax`(양도소득세) → en/zh-Hans/zh-Hant 3개 언어 신설(vi/th는 매핑상 hidden이라 제외).
+  - **동적 계산 결과 문구의 한국어 하드코딩 수정**: 기존에는 `acquisition-tax`의 시나리오 레이블
+    (예: "1주택 표준세율"), `transfer-tax`의 세율/면제 안내, `balance-settlement`의 정산 방향("매수자 → 매도자")이
+    계산 로직 내부에 **한국어로 고정**되어 있어, 번역된 페이지에서도 이 부분만 한국어로 노출되는 문제가 있었음.
+    계산 로직(세액·금액 산출)은 전혀 건드리지 않고, 결과에 `scenarioKey`/구조화 필드를 병행 반환하도록 확장한 뒤
+    UI 레이어에서 언어별 사전(`SCENARIO_I18N`, `TT_I18N`, `ARROW`)으로 표시 문구만 조립하도록 분리.
+    한국어 페이지 출력은 jsdom으로 수정 전후 동일함을 확인(회귀 없음).
+  - **hreflang 정확성 버그 수정**: 생성기가 실제로 존재하지 않는 언어(예: vi/th의 transfer-tax)에도
+    hreflang을 걸어 죽은 링크를 만들던 문제를 `availableLangsFor()`로 수정 — 실재하는 페이지만 상호 연결.
+  - EN 계산기 index(`en/calculators/index.html`, 수기 관리 페이지)는 재생성 스크립트가 건드리지 않고
+    새 카드 2개만 수동 삽입, content-priority 순서(취득세→양도세→중개보수→전월세→잔금정산→경매)로 재배열.
+  - 4개 언어 홈의 계산기 스트립도 우선순위 순서로 신규 계산기 카드 추가.
+  - jsdom으로 acquisition-tax(zh-Hans)·transfer-tax(en, 일반/비과세)·balance-settlement(vi) 재검증 통과.
 
 ---
 
