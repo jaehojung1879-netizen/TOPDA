@@ -602,9 +602,10 @@ details.explain .explain-body > :first-child { margin-top: 0; }
 .spec-card .meta-row:first-of-type { border-top: 0; }
 .spec-card .meta-row .k { color: var(--text-muted); }
 .spec-card .meta-row .v { font-weight: 600; }
-.spec-card .pros, .spec-card .cons { font-size: 0.88rem; padding: 8px 12px; border-radius: var(--radius-sm); margin-top: 4px; }
-.spec-card .pros { background: var(--success-soft); color: var(--success); }
-.spec-card .cons { background: var(--danger-soft); color: var(--danger); }
+.spec-card .pros, .spec-card .cons { font-size: 0.88rem; padding: 6px 0 0; margin-top: 2px; color: var(--text); line-height: 1.5; border-top: 1px solid var(--border); }
+.spec-card .pros:first-of-type, .spec-card .cons:first-of-type { }
+.spec-card .pros::before { content: "좋은 점"; display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; color: var(--text-subtle); margin-bottom: 2px; }
+.spec-card .cons::before { content: "아쉬운 점"; display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; color: var(--text-subtle); margin-bottom: 2px; }
 
 /* ===== TOC sidebar ===== */
 .layout-with-toc { display: grid; gap: 32px; grid-template-columns: 1fr; }
@@ -2857,36 +2858,39 @@ table.data.cmp th:first-child, table.data.cmp td:first-child { min-width: 116px;
 
 /* --- KeyPointBox --- */
 .g-keypoint {
-  border: 1px solid var(--border); border-left: 3px solid var(--accent);
-  background: var(--accent-soft); border-radius: var(--radius);
-  padding: 16px 18px; margin: 20px 0;
+  border: 1px solid var(--border); border-left: 2px solid var(--accent);
+  background: var(--surface); border-radius: var(--radius);
+  padding: 18px 20px; margin: 22px 0;
 }
 .g-keypoint .k-label {
-  font-size: 0.76rem; font-weight: 700; letter-spacing: 0.04em;
-  color: var(--accent); text-transform: uppercase; margin-bottom: 6px;
+  font-size: 0.74rem; font-weight: 700; letter-spacing: 0.06em;
+  color: var(--text-subtle); text-transform: uppercase; margin-bottom: 8px;
 }
-.g-keypoint p { margin: 0; color: var(--text); line-height: 1.7; }
+.g-keypoint p { margin: 0; color: var(--text); line-height: 1.75; font-size: 1.02rem; }
 .g-keypoint p + p { margin-top: 8px; }
 
-/* --- ProsCons --- */
-.g-proscons { display: grid; gap: 14px; margin: 20px 0; }
+/* --- ProsCons (절제된 중성 톤) --- */
+.g-proscons { display: grid; gap: 16px; margin: 22px 0; }
 @media (min-width: 560px) { .g-proscons { grid-template-columns: 1fr 1fr; } }
 .g-proscons-col {
   border: 1px solid var(--border); border-radius: var(--radius);
-  background: var(--surface); padding: 16px 18px;
+  background: var(--surface); padding: 18px 20px;
 }
 .g-proscons-col h4 {
-  font-size: 0.92rem; margin: 0 0 10px; display: flex; align-items: center; gap: 7px;
+  font-size: 0.8rem; margin: 0 0 12px; color: var(--text-subtle);
+  font-weight: 700; letter-spacing: 0.03em; text-transform: none;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border);
 }
-.g-proscons-col.is-pro h4 { color: var(--success); }
-.g-proscons-col.is-con h4 { color: var(--text); }
 .g-proscons-col ul { margin: 0; padding: 0; list-style: none; }
 .g-proscons-col li {
-  position: relative; padding-left: 18px; margin-bottom: 7px;
-  font-size: 0.92rem; line-height: 1.55; color: var(--text);
+  position: relative; padding-left: 16px; margin-bottom: 8px;
+  font-size: 0.93rem; line-height: 1.6; color: var(--text);
 }
-.g-proscons-col.is-pro li::before { content: "+"; position: absolute; left: 0; color: var(--success); font-weight: 700; }
-.g-proscons-col.is-con li::before { content: "−"; position: absolute; left: 0; color: var(--text-subtle); font-weight: 700; }
+.g-proscons-col li:last-child { margin-bottom: 0; }
+.g-proscons-col li::before {
+  content: ""; position: absolute; left: 2px; top: 0.62em;
+  width: 4px; height: 4px; border-radius: 50%; background: var(--border-strong);
+}
 
 /* --- SelectionChecklist --- */
 .g-checklist {
@@ -2987,13 +2991,47 @@ table.data.cmp th:first-child, table.data.cmp td:first-child { min-width: 116px;
 .brand-card dd { margin: 0; color: var(--text); font-size: 0.9rem; line-height: 1.5; }
 .brand-note { font-size: 0.82rem; color: var(--text-muted); margin-top: 6px; }
 
-/* --- SectionDivider for the two top-level guide areas --- */
-.g-area { margin: 40px 0; }
-.g-area-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
-.g-area-head h2 { font-size: 1.35rem; margin: 0; border: 0; padding: 0; }
-.g-area-head .g-area-tag {
-  font-size: 0.76rem; font-weight: 700; letter-spacing: 0.04em;
-  color: var(--accent); background: var(--accent-soft);
-  padding: 3px 10px; border-radius: 999px;
+/* --- 자재 유형 카드 (사진 → 가격대 → 설명) --- */
+.mtype-list { display: flex; flex-direction: column; gap: 18px; margin: 22px 0 8px; }
+.mtype-card {
+  display: flex; flex-direction: column; overflow: hidden;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface);
 }
-.g-area-desc { color: var(--text-muted); font-size: 0.95rem; margin: 4px 0 4px; max-width: 66ch; }
+.mtype-media { width: 100%; aspect-ratio: 16 / 10; background: var(--surface-2); overflow: hidden; }
+.mtype-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mtype-body { padding: 18px 20px 20px; }
+.mtype-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.mtype-name { font-size: 1.12rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+.mtype-price { font-size: 1.02rem; font-weight: 700; color: var(--text); white-space: nowrap; }
+.mtype-price span { font-size: 0.76rem; font-weight: 500; color: var(--text-subtle); margin-left: 3px; }
+.mtype-price.is-na { font-size: 0.86rem; font-weight: 600; color: var(--text-subtle); }
+.mtype-desc { margin: 10px 0 0; color: var(--text); line-height: 1.7; font-size: 0.96rem; }
+.mtype-specs { margin: 14px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; }
+@media (max-width: 480px) { .mtype-specs { grid-template-columns: 1fr; } }
+.mtype-spec { display: flex; gap: 10px; font-size: 0.86rem; line-height: 1.45; padding: 6px 0; border-top: 1px solid var(--border); }
+.mtype-spec dt { color: var(--text-subtle); font-weight: 600; flex-shrink: 0; min-width: 44px; margin: 0; }
+.mtype-spec dd { color: var(--text); margin: 0; }
+.mtype-tags { margin: 14px 0 0; display: flex; flex-direction: column; gap: 4px; }
+.mtype-tag { font-size: 0.88rem; line-height: 1.55; color: var(--text); }
+.mtype-tag b { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; color: var(--text-subtle); margin-right: 8px; }
+/* 데스크톱: 사진 왼쪽 / 내용 오른쪽 */
+@media (min-width: 760px) {
+  .mtype-card { flex-direction: row; }
+  .mtype-media { width: 300px; aspect-ratio: auto; flex-shrink: 0; align-self: stretch; min-height: 100%; }
+  .mtype-body { flex: 1; padding: 22px 24px; }
+}
+
+/* --- SectionDivider for the two top-level guide areas --- */
+.g-area { margin: 48px 0; }
+.g-area-head {
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.g-area-head h2 { font-size: 1.4rem; margin: 0; border: 0; padding: 0; }
+.g-area-head .g-area-tag {
+  font-size: 0.9rem; font-weight: 700; letter-spacing: 0.02em;
+  color: var(--text-subtle); background: transparent;
+  padding: 0; border-radius: 0;
+}
+.g-area-desc { color: var(--text-muted); font-size: 0.95rem; margin: 10px 0 4px; max-width: 66ch; }
