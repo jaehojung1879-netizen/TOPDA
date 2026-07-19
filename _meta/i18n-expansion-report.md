@@ -117,6 +117,23 @@
 
 ---
 
+## 5-2. 가이드·용어집 실번역 (후속 배치)
+
+계산기에 이어, 4개 신규 언어 홈에서 "(EN)"으로 남아있던 핵심 가이드/용어집 링크를 실제 번역판으로 교체했다.
+
+| 페이지 | 신규 언어 | 근거(content-priority) |
+|---|---|---|
+| `glossary.html` | zh-Hans·zh-Hant·vi·th (4개) | 전 언어 공통 필요 콘텐츠. `glossary.json` 데이터에서 자동 생성(검색 필터 JS 포함) |
+| `jeonse.html` (Jeonse 101) | vi·th (2개) | vi/th 1순위 콘텐츠(임대차보호) |
+| `foreigner-loan.html` | zh-Hans·zh-Hant·vi·th (4개) | 전 언어 공통 필요 콘텐츠. 3단계 대출 현실표(전부 `verified:false`) 그대로 유지 |
+| `foreigner-tax.html` | zh-Hans·zh-Hant (2개) | zh 1순위 콘텐츠(세제 차이) |
+
+- 용어집은 `scripts/gen_glossary_pages.mjs`로 데이터 기반 생성(카테고리 라벨 4개 언어 추가), jsdom으로 4개 언어 전부 검색·카운트 동작 검증.
+- `foreigner-loan.html`은 3단계에서 확인한 "미검증(unconfirmed)" 배지·소스 링크를 그대로 유지 — 번역 과정에서 대출 가능/불가 판단을 새로 창작하지 않음(사실 추측 금지 원칙 준수).
+- 4개 언어 홈의 관련 카드·풋터 링크를 네이티브 페이지로 교체하고 `(EN)` 라벨 제거. `en/*.html` 4종에 신규 언어 hreflang 추가(기존엔 없었음).
+- `app.js` PAGES 매니페스트·sitemap 갱신, 내부 링크 전수 점검 통과, jsdom으로 skip-link·언어 스위처 정상 주입 확인.
+- 아직 미번역: `about.html`, `auction.html` 등 나머지 EN 전용 페이지, 그리고 zh 대상 `foreigner-tax.html`이 vi/th에는 우선순위상 배정되지 않음(임대차 중심 프로파일이라 의도적 제외).
+
 ## 6. 검증 요약
 
 - **기능**: 6개 언어 스위처 링크 계산 로직 단위 검증(존재 시 딥링크, 부재 시 언어 홈 폴백). 국기 SVG XML 유효.
