@@ -19,11 +19,17 @@ const REQUIRED = [
   { path: '/vi/index.html', priority: '0.8' },
   { path: '/th/index.html', priority: '0.8' },
 ];
-// 번역 계산기 페이지(언어별 index + 3종)
-for (const l of ['zh-Hans', 'zh-Hant', 'vi', 'th']) {
-  for (const c of ['index', 'jeonse-monthly', 'brokerage-fee', 'acquisition-tax']) {
-    REQUIRED.push({ path: `/${l}/calculators/${c}.html`, priority: '0.7' });
-  }
+// 번역 계산기 페이지(언어별 index + 해당 언어 생성 대상)
+const CALC_LANGS = {
+  'jeonse-monthly': ['zh-Hans', 'zh-Hant', 'vi', 'th'],
+  'brokerage-fee': ['zh-Hans', 'zh-Hant', 'vi', 'th'],
+  'acquisition-tax': ['zh-Hans', 'zh-Hant', 'vi', 'th'],
+  'transfer-tax': ['en', 'zh-Hans', 'zh-Hant'],
+  'balance-settlement': ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th'],
+};
+for (const l of ['zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/calculators/index.html`, priority: '0.7' });
+for (const [calc, langs] of Object.entries(CALC_LANGS)) {
+  for (const l of langs) REQUIRED.push({ path: `/${l}/calculators/${calc}.html`, priority: '0.7' });
 }
 
 if (!existsSync(SITEMAP)) {

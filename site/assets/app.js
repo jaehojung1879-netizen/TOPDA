@@ -26,11 +26,11 @@
   // (i18n-maintenance 워크플로가 이 맵과 실제 파일의 정합성을 점검한다.)
   const PAGES = {
     ko: { all: true, exclude: ['foreigner-loan.html', 'foreigner-tax.html', 'jeonse.html', 'glossary.html'] },
-    en: { list: ['index.html', 'jeonse.html', 'foreigner-loan.html', 'foreigner-tax.html', 'glossary.html', 'auction.html', 'about.html', 'feedback.html', 'calculators/index.html', 'calculators/acquisition-tax.html', 'calculators/brokerage-fee.html', 'calculators/jeonse-monthly.html', 'calculators/auction-bid.html'] },
-    'zh-Hans': { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html'] },
-    'zh-Hant': { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html'] },
-    vi: { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html'] },
-    th: { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html'] },
+    en: { list: ['index.html', 'jeonse.html', 'foreigner-loan.html', 'foreigner-tax.html', 'glossary.html', 'auction.html', 'about.html', 'feedback.html', 'calculators/index.html', 'calculators/acquisition-tax.html', 'calculators/brokerage-fee.html', 'calculators/jeonse-monthly.html', 'calculators/auction-bid.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
+    'zh-Hans': { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
+    'zh-Hant': { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
+    vi: { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/balance-settlement.html'] },
+    th: { list: ['index.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/balance-settlement.html'] },
   };
   const LANG_PREFIX = ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th'];
 
@@ -323,20 +323,22 @@ function calcAcquisitionTax(input) {
   const relief = R.unsold2026Relief || { areaMaxSqm: 85, priceMax: 600000000, discountRatio: 0.50, excludeHeavySurcharge: true };
   const unsoldEligible = unsold2026 && acqType === 'purchase' && !areaOver85 && price <= relief.priceMax;
 
-  let baseRate, isHeavy = false, scenario = '';
+  let baseRate, isHeavy = false, scenario = '', scenarioKey = '';
 
   if (acqType === 'inherit') {
     // 상속 취득: 무주택 세대의 1가구 1주택 상속 0.8% 특례, 그 외 2.8%
     baseRate = inheritNoHome ? 0.008 : 0.028;
     scenario = inheritNoHome ? '상속 · 무주택 1가구1주택 특례(0.8%)' : '상속 취득(2.8%)';
+    scenarioKey = inheritNoHome ? 'inherit-nohome' : 'inherit-other';
   } else if (acqType === 'gift') {
     // 무상취득(증여): 표준 3.5%. 조정대상지역 + 시가표준 3억 이상 다주택자 증여 → 12% 중과
-    if (giftHeavy) { baseRate = 0.12; isHeavy = true; scenario = '증여 · 조정대상 3억↑ 중과(12%)'; }
-    else { baseRate = 0.035; scenario = '증여 취득(3.5%)'; }
+    if (giftHeavy) { baseRate = 0.12; isHeavy = true; scenario = '증여 · 조정대상 3억↑ 중과(12%)'; scenarioKey = 'gift-heavy'; }
+    else { baseRate = 0.035; scenario = '증여 취득(3.5%)'; scenarioKey = 'gift-standard'; }
   } else if (acqType === 'original') {
     // 원시취득(신축·신규 분양 등)
     baseRate = 0.028;
     scenario = '원시취득·신축(2.8%)';
+    scenarioKey = 'original';
   } else {
     // 유상취득(매매). 일시적 2주택은 종전주택 처분 조건 충족 시 1주택 세율 적용
     // 2026 미분양 한시감면 적용 시 다주택 중과 제외 → 표준세율로
@@ -344,16 +346,18 @@ function calcAcquisitionTax(input) {
       (unsoldEligible && relief.excludeHeavySurcharge ? Math.min(homes, 1) : homes);
     if (effHomes === 1) {
       baseRate = progRate;
-      scenario = (homes === 2 && tempTwoHome) ? '일시적 2주택 → 1주택 세율 적용'
-        : (unsoldEligible && homes >= 2 ? '미분양 한시 감면 — 다주택 중과 제외, 표준세율' : '1주택 표준세율');
+      if (homes === 2 && tempTwoHome) { scenario = '일시적 2주택 → 1주택 세율 적용'; scenarioKey = 'temp-two-home'; }
+      else if (unsoldEligible && homes >= 2) { scenario = '미분양 한시 감면 — 다주택 중과 제외, 표준세율'; scenarioKey = 'unsold-relief'; }
+      else { scenario = '1주택 표준세율'; scenarioKey = 'h1-standard'; }
     } else if (effHomes === 2) {
-      if (regulated) { baseRate = 0.08; isHeavy = true; scenario = '조정대상지역 2주택 중과(8%)'; }
-      else { baseRate = progRate; scenario = '비조정 2주택 표준세율'; }
+      if (regulated) { baseRate = 0.08; isHeavy = true; scenario = '조정대상지역 2주택 중과(8%)'; scenarioKey = 'h2-regulated'; }
+      else { baseRate = progRate; scenario = '비조정 2주택 표준세율'; scenarioKey = 'h2-nonregulated'; }
     } else if (effHomes === 3) {
       baseRate = regulated ? 0.12 : 0.08; isHeavy = true;
       scenario = regulated ? '조정대상지역 3주택 중과(12%)' : '비조정 3주택 중과(8%)';
+      scenarioKey = regulated ? 'h3-regulated' : 'h3-nonregulated';
     } else {
-      baseRate = 0.12; isHeavy = true; scenario = '4주택 이상 중과(12%)';
+      baseRate = 0.12; isHeavy = true; scenario = '4주택 이상 중과(12%)'; scenarioKey = 'h4plus';
     }
   }
   baseRate = Math.max(baseRate, 0.008);
@@ -398,11 +402,77 @@ function calcAcquisitionTax(input) {
   const total = acquisition + ruralTax + localEduTax;
 
   return {
-    baseRate, isHeavy, scenario, acqType,
+    baseRate, isHeavy, scenario, scenarioKey, acqType,
     acquisition, firstHomeDeduct, unsoldDeduct, unsoldEligible,
     ruralTax, localEduTax,
     total,
   };
+}
+
+// scenarioKey → 6개 언어 표시 문구 (한국어 UI는 항상 r.scenario 그대로 사용, 이 표는 비-한국어 페이지 전용)
+const SCENARIO_I18N = {
+  'inherit-nohome':   { en: 'Inheritance · no-home household special rate (0.8%)', 'zh-Hans': '继承·无房家庭特例（0.8%）', 'zh-Hant': '繼承·無房家庭特例（0.8%）', vi: 'Thừa kế · ưu đãi hộ không nhà (0,8%)', th: 'มรดก · อัตราพิเศษครัวเรือนไม่มีบ้าน (0.8%)' },
+  'inherit-other':    { en: 'Inheritance (2.8%)', 'zh-Hans': '继承取得（2.8%）', 'zh-Hant': '繼承取得（2.8%）', vi: 'Thừa kế (2,8%)', th: 'มรดก (2.8%)' },
+  'gift-heavy':       { en: 'Gift · regulated area ≥300M heavy rate (12%)', 'zh-Hans': '赠与·调整地区3亿以上重课（12%）', 'zh-Hant': '贈與·調整地區3億以上重課（12%）', vi: 'Tặng cho · khu điều tiết ≥3 trăm triệu, thuế nặng (12%)', th: 'ให้เปล่า · เขตควบคุม ≥300 ล้าน อัตราสูง (12%)' },
+  'gift-standard':    { en: 'Gift (3.5%)', 'zh-Hans': '赠与取得（3.5%）', 'zh-Hant': '贈與取得（3.5%）', vi: 'Tặng cho (3,5%)', th: 'ให้เปล่า (3.5%)' },
+  original:           { en: 'Original acquisition · new build (2.8%)', 'zh-Hans': '原始取得·新建（2.8%）', 'zh-Hant': '原始取得·新建（2.8%）', vi: 'Nguyên thủy · xây mới (2,8%)', th: 'ได้มาแรกเริ่ม · สร้างใหม่ (2.8%)' },
+  'temp-two-home':    { en: 'Temporary 2-home → taxed as 1 home', 'zh-Hans': '一时性2套→按1套税率', 'zh-Hant': '一時性2戶→按1戶稅率', vi: 'Tạm thời 2 căn → áp thuế 1 căn', th: 'ชั่วคราว 2 หลัง → คิดภาษีเหมือน 1 หลัง' },
+  'unsold-relief':    { en: '2026 unsold-unit relief — multi-home surcharge excluded, standard rate', 'zh-Hans': '2026滞销房减免—排除多套重课，标准税率', 'zh-Hant': '2026滯銷房減免—排除多戶重課，標準稅率', vi: 'Ưu đãi 2026 nhà tồn kho — miễn phụ thu đa nhà, thuế chuẩn', th: 'ลดหย่อนบ้านค้างขาย 2026 — ยกเว้นภาษีหลายหลัง อัตรามาตรฐาน' },
+  'h1-standard':      { en: '1-home standard rate', 'zh-Hans': '1套标准税率', 'zh-Hant': '1戶標準稅率', vi: '1 căn, thuế suất chuẩn', th: 'อัตรามาตรฐาน 1 หลัง' },
+  'h2-regulated':     { en: 'Regulated area · 2-home heavy rate (8%)', 'zh-Hans': '调整地区·2套重课（8%）', 'zh-Hant': '調整地區·2戶重課（8%）', vi: 'Khu điều tiết · 2 căn thuế nặng (8%)', th: 'เขตควบคุม · 2 หลัง อัตราสูง (8%)' },
+  'h2-nonregulated':  { en: 'Non-regulated · 2-home standard rate', 'zh-Hans': '非调整地区·2套标准税率', 'zh-Hant': '非調整地區·2戶標準稅率', vi: 'Khu không điều tiết · 2 căn thuế chuẩn', th: 'นอกเขตควบคุม · 2 หลัง อัตรามาตรฐาน' },
+  'h3-regulated':     { en: 'Regulated area · 3-home heavy rate (12%)', 'zh-Hans': '调整地区·3套重课（12%）', 'zh-Hant': '調整地區·3戶重課（12%）', vi: 'Khu điều tiết · 3 căn thuế nặng (12%)', th: 'เขตควบคุม · 3 หลัง อัตราสูง (12%)' },
+  'h3-nonregulated':  { en: 'Non-regulated · 3-home heavy rate (8%)', 'zh-Hans': '非调整地区·3套重课（8%）', 'zh-Hant': '非調整地區·3戶重課（8%）', vi: 'Khu không điều tiết · 3 căn thuế nặng (8%)', th: 'นอกเขตควบคุม · 3 หลัง อัตราสูง (8%)' },
+  h4plus:             { en: '4+ homes heavy rate (12%)', 'zh-Hans': '4套以上重课（12%）', 'zh-Hant': '4戶以上重課（12%）', vi: '4+ căn thuế nặng (12%)', th: '4+ หลัง อัตราสูง (12%)' },
+};
+const UNSOLD_SUFFIX = { en: ' · 2026 unsold-unit 50% relief', 'zh-Hans': ' · 2026滞销房50%减免', 'zh-Hant': ' · 2026滯銷房50%減免', vi: ' · Ưu đãi 50% nhà tồn kho 2026', th: ' · ลดหย่อนบ้านค้างขาย 2026 50%' };
+function scenarioText(r, lang) {
+  if (lang === 'ko' || !lang) return r.scenario;
+  const t = (SCENARIO_I18N[r.scenarioKey] && SCENARIO_I18N[r.scenarioKey][lang]) || (SCENARIO_I18N[r.scenarioKey] && SCENARIO_I18N[r.scenarioKey].en) || r.scenario;
+  return t + (r.unsoldDeduct ? ((UNSOLD_SUFFIX[lang] || UNSOLD_SUFFIX.en)) : '');
+}
+
+// ===== 양도소득세 계산기 — 비-한국어 라벨 조립 (계산 로직은 calcTransferTax 그대로, 표시만 언어별) =====
+const TT_I18N = {
+  shortTerm: { en: 'short-term heavy rate', 'zh-Hans': '短期持有重课', 'zh-Hant': '短期持有重課', vi: 'nắm giữ ngắn hạn, thuế nặng', th: 'ถือครองระยะสั้น อัตราสูง' },
+  progressive: { en: 'progressive', 'zh-Hans': '累进', 'zh-Hant': '累進', vi: 'lũy tiến', th: 'อัตราก้าวหน้า' },
+  surcharge: { en: 'multi-home surcharge', 'zh-Hans': '多套房加重', 'zh-Hant': '多屋加重', vi: 'phụ thu đa nhà', th: 'ภาษีเพิ่มหลายหลัง' },
+  waiverActive: { en: 'multi-home surcharge waived until', 'zh-Hans': '多套房加重豁免至', 'zh-Hant': '多屋加重豁免至', vi: 'miễn phụ thu đa nhà đến', th: 'ยกเว้นภาษีเพิ่มหลายหลังถึง' },
+  effRate: { en: 'Effective rate', 'zh-Hans': '实际税率', 'zh-Hant': '實際稅率', vi: 'Thuế suất thực tế', th: 'อัตราภาษีที่แท้จริง' },
+  ofSalePrice: { en: 'of sale price', 'zh-Hans': '（占售价）', 'zh-Hant': '（占售價）', vi: '(so với giá bán)', th: '(ของราคาขาย)' },
+  exemptTitle: { en: '1-home exemption', 'zh-Hans': '1套自住免税', 'zh-Hant': '1戶自住免稅', vi: 'Miễn thuế 1 nhà', th: 'ยกเว้นภาษี 1 หลัง' },
+  exemptBody: { en: 'Sale price ≤ KRW 1.2B and held ≥ 2 years — no tax due.', 'zh-Hans': '售价≤12亿韩元且持有≥2年——无需纳税。', 'zh-Hant': '售價≤12億韓元且持有≥2年——無需納稅。', vi: 'Giá bán ≤ 1,2 tỷ KRW và nắm giữ ≥ 2 năm — không phải nộp thuế.', th: 'ราคาขาย ≤ 1.2 พันล้านวอน และถือครอง ≥ 2 ปี — ไม่ต้องเสียภาษี' },
+  waiverTitle: { en: 'Multi-home surcharge temporarily waived', 'zh-Hans': '多套房加重暂时豁免', 'zh-Hant': '多屋加重暫時豁免', vi: 'Tạm miễn phụ thu đa nhà', th: 'ยกเว้นภาษีเพิ่มหลายหลังชั่วคราว' },
+  waiverBody: { en: 'Sale date is before {d} and held ≥ 2 years, so the 20-30%p surcharge was automatically excluded.', 'zh-Hans': '出售日期在{d}之前且持有≥2年，已自动排除20-30%的加重税率。', 'zh-Hant': '出售日期在{d}之前且持有≥2年，已自動排除20-30%的加重稅率。', vi: 'Ngày bán trước {d} và nắm giữ ≥ 2 năm nên đã tự động loại trừ mức phụ thu 20-30%.', th: 'วันที่ขายก่อน {d} และถือครอง ≥ 2 ปี จึงยกเว้นภาษีเพิ่ม 20-30% โดยอัตโนมัติ' },
+  highValueTitle: { en: 'High-value home — partial taxation', 'zh-Hans': '高价住宅——部分课税', 'zh-Hant': '高價住宅——部分課稅', vi: 'Nhà giá trị cao — đánh thuế một phần', th: 'บ้านมูลค่าสูง — เก็บภาษีบางส่วน' },
+  highValueBody: { en: '1-home household but sale price exceeds KRW 1.2B — only {p}% of the gain is taxable.', 'zh-Hans': '1套自住但售价超过12亿韩元——仅{p}%的收益需课税。', 'zh-Hant': '1戶自住但售價超過12億韓元——僅{p}%的收益需課稅。', vi: 'Hộ 1 nhà nhưng giá bán vượt 1,2 tỷ KRW — chỉ {p}% lợi nhuận bị đánh thuế.', th: 'ครัวเรือน 1 หลังแต่ราคาขายเกิน 1.2 พันล้านวอน — เก็บภาษีเพียง {p}% ของกำไร' },
+};
+function rateLabelText(r, lang) {
+  if (lang === 'ko' || !lang) return r.appliedRateLabel;
+  const L = (k) => (TT_I18N[k] && (TT_I18N[k][lang] || TT_I18N[k].en)) || '';
+  if (r.isShortTerm) return r.shortTermRatePct + '% (' + L('shortTerm') + ')';
+  let s = r.marginalRatePct + '% (' + L('progressive') + ')';
+  if (r.surchargeRatePct > 0) s += ' + ' + r.surchargeRatePct + '%p ' + L('surcharge');
+  else if (r.surchargeWaived) s += ' (' + L('waiverActive') + ' ' + r.waiverUntil + ')';
+  return s;
+}
+function effectiveRateText(r, lang) {
+  if (lang === 'ko' || !lang) return '실효세율 ' + r.effective.toFixed(2) + '% (양도가액 대비)';
+  const L = (k) => (TT_I18N[k] && (TT_I18N[k][lang] || TT_I18N[k].en)) || '';
+  return L('effRate') + ' ' + r.effective.toFixed(2) + '% (' + L('ofSalePrice') + ')';
+}
+function exemptBoxHtml(r, lang, regulated, multiSurcharge, homes) {
+  const L = (k) => (TT_I18N[k] && (TT_I18N[k][lang] || TT_I18N[k].en)) || '';
+  if (lang === 'ko' || !lang) {
+    if (r.exempted) return '<strong>1세대 1주택 비과세 대상</strong>양도가액 12억원 이하 + 보유 2년 이상 요건을 충족합니다. 별도 세부담이 없습니다.';
+    if (r.surchargeWaived && regulated && multiSurcharge && homes >= 2) return '<strong>다주택 중과 한시 유예 적용</strong>양도일이 2026-05-09 이전이고 보유 2년 이상이라 중과세율(20~30%p)이 자동으로 빠졌습니다.';
+    if (r.taxableGainRatio < 1 && r.taxableGainRatio > 0) return '<strong>고가주택 안분과세</strong>1세대1주택이나 12억 초과. 양도차익 중 ' + (r.taxableGainRatio * 100).toFixed(1) + '%만 과세대상입니다.';
+    return '';
+  }
+  if (r.exempted) return '<strong>' + L('exemptTitle') + '</strong>' + L('exemptBody');
+  if (r.surchargeWaived && regulated && multiSurcharge && homes >= 2) return '<strong>' + L('waiverTitle') + '</strong>' + L('waiverBody').replace('{d}', r.waiverUntil);
+  if (r.taxableGainRatio < 1 && r.taxableGainRatio > 0) return '<strong>' + L('highValueTitle') + '</strong>' + L('highValueBody').replace('{p}', (r.taxableGainRatio * 100).toFixed(1));
+  return '';
 }
 
 (function () {
@@ -454,7 +524,7 @@ function calcAcquisitionTax(input) {
       setText('scenario', isEn ? 'Enter a price' : '매매가를 입력하세요');
       return;
     }
-    setText('scenario', r.scenario);
+    setText('scenario', scenarioText(r, document.documentElement.lang));
     setText('rate', (r.baseRate * 100).toFixed(2) + '%' + (r.isHeavy ? (isEn ? ' (heavy)' : ' (중과)') : ''));
     setText('acquisition', fmt.won(r.acquisition));
     setText('ruralTax', r.ruralTax ? fmt.won(r.ruralTax) : (isEn ? 'Exempt' : '면제'));
@@ -666,6 +736,10 @@ function calcTransferTax(input) {
     ltDeductRate, ltDeduct, incomeAmount, basicDeduct, taxBase,
     rate, appliedRateLabel, incomeTax, localTax, total, effective,
     surchargeWaived, jointOwners: owners, jointTotal, jointSavings: savings,
+    // 비-한국어 표시용 구조화 필드(계산 로직은 위와 동일, 라벨 조립만 언어별로 분기)
+    isShortTerm: !!shortTermRate, shortTermRatePct: shortTermRate ? shortTermRate * 100 : 0,
+    marginalRatePct: !shortTermRate ? Math.round((rate - surchargeRate) * 100) : 0,
+    surchargeRatePct: surchargeRate * 100, waiverUntil,
   };
 }
 
@@ -713,9 +787,9 @@ function calcProgressiveTax(base) {
     const exemptBox = root.querySelector('[data-out="exemptBox"]');
     const jointBox = root.querySelector('[data-out="jointBox"]');
     if (!r) {
-      ['total','gain','ltDeduct','income','basicDeduct','taxBase','incomeTax','localTax'].forEach(k => setText(k, '0원'));
+      ['total','gain','ltDeduct','income','basicDeduct','taxBase','incomeTax','localTax'].forEach(k => setText(k, fmt.won(0)));
       setText('rate', '—');
-      setText('effective', '실효세율 —');
+      setText('effective', (document.documentElement.lang !== 'ko') ? (TT_I18N.effRate.en + ' —') : '실효세율 —');
       if (exemptBox) exemptBox.style.display = 'none';
       if (jointBox) jointBox.style.display = 'none';
       return;
@@ -725,24 +799,18 @@ function calcProgressiveTax(base) {
     setText('income', fmt.won(r.incomeAmount));
     setText('basicDeduct', '−' + fmt.won(r.basicDeduct));
     setText('taxBase', fmt.won(r.taxBase));
-    setText('rate', r.appliedRateLabel);
+    const ttLang = document.documentElement.lang || 'ko';
+    setText('rate', rateLabelText(r, ttLang));
     setText('incomeTax', fmt.won(r.incomeTax));
     setText('localTax', fmt.won(r.localTax));
     setText('total', fmt.won(r.total));
-    setText('effective', '실효세율 ' + r.effective.toFixed(2) + '% (양도가액 대비)');
+    setText('effective', effectiveRateText(r, ttLang));
     if (exemptBox) {
-      if (r.exempted) {
+      const html = exemptBoxHtml(r, ttLang, regulated, multiSurcharge, homes);
+      if (html) {
         exemptBox.style.display = '';
         const msg = root.querySelector('[data-out="exemptMsg"]');
-        if (msg) msg.innerHTML = '<strong>1세대 1주택 비과세 대상</strong>양도가액 12억원 이하 + 보유 2년 이상 요건을 충족합니다. 별도 세부담이 없습니다.';
-      } else if (r.surchargeWaived && regulated && multiSurcharge && homes >= 2) {
-        exemptBox.style.display = '';
-        const msg = root.querySelector('[data-out="exemptMsg"]');
-        if (msg) msg.innerHTML = '<strong>다주택 중과 한시 유예 적용</strong>양도일이 2026-05-09 이전이고 보유 2년 이상이라 중과세율(20~30%p)이 자동으로 빠졌습니다.';
-      } else if (r.taxableGainRatio < 1 && r.taxableGainRatio > 0) {
-        exemptBox.style.display = '';
-        const msg = root.querySelector('[data-out="exemptMsg"]');
-        if (msg) msg.innerHTML = '<strong>고가주택 안분과세</strong>1세대1주택이나 12억 초과. 양도차익 중 ' + (r.taxableGainRatio * 100).toFixed(1) + '%만 과세대상입니다.';
+        if (msg) msg.innerHTML = html;
       } else {
         exemptBox.style.display = 'none';
       }
@@ -751,10 +819,19 @@ function calcProgressiveTax(base) {
     if (jointBox) {
       if (r.jointTotal != null && r.jointOwners > 1 && r.jointSavings > 0) {
         jointBox.style.display = '';
+        const JOINT_I18N = {
+          ko: { owners: (n) => n + '인 공동', saved: ' 절세' },
+          en: { owners: (n) => n + '-way joint', saved: ' saved' },
+          'zh-Hans': { owners: (n) => n + '人共有', saved: ' 节税' },
+          'zh-Hant': { owners: (n) => n + '人共有', saved: ' 節稅' },
+          vi: { owners: (n) => 'Đồng sở hữu ' + n + ' người', saved: ' tiết kiệm' },
+          th: { owners: (n) => 'ร่วมเจ้าของ ' + n + ' คน', saved: ' ประหยัด' },
+        };
+        const J = JOINT_I18N[ttLang] || JOINT_I18N.en;
         setText('jointSingle', fmt.won(r.total));
-        setText('jointOwnersOut', r.jointOwners + '인 공동');
+        setText('jointOwnersOut', J.owners(r.jointOwners));
         setText('jointTotalOut', fmt.won(r.jointTotal));
-        setText('jointSavings', '−' + fmt.won(r.jointSavings) + ' 절세');
+        setText('jointSavings', '−' + fmt.won(r.jointSavings) + J.saved);
       } else {
         jointBox.style.display = 'none';
       }
@@ -802,10 +879,20 @@ function calcBalanceSettlement(input) {
     // 매도자 받을 금액 = 선수관리비 - 매도자 사용분 관리비 - 가스 - 전기 - 기타
     // = -buyerNet
     const netToSeller = r.prepaidFee - r.sellerShare - gasCost - electricCost - additional;
+    const lang = document.documentElement.lang || 'ko';
+    const ARROW = {
+      ko: { buyerToSeller: '매수자 → 매도자 ', sellerToBuyer: '매도자 → 매수자 ' },
+      en: { buyerToSeller: 'Buyer → Seller ', sellerToBuyer: 'Seller → Buyer ' },
+      'zh-Hans': { buyerToSeller: '买方 → 卖方 ', sellerToBuyer: '卖方 → 买方 ' },
+      'zh-Hant': { buyerToSeller: '買方 → 賣方 ', sellerToBuyer: '賣方 → 買方 ' },
+      vi: { buyerToSeller: 'Bên mua → Bên bán ', sellerToBuyer: 'Bên bán → Bên mua ' },
+      th: { buyerToSeller: 'ผู้ซื้อ → ผู้ขาย ', sellerToBuyer: 'ผู้ขาย → ผู้ซื้อ ' },
+    };
+    const arrow = ARROW[lang] || ARROW.en;
     if (netToSeller >= 0) {
-      setText('settlement', '매수자 → 매도자 ' + fmt.won(netToSeller));
+      setText('settlement', arrow.buyerToSeller + fmt.won(netToSeller));
     } else {
-      setText('settlement', '매도자 → 매수자 ' + fmt.won(-netToSeller));
+      setText('settlement', arrow.sellerToBuyer + fmt.won(-netToSeller));
     }
     setText('netSeller', fmt.won(netToSeller));
     setText('tenantLongRepair', fmt.won(r.accumLongRepair));
