@@ -24,7 +24,7 @@
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260721" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260722" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -77,109 +77,6 @@
     <h1>체크리스트</h1>
     <div class="meta"><span>거래·이사·인테리어 단계별 점검표. 체크 상태와 메모가 이 브라우저에 자동 저장됩니다.</span></div>
   </div>
-
-  <!-- ===== 여정 로드맵: 무엇을 모르는지 모를 때의 진입점 (인테리어 가이드의 .g-area/.timeline/.tip 재사용) ===== -->
-  <section class="g-area" id="journey">
-    <div class="g-area-head">
-      <h2>여정 로드맵 — 지금 내 단계는?</h2>
-    </div>
-    <p class="g-area-desc">
-      부동산 거래에서 가장 위험한 건 <strong>"무엇을 모르는지도 모르는 것"</strong>입니다.
-      계약 전부터 잔금·등기·입주 후까지 전 과정을 단계별로 펼쳐 놓았습니다.
-      ⚠ 아이콘에 커서를 올리면(모바일은 탭) 그 시점에 가장 자주 놓치는 것을 바로 보여줍니다.
-    </p>
-
-    <div class="field">
-      <label>거래 유형</label>
-      <div class="radio-group">
-        <label><input type="radio" name="journeyType" value="sale" checked/><span>매매 (내 집 사기)</span></label>
-        <label><input type="radio" name="journeyType" value="lease"/><span>전세·월세 (임차)</span></label>
-      </div>
-    </div>
-
-    <ol class="timeline" data-journey-panel="sale">
-      <li data-stage="sale-1" id="stage-sale-1">
-        <span class="t-when">계약 전 4~8주</span>
-        <span class="t-what">자금 계획 세우기 — 대출 한도·부대비용까지 넣은 총예산 확정<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="부대비용은 매매가의 2~5%. 매매가만 보고 예산을 짜면 잔금일에 돈이 모자랍니다.">⚠</span></span>
-        <span class="t-tool"><a href="../calculators/total-cost-dashboard.html">종합 비용 대시보드</a> · <a href="../calculators/dsr.html">DSR 계산기</a></span>
-      </li>
-      <li data-stage="sale-2" id="stage-sale-2">
-        <span class="t-when">계약 전</span>
-        <span class="t-what">매물 확인 · 권리 점검 — 등기부·건축물대장 직접 발급<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="등기부는 한 번 보고 끝이 아닙니다 — 계약 직전·잔금 직전에 다시 확인해야 합니다.">⚠</span></span>
-        <span class="t-tool"><a href="../posts/registry-reading.html">등기부등본 읽는 법</a> · <a href="../calculators/transactions.html">실거래가 조회</a></span>
-      </li>
-      <li data-stage="sale-3" id="stage-sale-3">
-        <span class="t-when">계약일</span>
-        <span class="t-what">매매계약 체결 — 소유자 본인 확인 후 계약금 이체<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="대출 불승인 시 계약금을 돌려받는다는 특약이 없으면, 대출 실패 시 계약금을 잃을 수 있습니다.">⚠</span></span>
-        <span class="t-tool"><a href="../posts/sale-contract-tips.html">매매계약서 특약 가이드</a> · <a href="../calculators/brokerage-fee.html">중개수수료 계산기</a></span>
-      </li>
-      <li data-stage="sale-4" id="stage-sale-4">
-        <span class="t-when">계약 후 ~ 잔금 전</span>
-        <span class="t-what">대출 실행 · 중도금 · 잔금 준비 — 일정과 금액을 미리 등록<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="대출 실행일과 잔금일이 어긋나면 하루 차이로도 잔금을 못 치릅니다 — 은행에 잔금일을 명확히 전달하세요.">⚠</span></span>
-        <span class="t-tool"><a href="dday-scheduler.html">D-Day 스케줄러</a> · <a href="../calculators/registration-cost.html">등기비용 계산기</a></span>
-      </li>
-      <li data-stage="sale-5" id="stage-sale-5">
-        <span class="t-when">잔금일 (D-Day)</span>
-        <span class="t-what">잔금 · 소유권이전등기 · 정산 — 등기부 최종 확인 후 이체<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="선수관리비는 매수인이 매도인에게 돌려주는 돈입니다 — 정산표에서 방향이 자주 헷갈립니다.">⚠</span></span>
-        <span class="t-tool"><a href="sale-balance-day.html">매매 잔금일 체크리스트 30</a> · <a href="../calculators/balance-settlement.html">잔금일 정산 계산기</a></span>
-      </li>
-      <li data-stage="sale-6" id="stage-sale-6">
-        <span class="t-when">잔금 후 ~ 60일</span>
-        <span class="t-what">입주 후 행정 처리 — 전입신고·취득세 신고<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="취득세 60일 신고 기한을 넘기면 무신고 가산세(20%)가 붙습니다.">⚠</span></span>
-        <span class="t-tool"><a href="../calculators/acquisition-tax.html">취득세 계산기</a></span>
-      </li>
-      <li data-stage="sale-7" id="stage-sale-7">
-        <span class="t-when">입주 전후</span>
-        <span class="t-what">인테리어 · 이사 — 견적 비교 후 표준계약으로 진행<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="하자보수 기간·범위가 계약서에 없으면 준공 후 분쟁에서 불리합니다.">⚠</span></span>
-        <span class="t-tool"><a href="interior-contract.html">인테리어 계약 체크리스트</a> · <a href="moving-day.html">이사 당일 체크리스트</a></span>
-      </li>
-      <li data-stage="sale-8" id="stage-sale-8">
-        <span class="t-when">보유 중 · 매도 대비</span>
-        <span class="t-what">보유세 · 양도 계획 — 비과세 요건 미리 확인<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="일시적 2주택 처분 기한을 넘기면 중과세율이 적용될 수 있습니다.">⚠</span></span>
-        <span class="t-tool"><a href="../calculators/transfer-tax.html">양도세 계산기</a></span>
-      </li>
-    </ol>
-
-    <ol class="timeline" data-journey-panel="lease" style="display:none;">
-      <li data-stage="lease-1" id="stage-lease-1">
-        <span class="t-when">계약 전 4~6주</span>
-        <span class="t-what">예산 · 조건 정하기 — 전세자금대출 가능액 확인<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="전세가율이 80%를 넘는 집은 보증금을 떼일(깡통전세) 위험이 큽니다.">⚠</span></span>
-        <span class="t-tool"><a href="../calculators/jeonse-monthly.html">전월세 전환 계산기</a> · <a href="../calculators/jeonse-ratio.html">전세가율 계산기</a></span>
-      </li>
-      <li data-stage="lease-2" id="stage-lease-2">
-        <span class="t-when">계약 전</span>
-        <span class="t-what">매물 · 권리 확인 — 근저당·가압류 등기부 확인<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="(근저당+내 보증금)이 시세의 70~80%를 넘으면 계약을 재고하세요.">⚠</span></span>
-        <span class="t-tool"><a href="../posts/jeonse-scam.html">전세사기 예방 가이드</a> · <a href="../posts/registry-reading.html">등기부등본 읽는 법</a></span>
-      </li>
-      <li data-stage="lease-3" id="stage-lease-3">
-        <span class="t-when">계약일</span>
-        <span class="t-what">임대차계약 체결 — 임대인 본인 확인 후 계약금 이체<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="대항력은 전입신고 다음 날 0시부터 생깁니다 — 잔금일 당일 근저당 설정을 막는 특약이 없으면 위험합니다.">⚠</span></span>
-        <span class="t-tool"><a href="../posts/lease-contract-tips.html">임대차계약 특약 가이드</a></span>
-      </li>
-      <li data-stage="lease-4" id="stage-lease-4">
-        <span class="t-when">계약 후 ~ 잔금 전</span>
-        <span class="t-what">대출 신청 · 보증보험 사전심사<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="보증보험은 미루다 조건이 바뀌면 못 들어갈 수 있습니다 — 잔금 직후 바로 가입하세요.">⚠</span></span>
-        <span class="t-tool"><a href="dday-scheduler.html">D-Day 스케줄러</a></span>
-      </li>
-      <li data-stage="lease-5" id="stage-lease-5">
-        <span class="t-when">잔금일 (D-Day)</span>
-        <span class="t-what">보증금 방어 3종 세트 — 전입신고+확정일자+보증보험<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="전입신고와 확정일자 중 하나만 하면 우선변제권이 없습니다 — 반드시 둘 다 해야 합니다.">⚠</span></span>
-        <span class="t-tool"><a href="lease-contract.html">전세계약 체크리스트</a></span>
-      </li>
-      <li data-stage="lease-6" id="stage-lease-6">
-        <span class="t-when">거주 중</span>
-        <span class="t-what">갱신 · 권리 유지 — 만기 6~2개월 전 갱신 여부 결정<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="통보 기한(만기 2개월 전)을 넘기면 묵시적 갱신이 되어 조건 협상 기회를 놓칩니다.">⚠</span></span>
-        <span class="t-tool"><a href="../posts/lease-renewal.html">계약갱신요구권 가이드</a></span>
-      </li>
-      <li data-stage="lease-7" id="stage-lease-7">
-        <span class="t-when">만기 전후</span>
-        <span class="t-what">퇴거 · 보증금 반환 — 통보와 이사·전출 일정 조율<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="보증금을 못 받은 채 먼저 이사·전출하면 대항력을 잃습니다 — 임차권등기 완료 후에 옮기세요.">⚠</span></span>
-        <span class="t-tool"><a href="../posts/lease-return.html">보증금 반환 가이드</a> · <a href="moving-day.html">이사 당일 체크리스트</a></span>
-      </li>
-    </ol>
-
-    <p class="journey-hint">각 단계를 클릭하면 '지금 내 단계'로 표시됩니다. 이 브라우저에만 저장되며, 홈에서 이어서 확인할 수 있습니다.</p>
-  </section>
 
   <section class="hub-section">
     <div class="hub-section-head">
@@ -276,6 +173,106 @@
     </div>
   </section>
 
+  <!-- ===== 여정 로드맵 — 다른 체크리스트와 같은 비중의 항목 하나로 (인테리어 가이드의 .timeline/.tip 재사용) ===== -->
+  <section class="hub-section" id="journey">
+    <div class="hub-section-head">
+      <span class="hub-section-tag">여정 로드맵</span>
+      <h2>지금 내 단계는?</h2>
+      <p>계약부터 잔금·등기·입주 후까지 전 과정을 단계별로 펼쳐, 그 시점에 자주 놓치는 것을 ⚠ 아이콘으로 보여줍니다.</p>
+    </div>
+
+    <div class="field">
+      <label>거래 유형</label>
+      <div class="radio-group">
+        <label><input type="radio" name="journeyType" value="sale" checked/><span>매매 (내 집 사기)</span></label>
+        <label><input type="radio" name="journeyType" value="lease"/><span>전세·월세 (임차)</span></label>
+      </div>
+    </div>
+
+    <ol class="timeline" data-journey-panel="sale">
+      <li data-stage="sale-1" id="stage-sale-1">
+        <span class="t-when">계약 전 4~8주</span>
+        <span class="t-what">자금 계획 세우기 — 대출 한도·부대비용까지 넣은 총예산 확정<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="부대비용은 매매가의 2~5%. 매매가만 보고 예산을 짜면 잔금일에 돈이 모자랍니다.">⚠</span></span>
+        <span class="t-tool"><a href="../calculators/total-cost-dashboard.html">종합 비용 대시보드</a> · <a href="../calculators/dsr.html">DSR 계산기</a></span>
+      </li>
+      <li data-stage="sale-2" id="stage-sale-2">
+        <span class="t-when">계약 전</span>
+        <span class="t-what">매물 확인 · 권리 점검 — 등기부·건축물대장 직접 발급<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="등기부는 한 번 보고 끝이 아닙니다 — 계약 직전·잔금 직전에 다시 확인해야 합니다.">⚠</span></span>
+        <span class="t-tool"><a href="../posts/registry-reading.html">등기부등본 읽는 법</a> · <a href="../calculators/transactions.html">실거래가 조회</a></span>
+      </li>
+      <li data-stage="sale-3" id="stage-sale-3">
+        <span class="t-when">계약일</span>
+        <span class="t-what">매매계약 체결 — 소유자 본인 확인 후 계약금 이체<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="대출 불승인 시 계약금을 돌려받는다는 특약이 없으면, 대출 실패 시 계약금을 잃을 수 있습니다.">⚠</span></span>
+        <span class="t-tool"><a href="../posts/sale-contract-tips.html">매매계약서 특약 가이드</a> · <a href="../calculators/brokerage-fee.html">중개수수료 계산기</a></span>
+      </li>
+      <li data-stage="sale-4" id="stage-sale-4">
+        <span class="t-when">계약 후 ~ 잔금 전</span>
+        <span class="t-what">대출 실행 · 중도금 · 잔금 준비 — 일정과 금액을 미리 등록<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="대출 실행일과 잔금일이 어긋나면 하루 차이로도 잔금을 못 치릅니다 — 은행에 잔금일을 명확히 전달하세요.">⚠</span></span>
+        <span class="t-tool"><a href="dday-scheduler.html">D-Day 스케줄러</a> · <a href="../calculators/registration-cost.html">등기비용 계산기</a></span>
+      </li>
+      <li data-stage="sale-5" id="stage-sale-5">
+        <span class="t-when">잔금일 (D-Day)</span>
+        <span class="t-what">잔금 · 소유권이전등기 · 정산 — 등기부 최종 확인 후 이체<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="선수관리비는 매수인이 매도인에게 돌려주는 돈입니다 — 정산표에서 방향이 자주 헷갈립니다.">⚠</span></span>
+        <span class="t-tool"><a href="sale-balance-day.html">매매 잔금일 체크리스트 30</a> · <a href="../calculators/balance-settlement.html">잔금일 정산 계산기</a></span>
+      </li>
+      <li data-stage="sale-6" id="stage-sale-6">
+        <span class="t-when">잔금 후 ~ 60일</span>
+        <span class="t-what">입주 후 행정 처리 — 전입신고·취득세 신고<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="취득세 60일 신고 기한을 넘기면 무신고 가산세(20%)가 붙습니다.">⚠</span></span>
+        <span class="t-tool"><a href="../calculators/acquisition-tax.html">취득세 계산기</a></span>
+      </li>
+      <li data-stage="sale-7" id="stage-sale-7">
+        <span class="t-when">입주 전후</span>
+        <span class="t-what">인테리어 · 이사 — 견적 비교 후 표준계약으로 진행<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="하자보수 기간·범위가 계약서에 없으면 준공 후 분쟁에서 불리합니다.">⚠</span></span>
+        <span class="t-tool"><a href="interior-contract.html">인테리어 계약 체크리스트</a> · <a href="moving-day.html">이사 당일 체크리스트</a></span>
+      </li>
+      <li data-stage="sale-8" id="stage-sale-8">
+        <span class="t-when">보유 중 · 매도 대비</span>
+        <span class="t-what">보유세 · 양도 계획 — 비과세 요건 미리 확인<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="일시적 2주택 처분 기한을 넘기면 중과세율이 적용될 수 있습니다.">⚠</span></span>
+        <span class="t-tool"><a href="../calculators/transfer-tax.html">양도세 계산기</a></span>
+      </li>
+    </ol>
+
+    <ol class="timeline" data-journey-panel="lease" style="display:none;">
+      <li data-stage="lease-1" id="stage-lease-1">
+        <span class="t-when">계약 전 4~6주</span>
+        <span class="t-what">예산 · 조건 정하기 — 전세자금대출 가능액 확인<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="전세가율이 80%를 넘는 집은 보증금을 떼일(깡통전세) 위험이 큽니다.">⚠</span></span>
+        <span class="t-tool"><a href="../calculators/jeonse-monthly.html">전월세 전환 계산기</a> · <a href="../calculators/jeonse-ratio.html">전세가율 계산기</a></span>
+      </li>
+      <li data-stage="lease-2" id="stage-lease-2">
+        <span class="t-when">계약 전</span>
+        <span class="t-what">매물 · 권리 확인 — 근저당·가압류 등기부 확인<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="(근저당+내 보증금)이 시세의 70~80%를 넘으면 계약을 재고하세요.">⚠</span></span>
+        <span class="t-tool"><a href="../posts/jeonse-scam.html">전세사기 예방 가이드</a> · <a href="../posts/registry-reading.html">등기부등본 읽는 법</a></span>
+      </li>
+      <li data-stage="lease-3" id="stage-lease-3">
+        <span class="t-when">계약일</span>
+        <span class="t-what">임대차계약 체결 — 임대인 본인 확인 후 계약금 이체<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="대항력은 전입신고 다음 날 0시부터 생깁니다 — 잔금일 당일 근저당 설정을 막는 특약이 없으면 위험합니다.">⚠</span></span>
+        <span class="t-tool"><a href="../posts/lease-contract-tips.html">임대차계약 특약 가이드</a></span>
+      </li>
+      <li data-stage="lease-4" id="stage-lease-4">
+        <span class="t-when">계약 후 ~ 잔금 전</span>
+        <span class="t-what">대출 신청 · 보증보험 사전심사<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="보증보험은 미루다 조건이 바뀌면 못 들어갈 수 있습니다 — 잔금 직후 바로 가입하세요.">⚠</span></span>
+        <span class="t-tool"><a href="dday-scheduler.html">D-Day 스케줄러</a></span>
+      </li>
+      <li data-stage="lease-5" id="stage-lease-5">
+        <span class="t-when">잔금일 (D-Day)</span>
+        <span class="t-what">보증금 방어 3종 세트 — 전입신고+확정일자+보증보험<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="전입신고와 확정일자 중 하나만 하면 우선변제권이 없습니다 — 반드시 둘 다 해야 합니다.">⚠</span></span>
+        <span class="t-tool"><a href="lease-contract.html">전세계약 체크리스트</a></span>
+      </li>
+      <li data-stage="lease-6" id="stage-lease-6">
+        <span class="t-when">거주 중</span>
+        <span class="t-what">갱신 · 권리 유지 — 만기 6~2개월 전 갱신 여부 결정<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="통보 기한(만기 2개월 전)을 넘기면 묵시적 갱신이 되어 조건 협상 기회를 놓칩니다.">⚠</span></span>
+        <span class="t-tool"><a href="../posts/lease-renewal.html">계약갱신요구권 가이드</a></span>
+      </li>
+      <li data-stage="lease-7" id="stage-lease-7">
+        <span class="t-when">만기 전후</span>
+        <span class="t-what">퇴거 · 보증금 반환 — 통보와 이사·전출 일정 조율<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="보증금을 못 받은 채 먼저 이사·전출하면 대항력을 잃습니다 — 임차권등기 완료 후에 옮기세요.">⚠</span></span>
+        <span class="t-tool"><a href="../posts/lease-return.html">보증금 반환 가이드</a> · <a href="moving-day.html">이사 당일 체크리스트</a></span>
+      </li>
+    </ol>
+
+    <p class="journey-hint">각 단계를 클릭하면 '지금 내 단계'로 표시됩니다. 이 브라우저에만 저장되며, 홈에서 이어서 확인할 수 있습니다.</p>
+  </section>
+
   <div class="callout callout-info" style="margin-top: 32px;">
     <div class="icon">i</div>
     <div class="body">
@@ -296,6 +293,6 @@
   </div>
 </footer>
 
-<script src="../assets/app.js?v=20260721"></script>
+<script src="../assets/app.js?v=20260722"></script>
 </body>
 </html>

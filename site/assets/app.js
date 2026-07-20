@@ -26,7 +26,7 @@
   // (i18n-maintenance 워크플로가 이 맵과 실제 파일의 정합성을 점검한다.)
   const PAGES = {
     ko: { all: true, exclude: ['foreigner-loan.html', 'foreigner-tax.html', 'jeonse.html', 'glossary.html'] },
-    en: { list: ['index.html', 'jeonse.html', 'foreigner-loan.html', 'foreigner-tax.html', 'glossary.html', 'auction.html', 'about.html', 'feedback.html', 'calculators/index.html', 'calculators/acquisition-tax.html', 'calculators/brokerage-fee.html', 'calculators/jeonse-monthly.html', 'calculators/auction-bid.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
+    en: { list: ['index.html', 'guides.html', 'jeonse.html', 'foreigner-loan.html', 'foreigner-tax.html', 'glossary.html', 'auction.html', 'about.html', 'feedback.html', 'calculators/index.html', 'calculators/acquisition-tax.html', 'calculators/brokerage-fee.html', 'calculators/jeonse-monthly.html', 'calculators/auction-bid.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html', 'calculators/total-cost-dashboard.html'] },
     'zh-Hans': { list: ['index.html', 'glossary.html', 'foreigner-loan.html', 'foreigner-tax.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
     'zh-Hant': { list: ['index.html', 'glossary.html', 'foreigner-loan.html', 'foreigner-tax.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
     vi: { list: ['index.html', 'glossary.html', 'jeonse.html', 'foreigner-loan.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/balance-settlement.html'] },
@@ -102,8 +102,25 @@
       });
 
       const items = () => Array.from(menu.querySelectorAll('.lang-item'));
+      // 데스크톱 드롭다운 위치는 버튼 기준으로 JS가 계산해 인라인으로 지정한다.
+      // .site-header 가 backdrop-filter를 쓰는데, 이는 position:fixed 자손의
+      // containing block을 header로 바꿔버려(뷰포트 기준이 아니게 됨) 메뉴를
+      // header 안에 두면 모바일 바텀시트가 화면 밖으로 밀려 안 보이는 문제가
+      // 있었다. 그래서 menu는 header가 아니라 body의 직계 자식으로 둔다.
+      const isMobile = () => window.matchMedia('(max-width: 640px)').matches;
+      const positionMenu = () => {
+        if (isMobile()) {
+          menu.style.top = ''; menu.style.right = ''; menu.style.bottom = ''; menu.style.left = '';
+          return;
+        }
+        const r = btn.getBoundingClientRect();
+        menu.style.top = Math.round(r.bottom + 8) + 'px';
+        menu.style.right = Math.round(window.innerWidth - r.right) + 'px';
+        menu.style.left = 'auto'; menu.style.bottom = 'auto';
+      };
       const open = () => {
         menu.hidden = false; backdrop.hidden = false;
+        positionMenu();
         btn.setAttribute('aria-expanded', 'true');
         document.body.classList.add('lang-open');
         const cur = menu.querySelector('.lang-item.is-current') || items()[0];
@@ -118,7 +135,8 @@
 
       btn.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
       backdrop.addEventListener('click', close);
-      document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) close(); });
+      document.addEventListener('click', (e) => { if (!wrap.contains(e.target) && !menu.contains(e.target)) close(); });
+      window.addEventListener('resize', () => { if (!menu.hidden) positionMenu(); });
       document.addEventListener('keydown', (e) => {
         if (menu.hidden) return;
         const list = items();
@@ -131,11 +149,11 @@
       });
 
       wrap.appendChild(btn);
-      wrap.appendChild(menu);
       const navToggle = header.querySelector('.nav-toggle');
       if (navToggle) header.insertBefore(wrap, navToggle);
       else header.appendChild(wrap);
       document.body.appendChild(backdrop);
+      document.body.appendChild(menu);
     }
   } catch (e) {}
 
@@ -1021,6 +1039,8 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
     const rtiBox = root.querySelector('[data-rti-box]');
     const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
     const setLabel = (attr, txt) => { const el = root.querySelector('['+attr+']'); if (el) el.textContent = txt; };
+    // 이 계산기의 라벨·안내문은 이 블록 안에서만 L(한국어, 영어)로 분기한다(isEn은 파일 상단에서 전역 선언).
+    const L = (ko, en) => (isEn ? en : ko);
 
     const getN = (name) => fmt.parseWon(root.querySelector('[name="'+name+'"]')?.value || '0');
     const getNum = (name) => Number(root.querySelector('[name="'+name+'"]')?.value || 0);
@@ -1262,29 +1282,29 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
 
     // ── 기타 대출(여러 건) — 금감원 DSR 원금 산정 방식 ──
     var OTHER_TYPES = [
-      ['none', '없음'],
-      ['mortgage', '주택담보대출 (분할상환·타 물건)'],
-      ['mortgageBullet', '주택담보대출 (만기일시·거치)'],
-      ['nonhouse', '비주택담보대출 (상가·오피스텔·토지)'],
-      ['jeonse', '전세자금대출'],
-      ['deposit', '예적금·보험약관 담보대출'],
-      ['stock', '유가증권·기타담보대출'],
-      ['card', '카드론·현금서비스'],
-      ['auto', '자동차 할부·리스'],
-      ['minus', '마이너스통장 (한도대출)'],
+      ['none', L('없음', 'None')],
+      ['mortgage', L('주택담보대출 (분할상환·타 물건)', 'Mortgage (amortizing, other property)')],
+      ['mortgageBullet', L('주택담보대출 (만기일시·거치)', 'Mortgage (bullet / grace period)')],
+      ['nonhouse', L('비주택담보대출 (상가·오피스텔·토지)', 'Non-housing mortgage (retail/officetel/land)')],
+      ['jeonse', L('전세자금대출', 'Jeonse loan')],
+      ['deposit', L('예적금·보험약관 담보대출', 'Deposit/insurance-secured loan')],
+      ['stock', L('유가증권·기타담보대출', 'Securities/other secured loan')],
+      ['card', L('카드론·현금서비스', 'Card loan / cash advance')],
+      ['auto', L('자동차 할부·리스', 'Auto loan/lease')],
+      ['minus', L('마이너스통장 (한도대출)', 'Overdraft line of credit')],
     ];
     // 종류 → [원금산정함수(amount,term), 설명, 만기입력필요]
     function otherLoanSpec(type) {
       switch (type) {
-        case 'mortgage': return [function (a, t) { return a / t; }, '주택담보대출(분할상환) → 원금(잔액÷잔존만기 N년) + 이자', true];
-        case 'mortgageBullet': return [function (a, t) { return a / t; }, '주택담보대출(만기일시·거치) → 원금(대출액÷대출기간 N년) + 이자', true];
-        case 'nonhouse': return [function (a) { return a / 8; }, '비주택담보대출 → 원금(대출액÷8년) + 이자 (금감원 산정만기 8년)', false];
-        case 'jeonse': return [function () { return 0; }, '전세자금대출 → 이자만 반영 (보증부는 DSR 산정 제외 가능)', false];
-        case 'deposit': return [function () { return 0; }, '예적금·보험약관 담보대출 → 이자만 반영 (원금 제외)', false];
-        case 'stock': return [function (a) { return a / 8; }, '유가증권·기타담보대출 → 원금(대출액÷8년) + 이자 (산정만기 8년)', false];
-        case 'card': return [function (a, t) { return a / t; }, '카드론·현금서비스 → 원금(잔액÷약정 N년) + 이자', true];
-        case 'auto': return [function (a, t) { return a / t; }, '자동차 할부·리스 → 원금(잔액÷약정 N년) + 이자', true];
-        case 'minus': return [function (a) { return a / 5; }, '마이너스통장(한도대출) → 원금(한도÷5년) + 이자', false];
+        case 'mortgage': return [function (a, t) { return a / t; }, L('주택담보대출(분할상환) → 원금(잔액÷잔존만기 N년) + 이자', 'Mortgage (amortizing) → principal (balance ÷ N-year remaining term) + interest'), true];
+        case 'mortgageBullet': return [function (a, t) { return a / t; }, L('주택담보대출(만기일시·거치) → 원금(대출액÷대출기간 N년) + 이자', 'Mortgage (bullet/grace) → principal (loan ÷ N-year term) + interest'), true];
+        case 'nonhouse': return [function (a) { return a / 8; }, L('비주택담보대출 → 원금(대출액÷8년) + 이자 (금감원 산정만기 8년)', 'Non-housing mortgage → principal (loan ÷ 8 years) + interest (FSS assumed 8-year term)'), false];
+        case 'jeonse': return [function () { return 0; }, L('전세자금대출 → 이자만 반영 (보증부는 DSR 산정 제외 가능)', 'Jeonse loan → interest only (guarantee-backed loans may be excluded from DSR)'), false];
+        case 'deposit': return [function () { return 0; }, L('예적금·보험약관 담보대출 → 이자만 반영 (원금 제외)', 'Deposit/insurance-secured loan → interest only (principal excluded)'), false];
+        case 'stock': return [function (a) { return a / 8; }, L('유가증권·기타담보대출 → 원금(대출액÷8년) + 이자 (산정만기 8년)', 'Securities/other secured loan → principal (loan ÷ 8 years) + interest (assumed 8-year term)'), false];
+        case 'card': return [function (a, t) { return a / t; }, L('카드론·현금서비스 → 원금(잔액÷약정 N년) + 이자', 'Card loan/cash advance → principal (balance ÷ N-year term) + interest'), true];
+        case 'auto': return [function (a, t) { return a / t; }, L('자동차 할부·리스 → 원금(잔액÷약정 N년) + 이자', 'Auto loan/lease → principal (balance ÷ N-year term) + interest'), true];
+        case 'minus': return [function (a) { return a / 5; }, L('마이너스통장(한도대출) → 원금(한도÷5년) + 이자', 'Overdraft line → principal (limit ÷ 5 years) + interest'), false];
         default: return [function () { return 0; }, '', false];
       }
     }
@@ -1305,7 +1325,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       var annual = principal + interest;
       note.style.display = '';
       note.innerHTML = spec[1].replace('N', term)
-        + (amount > 0 ? '<br/>이 대출의 DSR 반영액 ≈ <strong>' + fmt.won(Math.round(annual)) + ' / 년</strong>' : '');
+        + (amount > 0 ? L('<br/>이 대출의 DSR 반영액 ≈ <strong>' + fmt.won(Math.round(annual)) + ' / 년</strong>', '<br/>This loan’s DSR impact ≈ <strong>' + fmt.won(Math.round(annual)) + ' / yr</strong>') : '');
       return annual;
     }
 
@@ -1324,13 +1344,13 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       row.innerHTML =
         '<div class="other-loan-head">'
         + '<select class="ol-type">' + opts + '</select>'
-        + '<button type="button" class="ol-remove" aria-label="삭제">✕</button>'
+        + '<button type="button" class="ol-remove" aria-label="' + L('삭제', 'Remove') + '">✕</button>'
         + '</div>'
         + '<div class="field-row" data-row-detail style="display:none;">'
-        + '  <div class="field"><label>금액 (잔액·한도)</label><div class="input-suffix" data-suffix="원"><input class="ol-amount" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>'
-        + '  <div class="field"><label>금리 (연 %)</label><input class="ol-rate" type="number" min="0" max="20" step="0.1" value="6" /></div>'
+        + '  <div class="field"><label>' + L('금액 (잔액·한도)', 'Amount (balance/limit)') + '</label><div class="input-suffix" data-suffix="' + (isEn ? 'KRW' : '원') + '"><input class="ol-amount" type="text" inputmode="numeric" data-format="won" value="0" /></div></div>'
+        + '  <div class="field"><label>' + L('금리 (연 %)', 'Rate (annual %)') + '</label><input class="ol-rate" type="number" min="0" max="20" step="0.1" value="6" /></div>'
         + '</div>'
-        + '<div class="field" data-row-term style="display:none;"><label>남은 만기 (년)</label><input class="ol-term" type="number" min="1" max="40" step="1" value="3" /></div>'
+        + '<div class="field" data-row-term style="display:none;"><label>' + L('남은 만기 (년)', 'Remaining term (yrs)') + '</label><input class="ol-term" type="number" min="1" max="40" step="1" value="3" /></div>'
         + '<p class="scn-note" data-row-note style="display:none;"></p>';
       box.appendChild(row);
       row.querySelectorAll('input, select').forEach(function (el) {
@@ -1354,7 +1374,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const other = otherLoansTotal();
       const totalAnnualPmt = annualPmt + creditAnnual + other;
       const dsr = income > 0 ? totalAnnualPmt / income * 100 : 0;
-      setText('dsrPct', income > 0 ? dsr.toFixed(1) + '%' : '소득 입력 필요');
+      setText('dsrPct', income > 0 ? dsr.toFixed(1) + '%' : L('소득 입력 필요', 'Enter income'));
       const fillEl = root.querySelector('[data-out="dsrFill"]');
       if (fillEl) {
         fillEl.style.width = Math.min(100, dsr) + '%';
@@ -1363,18 +1383,18 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         else fillEl.style.background = '#047857';
       }
       let verdict;
-      if (income <= 0) verdict = '소득을 입력하면 DSR이 자동 계산됩니다.';
-      else if (dsr > DSR_T2) verdict = `2금융 한도(${DSR_T2}%)도 초과 — 대출 금액·기간 조정이 필요합니다.`;
-      else if (dsr > DSR_T1) verdict = `1금융 한도(${DSR_T1}%) 초과, 2금융(${DSR_T2}%) 내에서 검토 가능합니다.`;
-      else if (dsr > 0) verdict = `1금융 한도(${DSR_T1}%) 내 — 정상 승인이 가능한 수준입니다.`;
-      else verdict = '대출 정보가 0이라 DSR이 적용되지 않습니다.';
-      if (credit > 0 && income > 0) verdict += ` (신용대출 ${fmt.won(credit)} → 연환산 ${fmt.won(creditAnnual)})`;
+      if (income <= 0) verdict = L('소득을 입력하면 DSR이 자동 계산됩니다.', 'Enter income to calculate DSR automatically.');
+      else if (dsr > DSR_T2) verdict = L(`2금융 한도(${DSR_T2}%)도 초과 — 대출 금액·기간 조정이 필요합니다.`, `Exceeds even the 2nd-tier limit (${DSR_T2}%) — adjust loan amount or term.`);
+      else if (dsr > DSR_T1) verdict = L(`1금융 한도(${DSR_T1}%) 초과, 2금융(${DSR_T2}%) 내에서 검토 가능합니다.`, `Exceeds the 1st-tier limit (${DSR_T1}%), but within the 2nd-tier limit (${DSR_T2}%).`);
+      else if (dsr > 0) verdict = L(`1금융 한도(${DSR_T1}%) 내 — 정상 승인이 가능한 수준입니다.`, `Within the 1st-tier limit (${DSR_T1}%) — normally approvable.`);
+      else verdict = L('대출 정보가 0이라 DSR이 적용되지 않습니다.', 'No loan entered, so DSR does not apply.');
+      if (credit > 0 && income > 0) verdict += L(` (신용대출 ${fmt.won(credit)} → 연환산 ${fmt.won(creditAnnual)})`, ` (credit loan ${fmt.won(credit)} → annualized ${fmt.won(creditAnnual)})`);
       setText('dsrVerdict', verdict);
     }
 
     function renderRTI(annualRent, annualInterest, threshold) {
       const rti = annualInterest > 0 ? annualRent / annualInterest : 0;
-      setText('rtiRatio', annualInterest > 0 ? rti.toFixed(2) + 'x' : '이자 입력 필요');
+      setText('rtiRatio', annualInterest > 0 ? rti.toFixed(2) + 'x' : L('이자 입력 필요', 'Enter interest'));
       const fillEl = root.querySelector('[data-out="rtiFill"]');
       if (fillEl) {
         const pct = Math.min(100, rti / 2 * 100);
@@ -1384,10 +1404,10 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         else fillEl.style.background = '#047857';
       }
       let verdict;
-      if (annualInterest <= 0) verdict = '임대 대출 이자가 0이라 RTI가 적용되지 않습니다.';
-      else if (rti >= threshold + 0.25) verdict = `기준(${threshold}x) 이상 — 임대업 대출 승인이 가능한 수준입니다.`;
-      else if (rti >= threshold) verdict = `기준(${threshold}x) 충족 — 다만 여유가 크지 않습니다.`;
-      else verdict = `기준(${threshold}x) 미달 — 대출 금액 축소 또는 임대수입 증명이 필요합니다.`;
+      if (annualInterest <= 0) verdict = L('임대 대출 이자가 0이라 RTI가 적용되지 않습니다.', 'No rental loan interest entered, so RTI does not apply.');
+      else if (rti >= threshold + 0.25) verdict = L(`기준(${threshold}x) 이상 — 임대업 대출 승인이 가능한 수준입니다.`, `At or above the ${threshold}x threshold — normally approvable for a rental-business loan.`);
+      else if (rti >= threshold) verdict = L(`기준(${threshold}x) 충족 — 다만 여유가 크지 않습니다.`, `Meets the ${threshold}x threshold, but with little margin.`);
+      else verdict = L(`기준(${threshold}x) 미달 — 대출 금액 축소 또는 임대수입 증명이 필요합니다.`, `Below the ${threshold}x threshold — reduce the loan amount or document more rental income.`);
       setText('rtiVerdict', verdict);
     }
 
@@ -1434,12 +1454,12 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       let monthly, monthlyLabel, totalInterest, dsrAnnual;
       if (isEqualPrincipal) {
         monthly = equalPrincipalFirstMonth(loan, rate, term);   // 첫 달(가장 큼)
-        monthlyLabel = '월 상환액 (첫달·최대)';
+        monthlyLabel = L('월 상환액 (첫달·최대)', 'Monthly payment (1st mo., max)');
         totalInterest = equalPrincipalTotalInterest(loan, rate, term);
         dsrAnnual = equalPrincipalFirstYear(loan, rate, term);  // DSR은 첫해 기준
       } else {
         monthly = monthlyPayment(loan, rate, term);             // 매월 동일
-        monthlyLabel = '월 원리금 상환';
+        monthlyLabel = L('월 원리금 상환', 'Monthly payment');
         totalInterest = monthly > 0 ? monthly * term * 12 - loan : 0;
         dsrAnnual = monthly * 12;
       }
@@ -1448,41 +1468,41 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const grandTotal = price + acq.total + broker + reg.total;
 
       if (resultTitle) resultTitle.textContent = purpose === 'gap'
-        ? (nonhouse ? '임대 — 실제 투입 자기자본' : '갭투자 — 실제 투입 자기자본')
-        : '예상 총 매수 비용';
+        ? (nonhouse ? L('임대 — 실제 투입 자기자본', 'Rental — actual equity invested') : L('갭투자 — 실제 투입 자기자본', 'Gap investment — actual equity invested'))
+        : L('예상 총 매수 비용', 'Estimated total purchase cost');
       setText('primaryTotal', fmt.won(initialCapital));
       setLabel('data-quick-label1', monthlyLabel);
       setText('quick1', fmt.won(monthly));
-      setLabel('data-quick-label2', '총 이자 (만기까지)');
+      setLabel('data-quick-label2', L('총 이자 (만기까지)', 'Total interest (to maturity)'));
       setText('quick2', fmt.won(totalInterest));
-      setLabel('data-quick-label3', '취득세 합계');
+      setLabel('data-quick-label3', L('취득세 합계', 'Total acquisition tax'));
       setText('quick3', fmt.won(acq.total));
 
       renderChart([
-        { label: '자기자본', value: equity, color: '#1e3a8a' },
-        { label: '대출 원금', value: loan, color: '#3b82f6' },
-        { label: '전세보증금 인수', value: jeonseDeposit, color: '#60a5fa' },
-        { label: '취득세 합계', value: acq.total, color: '#f59e0b' },
-        { label: '중개수수료', value: broker, color: '#ef4444' },
-        { label: '등기·법무사', value: reg.total, color: '#a855f7' },
+        { label: L('자기자본', 'Equity'), value: equity, color: '#1e3a8a' },
+        { label: L('대출 원금', 'Loan principal'), value: loan, color: '#3b82f6' },
+        { label: L('전세보증금 인수', 'Assumed Jeonse deposit'), value: jeonseDeposit, color: '#60a5fa' },
+        { label: L('취득세 합계', 'Total acquisition tax'), value: acq.total, color: '#f59e0b' },
+        { label: L('중개수수료', 'Brokerage fee'), value: broker, color: '#ef4444' },
+        { label: L('등기·법무사', 'Registration & scrivener'), value: reg.total, color: '#a855f7' },
       ]);
       renderDetail([
-        { label: '자기자본', value: equity, color: '#1e3a8a' },
-        { label: '대출 원금', value: loan, color: '#3b82f6' },
-        ...(purpose === 'gap' ? [{ label: '전세보증금 인수', value: jeonseDeposit, color: '#60a5fa' }] : []),
-        { label: '취득세 (감면 후)', value: acq.acquisition, color: '#f59e0b', sub: true },
-        ...(acq.firstHomeDeduct > 0 ? [{ label: '생애최초 감면', value: '−' + fmt.won(acq.firstHomeDeduct), sub: true }] : []),
-        { label: '농어촌특별세', value: acq.ruralTax, sub: true },
-        { label: '지방교육세', value: acq.localEduTax, sub: true },
-        { label: '중개수수료(VAT 포함)', value: broker, color: '#ef4444' },
-        { label: '등기·법무사', value: reg.total, color: '#a855f7' },
-        { label: '인지세', value: reg.stamp, sub: true },
-        { label: '등기신청 수수료', value: reg.regFee, sub: true },
-        { label: '국민주택채권 할인부담 (매입률 ' + (reg.rate * 100).toFixed(1) + '% · 할인 ' + (regDiscount * 100).toFixed(1) + '%)', value: reg.bond, sub: true },
+        { label: L('자기자본', 'Equity'), value: equity, color: '#1e3a8a' },
+        { label: L('대출 원금', 'Loan principal'), value: loan, color: '#3b82f6' },
+        ...(purpose === 'gap' ? [{ label: L('전세보증금 인수', 'Assumed Jeonse deposit'), value: jeonseDeposit, color: '#60a5fa' }] : []),
+        { label: L('취득세 (감면 후)', 'Acquisition tax (after relief)'), value: acq.acquisition, color: '#f59e0b', sub: true },
+        ...(acq.firstHomeDeduct > 0 ? [{ label: L('생애최초 감면', 'First-home relief'), value: '−' + fmt.won(acq.firstHomeDeduct), sub: true }] : []),
+        { label: L('농어촌특별세', 'Rural special tax'), value: acq.ruralTax, sub: true },
+        { label: L('지방교육세', 'Local education tax'), value: acq.localEduTax, sub: true },
+        { label: L('중개수수료(VAT 포함)', 'Brokerage fee (incl. VAT)'), value: broker, color: '#ef4444' },
+        { label: L('등기·법무사', 'Registration & scrivener'), value: reg.total, color: '#a855f7' },
+        { label: L('인지세', 'Stamp duty'), value: reg.stamp, sub: true },
+        { label: L('등기신청 수수료', 'Registration filing fee'), value: reg.regFee, sub: true },
+        { label: L('국민주택채권 할인부담 (매입률 ' + (reg.rate * 100).toFixed(1) + '% · 할인 ' + (regDiscount * 100).toFixed(1) + '%)', 'National Housing Bond discount cost (purchase rate ' + (reg.rate * 100).toFixed(1) + '% · discount ' + (regDiscount * 100).toFixed(1) + '%)'), value: reg.bond, sub: true },
         ...(selfReg
-          ? [{ label: '법무사 보수', value: '셀프 등기 (0원)', sub: true }]
-          : [{ label: '법무사 보수', value: reg.scrivener, sub: true }, { label: '└ 부가세 (10%)', value: reg.vat, sub: true }]),
-        { divider: true, label: '총 매수 비용 (대출 포함)', value: grandTotal },
+          ? [{ label: L('법무사 보수', 'Scrivener fee'), value: L('셀프 등기 (0원)', 'Self-filed (KRW 0)'), sub: true }]
+          : [{ label: L('법무사 보수', 'Scrivener fee'), value: reg.scrivener, sub: true }, { label: L('└ 부가세 (10%)', '└ VAT (10%)'), value: reg.vat, sub: true }]),
+        { divider: true, label: L('총 매수 비용 (대출 포함)', 'Total purchase cost (incl. loan)'), value: grandTotal },
       ]);
 
       if (isLeaseBiz) {
@@ -1545,31 +1565,31 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const localTax = incomeTax * 0.10;
       const total = incomeTax + localTax;
 
-      if (resultTitle) resultTitle.textContent = exempted ? '1세대1주택 비과세 (양도세 0원)' : '예상 양도소득세';
+      if (resultTitle) resultTitle.textContent = exempted ? L('1세대1주택 비과세 (양도세 0원)', '1-home exemption (KRW 0 capital gains tax)') : L('예상 양도소득세', 'Estimated capital gains tax');
       setText('primaryTotal', fmt.won(total));
-      setLabel('data-quick-label1', '양도차익');
+      setLabel('data-quick-label1', L('양도차익', 'Capital gain'));
       setText('quick1', fmt.won(rawGain));
-      setLabel('data-quick-label2', '과세표준');
+      setLabel('data-quick-label2', L('과세표준', 'Tax base'));
       setText('quick2', fmt.won(taxBase));
-      setLabel('data-quick-label3', '실효세율 (양도가 대비)');
+      setLabel('data-quick-label3', L('실효세율 (양도가 대비)', 'Effective rate (of sale price)'));
       setText('quick3', sellPrice > 0 ? (total / sellPrice * 100).toFixed(2) + '%' : '—');
 
       renderChart([
-        { label: '국세 양도소득세', value: incomeTax, color: '#1e3a8a' },
-        { label: '지방소득세 (10%)', value: localTax, color: '#3b82f6' },
-        { label: '장기보유 공제분', value: ltDeduct, color: '#047857' },
+        { label: L('국세 양도소득세', 'National capital gains tax'), value: incomeTax, color: '#1e3a8a' },
+        { label: L('지방소득세 (10%)', 'Local income tax (10%)'), value: localTax, color: '#3b82f6' },
+        { label: L('장기보유 공제분', 'Long-term holding deduction'), value: ltDeduct, color: '#047857' },
       ]);
       renderDetail([
-        { label: '양도가액', value: sellPrice, sub: true },
-        { label: '취득가액 + 필요경비', value: buyPrice + cost, sub: true },
-        { label: '양도차익', value: rawGain, color: '#1e3a8a' },
-        ...(ratio < 1 && ratio > 0 ? [{ label: '과세 비율 (12억 초과)', value: (ratio*100).toFixed(1)+'%', sub: true }] : []),
-        { label: '장기보유특별공제 (' + (ltRate*100).toFixed(0) + '%)', value: '−' + fmt.won(ltDeduct), sub: true },
-        { label: '기본공제', value: '−' + fmt.won(basicDeduct), sub: true },
-        { label: '과세표준', value: taxBase },
-        { label: '산출세액 (국세)', value: incomeTax, color: '#1e3a8a' },
-        { label: '지방소득세', value: localTax, color: '#3b82f6' },
-        { divider: true, label: '총 부담세액', value: total },
+        { label: L('양도가액', 'Sale price'), value: sellPrice, sub: true },
+        { label: L('취득가액 + 필요경비', 'Purchase price + costs'), value: buyPrice + cost, sub: true },
+        { label: L('양도차익', 'Capital gain'), value: rawGain, color: '#1e3a8a' },
+        ...(ratio < 1 && ratio > 0 ? [{ label: L('과세 비율 (12억 초과)', 'Taxable ratio (over KRW 1.2B)'), value: (ratio*100).toFixed(1)+'%', sub: true }] : []),
+        { label: L('장기보유특별공제 (' + (ltRate*100).toFixed(0) + '%)', 'Long-term holding deduction (' + (ltRate*100).toFixed(0) + '%)'), value: '−' + fmt.won(ltDeduct), sub: true },
+        { label: L('기본공제', 'Basic deduction'), value: '−' + fmt.won(basicDeduct), sub: true },
+        { label: L('과세표준', 'Tax base'), value: taxBase },
+        { label: L('산출세액 (국세)', 'Calculated tax (national)'), value: incomeTax, color: '#1e3a8a' },
+        { label: L('지방소득세', 'Local income tax'), value: localTax, color: '#3b82f6' },
+        { divider: true, label: L('총 부담세액', 'Total tax'), value: total },
       ]);
     }
 
@@ -1583,25 +1603,25 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const totalInterest = monthlyInterest * 12 * term;
       const equity = Math.max(0, deposit - loan);
 
-      if (resultTitle) resultTitle.textContent = '전세 임차 — 실제 투입 자기자본';
+      if (resultTitle) resultTitle.textContent = L('전세 임차 — 실제 투입 자기자본', 'Jeonse lease — actual equity invested');
       setText('primaryTotal', fmt.won(equity + broker));
-      setLabel('data-quick-label1', '월 이자 (전세대출)');
+      setLabel('data-quick-label1', L('월 이자 (전세대출)', 'Monthly interest (Jeonse loan)'));
       setText('quick1', fmt.won(monthlyInterest));
-      setLabel('data-quick-label2', '총 이자 (계약 기간)');
+      setLabel('data-quick-label2', L('총 이자 (계약 기간)', 'Total interest (lease term)'));
       setText('quick2', fmt.won(totalInterest));
-      setLabel('data-quick-label3', '중개수수료');
+      setLabel('data-quick-label3', L('중개수수료', 'Brokerage fee'));
       setText('quick3', fmt.won(broker));
 
       renderChart([
-        { label: '자기자본', value: equity, color: '#1e3a8a' },
-        { label: '전세자금대출', value: loan, color: '#3b82f6' },
-        { label: '중개수수료', value: broker, color: '#ef4444' },
+        { label: L('자기자본', 'Equity'), value: equity, color: '#1e3a8a' },
+        { label: L('전세자금대출', 'Jeonse loan'), value: loan, color: '#3b82f6' },
+        { label: L('중개수수료', 'Brokerage fee'), value: broker, color: '#ef4444' },
       ]);
       renderDetail([
-        { label: '자기자본', value: equity, color: '#1e3a8a' },
-        { label: '전세자금대출 (DSR 산정 제외)', value: loan, color: '#3b82f6' },
-        { label: '중개수수료(VAT 포함)', value: broker, color: '#ef4444' },
-        { divider: true, label: '총 임차 비용 (보증금 + 부대)', value: deposit + broker },
+        { label: L('자기자본', 'Equity'), value: equity, color: '#1e3a8a' },
+        { label: L('전세자금대출 (DSR 산정 제외)', 'Jeonse loan (excluded from DSR)'), value: loan, color: '#3b82f6' },
+        { label: L('중개수수료(VAT 포함)', 'Brokerage fee (incl. VAT)'), value: broker, color: '#ef4444' },
+        { divider: true, label: L('총 임차 비용 (보증금 + 부대)', 'Total lease cost (deposit + fees)'), value: deposit + broker },
       ]);
     }
 
@@ -1623,30 +1643,30 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const taxBase = Math.max(0, netAssets - totalDeduct);
       const tax = inheritGiftTax(taxBase);
 
-      if (resultTitle) resultTitle.textContent = '예상 상속세';
+      if (resultTitle) resultTitle.textContent = L('예상 상속세', 'Estimated inheritance tax');
       setText('primaryTotal', fmt.won(tax));
-      setLabel('data-quick-label1', '총 상속재산');
+      setLabel('data-quick-label1', L('총 상속재산', 'Total estate'));
       setText('quick1', fmt.won(grossAssets));
-      setLabel('data-quick-label2', '공제 합계');
+      setLabel('data-quick-label2', L('공제 합계', 'Total deductions'));
       setText('quick2', fmt.won(totalDeduct));
-      setLabel('data-quick-label3', '과세표준');
+      setLabel('data-quick-label3', L('과세표준', 'Tax base'));
       setText('quick3', fmt.won(taxBase));
 
       renderChart([
-        { label: '순 상속재산', value: netAssets, color: '#1e3a8a' },
-        { label: '공제 합계', value: totalDeduct, color: '#047857' },
-        { label: '상속세', value: tax, color: '#ef4444' },
+        { label: L('순 상속재산', 'Net estate'), value: netAssets, color: '#1e3a8a' },
+        { label: L('공제 합계', 'Total deductions'), value: totalDeduct, color: '#047857' },
+        { label: L('상속세', 'Inheritance tax'), value: tax, color: '#ef4444' },
       ]);
       renderDetail([
-        { label: '부동산 평가액', value: propValue, sub: true },
-        { label: '기타 상속재산', value: other, sub: true },
-        { label: '채무·장례비', value: '−' + fmt.won(debt), sub: true },
-        { label: '순 상속재산', value: netAssets },
-        { label: '기초공제 + 인적공제', value: '−' + fmt.won(totalBasic), sub: true },
-        { label: '일괄공제 5억 (max 적용)', value: '−' + fmt.won(publicDeduct), sub: true },
-        ...(hasSpouse ? [{ label: '배우자 공제 (추정)', value: '−' + fmt.won(spouseDeduct), sub: true }] : []),
-        { label: '과세표준', value: taxBase },
-        { divider: true, label: '예상 상속세', value: tax },
+        { label: L('부동산 평가액', 'Property value'), value: propValue, sub: true },
+        { label: L('기타 상속재산', 'Other estate assets'), value: other, sub: true },
+        { label: L('채무·장례비', 'Debts & funeral costs'), value: '−' + fmt.won(debt), sub: true },
+        { label: L('순 상속재산', 'Net estate'), value: netAssets },
+        { label: L('기초공제 + 인적공제', 'Basic + personal deduction'), value: '−' + fmt.won(totalBasic), sub: true },
+        { label: L('일괄공제 5억 (max 적용)', 'Lump-sum deduction KRW 500M (max applied)'), value: '−' + fmt.won(publicDeduct), sub: true },
+        ...(hasSpouse ? [{ label: L('배우자 공제 (추정)', 'Spousal deduction (estimated)'), value: '−' + fmt.won(spouseDeduct), sub: true }] : []),
+        { label: L('과세표준', 'Tax base'), value: taxBase },
+        { divider: true, label: L('예상 상속세', 'Estimated inheritance tax'), value: tax },
       ]);
     }
 
@@ -1661,29 +1681,29 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const tax = inheritGiftTax(taxBase);
       const acqOnGift = value * 0.035 + value * 0.003;
 
-      if (resultTitle) resultTitle.textContent = '예상 증여세';
+      if (resultTitle) resultTitle.textContent = L('예상 증여세', 'Estimated gift tax');
       setText('primaryTotal', fmt.won(tax));
-      setLabel('data-quick-label1', '공제 한도 (10년)');
+      setLabel('data-quick-label1', L('공제 한도 (10년)', 'Deduction limit (10-yr)'));
       setText('quick1', fmt.won(baseDeduct));
-      setLabel('data-quick-label2', '잔여 공제');
+      setLabel('data-quick-label2', L('잔여 공제', 'Remaining deduction'));
       setText('quick2', fmt.won(remainingDeduct));
-      setLabel('data-quick-label3', '과세표준');
+      setLabel('data-quick-label3', L('과세표준', 'Tax base'));
       setText('quick3', fmt.won(taxBase));
 
       renderChart([
-        { label: '증여 평가액', value: value, color: '#1e3a8a' },
-        { label: '공제 한도', value: remainingDeduct, color: '#047857' },
-        { label: '증여세', value: tax, color: '#ef4444' },
-        { label: '취득세 (부동산)', value: acqOnGift, color: '#f59e0b' },
+        { label: L('증여 평가액', 'Gift value'), value: value, color: '#1e3a8a' },
+        { label: L('공제 한도', 'Deduction limit'), value: remainingDeduct, color: '#047857' },
+        { label: L('증여세', 'Gift tax'), value: tax, color: '#ef4444' },
+        { label: L('취득세 (부동산)', 'Acquisition tax (property)'), value: acqOnGift, color: '#f59e0b' },
       ]);
       renderDetail([
-        { label: '증여 평가액', value: value, sub: true },
-        { label: '과거 10년 증여액', value: prev, sub: true },
-        { label: '잔여 공제', value: '−' + fmt.won(remainingDeduct), sub: true },
-        { label: '과세표준', value: taxBase },
-        { label: '증여세 (누진)', value: tax, color: '#ef4444' },
-        { label: '부동산 취득세 (별도, 3.8% 추정)', value: acqOnGift, color: '#f59e0b' },
-        { divider: true, label: '예상 총 부담 (증여세 + 취득세)', value: tax + acqOnGift },
+        { label: L('증여 평가액', 'Gift value'), value: value, sub: true },
+        { label: L('과거 10년 증여액', 'Prior gifts (10-yr)'), value: prev, sub: true },
+        { label: L('잔여 공제', 'Remaining deduction'), value: '−' + fmt.won(remainingDeduct), sub: true },
+        { label: L('과세표준', 'Tax base'), value: taxBase },
+        { label: L('증여세 (누진)', 'Gift tax (progressive)'), value: tax, color: '#ef4444' },
+        { label: L('부동산 취득세 (별도, 3.8% 추정)', 'Acquisition tax (separate, est. 3.8%)'), value: acqOnGift, color: '#f59e0b' },
+        { divider: true, label: L('예상 총 부담 (증여세 + 취득세)', 'Estimated total (gift tax + acquisition tax)'), value: tax + acqOnGift },
       ]);
     }
 
@@ -1714,11 +1734,11 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       });
       // 자산 유형에 맞춰 연관 라벨도 함께 바꾼다 (실거주↔직접사용 / 갭투자↔임대 등)
       const setTxt = (sel, txt) => { const el = root.querySelector(sel); if (el) el.textContent = txt; };
-      setTxt('[data-loan-title]', nonhouse ? '담보대출' : '주담대');
-      setTxt('[data-purpose-label]', nonhouse ? '이용 계획' : '구매 목적');
-      setTxt('[data-purpose-own]', nonhouse ? '직접 사용' : '실거주');
-      setTxt('[data-purpose-gap]', nonhouse ? '임대 (임차인)' : '갭투자');
-      setTxt('[data-jeonse-label]', nonhouse ? '예상 임대 보증금 (인수)' : '예상 전세 보증금 인수');
+      setTxt('[data-loan-title]', nonhouse ? L('담보대출', 'Secured loan') : L('주담대', 'Mortgage'));
+      setTxt('[data-purpose-label]', nonhouse ? L('이용 계획', 'Intended use') : L('구매 목적', 'Purchase purpose'));
+      setTxt('[data-purpose-own]', nonhouse ? L('직접 사용', 'Own use') : L('실거주', 'Own residence'));
+      setTxt('[data-purpose-gap]', nonhouse ? L('임대 (임차인)', 'Rental (with tenant)') : L('갭투자', 'Gap investment'));
+      setTxt('[data-jeonse-label]', nonhouse ? L('예상 임대 보증금 (인수)', 'Assumed rental deposit') : L('예상 전세 보증금 인수', 'Assumed Jeonse deposit'));
       const nhNote = root.querySelector('[data-nonhouse-note]');
       if (nhNote) nhNote.style.display = nonhouse ? '' : 'none';
     }
@@ -2626,6 +2646,7 @@ function calcInteriorEstimate({ area, grade, items }) {
     (function () {
       const pairs = [
         ['index.html', 'en/index.html'],
+        ['guides.html', 'en/guides.html'],
         ['about.html', 'en/about.html'],
         ['feedback.html', 'en/feedback.html'],
         ['calculators/index.html', 'en/calculators/index.html'],
@@ -2633,6 +2654,9 @@ function calcInteriorEstimate({ area, grade, items }) {
         ['calculators/brokerage-fee.html', 'en/calculators/brokerage-fee.html'],
         ['calculators/jeonse-monthly.html', 'en/calculators/jeonse-monthly.html'],
         ['calculators/auction-bid.html', 'en/calculators/auction-bid.html'],
+        ['calculators/transfer-tax.html', 'en/calculators/transfer-tax.html'],
+        ['calculators/balance-settlement.html', 'en/calculators/balance-settlement.html'],
+        ['calculators/total-cost-dashboard.html', 'en/calculators/total-cost-dashboard.html'],
       ].sort((a, b) => b[0].length - a[0].length);
       let path = location.pathname;
       if (path.endsWith('/')) path += 'index.html';
