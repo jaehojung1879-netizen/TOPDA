@@ -3803,3 +3803,134 @@ function calcJeonseLoanByAgency(deposit, opts) {
   }, { passive: true });
   spy();
 })();
+
+// ===== 전역 네비: '로드맵' 링크 주입 =====
+// 정적 HTML을 전부 고치지 않고도 모든 한국어 페이지 네비에 거래 로드맵 진입점을 제공한다.
+// (roadmap.html·index.html처럼 정적으로 이미 링크가 있는 페이지는 건너뜀)
+(function () {
+  try {
+    if ((document.documentElement.lang || 'ko') !== 'ko') return;
+    var anchors = document.querySelectorAll('.nav a[href$="checklists/index.html"], .mobile-menu a[href$="checklists/index.html"]');
+    anchors.forEach(function (a) {
+      var parent = a.parentElement;
+      if (!parent || parent.querySelector('a[href$="roadmap.html"]')) return;
+      var href = a.getAttribute('href').replace(/checklists\/index\.html$/, 'roadmap.html');
+      var link = document.createElement('a');
+      link.href = href;
+      link.textContent = '로드맵';
+      if (a.hasAttribute('data-nav')) link.setAttribute('data-nav', '');
+      if (/\/roadmap\.html$/.test(location.pathname)) link.classList.add('active');
+      a.insertAdjacentElement('afterend', link);
+    });
+  } catch (e) { /* noop */ }
+})();
+
+// ===== 홈 '이어서 하기' — 저장된 진행 상태 기반 재방문 위젯 =====
+// 체크리스트 진행률(cl-hub)·D-Day 일정(dday:events)·로드맵 현재 단계(topda:roadmap)가
+// 이 브라우저에 저장되어 있으면, 홈 상단에 이어서 할 일을 보여준다.
+// 저장 데이터가 전혀 없으면(첫 방문) 아무것도 렌더링하지 않는다. 모든 데이터는 로컬 전용.
+(function () {
+  try {
+    if ((document.documentElement.lang || 'ko') !== 'ko') return;
+    var intro = document.querySelector('.home-intro');
+    if (!intro || document.querySelector('.home-resume')) return;
+
+    var esc = function (s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    };
+    var read = function (key, fallback) {
+      try { return JSON.parse(localStorage.getItem(key) || fallback); } catch (e) { return JSON.parse(fallback); }
+    };
+    var cards = [];
+
+    // 1) D-Day 스케줄러: 가장 가까운 예정 일정 + 시점별 '지금 챙길 일' 힌트
+    var events = read('dday:events', '[]');
+    var dealType = (function () { try { return localStorage.getItem('dday:type') || 'sale'; } catch (e) { return 'sale'; } })();
+    if (Array.isArray(events) && events.length) {
+      var t0 = new Date(); t0.setHours(0, 0, 0, 0);
+      var next = events
+        .map(function (e) { return { title: e.title || '', tag: e.tag || '', date: new Date(e.date) }; })
+        .filter(function (e) { return !isNaN(e.date) && e.date >= t0; })
+        .sort(function (a, b) { return a.date - b.date; })[0];
+      if (next) {
+        var diff = Math.round((next.date - t0) / 86400000);
+        var dLabel = diff === 0 ? 'D-Day' : 'D-' + diff;
+        var pad = function (n) { return String(n).padStart(2, '0'); };
+        var dateStr = next.date.getFullYear() + '.' + pad(next.date.getMonth() + 1) + '.' + pad(next.date.getDate());
+        var hint = '';
+        var probe = next.title + ' ' + next.tag;
+        if (/잔금/.test(probe)) {
+          hint = dealType === 'lease'
+            ? '당일 전입신고+확정일자+보증보험까지 — 전세계약 체크리스트로 점검하세요'
+            : '등기·정산 누락 방지 — 잔금일 체크리스트로 최종 점검하세요';
+        } else if (/취득세|세금/.test(probe)) {
+          hint = '기한을 넘기면 가산세 — 취득세 계산기에서 납부액을 확인하세요';
+        } else if (/전입|확정/.test(probe)) {
+          hint = '전입신고는 14일 내 — 이사 당일 체크리스트를 참고하세요';
+        } else if (/계약/.test(probe)) {
+          hint = '계약 전 등기부 재확인 — 로드맵의 계약 단계를 점검하세요';
+        } else if (/보증/.test(probe)) {
+          hint = '보증보험은 미루면 조건이 바뀔 수 있어요 — 바로 가입하세요';
+        }
+        cards.push(
+          '<a class="resume-card" href="checklists/dday-scheduler.html">' +
+          '<span class="resume-tag">다음 일정</span>' +
+          '<span class="resume-title">' + esc(dLabel + ' · ' + next.title) + '</span>' +
+          '<span class="resume-meta">' + esc(dateStr) + ' · D-Day 스케줄러</span>' +
+          (hint ? '<span class="resume-hint">⚠ ' + esc(hint) + '</span>' : '') +
+          '</a>'
+        );
+      }
+    }
+
+    // 2) 거래 로드맵: 표시해 둔 현재 단계
+    var rm = read('topda:roadmap', 'null');
+    if (rm && rm.id && rm.label) {
+      var typeLabel = rm.type === 'lease' ? '전세·월세' : '매매';
+      cards.push(
+        '<a class="resume-card" href="roadmap.html?type=' + esc(rm.type || 'sale') + '#' + esc(rm.id) + '">' +
+        '<span class="resume-tag">거래 로드맵</span>' +
+        '<span class="resume-title">' + esc(rm.label) + ' 단계 진행 중</span>' +
+        '<span class="resume-meta">' + esc(typeLabel) + ' 로드맵 · 다음 단계 미리 보기</span>' +
+        '</a>'
+      );
+    }
+
+    // 3) 진행 중인 체크리스트 (완료 전 항목, 최근 사용순)
+    var HUB_META = {
+      'sale-balance-day': ['매매 잔금일 체크리스트', 'checklists/sale-balance-day.html'],
+      'lease-contract': ['전세계약 체크리스트', 'checklists/lease-contract.html'],
+      'moving-day': ['이사 당일 체크리스트', 'checklists/moving-day.html'],
+      'interior-contract': ['인테리어 계약 체크리스트', 'checklists/interior-contract.html'],
+    };
+    var hub = read('cl-hub', '{}');
+    Object.keys(hub)
+      .filter(function (k) { return HUB_META[k] && hub[k] && hub[k].pct > 0 && hub[k].pct < 100; })
+      .sort(function (a, b) { return (hub[b].updated || 0) - (hub[a].updated || 0); })
+      .forEach(function (k) {
+        if (cards.length >= 3) return;
+        var d = hub[k];
+        cards.push(
+          '<a class="resume-card" href="' + HUB_META[k][1] + '">' +
+          '<span class="resume-tag">체크리스트</span>' +
+          '<span class="resume-title">' + esc(HUB_META[k][0]) + '</span>' +
+          '<span class="resume-meta">' + esc(d.done + ' / ' + d.total + ' 완료 · ' + d.pct + '%') + '</span>' +
+          '<span class="resume-bar"><span style="width:' + Math.max(0, Math.min(100, d.pct)) + '%"></span></span>' +
+          '</a>'
+        );
+      });
+
+    if (!cards.length) return;
+
+    var sec = document.createElement('section');
+    sec.className = 'home-resume';
+    sec.innerHTML =
+      '<div class="container"><div class="resume-box">' +
+      '<div class="resume-head"><h2>이어서 하기</h2><a href="roadmap.html">거래 로드맵 →</a></div>' +
+      '<div class="resume-grid">' + cards.slice(0, 3).join('') + '</div>' +
+      '</div></div>';
+    intro.insertAdjacentElement('afterend', sec);
+  } catch (e) { /* noop */ }
+})();
