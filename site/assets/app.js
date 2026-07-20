@@ -1990,6 +1990,74 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
     saveEvents(); renderAll();
   });
   root.querySelector('[data-dday-export]')?.addEventListener('click', exportICS);
+
+  // ===== 카카오톡 공유(안내) =====
+  // 다음 일정을 카카오톡으로 공유해 리마인드로 쓸 수 있게 한다. 예약 발송이 아니라
+  // 클릭 시점의 '지금 공유'이며, 로그인·서버 저장 없이 카카오 JS SDK만 사용한다.
+  // (자동 예약 알림은 서버에 사용자 토큰을 저장해야 해 이 사이트의 '서버 전송·저장 금지'
+  // 원칙과 맞지 않아 제외했다.) 배포 시 __KAKAO_JS_KEY__ 는 지도(kmap.js)와 동일한
+  // 시크릿(KAKAO_JAVASCRIPT_KEY)으로 치환된다.
+  const KAKAO_KEY = '__KAKAO_JS_KEY__';
+  const kakaoKeyValid = !/^__.*__$/.test(KAKAO_KEY) && KAKAO_KEY.length >= 16;
+
+  function ensureKakao(cb) {
+    if (!kakaoKeyValid) { cb(false); return; }
+    if (window.Kakao && window.Kakao.isInitialized && window.Kakao.isInitialized()) { cb(true); return; }
+    if (window.Kakao && window.Kakao.Share) {
+      try { window.Kakao.init(KAKAO_KEY); } catch (e) {}
+      cb(!!(window.Kakao.isInitialized && window.Kakao.isInitialized()));
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js';
+    s.onload = () => {
+      try { window.Kakao.init(KAKAO_KEY); } catch (e) {}
+      cb(!!(window.Kakao && window.Kakao.isInitialized && window.Kakao.isInitialized()));
+    };
+    s.onerror = () => cb(false);
+    document.head.appendChild(s);
+  }
+
+  function shareMessage() {
+    const t = today();
+    const upcoming = events
+      .filter((e) => new Date(e.date) >= t)
+      .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+    const lines = ['[톺다] 거래 일정 안내'];
+    lines.push(upcoming
+      ? dDayLabel(upcoming.date) + ' · ' + upcoming.title + ' (' + fmtDate(upcoming.date) + ')'
+      : '등록된 예정 일정이 없습니다.');
+    lines.push('전체 일정·자금 흐름 보기 ↓');
+    return lines.join('\n');
+  }
+
+  function shareKakao() {
+    const btn = root.querySelector('[data-dday-kakao]');
+    const url = location.href.split('#')[0].split('?')[0];
+    const text = shareMessage();
+    ensureKakao((ok) => {
+      if (ok) {
+        try {
+          window.Kakao.Share.sendDefault({
+            objectType: 'text',
+            text,
+            link: { mobileWebUrl: url, webUrl: url },
+            buttons: [{ title: '내 일정 보기', link: { mobileWebUrl: url, webUrl: url } }],
+          });
+          return;
+        } catch (e) { /* 실패 시 아래 클립보드 복사로 대체 */ }
+      }
+      // 카카오 SDK를 쓸 수 없으면(도메인 미등록·로컬 환경 등) 텍스트를 복사해 대신 붙여넣게 한다.
+      navigator.clipboard?.writeText(text + '\n' + url).then(() => {
+        if (!btn) return;
+        const original = btn.textContent;
+        btn.textContent = '복사됨 — 카톡에 붙여넣기 ✓';
+        setTimeout(() => { btn.textContent = original; }, 2000);
+      });
+    });
+  }
+  root.querySelector('[data-dday-kakao]')?.addEventListener('click', shareKakao);
+
   root.querySelector('[data-cal-prev]')?.addEventListener('click', () => { calCursor.setMonth(calCursor.getMonth()-1); renderCalendar(); });
   root.querySelector('[data-cal-next]')?.addEventListener('click', () => { calCursor.setMonth(calCursor.getMonth()+1); renderCalendar(); });
 
@@ -2432,6 +2500,61 @@ function calcInteriorEstimate({ area, grade, items }) {
     if (data && stats) stats.textContent = `${data.done} / ${data.total} 완료`;
     else if (stats) stats.textContent = '시작 전';
   });
+})();
+
+// ===== 여정 로드맵 (checklists/index.html #journey) =====
+// 매매/전세 토글 + 단계 클릭으로 '지금 내 단계' 표시(localStorage, 서버 전송 없음).
+// 홈 '이어서 하기' 위젯이 이 값을 읽어 재방문 시 이어보기를 제공한다.
+(function () {
+  const panels = document.querySelectorAll('[data-journey-panel]');
+  if (!panels.length) return;
+  const KEY = 'topda:journey';
+  const params = new URLSearchParams(location.search);
+
+  const read = () => { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; } };
+
+  function setType(type, persist) {
+    const t = type === 'lease' ? 'lease' : 'sale';
+    document.querySelectorAll('[name="journeyType"]').forEach((el) => { el.checked = el.value === t; });
+    panels.forEach((p) => { p.style.display = p.dataset.journeyPanel === t ? '' : 'none'; });
+  }
+  const initialType = params.get('type') || (read() && read().type) || 'sale';
+  setType(initialType);
+  document.querySelectorAll('[name="journeyType"]').forEach((el) => {
+    el.addEventListener('change', () => setType(el.value));
+  });
+
+  function applyCurrent() {
+    const cur = read();
+    document.querySelectorAll('.timeline li[data-stage]').forEach((li) => {
+      li.classList.toggle('is-current', !!(cur && li.dataset.stage === cur.id));
+    });
+  }
+  document.querySelectorAll('.timeline li[data-stage]').forEach((li) => {
+    li.addEventListener('click', (e) => {
+      if (e.target.closest('a, .tip')) return; // 링크·툴팁 클릭은 단계 표시로 취급하지 않음
+      const cur = read();
+      const id = li.dataset.stage;
+      const label = (li.querySelector('.t-what')?.textContent || '').split('—')[0].trim() || li.querySelector('.t-when')?.textContent || '';
+      const panel = li.closest('[data-journey-panel]');
+      if (cur && cur.id === id) {
+        localStorage.removeItem(KEY);
+      } else {
+        try {
+          localStorage.setItem(KEY, JSON.stringify({
+            id, label, type: panel ? panel.dataset.journeyPanel : 'sale', updated: Date.now(),
+          }));
+        } catch (e) {}
+      }
+      applyCurrent();
+    });
+  });
+  applyCurrent();
+
+  if (location.hash) {
+    const el = document.querySelector(location.hash);
+    if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+  }
 })();
 
 // ===== Site-wide accessibility + SEO enhancements =====
@@ -3804,29 +3927,8 @@ function calcJeonseLoanByAgency(deposit, opts) {
   spy();
 })();
 
-// ===== 전역 네비: '로드맵' 링크 주입 =====
-// 정적 HTML을 전부 고치지 않고도 모든 한국어 페이지 네비에 거래 로드맵 진입점을 제공한다.
-// (roadmap.html·index.html처럼 정적으로 이미 링크가 있는 페이지는 건너뜀)
-(function () {
-  try {
-    if ((document.documentElement.lang || 'ko') !== 'ko') return;
-    var anchors = document.querySelectorAll('.nav a[href$="checklists/index.html"], .mobile-menu a[href$="checklists/index.html"]');
-    anchors.forEach(function (a) {
-      var parent = a.parentElement;
-      if (!parent || parent.querySelector('a[href$="roadmap.html"]')) return;
-      var href = a.getAttribute('href').replace(/checklists\/index\.html$/, 'roadmap.html');
-      var link = document.createElement('a');
-      link.href = href;
-      link.textContent = '로드맵';
-      if (a.hasAttribute('data-nav')) link.setAttribute('data-nav', '');
-      if (/\/roadmap\.html$/.test(location.pathname)) link.classList.add('active');
-      a.insertAdjacentElement('afterend', link);
-    });
-  } catch (e) { /* noop */ }
-})();
-
 // ===== 홈 '이어서 하기' — 저장된 진행 상태 기반 재방문 위젯 =====
-// 체크리스트 진행률(cl-hub)·D-Day 일정(dday:events)·로드맵 현재 단계(topda:roadmap)가
+// 체크리스트 진행률(cl-hub)·D-Day 일정(dday:events)·여정 로드맵 현재 단계(topda:journey)가
 // 이 브라우저에 저장되어 있으면, 홈 상단에 이어서 할 일을 보여준다.
 // 저장 데이터가 전혀 없으면(첫 방문) 아무것도 렌더링하지 않는다. 모든 데이터는 로컬 전용.
 (function () {
@@ -3870,7 +3972,7 @@ function calcJeonseLoanByAgency(deposit, opts) {
         } else if (/전입|확정/.test(probe)) {
           hint = '전입신고는 14일 내 — 이사 당일 체크리스트를 참고하세요';
         } else if (/계약/.test(probe)) {
-          hint = '계약 전 등기부 재확인 — 로드맵의 계약 단계를 점검하세요';
+          hint = '계약 전 등기부 재확인 — 체크리스트의 계약 단계를 점검하세요';
         } else if (/보증/.test(probe)) {
           hint = '보증보험은 미루면 조건이 바뀔 수 있어요 — 바로 가입하세요';
         }
@@ -3885,15 +3987,15 @@ function calcJeonseLoanByAgency(deposit, opts) {
       }
     }
 
-    // 2) 거래 로드맵: 표시해 둔 현재 단계
-    var rm = read('topda:roadmap', 'null');
+    // 2) 여정 로드맵(체크리스트 내 섹션): 표시해 둔 현재 단계
+    var rm = read('topda:journey', 'null');
     if (rm && rm.id && rm.label) {
       var typeLabel = rm.type === 'lease' ? '전세·월세' : '매매';
       cards.push(
-        '<a class="resume-card" href="roadmap.html?type=' + esc(rm.type || 'sale') + '#' + esc(rm.id) + '">' +
-        '<span class="resume-tag">거래 로드맵</span>' +
+        '<a class="resume-card" href="checklists/index.html?type=' + esc(rm.type || 'sale') + '#stage-' + esc(rm.id) + '">' +
+        '<span class="resume-tag">여정 로드맵</span>' +
         '<span class="resume-title">' + esc(rm.label) + ' 단계 진행 중</span>' +
-        '<span class="resume-meta">' + esc(typeLabel) + ' 로드맵 · 다음 단계 미리 보기</span>' +
+        '<span class="resume-meta">' + esc(typeLabel) + ' 여정 · 다음 단계 미리 보기</span>' +
         '</a>'
       );
     }
@@ -3928,7 +4030,7 @@ function calcJeonseLoanByAgency(deposit, opts) {
     sec.className = 'home-resume';
     sec.innerHTML =
       '<div class="container"><div class="resume-box">' +
-      '<div class="resume-head"><h2>이어서 하기</h2><a href="roadmap.html">거래 로드맵 →</a></div>' +
+      '<div class="resume-head"><h2>이어서 하기</h2><a href="checklists/index.html#journey">여정 로드맵 →</a></div>' +
       '<div class="resume-grid">' + cards.slice(0, 3).join('') + '</div>' +
       '</div></div>';
     intro.insertAdjacentElement('afterend', sec);
