@@ -2239,7 +2239,10 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 .lang-globe[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); }
 
 .lang-menu {
-  position: absolute; top: calc(100% + 8px); right: 0; z-index: 60;
+  /* fixed + JS가 버튼 기준 top/right를 인라인으로 계산(app.js positionMenu).
+     body 직계 자식이라 .site-header의 backdrop-filter(containing block 부작용)에
+     영향받지 않는다 — 모바일 바텀시트가 화면 밖으로 밀리던 문제의 원인이었다. */
+  position: fixed; z-index: 60;
   min-width: 208px; padding: 6px;
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 14px; box-shadow: 0 12px 32px rgba(0,0,0,.14);
