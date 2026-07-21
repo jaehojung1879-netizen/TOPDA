@@ -245,37 +245,48 @@
     const total = wsum ? ssum / wsum : 0;
 
     // 추천 이유: 강점 위주 (점수 높은 항목 우선) 최대 3개
+    // 각 이유에 구조화 데이터(d)를 함께 담아, 다국어 페이지가 한국어 문자열(t) 대신
+    // key+파라미터로 현지어 문구를 조립할 수 있게 한다(한국어 출력은 t 그대로 사용 → 불변).
     const reasons = [];
     if (sub.subway != null && apt.subway.distance_m <= 600)
-      reasons.push({ t: `🚇 ${apt.subway.station} 도보 ${walkMin(apt.subway.distance_m)}분`, s: sub.subway });
+      reasons.push({ t: `🚇 ${apt.subway.station} 도보 ${walkMin(apt.subway.distance_m)}분`, s: sub.subway,
+        d: { key: 'subway', station: apt.subway.station, min: walkMin(apt.subway.distance_m) } });
     if (sub.school != null && apt.elementary.distance_m <= 600)
-      reasons.push({ t: `🎒 ${apt.elementary.name} ${apt.elementary.distance_m}m${apt.elementary.in_zone ? ' 배정' : ''}`, s: sub.school });
+      reasons.push({ t: `🎒 ${apt.elementary.name} ${apt.elementary.distance_m}m${apt.elementary.in_zone ? ' 배정' : ''}`, s: sub.school,
+        d: { key: 'school', name: apt.elementary.name, dist: apt.elementary.distance_m, inZone: !!apt.elementary.in_zone } });
     if (apt.households >= 1500)
-      reasons.push({ t: `🏙 ${apt.households.toLocaleString()}세대 대단지`, s: sub.scale });
+      reasons.push({ t: `🏙 ${apt.households.toLocaleString()}세대 대단지`, s: sub.scale,
+        d: { key: 'scale', households: apt.households } });
     if ((y - apt.built_year) <= 7)
-      reasons.push({ t: `🏗 준공 ${apt.built_year}년 신축급`, s: sub.age });
+      reasons.push({ t: `🏗 준공 ${apt.built_year}년 신축급`, s: sub.age,
+        d: { key: 'age', year: apt.built_year } });
     if (scoreMomentum(apt.price_history) >= 68)
-      reasons.push({ t: `📈 최근 실거래 상승세`, s: sub.appreciation || 70 });
+      reasons.push({ t: `📈 최근 실거래 상승세`, s: sub.appreciation || 70, d: { key: 'momentum' } });
     if (sub.stability >= 80)
-      reasons.push({ t: `🛡 실거래가 안정적`, s: sub.stability });
+      reasons.push({ t: `🛡 실거래가 안정적`, s: sub.stability, d: { key: 'stability' } });
     if (f.commute_hub && apt.commute && apt.commute[f.commute_hub] != null && apt.commute[f.commute_hub] <= 30)
-      reasons.push({ t: `🏢 ${f.commute_hub} ${apt.commute[f.commute_hub]}분`, s: 100 - apt.commute[f.commute_hub] });
+      reasons.push({ t: `🏢 ${f.commute_hub} ${apt.commute[f.commute_hub]}분`, s: 100 - apt.commute[f.commute_hub],
+        d: { key: 'commute', hub: f.commute_hub, min: apt.commute[f.commute_hub] } });
     if (apt.parking_per_household != null && apt.parking_per_household >= 1.3)
-      reasons.push({ t: `🅿 세대당 ${apt.parking_per_household.toFixed(2)}대`, s: 80 });
+      reasons.push({ t: `🅿 세대당 ${apt.parking_per_household.toFixed(2)}대`, s: 80,
+        d: { key: 'parking', per: apt.parking_per_household } });
 
     reasons.sort((a, b) => b.s - a.s);
-    let reasonTexts = reasons.slice(0, 3).map((r) => r.t);
+    const top = reasons.slice(0, 3);
+    let reasonTexts = top.map((r) => r.t);
+    let reasonData = top.map((r) => r.d);
+    let bestKey = null;
     if (!reasonTexts.length) {
       // 강점이 뚜렷하지 않으면 최고 점수 항목으로 한 줄
       const labels = { appreciation: '상승기대', subway: '교통', school: '학군', stability: '실거래 안정', scale: '단지 규모', age: '연식' };
       const best = Object.keys(sub).filter((k) => sub[k] != null).sort((a, b) => sub[b] - sub[a])[0];
-      if (best) reasonTexts = [`${labels[best]} 항목이 가장 우수`];
+      if (best) { reasonTexts = [`${labels[best]} 항목이 가장 우수`]; bestKey = best; }
     }
 
     return {
       apt, rep, price,
       total: Math.round(total * 10) / 10,
-      sub, reasons: reasonTexts,
+      sub, reasons: reasonTexts, reasonData, bestKey,
       ageYears: y - apt.built_year,
     };
   }
@@ -301,6 +312,7 @@
       .map((x) => {
         const r = evaluate(x.apt, f, y);
         r.relaxed = x.fails.map((k) => FILTER_LABELS[k] || k);
+        r.relaxedKeys = x.fails.slice();   // 다국어 페이지용 원시 키(한국어 relaxed는 그대로 유지)
         return r;
       })
       .sort((a, b) => b.total - a.total);

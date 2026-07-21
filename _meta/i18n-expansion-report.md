@@ -150,6 +150,17 @@
 - **매니페스트·SEO**: `app.js` PAGES 에 5개 언어 `guides.html`/`market.html` 등록(스위처 딥링크), `gen_i18n_sitemap.mjs` REQUIRED 확장 후 sitemap 9건 추가. 두 허브 모두 6개 언어 hreflang(+x-default→ko) 상호 연결.
 - **검증**: `i18n_check` 오류 0·경고 0, 신규 9개 페이지 태그 밸런스·인라인 JS `node --check` 통과, guides/market 링크 전수 해석 확인.
 
+## 5-4. 맞춤 내집 찾기(search) 실번역 (후속 배치)
+
+시세정보 허브의 대표 CTA인 **맞춤 내집 찾기**가 한국어 원본으로만 열리던 문제를 해결했다. 인터랙티브 앱 자체를 5개 언어로 번역해 `site/{lang}/calculators/search.html` 로 신설했다.
+
+- **로직 불변·데이터 유지**: 점수 엔진 `score.js`·지역 유틸 `region.js` 는 공유·불변. 아파트·지역·역·학교명은 실데이터라 한국어 유지(지도·좌표 동일).
+- **score.js 가법 확장**: 추천 이유를 한국어 문자열(`t`)과 함께 **구조화 데이터(`reasonData` key+파라미터)** 로도 반환하고, 근접추천 `relaxedKeys` 를 추가. 한국어 페이지 출력은 그대로(회귀 없음, node 검증). 번역 페이지는 이 구조화 데이터로 현지어 칩을 조립.
+- **표시 문자열 전량 번역**: 폼 라벨·정렬·평형·업무지구(값=한국어, 표시=로마자/현지)·점수 산정표(8행)·결과 카드(순위·스펙·바·이유 칩)·상세 팝업·빈/완화 상태 문구까지. 통화는 국제 표기(zh: `亿`, en·vi·th: 십억 `₩`)로 렌더 — 예: 23억 → `₩2.3B` / `23亿` / `₩2.3 tỷ` / `₩2.3 พันล้าน`.
+- **생성기**: `scripts/gen_search_pages.mjs`(언어별 사전 `T` + 정적 HTML) + `scripts/search_app.js.txt`(공유 인라인 JS, `T` 기반). 계산·데이터 fetch 경로는 depth-2(`../../assets/*`)로 보정.
+- **배선**: 시세정보 허브 hero·각 언어 홈 파인더 카드 → 로컬 search 로 연결. `app.js` PAGES 5개 언어 등록, sitemap 5건 추가, 6개 언어 hreflang(+x-default→ko).
+- **검증**: `i18n_check` 0/0, 조립된 인라인 JS `node --check` 통과, `score.js` 한국어 출력 회귀 없음 확인, fmt·이유칩 로직을 실제 `score.js` 결과로 4개 언어 단위 검증, 정적 링크 전수 해석.
+
 ## 6. 검증 요약
 
 - **기능**: 6개 언어 스위처 링크 계산 로직 단위 검증(존재 시 딥링크, 부재 시 언어 홈 폴백). 국기 SVG XML 유효.

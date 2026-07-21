@@ -1,0 +1,449 @@
+(function () {
+  'use strict';
+  var S = window.TopdaScore;
+  var form = document.getElementById('finderForm');
+  var resultsEl = document.getElementById('finderResults');
+  var countEl = document.getElementById('finderCount');
+  var relaxedEl = document.getElementById('finderRelaxed');
+  var sidoSel = document.getElementById('f-sido');
+  var guSel = document.getElementById('f-gu');
+  var familySel = document.getElementById('f-family');
+  var areaSel = document.getElementById('f-area');
+  var searchInp = document.getElementById('f-search');
+  var sortSel = document.getElementById('f-sort');
+  var DATA = [];
+  var DEALS = [];
+
+  // 국제 통화 표기: zh 는 亿(=억), 그 외는 십억(₩ B/tỷ/พันล้าน).
+  function fmt(manwon) {
+    if (manwon == null) return '—';
+    var eok = manwon / 10000;
+    if (T.curMode === 'eok') {
+      var v = Number.isInteger(eok) ? eok : Math.round(eok * 10) / 10;
+      return T.curPrefix + v + T.curUnit;
+    }
+    var bn = Math.round((eok / 10) * 100) / 100;
+    return T.curPrefix + bn + T.curUnit;
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function num(v) { v = parseFloat(v); return isNaN(v) ? null : v; }
+  function hubName(k) { return (typeof HUB_DISPLAY !== 'undefined' && HUB_DISPLAY[k]) || k; }
+
+  function readFilters() {
+    var f = {};
+    var budget = num(form.budget.value);
+    if (budget) f.budget_max = Math.round(budget * 10000);
+    if (guSel.value && guSel.value !== 'all') f.region = guSel.value;
+    else if (sidoSel.value && sidoSel.value !== 'all') f.region = sidoSel.value;
+    if (areaSel.value && areaSel.value !== 'all') f.area_type = areaSel.value;
+    var age = num(form.max_age_years.value); if (age) f.max_age_years = age;
+    var sub = num(form.subway_distance_max.value); if (sub) f.subway_distance_max = sub;
+    var elem = num(form.elementary_distance_max.value); if (elem) f.elementary_distance_max = elem;
+    var house = num(form.min_households.value); if (house) f.min_households = house;
+    if (form.commute_hub.value) {
+      f.commute_hub = form.commute_hub.value;
+      f.commute_max = num(form.commute_max.value) || 60;
+    }
+    var park = num(form.parking_min.value); if (park) f.parking_min = park;
+    var ratio = num(form.jeonse_ratio_max.value); if (ratio) f.jeonse_ratio_max = ratio;
+    var q = (searchInp.value || '').trim();
+    if (q) f._search = q.toLowerCase();
+    return f;
+  }
+
+  function matchesSearch(a, q) {
+    if (!q) return true;
+    var hay = ((a.name || '') + ' ' + (a.region || '') + ' ' + (a.region_key || '') + ' ' + (a.builder || '')).toLowerCase();
+    return hay.indexOf(q) >= 0;
+  }
+
+  function comparator(mode) {
+    if (mode === 'price_asc')  return function (a, b) { return (a.price || Infinity) - (b.price || Infinity); };
+    if (mode === 'price_desc') return function (a, b) { return (b.price || 0) - (a.price || 0); };
+    if (mode === 'recent') {
+      return function (a, b) {
+        var ad = (DEALS_BY_APT[a.apt.name] || {}).latest || '';
+        var bd = (DEALS_BY_APT[b.apt.name] || {}).latest || '';
+        return bd < ad ? -1 : bd > ad ? 1 : b.total - a.total;
+      };
+    }
+    if (mode === 'momentum') {
+      return function (a, b) {
+        var am = S.scoreMomentum(a.apt.price_history) || 0;
+        var bm = S.scoreMomentum(b.apt.price_history) || 0;
+        return bm - am;
+      };
+    }
+    return function (a, b) { return b.total - a.total; };
+  }
+
+  var DEALS_BY_APT = {};
+
+  function enrichWithDeals() {
+    if (!DEALS.length) return;
+    var byName = {};
+    DATA.forEach(function (a) { byName[a.name] = a; });
+    var newApts = {};
+    DEALS.forEach(function (d) {
+      var apt = byName[d.apt];
+      if (!apt) {
+        if (!newApts[d.apt]) {
+          var rk = d.region_key || '';
+          var rkParts = rk.split(' ');
+          var sido = d.sido || rkParts[0] || '';
+          var sigungu = rkParts.slice(1).join(' ');
+          newApts[d.apt] = {
+            name: d.apt, region: d.region || rk, region_key: rk,
+            sido: sido, sigungu: sigungu, built_year: d.build_year || null,
+            units: [], price_history: [], _from_deals: true,
+          };
+        }
+        apt = newApts[d.apt];
+      }
+      var key = d.apt;
+      if (!DEALS_BY_APT[key]) DEALS_BY_APT[key] = { latest: '', prices: [] };
+      var agg = DEALS_BY_APT[key];
+      if (d.date > agg.latest) agg.latest = d.date;
+      agg.prices.push({ area_m2: d.area_m2, price: d.price, date: d.date });
+      if (!apt.units || !apt.units.length) {
+        if (!apt._unitMap) apt._unitMap = {};
+        var band = Math.round(d.area_m2);
+        var slot = apt._unitMap[band];
+        if (!slot || slot.date < d.date) {
+          apt._unitMap[band] = { area_m2: band, recent_price: d.price, date: d.date, label: band + '㎡' };
+        }
+      }
+    });
+    Object.keys(newApts).forEach(function (n) {
+      var a = newApts[n];
+      if (a._unitMap) {
+        a.units = Object.keys(a._unitMap).map(function (k) { return a._unitMap[k]; })
+          .sort(function (x, y) { return x.area_m2 - y.area_m2; })
+          .map(function (u) { return { label: u.label, area_m2: u.area_m2, recent_price: u.recent_price }; });
+        delete a._unitMap;
+      }
+      var allPrices = (DEALS_BY_APT[n] && DEALS_BY_APT[n].prices || []).filter(function (p) { return p.area_m2 > 0; });
+      var areas = allPrices.map(function (p) { return p.area_m2; }).sort(function (x, y) { return x - y; });
+      var repArea = areas.length ? areas[Math.floor(areas.length / 2)] : 0;
+      var months = {};
+      allPrices.forEach(function (p) {
+        var mo = p.date.slice(0, 7);
+        if (!months[mo]) months[mo] = [];
+        months[mo].push(p.price / p.area_m2);
+      });
+      a.price_history = Object.keys(months).sort().slice(-12).map(function (mo) {
+        var arr = months[mo]; return Math.round(arr.reduce(function (s, x) { return s + x; }, 0) / arr.length * repArea);
+      });
+      var cutoff = new Date(Date.now() - 180 * 86400000).toISOString().slice(0, 10);
+      var recent = (DEALS_BY_APT[n] && DEALS_BY_APT[n].prices || []).filter(function (p) { return p.date >= cutoff; });
+      a.recent_tx_count = recent.length;
+      DATA.push(a);
+    });
+    DATA.forEach(function (a) {
+      if (a.recent_tx_count == null && DEALS_BY_APT[a.name]) {
+        var cut = new Date(Date.now() - 180 * 86400000).toISOString().slice(0, 10);
+        a.recent_tx_count = DEALS_BY_APT[a.name].prices.filter(function (p) { return p.date >= cut; }).length;
+      }
+    });
+  }
+  var curHub = '';
+
+  function barRow(label, val) {
+    if (val == null) return '';
+    var w = Math.round(val);
+    return '<div class="apt-bar"><span>' + label + '</span><span class="track"><span class="fill" style="width:' + w + '%"></span></span><span>' + w + '</span></div>';
+  }
+
+  function latestDealOf(aptName) { var x = DEALS_BY_APT[aptName]; return x ? x.latest : ''; }
+  function daysSince(s) { if (!s) return null; var d = new Date(s); if (isNaN(d)) return null; return Math.floor((Date.now() - d.getTime()) / 86400000); }
+  function ago(days) {
+    if (days == null) return '';
+    if (days < 1) return T.ago.today;
+    if (days < 30) return days + T.ago.d;
+    if (days < 365) return Math.floor(days / 30) + T.ago.mo;
+    return Math.floor(days / 365) + T.ago.y;
+  }
+
+  // 구조화 추천 이유(reasonData) → 현지어 칩
+  function reasonChip(d) {
+    if (!d || !d.key) return '';
+    var tpl = T.reasons[d.key];
+    if (!tpl) return '';
+    if (d.key === 'subway') return tpl.replace('{station}', esc(d.station)).replace('{min}', d.min);
+    if (d.key === 'school') return tpl.replace('{name}', esc(d.name)).replace('{dist}', d.dist).replace('{zone}', d.inZone ? T.assigned : '');
+    if (d.key === 'scale') return tpl.replace('{n}', Number(d.households).toLocaleString());
+    if (d.key === 'age') return tpl.replace('{year}', d.year);
+    if (d.key === 'commute') return tpl.replace('{hub}', esc(hubName(d.hub))).replace('{min}', d.min);
+    if (d.key === 'parking') return tpl.replace('{per}', Number(d.per).toFixed(2));
+    return tpl; // momentum, stability
+  }
+
+  function card(r, rank) {
+    var a = r.apt;
+    var rd = r.reasonData || [];
+    var reasons = rd.map(function (d) { var x = reasonChip(d); return x ? '<span class="apt-chip">' + x + '</span>' : ''; }).join('');
+    if (!reasons && r.bestKey) reasons = '<span class="apt-chip">' + ((T.bestLabels[r.bestKey] || r.bestKey) + T.bestSuffix) + '</span>';
+    var relaxed = (r.relaxedKeys && r.relaxedKeys.length)
+      ? '<div class="apt-relaxed">' + T.relaxedCardPre + esc(r.relaxedKeys.map(function (k) { return T.filterLabels[k] || k; }).join(', ')) + T.relaxedCardSuf + '</div>'
+      : '';
+    var bars = (r.sub.fit != null ? barRow(T.bars.fit, r.sub.fit) : '')
+      + barRow(T.bars.appreciation, r.sub.appreciation) + barRow(T.bars.subway, r.sub.subway) + barRow(T.bars.school, r.sub.school)
+      + barRow(T.bars.stability, r.sub.stability) + barRow(T.bars.liquidity, r.sub.liquidity)
+      + barRow(T.bars.scale, r.sub.scale) + barRow(T.bars.age, r.sub.age);
+    var sub = a.subway && a.subway.distance_m != null
+      ? a.subway.distance_m + 'm · ' + esc(a.subway.station || '') + ' (' + T.walk + ' ' + S.walkMin(a.subway.distance_m) + T.min + (a.subway.line ? ', ' + esc(a.subway.line) : '') + ')'
+      : T.noInfo;
+    var elem = a.elementary && a.elementary.distance_m != null
+      ? a.elementary.distance_m + 'm · ' + esc(a.elementary.name || '')
+      : T.noInfo;
+    var house = a.households ? a.households.toLocaleString() + T.units : T.unitsUnknown;
+    if (a.builder && a.builder !== '기타') house += (a.households ? ' · ' : '') + esc(a.builder);
+    var latest = latestDealOf(a.name);
+    var repLabel = esc(r.rep ? r.rep.label : '');
+    var dealNote = latest ? repLabel + ' · ' + latest + ' (' + ago(daysSince(latest)) + ')' : repLabel + ' ' + T.recentDeal;
+    return '' +
+      '<article class="apt-card" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region_key || '') + '">' +
+        '<span class="rank">' + T.rankPre + rank + T.rankSuf + '</span>' +
+        '<div class="apt-head">' +
+          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(a.region) + '</div></div>' +
+          '<div class="apt-score"><div class="num">' + r.total + '</div><div class="lbl">' + T.totalScore + '</div></div>' +
+        '</div>' +
+        '<div class="apt-price">' + fmt(r.price) + ' <small>' + dealNote + '</small></div>' +
+        '<div class="apt-units">' + (a.units || []).map(function (u) {
+          return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(u.label) + ' ' + fmt(u.recent_price) + '</span>';
+        }).join('') + '</div>' +
+        relaxed +
+        '<div class="apt-spec">' +
+          '<span class="k">' + T.specSubway + '</span><span class="v">' + sub + '</span>' +
+          '<span class="k">' + T.specElem + '</span><span class="v">' + elem + '</span>' +
+          '<span class="k">' + T.specBuilt + '</span><span class="v">' + (a.built_year ? a.built_year + T.builtYr + ' (' + r.ageYears + T.yrOld + ')' : T.unknown) + '</span>' +
+          '<span class="k">' + T.specHouseholds + '</span><span class="v">' + house + '</span>' +
+          (curHub && a.commute && a.commute[curHub] != null ? '<span class="k">' + T.toPrefix + esc(hubName(curHub)) + T.toSuffix + '</span><span class="v">' + T.about + a.commute[curHub] + T.min + '</span>' : '') +
+          (a.jeonse_ratio != null ? '<span class="k">' + T.specRatio + '</span><span class="v">' + a.jeonse_ratio + '%' + (a._jr_region ? ' <small>' + T.areaAvg + '</small>' : '') + '</span>' : '') +
+          (a.parking_per_household != null ? '<span class="k">' + T.specParking + '</span><span class="v">' + a.parking_per_household.toFixed(2) + T.perUnit + '</span>' : '') +
+        '</div>' +
+        '<div class="apt-reasons">' + reasons + '</div>' +
+        '<div class="apt-bars">' + bars + '</div>' +
+      '</article>';
+  }
+
+  function render() {
+    if (!DATA.length) return;
+    var f = readFilters();
+    var q = f._search; delete f._search;
+    var mode = sortSel.value || 'score';
+    curHub = f.commute_hub || '';
+    var hasFilter = Object.keys(f).length > 0 || !!q;
+    if (!hasFilter) {
+      relaxedEl.innerHTML = '';
+      countEl.textContent = '';
+      resultsEl.innerHTML = '<div class="finder-empty">' + T.initialEmpty + '</div>';
+      return;
+    }
+    var pool = q ? DATA.filter(function (a) { return matchesSearch(a, q); }) : DATA;
+    var list = S.search(pool, f);
+    list.sort(comparator(mode));
+    relaxedEl.innerHTML = '';
+    if (list.length) {
+      var sortLabel = T.sortLabelsShort[mode] || T.sortLabelsShort.score;
+      countEl.innerHTML = T.countMatch.replace('{n}', list.length).replace('{sort}', sortLabel);
+      resultsEl.innerHTML = list.slice(0, 200).map(function (r, i) { return card(r, i + 1); }).join('');
+    } else {
+      var near = S.nearMatches(pool, f, null, 2);
+      if (near.length) {
+        countEl.innerHTML = T.countRelaxed;
+        relaxedEl.innerHTML = '<div class="finder-relaxed-banner">' + T.relaxedBanner + '</div>';
+        resultsEl.innerHTML = near.slice(0, 100).map(function (r, i) { return card(r, i + 1); }).join('');
+      } else {
+        countEl.textContent = T.noMatch;
+        resultsEl.innerHTML = '<div class="finder-empty">' + T.emptyRelax + '</div>';
+      }
+    }
+  }
+
+  // ── 단지 상세 팝업 ──
+  var aptModal = document.getElementById('aptModal');
+  var aptMap = null, aptMapInit = false, aptMarker = null;
+
+  function findApt(name, regionKey) {
+    for (var i = 0; i < DATA.length; i++) {
+      var a = DATA[i];
+      if (a.name === name && (!regionKey || (a.region_key || '') === regionKey)) return a;
+    }
+    return null;
+  }
+
+  function ensureAptMap() {
+    if (aptMapInit) return;
+    if (typeof L === 'undefined') return;
+    aptMap = L.map('aptModalMap', { zoomControl: true, scrollWheelZoom: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; OpenStreetMap' }).addTo(aptMap);
+    aptMapInit = true;
+  }
+
+  function renderAptMap(a) {
+    var mapEl = document.getElementById('aptModalMap');
+    if (a.lat == null || a.lng == null) { mapEl.style.display = 'none'; return; }
+    mapEl.style.display = '';
+    ensureAptMap();
+    if (!aptMapInit) return;
+    aptMap.setView([a.lat, a.lng], 16);
+    if (aptMarker) aptMap.removeLayer(aptMarker);
+    aptMarker = L.marker([a.lat, a.lng]).addTo(aptMap);
+    setTimeout(function () { aptMap.invalidateSize(); aptMap.setView([a.lat, a.lng], 16); }, 60);
+  }
+
+  function openAptModal(name, regionKey) {
+    var a = findApt(name, regionKey);
+    if (!a) return;
+    document.getElementById('aptModalTitle').textContent = a.name;
+    document.getElementById('aptModalSub').textContent = a.region || '';
+
+    var agg = DEALS_BY_APT[a.name] || { prices: [] };
+    var deals = agg.prices.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; });
+    var meta = [];
+    if (deals.length) {
+      var last = deals[0];
+      var vals = deals.map(function (d) { return d.price; });
+      var avg = Math.round(vals.reduce(function (s, v) { return s + v; }, 0) / vals.length);
+      meta.push({ lbl: T.mLatest, val: fmt(last.price) + ' · ' + last.date });
+      meta.push({ lbl: T.mDeals, val: deals.length.toLocaleString() + T.dealsCnt });
+      meta.push({ lbl: T.mAvg, val: fmt(avg) });
+    }
+    if (a.built_year) meta.push({ lbl: T.mBuilt, val: a.built_year + T.builtYr });
+    if (a.households) meta.push({ lbl: T.mHouseholds, val: a.households.toLocaleString() + T.units });
+    if (a.subway && a.subway.station) meta.push({ lbl: T.mStation, val: a.subway.station + ' ' + a.subway.distance_m + 'm' });
+    if (a.elementary && a.elementary.name) meta.push({ lbl: T.mElem, val: a.elementary.name + ' ' + a.elementary.distance_m + 'm' });
+    if (a.jeonse_ratio != null) meta.push({ lbl: T.mRatio, val: a.jeonse_ratio + '%' });
+    if (a.parking_per_household != null) meta.push({ lbl: T.mParking, val: a.parking_per_household.toFixed(2) + T.perUnit });
+    document.getElementById('aptModalMeta').innerHTML = meta.map(function (m) {
+      return '<div class="item"><div class="lbl">' + esc(m.lbl) + '</div><div class="val">' + esc(m.val) + '</div></div>';
+    }).join('');
+
+    document.getElementById('aptModalBody').innerHTML = deals.slice(0, 8).map(function (d) {
+      var py = Math.round(d.area_m2 / 3.3058);
+      return '<tr><td>' + d.date + '</td><td>' + d.area_m2 + '㎡(' + py + ')</td><td class="num">' + fmt(d.price) + '</td></tr>';
+    }).join('') || '<tr><td colspan="3" style="color:var(--text-muted);">' + T.noDeals + '</td></tr>';
+
+    document.getElementById('aptModalMore').href = '../../calculators/transactions.html?q=' + encodeURIComponent(a.name);
+
+    renderAptMap(a);
+    aptModal.classList.add('open');
+    aptModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeAptModal() {
+    aptModal.classList.remove('open');
+    aptModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  resultsEl.addEventListener('click', function (e) {
+    var card = e.target.closest('.apt-card');
+    if (!card) return;
+    openAptModal(card.dataset.apt, card.dataset.region);
+  });
+  document.querySelectorAll('[data-apt-close]').forEach(function (b) { b.addEventListener('click', closeAptModal); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && aptModal.classList.contains('open')) closeAptModal(); });
+
+  familySel.addEventListener('change', function () {
+    var map = { '1': 'small', '3': 'medium-small', '4': 'medium' };
+    if (familySel.value && (!areaSel.value || areaSel.value === 'all')) {
+      areaSel.value = map[familySel.value] || 'all';
+    }
+    render();
+  });
+
+  form.addEventListener('submit', function (e) { e.preventDefault(); render(); });
+  form.addEventListener('input', render);
+  form.addEventListener('change', render);
+  document.getElementById('finderReset').addEventListener('click', function () { form.reset(); render(); });
+
+  var R = window.TopdaRegion;
+  function sidoOf(a) { return R.normSido(a.sido || (a.region_key || '').split(' ')[0]); }
+  function guOf(a) { return a.sigungu || (a.region_key || '').split(' ').slice(1).join(' '); }
+
+  function fillGu() {
+    var sido = sidoSel.value;
+    guSel.innerHTML = '<option value="all">' + T.optAll + '</option>';
+    if (!sido || sido === 'all') return;
+    var gus = [];
+    DATA.forEach(function (a) {
+      if (sidoOf(a) === sido) { var g = a.region_key; if (g && gus.indexOf(g) < 0) gus.push(g); }
+    });
+    gus.sort(function (a, b) { return guOf({ region_key: a }).localeCompare(guOf({ region_key: b }), 'ko'); })
+      .forEach(function (key) {
+        var o = document.createElement('option'); o.value = key; o.textContent = guOf({ region_key: key }); guSel.appendChild(o);
+      });
+  }
+  sidoSel.addEventListener('change', function () { fillGu(); render(); });
+
+  var howtoBtn = document.querySelector('[data-finder-howto]');
+  var howtoEl = document.getElementById('finderHowto');
+  if (howtoBtn && howtoEl) {
+    howtoBtn.addEventListener('click', function () {
+      howtoEl.open = !howtoEl.open;
+      if (howtoEl.open) howtoEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  function applyUrlParams() {
+    var params = new URLSearchParams(location.search);
+    var apt = params.get('apt');
+    if (apt) { searchInp.value = apt; }
+    var region = params.get('region'); if (region) {
+      searchInp.value = (searchInp.value ? searchInp.value + ' ' : '') + region;
+    }
+  }
+
+  searchInp.addEventListener('input', render);
+  sortSel.addEventListener('change', render);
+
+  Promise.all([
+    fetch('../../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('apt'); return r.json(); })
+      .catch(function () { return { apartments: [] }; }),
+    fetch('../../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('deals'); return r.json(); })
+      .catch(function () { return { deals: [] }; }),
+    fetch('../../assets/households.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('hh'); return r.json(); })
+      .catch(function () { return { map: {} }; }),
+    fetch('../../assets/jeonse_ratio.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('jr'); return r.json(); })
+      .catch(function () { return { regions: [] }; }),
+  ]).then(function (results) {
+    DATA = (results[0].apartments || []).slice();
+    DEALS = results[1].deals || [];
+    enrichWithDeals();
+    var HH = (results[2] && results[2].map) || {};
+    DATA.forEach(function (a) {
+      var e = HH[(a.region_key || '') + '|' + (a.name || '')];
+      if (!e) return;
+      if (!a.households && e.households) a.households = e.households;
+      if (!a.built_year && e.built_year) a.built_year = e.built_year;
+      if (a.lat == null && e.lat != null) { a.lat = e.lat; a.lng = e.lng; }
+      if (!a.subway && e.subway && e.subway.station) a.subway = { station: e.subway.station, line: '', distance_m: e.subway.distance_m };
+      if (!a.elementary && e.elementary && e.elementary.name) a.elementary = { name: e.elementary.name, distance_m: e.elementary.distance_m, in_zone: false };
+    });
+    var jr = results[3] || {};
+    if (!jr.seed && jr.regions && jr.regions.length) {
+      var RATIO = {};
+      jr.regions.forEach(function (r) { if (r.key && r.jeonse_ratio != null) RATIO[r.key] = r.jeonse_ratio; });
+      DATA.forEach(function (a) {
+        if (a.jeonse_ratio == null && RATIO[a.region_key] != null) { a.jeonse_ratio = RATIO[a.region_key]; a._jr_region = true; }
+      });
+    }
+    if (!DATA.length) {
+      countEl.textContent = '';
+      resultsEl.innerHTML = '<div class="finder-empty">' + T.loadFail + '</div>';
+      return;
+    }
+    var sidos = [];
+    DATA.forEach(function (a) { var s = sidoOf(a); if (s && sidos.indexOf(s) < 0) sidos.push(s); });
+    R.sortSidos(sidos).forEach(function (s) {
+      var o = document.createElement('option'); o.value = s; o.textContent = s; sidoSel.appendChild(o);
+    });
+    applyUrlParams();
+    render();
+  });
+})();
