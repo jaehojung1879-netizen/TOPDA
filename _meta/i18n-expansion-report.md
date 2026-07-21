@@ -134,6 +134,22 @@
 - `app.js` PAGES 매니페스트·sitemap 갱신, 내부 링크 전수 점검 통과, jsdom으로 skip-link·언어 스위처 정상 주입 확인.
 - 아직 미번역: `about.html`, `auction.html` 등 나머지 EN 전용 페이지, 그리고 zh 대상 `foreigner-tax.html`이 vi/th에는 우선순위상 배정되지 않음(임대차 중심 프로파일이라 의도적 제외).
 
+## 5-3. 가이드 허브·시세정보 실번역 (후속 배치)
+
+지금까지 신규 언어 페이지의 상단 네비게이션에서 **가이드(Guides)**와 **시세정보(Market)** 링크가 한국어 원본으로 폴백돼 있던 문제를 해결했다. 두 허브 페이지를 각 언어로 번역해 신설하고, 네비게이션을 로컬 페이지로 연결했다.
+
+| 페이지 | 신규 언어 | 성격 |
+|---|---|---|
+| `guides.html` | zh-Hans·zh-Hant·vi·th (4개) | 언어별 번역 완료 페이지를 content-priority 순으로 모은 허브. en/guides.html(수기 관리)은 유지 |
+| `market.html`(시세정보) | en·zh-Hans·zh-Hant·vi·th (5개) | 맞춤찾기·실거래·지역시세·전세가율·상가시세 도구 허브. 라벨·설명만 번역 |
+
+- **생성기 방식**: `scripts/gen_i18n_hubs.mjs` 로 데이터 테이블 기반 생성(계산기·용어집 생성기와 동일한 철학). 헤더/푸터는 각 언어 index.html 과 동일한 depth-1 상대경로라 그대로 재사용.
+- **가이드 허브**: 각 언어에 실재하는 번역 페이지(jeonse·foreigner-loan·(zh)foreigner-tax·glossary·calculators·market)만 카드로 연결. 심화 한국어 가이드는 브라우저 번역 안내와 함께 한국어 허브로 링크.
+- **시세정보 허브**: 실거래·지도 등 데이터 도구는 **한국어 데이터 앱을 그대로 링크**(지도·숫자는 언어 무관)하고, "데이터 도구는 한국어 표기 → 브라우저 번역 권장" 안내를 명시. **시세·가능/불가 등 사실·수치를 새로 창작하지 않음**(사실 추측 금지 원칙). as-of 표시 JS 문구만 언어별로 현지화, 데이터 경로는 `../assets/*.json` 으로 보정.
+- **네비게이션 배선**: `scripts/rewrite_hub_nav.mjs` 로 언어판 56개 파일의 `../(../)guides|market.html` → 로컬 링크로 교체. en/guides.html 본문의 "한국어 가이드 허브" 링크는 의도된 것이라 예외 처리.
+- **매니페스트·SEO**: `app.js` PAGES 에 5개 언어 `guides.html`/`market.html` 등록(스위처 딥링크), `gen_i18n_sitemap.mjs` REQUIRED 확장 후 sitemap 9건 추가. 두 허브 모두 6개 언어 hreflang(+x-default→ko) 상호 연결.
+- **검증**: `i18n_check` 오류 0·경고 0, 신규 9개 페이지 태그 밸런스·인라인 JS `node --check` 통과, guides/market 링크 전수 해석 확인.
+
 ## 6. 검증 요약
 
 - **기능**: 6개 언어 스위처 링크 계산 로직 단위 검증(존재 시 딥링크, 부재 시 언어 홈 폴백). 국기 SVG XML 유효.
@@ -145,7 +161,7 @@
 
 ## 7. 수동 후속 조치 체크리스트
 
-- [ ] **원어민 검수**: zh-Hans/zh-Hant/vi/th 홈 + 용어집 pending 7건 (기계 초벌 → 검수).
+- [ ] **원어민 검수**: zh-Hans/zh-Hant/vi/th 홈 + 용어집 pending 7건 + 신규 가이드/시세정보 허브 9종 (기계 초벌 → 검수).
 - [ ] **외국인 대출 사실 확정**: SGI 전용 여부 등 공식 소스 확인 후 `foreigner-loan-eligibility.json` `verified:true` 전환.
 - [ ] **국기 SVG 라이선스**: 현재 자체 제작 단순 SVG. 프로덕션은 `flag-icons`(MIT)로 교체 검토 — 국기 도안 자체는 저작권 비대상이나 아이콘 셋 라이선스 명시 권장.
 - [ ] **도메인 hreflang/서치콘솔**: 배포 후 Google/Naver 서치콘솔에 sitemap 재제출, hreflang 인덱싱 확인.
