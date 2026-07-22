@@ -36,6 +36,7 @@ for (const l of ['vi', 'th']) REQUIRED.push({ path: `/${l}/jeonse.html`, priorit
 for (const l of ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/guides.html`, priority: '0.8' });
 for (const l of ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/market.html`, priority: '0.7' });
 for (const l of ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/calculators/search.html`, priority: '0.7' });
+for (const l of ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/interior/index.html`, priority: '0.7' });
 for (const l of ['zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/foreigner-loan.html`, priority: '0.8' });
 for (const l of ['zh-Hans', 'zh-Hant']) REQUIRED.push({ path: `/${l}/foreigner-tax.html`, priority: '0.8' });
 for (const [calc, langs] of Object.entries(CALC_LANGS)) {

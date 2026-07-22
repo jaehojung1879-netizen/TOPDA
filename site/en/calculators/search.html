@@ -72,6 +72,27 @@
   .finder-empty { border: 1px dashed var(--border, #d1d5db); border-radius: 14px; padding: 28px; text-align: center; color: var(--text-muted); }
   .finder-relaxed-banner { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; }
   .finder-howto-toggle { background: none; border: 0; padding: 0; margin-left: 4px; color: var(--accent, #2563eb); font-weight: 600; cursor: pointer; font-size: inherit; }
+  .finder-note { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; border-radius: 10px; padding: 8px 11px; font-size: 0.78rem; line-height: 1.55; margin-top: 6px; }
+  .apt-modal { position: fixed; inset: 0; display: none; z-index: 1000; }
+  .apt-modal.open { display: block; }
+  .apt-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.5); }
+  .apt-modal-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: min(560px, calc(100vw - 32px)); max-height: 90vh; overflow: auto; background: #fff; border-radius: 18px; padding: 22px; box-shadow: 0 20px 60px -16px rgba(15,23,42,0.4); }
+  .apt-modal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .apt-modal-head h2 { margin: 0; font-size: 1.2rem; letter-spacing: -0.02em; }
+  .apt-modal-sub { margin: 4px 0 0; color: var(--text-muted); font-size: 0.86rem; }
+  .apt-modal-close { background: none; border: 0; padding: 4px; cursor: pointer; color: var(--text-muted); flex-shrink: 0; }
+  .apt-modal-close:hover { color: var(--text); }
+  #aptModalMap { width: 100%; height: 200px; border-radius: 12px; border: 1px solid var(--border, #e5e7eb); background: #f1f5f9; margin-bottom: 14px; }
+  .apt-modal-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 8px; margin-bottom: 16px; }
+  .apt-modal-meta .item { background: var(--surface-2, #f8fafc); border-radius: 10px; padding: 8px 10px; }
+  .apt-modal-meta .lbl { font-size: 0.72rem; color: var(--text-muted); }
+  .apt-modal-meta .val { font-size: 0.98rem; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .apt-modal-list h3 { font-size: 0.9rem; margin: 0 0 8px; }
+  .apt-modal-list table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .apt-modal-list th, .apt-modal-list td { padding: 7px 8px; border-bottom: 1px solid var(--border, #eee); text-align: left; }
+  .apt-modal-list td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .apt-modal-more { display: inline-block; margin-top: 14px; color: var(--accent, #2563eb); font-weight: 600; text-decoration: none; font-size: 0.88rem; }
+  .apt-modal-more:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -113,8 +134,9 @@
 
       <div class="finder-field">
         <label for="f-search">Complex name · keyword</label>
-        <input id="f-search" name="search" type="search" placeholder="e.g. Helio City, Raemian" />
-        <span class="finder-hint">Quickly find by complex or region name</span>
+        <input id="f-search" name="search" type="search" placeholder="헬리오시티, 래미안" />
+        <span class="finder-hint">Find by complex or region name</span>
+        <div class="finder-note">⌨️ Search matches Korean text only — type the Korean name (e.g. 헬리오시티) or region. Romanizations like “Helio” won’t match. The Region dropdowns below are shown in English for reference.</div>
       </div>
 
       <div class="finder-field">
@@ -130,10 +152,10 @@
 
       <div class="finder-field">
         <label for="f-budget">Budget (max)</label>
-        <div class="finder-suffix" data-suffix="억">
-          <input id="f-budget" name="budget" type="number" min="0" step="0.5" inputmode="decimal" placeholder="e.g. 15" />
+        <div class="finder-suffix" data-suffix="B ₩">
+          <input id="f-budget" name="budget" type="number" min="0" step="0.1" inputmode="decimal" placeholder="1.5" />
         </div>
-        <span class="finder-hint">In 억 (1 = 100 million KRW). Shows complexes with a unit at or below this.</span>
+        <span class="finder-hint">In billions of KRW (1 = ₩1,000,000,000). Shows complexes with a unit at or below this.</span>
       </div>
 
       <div class="finder-field">
@@ -297,9 +319,10 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="../../assets/score.js?v=20260722"></script>
 <script src="../../assets/region.js?v=20260629"></script>
+<script src="../../assets/kmap.js?v=20260722"></script>
 <script src="../../assets/app.js?v=20260722"></script>
 <script>
-var T = {"title":"Find Your Home","metaDesc":"Enter budget, region, size, age, distance to station/school and household count — complexes are ranked by an overall score. A few conditions are enough.","home":"Home","h1":"Find Your Home","intro":"Enter a few conditions and complexes are scored by upside, transit, school zone and more. <strong>Enter a budget and complexes near that price show first.</strong> ","howtoToggle":"How scoring works ▾","condH":"Conditions","searchLabel":"Complex name · keyword","searchPh":"e.g. Helio City, Raemian","searchHint":"Quickly find by complex or region name","sortLabel":"Sort","sortScore":"Highest score","sortPriceAsc":"Lowest price","sortPriceDesc":"Highest price","sortRecent":"Most recent deal","sortMomentum":"Strongest momentum","budgetLabel":"Budget (max)","budgetSuffix":"억","budgetPh":"e.g. 15","budgetHint":"In 억 (1 = 100 million KRW). Shows complexes with a unit at or below this.","sidoLabel":"Region — Province/City","guLabel":"Region — District","optAll":"All","areaLabel":"Size (exclusive area)","areaAll":"All","areaSmall":"Small (~60㎡)","areaMs":"Standard (60~85㎡)","areaMid":"Mid (85~102㎡)","areaLarge":"Large (102㎡~)","familyLabel":"Household size (optional — suggests size)","famNone":"None","fam1":"1–2 people","fam3":"3 people","fam4":"4+ people","ageLabel":"Max age","ageSuffix":"yr","agePh":"e.g. 15","subwayLabel":"Distance to station (max)","elemLabel":"Distance to elementary (max)","mSuffix":"m","subwayPh":"e.g. 500","elemPh":"e.g. 400","houseLabel":"Min households","houseSuffix":"units","housePh":"e.g. 1000","commuteLabel":"Commute to business district","commuteNone":"None","commuteSuffix":"min","commutePh":"40","commuteHint":"Pick a district and a max commute (min); only complexes within that time are shown.","parkingLabel":"Min parking per household","parkingSuffix":"/unit","parkingPh":"e.g. 1.2","ratioLabel":"Max Jeonse ratio","ratioSuffix":"%","ratioPh":"e.g. 55","ratioHint":"A lower ratio tends to mean pricier, more sought-after areas.","submit":"Get recommendations","reset":"Reset","loading":"Loading complexes…","howtoSummary":"How the total score is calculated","howtoP1":"Each factor is scored 0–100, then combined as a <strong>weighted average</strong> for the total (0–100). Factors with no data or no input are dropped and their weight is redistributed to the rest.","thFactor":"Factor","thWeight":"Weight","thFormula":"Score formula (0–100)","rows":[["Upside","23%","Trend of recent <strong>price per ㎡</strong> (linear-regression slope → annualized) at 65%, plus <strong>Jeonse ratio</strong> (lower = pricier area) at 35%. +20%/yr = full marks, 0% = 50."],["Transit","19%","Walking distance to the nearest subway station. ≤300m = 100, ≥1.5km = 0 (linear)."],["School","19%","Distance to the nearest elementary school. ≤150m = 100, ≥1.2km = 0 (linear)."],["Price stability","14%","Lower coefficient of variation (std ÷ mean) of recent prices scores higher. Fewer than 2 samples = neutral (60)."],["Scale","10%","≥2,000 households = 100, ≤300 = 20 (linear)."],["Age","10%","Built within 2 years = 100, ≥35 years = 10 (linear)."],["Liquidity","5%","Deals in the last 6 months. ≥15 = 100, 0 = 30."],["Budget fit","25%<br/><span style=\"font-size:0.8em;color:var(--text-muted)\">when budget entered</span>","Among units at or below budget, closer to your budget scores higher. Entering a budget adds this factor with the largest weight."]],"howtoP2":"※ The price trend uses <strong>monthly average price per ㎡</strong> to remove distortion from which unit sizes traded. When a complex has no per-complex Jeonse ratio, the <strong>regional average</strong> is used and marked \"(area)\" on the card. This score is a <strong>reference indicator</strong> from public transaction/open data and does not guarantee returns.","sampleNote":"Figures are illustrative references. Always verify prices, the property and its legal status in person before signing.","close":"Close","mapAria":"Complex location map","recentDeals":"Recent transactions","thDate":"Date","thAreaPy":"Area (pyeong)","thAmount":"Amount","moreLink":"See full history in Transactions →","noDeals":"No transaction records.","curMode":"bn","curPrefix":"₩","curUnit":"B","bars":{"fit":"Budget","appreciation":"Upside","subway":"Transit","school":"School","stability":"Stability","liquidity":"Liquidity","scale":"Scale","age":"Age"},"rankPre":"#","rankSuf":"","totalScore":"Total score","units":" units","unitsUnknown":"Households unknown","noInfo":"No data","unknown":"Unknown","specSubway":"To station","specElem":"Elementary","specBuilt":"Built","specHouseholds":"Households","specRatio":"Jeonse ratio","specParking":"Parking/unit","walk":"walk","min":" min","builtYr":"","yrOld":" yrs old","about":"~","areaAvg":"(area)","perUnit":"/unit","toPrefix":"To ","toSuffix":"","recentDeal":"recent deal","reasons":{"subway":"🚇 {station} · {min} min walk","school":"🎒 {name} {dist}m{zone}","scale":"🏙 {n}-unit large complex","age":"🏗 Built {year}, near-new","momentum":"📈 Recent price uptrend","stability":"🛡 Stable prices","commute":"🏢 {hub} {min} min","parking":"🅿 {per}/unit"},"assigned":" (assigned)","bestLabels":{"appreciation":"Upside","subway":"Transit","school":"School","stability":"Price stability","scale":"Scale","age":"Age"},"bestSuffix":" is the strongest factor","relaxedCardPre":"⚠ Didn’t meet <strong>","relaxedCardSuf":"</strong>, but recommended for strong other factors.","filterLabels":{"budget_max":"budget","region":"region","area_type":"size","max_age_years":"age","subway_distance_max":"station distance","elementary_distance_max":"school distance","min_households":"households","commute":"commute","parking_min":"parking","jeonse_ratio_max":"Jeonse ratio"},"countMatch":"<span class=\"em\">{n}</span> complexes match · {sort}","countUnit":"","countRelaxed":"No exact match — showing <span class=\"em\">slightly relaxed</span> picks","relaxedBanner":"No complex met every condition, but these match if you relax 1–2 conditions — try widening the filters.","noMatch":"No matching complexes","emptyRelax":"Try relaxing your conditions.","initialEmpty":"Enter <strong>a keyword or at least one condition</strong> on the left<br/>and we’ll rank matching complexes by overall score","loadFail":"Could not load data. Please try again shortly.","sortLabelsShort":{"score":"highest score","price_asc":"lowest price","price_desc":"highest price","recent":"most recent","momentum":"strongest momentum"},"mLatest":"Latest deal","mDeals":"Deals","mAvg":"Average","mBuilt":"Built","mHouseholds":"Households","mStation":"Nearest station","mElem":"Elementary","mRatio":"Jeonse ratio","mParking":"Parking/unit","dealsCnt":"","py":"py","ago":{"today":"today","d":" days ago","mo":" months ago","y":" years ago"}};
+var T = {"title":"Find Your Home","metaDesc":"Enter budget, region, size, age, distance to station/school and household count — complexes are ranked by an overall score. A few conditions are enough.","home":"Home","h1":"Find Your Home","intro":"Enter a few conditions and complexes are scored by upside, transit, school zone and more. <strong>Enter a budget and complexes near that price show first.</strong> ","howtoToggle":"How scoring works ▾","condH":"Conditions","searchLabel":"Complex name · keyword","searchPh":"헬리오시티, 래미안","searchHint":"Find by complex or region name","searchNote":"⌨️ Search matches Korean text only — type the Korean name (e.g. 헬리오시티) or region. Romanizations like “Helio” won’t match. The Region dropdowns below are shown in English for reference.","sortLabel":"Sort","sortScore":"Highest score","sortPriceAsc":"Lowest price","sortPriceDesc":"Highest price","sortRecent":"Most recent deal","sortMomentum":"Strongest momentum","budgetLabel":"Budget (max)","budgetSuffix":"B ₩","budgetPh":"1.5","budgetStep":"0.1","budgetScale":100000,"budgetHint":"In billions of KRW (1 = ₩1,000,000,000). Shows complexes with a unit at or below this.","sidoLabel":"Region — Province/City","guLabel":"Region — District","optAll":"All","areaLabel":"Size (exclusive area)","areaAll":"All","areaSmall":"Small (~60㎡)","areaMs":"Standard (60~85㎡)","areaMid":"Mid (85~102㎡)","areaLarge":"Large (102㎡~)","familyLabel":"Household size (optional — suggests size)","famNone":"None","fam1":"1–2 people","fam3":"3 people","fam4":"4+ people","ageLabel":"Max age","ageSuffix":"yr","agePh":"e.g. 15","subwayLabel":"Distance to station (max)","elemLabel":"Distance to elementary (max)","mSuffix":"m","subwayPh":"e.g. 500","elemPh":"e.g. 400","houseLabel":"Min households","houseSuffix":"units","housePh":"e.g. 1000","commuteLabel":"Commute to business district","commuteNone":"None","commuteSuffix":"min","commutePh":"40","commuteHint":"Pick a district and a max commute (min); only complexes within that time are shown.","parkingLabel":"Min parking per household","parkingSuffix":"/unit","parkingPh":"e.g. 1.2","ratioLabel":"Max Jeonse ratio","ratioSuffix":"%","ratioPh":"e.g. 55","ratioHint":"A lower ratio tends to mean pricier, more sought-after areas.","submit":"Get recommendations","reset":"Reset","loading":"Loading complexes…","howtoSummary":"How the total score is calculated","howtoP1":"Each factor is scored 0–100, then combined as a <strong>weighted average</strong> for the total (0–100). Factors with no data or no input are dropped and their weight is redistributed to the rest.","thFactor":"Factor","thWeight":"Weight","thFormula":"Score formula (0–100)","rows":[["Upside","23%","Trend of recent <strong>price per ㎡</strong> (linear-regression slope → annualized) at 65%, plus <strong>Jeonse ratio</strong> (lower = pricier area) at 35%. +20%/yr = full marks, 0% = 50."],["Transit","19%","Walking distance to the nearest subway station. ≤300m = 100, ≥1.5km = 0 (linear)."],["School","19%","Distance to the nearest elementary school. ≤150m = 100, ≥1.2km = 0 (linear)."],["Price stability","14%","Lower coefficient of variation (std ÷ mean) of recent prices scores higher. Fewer than 2 samples = neutral (60)."],["Scale","10%","≥2,000 households = 100, ≤300 = 20 (linear)."],["Age","10%","Built within 2 years = 100, ≥35 years = 10 (linear)."],["Liquidity","5%","Deals in the last 6 months. ≥15 = 100, 0 = 30."],["Budget fit","25%<br/><span style=\"font-size:0.8em;color:var(--text-muted)\">when budget entered</span>","Among units at or below budget, closer to your budget scores higher. Entering a budget adds this factor with the largest weight."]],"howtoP2":"※ The price trend uses <strong>monthly average price per ㎡</strong> to remove distortion from which unit sizes traded. When a complex has no per-complex Jeonse ratio, the <strong>regional average</strong> is used and marked \"(area)\" on the card. This score is a <strong>reference indicator</strong> from public transaction/open data and does not guarantee returns.","sampleNote":"Figures are illustrative references. Always verify prices, the property and its legal status in person before signing.","close":"Close","mapAria":"Complex location map","recentDeals":"Recent transactions","thDate":"Date","thAreaPy":"Area (pyeong)","thAmount":"Amount","moreLink":"See full history in Transactions →","noDeals":"No transaction records.","curMode":"bn","curPrefix":"₩","curUnit":"B","bars":{"fit":"Budget","appreciation":"Upside","subway":"Transit","school":"School","stability":"Stability","liquidity":"Liquidity","scale":"Scale","age":"Age"},"rankPre":"#","rankSuf":"","totalScore":"Total score","units":" units","unitsUnknown":"Households unknown","noInfo":"No data","unknown":"Unknown","specSubway":"To station","specElem":"Elementary","specBuilt":"Built","specHouseholds":"Households","specRatio":"Jeonse ratio","specParking":"Parking/unit","walk":"walk","min":" min","builtYr":"","yrOld":" yrs old","about":"~","areaAvg":"(area)","perUnit":"/unit","toPrefix":"To ","toSuffix":"","recentDeal":"recent deal","reasons":{"subway":"🚇 {station} · {min} min walk","school":"🎒 {name} {dist}m{zone}","scale":"🏙 {n}-unit large complex","age":"🏗 Built {year}, near-new","momentum":"📈 Recent price uptrend","stability":"🛡 Stable prices","commute":"🏢 {hub} {min} min","parking":"🅿 {per}/unit"},"assigned":" (assigned)","bestLabels":{"appreciation":"Upside","subway":"Transit","school":"School","stability":"Price stability","scale":"Scale","age":"Age"},"bestSuffix":" is the strongest factor","relaxedCardPre":"⚠ Didn’t meet <strong>","relaxedCardSuf":"</strong>, but recommended for strong other factors.","filterLabels":{"budget_max":"budget","region":"region","area_type":"size","max_age_years":"age","subway_distance_max":"station distance","elementary_distance_max":"school distance","min_households":"households","commute":"commute","parking_min":"parking","jeonse_ratio_max":"Jeonse ratio"},"countMatch":"<span class=\"em\">{n}</span> complexes match · {sort}","countUnit":"","countRelaxed":"No exact match — showing <span class=\"em\">slightly relaxed</span> picks","relaxedBanner":"No complex met every condition, but these match if you relax 1–2 conditions — try widening the filters.","noMatch":"No matching complexes","emptyRelax":"Try relaxing your conditions.","initialEmpty":"Enter <strong>a keyword or at least one condition</strong> on the left<br/>and we’ll rank matching complexes by overall score","loadFail":"Could not load data. Please try again shortly.","sortLabelsShort":{"score":"highest score","price_asc":"lowest price","price_desc":"highest price","recent":"most recent","momentum":"strongest momentum"},"mLatest":"Latest deal","mDeals":"Deals","mAvg":"Average","mBuilt":"Built","mHouseholds":"Households","mStation":"Nearest station","mElem":"Elementary","mRatio":"Jeonse ratio","mParking":"Parking/unit","dealsCnt":"","py":"py","ago":{"today":"today","d":" days ago","mo":" months ago","y":" years ago"}};
 var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","광화문":"Gwanghwamun"};
 </script>
 <script>
@@ -334,10 +357,35 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
   function num(v) { v = parseFloat(v); return isNaN(v) ? null : v; }
   function hubName(k) { return (typeof HUB_DISPLAY !== 'undefined' && HUB_DISPLAY[k]) || k; }
 
+  // 한글 지역명 → 로마자(개정 로마자 표기 근사). 값(필터)은 한글 유지, 표시만 로마자.
+  var RM_CHO = ['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];
+  var RM_JUNG = ['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'];
+  var RM_JONG = ['','k','k','k','n','n','n','t','l','k','m','l','l','l','p','l','m','p','p','t','t','ng','t','t','k','t','p','t'];
+  var RM_SUFFIX = { '구': 'gu', '군': 'gun', '시': 'si', '동': 'dong', '읍': 'eup', '면': 'myeon', '도': 'do' };
+  function romanizeSyl(ch) {
+    var code = ch.charCodeAt(0) - 0xAC00;
+    if (code < 0 || code > 11171) return ch;
+    return RM_CHO[Math.floor(code / 588)] + RM_JUNG[Math.floor((code % 588) / 28)] + RM_JONG[code % 28];
+  }
+  function romanizeWord(w) {
+    if (!w) return w;
+    // 행정 접미사(구/군/시/동…)는 어간이 2음절 이상일 때만 분리한다.
+    // (대구=Daegu 처럼 접미사가 아닌 1음절 어간 지명이 'Dae-gu'로 잘못 쪼개지는 것 방지)
+    var last = w.slice(-1), stem = w, suf = '';
+    if (RM_SUFFIX[last] && w.length >= 3) { stem = w.slice(0, -1); suf = '-' + RM_SUFFIX[last]; }
+    var r = '';
+    for (var i = 0; i < stem.length; i++) r += romanizeSyl(stem[i]);
+    if (r) r = r.charAt(0).toUpperCase() + r.slice(1);
+    return r + suf;
+  }
+  function romanize(s) { return s ? String(s).split(' ').map(romanizeWord).join(' ') : s; }
+  // 평형 라벨의 한글 '평'을 현지 단위로 치환 (데이터 라벨 예: "85㎡(26평)")
+  function unitLabel(s) { return s ? String(s).replace(/\((\d+)\s*평\)/g, function (_, n) { return '(' + n + ' ' + T.py + ')'; }) : s; }
+
   function readFilters() {
     var f = {};
     var budget = num(form.budget.value);
-    if (budget) f.budget_max = Math.round(budget * 10000);
+    if (budget) f.budget_max = Math.round(budget * (T.budgetScale || 10000));
     if (guSel.value && guSel.value !== 'all') f.region = guSel.value;
     else if (sidoSel.value && sidoSel.value !== 'all') f.region = sidoSel.value;
     if (areaSel.value && areaSel.value !== 'all') f.area_type = areaSel.value;
@@ -504,18 +552,18 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
     var house = a.households ? a.households.toLocaleString() + T.units : T.unitsUnknown;
     if (a.builder && a.builder !== '기타') house += (a.households ? ' · ' : '') + esc(a.builder);
     var latest = latestDealOf(a.name);
-    var repLabel = esc(r.rep ? r.rep.label : '');
+    var repLabel = esc(unitLabel(r.rep ? r.rep.label : ''));
     var dealNote = latest ? repLabel + ' · ' + latest + ' (' + ago(daysSince(latest)) + ')' : repLabel + ' ' + T.recentDeal;
     return '' +
       '<article class="apt-card" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region_key || '') + '">' +
         '<span class="rank">' + T.rankPre + rank + T.rankSuf + '</span>' +
         '<div class="apt-head">' +
-          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(a.region) + '</div></div>' +
+          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(romanize(a.region)) + '</div></div>' +
           '<div class="apt-score"><div class="num">' + r.total + '</div><div class="lbl">' + T.totalScore + '</div></div>' +
         '</div>' +
         '<div class="apt-price">' + fmt(r.price) + ' <small>' + dealNote + '</small></div>' +
         '<div class="apt-units">' + (a.units || []).map(function (u) {
-          return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(u.label) + ' ' + fmt(u.recent_price) + '</span>';
+          return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(unitLabel(u.label)) + ' ' + fmt(u.recent_price) + '</span>';
         }).join('') + '</div>' +
         relaxed +
         '<div class="apt-spec">' +
@@ -568,7 +616,7 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
 
   // ── 단지 상세 팝업 ──
   var aptModal = document.getElementById('aptModal');
-  var aptMap = null, aptMapInit = false, aptMarker = null;
+  var finderMap = null;   // TopdaKMap 어댑터(카카오 우선, 실패 시 Leaflet 폴백)
 
   function findApt(name, regionKey) {
     for (var i = 0; i < DATA.length; i++) {
@@ -578,31 +626,33 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
     return null;
   }
 
-  function ensureAptMap() {
-    if (aptMapInit) return;
-    if (typeof L === 'undefined') return;
-    aptMap = L.map('aptModalMap', { zoomControl: true, scrollWheelZoom: false });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; OpenStreetMap' }).addTo(aptMap);
-    aptMapInit = true;
-  }
-
-  function renderAptMap(a) {
+  // 상세 팝업 지도 — TopdaKMap(카카오 우선, 도메인 미등록/로컬은 Leaflet 폴백).
+  // 어댑터를 한 번만 만들고 이후엔 재중심(setCenter)만 해서 모달 재오픈에 재사용한다.
+  function showFinderMap(a) {
     var mapEl = document.getElementById('aptModalMap');
     if (a.lat == null || a.lng == null) { mapEl.style.display = 'none'; return; }
     mapEl.style.display = '';
-    ensureAptMap();
-    if (!aptMapInit) return;
-    aptMap.setView([a.lat, a.lng], 16);
-    if (aptMarker) aptMap.removeLayer(aptMarker);
-    aptMarker = L.marker([a.lat, a.lng]).addTo(aptMap);
-    setTimeout(function () { aptMap.invalidateSize(); aptMap.setView([a.lat, a.lng], 16); }, 60);
+    function place(ad) {
+      if (!ad) return;
+      finderMap = ad;
+      ad.clear();
+      if (ad.relayout) ad.relayout();
+      ad.setCenter(a.lat, a.lng);
+      ad.addCircle(a.lat, a.lng, { fillColor: '#2563eb', radius: 10, title: a.name });
+      // 모달이 방금 표시돼 컨테이너 크기가 잡히기 전이면 한 번 더 재배치·재중심.
+      setTimeout(function () { if (ad.relayout) ad.relayout(); ad.setCenter(a.lat, a.lng); }, 90);
+    }
+    if (finderMap) { place(finderMap); return; }
+    if (typeof window.TopdaKMap !== 'undefined') {
+      window.TopdaKMap.init('aptModalMap', { center: [a.lat, a.lng], level: 3, zoom: 16, maxZoom: 16 }, place);
+    }
   }
 
   function openAptModal(name, regionKey) {
     var a = findApt(name, regionKey);
     if (!a) return;
     document.getElementById('aptModalTitle').textContent = a.name;
-    document.getElementById('aptModalSub').textContent = a.region || '';
+    document.getElementById('aptModalSub').textContent = romanize(a.region || '');
 
     var agg = DEALS_BY_APT[a.name] || { prices: [] };
     var deals = agg.prices.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; });
@@ -632,7 +682,7 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
 
     document.getElementById('aptModalMore').href = '../../calculators/transactions.html?q=' + encodeURIComponent(a.name);
 
-    renderAptMap(a);
+    showFinderMap(a);
     aptModal.classList.add('open');
     aptModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -677,7 +727,7 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
     });
     gus.sort(function (a, b) { return guOf({ region_key: a }).localeCompare(guOf({ region_key: b }), 'ko'); })
       .forEach(function (key) {
-        var o = document.createElement('option'); o.value = key; o.textContent = guOf({ region_key: key }); guSel.appendChild(o);
+        var o = document.createElement('option'); o.value = key; o.textContent = romanize(guOf({ region_key: key })); guSel.appendChild(o);
       });
   }
   sidoSel.addEventListener('change', function () { fillGu(); render(); });
@@ -746,7 +796,7 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
     var sidos = [];
     DATA.forEach(function (a) { var s = sidoOf(a); if (s && sidos.indexOf(s) < 0) sidos.push(s); });
     R.sortSidos(sidos).forEach(function (s) {
-      var o = document.createElement('option'); o.value = s; o.textContent = s; sidoSel.appendChild(o);
+      var o = document.createElement('option'); o.value = s; o.textContent = romanize(s); sidoSel.appendChild(o);
     });
     applyUrlParams();
     render();
