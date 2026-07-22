@@ -63,7 +63,7 @@ const T = {
       ['7. Check during construction', 'Photograph/record trades that get covered up — waterproofing, plumbing, electrical'],
       ['8. Defect repair & aftercare', 'Use trade warranty periods (papering 1yr, flooring/tile 2yr, waterproofing 3yr)'],
     ],
-    relTag: 'Related (Korean)',
+    relTag: 'Interior contract checklist',
     rel: [
       { cat: 'Firm types · finding', h3: '8 ways to choose an interior firm', p: 'Business registration, track record, defect warranty, standard contract' },
       { cat: 'Comparing quotes', h3: 'How to compare quotes properly', p: 'Split material / spec / quantity / unit price · extra-work consent process' },
@@ -319,9 +319,10 @@ const T = {
   },
 };
 
-// 자재 상세/관련 글은 국내(한국어) 콘텐츠 → depth-2 에서 ../../ 로 링크
-const DEEP = (f) => `../../interior/${f}`;      // cost.html, flooring.html …
-const POST = (f) => `../../posts/${f}`;          // interior-company.html …
+// English has complete translated detail pages. Other localized hubs continue
+// to point to Korean source pages until their detail translations are ready.
+const DEEP = (f, lang) => lang === 'en' ? `./${f}` : `../../interior/${f}`;
+const POST = (f, lang) => lang === 'en' ? `../posts/${f}` : `../../posts/${f}`;
 const CHK = (f) => `../../checklists/${f}`;
 const IMG = (p) => `../../assets/images/interior/${p}`;
 const PLACEHOLDER = '../../assets/images/interior/_placeholder.svg';
@@ -329,16 +330,7 @@ const imgTag = (src, alt) => `<img src="${IMG(src)}" alt="${alt}" loading="lazy"
 
 // 관련 글/타임라인 도구 링크(한국어 페이지) — 카드 순서와 매칭
 const REL_HREF = ['posts/interior-company.html', 'posts/interior-quote.html', 'posts/interior-contract.html', 'posts/interior-defect.html'];
-const STEP_TOOL = [
-  { label: 'coRel0', href: POST('interior-company.html') },
-  { label: 'coRel0', href: POST('interior-company.html') },
-  { label: 'costShort', href: DEEP('cost.html') },
-  { label: 'coRel1', href: POST('interior-quote.html') },
-  { label: 'coRel2', href: POST('interior-contract.html') },
-  { label: 'chk', href: CHK('interior-contract.html') },
-  { label: 'bath', href: DEEP('bathroom.html') },
-  { label: 'coRel3', href: POST('interior-defect.html') },
-];
+const STEP_TOOL = ['coRel0', 'coRel0', 'costShort', 'coRel1', 'coRel2', 'chk', 'bath', 'coRel3'];
 
 function head(lang, t) {
   const alts = ['ko', 'en', 'zh-Hans', 'zh-Hant', 'vi', 'th'].map((l) => {
@@ -415,7 +407,7 @@ function footer(c) {
 
 function matCard(lang, t, key) {
   const m = t.mat[key];
-  return `      <a class="mat-card" href="${DEEP(key + '.html')}">
+  return `      <a class="mat-card" href="${DEEP(key + '.html', lang)}">
         <div class="mat-card-media">${imgTag(MAT_IMG[key], m.h3)}</div>
         <div class="mat-card-body">
           <h3>${m.h3}</h3>
@@ -429,20 +421,19 @@ function matCard(lang, t, key) {
       </a>`;
 }
 
-function stepTool(t, i) {
+function stepTool(lang, t, i) {
   // 타임라인 각 단계의 도구 링크 라벨 — 관련 글/체크리스트/비용/욕실
   const rel = t.rel;
   const map = {
-    coRel0: { label: rel[0].h3, href: POST('interior-company.html') },
-    coRel1: { label: rel[1].h3, href: POST('interior-quote.html') },
-    coRel2: { label: rel[2].h3, href: POST('interior-contract.html') },
-    coRel3: { label: rel[3].h3, href: POST('interior-defect.html') },
-    costShort: { label: t.costTitle, href: DEEP('cost.html') },
-    chk: { label: t.relTag, href: CHK('interior-contract.html') },
-    bath: { label: t.mat.bathroom.h3, href: DEEP('bathroom.html') },
+    coRel0: { label: rel[0].h3, href: POST('interior-company.html', lang) },
+    coRel1: { label: rel[1].h3, href: POST('interior-quote.html', lang) },
+    coRel2: { label: rel[2].h3, href: POST('interior-contract.html', lang) },
+    coRel3: { label: rel[3].h3, href: POST('interior-defect.html', lang) },
+    costShort: { label: t.costTitle, href: DEEP('cost.html', lang) },
+    chk: { label: t.relTag, href: lang === 'en' ? '../checklists/interior-contract.html' : CHK('interior-contract.html') },
+    bath: { label: t.mat.bathroom.h3, href: DEEP('bathroom.html', lang) },
   };
-  const s = STEP_TOOL[i];
-  const e = map[s.label];
+  const e = map[STEP_TOOL[i]];
   return `<a href="${e.href}">${e.label}</a>`;
 }
 
@@ -451,8 +442,8 @@ function page(lang) {
   const c = CHROME[lang];
   const toc = t.toc.map((x, i) => `      <li><a href="#${['materials', 'company', 'official', 'schedule'][i]}">${x}</a></li>`).join('\n');
   const mats = MAT_KEYS.map((k) => matCard(lang, t, k)).join('\n');
-  const steps = t.steps.map((s, i) => `      <li><span class="t-when">${s[0]}</span><span class="t-what">${s[1]}</span><span class="t-tool">${stepTool(t, i)}</span></li>`).join('\n');
-  const rels = t.rel.map((r, i) => `      <a class="g-related-card" href="${POST(REL_HREF[i].split('/')[1])}">
+  const steps = t.steps.map((s, i) => `      <li><span class="t-when">${s[0]}</span><span class="t-what">${s[1]}</span><span class="t-tool">${stepTool(lang, t, i)}</span></li>`).join('\n');
+  const rels = t.rel.map((r, i) => `      <a class="g-related-card" href="${POST(REL_HREF[i].split('/')[1], lang)}">
         <span class="r-cat">${r.cat}</span>
         <h3>${r.h3}</h3>
         <p>${r.p}</p>
@@ -500,7 +491,7 @@ ${toc}
     <div class="g-area-head"><span class="g-area-tag">${t.matTag}</span><h2>${t.matH}</h2></div>
     <p class="g-area-desc">${t.matDesc}</p>
 
-    <a class="mat-card mat-card--wide" href="${DEEP('cost.html')}">
+    <a class="mat-card mat-card--wide" href="${DEEP('cost.html', lang)}">
       <div class="mat-card-media">${imgTag('hero/cost.webp', t.costTitle)}</div>
       <div class="mat-card-body">
         <h3>${t.costTitle}</h3>
