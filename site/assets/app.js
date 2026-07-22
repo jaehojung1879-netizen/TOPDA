@@ -26,7 +26,7 @@
   // (i18n-maintenance 워크플로가 이 맵과 실제 파일의 정합성을 점검한다.)
   const PAGES = {
     ko: { all: true, exclude: ['foreigner-loan.html', 'foreigner-tax.html', 'jeonse.html', 'glossary.html'] },
-    en: { list: ['index.html', 'guides.html', 'market.html', 'interior/index.html', 'jeonse.html', 'foreigner-loan.html', 'foreigner-tax.html', 'glossary.html', 'auction.html', 'about.html', 'feedback.html', 'calculators/index.html', 'calculators/search.html', 'calculators/acquisition-tax.html', 'calculators/brokerage-fee.html', 'calculators/jeonse-monthly.html', 'calculators/auction-bid.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html', 'calculators/total-cost-dashboard.html'] },
+    en: { list: ['index.html', '404.html', 'guides.html', 'market.html', 'interior/index.html', 'interior/cost.html', 'interior/flooring.html', 'interior/wallpaper.html', 'interior/tile.html', 'interior/bathroom.html', 'interior/kitchen.html', 'interior/windows.html', 'posts/interior-company.html', 'posts/interior-quote.html', 'posts/interior-contract.html', 'posts/interior-defect.html', 'checklists/interior-contract.html', 'jeonse.html', 'foreigner-loan.html', 'foreigner-tax.html', 'glossary.html', 'auction.html', 'sale.html', 'moving.html', 'about.html', 'feedback.html', 'calculators/index.html', 'calculators/search.html', 'calculators/interior-estimate.html', 'calculators/acquisition-tax.html', 'calculators/brokerage-fee.html', 'calculators/jeonse-monthly.html', 'calculators/auction-bid.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html', 'calculators/total-cost-dashboard.html'] },
     'zh-Hans': { list: ['index.html', 'guides.html', 'market.html', 'interior/index.html', 'calculators/search.html', 'glossary.html', 'foreigner-loan.html', 'foreigner-tax.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
     'zh-Hant': { list: ['index.html', 'guides.html', 'market.html', 'interior/index.html', 'calculators/search.html', 'glossary.html', 'foreigner-loan.html', 'foreigner-tax.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/transfer-tax.html', 'calculators/balance-settlement.html'] },
     vi: { list: ['index.html', 'guides.html', 'market.html', 'interior/index.html', 'glossary.html', 'jeonse.html', 'foreigner-loan.html', 'calculators/index.html', 'calculators/jeonse-monthly.html', 'calculators/brokerage-fee.html', 'calculators/acquisition-tax.html', 'calculators/balance-settlement.html'] },
@@ -45,6 +45,23 @@
     let b = pageExists(lang, base) ? base : 'index.html';
     if (b === '') b = 'index.html';
     return lang === 'ko' ? '/' + b : '/' + lang + '/' + b;
+  }
+
+  const STORAGE_KEY = 'topda-language';
+  function pathInfo(pathname) {
+    const segs = pathname.replace(/^\/+/, '').split('/');
+    const lang = LANG_PREFIX.includes(segs[0]) ? segs.shift() : 'ko';
+    return { lang, base: segs.join('/') || 'index.html' };
+  }
+  // A language changes only when the visitor explicitly uses the switcher.  For
+  // normal internal navigation, keep the stored locale when that page exists.
+  let preferredLang = null;
+  try { preferredLang = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  const current = pathInfo(location.pathname);
+  const navigationLang = preferredLang || current.lang;
+  if (preferredLang && preferredLang !== current.lang && pageExists(preferredLang, current.base)) {
+    location.replace(langHref(preferredLang, current.base) + location.search + location.hash);
+    return;
   }
 
   try {
@@ -93,6 +110,9 @@
         a.setAttribute('lang', l.code);
         a.setAttribute('hreflang', l.code);
         a.href = langHref(l.code, base);
+        a.addEventListener('click', () => {
+          try { localStorage.setItem(STORAGE_KEY, l.code); } catch (e) {}
+        });
         if (l.code === curLang) { a.classList.add('is-current'); a.setAttribute('aria-current', 'true'); }
         a.innerHTML =
           '<img class="lang-flag" src="/assets/flags/' + l.code + '.svg" alt="" width="20" height="15" loading="lazy" />' +
@@ -156,6 +176,26 @@
       document.body.appendChild(menu);
     }
   } catch (e) {}
+
+  // Normalize ordinary same-origin document links. Protocol links, downloads,
+  // fragments and explicit language-switcher links are deliberately untouched.
+  if (navigationLang) document.querySelectorAll('a[href]').forEach((a) => {
+    const raw = a.getAttribute('href');
+    if (!raw || raw[0] === '#' || a.hasAttribute('download') || /^(?:mailto:|tel:|javascript:|data:)/i.test(raw) || a.classList.contains('lang-item')) return;
+    let url;
+    try { url = new URL(raw, location.href); } catch (e) { return; }
+    if (url.origin !== location.origin) return;
+    const target = pathInfo(url.pathname);
+    if (!pageExists(navigationLang, target.base)) {
+      // Never disguise a missing translation by opening its Korean counterpart.
+      // English visitors get an explicit English missing-translation page.
+      if (navigationLang === 'en' && target.lang === 'ko') {
+        a.href = '/en/404.html?missing=' + encodeURIComponent(target.base);
+      }
+      return;
+    }
+    a.href = langHref(navigationLang, target.base) + url.search + url.hash;
+  });
 
   // Mark active nav link
   const path = location.pathname.replace(/\/$/, '');
