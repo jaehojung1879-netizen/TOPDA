@@ -41,9 +41,10 @@ const T = {
     home: 'Home', h1: 'Find Your Home',
     intro: 'Enter a few conditions and complexes are scored by upside, transit, school zone and more. <strong>Enter a budget and complexes near that price show first.</strong> ',
     howtoToggle: 'How scoring works ▾',
-    condH: 'Conditions', searchLabel: 'Complex name · keyword', searchPh: 'e.g. Helio City, Raemian', searchHint: 'Quickly find by complex or region name',
+    condH: 'Conditions', searchLabel: 'Complex name · keyword', searchPh: '헬리오시티, 래미안', searchHint: 'Find by complex or region name',
+    searchNote: '⌨️ Search matches Korean text only — type the Korean name (e.g. 헬리오시티) or region. Romanizations like “Helio” won’t match. The Region dropdowns below are shown in English for reference.',
     sortLabel: 'Sort', sortScore: 'Highest score', sortPriceAsc: 'Lowest price', sortPriceDesc: 'Highest price', sortRecent: 'Most recent deal', sortMomentum: 'Strongest momentum',
-    budgetLabel: 'Budget (max)', budgetSuffix: '억', budgetPh: 'e.g. 15', budgetHint: 'In 억 (1 = 100 million KRW). Shows complexes with a unit at or below this.',
+    budgetLabel: 'Budget (max)', budgetSuffix: 'B ₩', budgetPh: '1.5', budgetStep: '0.1', budgetScale: 100000, budgetHint: 'In billions of KRW (1 = ₩1,000,000,000). Shows complexes with a unit at or below this.',
     sidoLabel: 'Region — Province/City', guLabel: 'Region — District', optAll: 'All',
     areaLabel: 'Size (exclusive area)', areaAll: 'All', areaSmall: 'Small (~60㎡)', areaMs: 'Standard (60~85㎡)', areaMid: 'Mid (85~102㎡)', areaLarge: 'Large (102㎡~)',
     familyLabel: 'Household size (optional — suggests size)', famNone: 'None', fam1: '1–2 people', fam3: '3 people', fam4: '4+ people',
@@ -99,9 +100,10 @@ const T = {
     home: '首页', h1: '定制找房',
     intro: '只需输入条件，系统就按上涨预期、地铁、学区等为小区打分。<strong>输入预算后，接近该价位的小区会优先显示。</strong> ',
     howtoToggle: '评分方式 ▾',
-    condH: '输入条件', searchLabel: '小区名·关键词', searchPh: '例：Helio City、Raemian', searchHint: '用小区名或地区名快速查找',
+    condH: '输入条件', searchLabel: '小区名·关键词', searchPh: '헬리오시티, 래미안', searchHint: '按小区名或地区名查找',
+    searchNote: '⌨️ 搜索仅匹配韩文——请输入韩文名称（例：헬리오시티）或地区名。“Helio” 等罗马字不会命中。下方地区下拉框以英文显示供参考。',
     sortLabel: '排序', sortScore: '综合评分从高到低', sortPriceAsc: '价格从低到高', sortPriceDesc: '价格从高到低', sortRecent: '最近成交优先', sortMomentum: '上涨动能优先',
-    budgetLabel: '预算（上限）', budgetSuffix: '亿', budgetPh: '例：15', budgetHint: '单位为亿韩元（1＝1亿韩元）。仅推荐存在不超过此价位户型的小区。',
+    budgetLabel: '预算（上限）', budgetSuffix: '亿', budgetPh: '15', budgetStep: '0.5', budgetScale: 10000, budgetHint: '单位为亿韩元（1＝1亿韩元）。仅推荐存在不超过此价位户型的小区。',
     sidoLabel: '地区 — 市·道', guLabel: '地区 — 市·郡·区', optAll: '全部',
     areaLabel: '户型（专用面积）', areaAll: '全部', areaSmall: '小户型（~60㎡）', areaMs: '国民户型（60~85㎡）', areaMid: '中户型（85~102㎡）', areaLarge: '大户型（102㎡~）',
     familyLabel: '家庭人数（可选 — 推荐户型）', famNone: '不选', fam1: '1~2人', fam3: '3人', fam4: '4人以上',
@@ -155,9 +157,10 @@ const T = {
     home: '首頁', h1: '定制找房',
     intro: '只需輸入條件，系統就按上漲預期、捷運、學區等為社區打分。<strong>輸入預算後，接近該價位的社區會優先顯示。</strong> ',
     howtoToggle: '評分方式 ▾',
-    condH: '輸入條件', searchLabel: '社區名·關鍵詞', searchPh: '例：Helio City、Raemian', searchHint: '用社區名或地區名快速查找',
+    condH: '輸入條件', searchLabel: '社區名·關鍵詞', searchPh: '헬리오시티, 래미안', searchHint: '按社區名或地區名查找',
+    searchNote: '⌨️ 搜尋僅比對韓文——請輸入韓文名稱（例：헬리오시티）或地區名。「Helio」等羅馬字不會命中。下方地區下拉選單以英文顯示供參考。',
     sortLabel: '排序', sortScore: '綜合評分從高到低', sortPriceAsc: '價格從低到高', sortPriceDesc: '價格從高到低', sortRecent: '最近成交優先', sortMomentum: '上漲動能優先',
-    budgetLabel: '預算（上限）', budgetSuffix: '億', budgetPh: '例：15', budgetHint: '單位為億韓元（1＝1億韓元）。僅推薦存在不超過此價位坪型的社區。',
+    budgetLabel: '預算（上限）', budgetSuffix: '億', budgetPh: '15', budgetStep: '0.5', budgetScale: 10000, budgetHint: '單位為億韓元（1＝1億韓元）。僅推薦存在不超過此價位坪型的社區。',
     sidoLabel: '地區 — 市·道', guLabel: '地區 — 市·郡·區', optAll: '全部',
     areaLabel: '坪型（專用面積）', areaAll: '全部', areaSmall: '小坪型（~60㎡）', areaMs: '國民坪型（60~85㎡）', areaMid: '中坪型（85~102㎡）', areaLarge: '大坪型（102㎡~）',
     familyLabel: '家庭人數（可選 — 推薦坪型）', famNone: '不選', fam1: '1~2人', fam3: '3人', fam4: '4人以上',
@@ -211,9 +214,10 @@ const T = {
     home: 'Trang chủ', h1: 'Tìm nhà theo nhu cầu',
     intro: 'Chỉ cần nhập điều kiện, chung cư được chấm điểm theo kỳ vọng tăng giá, gần ga, tuyến trường… <strong>Nhập ngân sách thì các chung cư gần mức giá đó hiện trước.</strong> ',
     howtoToggle: 'Cách tính điểm ▾',
-    condH: 'Nhập điều kiện', searchLabel: 'Tên chung cư · từ khóa', searchPh: 'vd: Helio City, Raemian', searchHint: 'Tìm nhanh theo tên chung cư hoặc khu vực',
+    condH: 'Nhập điều kiện', searchLabel: 'Tên chung cư · từ khóa', searchPh: '헬리오시티, 래미안', searchHint: 'Tìm theo tên chung cư hoặc khu vực',
+    searchNote: '⌨️ Tìm kiếm chỉ khớp tiếng Hàn — hãy gõ tên tiếng Hàn (vd: 헬리오시티) hoặc khu vực. Chữ La-tinh như “Helio” sẽ không khớp. Danh sách khu vực bên dưới hiển thị bằng tiếng Anh để tham khảo.',
     sortLabel: 'Sắp xếp', sortScore: 'Điểm cao nhất', sortPriceAsc: 'Giá thấp nhất', sortPriceDesc: 'Giá cao nhất', sortRecent: 'Giao dịch gần nhất', sortMomentum: 'Đà tăng mạnh nhất',
-    budgetLabel: 'Ngân sách (tối đa)', budgetSuffix: '억', budgetPh: 'vd: 15', budgetHint: 'Đơn vị 억 (1 = 100 triệu KRW). Chỉ gợi ý chung cư có căn ≤ mức này.',
+    budgetLabel: 'Ngân sách (tối đa)', budgetSuffix: 'tỷ ₩', budgetPh: '1.5', budgetStep: '0.1', budgetScale: 100000, budgetHint: 'Đơn vị tỷ KRW (1 = 1.000.000.000 KRW). Chỉ gợi ý chung cư có căn ≤ mức này.',
     sidoLabel: 'Khu vực — Tỉnh/Thành', guLabel: 'Khu vực — Quận/Huyện', optAll: 'Tất cả',
     areaLabel: 'Diện tích (sử dụng)', areaAll: 'Tất cả', areaSmall: 'Nhỏ (~60㎡)', areaMs: 'Phổ thông (60~85㎡)', areaMid: 'Trung (85~102㎡)', areaLarge: 'Lớn (102㎡~)',
     familyLabel: 'Số người (tùy chọn — gợi ý diện tích)', famNone: 'Không chọn', fam1: '1–2 người', fam3: '3 người', fam4: '4+ người',
@@ -267,9 +271,10 @@ const T = {
     home: 'หน้าแรก', h1: 'ค้นหาบ้านตามใจ',
     intro: 'แค่กรอกเงื่อนไข ระบบให้คะแนนโครงการตามโอกาสราคาขึ้น ใกล้รถไฟ เขตโรงเรียน ฯลฯ <strong>กรอกงบแล้วโครงการใกล้ระดับราคานั้นจะแสดงก่อน</strong> ',
     howtoToggle: 'วิธีให้คะแนน ▾',
-    condH: 'กรอกเงื่อนไข', searchLabel: 'ชื่อโครงการ · คำค้น', searchPh: 'เช่น Helio City, Raemian', searchHint: 'ค้นเร็วด้วยชื่อโครงการหรือพื้นที่',
+    condH: 'กรอกเงื่อนไข', searchLabel: 'ชื่อโครงการ · คำค้น', searchPh: '헬리오시티, 래미안', searchHint: 'ค้นด้วยชื่อโครงการหรือพื้นที่',
+    searchNote: '⌨️ การค้นหาจับคู่เฉพาะภาษาเกาหลี — พิมพ์ชื่อภาษาเกาหลี (เช่น 헬리오시티) หรือชื่อพื้นที่ อักษรโรมันเช่น “Helio” จะไม่ตรง รายการพื้นที่ด้านล่างแสดงเป็นภาษาอังกฤษเพื่ออ้างอิง',
     sortLabel: 'จัดเรียง', sortScore: 'คะแนนสูงสุด', sortPriceAsc: 'ราคาต่ำสุด', sortPriceDesc: 'ราคาสูงสุด', sortRecent: 'ซื้อขายล่าสุด', sortMomentum: 'โมเมนตัมแรงสุด',
-    budgetLabel: 'งบประมาณ (สูงสุด)', budgetSuffix: '억', budgetPh: 'เช่น 15', budgetHint: 'หน่วย 억 (1 = 100 ล้านวอน) แสดงเฉพาะโครงการที่มียูนิต ≤ ระดับนี้',
+    budgetLabel: 'งบประมาณ (สูงสุด)', budgetSuffix: 'พันล้าน', budgetPh: '1.5', budgetStep: '0.1', budgetScale: 100000, budgetHint: 'หน่วยพันล้านวอน (1 = 1,000,000,000 วอน) แสดงเฉพาะโครงการที่มียูนิต ≤ ระดับนี้',
     sidoLabel: 'พื้นที่ — จังหวัด', guLabel: 'พื้นที่ — เขต/อำเภอ', optAll: 'ทั้งหมด',
     areaLabel: 'ขนาด (พื้นที่ใช้สอย)', areaAll: 'ทั้งหมด', areaSmall: 'เล็ก (~60㎡)', areaMs: 'มาตรฐาน (60~85㎡)', areaMid: 'กลาง (85~102㎡)', areaLarge: 'ใหญ่ (102㎡~)',
     familyLabel: 'จำนวนคน (ไม่บังคับ — แนะนำขนาด)', famNone: 'ไม่เลือก', fam1: '1–2 คน', fam3: '3 คน', fam4: '4 คนขึ้นไป',
@@ -405,6 +410,7 @@ function main(lang, t) {
         <label for="f-search">${t.searchLabel}</label>
         <input id="f-search" name="search" type="search" placeholder="${t.searchPh}" />
         <span class="finder-hint">${t.searchHint}</span>
+        <div class="finder-note">${t.searchNote}</div>
       </div>
 
       <div class="finder-field">
@@ -421,7 +427,7 @@ function main(lang, t) {
       <div class="finder-field">
         <label for="f-budget">${t.budgetLabel}</label>
         <div class="finder-suffix" data-suffix="${t.budgetSuffix}">
-          <input id="f-budget" name="budget" type="number" min="0" step="0.5" inputmode="decimal" placeholder="${t.budgetPh}" />
+          <input id="f-budget" name="budget" type="number" min="0" step="${t.budgetStep}" inputmode="decimal" placeholder="${t.budgetPh}" />
         </div>
         <span class="finder-hint">${t.budgetHint}</span>
       </div>
@@ -620,6 +626,27 @@ const STYLE = `<style>
   .finder-empty { border: 1px dashed var(--border, #d1d5db); border-radius: 14px; padding: 28px; text-align: center; color: var(--text-muted); }
   .finder-relaxed-banner { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; }
   .finder-howto-toggle { background: none; border: 0; padding: 0; margin-left: 4px; color: var(--accent, #2563eb); font-weight: 600; cursor: pointer; font-size: inherit; }
+  .finder-note { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; border-radius: 10px; padding: 8px 11px; font-size: 0.78rem; line-height: 1.55; margin-top: 6px; }
+  .apt-modal { position: fixed; inset: 0; display: none; z-index: 1000; }
+  .apt-modal.open { display: block; }
+  .apt-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.5); }
+  .apt-modal-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: min(560px, calc(100vw - 32px)); max-height: 90vh; overflow: auto; background: #fff; border-radius: 18px; padding: 22px; box-shadow: 0 20px 60px -16px rgba(15,23,42,0.4); }
+  .apt-modal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .apt-modal-head h2 { margin: 0; font-size: 1.2rem; letter-spacing: -0.02em; }
+  .apt-modal-sub { margin: 4px 0 0; color: var(--text-muted); font-size: 0.86rem; }
+  .apt-modal-close { background: none; border: 0; padding: 4px; cursor: pointer; color: var(--text-muted); flex-shrink: 0; }
+  .apt-modal-close:hover { color: var(--text); }
+  #aptModalMap { width: 100%; height: 200px; border-radius: 12px; border: 1px solid var(--border, #e5e7eb); background: #f1f5f9; margin-bottom: 14px; }
+  .apt-modal-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 8px; margin-bottom: 16px; }
+  .apt-modal-meta .item { background: var(--surface-2, #f8fafc); border-radius: 10px; padding: 8px 10px; }
+  .apt-modal-meta .lbl { font-size: 0.72rem; color: var(--text-muted); }
+  .apt-modal-meta .val { font-size: 0.98rem; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .apt-modal-list h3 { font-size: 0.9rem; margin: 0 0 8px; }
+  .apt-modal-list table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .apt-modal-list th, .apt-modal-list td { padding: 7px 8px; border-bottom: 1px solid var(--border, #eee); text-align: left; }
+  .apt-modal-list td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .apt-modal-more { display: inline-block; margin-top: 14px; color: var(--accent, #2563eb); font-weight: 600; text-decoration: none; font-size: 0.88rem; }
+  .apt-modal-more:hover { text-decoration: underline; }
 </style>`;
 
 // ===== 공유 인라인 JS (T 사전 기반). 백틱/${ 없이 문자열 결합만 사용. =====
@@ -638,6 +665,7 @@ ${main(lang, t)}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="../../assets/score.js?v=20260722"></script>
 <script src="../../assets/region.js?v=20260629"></script>
+<script src="../../assets/kmap.js?v=20260722"></script>
 <script src="../../assets/app.js?v=20260722"></script>
 <script>
 var T = ${JSON.stringify(t)};

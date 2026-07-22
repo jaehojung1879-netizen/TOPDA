@@ -72,6 +72,27 @@
   .finder-empty { border: 1px dashed var(--border, #d1d5db); border-radius: 14px; padding: 28px; text-align: center; color: var(--text-muted); }
   .finder-relaxed-banner { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; }
   .finder-howto-toggle { background: none; border: 0; padding: 0; margin-left: 4px; color: var(--accent, #2563eb); font-weight: 600; cursor: pointer; font-size: inherit; }
+  .finder-note { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; border-radius: 10px; padding: 8px 11px; font-size: 0.78rem; line-height: 1.55; margin-top: 6px; }
+  .apt-modal { position: fixed; inset: 0; display: none; z-index: 1000; }
+  .apt-modal.open { display: block; }
+  .apt-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.5); }
+  .apt-modal-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: min(560px, calc(100vw - 32px)); max-height: 90vh; overflow: auto; background: #fff; border-radius: 18px; padding: 22px; box-shadow: 0 20px 60px -16px rgba(15,23,42,0.4); }
+  .apt-modal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .apt-modal-head h2 { margin: 0; font-size: 1.2rem; letter-spacing: -0.02em; }
+  .apt-modal-sub { margin: 4px 0 0; color: var(--text-muted); font-size: 0.86rem; }
+  .apt-modal-close { background: none; border: 0; padding: 4px; cursor: pointer; color: var(--text-muted); flex-shrink: 0; }
+  .apt-modal-close:hover { color: var(--text); }
+  #aptModalMap { width: 100%; height: 200px; border-radius: 12px; border: 1px solid var(--border, #e5e7eb); background: #f1f5f9; margin-bottom: 14px; }
+  .apt-modal-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 8px; margin-bottom: 16px; }
+  .apt-modal-meta .item { background: var(--surface-2, #f8fafc); border-radius: 10px; padding: 8px 10px; }
+  .apt-modal-meta .lbl { font-size: 0.72rem; color: var(--text-muted); }
+  .apt-modal-meta .val { font-size: 0.98rem; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .apt-modal-list h3 { font-size: 0.9rem; margin: 0 0 8px; }
+  .apt-modal-list table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .apt-modal-list th, .apt-modal-list td { padding: 7px 8px; border-bottom: 1px solid var(--border, #eee); text-align: left; }
+  .apt-modal-list td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .apt-modal-more { display: inline-block; margin-top: 14px; color: var(--accent, #2563eb); font-weight: 600; text-decoration: none; font-size: 0.88rem; }
+  .apt-modal-more:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -113,8 +134,9 @@
 
       <div class="finder-field">
         <label for="f-search">小区名·关键词</label>
-        <input id="f-search" name="search" type="search" placeholder="例：Helio City、Raemian" />
-        <span class="finder-hint">用小区名或地区名快速查找</span>
+        <input id="f-search" name="search" type="search" placeholder="헬리오시티, 래미안" />
+        <span class="finder-hint">按小区名或地区名查找</span>
+        <div class="finder-note">⌨️ 搜索仅匹配韩文——请输入韩文名称（例：헬리오시티）或地区名。“Helio” 等罗马字不会命中。下方地区下拉框以英文显示供参考。</div>
       </div>
 
       <div class="finder-field">
@@ -131,7 +153,7 @@
       <div class="finder-field">
         <label for="f-budget">预算（上限）</label>
         <div class="finder-suffix" data-suffix="亿">
-          <input id="f-budget" name="budget" type="number" min="0" step="0.5" inputmode="decimal" placeholder="例：15" />
+          <input id="f-budget" name="budget" type="number" min="0" step="0.5" inputmode="decimal" placeholder="15" />
         </div>
         <span class="finder-hint">单位为亿韩元（1＝1亿韩元）。仅推荐存在不超过此价位户型的小区。</span>
       </div>
@@ -297,9 +319,10 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="../../assets/score.js?v=20260722"></script>
 <script src="../../assets/region.js?v=20260629"></script>
+<script src="../../assets/kmap.js?v=20260722"></script>
 <script src="../../assets/app.js?v=20260722"></script>
 <script>
-var T = {"title":"定制找房","metaDesc":"输入预算、地区、户型、房龄、离地铁/小学距离、户数，即可按综合评分排序推荐单个小区。只填几项也行。","home":"首页","h1":"定制找房","intro":"只需输入条件，系统就按上涨预期、地铁、学区等为小区打分。<strong>输入预算后，接近该价位的小区会优先显示。</strong> ","howtoToggle":"评分方式 ▾","condH":"输入条件","searchLabel":"小区名·关键词","searchPh":"例：Helio City、Raemian","searchHint":"用小区名或地区名快速查找","sortLabel":"排序","sortScore":"综合评分从高到低","sortPriceAsc":"价格从低到高","sortPriceDesc":"价格从高到低","sortRecent":"最近成交优先","sortMomentum":"上涨动能优先","budgetLabel":"预算（上限）","budgetSuffix":"亿","budgetPh":"例：15","budgetHint":"单位为亿韩元（1＝1亿韩元）。仅推荐存在不超过此价位户型的小区。","sidoLabel":"地区 — 市·道","guLabel":"地区 — 市·郡·区","optAll":"全部","areaLabel":"户型（专用面积）","areaAll":"全部","areaSmall":"小户型（~60㎡）","areaMs":"国民户型（60~85㎡）","areaMid":"中户型（85~102㎡）","areaLarge":"大户型（102㎡~）","familyLabel":"家庭人数（可选 — 推荐户型）","famNone":"不选","fam1":"1~2人","fam3":"3人","fam4":"4人以上","ageLabel":"最大房龄","ageSuffix":"年","agePh":"例：15","subwayLabel":"离地铁站距离（上限）","elemLabel":"离小学距离（上限）","mSuffix":"m","subwayPh":"例：500","elemPh":"例：400","houseLabel":"最少户数","houseSuffix":"户","housePh":"例：1000","commuteLabel":"到商务区通勤","commuteNone":"不选","commuteSuffix":"分","commutePh":"40","commuteHint":"选择商务区并填最大通勤时间（分钟），只推荐在此时间内的小区。","parkingLabel":"每户最少车位","parkingSuffix":"辆","parkingPh":"例：1.2","ratioLabel":"全租率上限","ratioSuffix":"%","ratioPh":"例：55","ratioHint":"比率越低，通常越是价差大的高档地段。","submit":"获取推荐","reset":"重置","loading":"正在加载小区…","howtoSummary":"综合评分的计算方式","howtoP1":"各项先按 0~100 打分，再<strong>按下列权重加权平均</strong>得到综合评分（0~100）。无数据或未填写的项从计算中剔除，其权重自动分配给其余项。","thFactor":"项目","thWeight":"权重","thFormula":"评分算式（0~100）","rows":[["上涨预期","23%","近期实际成交<strong>每㎡单价</strong>的趋势（线性回归斜率→年化）占65%，<strong>全租率</strong>（越低越是高档地段）占35%。年+20%满分，0%为50分。"],["地铁","19%","到最近地铁站的步行距离。≤300m 100分，≥1.5km 0分（线性）。"],["学区","19%","到最近小学的距离。≤150m 100分，≥1.2km 0分（线性）。"],["成交稳定","14%","近期成交价的变异系数（标准差÷均值）越小越加分。样本少于2笔为中性（60分）。"],["小区规模","10%","≥2,000户 100分，≤300户 20分（线性）。"],["房龄","10%","竣工2年内 100分，≥35年 10分（线性）。"],["成交活跃","5%","近6个月成交笔数。≥15笔 100分，0笔 30分。"],["预算契合","25%<br/><span style=\"font-size:0.8em;color:var(--text-muted)\">填预算时</span>","在不超预算的户型中，越接近预算越加分。填了预算才加入此项，且权重最大。"]],"howtoP2":"※ 价格趋势按<strong>每月每㎡均价</strong>计算，以消除成交户型不同带来的失真。小区无自有全租率时使用<strong>地区平均</strong>，并在卡片上标注“(地区)”。本评分为公开成交·公共数据的<strong>参考指标</strong>，不保证投资收益。","sampleNote":"所示信息为参考示例，签约前请务必亲自核实成交价、现场与权利关系。","close":"关闭","mapAria":"小区位置地图","recentDeals":"最近成交","thDate":"成交日","thAreaPy":"专用（坪）","thAmount":"金额","moreLink":"在成交价查询查看全部记录 →","noDeals":"暂无成交记录。","curMode":"eok","curPrefix":"","curUnit":"亿","bars":{"fit":"预算","appreciation":"上涨","subway":"地铁","school":"学区","stability":"稳定","liquidity":"活跃","scale":"规模","age":"房龄"},"rankPre":"第","rankSuf":"名","totalScore":"综合评分","units":"户","unitsUnknown":"户数不详","noInfo":"无信息","unknown":"不详","specSubway":"离地铁","specElem":"小学","specBuilt":"竣工","specHouseholds":"户数","specRatio":"全租率","specParking":"每户车位","walk":"步行","min":"分","builtYr":"年","yrOld":"年","about":"约","areaAvg":"(地区)","perUnit":"辆","toPrefix":"到","toSuffix":"","recentDeal":"近期成交","reasons":{"subway":"🚇 {station} 步行{min}分","school":"🎒 {name} {dist}m{zone}","scale":"🏙 {n}户大型社区","age":"🏗 竣工{year}年 准新房","momentum":"📈 近期成交上涨","stability":"🛡 成交价稳定","commute":"🏢 {hub} {min}分","parking":"🅿 每户{per}辆"},"assigned":" 划片","bestLabels":{"appreciation":"上涨预期","subway":"交通","school":"学区","stability":"成交稳定","scale":"小区规模","age":"房龄"},"bestSuffix":"项最佳","relaxedCardPre":"⚠ 未满足 <strong>","relaxedCardSuf":"</strong>，但其他条件优秀故推荐。","filterLabels":{"budget_max":"预算","region":"地区","area_type":"户型","max_age_years":"房龄","subway_distance_max":"离地铁","elementary_distance_max":"离小学","min_households":"户数","commute":"通勤","parking_min":"车位","jeonse_ratio_max":"全租率"},"countMatch":"符合条件的小区 <span class=\"em\">{n}</span> 个 · {sort}","countUnit":"","countRelaxed":"没有完全匹配，为您<span class=\"em\">略微放宽条件</span>推荐","relaxedBanner":"没有满足全部条件的小区，但放宽1~2个条件即可匹配 — 试试放宽筛选。","noMatch":"没有符合条件的小区","emptyRelax":"请放宽条件后重试。","initialEmpty":"在左侧输入<strong>关键词或至少一个条件</strong><br/>我们会按综合评分为您排序推荐","loadFail":"数据加载失败，请稍后重试。","sortLabelsShort":{"score":"评分从高到低","price_asc":"价格从低到高","price_desc":"价格从高到低","recent":"最近成交","momentum":"上涨动能"},"mLatest":"最近成交","mDeals":"成交笔数","mAvg":"平均价","mBuilt":"竣工","mHouseholds":"户数","mStation":"最近车站","mElem":"小学","mRatio":"全租率","mParking":"每户车位","dealsCnt":"笔","py":"坪","ago":{"today":"今天","d":"天前","mo":"个月前","y":"年前"}};
+var T = {"title":"定制找房","metaDesc":"输入预算、地区、户型、房龄、离地铁/小学距离、户数，即可按综合评分排序推荐单个小区。只填几项也行。","home":"首页","h1":"定制找房","intro":"只需输入条件，系统就按上涨预期、地铁、学区等为小区打分。<strong>输入预算后，接近该价位的小区会优先显示。</strong> ","howtoToggle":"评分方式 ▾","condH":"输入条件","searchLabel":"小区名·关键词","searchPh":"헬리오시티, 래미안","searchHint":"按小区名或地区名查找","searchNote":"⌨️ 搜索仅匹配韩文——请输入韩文名称（例：헬리오시티）或地区名。“Helio” 等罗马字不会命中。下方地区下拉框以英文显示供参考。","sortLabel":"排序","sortScore":"综合评分从高到低","sortPriceAsc":"价格从低到高","sortPriceDesc":"价格从高到低","sortRecent":"最近成交优先","sortMomentum":"上涨动能优先","budgetLabel":"预算（上限）","budgetSuffix":"亿","budgetPh":"15","budgetStep":"0.5","budgetScale":10000,"budgetHint":"单位为亿韩元（1＝1亿韩元）。仅推荐存在不超过此价位户型的小区。","sidoLabel":"地区 — 市·道","guLabel":"地区 — 市·郡·区","optAll":"全部","areaLabel":"户型（专用面积）","areaAll":"全部","areaSmall":"小户型（~60㎡）","areaMs":"国民户型（60~85㎡）","areaMid":"中户型（85~102㎡）","areaLarge":"大户型（102㎡~）","familyLabel":"家庭人数（可选 — 推荐户型）","famNone":"不选","fam1":"1~2人","fam3":"3人","fam4":"4人以上","ageLabel":"最大房龄","ageSuffix":"年","agePh":"例：15","subwayLabel":"离地铁站距离（上限）","elemLabel":"离小学距离（上限）","mSuffix":"m","subwayPh":"例：500","elemPh":"例：400","houseLabel":"最少户数","houseSuffix":"户","housePh":"例：1000","commuteLabel":"到商务区通勤","commuteNone":"不选","commuteSuffix":"分","commutePh":"40","commuteHint":"选择商务区并填最大通勤时间（分钟），只推荐在此时间内的小区。","parkingLabel":"每户最少车位","parkingSuffix":"辆","parkingPh":"例：1.2","ratioLabel":"全租率上限","ratioSuffix":"%","ratioPh":"例：55","ratioHint":"比率越低，通常越是价差大的高档地段。","submit":"获取推荐","reset":"重置","loading":"正在加载小区…","howtoSummary":"综合评分的计算方式","howtoP1":"各项先按 0~100 打分，再<strong>按下列权重加权平均</strong>得到综合评分（0~100）。无数据或未填写的项从计算中剔除，其权重自动分配给其余项。","thFactor":"项目","thWeight":"权重","thFormula":"评分算式（0~100）","rows":[["上涨预期","23%","近期实际成交<strong>每㎡单价</strong>的趋势（线性回归斜率→年化）占65%，<strong>全租率</strong>（越低越是高档地段）占35%。年+20%满分，0%为50分。"],["地铁","19%","到最近地铁站的步行距离。≤300m 100分，≥1.5km 0分（线性）。"],["学区","19%","到最近小学的距离。≤150m 100分，≥1.2km 0分（线性）。"],["成交稳定","14%","近期成交价的变异系数（标准差÷均值）越小越加分。样本少于2笔为中性（60分）。"],["小区规模","10%","≥2,000户 100分，≤300户 20分（线性）。"],["房龄","10%","竣工2年内 100分，≥35年 10分（线性）。"],["成交活跃","5%","近6个月成交笔数。≥15笔 100分，0笔 30分。"],["预算契合","25%<br/><span style=\"font-size:0.8em;color:var(--text-muted)\">填预算时</span>","在不超预算的户型中，越接近预算越加分。填了预算才加入此项，且权重最大。"]],"howtoP2":"※ 价格趋势按<strong>每月每㎡均价</strong>计算，以消除成交户型不同带来的失真。小区无自有全租率时使用<strong>地区平均</strong>，并在卡片上标注“(地区)”。本评分为公开成交·公共数据的<strong>参考指标</strong>，不保证投资收益。","sampleNote":"所示信息为参考示例，签约前请务必亲自核实成交价、现场与权利关系。","close":"关闭","mapAria":"小区位置地图","recentDeals":"最近成交","thDate":"成交日","thAreaPy":"专用（坪）","thAmount":"金额","moreLink":"在成交价查询查看全部记录 →","noDeals":"暂无成交记录。","curMode":"eok","curPrefix":"","curUnit":"亿","bars":{"fit":"预算","appreciation":"上涨","subway":"地铁","school":"学区","stability":"稳定","liquidity":"活跃","scale":"规模","age":"房龄"},"rankPre":"第","rankSuf":"名","totalScore":"综合评分","units":"户","unitsUnknown":"户数不详","noInfo":"无信息","unknown":"不详","specSubway":"离地铁","specElem":"小学","specBuilt":"竣工","specHouseholds":"户数","specRatio":"全租率","specParking":"每户车位","walk":"步行","min":"分","builtYr":"年","yrOld":"年","about":"约","areaAvg":"(地区)","perUnit":"辆","toPrefix":"到","toSuffix":"","recentDeal":"近期成交","reasons":{"subway":"🚇 {station} 步行{min}分","school":"🎒 {name} {dist}m{zone}","scale":"🏙 {n}户大型社区","age":"🏗 竣工{year}年 准新房","momentum":"📈 近期成交上涨","stability":"🛡 成交价稳定","commute":"🏢 {hub} {min}分","parking":"🅿 每户{per}辆"},"assigned":" 划片","bestLabels":{"appreciation":"上涨预期","subway":"交通","school":"学区","stability":"成交稳定","scale":"小区规模","age":"房龄"},"bestSuffix":"项最佳","relaxedCardPre":"⚠ 未满足 <strong>","relaxedCardSuf":"</strong>，但其他条件优秀故推荐。","filterLabels":{"budget_max":"预算","region":"地区","area_type":"户型","max_age_years":"房龄","subway_distance_max":"离地铁","elementary_distance_max":"离小学","min_households":"户数","commute":"通勤","parking_min":"车位","jeonse_ratio_max":"全租率"},"countMatch":"符合条件的小区 <span class=\"em\">{n}</span> 个 · {sort}","countUnit":"","countRelaxed":"没有完全匹配，为您<span class=\"em\">略微放宽条件</span>推荐","relaxedBanner":"没有满足全部条件的小区，但放宽1~2个条件即可匹配 — 试试放宽筛选。","noMatch":"没有符合条件的小区","emptyRelax":"请放宽条件后重试。","initialEmpty":"在左侧输入<strong>关键词或至少一个条件</strong><br/>我们会按综合评分为您排序推荐","loadFail":"数据加载失败，请稍后重试。","sortLabelsShort":{"score":"评分从高到低","price_asc":"价格从低到高","price_desc":"价格从高到低","recent":"最近成交","momentum":"上涨动能"},"mLatest":"最近成交","mDeals":"成交笔数","mAvg":"平均价","mBuilt":"竣工","mHouseholds":"户数","mStation":"最近车站","mElem":"小学","mRatio":"全租率","mParking":"每户车位","dealsCnt":"笔","py":"坪","ago":{"today":"今天","d":"天前","mo":"个月前","y":"年前"}};
 var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板桥 Pangyo","여의도":"汝矣岛 Yeouido","광화문":"光化门 Gwanghwamun"};
 </script>
 <script>
@@ -334,10 +357,35 @@ var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板桥 Pangyo","여의도
   function num(v) { v = parseFloat(v); return isNaN(v) ? null : v; }
   function hubName(k) { return (typeof HUB_DISPLAY !== 'undefined' && HUB_DISPLAY[k]) || k; }
 
+  // 한글 지역명 → 로마자(개정 로마자 표기 근사). 값(필터)은 한글 유지, 표시만 로마자.
+  var RM_CHO = ['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];
+  var RM_JUNG = ['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'];
+  var RM_JONG = ['','k','k','k','n','n','n','t','l','k','m','l','l','l','p','l','m','p','p','t','t','ng','t','t','k','t','p','t'];
+  var RM_SUFFIX = { '구': 'gu', '군': 'gun', '시': 'si', '동': 'dong', '읍': 'eup', '면': 'myeon', '도': 'do' };
+  function romanizeSyl(ch) {
+    var code = ch.charCodeAt(0) - 0xAC00;
+    if (code < 0 || code > 11171) return ch;
+    return RM_CHO[Math.floor(code / 588)] + RM_JUNG[Math.floor((code % 588) / 28)] + RM_JONG[code % 28];
+  }
+  function romanizeWord(w) {
+    if (!w) return w;
+    // 행정 접미사(구/군/시/동…)는 어간이 2음절 이상일 때만 분리한다.
+    // (대구=Daegu 처럼 접미사가 아닌 1음절 어간 지명이 'Dae-gu'로 잘못 쪼개지는 것 방지)
+    var last = w.slice(-1), stem = w, suf = '';
+    if (RM_SUFFIX[last] && w.length >= 3) { stem = w.slice(0, -1); suf = '-' + RM_SUFFIX[last]; }
+    var r = '';
+    for (var i = 0; i < stem.length; i++) r += romanizeSyl(stem[i]);
+    if (r) r = r.charAt(0).toUpperCase() + r.slice(1);
+    return r + suf;
+  }
+  function romanize(s) { return s ? String(s).split(' ').map(romanizeWord).join(' ') : s; }
+  // 평형 라벨의 한글 '평'을 현지 단위로 치환 (데이터 라벨 예: "85㎡(26평)")
+  function unitLabel(s) { return s ? String(s).replace(/\((\d+)\s*평\)/g, function (_, n) { return '(' + n + ' ' + T.py + ')'; }) : s; }
+
   function readFilters() {
     var f = {};
     var budget = num(form.budget.value);
-    if (budget) f.budget_max = Math.round(budget * 10000);
+    if (budget) f.budget_max = Math.round(budget * (T.budgetScale || 10000));
     if (guSel.value && guSel.value !== 'all') f.region = guSel.value;
     else if (sidoSel.value && sidoSel.value !== 'all') f.region = sidoSel.value;
     if (areaSel.value && areaSel.value !== 'all') f.area_type = areaSel.value;
@@ -504,18 +552,18 @@ var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板桥 Pangyo","여의도
     var house = a.households ? a.households.toLocaleString() + T.units : T.unitsUnknown;
     if (a.builder && a.builder !== '기타') house += (a.households ? ' · ' : '') + esc(a.builder);
     var latest = latestDealOf(a.name);
-    var repLabel = esc(r.rep ? r.rep.label : '');
+    var repLabel = esc(unitLabel(r.rep ? r.rep.label : ''));
     var dealNote = latest ? repLabel + ' · ' + latest + ' (' + ago(daysSince(latest)) + ')' : repLabel + ' ' + T.recentDeal;
     return '' +
       '<article class="apt-card" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region_key || '') + '">' +
         '<span class="rank">' + T.rankPre + rank + T.rankSuf + '</span>' +
         '<div class="apt-head">' +
-          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(a.region) + '</div></div>' +
+          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(romanize(a.region)) + '</div></div>' +
           '<div class="apt-score"><div class="num">' + r.total + '</div><div class="lbl">' + T.totalScore + '</div></div>' +
         '</div>' +
         '<div class="apt-price">' + fmt(r.price) + ' <small>' + dealNote + '</small></div>' +
         '<div class="apt-units">' + (a.units || []).map(function (u) {
-          return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(u.label) + ' ' + fmt(u.recent_price) + '</span>';
+          return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(unitLabel(u.label)) + ' ' + fmt(u.recent_price) + '</span>';
         }).join('') + '</div>' +
         relaxed +
         '<div class="apt-spec">' +
@@ -568,7 +616,7 @@ var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板桥 Pangyo","여의도
 
   // ── 단지 상세 팝업 ──
   var aptModal = document.getElementById('aptModal');
-  var aptMap = null, aptMapInit = false, aptMarker = null;
+  var finderMap = null;   // TopdaKMap 어댑터(카카오 우선, 실패 시 Leaflet 폴백)
 
   function findApt(name, regionKey) {
     for (var i = 0; i < DATA.length; i++) {
@@ -578,31 +626,33 @@ var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板桥 Pangyo","여의도
     return null;
   }
 
-  function ensureAptMap() {
-    if (aptMapInit) return;
-    if (typeof L === 'undefined') return;
-    aptMap = L.map('aptModalMap', { zoomControl: true, scrollWheelZoom: false });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; OpenStreetMap' }).addTo(aptMap);
-    aptMapInit = true;
-  }
-
-  function renderAptMap(a) {
+  // 상세 팝업 지도 — TopdaKMap(카카오 우선, 도메인 미등록/로컬은 Leaflet 폴백).
+  // 어댑터를 한 번만 만들고 이후엔 재중심(setCenter)만 해서 모달 재오픈에 재사용한다.
+  function showFinderMap(a) {
     var mapEl = document.getElementById('aptModalMap');
     if (a.lat == null || a.lng == null) { mapEl.style.display = 'none'; return; }
     mapEl.style.display = '';
-    ensureAptMap();
-    if (!aptMapInit) return;
-    aptMap.setView([a.lat, a.lng], 16);
-    if (aptMarker) aptMap.removeLayer(aptMarker);
-    aptMarker = L.marker([a.lat, a.lng]).addTo(aptMap);
-    setTimeout(function () { aptMap.invalidateSize(); aptMap.setView([a.lat, a.lng], 16); }, 60);
+    function place(ad) {
+      if (!ad) return;
+      finderMap = ad;
+      ad.clear();
+      if (ad.relayout) ad.relayout();
+      ad.setCenter(a.lat, a.lng);
+      ad.addCircle(a.lat, a.lng, { fillColor: '#2563eb', radius: 10, title: a.name });
+      // 모달이 방금 표시돼 컨테이너 크기가 잡히기 전이면 한 번 더 재배치·재중심.
+      setTimeout(function () { if (ad.relayout) ad.relayout(); ad.setCenter(a.lat, a.lng); }, 90);
+    }
+    if (finderMap) { place(finderMap); return; }
+    if (typeof window.TopdaKMap !== 'undefined') {
+      window.TopdaKMap.init('aptModalMap', { center: [a.lat, a.lng], level: 3, zoom: 16, maxZoom: 16 }, place);
+    }
   }
 
   function openAptModal(name, regionKey) {
     var a = findApt(name, regionKey);
     if (!a) return;
     document.getElementById('aptModalTitle').textContent = a.name;
-    document.getElementById('aptModalSub').textContent = a.region || '';
+    document.getElementById('aptModalSub').textContent = romanize(a.region || '');
 
     var agg = DEALS_BY_APT[a.name] || { prices: [] };
     var deals = agg.prices.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; });
@@ -632,7 +682,7 @@ var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板桥 Pangyo","여의도
 
     document.getElementById('aptModalMore').href = '../../calculators/transactions.html?q=' + encodeURIComponent(a.name);
 
-    renderAptMap(a);
+    showFinderMap(a);
     aptModal.classList.add('open');
     aptModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -677,7 +727,7 @@ var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板桥 Pangyo","여의도
     });
     gus.sort(function (a, b) { return guOf({ region_key: a }).localeCompare(guOf({ region_key: b }), 'ko'); })
       .forEach(function (key) {
-        var o = document.createElement('option'); o.value = key; o.textContent = guOf({ region_key: key }); guSel.appendChild(o);
+        var o = document.createElement('option'); o.value = key; o.textContent = romanize(guOf({ region_key: key })); guSel.appendChild(o);
       });
   }
   sidoSel.addEventListener('change', function () { fillGu(); render(); });
@@ -746,7 +796,7 @@ var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板桥 Pangyo","여의도
     var sidos = [];
     DATA.forEach(function (a) { var s = sidoOf(a); if (s && sidos.indexOf(s) < 0) sidos.push(s); });
     R.sortSidos(sidos).forEach(function (s) {
-      var o = document.createElement('option'); o.value = s; o.textContent = s; sidoSel.appendChild(o);
+      var o = document.createElement('option'); o.value = s; o.textContent = romanize(s); sidoSel.appendChild(o);
     });
     applyUrlParams();
     render();

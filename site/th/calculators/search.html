@@ -72,6 +72,27 @@
   .finder-empty { border: 1px dashed var(--border, #d1d5db); border-radius: 14px; padding: 28px; text-align: center; color: var(--text-muted); }
   .finder-relaxed-banner { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; }
   .finder-howto-toggle { background: none; border: 0; padding: 0; margin-left: 4px; color: var(--accent, #2563eb); font-weight: 600; cursor: pointer; font-size: inherit; }
+  .finder-note { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; border-radius: 10px; padding: 8px 11px; font-size: 0.78rem; line-height: 1.55; margin-top: 6px; }
+  .apt-modal { position: fixed; inset: 0; display: none; z-index: 1000; }
+  .apt-modal.open { display: block; }
+  .apt-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.5); }
+  .apt-modal-panel { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: min(560px, calc(100vw - 32px)); max-height: 90vh; overflow: auto; background: #fff; border-radius: 18px; padding: 22px; box-shadow: 0 20px 60px -16px rgba(15,23,42,0.4); }
+  .apt-modal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .apt-modal-head h2 { margin: 0; font-size: 1.2rem; letter-spacing: -0.02em; }
+  .apt-modal-sub { margin: 4px 0 0; color: var(--text-muted); font-size: 0.86rem; }
+  .apt-modal-close { background: none; border: 0; padding: 4px; cursor: pointer; color: var(--text-muted); flex-shrink: 0; }
+  .apt-modal-close:hover { color: var(--text); }
+  #aptModalMap { width: 100%; height: 200px; border-radius: 12px; border: 1px solid var(--border, #e5e7eb); background: #f1f5f9; margin-bottom: 14px; }
+  .apt-modal-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 8px; margin-bottom: 16px; }
+  .apt-modal-meta .item { background: var(--surface-2, #f8fafc); border-radius: 10px; padding: 8px 10px; }
+  .apt-modal-meta .lbl { font-size: 0.72rem; color: var(--text-muted); }
+  .apt-modal-meta .val { font-size: 0.98rem; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .apt-modal-list h3 { font-size: 0.9rem; margin: 0 0 8px; }
+  .apt-modal-list table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .apt-modal-list th, .apt-modal-list td { padding: 7px 8px; border-bottom: 1px solid var(--border, #eee); text-align: left; }
+  .apt-modal-list td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .apt-modal-more { display: inline-block; margin-top: 14px; color: var(--accent, #2563eb); font-weight: 600; text-decoration: none; font-size: 0.88rem; }
+  .apt-modal-more:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -113,8 +134,9 @@
 
       <div class="finder-field">
         <label for="f-search">ชื่อโครงการ · คำค้น</label>
-        <input id="f-search" name="search" type="search" placeholder="เช่น Helio City, Raemian" />
-        <span class="finder-hint">ค้นเร็วด้วยชื่อโครงการหรือพื้นที่</span>
+        <input id="f-search" name="search" type="search" placeholder="헬리오시티, 래미안" />
+        <span class="finder-hint">ค้นด้วยชื่อโครงการหรือพื้นที่</span>
+        <div class="finder-note">⌨️ การค้นหาจับคู่เฉพาะภาษาเกาหลี — พิมพ์ชื่อภาษาเกาหลี (เช่น 헬리오시티) หรือชื่อพื้นที่ อักษรโรมันเช่น “Helio” จะไม่ตรง รายการพื้นที่ด้านล่างแสดงเป็นภาษาอังกฤษเพื่ออ้างอิง</div>
       </div>
 
       <div class="finder-field">
@@ -130,10 +152,10 @@
 
       <div class="finder-field">
         <label for="f-budget">งบประมาณ (สูงสุด)</label>
-        <div class="finder-suffix" data-suffix="억">
-          <input id="f-budget" name="budget" type="number" min="0" step="0.5" inputmode="decimal" placeholder="เช่น 15" />
+        <div class="finder-suffix" data-suffix="พันล้าน">
+          <input id="f-budget" name="budget" type="number" min="0" step="0.1" inputmode="decimal" placeholder="1.5" />
         </div>
-        <span class="finder-hint">หน่วย 억 (1 = 100 ล้านวอน) แสดงเฉพาะโครงการที่มียูนิต ≤ ระดับนี้</span>
+        <span class="finder-hint">หน่วยพันล้านวอน (1 = 1,000,000,000 วอน) แสดงเฉพาะโครงการที่มียูนิต ≤ ระดับนี้</span>
       </div>
 
       <div class="finder-field">
@@ -297,9 +319,10 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="../../assets/score.js?v=20260722"></script>
 <script src="../../assets/region.js?v=20260629"></script>
+<script src="../../assets/kmap.js?v=20260722"></script>
 <script src="../../assets/app.js?v=20260722"></script>
 <script>
-var T = {"title":"ค้นหาบ้านตามใจ","metaDesc":"กรอกงบประมาณ พื้นที่ ขนาด อายุอาคาร ระยะถึงสถานี/โรงเรียน และจำนวนยูนิต ระบบจัดอันดับโครงการตามคะแนนรวม กรอกไม่กี่ข้อก็พอ","home":"หน้าแรก","h1":"ค้นหาบ้านตามใจ","intro":"แค่กรอกเงื่อนไข ระบบให้คะแนนโครงการตามโอกาสราคาขึ้น ใกล้รถไฟ เขตโรงเรียน ฯลฯ <strong>กรอกงบแล้วโครงการใกล้ระดับราคานั้นจะแสดงก่อน</strong> ","howtoToggle":"วิธีให้คะแนน ▾","condH":"กรอกเงื่อนไข","searchLabel":"ชื่อโครงการ · คำค้น","searchPh":"เช่น Helio City, Raemian","searchHint":"ค้นเร็วด้วยชื่อโครงการหรือพื้นที่","sortLabel":"จัดเรียง","sortScore":"คะแนนสูงสุด","sortPriceAsc":"ราคาต่ำสุด","sortPriceDesc":"ราคาสูงสุด","sortRecent":"ซื้อขายล่าสุด","sortMomentum":"โมเมนตัมแรงสุด","budgetLabel":"งบประมาณ (สูงสุด)","budgetSuffix":"억","budgetPh":"เช่น 15","budgetHint":"หน่วย 억 (1 = 100 ล้านวอน) แสดงเฉพาะโครงการที่มียูนิต ≤ ระดับนี้","sidoLabel":"พื้นที่ — จังหวัด","guLabel":"พื้นที่ — เขต/อำเภอ","optAll":"ทั้งหมด","areaLabel":"ขนาด (พื้นที่ใช้สอย)","areaAll":"ทั้งหมด","areaSmall":"เล็ก (~60㎡)","areaMs":"มาตรฐาน (60~85㎡)","areaMid":"กลาง (85~102㎡)","areaLarge":"ใหญ่ (102㎡~)","familyLabel":"จำนวนคน (ไม่บังคับ — แนะนำขนาด)","famNone":"ไม่เลือก","fam1":"1–2 คน","fam3":"3 คน","fam4":"4 คนขึ้นไป","ageLabel":"อายุอาคารสูงสุด","ageSuffix":"ปี","agePh":"เช่น 15","subwayLabel":"ระยะถึงสถานี (สูงสุด)","elemLabel":"ระยะถึงโรงเรียนประถม (สูงสุด)","mSuffix":"m","subwayPh":"เช่น 500","elemPh":"เช่น 400","houseLabel":"จำนวนยูนิตขั้นต่ำ","houseSuffix":"ยูนิต","housePh":"เช่น 1000","commuteLabel":"เดินทางไปย่านธุรกิจ","commuteNone":"ไม่เลือก","commuteSuffix":"นาที","commutePh":"40","commuteHint":"เลือกย่านธุรกิจและเวลาเดินทางสูงสุด (นาที) จะแสดงเฉพาะโครงการในเวลานั้น","parkingLabel":"ที่จอดขั้นต่ำต่อยูนิต","parkingSuffix":"คัน","parkingPh":"เช่น 1.2","ratioLabel":"เพดานอัตรา Jeonse","ratioSuffix":"%","ratioPh":"เช่น 55","ratioHint":"อัตรายิ่งต่ำมักเป็นย่านราคาสูงและเป็นที่ต้องการมากกว่า","submit":"รับคำแนะนำ","reset":"รีเซ็ต","loading":"กำลังโหลดโครงการ…","howtoSummary":"วิธีคำนวณคะแนนรวม","howtoP1":"แต่ละปัจจัยให้คะแนน 0–100 แล้ว<strong>ถัวเฉลี่ยแบบถ่วงน้ำหนัก</strong>เป็นคะแนนรวม (0–100) ปัจจัยที่ไม่มีข้อมูลหรือไม่ได้กรอกจะถูกตัดออก และกระจายน้ำหนักไปยังปัจจัยที่เหลือ","thFactor":"ปัจจัย","thWeight":"น้ำหนัก","thFormula":"สูตรคะแนน (0–100)","rows":[["โอกาสขึ้นราคา","23%","แนวโน้ม<strong>ราคาต่อ㎡</strong>ล่าสุด (ความชันถดถอย → ต่อปี) 65% บวก<strong>อัตรา Jeonse</strong> (ยิ่งต่ำยิ่งเป็นย่านพรีเมียม) 35% +20%/ปี = เต็ม, 0% = 50"],["ใกล้รถไฟ","19%","ระยะเดินถึงสถานีใกล้สุด ≤300m = 100, ≥1.5km = 0 (เชิงเส้น)"],["เขตโรงเรียน","19%","ระยะถึงโรงเรียนประถมใกล้สุด ≤150m = 100, ≥1.2km = 0 (เชิงเส้น)"],["เสถียรราคา","14%","ค่าสัมประสิทธิ์การผันแปร (SD ÷ ค่าเฉลี่ย) ของราคาล่าสุดยิ่งต่ำยิ่งได้คะแนน ต่ำกว่า 2 ตัวอย่าง = กลาง (60)"],["ขนาดโครงการ","10%","≥2,000 ยูนิต = 100, ≤300 = 20 (เชิงเส้น)"],["อายุอาคาร","10%","สร้างภายใน 2 ปี = 100, ≥35 ปี = 10 (เชิงเส้น)"],["สภาพคล่อง","5%","จำนวนซื้อขาย 6 เดือนล่าสุด ≥15 = 100, 0 = 30"],["เข้ากับงบ","25%<br/><span style=\"font-size:0.8em;color:var(--text-muted)\">เมื่อกรอกงบ</span>","ในยูนิตที่ ≤ งบ ยิ่งใกล้งบยิ่งได้คะแนน การกรอกงบจะเพิ่มปัจจัยนี้ด้วยน้ำหนักสูงสุด"]],"howtoP2":"※ แนวโน้มราคาใช้<strong>ราคาเฉลี่ยต่อ㎡รายเดือน</strong>เพื่อลดความบิดเบือนจากขนาดที่ซื้อขาย เมื่อโครงการไม่มีอัตรา Jeonse ของตัวเอง จะใช้<strong>ค่าเฉลี่ยพื้นที่</strong>และระบุ \"(พื้นที่)\" บนการ์ด คะแนนนี้เป็น<strong>ตัวชี้วัดอ้างอิง</strong>จากข้อมูลซื้อขาย/ข้อมูลเปิด ไม่รับประกันผลตอบแทน","sampleNote":"ตัวเลขเป็นตัวอย่างอ้างอิง โปรดตรวจสอบราคา สถานที่จริง และสถานะทางกฎหมายด้วยตนเองก่อนเซ็นสัญญาเสมอ","close":"ปิด","mapAria":"แผนที่ตำแหน่งโครงการ","recentDeals":"ซื้อขายล่าสุด","thDate":"วันที่","thAreaPy":"พื้นที่ (พยอง)","thAmount":"จำนวนเงิน","moreLink":"ดูทั้งหมดที่ค้นราคาซื้อขาย →","noDeals":"ไม่มีข้อมูลการซื้อขาย","curMode":"bn","curPrefix":"₩","curUnit":" พันล้าน","bars":{"fit":"งบ","appreciation":"ขึ้นราคา","subway":"ใกล้รถไฟ","school":"โรงเรียน","stability":"เสถียร","liquidity":"สภาพคล่อง","scale":"ขนาด","age":"อายุ"},"rankPre":"#","rankSuf":"","totalScore":"คะแนนรวม","units":" ยูนิต","unitsUnknown":"ไม่ทราบจำนวนยูนิต","noInfo":"ไม่มีข้อมูล","unknown":"ไม่ทราบ","specSubway":"ถึงสถานี","specElem":"ประถม","specBuilt":"สร้าง","specHouseholds":"ยูนิต","specRatio":"อัตรา Jeonse","specParking":"จอด/ยูนิต","walk":"เดิน","min":" นาที","builtYr":"","yrOld":" ปี","about":"~","areaAvg":"(พื้นที่)","perUnit":" คัน","toPrefix":"ถึง ","toSuffix":"","recentDeal":"ซื้อขายล่าสุด","reasons":{"subway":"🚇 {station} · เดิน {min} นาที","school":"🎒 {name} {dist}m{zone}","scale":"🏙 โครงการใหญ่ {n} ยูนิต","age":"🏗 สร้างปี {year} เกือบใหม่","momentum":"📈 ราคาล่าสุดขาขึ้น","stability":"🛡 ราคานิ่ง","commute":"🏢 {hub} {min} นาที","parking":"🅿 {per}/ยูนิต"},"assigned":" (เขต)","bestLabels":{"appreciation":"โอกาสขึ้นราคา","subway":"คมนาคม","school":"เขตโรงเรียน","stability":"เสถียรราคา","scale":"ขนาดโครงการ","age":"อายุอาคาร"},"bestSuffix":" เด่นที่สุด","relaxedCardPre":"⚠ ไม่ผ่าน <strong>","relaxedCardSuf":"</strong> แต่แนะนำเพราะปัจจัยอื่นดีเด่น","filterLabels":{"budget_max":"งบ","region":"พื้นที่","area_type":"ขนาด","max_age_years":"อายุ","subway_distance_max":"ระยะสถานี","elementary_distance_max":"ระยะโรงเรียน","min_households":"ยูนิต","commute":"เดินทาง","parking_min":"ที่จอด","jeonse_ratio_max":"อัตรา Jeonse"},"countMatch":"โครงการที่ตรง <span class=\"em\">{n}</span> แห่ง · {sort}","countUnit":"","countRelaxed":"ไม่มีที่ตรงพอดี — แนะนำแบบ<span class=\"em\">ผ่อนเงื่อนไขเล็กน้อย</span>","relaxedBanner":"ไม่มีโครงการที่ผ่านทุกเงื่อนไข แต่ผ่านหากผ่อน 1–2 เงื่อนไข ลองขยายตัวกรอง","noMatch":"ไม่มีโครงการที่ตรงเงื่อนไข","emptyRelax":"โปรดผ่อนเงื่อนไขแล้วลองใหม่","initialEmpty":"กรอก<strong>คำค้นหรืออย่างน้อยหนึ่งเงื่อนไข</strong>ทางซ้าย<br/>เราจะจัดอันดับโครงการที่ตรงตามคะแนนรวม","loadFail":"โหลดข้อมูลไม่สำเร็จ โปรดลองใหม่ภายหลัง","sortLabelsShort":{"score":"คะแนนสูงสุด","price_asc":"ราคาต่ำสุด","price_desc":"ราคาสูงสุด","recent":"ล่าสุด","momentum":"โมเมนตัมแรง"},"mLatest":"ล่าสุด","mDeals":"จำนวนซื้อขาย","mAvg":"เฉลี่ย","mBuilt":"สร้าง","mHouseholds":"ยูนิต","mStation":"สถานีใกล้สุด","mElem":"ประถม","mRatio":"อัตรา Jeonse","mParking":"จอด/ยูนิต","dealsCnt":" รายการ","py":"พยอง","ago":{"today":"วันนี้","d":" วันก่อน","mo":" เดือนก่อน","y":" ปีก่อน"}};
+var T = {"title":"ค้นหาบ้านตามใจ","metaDesc":"กรอกงบประมาณ พื้นที่ ขนาด อายุอาคาร ระยะถึงสถานี/โรงเรียน และจำนวนยูนิต ระบบจัดอันดับโครงการตามคะแนนรวม กรอกไม่กี่ข้อก็พอ","home":"หน้าแรก","h1":"ค้นหาบ้านตามใจ","intro":"แค่กรอกเงื่อนไข ระบบให้คะแนนโครงการตามโอกาสราคาขึ้น ใกล้รถไฟ เขตโรงเรียน ฯลฯ <strong>กรอกงบแล้วโครงการใกล้ระดับราคานั้นจะแสดงก่อน</strong> ","howtoToggle":"วิธีให้คะแนน ▾","condH":"กรอกเงื่อนไข","searchLabel":"ชื่อโครงการ · คำค้น","searchPh":"헬리오시티, 래미안","searchHint":"ค้นด้วยชื่อโครงการหรือพื้นที่","searchNote":"⌨️ การค้นหาจับคู่เฉพาะภาษาเกาหลี — พิมพ์ชื่อภาษาเกาหลี (เช่น 헬리오시티) หรือชื่อพื้นที่ อักษรโรมันเช่น “Helio” จะไม่ตรง รายการพื้นที่ด้านล่างแสดงเป็นภาษาอังกฤษเพื่ออ้างอิง","sortLabel":"จัดเรียง","sortScore":"คะแนนสูงสุด","sortPriceAsc":"ราคาต่ำสุด","sortPriceDesc":"ราคาสูงสุด","sortRecent":"ซื้อขายล่าสุด","sortMomentum":"โมเมนตัมแรงสุด","budgetLabel":"งบประมาณ (สูงสุด)","budgetSuffix":"พันล้าน","budgetPh":"1.5","budgetStep":"0.1","budgetScale":100000,"budgetHint":"หน่วยพันล้านวอน (1 = 1,000,000,000 วอน) แสดงเฉพาะโครงการที่มียูนิต ≤ ระดับนี้","sidoLabel":"พื้นที่ — จังหวัด","guLabel":"พื้นที่ — เขต/อำเภอ","optAll":"ทั้งหมด","areaLabel":"ขนาด (พื้นที่ใช้สอย)","areaAll":"ทั้งหมด","areaSmall":"เล็ก (~60㎡)","areaMs":"มาตรฐาน (60~85㎡)","areaMid":"กลาง (85~102㎡)","areaLarge":"ใหญ่ (102㎡~)","familyLabel":"จำนวนคน (ไม่บังคับ — แนะนำขนาด)","famNone":"ไม่เลือก","fam1":"1–2 คน","fam3":"3 คน","fam4":"4 คนขึ้นไป","ageLabel":"อายุอาคารสูงสุด","ageSuffix":"ปี","agePh":"เช่น 15","subwayLabel":"ระยะถึงสถานี (สูงสุด)","elemLabel":"ระยะถึงโรงเรียนประถม (สูงสุด)","mSuffix":"m","subwayPh":"เช่น 500","elemPh":"เช่น 400","houseLabel":"จำนวนยูนิตขั้นต่ำ","houseSuffix":"ยูนิต","housePh":"เช่น 1000","commuteLabel":"เดินทางไปย่านธุรกิจ","commuteNone":"ไม่เลือก","commuteSuffix":"นาที","commutePh":"40","commuteHint":"เลือกย่านธุรกิจและเวลาเดินทางสูงสุด (นาที) จะแสดงเฉพาะโครงการในเวลานั้น","parkingLabel":"ที่จอดขั้นต่ำต่อยูนิต","parkingSuffix":"คัน","parkingPh":"เช่น 1.2","ratioLabel":"เพดานอัตรา Jeonse","ratioSuffix":"%","ratioPh":"เช่น 55","ratioHint":"อัตรายิ่งต่ำมักเป็นย่านราคาสูงและเป็นที่ต้องการมากกว่า","submit":"รับคำแนะนำ","reset":"รีเซ็ต","loading":"กำลังโหลดโครงการ…","howtoSummary":"วิธีคำนวณคะแนนรวม","howtoP1":"แต่ละปัจจัยให้คะแนน 0–100 แล้ว<strong>ถัวเฉลี่ยแบบถ่วงน้ำหนัก</strong>เป็นคะแนนรวม (0–100) ปัจจัยที่ไม่มีข้อมูลหรือไม่ได้กรอกจะถูกตัดออก และกระจายน้ำหนักไปยังปัจจัยที่เหลือ","thFactor":"ปัจจัย","thWeight":"น้ำหนัก","thFormula":"สูตรคะแนน (0–100)","rows":[["โอกาสขึ้นราคา","23%","แนวโน้ม<strong>ราคาต่อ㎡</strong>ล่าสุด (ความชันถดถอย → ต่อปี) 65% บวก<strong>อัตรา Jeonse</strong> (ยิ่งต่ำยิ่งเป็นย่านพรีเมียม) 35% +20%/ปี = เต็ม, 0% = 50"],["ใกล้รถไฟ","19%","ระยะเดินถึงสถานีใกล้สุด ≤300m = 100, ≥1.5km = 0 (เชิงเส้น)"],["เขตโรงเรียน","19%","ระยะถึงโรงเรียนประถมใกล้สุด ≤150m = 100, ≥1.2km = 0 (เชิงเส้น)"],["เสถียรราคา","14%","ค่าสัมประสิทธิ์การผันแปร (SD ÷ ค่าเฉลี่ย) ของราคาล่าสุดยิ่งต่ำยิ่งได้คะแนน ต่ำกว่า 2 ตัวอย่าง = กลาง (60)"],["ขนาดโครงการ","10%","≥2,000 ยูนิต = 100, ≤300 = 20 (เชิงเส้น)"],["อายุอาคาร","10%","สร้างภายใน 2 ปี = 100, ≥35 ปี = 10 (เชิงเส้น)"],["สภาพคล่อง","5%","จำนวนซื้อขาย 6 เดือนล่าสุด ≥15 = 100, 0 = 30"],["เข้ากับงบ","25%<br/><span style=\"font-size:0.8em;color:var(--text-muted)\">เมื่อกรอกงบ</span>","ในยูนิตที่ ≤ งบ ยิ่งใกล้งบยิ่งได้คะแนน การกรอกงบจะเพิ่มปัจจัยนี้ด้วยน้ำหนักสูงสุด"]],"howtoP2":"※ แนวโน้มราคาใช้<strong>ราคาเฉลี่ยต่อ㎡รายเดือน</strong>เพื่อลดความบิดเบือนจากขนาดที่ซื้อขาย เมื่อโครงการไม่มีอัตรา Jeonse ของตัวเอง จะใช้<strong>ค่าเฉลี่ยพื้นที่</strong>และระบุ \"(พื้นที่)\" บนการ์ด คะแนนนี้เป็น<strong>ตัวชี้วัดอ้างอิง</strong>จากข้อมูลซื้อขาย/ข้อมูลเปิด ไม่รับประกันผลตอบแทน","sampleNote":"ตัวเลขเป็นตัวอย่างอ้างอิง โปรดตรวจสอบราคา สถานที่จริง และสถานะทางกฎหมายด้วยตนเองก่อนเซ็นสัญญาเสมอ","close":"ปิด","mapAria":"แผนที่ตำแหน่งโครงการ","recentDeals":"ซื้อขายล่าสุด","thDate":"วันที่","thAreaPy":"พื้นที่ (พยอง)","thAmount":"จำนวนเงิน","moreLink":"ดูทั้งหมดที่ค้นราคาซื้อขาย →","noDeals":"ไม่มีข้อมูลการซื้อขาย","curMode":"bn","curPrefix":"₩","curUnit":" พันล้าน","bars":{"fit":"งบ","appreciation":"ขึ้นราคา","subway":"ใกล้รถไฟ","school":"โรงเรียน","stability":"เสถียร","liquidity":"สภาพคล่อง","scale":"ขนาด","age":"อายุ"},"rankPre":"#","rankSuf":"","totalScore":"คะแนนรวม","units":" ยูนิต","unitsUnknown":"ไม่ทราบจำนวนยูนิต","noInfo":"ไม่มีข้อมูล","unknown":"ไม่ทราบ","specSubway":"ถึงสถานี","specElem":"ประถม","specBuilt":"สร้าง","specHouseholds":"ยูนิต","specRatio":"อัตรา Jeonse","specParking":"จอด/ยูนิต","walk":"เดิน","min":" นาที","builtYr":"","yrOld":" ปี","about":"~","areaAvg":"(พื้นที่)","perUnit":" คัน","toPrefix":"ถึง ","toSuffix":"","recentDeal":"ซื้อขายล่าสุด","reasons":{"subway":"🚇 {station} · เดิน {min} นาที","school":"🎒 {name} {dist}m{zone}","scale":"🏙 โครงการใหญ่ {n} ยูนิต","age":"🏗 สร้างปี {year} เกือบใหม่","momentum":"📈 ราคาล่าสุดขาขึ้น","stability":"🛡 ราคานิ่ง","commute":"🏢 {hub} {min} นาที","parking":"🅿 {per}/ยูนิต"},"assigned":" (เขต)","bestLabels":{"appreciation":"โอกาสขึ้นราคา","subway":"คมนาคม","school":"เขตโรงเรียน","stability":"เสถียรราคา","scale":"ขนาดโครงการ","age":"อายุอาคาร"},"bestSuffix":" เด่นที่สุด","relaxedCardPre":"⚠ ไม่ผ่าน <strong>","relaxedCardSuf":"</strong> แต่แนะนำเพราะปัจจัยอื่นดีเด่น","filterLabels":{"budget_max":"งบ","region":"พื้นที่","area_type":"ขนาด","max_age_years":"อายุ","subway_distance_max":"ระยะสถานี","elementary_distance_max":"ระยะโรงเรียน","min_households":"ยูนิต","commute":"เดินทาง","parking_min":"ที่จอด","jeonse_ratio_max":"อัตรา Jeonse"},"countMatch":"โครงการที่ตรง <span class=\"em\">{n}</span> แห่ง · {sort}","countUnit":"","countRelaxed":"ไม่มีที่ตรงพอดี — แนะนำแบบ<span class=\"em\">ผ่อนเงื่อนไขเล็กน้อย</span>","relaxedBanner":"ไม่มีโครงการที่ผ่านทุกเงื่อนไข แต่ผ่านหากผ่อน 1–2 เงื่อนไข ลองขยายตัวกรอง","noMatch":"ไม่มีโครงการที่ตรงเงื่อนไข","emptyRelax":"โปรดผ่อนเงื่อนไขแล้วลองใหม่","initialEmpty":"กรอก<strong>คำค้นหรืออย่างน้อยหนึ่งเงื่อนไข</strong>ทางซ้าย<br/>เราจะจัดอันดับโครงการที่ตรงตามคะแนนรวม","loadFail":"โหลดข้อมูลไม่สำเร็จ โปรดลองใหม่ภายหลัง","sortLabelsShort":{"score":"คะแนนสูงสุด","price_asc":"ราคาต่ำสุด","price_desc":"ราคาสูงสุด","recent":"ล่าสุด","momentum":"โมเมนตัมแรง"},"mLatest":"ล่าสุด","mDeals":"จำนวนซื้อขาย","mAvg":"เฉลี่ย","mBuilt":"สร้าง","mHouseholds":"ยูนิต","mStation":"สถานีใกล้สุด","mElem":"ประถม","mRatio":"อัตรา Jeonse","mParking":"จอด/ยูนิต","dealsCnt":" รายการ","py":"พยอง","ago":{"today":"วันนี้","d":" วันก่อน","mo":" เดือนก่อน","y":" ปีก่อน"}};
 var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","광화문":"Gwanghwamun"};
 </script>
 <script>
@@ -334,10 +357,35 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
   function num(v) { v = parseFloat(v); return isNaN(v) ? null : v; }
   function hubName(k) { return (typeof HUB_DISPLAY !== 'undefined' && HUB_DISPLAY[k]) || k; }
 
+  // 한글 지역명 → 로마자(개정 로마자 표기 근사). 값(필터)은 한글 유지, 표시만 로마자.
+  var RM_CHO = ['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];
+  var RM_JUNG = ['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'];
+  var RM_JONG = ['','k','k','k','n','n','n','t','l','k','m','l','l','l','p','l','m','p','p','t','t','ng','t','t','k','t','p','t'];
+  var RM_SUFFIX = { '구': 'gu', '군': 'gun', '시': 'si', '동': 'dong', '읍': 'eup', '면': 'myeon', '도': 'do' };
+  function romanizeSyl(ch) {
+    var code = ch.charCodeAt(0) - 0xAC00;
+    if (code < 0 || code > 11171) return ch;
+    return RM_CHO[Math.floor(code / 588)] + RM_JUNG[Math.floor((code % 588) / 28)] + RM_JONG[code % 28];
+  }
+  function romanizeWord(w) {
+    if (!w) return w;
+    // 행정 접미사(구/군/시/동…)는 어간이 2음절 이상일 때만 분리한다.
+    // (대구=Daegu 처럼 접미사가 아닌 1음절 어간 지명이 'Dae-gu'로 잘못 쪼개지는 것 방지)
+    var last = w.slice(-1), stem = w, suf = '';
+    if (RM_SUFFIX[last] && w.length >= 3) { stem = w.slice(0, -1); suf = '-' + RM_SUFFIX[last]; }
+    var r = '';
+    for (var i = 0; i < stem.length; i++) r += romanizeSyl(stem[i]);
+    if (r) r = r.charAt(0).toUpperCase() + r.slice(1);
+    return r + suf;
+  }
+  function romanize(s) { return s ? String(s).split(' ').map(romanizeWord).join(' ') : s; }
+  // 평형 라벨의 한글 '평'을 현지 단위로 치환 (데이터 라벨 예: "85㎡(26평)")
+  function unitLabel(s) { return s ? String(s).replace(/\((\d+)\s*평\)/g, function (_, n) { return '(' + n + ' ' + T.py + ')'; }) : s; }
+
   function readFilters() {
     var f = {};
     var budget = num(form.budget.value);
-    if (budget) f.budget_max = Math.round(budget * 10000);
+    if (budget) f.budget_max = Math.round(budget * (T.budgetScale || 10000));
     if (guSel.value && guSel.value !== 'all') f.region = guSel.value;
     else if (sidoSel.value && sidoSel.value !== 'all') f.region = sidoSel.value;
     if (areaSel.value && areaSel.value !== 'all') f.area_type = areaSel.value;
@@ -504,18 +552,18 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
     var house = a.households ? a.households.toLocaleString() + T.units : T.unitsUnknown;
     if (a.builder && a.builder !== '기타') house += (a.households ? ' · ' : '') + esc(a.builder);
     var latest = latestDealOf(a.name);
-    var repLabel = esc(r.rep ? r.rep.label : '');
+    var repLabel = esc(unitLabel(r.rep ? r.rep.label : ''));
     var dealNote = latest ? repLabel + ' · ' + latest + ' (' + ago(daysSince(latest)) + ')' : repLabel + ' ' + T.recentDeal;
     return '' +
       '<article class="apt-card" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region_key || '') + '">' +
         '<span class="rank">' + T.rankPre + rank + T.rankSuf + '</span>' +
         '<div class="apt-head">' +
-          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(a.region) + '</div></div>' +
+          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(romanize(a.region)) + '</div></div>' +
           '<div class="apt-score"><div class="num">' + r.total + '</div><div class="lbl">' + T.totalScore + '</div></div>' +
         '</div>' +
         '<div class="apt-price">' + fmt(r.price) + ' <small>' + dealNote + '</small></div>' +
         '<div class="apt-units">' + (a.units || []).map(function (u) {
-          return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(u.label) + ' ' + fmt(u.recent_price) + '</span>';
+          return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(unitLabel(u.label)) + ' ' + fmt(u.recent_price) + '</span>';
         }).join('') + '</div>' +
         relaxed +
         '<div class="apt-spec">' +
@@ -568,7 +616,7 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
 
   // ── 단지 상세 팝업 ──
   var aptModal = document.getElementById('aptModal');
-  var aptMap = null, aptMapInit = false, aptMarker = null;
+  var finderMap = null;   // TopdaKMap 어댑터(카카오 우선, 실패 시 Leaflet 폴백)
 
   function findApt(name, regionKey) {
     for (var i = 0; i < DATA.length; i++) {
@@ -578,31 +626,33 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
     return null;
   }
 
-  function ensureAptMap() {
-    if (aptMapInit) return;
-    if (typeof L === 'undefined') return;
-    aptMap = L.map('aptModalMap', { zoomControl: true, scrollWheelZoom: false });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; OpenStreetMap' }).addTo(aptMap);
-    aptMapInit = true;
-  }
-
-  function renderAptMap(a) {
+  // 상세 팝업 지도 — TopdaKMap(카카오 우선, 도메인 미등록/로컬은 Leaflet 폴백).
+  // 어댑터를 한 번만 만들고 이후엔 재중심(setCenter)만 해서 모달 재오픈에 재사용한다.
+  function showFinderMap(a) {
     var mapEl = document.getElementById('aptModalMap');
     if (a.lat == null || a.lng == null) { mapEl.style.display = 'none'; return; }
     mapEl.style.display = '';
-    ensureAptMap();
-    if (!aptMapInit) return;
-    aptMap.setView([a.lat, a.lng], 16);
-    if (aptMarker) aptMap.removeLayer(aptMarker);
-    aptMarker = L.marker([a.lat, a.lng]).addTo(aptMap);
-    setTimeout(function () { aptMap.invalidateSize(); aptMap.setView([a.lat, a.lng], 16); }, 60);
+    function place(ad) {
+      if (!ad) return;
+      finderMap = ad;
+      ad.clear();
+      if (ad.relayout) ad.relayout();
+      ad.setCenter(a.lat, a.lng);
+      ad.addCircle(a.lat, a.lng, { fillColor: '#2563eb', radius: 10, title: a.name });
+      // 모달이 방금 표시돼 컨테이너 크기가 잡히기 전이면 한 번 더 재배치·재중심.
+      setTimeout(function () { if (ad.relayout) ad.relayout(); ad.setCenter(a.lat, a.lng); }, 90);
+    }
+    if (finderMap) { place(finderMap); return; }
+    if (typeof window.TopdaKMap !== 'undefined') {
+      window.TopdaKMap.init('aptModalMap', { center: [a.lat, a.lng], level: 3, zoom: 16, maxZoom: 16 }, place);
+    }
   }
 
   function openAptModal(name, regionKey) {
     var a = findApt(name, regionKey);
     if (!a) return;
     document.getElementById('aptModalTitle').textContent = a.name;
-    document.getElementById('aptModalSub').textContent = a.region || '';
+    document.getElementById('aptModalSub').textContent = romanize(a.region || '');
 
     var agg = DEALS_BY_APT[a.name] || { prices: [] };
     var deals = agg.prices.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; });
@@ -632,7 +682,7 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
 
     document.getElementById('aptModalMore').href = '../../calculators/transactions.html?q=' + encodeURIComponent(a.name);
 
-    renderAptMap(a);
+    showFinderMap(a);
     aptModal.classList.add('open');
     aptModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -677,7 +727,7 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
     });
     gus.sort(function (a, b) { return guOf({ region_key: a }).localeCompare(guOf({ region_key: b }), 'ko'); })
       .forEach(function (key) {
-        var o = document.createElement('option'); o.value = key; o.textContent = guOf({ region_key: key }); guSel.appendChild(o);
+        var o = document.createElement('option'); o.value = key; o.textContent = romanize(guOf({ region_key: key })); guSel.appendChild(o);
       });
   }
   sidoSel.addEventListener('change', function () { fillGu(); render(); });
@@ -746,7 +796,7 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
     var sidos = [];
     DATA.forEach(function (a) { var s = sidoOf(a); if (s && sidos.indexOf(s) < 0) sidos.push(s); });
     R.sortSidos(sidos).forEach(function (s) {
-      var o = document.createElement('option'); o.value = s; o.textContent = s; sidoSel.appendChild(o);
+      var o = document.createElement('option'); o.value = s; o.textContent = romanize(s); sidoSel.appendChild(o);
     });
     applyUrlParams();
     render();

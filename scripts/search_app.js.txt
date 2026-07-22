@@ -29,10 +29,35 @@
   function num(v) { v = parseFloat(v); return isNaN(v) ? null : v; }
   function hubName(k) { return (typeof HUB_DISPLAY !== 'undefined' && HUB_DISPLAY[k]) || k; }
 
+  // 한글 지역명 → 로마자(개정 로마자 표기 근사). 값(필터)은 한글 유지, 표시만 로마자.
+  var RM_CHO = ['g','kk','n','d','tt','r','m','b','pp','s','ss','','j','jj','ch','k','t','p','h'];
+  var RM_JUNG = ['a','ae','ya','yae','eo','e','yeo','ye','o','wa','wae','oe','yo','u','wo','we','wi','yu','eu','ui','i'];
+  var RM_JONG = ['','k','k','k','n','n','n','t','l','k','m','l','l','l','p','l','m','p','p','t','t','ng','t','t','k','t','p','t'];
+  var RM_SUFFIX = { '구': 'gu', '군': 'gun', '시': 'si', '동': 'dong', '읍': 'eup', '면': 'myeon', '도': 'do' };
+  function romanizeSyl(ch) {
+    var code = ch.charCodeAt(0) - 0xAC00;
+    if (code < 0 || code > 11171) return ch;
+    return RM_CHO[Math.floor(code / 588)] + RM_JUNG[Math.floor((code % 588) / 28)] + RM_JONG[code % 28];
+  }
+  function romanizeWord(w) {
+    if (!w) return w;
+    // 행정 접미사(구/군/시/동…)는 어간이 2음절 이상일 때만 분리한다.
+    // (대구=Daegu 처럼 접미사가 아닌 1음절 어간 지명이 'Dae-gu'로 잘못 쪼개지는 것 방지)
+    var last = w.slice(-1), stem = w, suf = '';
+    if (RM_SUFFIX[last] && w.length >= 3) { stem = w.slice(0, -1); suf = '-' + RM_SUFFIX[last]; }
+    var r = '';
+    for (var i = 0; i < stem.length; i++) r += romanizeSyl(stem[i]);
+    if (r) r = r.charAt(0).toUpperCase() + r.slice(1);
+    return r + suf;
+  }
+  function romanize(s) { return s ? String(s).split(' ').map(romanizeWord).join(' ') : s; }
+  // 평형 라벨의 한글 '평'을 현지 단위로 치환 (데이터 라벨 예: "85㎡(26평)")
+  function unitLabel(s) { return s ? String(s).replace(/\((\d+)\s*평\)/g, function (_, n) { return '(' + n + ' ' + T.py + ')'; }) : s; }
+
   function readFilters() {
     var f = {};
     var budget = num(form.budget.value);
-    if (budget) f.budget_max = Math.round(budget * 10000);
+    if (budget) f.budget_max = Math.round(budget * (T.budgetScale || 10000));
     if (guSel.value && guSel.value !== 'all') f.region = guSel.value;
     else if (sidoSel.value && sidoSel.value !== 'all') f.region = sidoSel.value;
     if (areaSel.value && areaSel.value !== 'all') f.area_type = areaSel.value;
@@ -199,18 +224,18 @@
     var house = a.households ? a.households.toLocaleString() + T.units : T.unitsUnknown;
     if (a.builder && a.builder !== '기타') house += (a.households ? ' · ' : '') + esc(a.builder);
     var latest = latestDealOf(a.name);
-    var repLabel = esc(r.rep ? r.rep.label : '');
+    var repLabel = esc(unitLabel(r.rep ? r.rep.label : ''));
     var dealNote = latest ? repLabel + ' · ' + latest + ' (' + ago(daysSince(latest)) + ')' : repLabel + ' ' + T.recentDeal;
     return '' +
       '<article class="apt-card" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region_key || '') + '">' +
         '<span class="rank">' + T.rankPre + rank + T.rankSuf + '</span>' +
         '<div class="apt-head">' +
-          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(a.region) + '</div></div>' +
+          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(romanize(a.region)) + '</div></div>' +
           '<div class="apt-score"><div class="num">' + r.total + '</div><div class="lbl">' + T.totalScore + '</div></div>' +
         '</div>' +
         '<div class="apt-price">' + fmt(r.price) + ' <small>' + dealNote + '</small></div>' +
         '<div class="apt-units">' + (a.units || []).map(function (u) {
-          return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(u.label) + ' ' + fmt(u.recent_price) + '</span>';
+          return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(unitLabel(u.label)) + ' ' + fmt(u.recent_price) + '</span>';
         }).join('') + '</div>' +
         relaxed +
         '<div class="apt-spec">' +
@@ -263,7 +288,7 @@
 
   // ── 단지 상세 팝업 ──
   var aptModal = document.getElementById('aptModal');
-  var aptMap = null, aptMapInit = false, aptMarker = null;
+  var finderMap = null;   // TopdaKMap 어댑터(카카오 우선, 실패 시 Leaflet 폴백)
 
   function findApt(name, regionKey) {
     for (var i = 0; i < DATA.length; i++) {
@@ -273,31 +298,33 @@
     return null;
   }
 
-  function ensureAptMap() {
-    if (aptMapInit) return;
-    if (typeof L === 'undefined') return;
-    aptMap = L.map('aptModalMap', { zoomControl: true, scrollWheelZoom: false });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; OpenStreetMap' }).addTo(aptMap);
-    aptMapInit = true;
-  }
-
-  function renderAptMap(a) {
+  // 상세 팝업 지도 — TopdaKMap(카카오 우선, 도메인 미등록/로컬은 Leaflet 폴백).
+  // 어댑터를 한 번만 만들고 이후엔 재중심(setCenter)만 해서 모달 재오픈에 재사용한다.
+  function showFinderMap(a) {
     var mapEl = document.getElementById('aptModalMap');
     if (a.lat == null || a.lng == null) { mapEl.style.display = 'none'; return; }
     mapEl.style.display = '';
-    ensureAptMap();
-    if (!aptMapInit) return;
-    aptMap.setView([a.lat, a.lng], 16);
-    if (aptMarker) aptMap.removeLayer(aptMarker);
-    aptMarker = L.marker([a.lat, a.lng]).addTo(aptMap);
-    setTimeout(function () { aptMap.invalidateSize(); aptMap.setView([a.lat, a.lng], 16); }, 60);
+    function place(ad) {
+      if (!ad) return;
+      finderMap = ad;
+      ad.clear();
+      if (ad.relayout) ad.relayout();
+      ad.setCenter(a.lat, a.lng);
+      ad.addCircle(a.lat, a.lng, { fillColor: '#2563eb', radius: 10, title: a.name });
+      // 모달이 방금 표시돼 컨테이너 크기가 잡히기 전이면 한 번 더 재배치·재중심.
+      setTimeout(function () { if (ad.relayout) ad.relayout(); ad.setCenter(a.lat, a.lng); }, 90);
+    }
+    if (finderMap) { place(finderMap); return; }
+    if (typeof window.TopdaKMap !== 'undefined') {
+      window.TopdaKMap.init('aptModalMap', { center: [a.lat, a.lng], level: 3, zoom: 16, maxZoom: 16 }, place);
+    }
   }
 
   function openAptModal(name, regionKey) {
     var a = findApt(name, regionKey);
     if (!a) return;
     document.getElementById('aptModalTitle').textContent = a.name;
-    document.getElementById('aptModalSub').textContent = a.region || '';
+    document.getElementById('aptModalSub').textContent = romanize(a.region || '');
 
     var agg = DEALS_BY_APT[a.name] || { prices: [] };
     var deals = agg.prices.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; });
@@ -327,7 +354,7 @@
 
     document.getElementById('aptModalMore').href = '../../calculators/transactions.html?q=' + encodeURIComponent(a.name);
 
-    renderAptMap(a);
+    showFinderMap(a);
     aptModal.classList.add('open');
     aptModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -372,7 +399,7 @@
     });
     gus.sort(function (a, b) { return guOf({ region_key: a }).localeCompare(guOf({ region_key: b }), 'ko'); })
       .forEach(function (key) {
-        var o = document.createElement('option'); o.value = key; o.textContent = guOf({ region_key: key }); guSel.appendChild(o);
+        var o = document.createElement('option'); o.value = key; o.textContent = romanize(guOf({ region_key: key })); guSel.appendChild(o);
       });
   }
   sidoSel.addEventListener('change', function () { fillGu(); render(); });
@@ -441,7 +468,7 @@
     var sidos = [];
     DATA.forEach(function (a) { var s = sidoOf(a); if (s && sidos.indexOf(s) < 0) sidos.push(s); });
     R.sortSidos(sidos).forEach(function (s) {
-      var o = document.createElement('option'); o.value = s; o.textContent = s; sidoSel.appendChild(o);
+      var o = document.createElement('option'); o.value = s; o.textContent = romanize(s); sidoSel.appendChild(o);
     });
     applyUrlParams();
     render();

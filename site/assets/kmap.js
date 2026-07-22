@@ -92,6 +92,10 @@
         pts.forEach(function (p) { b.extend(new kakao.maps.LatLng(p[0], p[1])); });
         map.setBounds(b);
       },
+      // 단일 위치 재중심(팝업 지도 등에서 재사용). level 미지정 시 근접 확대.
+      setCenter: function (lat, lng, level) { map.setCenter(new kakao.maps.LatLng(lat, lng)); map.setLevel(level || 3); },
+      // 숨겨졌다 다시 보이는 컨테이너(모달 등)에서 타일이 깨지지 않도록 재배치.
+      relayout: function () { try { map.relayout(); } catch (e) {} },
       setLegend: setLegendFactory(el),
     };
   }
@@ -116,6 +120,8 @@
       fitBounds: function (pts) {
         if (pts.length) { try { map.fitBounds(pts, { padding: [40, 40], maxZoom: opts.maxZoom || 11 }); } catch (e) {} }
       },
+      setCenter: function (lat, lng, zoom) { map.setView([lat, lng], zoom || 16); },
+      relayout: function () { try { map.invalidateSize(); } catch (e) {} },
       setLegend: setLegendFactory(el),
     };
   }
