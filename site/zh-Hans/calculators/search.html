@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6725359021570843" crossorigin="anonymous"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- i18n:review lang=zh-Hans — 机器初译，需母语者校对 -->
+<title>定制找房 — TOPDA</title>
+<meta name="description" content="输入预算、地区、户型、房龄、离地铁/小学距离、户数，即可按综合评分排序推荐单个小区。只填几项也行。" />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="canonical" href="https://topda.kr/zh-Hans/calculators/search.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="TOPDA" />
+<meta property="og:title" content="定制找房 — TOPDA" />
+<meta property="og:description" content="输入预算、地区、户型、房龄、离地铁/小学距离、户数，即可按综合评分排序推荐单个小区。只填几项也行。" />
+<meta property="og:url" content="https://topda.kr/zh-Hans/calculators/search.html" />
+<meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
+<meta property="og:locale" content="zh_CN" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/calculators/search.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/calculators/search.html" />
+<link rel="alternate" hreflang="zh-Hans" href="https://topda.kr/zh-Hans/calculators/search.html" />
+<link rel="alternate" hreflang="zh-Hant" href="https://topda.kr/zh-Hant/calculators/search.html" />
+<link rel="alternate" hreflang="vi" href="https://topda.kr/vi/calculators/search.html" />
+<link rel="alternate" hreflang="th" href="https://topda.kr/th/calculators/search.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/search.html" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<style>
+  .finder-intro { color: var(--text-muted); max-width: 720px; line-height: 1.7; }
+  .apt-card { cursor: pointer; }
+  .finder-layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; margin-top: 28px; align-items: start; }
+  .finder-panel { background: var(--surface, #fff); border: 1px solid var(--border, #e5e7eb); border-radius: 16px; padding: 20px; position: sticky; top: 88px; }
+  .finder-panel h2 { font-size: 1rem; margin: 0 0 14px; }
+  .finder-field { margin-bottom: 14px; }
+  .finder-field > label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+  .finder-field input, .finder-field select { width: 100%; padding: 10px 12px; border: 1px solid var(--border, #d1d5db); border-radius: 10px; font-size: 0.95rem; font-family: inherit; background: #fff; color: inherit; }
+  .finder-suffix { position: relative; }
+  .finder-suffix input { padding-right: 44px; }
+  .finder-suffix::after { content: attr(data-suffix); position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; pointer-events: none; }
+  .finder-hint { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; display: block; }
+  .finder-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .finder-actions .btn { flex: 1; }
+  .finder-count { font-weight: 700; margin: 0 0 14px; font-size: 1.05rem; }
+  .finder-count .em { color: var(--accent, #2563eb); }
+  .finder-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .apt-card { border: 1px solid var(--border, #e5e7eb); border-radius: 16px; padding: 18px; background: #fff; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
+  .apt-card .rank { position: absolute; top: 0; left: 0; background: var(--accent, #2563eb); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-bottom-right-radius: 10px; }
+  .apt-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-top: 8px; }
+  .apt-name { font-size: 1.12rem; font-weight: 800; letter-spacing: -0.02em; }
+  .apt-region { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+  .apt-score { text-align: center; flex-shrink: 0; }
+  .apt-score .num { font-size: 1.7rem; font-weight: 800; line-height: 1; color: var(--accent, #2563eb); font-variant-numeric: tabular-nums; }
+  .apt-score .lbl { font-size: 0.68rem; color: var(--text-muted); }
+  .apt-price { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; }
+  .apt-price small { font-size: 0.78rem; font-weight: 500; color: var(--text-muted); }
+  .apt-units { display: flex; flex-wrap: wrap; gap: 5px; }
+  .apt-unit { font-size: 0.74rem; padding: 3px 8px; border: 1px solid var(--border, #e5e7eb); border-radius: 8px; color: var(--text-muted); }
+  .apt-unit.is-rep { border-color: var(--accent, #2563eb); color: var(--accent, #2563eb); font-weight: 600; }
+  .apt-spec { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; font-size: 0.85rem; }
+  .apt-spec .k { color: var(--text-muted); }
+  .apt-spec .v { font-weight: 600; }
+  .apt-reasons { display: flex; flex-wrap: wrap; gap: 6px; }
+  .apt-chip { background: color-mix(in srgb, var(--accent, #2563eb) 10%, transparent); color: var(--accent, #2563eb); border-radius: 999px; padding: 4px 10px; font-size: 0.78rem; font-weight: 600; word-break: keep-all; }
+  .apt-relaxed { font-size: 0.76rem; color: #b45309; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 6px 10px; }
+  .apt-bars { display: grid; gap: 5px; }
+  .apt-bar { display: grid; grid-template-columns: 64px 1fr 34px; align-items: center; gap: 8px; font-size: 0.72rem; color: var(--text-muted); }
+  .apt-bar .track { height: 6px; background: var(--surface-2, #f1f5f9); border-radius: 4px; overflow: hidden; }
+  .apt-bar .fill { height: 100%; background: var(--accent, #2563eb); border-radius: 4px; }
+  .finder-empty { border: 1px dashed var(--border, #d1d5db); border-radius: 14px; padding: 28px; text-align: center; color: var(--text-muted); }
+  .finder-relaxed-banner { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; }
+  .finder-howto-toggle { background: none; border: 0; padding: 0; margin-left: 4px; color: var(--accent, #2563eb); font-weight: 600; cursor: pointer; font-size: inherit; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>TOPDA</a>
+    <nav class="nav">
+      <a href="../guides.html" data-nav>指南</a>
+      <a href="../calculators/index.html" data-nav class="active">计算器</a>
+      <a href="../market.html" data-nav>行情信息</a>
+      <a href="../../checklists/index.html" data-nav>清单</a>
+      <a href="../../board.html" data-nav>论坛</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="../guides.html">指南</a>
+    <a href="../calculators/index.html">计算器</a>
+    <a href="../market.html">行情信息</a>
+    <a href="../../checklists/index.html">清单</a>
+    <a href="../../board.html">论坛</a>
+    <a href="../../index.html">한국어</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="article-header" style="margin-bottom: 8px;">
+    <div class="breadcrumb"><a href="../index.html">首页</a> / <a href="../market.html">行情信息</a> / 定制找房</div>
+    <h1 style="margin-bottom: 4px;">定制找房</h1>
+    <p class="finder-intro" style="margin: 0;">只需输入条件，系统就按上涨预期、地铁、学区等为小区打分。<strong>输入预算后，接近该价位的小区会优先显示。</strong> <button type="button" class="finder-howto-toggle" data-finder-howto>评分方式 ▾</button></p>
+  </div>
+
+  <div class="finder-layout">
+    <form class="finder-panel" id="finderForm" autocomplete="off">
+      <h2>输入条件</h2>
+
+      <div class="finder-field">
+        <label for="f-search">小区名·关键词</label>
+        <input id="f-search" name="search" type="search" placeholder="例：Helio City、Raemian" />
+        <span class="finder-hint">用小区名或地区名快速查找</span>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-sort">排序</label>
+        <select id="f-sort" name="sort">
+          <option value="score">综合评分从高到低</option>
+          <option value="price_asc">价格从低到高</option>
+          <option value="price_desc">价格从高到低</option>
+          <option value="recent">最近成交优先</option>
+          <option value="momentum">上涨动能优先</option>
+        </select>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-budget">预算（上限）</label>
+        <div class="finder-suffix" data-suffix="亿">
+          <input id="f-budget" name="budget" type="number" min="0" step="0.5" inputmode="decimal" placeholder="例：15" />
+        </div>
+        <span class="finder-hint">单位为亿韩元（1＝1亿韩元）。仅推荐存在不超过此价位户型的小区。</span>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-sido">地区 — 市·道</label>
+        <select id="f-sido" name="sido"><option value="all">全部</option></select>
+      </div>
+      <div class="finder-field">
+        <label for="f-gu">地区 — 市·郡·区</label>
+        <select id="f-gu" name="gu"><option value="all">全部</option></select>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-area">户型（专用面积）</label>
+        <select id="f-area" name="area_type">
+          <option value="all">全部</option>
+          <option value="small">小户型（~60㎡）</option>
+          <option value="medium-small">国民户型（60~85㎡）</option>
+          <option value="medium">中户型（85~102㎡）</option>
+          <option value="large">大户型（102㎡~）</option>
+        </select>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-family">家庭人数（可选 — 推荐户型）</label>
+        <select id="f-family" name="family">
+          <option value="">不选</option>
+          <option value="1">1~2人</option>
+          <option value="3">3人</option>
+          <option value="4">4人以上</option>
+        </select>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-age">最大房龄</label>
+        <div class="finder-suffix" data-suffix="年">
+          <input id="f-age" name="max_age_years" type="number" min="0" step="1" inputmode="numeric" placeholder="例：15" />
+        </div>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-subway">离地铁站距离（上限）</label>
+        <div class="finder-suffix" data-suffix="m">
+          <input id="f-subway" name="subway_distance_max" type="number" min="0" step="50" inputmode="numeric" placeholder="例：500" />
+        </div>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-elem">离小学距离（上限）</label>
+        <div class="finder-suffix" data-suffix="m">
+          <input id="f-elem" name="elementary_distance_max" type="number" min="0" step="50" inputmode="numeric" placeholder="例：400" />
+        </div>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-house">最少户数</label>
+        <div class="finder-suffix" data-suffix="户">
+          <input id="f-house" name="min_households" type="number" min="0" step="100" inputmode="numeric" placeholder="例：1000" />
+        </div>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-hub">到商务区通勤</label>
+        <div style="display:flex; gap:8px;">
+          <select id="f-hub" name="commute_hub" style="flex:1.1;">
+            <option value="">不选</option>
+            <option value="강남">江南 Gangnam</option>
+            <option value="판교">板桥 Pangyo</option>
+            <option value="여의도">汝矣岛 Yeouido</option>
+            <option value="광화문">光化门 Gwanghwamun</option>
+          </select>
+          <div class="finder-suffix" data-suffix="分" style="flex:1;">
+            <input id="f-commute" name="commute_max" type="number" min="0" step="5" inputmode="numeric" placeholder="40" />
+          </div>
+        </div>
+        <span class="finder-hint">选择商务区并填最大通勤时间（分钟），只推荐在此时间内的小区。</span>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-parking">每户最少车位</label>
+        <div class="finder-suffix" data-suffix="辆">
+          <input id="f-parking" name="parking_min" type="number" min="0" step="0.1" inputmode="decimal" placeholder="例：1.2" />
+        </div>
+      </div>
+
+      <div class="finder-field">
+        <label for="f-ratio">全租率上限</label>
+        <div class="finder-suffix" data-suffix="%">
+          <input id="f-ratio" name="jeonse_ratio_max" type="number" min="0" max="100" step="1" inputmode="numeric" placeholder="例：55" />
+        </div>
+        <span class="finder-hint">比率越低，通常越是价差大的高档地段。</span>
+      </div>
+
+      <div class="finder-actions">
+        <button type="submit" class="btn btn-primary">获取推荐</button>
+        <button type="button" class="btn btn-secondary" id="finderReset">重置</button>
+      </div>
+    </form>
+
+    <section>
+      <p class="finder-count" id="finderCount">正在加载小区…</p>
+      <div id="finderRelaxed"></div>
+      <div class="finder-results" id="finderResults"></div>
+    </section>
+  </div>
+
+  <details id="finderHowto" class="finder-howto" style="margin-top: 32px;">
+    <summary>综合评分的计算方式</summary>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin: 12px 0 8px;">各项先按 0~100 打分，再<strong>按下列权重加权平均</strong>得到综合评分（0~100）。无数据或未填写的项从计算中剔除，其权重自动分配给其余项。</p>
+    <div class="table-wrap" style="margin-top: 12px;">
+      <table class="data">
+        <thead><tr><th>项目</th><th>权重</th><th>评分算式（0~100）</th></tr></thead>
+        <tbody>
+          <tr><td>上涨预期</td><td>23%</td><td>近期实际成交<strong>每㎡单价</strong>的趋势（线性回归斜率→年化）占65%，<strong>全租率</strong>（越低越是高档地段）占35%。年+20%满分，0%为50分。</td></tr>
+          <tr><td>地铁</td><td>19%</td><td>到最近地铁站的步行距离。≤300m 100分，≥1.5km 0分（线性）。</td></tr>
+          <tr><td>学区</td><td>19%</td><td>到最近小学的距离。≤150m 100分，≥1.2km 0分（线性）。</td></tr>
+          <tr><td>成交稳定</td><td>14%</td><td>近期成交价的变异系数（标准差÷均值）越小越加分。样本少于2笔为中性（60分）。</td></tr>
+          <tr><td>小区规模</td><td>10%</td><td>≥2,000户 100分，≤300户 20分（线性）。</td></tr>
+          <tr><td>房龄</td><td>10%</td><td>竣工2年内 100分，≥35年 10分（线性）。</td></tr>
+          <tr><td>成交活跃</td><td>5%</td><td>近6个月成交笔数。≥15笔 100分，0笔 30分。</td></tr>
+          <tr><td>预算契合</td><td>25%<br/><span style="font-size:0.8em;color:var(--text-muted)">填预算时</span></td><td>在不超预算的户型中，越接近预算越加分。填了预算才加入此项，且权重最大。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 8px;">※ 价格趋势按<strong>每月每㎡均价</strong>计算，以消除成交户型不同带来的失真。小区无自有全租率时使用<strong>地区平均</strong>，并在卡片上标注“(地区)”。本评分为公开成交·公共数据的<strong>参考指标</strong>，不保证投资收益。</p>
+  </details>
+
+  <p class="finder-sample-note">所示信息为参考示例，签约前请务必亲自核实成交价、现场与权利关系。</p>
+</main>
+
+<div class="apt-modal" id="aptModal" aria-hidden="true">
+  <div class="apt-modal-backdrop" data-apt-close></div>
+  <div class="apt-modal-panel" role="dialog" aria-labelledby="aptModalTitle">
+    <div class="apt-modal-head">
+      <div>
+        <h2 id="aptModalTitle">—</h2>
+        <p id="aptModalSub" class="apt-modal-sub">—</p>
+      </div>
+      <button class="apt-modal-close" data-apt-close aria-label="关闭">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div id="aptModalMap" role="region" aria-label="小区位置地图"></div>
+    <div class="apt-modal-meta" id="aptModalMeta"></div>
+    <div class="apt-modal-list">
+      <h3>最近成交</h3>
+      <table>
+        <thead><tr><th>成交日</th><th>专用（坪）</th><th class="num">金额</th></tr></thead>
+        <tbody id="aptModalBody"></tbody>
+      </table>
+    </div>
+    <a href="#" id="aptModalMore" class="apt-modal-more">在成交价查询查看全部记录 →</a>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="disclaimer">&copy; TOPDA。仅供一般参考。</p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="../../assets/score.js?v=20260722"></script>
+<script src="../../assets/region.js?v=20260629"></script>
+<script src="../../assets/app.js?v=20260722"></script>
+<script>
+var T = {"title":"定制找房","metaDesc":"输入预算、地区、户型、房龄、离地铁/小学距离、户数，即可按综合评分排序推荐单个小区。只填几项也行。","home":"首页","h1":"定制找房","intro":"只需输入条件，系统就按上涨预期、地铁、学区等为小区打分。<strong>输入预算后，接近该价位的小区会优先显示。</strong> ","howtoToggle":"评分方式 ▾","condH":"输入条件","searchLabel":"小区名·关键词","searchPh":"例：Helio City、Raemian","searchHint":"用小区名或地区名快速查找","sortLabel":"排序","sortScore":"综合评分从高到低","sortPriceAsc":"价格从低到高","sortPriceDesc":"价格从高到低","sortRecent":"最近成交优先","sortMomentum":"上涨动能优先","budgetLabel":"预算（上限）","budgetSuffix":"亿","budgetPh":"例：15","budgetHint":"单位为亿韩元（1＝1亿韩元）。仅推荐存在不超过此价位户型的小区。","sidoLabel":"地区 — 市·道","guLabel":"地区 — 市·郡·区","optAll":"全部","areaLabel":"户型（专用面积）","areaAll":"全部","areaSmall":"小户型（~60㎡）","areaMs":"国民户型（60~85㎡）","areaMid":"中户型（85~102㎡）","areaLarge":"大户型（102㎡~）","familyLabel":"家庭人数（可选 — 推荐户型）","famNone":"不选","fam1":"1~2人","fam3":"3人","fam4":"4人以上","ageLabel":"最大房龄","ageSuffix":"年","agePh":"例：15","subwayLabel":"离地铁站距离（上限）","elemLabel":"离小学距离（上限）","mSuffix":"m","subwayPh":"例：500","elemPh":"例：400","houseLabel":"最少户数","houseSuffix":"户","housePh":"例：1000","commuteLabel":"到商务区通勤","commuteNone":"不选","commuteSuffix":"分","commutePh":"40","commuteHint":"选择商务区并填最大通勤时间（分钟），只推荐在此时间内的小区。","parkingLabel":"每户最少车位","parkingSuffix":"辆","parkingPh":"例：1.2","ratioLabel":"全租率上限","ratioSuffix":"%","ratioPh":"例：55","ratioHint":"比率越低，通常越是价差大的高档地段。","submit":"获取推荐","reset":"重置","loading":"正在加载小区…","howtoSummary":"综合评分的计算方式","howtoP1":"各项先按 0~100 打分，再<strong>按下列权重加权平均</strong>得到综合评分（0~100）。无数据或未填写的项从计算中剔除，其权重自动分配给其余项。","thFactor":"项目","thWeight":"权重","thFormula":"评分算式（0~100）","rows":[["上涨预期","23%","近期实际成交<strong>每㎡单价</strong>的趋势（线性回归斜率→年化）占65%，<strong>全租率</strong>（越低越是高档地段）占35%。年+20%满分，0%为50分。"],["地铁","19%","到最近地铁站的步行距离。≤300m 100分，≥1.5km 0分（线性）。"],["学区","19%","到最近小学的距离。≤150m 100分，≥1.2km 0分（线性）。"],["成交稳定","14%","近期成交价的变异系数（标准差÷均值）越小越加分。样本少于2笔为中性（60分）。"],["小区规模","10%","≥2,000户 100分，≤300户 20分（线性）。"],["房龄","10%","竣工2年内 100分，≥35年 10分（线性）。"],["成交活跃","5%","近6个月成交笔数。≥15笔 100分，0笔 30分。"],["预算契合","25%<br/><span style=\"font-size:0.8em;color:var(--text-muted)\">填预算时</span>","在不超预算的户型中，越接近预算越加分。填了预算才加入此项，且权重最大。"]],"howtoP2":"※ 价格趋势按<strong>每月每㎡均价</strong>计算，以消除成交户型不同带来的失真。小区无自有全租率时使用<strong>地区平均</strong>，并在卡片上标注“(地区)”。本评分为公开成交·公共数据的<strong>参考指标</strong>，不保证投资收益。","sampleNote":"所示信息为参考示例，签约前请务必亲自核实成交价、现场与权利关系。","close":"关闭","mapAria":"小区位置地图","recentDeals":"最近成交","thDate":"成交日","thAreaPy":"专用（坪）","thAmount":"金额","moreLink":"在成交价查询查看全部记录 →","noDeals":"暂无成交记录。","curMode":"eok","curPrefix":"","curUnit":"亿","bars":{"fit":"预算","appreciation":"上涨","subway":"地铁","school":"学区","stability":"稳定","liquidity":"活跃","scale":"规模","age":"房龄"},"rankPre":"第","rankSuf":"名","totalScore":"综合评分","units":"户","unitsUnknown":"户数不详","noInfo":"无信息","unknown":"不详","specSubway":"离地铁","specElem":"小学","specBuilt":"竣工","specHouseholds":"户数","specRatio":"全租率","specParking":"每户车位","walk":"步行","min":"分","builtYr":"年","yrOld":"年","about":"约","areaAvg":"(地区)","perUnit":"辆","toPrefix":"到","toSuffix":"","recentDeal":"近期成交","reasons":{"subway":"🚇 {station} 步行{min}分","school":"🎒 {name} {dist}m{zone}","scale":"🏙 {n}户大型社区","age":"🏗 竣工{year}年 准新房","momentum":"📈 近期成交上涨","stability":"🛡 成交价稳定","commute":"🏢 {hub} {min}分","parking":"🅿 每户{per}辆"},"assigned":" 划片","bestLabels":{"appreciation":"上涨预期","subway":"交通","school":"学区","stability":"成交稳定","scale":"小区规模","age":"房龄"},"bestSuffix":"项最佳","relaxedCardPre":"⚠ 未满足 <strong>","relaxedCardSuf":"</strong>，但其他条件优秀故推荐。","filterLabels":{"budget_max":"预算","region":"地区","area_type":"户型","max_age_years":"房龄","subway_distance_max":"离地铁","elementary_distance_max":"离小学","min_households":"户数","commute":"通勤","parking_min":"车位","jeonse_ratio_max":"全租率"},"countMatch":"符合条件的小区 <span class=\"em\">{n}</span> 个 · {sort}","countUnit":"","countRelaxed":"没有完全匹配，为您<span class=\"em\">略微放宽条件</span>推荐","relaxedBanner":"没有满足全部条件的小区，但放宽1~2个条件即可匹配 — 试试放宽筛选。","noMatch":"没有符合条件的小区","emptyRelax":"请放宽条件后重试。","initialEmpty":"在左侧输入<strong>关键词或至少一个条件</strong><br/>我们会按综合评分为您排序推荐","loadFail":"数据加载失败，请稍后重试。","sortLabelsShort":{"score":"评分从高到低","price_asc":"价格从低到高","price_desc":"价格从高到低","recent":"最近成交","momentum":"上涨动能"},"mLatest":"最近成交","mDeals":"成交笔数","mAvg":"平均价","mBuilt":"竣工","mHouseholds":"户数","mStation":"最近车站","mElem":"小学","mRatio":"全租率","mParking":"每户车位","dealsCnt":"笔","py":"坪","ago":{"today":"今天","d":"天前","mo":"个月前","y":"年前"}};
+var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板桥 Pangyo","여의도":"汝矣岛 Yeouido","광화문":"光化门 Gwanghwamun"};
+</script>
+<script>
+(function () {
+  'use strict';
+  var S = window.TopdaScore;
+  var form = document.getElementById('finderForm');
+  var resultsEl = document.getElementById('finderResults');
+  var countEl = document.getElementById('finderCount');
+  var relaxedEl = document.getElementById('finderRelaxed');
+  var sidoSel = document.getElementById('f-sido');
+  var guSel = document.getElementById('f-gu');
+  var familySel = document.getElementById('f-family');
+  var areaSel = document.getElementById('f-area');
+  var searchInp = document.getElementById('f-search');
+  var sortSel = document.getElementById('f-sort');
+  var DATA = [];
+  var DEALS = [];
+
+  // 국제 통화 표기: zh 는 亿(=억), 그 외는 십억(₩ B/tỷ/พันล้าน).
+  function fmt(manwon) {
+    if (manwon == null) return '—';
+    var eok = manwon / 10000;
+    if (T.curMode === 'eok') {
+      var v = Number.isInteger(eok) ? eok : Math.round(eok * 10) / 10;
+      return T.curPrefix + v + T.curUnit;
+    }
+    var bn = Math.round((eok / 10) * 100) / 100;
+    return T.curPrefix + bn + T.curUnit;
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function num(v) { v = parseFloat(v); return isNaN(v) ? null : v; }
+  function hubName(k) { return (typeof HUB_DISPLAY !== 'undefined' && HUB_DISPLAY[k]) || k; }
+
+  function readFilters() {
+    var f = {};
+    var budget = num(form.budget.value);
+    if (budget) f.budget_max = Math.round(budget * 10000);
+    if (guSel.value && guSel.value !== 'all') f.region = guSel.value;
+    else if (sidoSel.value && sidoSel.value !== 'all') f.region = sidoSel.value;
+    if (areaSel.value && areaSel.value !== 'all') f.area_type = areaSel.value;
+    var age = num(form.max_age_years.value); if (age) f.max_age_years = age;
+    var sub = num(form.subway_distance_max.value); if (sub) f.subway_distance_max = sub;
+    var elem = num(form.elementary_distance_max.value); if (elem) f.elementary_distance_max = elem;
+    var house = num(form.min_households.value); if (house) f.min_households = house;
+    if (form.commute_hub.value) {
+      f.commute_hub = form.commute_hub.value;
+      f.commute_max = num(form.commute_max.value) || 60;
+    }
+    var park = num(form.parking_min.value); if (park) f.parking_min = park;
+    var ratio = num(form.jeonse_ratio_max.value); if (ratio) f.jeonse_ratio_max = ratio;
+    var q = (searchInp.value || '').trim();
+    if (q) f._search = q.toLowerCase();
+    return f;
+  }
+
+  function matchesSearch(a, q) {
+    if (!q) return true;
+    var hay = ((a.name || '') + ' ' + (a.region || '') + ' ' + (a.region_key || '') + ' ' + (a.builder || '')).toLowerCase();
+    return hay.indexOf(q) >= 0;
+  }
+
+  function comparator(mode) {
+    if (mode === 'price_asc')  return function (a, b) { return (a.price || Infinity) - (b.price || Infinity); };
+    if (mode === 'price_desc') return function (a, b) { return (b.price || 0) - (a.price || 0); };
+    if (mode === 'recent') {
+      return function (a, b) {
+        var ad = (DEALS_BY_APT[a.apt.name] || {}).latest || '';
+        var bd = (DEALS_BY_APT[b.apt.name] || {}).latest || '';
+        return bd < ad ? -1 : bd > ad ? 1 : b.total - a.total;
+      };
+    }
+    if (mode === 'momentum') {
+      return function (a, b) {
+        var am = S.scoreMomentum(a.apt.price_history) || 0;
+        var bm = S.scoreMomentum(b.apt.price_history) || 0;
+        return bm - am;
+      };
+    }
+    return function (a, b) { return b.total - a.total; };
+  }
+
+  var DEALS_BY_APT = {};
+
+  function enrichWithDeals() {
+    if (!DEALS.length) return;
+    var byName = {};
+    DATA.forEach(function (a) { byName[a.name] = a; });
+    var newApts = {};
+    DEALS.forEach(function (d) {
+      var apt = byName[d.apt];
+      if (!apt) {
+        if (!newApts[d.apt]) {
+          var rk = d.region_key || '';
+          var rkParts = rk.split(' ');
+          var sido = d.sido || rkParts[0] || '';
+          var sigungu = rkParts.slice(1).join(' ');
+          newApts[d.apt] = {
+            name: d.apt, region: d.region || rk, region_key: rk,
+            sido: sido, sigungu: sigungu, built_year: d.build_year || null,
+            units: [], price_history: [], _from_deals: true,
+          };
+        }
+        apt = newApts[d.apt];
+      }
+      var key = d.apt;
+      if (!DEALS_BY_APT[key]) DEALS_BY_APT[key] = { latest: '', prices: [] };
+      var agg = DEALS_BY_APT[key];
+      if (d.date > agg.latest) agg.latest = d.date;
+      agg.prices.push({ area_m2: d.area_m2, price: d.price, date: d.date });
+      if (!apt.units || !apt.units.length) {
+        if (!apt._unitMap) apt._unitMap = {};
+        var band = Math.round(d.area_m2);
+        var slot = apt._unitMap[band];
+        if (!slot || slot.date < d.date) {
+          apt._unitMap[band] = { area_m2: band, recent_price: d.price, date: d.date, label: band + '㎡' };
+        }
+      }
+    });
+    Object.keys(newApts).forEach(function (n) {
+      var a = newApts[n];
+      if (a._unitMap) {
+        a.units = Object.keys(a._unitMap).map(function (k) { return a._unitMap[k]; })
+          .sort(function (x, y) { return x.area_m2 - y.area_m2; })
+          .map(function (u) { return { label: u.label, area_m2: u.area_m2, recent_price: u.recent_price }; });
+        delete a._unitMap;
+      }
+      var allPrices = (DEALS_BY_APT[n] && DEALS_BY_APT[n].prices || []).filter(function (p) { return p.area_m2 > 0; });
+      var areas = allPrices.map(function (p) { return p.area_m2; }).sort(function (x, y) { return x - y; });
+      var repArea = areas.length ? areas[Math.floor(areas.length / 2)] : 0;
+      var months = {};
+      allPrices.forEach(function (p) {
+        var mo = p.date.slice(0, 7);
+        if (!months[mo]) months[mo] = [];
+        months[mo].push(p.price / p.area_m2);
+      });
+      a.price_history = Object.keys(months).sort().slice(-12).map(function (mo) {
+        var arr = months[mo]; return Math.round(arr.reduce(function (s, x) { return s + x; }, 0) / arr.length * repArea);
+      });
+      var cutoff = new Date(Date.now() - 180 * 86400000).toISOString().slice(0, 10);
+      var recent = (DEALS_BY_APT[n] && DEALS_BY_APT[n].prices || []).filter(function (p) { return p.date >= cutoff; });
+      a.recent_tx_count = recent.length;
+      DATA.push(a);
+    });
+    DATA.forEach(function (a) {
+      if (a.recent_tx_count == null && DEALS_BY_APT[a.name]) {
+        var cut = new Date(Date.now() - 180 * 86400000).toISOString().slice(0, 10);
+        a.recent_tx_count = DEALS_BY_APT[a.name].prices.filter(function (p) { return p.date >= cut; }).length;
+      }
+    });
+  }
+  var curHub = '';
+
+  function barRow(label, val) {
+    if (val == null) return '';
+    var w = Math.round(val);
+    return '<div class="apt-bar"><span>' + label + '</span><span class="track"><span class="fill" style="width:' + w + '%"></span></span><span>' + w + '</span></div>';
+  }
+
+  function latestDealOf(aptName) { var x = DEALS_BY_APT[aptName]; return x ? x.latest : ''; }
+  function daysSince(s) { if (!s) return null; var d = new Date(s); if (isNaN(d)) return null; return Math.floor((Date.now() - d.getTime()) / 86400000); }
+  function ago(days) {
+    if (days == null) return '';
+    if (days < 1) return T.ago.today;
+    if (days < 30) return days + T.ago.d;
+    if (days < 365) return Math.floor(days / 30) + T.ago.mo;
+    return Math.floor(days / 365) + T.ago.y;
+  }
+
+  // 구조화 추천 이유(reasonData) → 현지어 칩
+  function reasonChip(d) {
+    if (!d || !d.key) return '';
+    var tpl = T.reasons[d.key];
+    if (!tpl) return '';
+    if (d.key === 'subway') return tpl.replace('{station}', esc(d.station)).replace('{min}', d.min);
+    if (d.key === 'school') return tpl.replace('{name}', esc(d.name)).replace('{dist}', d.dist).replace('{zone}', d.inZone ? T.assigned : '');
+    if (d.key === 'scale') return tpl.replace('{n}', Number(d.households).toLocaleString());
+    if (d.key === 'age') return tpl.replace('{year}', d.year);
+    if (d.key === 'commute') return tpl.replace('{hub}', esc(hubName(d.hub))).replace('{min}', d.min);
+    if (d.key === 'parking') return tpl.replace('{per}', Number(d.per).toFixed(2));
+    return tpl; // momentum, stability
+  }
+
+  function card(r, rank) {
+    var a = r.apt;
+    var rd = r.reasonData || [];
+    var reasons = rd.map(function (d) { var x = reasonChip(d); return x ? '<span class="apt-chip">' + x + '</span>' : ''; }).join('');
+    if (!reasons && r.bestKey) reasons = '<span class="apt-chip">' + ((T.bestLabels[r.bestKey] || r.bestKey) + T.bestSuffix) + '</span>';
+    var relaxed = (r.relaxedKeys && r.relaxedKeys.length)
+      ? '<div class="apt-relaxed">' + T.relaxedCardPre + esc(r.relaxedKeys.map(function (k) { return T.filterLabels[k] || k; }).join(', ')) + T.relaxedCardSuf + '</div>'
+      : '';
+    var bars = (r.sub.fit != null ? barRow(T.bars.fit, r.sub.fit) : '')
+      + barRow(T.bars.appreciation, r.sub.appreciation) + barRow(T.bars.subway, r.sub.subway) + barRow(T.bars.school, r.sub.school)
+      + barRow(T.bars.stability, r.sub.stability) + barRow(T.bars.liquidity, r.sub.liquidity)
+      + barRow(T.bars.scale, r.sub.scale) + barRow(T.bars.age, r.sub.age);
+    var sub = a.subway && a.subway.distance_m != null
+      ? a.subway.distance_m + 'm · ' + esc(a.subway.station || '') + ' (' + T.walk + ' ' + S.walkMin(a.subway.distance_m) + T.min + (a.subway.line ? ', ' + esc(a.subway.line) : '') + ')'
+      : T.noInfo;
+    var elem = a.elementary && a.elementary.distance_m != null
+      ? a.elementary.distance_m + 'm · ' + esc(a.elementary.name || '')
+      : T.noInfo;
+    var house = a.households ? a.households.toLocaleString() + T.units : T.unitsUnknown;
+    if (a.builder && a.builder !== '기타') house += (a.households ? ' · ' : '') + esc(a.builder);
+    var latest = latestDealOf(a.name);
+    var repLabel = esc(r.rep ? r.rep.label : '');
+    var dealNote = latest ? repLabel + ' · ' + latest + ' (' + ago(daysSince(latest)) + ')' : repLabel + ' ' + T.recentDeal;
+    return '' +
+      '<article class="apt-card" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region_key || '') + '">' +
+        '<span class="rank">' + T.rankPre + rank + T.rankSuf + '</span>' +
+        '<div class="apt-head">' +
+          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(a.region) + '</div></div>' +
+          '<div class="apt-score"><div class="num">' + r.total + '</div><div class="lbl">' + T.totalScore + '</div></div>' +
+        '</div>' +
+        '<div class="apt-price">' + fmt(r.price) + ' <small>' + dealNote + '</small></div>' +
+        '<div class="apt-units">' + (a.units || []).map(function (u) {
+          return '<span class="apt-unit' + (r.rep && u.area_m2 === r.rep.area_m2 ? ' is-rep' : '') + '">' + esc(u.label) + ' ' + fmt(u.recent_price) + '</span>';
+        }).join('') + '</div>' +
+        relaxed +
+        '<div class="apt-spec">' +
+          '<span class="k">' + T.specSubway + '</span><span class="v">' + sub + '</span>' +
+          '<span class="k">' + T.specElem + '</span><span class="v">' + elem + '</span>' +
+          '<span class="k">' + T.specBuilt + '</span><span class="v">' + (a.built_year ? a.built_year + T.builtYr + ' (' + r.ageYears + T.yrOld + ')' : T.unknown) + '</span>' +
+          '<span class="k">' + T.specHouseholds + '</span><span class="v">' + house + '</span>' +
+          (curHub && a.commute && a.commute[curHub] != null ? '<span class="k">' + T.toPrefix + esc(hubName(curHub)) + T.toSuffix + '</span><span class="v">' + T.about + a.commute[curHub] + T.min + '</span>' : '') +
+          (a.jeonse_ratio != null ? '<span class="k">' + T.specRatio + '</span><span class="v">' + a.jeonse_ratio + '%' + (a._jr_region ? ' <small>' + T.areaAvg + '</small>' : '') + '</span>' : '') +
+          (a.parking_per_household != null ? '<span class="k">' + T.specParking + '</span><span class="v">' + a.parking_per_household.toFixed(2) + T.perUnit + '</span>' : '') +
+        '</div>' +
+        '<div class="apt-reasons">' + reasons + '</div>' +
+        '<div class="apt-bars">' + bars + '</div>' +
+      '</article>';
+  }
+
+  function render() {
+    if (!DATA.length) return;
+    var f = readFilters();
+    var q = f._search; delete f._search;
+    var mode = sortSel.value || 'score';
+    curHub = f.commute_hub || '';
+    var hasFilter = Object.keys(f).length > 0 || !!q;
+    if (!hasFilter) {
+      relaxedEl.innerHTML = '';
+      countEl.textContent = '';
+      resultsEl.innerHTML = '<div class="finder-empty">' + T.initialEmpty + '</div>';
+      return;
+    }
+    var pool = q ? DATA.filter(function (a) { return matchesSearch(a, q); }) : DATA;
+    var list = S.search(pool, f);
+    list.sort(comparator(mode));
+    relaxedEl.innerHTML = '';
+    if (list.length) {
+      var sortLabel = T.sortLabelsShort[mode] || T.sortLabelsShort.score;
+      countEl.innerHTML = T.countMatch.replace('{n}', list.length).replace('{sort}', sortLabel);
+      resultsEl.innerHTML = list.slice(0, 200).map(function (r, i) { return card(r, i + 1); }).join('');
+    } else {
+      var near = S.nearMatches(pool, f, null, 2);
+      if (near.length) {
+        countEl.innerHTML = T.countRelaxed;
+        relaxedEl.innerHTML = '<div class="finder-relaxed-banner">' + T.relaxedBanner + '</div>';
+        resultsEl.innerHTML = near.slice(0, 100).map(function (r, i) { return card(r, i + 1); }).join('');
+      } else {
+        countEl.textContent = T.noMatch;
+        resultsEl.innerHTML = '<div class="finder-empty">' + T.emptyRelax + '</div>';
+      }
+    }
+  }
+
+  // ── 단지 상세 팝업 ──
+  var aptModal = document.getElementById('aptModal');
+  var aptMap = null, aptMapInit = false, aptMarker = null;
+
+  function findApt(name, regionKey) {
+    for (var i = 0; i < DATA.length; i++) {
+      var a = DATA[i];
+      if (a.name === name && (!regionKey || (a.region_key || '') === regionKey)) return a;
+    }
+    return null;
+  }
+
+  function ensureAptMap() {
+    if (aptMapInit) return;
+    if (typeof L === 'undefined') return;
+    aptMap = L.map('aptModalMap', { zoomControl: true, scrollWheelZoom: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; OpenStreetMap' }).addTo(aptMap);
+    aptMapInit = true;
+  }
+
+  function renderAptMap(a) {
+    var mapEl = document.getElementById('aptModalMap');
+    if (a.lat == null || a.lng == null) { mapEl.style.display = 'none'; return; }
+    mapEl.style.display = '';
+    ensureAptMap();
+    if (!aptMapInit) return;
+    aptMap.setView([a.lat, a.lng], 16);
+    if (aptMarker) aptMap.removeLayer(aptMarker);
+    aptMarker = L.marker([a.lat, a.lng]).addTo(aptMap);
+    setTimeout(function () { aptMap.invalidateSize(); aptMap.setView([a.lat, a.lng], 16); }, 60);
+  }
+
+  function openAptModal(name, regionKey) {
+    var a = findApt(name, regionKey);
+    if (!a) return;
+    document.getElementById('aptModalTitle').textContent = a.name;
+    document.getElementById('aptModalSub').textContent = a.region || '';
+
+    var agg = DEALS_BY_APT[a.name] || { prices: [] };
+    var deals = agg.prices.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; });
+    var meta = [];
+    if (deals.length) {
+      var last = deals[0];
+      var vals = deals.map(function (d) { return d.price; });
+      var avg = Math.round(vals.reduce(function (s, v) { return s + v; }, 0) / vals.length);
+      meta.push({ lbl: T.mLatest, val: fmt(last.price) + ' · ' + last.date });
+      meta.push({ lbl: T.mDeals, val: deals.length.toLocaleString() + T.dealsCnt });
+      meta.push({ lbl: T.mAvg, val: fmt(avg) });
+    }
+    if (a.built_year) meta.push({ lbl: T.mBuilt, val: a.built_year + T.builtYr });
+    if (a.households) meta.push({ lbl: T.mHouseholds, val: a.households.toLocaleString() + T.units });
+    if (a.subway && a.subway.station) meta.push({ lbl: T.mStation, val: a.subway.station + ' ' + a.subway.distance_m + 'm' });
+    if (a.elementary && a.elementary.name) meta.push({ lbl: T.mElem, val: a.elementary.name + ' ' + a.elementary.distance_m + 'm' });
+    if (a.jeonse_ratio != null) meta.push({ lbl: T.mRatio, val: a.jeonse_ratio + '%' });
+    if (a.parking_per_household != null) meta.push({ lbl: T.mParking, val: a.parking_per_household.toFixed(2) + T.perUnit });
+    document.getElementById('aptModalMeta').innerHTML = meta.map(function (m) {
+      return '<div class="item"><div class="lbl">' + esc(m.lbl) + '</div><div class="val">' + esc(m.val) + '</div></div>';
+    }).join('');
+
+    document.getElementById('aptModalBody').innerHTML = deals.slice(0, 8).map(function (d) {
+      var py = Math.round(d.area_m2 / 3.3058);
+      return '<tr><td>' + d.date + '</td><td>' + d.area_m2 + '㎡(' + py + ')</td><td class="num">' + fmt(d.price) + '</td></tr>';
+    }).join('') || '<tr><td colspan="3" style="color:var(--text-muted);">' + T.noDeals + '</td></tr>';
+
+    document.getElementById('aptModalMore').href = '../../calculators/transactions.html?q=' + encodeURIComponent(a.name);
+
+    renderAptMap(a);
+    aptModal.classList.add('open');
+    aptModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeAptModal() {
+    aptModal.classList.remove('open');
+    aptModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  resultsEl.addEventListener('click', function (e) {
+    var card = e.target.closest('.apt-card');
+    if (!card) return;
+    openAptModal(card.dataset.apt, card.dataset.region);
+  });
+  document.querySelectorAll('[data-apt-close]').forEach(function (b) { b.addEventListener('click', closeAptModal); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && aptModal.classList.contains('open')) closeAptModal(); });
+
+  familySel.addEventListener('change', function () {
+    var map = { '1': 'small', '3': 'medium-small', '4': 'medium' };
+    if (familySel.value && (!areaSel.value || areaSel.value === 'all')) {
+      areaSel.value = map[familySel.value] || 'all';
+    }
+    render();
+  });
+
+  form.addEventListener('submit', function (e) { e.preventDefault(); render(); });
+  form.addEventListener('input', render);
+  form.addEventListener('change', render);
+  document.getElementById('finderReset').addEventListener('click', function () { form.reset(); render(); });
+
+  var R = window.TopdaRegion;
+  function sidoOf(a) { return R.normSido(a.sido || (a.region_key || '').split(' ')[0]); }
+  function guOf(a) { return a.sigungu || (a.region_key || '').split(' ').slice(1).join(' '); }
+
+  function fillGu() {
+    var sido = sidoSel.value;
+    guSel.innerHTML = '<option value="all">' + T.optAll + '</option>';
+    if (!sido || sido === 'all') return;
+    var gus = [];
+    DATA.forEach(function (a) {
+      if (sidoOf(a) === sido) { var g = a.region_key; if (g && gus.indexOf(g) < 0) gus.push(g); }
+    });
+    gus.sort(function (a, b) { return guOf({ region_key: a }).localeCompare(guOf({ region_key: b }), 'ko'); })
+      .forEach(function (key) {
+        var o = document.createElement('option'); o.value = key; o.textContent = guOf({ region_key: key }); guSel.appendChild(o);
+      });
+  }
+  sidoSel.addEventListener('change', function () { fillGu(); render(); });
+
+  var howtoBtn = document.querySelector('[data-finder-howto]');
+  var howtoEl = document.getElementById('finderHowto');
+  if (howtoBtn && howtoEl) {
+    howtoBtn.addEventListener('click', function () {
+      howtoEl.open = !howtoEl.open;
+      if (howtoEl.open) howtoEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  function applyUrlParams() {
+    var params = new URLSearchParams(location.search);
+    var apt = params.get('apt');
+    if (apt) { searchInp.value = apt; }
+    var region = params.get('region'); if (region) {
+      searchInp.value = (searchInp.value ? searchInp.value + ' ' : '') + region;
+    }
+  }
+
+  searchInp.addEventListener('input', render);
+  sortSel.addEventListener('change', render);
+
+  Promise.all([
+    fetch('../../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('apt'); return r.json(); })
+      .catch(function () { return { apartments: [] }; }),
+    fetch('../../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('deals'); return r.json(); })
+      .catch(function () { return { deals: [] }; }),
+    fetch('../../assets/households.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('hh'); return r.json(); })
+      .catch(function () { return { map: {} }; }),
+    fetch('../../assets/jeonse_ratio.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('jr'); return r.json(); })
+      .catch(function () { return { regions: [] }; }),
+  ]).then(function (results) {
+    DATA = (results[0].apartments || []).slice();
+    DEALS = results[1].deals || [];
+    enrichWithDeals();
+    var HH = (results[2] && results[2].map) || {};
+    DATA.forEach(function (a) {
+      var e = HH[(a.region_key || '') + '|' + (a.name || '')];
+      if (!e) return;
+      if (!a.households && e.households) a.households = e.households;
+      if (!a.built_year && e.built_year) a.built_year = e.built_year;
+      if (a.lat == null && e.lat != null) { a.lat = e.lat; a.lng = e.lng; }
+      if (!a.subway && e.subway && e.subway.station) a.subway = { station: e.subway.station, line: '', distance_m: e.subway.distance_m };
+      if (!a.elementary && e.elementary && e.elementary.name) a.elementary = { name: e.elementary.name, distance_m: e.elementary.distance_m, in_zone: false };
+    });
+    var jr = results[3] || {};
+    if (!jr.seed && jr.regions && jr.regions.length) {
+      var RATIO = {};
+      jr.regions.forEach(function (r) { if (r.key && r.jeonse_ratio != null) RATIO[r.key] = r.jeonse_ratio; });
+      DATA.forEach(function (a) {
+        if (a.jeonse_ratio == null && RATIO[a.region_key] != null) { a.jeonse_ratio = RATIO[a.region_key]; a._jr_region = true; }
+      });
+    }
+    if (!DATA.length) {
+      countEl.textContent = '';
+      resultsEl.innerHTML = '<div class="finder-empty">' + T.loadFail + '</div>';
+      return;
+    }
+    var sidos = [];
+    DATA.forEach(function (a) { var s = sidoOf(a); if (s && sidos.indexOf(s) < 0) sidos.push(s); });
+    R.sortSidos(sidos).forEach(function (s) {
+      var o = document.createElement('option'); o.value = s; o.textContent = s; sidoSel.appendChild(o);
+    });
+    applyUrlParams();
+    render();
+  });
+})();
+
+</script>
+</body>
+</html>

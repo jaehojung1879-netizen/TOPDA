@@ -426,7 +426,7 @@ ${header(c, 'market')}
   </div>
 
   <section class="market-hero">
-    <a class="market-hero-card" href="../calculators/search.html">
+    <a class="market-hero-card" href="calculators/search.html">
       <div class="market-hero-icon">${ICON.search}</div>
       <div class="market-hero-body">
         <h2>${m.heroTitle}</h2>
