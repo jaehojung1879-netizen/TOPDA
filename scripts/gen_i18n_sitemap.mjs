@@ -34,6 +34,7 @@ for (const l of ['zh-Hans', 'zh-Hant', 'vi', 'th']) {
 for (const l of ['vi', 'th']) REQUIRED.push({ path: `/${l}/jeonse.html`, priority: '0.8' });
 // 언어별 허브 페이지(가이드·시세정보)
 for (const l of ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/guides.html`, priority: '0.8' });
+for (const page of ['sale', 'moving']) REQUIRED.push({ path: `/en/${page}.html`, priority: '0.8' });
 for (const l of ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/market.html`, priority: '0.7' });
 for (const l of ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/calculators/search.html`, priority: '0.7' });
 for (const l of ['en', 'zh-Hans', 'zh-Hant', 'vi', 'th']) REQUIRED.push({ path: `/${l}/interior/index.html`, priority: '0.7' });
