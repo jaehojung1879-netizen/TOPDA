@@ -193,16 +193,16 @@
         <label class="check-item" style="padding: 0; cursor: pointer;">
           <input type="checkbox" name="regulated"/>
           <span class="text">조정대상지역에 위치 (양도 시점)
-            <span class="note">다주택 중과 적용 판단용부로 한시적 중과배제 종료 여부 확인 필요.</span>
+            <span class="note">2주택 이상이면 조정대상지역 양도 시 중과세율(+20~30%p)과 장기보유특별공제 배제가 자동 적용됩니다.</span>
           </span>
         </label>
       </div>
 
       <div class="field">
         <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="multiSurcharge"/>
-          <span class="text">다주택 중과세율 적용
-            <span class="note">조정지역 2주택 +20%p · 3주택+ +30%p. 한시적 중과배제 기간이면 체크 해제.</span>
+          <input type="checkbox" name="surchargeExempt"/>
+          <span class="text">중과 배제 주택 (장기임대·상속·조특법 감면 등)
+            <span class="note">조정대상지역 다주택이라도 중과 제외 요건에 해당하면 체크하세요. 중과세율·장특공 배제가 해제되고 일반세율로 계산됩니다.</span>
           </span>
         </label>
       </div>
@@ -471,6 +471,6 @@
   </div>
 </footer>
 <script src="../assets/rates.js?v=20260629"></script>
-<script src="../assets/app.js?v=20260722"></script>
+<script src="../assets/app.js?v=20260723"></script>
 </body>
 </html>
