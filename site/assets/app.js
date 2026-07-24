@@ -504,6 +504,8 @@ const TT_I18N = {
   waiverBody: { en: 'Sale date is before {d} and held ≥ 2 years, so the 20-30%p surcharge was automatically excluded.', 'zh-Hans': '出售日期在{d}之前且持有≥2年，已自动排除20-30%的加重税率。', 'zh-Hant': '出售日期在{d}之前且持有≥2年，已自動排除20-30%的加重稅率。', vi: 'Ngày bán trước {d} và nắm giữ ≥ 2 năm nên đã tự động loại trừ mức phụ thu 20-30%.', th: 'วันที่ขายก่อน {d} และถือครอง ≥ 2 ปี จึงยกเว้นภาษีเพิ่ม 20-30% โดยอัตโนมัติ' },
   highValueTitle: { en: 'High-value home — partial taxation', 'zh-Hans': '高价住宅——部分课税', 'zh-Hant': '高價住宅——部分課稅', vi: 'Nhà giá trị cao — đánh thuế một phần', th: 'บ้านมูลค่าสูง — เก็บภาษีบางส่วน' },
   highValueBody: { en: '1-home household but sale price exceeds KRW 1.2B — only {p}% of the gain is taxable.', 'zh-Hans': '1套自住但售价超过12亿韩元——仅{p}%的收益需课税。', 'zh-Hant': '1戶自住但售價超過12億韓元——僅{p}%的收益需課稅。', vi: 'Hộ 1 nhà nhưng giá bán vượt 1,2 tỷ KRW — chỉ {p}% lợi nhuận bị đánh thuế.', th: 'ครัวเรือน 1 หลังแต่ราคาขายเกิน 1.2 พันล้านวอน — เก็บภาษีเพียง {p}% ของกำไร' },
+  heavyTitle: { en: 'Multi-home heavy taxation', 'zh-Hans': '多套房重课', 'zh-Hant': '多屋重課', vi: 'Đánh thuế nặng đa nhà', th: 'ภาษีเพิ่มหลายหลัง' },
+  heavyBody: { en: '{n}-home sale in a regulated area — {p}%p is added to the base rate and the long-term holding deduction is excluded (Income Tax Act §95(2)).', 'zh-Hans': '调整地区{n}套房转让——基本税率加征{p}%，且不适用长期持有特别扣除（所得税法第95条第2款）。', 'zh-Hant': '調整地區{n}戶轉讓——基本稅率加徵{p}%，且不適用長期持有特別扣除（所得稅法第95條第2款）。', vi: 'Bán {n} nhà trong khu điều tiết — cộng thêm {p}%p vào thuế suất cơ bản và loại trừ khấu trừ nắm giữ dài hạn (Luật thuế TNCN §95(2)).', th: 'ขาย {n} หลังในเขตควบคุม — บวก {p}%p จากอัตราพื้นฐานและไม่ได้รับลดหย่อนการถือครองระยะยาว (ม.95(2))' },
 };
 function rateLabelText(r, lang) {
   if (lang === 'ko' || !lang) return r.appliedRateLabel;
@@ -519,16 +521,18 @@ function effectiveRateText(r, lang) {
   const L = (k) => (TT_I18N[k] && (TT_I18N[k][lang] || TT_I18N[k].en)) || '';
   return L('effRate') + ' ' + r.effective.toFixed(2) + '% (' + L('ofSalePrice') + ')';
 }
-function exemptBoxHtml(r, lang, regulated, multiSurcharge, homes) {
+function exemptBoxHtml(r, lang, regulated, homes) {
   const L = (k) => (TT_I18N[k] && (TT_I18N[k][lang] || TT_I18N[k].en)) || '';
   if (lang === 'ko' || !lang) {
     if (r.exempted) return '<strong>1세대 1주택 비과세 대상</strong>양도가액 12억원 이하 + 보유 2년 이상 요건을 충족합니다. 별도 세부담이 없습니다.';
-    if (r.surchargeWaived && regulated && multiSurcharge && homes >= 2) return '<strong>다주택 중과 한시 유예 적용</strong>양도일이 2026-05-09 이전이고 보유 2년 이상이라 중과세율(20~30%p)이 자동으로 빠졌습니다.';
+    if (r.surchargeWaived && regulated && homes >= 2) return '<strong>다주택 중과 한시 유예 적용</strong>양도일이 ' + r.waiverUntil + ' 이전이고 보유 2년 이상이라 중과세율(20~30%p)이 자동으로 빠졌습니다.';
+    if (r.surchargeRatePct > 0) return '<strong>다주택 중과 적용</strong>조정대상지역 ' + homes + '주택 양도로 기본세율에 ' + r.surchargeRatePct + '%p가 가산되고, 장기보유특별공제는 배제됩니다 (소득세법 제95조 제2항).';
     if (r.taxableGainRatio < 1 && r.taxableGainRatio > 0) return '<strong>고가주택 안분과세</strong>1세대1주택이나 12억 초과. 양도차익 중 ' + (r.taxableGainRatio * 100).toFixed(1) + '%만 과세대상입니다.';
     return '';
   }
   if (r.exempted) return '<strong>' + L('exemptTitle') + '</strong>' + L('exemptBody');
-  if (r.surchargeWaived && regulated && multiSurcharge && homes >= 2) return '<strong>' + L('waiverTitle') + '</strong>' + L('waiverBody').replace('{d}', r.waiverUntil);
+  if (r.surchargeWaived && regulated && homes >= 2) return '<strong>' + L('waiverTitle') + '</strong>' + L('waiverBody').replace('{d}', r.waiverUntil);
+  if (r.surchargeRatePct > 0) return '<strong>' + L('heavyTitle') + '</strong>' + L('heavyBody').replace('{p}', r.surchargeRatePct).replace('{n}', homes);
   if (r.taxableGainRatio < 1 && r.taxableGainRatio > 0) return '<strong>' + L('highValueTitle') + '</strong>' + L('highValueBody').replace('{p}', (r.taxableGainRatio * 100).toFixed(1));
   return '';
 }
@@ -665,12 +669,16 @@ function calcBrokerageFee({ price, type }) {
 // - 기본공제 250만원
 // - 누진세율: 8구간 (1,400 / 5,000 / 8,800 / 1.5억 / 3억 / 5억 / 10억 / 그 외)
 // - 단기보유 중과: 1년 미만 70%, 1~2년 60% (주택 기준, 비교과세 단순화)
-// - 다주택 중과: 2주택 +20%p, 3주택+ +30%p (조정대상지역 양도 시)
+// - 다주택 중과: 조정대상지역 2주택 +20%p, 3주택+ +30%p (자동 적용).
+//   * 중과 대상 주택은 장기보유특별공제도 배제 (소득세법 제95조 제2항)
+//   * 2년 이상 보유 + 양도일 ≤ 2026-05-09 이면 한시 유예로 중과 미적용
+//   * '중과 배제 주택'(장기임대·상속 등)으로 표시하면 중과·장특공 배제 해제
 // - 지방소득세 = 양도소득세 × 10%
 function calcTransferTax(input) {
   const {
     sellPrice, buyPrice, cost, holdYears, liveYears,
-    homes, onlyHome, regulated, multiSurcharge,
+    homes, onlyHome, regulated,
+    surchargeExempt = false, // 조정지역 다주택이라도 중과 제외 요건(장기임대·상속 등) 해당 시 true
     sellDate,        // 'YYYY-MM-DD' — 다주택 중과 한시 유예(2026-05-09까지) 자동 판단용
     jointOwners = 1, // 공동명의 인원(1=단독, 2=부부 공동 등). 양도차익을 균등 분할 후 세액 합산
   } = input;
@@ -697,9 +705,21 @@ function calcTransferTax(input) {
   if (holdYears < 1) shortTermRate = 0.70;
   else if (holdYears < 2) shortTermRate = 0.60;
 
-  // 장기보유특별공제
+  // 다주택 중과 한시 유예 자동 판단:
+  //  보유 2년+ & 양도일 ≤ 2026-05-09 이면 조정지역·다주택이어도 중과 미적용.
+  const W = (window.TOPDA_RATES && window.TOPDA_RATES.transferTax) || {};
+  const waiverUntil = W.multiHomeSurchargeWaiverUntil || '2026-05-09';
+  const waiverMinHold = W.multiHomeSurchargeWaiverMinHoldYears || 2;
+  const sd = (sellDate && /^\d{4}-\d{2}-\d{2}$/.test(sellDate)) ? sellDate : '';
+  const surchargeWaived = sd && sd <= waiverUntil && holdYears >= waiverMinHold;
+
+  // 다주택 중과 대상 판정 (조정대상지역 + 2주택 이상 + 장기보유 + 한시유예/중과배제 미해당).
+  //  조정지역 다주택 양도는 세율 가산과 함께 장기보유특별공제가 배제된다 (소득세법 제95조 제2항).
+  const heavyTax = !shortTermRate && regulated && homes >= 2 && !surchargeWaived && !surchargeExempt;
+
+  // 장기보유특별공제 (단기보유·다주택 중과 대상은 배제)
   let ltDeductRate = 0;
-  if (!shortTermRate && holdYears >= 3) {
+  if (!shortTermRate && !heavyTax && holdYears >= 3) {
     if (isOneHome && sellPrice > 1200000000 && liveYears >= 2) {
       // 표2(1세대1주택·거주 2년 이상): 보유 연 4%(최대 40%) + 거주 연 4%(최대 40%), 합산 최대 80%
       const holdY = Math.min(holdYears, 10);
@@ -720,7 +740,7 @@ function calcTransferTax(input) {
   const basicDeduct = Math.min(2500000, incomeAmount);
   const taxBase = Math.max(0, incomeAmount - basicDeduct);
 
-  // 산출세액
+  // 산출세액 (기본세율)
   let rate, deduction, appliedRateLabel;
   if (shortTermRate) {
     rate = shortTermRate;
@@ -733,31 +753,19 @@ function calcTransferTax(input) {
     appliedRateLabel = (t.marginalRate * 100).toFixed(0) + '% (누진)';
   }
 
-  // 다주택 중과 한시 유예 자동 판단:
-  //  보유 2년+ & 양도일 ≤ 2026-05-09 이면 조정지역·다주택이어도 중과 미적용.
-  const W = (window.TOPDA_RATES && window.TOPDA_RATES.transferTax) || {};
-  const waiverUntil = W.multiHomeSurchargeWaiverUntil || '2026-05-09';
-  const waiverMinHold = W.multiHomeSurchargeWaiverMinHoldYears || 2;
-  const sd = (sellDate && /^\d{4}-\d{2}-\d{2}$/.test(sellDate)) ? sellDate : '';
-  const surchargeWaived = sd && sd <= waiverUntil && holdYears >= waiverMinHold;
-
-  // 다주택 중과 (조정지역 + 다주택 + 중과 적용 체크 + 단기보유 아닐 때 + 한시유예 미해당)
+  // 다주택 중과세율 가산 (기본세율 + 2주택 20%p / 3주택+ 30%p)
   let surchargeRate = 0;
-  if (!shortTermRate && regulated && multiSurcharge && homes >= 2 && !surchargeWaived) {
+  if (heavyTax) {
     surchargeRate = homes >= 3 ? 0.30 : 0.20;
     rate += surchargeRate;
     appliedRateLabel += ' + ' + (surchargeRate * 100) + '%p 중과';
-  } else if (surchargeWaived && regulated && multiSurcharge && homes >= 2) {
+  } else if (surchargeWaived && regulated && homes >= 2) {
     appliedRateLabel += ' (중과 한시유예 적용 — ' + waiverUntil + '까지)';
   }
 
-  let incomeTax;
-  if (shortTermRate || surchargeRate > 0) {
-    incomeTax = taxBase * rate;
-  } else {
-    incomeTax = taxBase * rate - deduction;
-  }
-  incomeTax = Math.max(0, incomeTax);
+  // 산출세액 = 과세표준 × 세율 − 누진공제.
+  //  중과 시에도 기본세율 구간의 누진공제는 유지된다(가산분만 정률). 단기보유는 누진공제 0.
+  const incomeTax = Math.max(0, taxBase * rate - deduction);
 
   // 공동명의 안분: 양도차익을 인원수로 균등 분할 후 각자 누진세율로 산출 → 합산.
   //  단순 분할로 누진세율 구간이 낮아져 절세 효과가 발생한다.
@@ -773,11 +781,10 @@ function calcTransferTax(input) {
     let perTax;
     if (shortTermRate) {
       perTax = perBase * shortTermRate;
-    } else if (surchargeRate > 0) {
-      perTax = perBase * rate;
     } else {
+      // 분할된 과세표준으로 각자 누진세율 재산정 후 중과 가산분(있으면) 적용
       const t = calcProgressiveTax(perBase);
-      perTax = Math.max(0, perBase * t.marginalRate - t.deduction);
+      perTax = Math.max(0, perBase * (t.marginalRate + surchargeRate) - t.deduction);
     }
     const jointIncomeTax = perTax * owners;
     const jointLocalTax = jointIncomeTax * 0.10;
@@ -834,12 +841,12 @@ function calcProgressiveTax(base) {
     const homes = Number(root.querySelector('[name="homes"]:checked')?.value || 1);
     const onlyHome = root.querySelector('[name="onlyHome"]')?.checked || false;
     const regulated = root.querySelector('[name="regulated"]')?.checked || false;
-    const multiSurcharge = root.querySelector('[name="multiSurcharge"]')?.checked || false;
+    const surchargeExempt = root.querySelector('[name="surchargeExempt"]')?.checked || false;
     const sellDate = root.querySelector('[name="sellDate"]')?.value || '';
     const jointOwners = Number(root.querySelector('[name="jointOwners"]')?.value || 1);
     const r = calcTransferTax({
       sellPrice, buyPrice, cost, holdYears, liveYears,
-      homes, onlyHome, regulated, multiSurcharge,
+      homes, onlyHome, regulated, surchargeExempt,
       sellDate, jointOwners,
     });
     const exemptBox = root.querySelector('[data-out="exemptBox"]');
@@ -864,7 +871,7 @@ function calcProgressiveTax(base) {
     setText('total', fmt.won(r.total));
     setText('effective', effectiveRateText(r, ttLang));
     if (exemptBox) {
-      const html = exemptBoxHtml(r, ttLang, regulated, multiSurcharge, homes);
+      const html = exemptBoxHtml(r, ttLang, regulated, homes);
       if (html) {
         exemptBox.style.display = '';
         const msg = root.querySelector('[data-out="exemptMsg"]');
