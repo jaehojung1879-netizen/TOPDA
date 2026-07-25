@@ -29,15 +29,39 @@ for (const file of files) {
 }
 
 const hub = readFileSync(join(start, 'interior', 'index.html'), 'utf8');
-const required = [
+const requiredInteriorRoutes = [
   'cost', 'flooring', 'wallpaper', 'tile', 'bathroom', 'kitchen', 'windows',
   '../posts/interior-company', '../posts/interior-quote', '../posts/interior-contract',
   '../posts/interior-defect', '../checklists/interior-contract',
 ];
-for (const route of required) if (!hub.includes(`${route}.html`)) failures.push(`interior hub is missing ${route}.html`);
+for (const route of requiredInteriorRoutes) if (!hub.includes(`${route}.html`)) failures.push(`interior hub is missing ${route}.html`);
+
+const guideHubRoutes = {
+  'sale.html': [
+    'property-tour', 'registry-reading', 'sale-contract-tips',
+    'balance-day-settlement', 'tax-roadmap',
+  ],
+  'moving.html': [
+    'moving-company', 'moving-quote', 'moving-types',
+    'moving-day-tips', 'storage-moving', 'move-in-admin',
+  ],
+};
+const app = readFileSync(join(root, 'assets', 'app.js'), 'utf8');
+for (const [hubName, routes] of Object.entries(guideHubRoutes)) {
+  const guideHub = readFileSync(join(start, hubName), 'utf8');
+  if (/<article\b[^>]*class=["'][^"']*\btopic-card\b/i.test(guideHub)) {
+    failures.push(`${hubName} still contains non-clickable topic cards`);
+  }
+  for (const route of routes) {
+    const href = `posts/${route}.html`;
+    if (!guideHub.includes(`href="${href}"`)) failures.push(`${hubName} is missing clickable ${href}`);
+    if (!app.includes(`'${href}'`)) failures.push(`app.js English page map is missing ${href}`);
+  }
+}
 
 if (failures.length) {
   console.error(`English route check failed (${failures.length})\n${failures.join('\n')}`);
   process.exit(1);
 }
-console.log(`English route check passed: ${files.length} pages; ${required.length} renovation routes.`);
+const guideRouteCount = Object.values(guideHubRoutes).flat().length;
+console.log(`English route check passed: ${files.length} pages; ${requiredInteriorRoutes.length} renovation routes; ${guideRouteCount} clickable sale/moving detail routes.`);
