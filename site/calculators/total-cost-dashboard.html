@@ -274,10 +274,34 @@
             <input id="td-liveYears" name="liveYears" type="number" min="0" max="50" step="0.5" value="4" />
           </div>
         </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-sellDate">양도일(예정일)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="다주택 중과 한시 유예 적용 여부를 판단하는 날짜입니다. 기준일과 유예 기간은 계산기 세율 데이터에 따라 적용됩니다.">?</span></label>
+            <input id="td-sellDate" name="sellDate" type="date" value="" />
+          </div>
+          <div class="field">
+            <label for="td-jointOwners">명의(공동명의)</label>
+            <select id="td-jointOwners" name="jointOwners">
+              <option value="1">단독 명의</option>
+              <option value="2">2인 공동(부부 등)</option>
+              <option value="3">3인 공동</option>
+              <option value="4">4인 공동</option>
+            </select>
+            <span class="hint">공동명의는 양도차익을 균등 안분한 뒤 소유자별 세액을 합산합니다.</span>
+          </div>
+        </div>
         <div class="field" data-house-only>
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="onlyHome" checked/>
             <span class="text">1세대 1주택 (양도일 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="양도일 현재 1세대가 국내에 주택 1채만 보유하고 2년 이상 보유(조정지역은 2년 거주)하면 12억까지 비과세됩니다. 비주택에는 적용되지 않습니다.">?</span></span>
+          </label>
+        </div>
+        <div class="field" data-house-only>
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="surchargeExempt"/>
+            <span class="text">중과 배제 주택 (장기임대·상속·조특법 감면 등)
+              <span class="note">조정대상지역 다주택이어도 중과 제외 요건에 해당하면 체크하세요. 일반세율과 장기보유특별공제가 적용됩니다.</span>
+            </span>
           </label>
         </div>
         <p class="scn-note">매도 시나리오는 양도소득세 산정이 중심이라 소득·DSR을 적용하지 않습니다.</p>
@@ -554,7 +578,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="../assets/rates.js?v=20260629"></script>
-<script src="../assets/app.js?v=20260723"></script>
+<script src="../assets/app.js?v=20260725"></script>
 <script>
 (function () {
   'use strict';

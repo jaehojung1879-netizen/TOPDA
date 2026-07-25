@@ -272,10 +272,34 @@
             <input id="td-liveYears" name="liveYears" type="number" min="0" max="50" step="0.5" value="4" />
           </div>
         </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-sellDate">Sale (planned) date<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Used to determine whether a temporary multi-home surcharge waiver applies. The calculator uses the cutoff date in its current rate data.">?</span></label>
+            <input id="td-sellDate" name="sellDate" type="date" value="" />
+          </div>
+          <div class="field">
+            <label for="td-jointOwners">Ownership</label>
+            <select id="td-jointOwners" name="jointOwners">
+              <option value="1">Sole</option>
+              <option value="2">2-way joint (e.g. spouses)</option>
+              <option value="3">3-way joint</option>
+              <option value="4">4-way joint</option>
+            </select>
+            <span class="hint">For joint ownership, the gain is split equally and each owner's tax is calculated before summing the total.</span>
+          </div>
+        </div>
         <div class="field" data-house-only>
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="onlyHome" checked/>
             <span class="text">1-home household (as of sale date)<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="If, on the sale date, the household owns only 1 home nationwide and has held it 2+ years (2+ years of residence if bought in a regulated area), gains up to KRW 1.2B are exempt. Does not apply to non-housing.">?</span></span>
+          </label>
+        </div>
+        <div class="field" data-house-only>
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="surchargeExempt"/>
+            <span class="text">Surcharge-exempt home (long-term rental, inheritance, etc.)
+              <span class="note">Check this when a regulated-area multi-home sale qualifies for an exclusion. The base rate and long-term holding deduction then apply.</span>
+            </span>
           </label>
         </div>
         <p class="scn-note">The sale scenario focuses on capital gains tax, so income/DSR are not applied.</p>
@@ -504,7 +528,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="../../assets/rates.js?v=20260629"></script>
-<script src="../../assets/app.js?v=20260723"></script>
+<script src="../../assets/app.js?v=20260725"></script>
 <script>
 (function () {
   'use strict';

@@ -678,6 +678,7 @@ function calcTransferTax(input) {
   const {
     sellPrice, buyPrice, cost, holdYears, liveYears,
     homes, onlyHome, regulated,
+    assetType = 'house', // 종합계산기의 비주택(상가·업무용 오피스텔·토지) 단기세율 분기용
     surchargeExempt = false, // 조정지역 다주택이라도 중과 제외 요건(장기임대·상속 등) 해당 시 true
     sellDate,        // 'YYYY-MM-DD' — 다주택 중과 한시 유예(2026-05-09까지) 자동 판단용
     jointOwners = 1, // 공동명의 인원(1=단독, 2=부부 공동 등). 양도차익을 균등 분할 후 세액 합산
@@ -685,11 +686,12 @@ function calcTransferTax(input) {
   if (!sellPrice || sellPrice <= 0) return null;
 
   const rawGain = Math.max(0, sellPrice - buyPrice - cost);
+  const isHousing = assetType !== 'nonhouse';
 
   // 1세대 1주택 비과세 / 안분
   let exempted = false;
   let taxableGainRatio = 1;
-  const isOneHome = homes === 1 && onlyHome;
+  const isOneHome = isHousing && homes === 1 && onlyHome;
   if (isOneHome && holdYears >= 2) {
     if (sellPrice <= 1200000000) {
       exempted = true;
@@ -702,20 +704,20 @@ function calcTransferTax(input) {
 
   // 단기보유 판정
   let shortTermRate = null;
-  if (holdYears < 1) shortTermRate = 0.70;
-  else if (holdYears < 2) shortTermRate = 0.60;
+  if (holdYears < 1) shortTermRate = isHousing ? 0.70 : 0.50;
+  else if (holdYears < 2) shortTermRate = isHousing ? 0.60 : 0.40;
 
   // 다주택 중과 한시 유예 자동 판단:
   //  보유 2년+ & 양도일 ≤ 2026-05-09 이면 조정지역·다주택이어도 중과 미적용.
-  const W = (window.TOPDA_RATES && window.TOPDA_RATES.transferTax) || {};
+  const W = (typeof window !== 'undefined' && window.TOPDA_RATES && window.TOPDA_RATES.transferTax) || {};
   const waiverUntil = W.multiHomeSurchargeWaiverUntil || '2026-05-09';
   const waiverMinHold = W.multiHomeSurchargeWaiverMinHoldYears || 2;
   const sd = (sellDate && /^\d{4}-\d{2}-\d{2}$/.test(sellDate)) ? sellDate : '';
-  const surchargeWaived = sd && sd <= waiverUntil && holdYears >= waiverMinHold;
+  const surchargeWaived = Boolean(isHousing && regulated && homes >= 2 && sd && sd <= waiverUntil && holdYears >= waiverMinHold);
 
   // 다주택 중과 대상 판정 (조정대상지역 + 2주택 이상 + 장기보유 + 한시유예/중과배제 미해당).
   //  조정지역 다주택 양도는 세율 가산과 함께 장기보유특별공제가 배제된다 (소득세법 제95조 제2항).
-  const heavyTax = !shortTermRate && regulated && homes >= 2 && !surchargeWaived && !surchargeExempt;
+  const heavyTax = isHousing && !shortTermRate && regulated && homes >= 2 && !surchargeWaived && !surchargeExempt;
 
   // 장기보유특별공제 (단기보유·다주택 중과 대상은 배제)
   let ltDeductRate = 0;
@@ -771,23 +773,33 @@ function calcTransferTax(input) {
   //  단순 분할로 누진세율 구간이 낮아져 절세 효과가 발생한다.
   //  단기보유·다주택 중과는 인원과 무관하므로 위와 동일 세율 적용.
   const owners = Math.max(1, Math.min(4, Math.round(Number(jointOwners) || 1)));
-  let jointTotal = null, savings = 0;
+  let jointBasicDeduct = null, jointTaxBase = null;
+  let jointMarginalRatePct = null, jointAppliedRateLabel = null;
+  let jointIncomeTax = null, jointLocalTax = null, jointTotal = null, savings = 0;
   if (owners > 1 && !exempted) {
     const perGain = taxableGain / owners;
     const perLtDeduct = perGain * ltDeductRate;
     const perIncome = Math.max(0, perGain - perLtDeduct);
     const perBasic = Math.min(2500000, perIncome);
     const perBase = Math.max(0, perIncome - perBasic);
+    jointBasicDeduct = perBasic * owners;
+    jointTaxBase = perBase * owners;
     let perTax;
     if (shortTermRate) {
       perTax = perBase * shortTermRate;
+      jointMarginalRatePct = shortTermRate * 100;
+      jointAppliedRateLabel = (shortTermRate * 100) + '% (단기보유 중과)';
     } else {
       // 분할된 과세표준으로 각자 누진세율 재산정 후 중과 가산분(있으면) 적용
       const t = calcProgressiveTax(perBase);
       perTax = Math.max(0, perBase * (t.marginalRate + surchargeRate) - t.deduction);
+      jointMarginalRatePct = Math.round(t.marginalRate * 100);
+      jointAppliedRateLabel = jointMarginalRatePct + '% (누진)';
+      if (surchargeRate > 0) jointAppliedRateLabel += ' + ' + (surchargeRate * 100) + '%p 중과';
+      else if (surchargeWaived) jointAppliedRateLabel += ' (중과 한시유예 적용 — ' + waiverUntil + '까지)';
     }
-    const jointIncomeTax = perTax * owners;
-    const jointLocalTax = jointIncomeTax * 0.10;
+    jointIncomeTax = perTax * owners;
+    jointLocalTax = jointIncomeTax * 0.10;
     jointTotal = jointIncomeTax + jointLocalTax;
     savings = Math.max(0, (incomeTax + incomeTax * 0.10) - jointTotal);
   }
@@ -800,7 +812,9 @@ function calcTransferTax(input) {
     exempted, taxableGainRatio, rawGain, taxableGain,
     ltDeductRate, ltDeduct, incomeAmount, basicDeduct, taxBase,
     rate, appliedRateLabel, incomeTax, localTax, total, effective,
-    surchargeWaived, jointOwners: owners, jointTotal, jointSavings: savings,
+    surchargeWaived, jointOwners: owners,
+    jointBasicDeduct, jointTaxBase, jointMarginalRatePct, jointAppliedRateLabel,
+    jointIncomeTax, jointLocalTax, jointTotal, jointSavings: savings,
     // 비-한국어 표시용 구조화 필드(계산 로직은 위와 동일, 라벨 조립만 언어별로 분기)
     isShortTerm: !!shortTermRate, shortTermRatePct: shortTermRate ? shortTermRate * 100 : 0,
     marginalRatePct: !shortTermRate ? Math.round((rate - surchargeRate) * 100) : 0,
@@ -1224,21 +1238,6 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       return { total: stamp + regFee + bond + scrivener + vat, stamp, regFee, bond, bondBuy, rate, scrivener, vat, std };
     }
 
-    function progressiveTax(base) {
-      const brackets = [
-        { upTo: 14000000,    rate: 0.06, deduction: 0 },
-        { upTo: 50000000,    rate: 0.15, deduction: 1260000 },
-        { upTo: 88000000,    rate: 0.24, deduction: 5760000 },
-        { upTo: 150000000,   rate: 0.35, deduction: 15440000 },
-        { upTo: 300000000,   rate: 0.38, deduction: 19940000 },
-        { upTo: 500000000,   rate: 0.40, deduction: 25940000 },
-        { upTo: 1000000000,  rate: 0.42, deduction: 35940000 },
-        { upTo: Infinity,    rate: 0.45, deduction: 65940000 },
-      ];
-      for (const b of brackets) if (base <= b.upTo) return Math.max(0, base * b.rate - b.deduction);
-      return 0;
-    }
-
     function inheritGiftTax(base) {
       const brackets = [
         { upTo: 100000000,   rate: 0.10, deduction: 0 },
@@ -1575,65 +1574,71 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const liveYears = getNum('liveYears');
       const homes = Number(getRadio('homes') || 1);
       const onlyHome = getCheck('onlyHome');
-      const nonhouse = (getRadio('assetType') || 'house') === 'nonhouse';
+      const assetType = getRadio('assetType') || 'house';
+      const regulated = getCheck('regulated');
+      const surchargeExempt = getCheck('surchargeExempt');
+      const sellDate = root.querySelector('[name="sellDate"]')?.value || '';
+      const jointOwners = getNum('jointOwners') || 1;
+      const r = calcTransferTax({
+        sellPrice, buyPrice, cost, holdYears, liveYears,
+        homes, onlyHome, regulated, assetType,
+        surchargeExempt, sellDate, jointOwners,
+      });
 
-      const rawGain = Math.max(0, sellPrice - buyPrice - cost);
-      const isOne = !nonhouse && homes === 1 && onlyHome && holdYears >= 2;
-      let exempted = false, ratio = 1;
-      if (isOne) {
-        if (sellPrice <= 1200000000) { exempted = true; ratio = 0; }
-        else { ratio = (sellPrice - 1200000000) / sellPrice; }
+      if (!r) {
+        if (resultTitle) resultTitle.textContent = L('예상 양도소득세', 'Estimated capital gains tax');
+        setText('primaryTotal', fmt.won(0));
+        setLabel('data-quick-label1', L('양도차익', 'Capital gain'));
+        setText('quick1', fmt.won(0));
+        setLabel('data-quick-label2', L('과세표준', 'Tax base'));
+        setText('quick2', fmt.won(0));
+        setLabel('data-quick-label3', L('실효세율 (양도가 대비)', 'Effective rate (of sale price)'));
+        setText('quick3', '—');
+        renderChart([]);
+        renderDetail([]);
+        return;
       }
-      const taxableGain = rawGain * ratio;
 
-      let ltRate = 0;
-      if (holdYears >= 3) {
-        if (isOne && sellPrice > 1200000000 && liveYears >= 2) {
-          // 표2(1세대1주택·거주 2년 이상): 보유 연 4% + 거주 연 4%, 합산 최대 80%
-          const h = Math.min(holdYears, 10);
-          const l = Math.min(liveYears, 10);
-          const hr = h >= 3 ? Math.min(0.40, 0.12 + (h-3)*0.04) : 0;
-          const lr = l >= 3 ? Math.min(0.40, 0.12 + (l-3)*0.04) : 0;
-          ltRate = Math.min(0.80, hr + lr);
-        } else {
-          // 표1(일반): 보유 연 2%, 3년 6% ~ 15년 30%
-          const y = Math.min(holdYears, 15);
-          ltRate = Math.min(0.30, y * 0.02);
-        }
-      }
-      const ltDeduct = taxableGain * ltRate;
-      const income = Math.max(0, taxableGain - ltDeduct);
-      const basicDeduct = Math.min(2500000, income);
-      const taxBase = Math.max(0, income - basicDeduct);
-      let incomeTax;
-      if (holdYears < 1) incomeTax = taxBase * (nonhouse ? 0.50 : 0.70);
-      else if (holdYears < 2) incomeTax = taxBase * (nonhouse ? 0.40 : 0.60);
-      else incomeTax = progressiveTax(taxBase);
-      const localTax = incomeTax * 0.10;
-      const total = incomeTax + localTax;
+      // 공동명의가 선택되면 안분 후 합산한 실제 예상세액을 대표값으로 사용한다.
+      const hasJointEstimate = r.jointOwners > 1 && r.jointTotal != null;
+      const incomeTax = hasJointEstimate ? r.jointIncomeTax : r.incomeTax;
+      const localTax = hasJointEstimate ? r.jointLocalTax : r.localTax;
+      const total = hasJointEstimate ? r.jointTotal : r.total;
+      const basicDeduct = hasJointEstimate ? r.jointBasicDeduct : r.basicDeduct;
+      const taxBase = hasJointEstimate ? r.jointTaxBase : r.taxBase;
+      const rateResult = hasJointEstimate
+        ? { ...r, appliedRateLabel: r.jointAppliedRateLabel, marginalRatePct: r.jointMarginalRatePct }
+        : r;
+      const effective = sellPrice > 0 ? total / sellPrice * 100 : 0;
 
-      if (resultTitle) resultTitle.textContent = exempted ? L('1세대1주택 비과세 (양도세 0원)', '1-home exemption (KRW 0 capital gains tax)') : L('예상 양도소득세', 'Estimated capital gains tax');
+      if (resultTitle) resultTitle.textContent = r.exempted ? L('1세대1주택 비과세 (양도세 0원)', '1-home exemption (KRW 0 capital gains tax)') : L('예상 양도소득세', 'Estimated capital gains tax');
       setText('primaryTotal', fmt.won(total));
       setLabel('data-quick-label1', L('양도차익', 'Capital gain'));
-      setText('quick1', fmt.won(rawGain));
+      setText('quick1', fmt.won(r.rawGain));
       setLabel('data-quick-label2', L('과세표준', 'Tax base'));
       setText('quick2', fmt.won(taxBase));
       setLabel('data-quick-label3', L('실효세율 (양도가 대비)', 'Effective rate (of sale price)'));
-      setText('quick3', sellPrice > 0 ? (total / sellPrice * 100).toFixed(2) + '%' : '—');
+      setText('quick3', effective.toFixed(2) + '%');
 
       renderChart([
         { label: L('국세 양도소득세', 'National capital gains tax'), value: incomeTax, color: '#1e3a8a' },
         { label: L('지방소득세 (10%)', 'Local income tax (10%)'), value: localTax, color: '#3b82f6' },
-        { label: L('장기보유 공제분', 'Long-term holding deduction'), value: ltDeduct, color: '#047857' },
+        { label: L('장기보유 공제분', 'Long-term holding deduction'), value: r.ltDeduct, color: '#047857' },
       ]);
       renderDetail([
         { label: L('양도가액', 'Sale price'), value: sellPrice, sub: true },
         { label: L('취득가액 + 필요경비', 'Purchase price + costs'), value: buyPrice + cost, sub: true },
-        { label: L('양도차익', 'Capital gain'), value: rawGain, color: '#1e3a8a' },
-        ...(ratio < 1 && ratio > 0 ? [{ label: L('과세 비율 (12억 초과)', 'Taxable ratio (over KRW 1.2B)'), value: (ratio*100).toFixed(1)+'%', sub: true }] : []),
-        { label: L('장기보유특별공제 (' + (ltRate*100).toFixed(0) + '%)', 'Long-term holding deduction (' + (ltRate*100).toFixed(0) + '%)'), value: '−' + fmt.won(ltDeduct), sub: true },
+        { label: L('양도차익', 'Capital gain'), value: r.rawGain, color: '#1e3a8a' },
+        ...(r.taxableGainRatio < 1 && r.taxableGainRatio > 0 ? [{ label: L('과세 비율 (12억 초과)', 'Taxable ratio (over KRW 1.2B)'), value: (r.taxableGainRatio*100).toFixed(1)+'%', sub: true }] : []),
+        { label: L('장기보유특별공제 (' + (r.ltDeductRate*100).toFixed(0) + '%)', 'Long-term holding deduction (' + (r.ltDeductRate*100).toFixed(0) + '%)'), value: '−' + fmt.won(r.ltDeduct), sub: true },
         { label: L('기본공제', 'Basic deduction'), value: '−' + fmt.won(basicDeduct), sub: true },
         { label: L('과세표준', 'Tax base'), value: taxBase },
+        { label: L('적용 세율', 'Applied rate'), value: rateLabelText(rateResult, isEn ? 'en' : 'ko'), sub: true },
+        ...(r.surchargeWaived && regulated && homes >= 2 ? [{ label: L('다주택 중과', 'Multi-home surcharge'), value: L(r.waiverUntil + '까지 한시 유예', 'Waived through ' + r.waiverUntil), sub: true }] : []),
+        ...(hasJointEstimate ? [
+          { label: L('단독명의 예상세액', 'Sole-owner estimate'), value: r.total, sub: true },
+          { label: L(r.jointOwners + '인 공동명의 절세액', r.jointOwners + '-owner estimated savings'), value: '−' + fmt.won(r.jointSavings), sub: true },
+        ] : []),
         { label: L('산출세액 (국세)', 'Calculated tax (national)'), value: incomeTax, color: '#1e3a8a' },
         { label: L('지방소득세', 'Local income tax'), value: localTax, color: '#3b82f6' },
         { divider: true, label: L('총 부담세액', 'Total tax'), value: total },
@@ -1799,7 +1804,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       else if (currentScn === 'gift') calcGift();
     }
 
-    root.querySelectorAll('input').forEach((el) => {
+    root.querySelectorAll('input, select').forEach((el) => {
       el.addEventListener('input', recalc);
       el.addEventListener('change', recalc);
     });
