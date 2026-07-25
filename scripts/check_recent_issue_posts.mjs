@@ -26,6 +26,7 @@ for (const { slug, category } of posts) {
     '"@type": "Article"',
     '"datePublished": "2026-07-25"',
     '자료 기준 2026.07.25',
+    '이슈 정리',
     '공식 자료',
     '<nav class="g-toc"',
     '<h2'
@@ -35,6 +36,9 @@ for (const { slug, category } of posts) {
   }
   if (/<div class="g-hero-media"|<img\b/i.test(html)) {
     errors.push(`${slug}: 요청하지 않은 본문 이미지가 포함됨`);
+  }
+  if (/빅 이슈|이슈\s+[1-9]|뷰 포인트/.test(html)) {
+    errors.push(`${slug}: 과장되거나 지시를 그대로 옮긴 표현이 포함됨`);
   }
 
   const hrefPattern = /href="([^"]+)"/g;

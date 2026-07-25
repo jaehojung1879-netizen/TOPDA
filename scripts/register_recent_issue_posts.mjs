@@ -9,21 +9,21 @@ const data = JSON.parse(readFileSync(searchIndexPath, 'utf8'));
 
 const recentPosts = [
   {
-    title: '2026년 상반기 매매 빅 이슈 — 규제지역·양도세·거래 양극화',
-    desc: '2026년 4~7월 수도권·지방 거래 양극화, 새 규제지역, 다주택자 양도세 중과 재개와 매매 계약 체크포인트.',
+    title: '2026년 상반기 매매 이슈 정리 — 가격 흐름·규제지역·양도세',
+    desc: '2026년 상반기 주택가격 변화와 하반기 전망, 수도권·지방 격차, 새 규제지역, 다주택자 양도세와 매매 계약 체크포인트.',
     url: 'posts/recent-sale-issues-2026.html',
     type: '가이드',
     cat: '매매'
   },
   {
-    title: '2026년 상반기 전세 빅 이슈 — 전셋값·보증·전세사기 지원',
+    title: '2026년 상반기 전세 이슈 정리 — 전셋값·보증·전세사기 지원',
     desc: '2026년 4~7월 전세·월세 가격, 전세사기 피해자 지원, HUG 반환보증과 임대사업자 보증 심사 변화.',
     url: 'posts/recent-jeonse-issues-2026.html',
     type: '가이드',
     cat: '전세·월세'
   },
   {
-    title: '2026년 상반기 대출 빅 이슈 — LTV·가계부채·기준금리',
+    title: '2026년 상반기 대출 이슈 정리 — LTV·가계부채·기준금리',
     desc: '2026년 4~7월 가계대출 총량 관리, 규제지역 LTV 40%, 다주택자 만기연장 제한, 기준금리 2.75%의 영향.',
     url: 'posts/recent-loan-issues-2026.html',
     type: '가이드',
