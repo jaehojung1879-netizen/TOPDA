@@ -24,7 +24,7 @@
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260725" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -190,30 +190,30 @@
 </footer>
 
 <script src="../assets/rates.js?v=20260629"></script>
-<script src="../assets/app.js?v=20260723"></script>
+<script src="../assets/app.js?v=20260725"></script>
 <script>
 (function () {
   const won = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
   const $ = (id) => document.getElementById(id);
   const parseWon = (v) => Number(String(v).replace(/[^0-9]/g, '')) || 0;
-  const DEPOSIT_RATE = 0.035; // 보증금 간주임대 가산 이자율(정기예금 근사)
 
   function recalc() {
     const type = document.querySelector('input[name="type"]:checked').value;
     const rent = parseWon($('rti-rent').value);
     const deposit = parseWon($('rti-deposit').value);
     const loan = parseWon($('rti-loan').value);
-    const rate = (+$('rti-rate').value || 0) / 100;
+    const rate = +$('rti-rate').value || 0;
     const R = window.TOPDA_RATES || {};
     const threshold = type === 'residential'
       ? ((R.rti && R.rti.residential) || 1.25)
       : ((R.rti && R.rti.commercial) || 1.5);
 
-    const rent12 = rent * 12;
-    const depositInt = Math.round(deposit * DEPOSIT_RATE);
-    const annualRent = rent12 + depositInt;
-    const annualInterest = Math.round(loan * rate);
-    const rti = annualInterest > 0 ? annualRent / annualInterest : 0;
+    const result = calcRti({ monthlyRent: rent, deposit, loan, annualRate: rate });
+    const rent12 = Math.round(result.rent12);
+    const depositInt = Math.round(result.depositIncome);
+    const annualRent = Math.round(result.annualRent);
+    const annualInterest = Math.round(result.annualInterest);
+    const rti = result.ratio;
 
     $('rti-total').textContent = annualInterest > 0 ? rti.toFixed(2) + '배' : '—';
     $('rti-ratio').textContent = annualInterest > 0 ? rti.toFixed(2) + '배' : '이자 입력 필요';
