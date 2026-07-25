@@ -27,7 +27,7 @@
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/total-cost-dashboard.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="../../assets/styles.css?v=20260725" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -145,20 +145,32 @@
           </div>
         </div>
 
-        <div class="field" data-house-only>
-          <label class="check-item" style="padding: 0; cursor: pointer;">
-            <input type="checkbox" name="areaOver85"/>
-            <span class="text">Floor area over 85 m²<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Housing above the national housing scale (85 m²) adds a rural special tax. 85 m² or below is exempt.">?</span></span>
-          </label>
-        </div>
-
-        <div class="field" data-house-only>
-          <label class="check-item" style="padding: 0; cursor: pointer;">
-            <input type="checkbox" name="firstHome"/>
-            <span class="text">First-time home buyer
-              <span class="note">No-home household + price ≤ KRW 1.2B → up to KRW 2M acquisition-tax relief</span>
-            </span>
-          </label>
+        <div class="calc-check-grid" data-house-only>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="areaOver85"/>
+              <span class="text">Floor area over 85 m²<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="A rural special tax applies above 85 m². This also automatically controls whether the 2026 unsold-unit relief can be selected.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="tempTwoHome"/>
+              <span class="text">Temporary two-home case<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this if the former home will be disposed of within the statutory period. It is enabled only for a two-home household and applies the one-home standard rate.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="firstHome"/>
+              <span class="text">First-ever home purchase<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this only if no household member has ever owned a home. The calculator automatically checks the one-home and KRW 1.2B limits and applies up to KRW 2M of relief.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="unsold2026"/>
+              <span class="text">Qualifying regional unsold unit<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this for a qualifying completed but unsold regional unit under the temporary 2026 program. The KRW 600M and 85 m² limits are checked automatically.">?</span></span>
+            </label>
+          </div>
+          <p class="acq-auto-status" data-dashboard-acq-status>Relief eligibility is checked automatically from price, home count, and floor area.</p>
         </div>
 
         <h3 class="scn-section-title" data-loan-title>Mortgage</h3>
@@ -272,10 +284,34 @@
             <input id="td-liveYears" name="liveYears" type="number" min="0" max="50" step="0.5" value="4" />
           </div>
         </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-sellDate">Sale (planned) date<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Used to determine whether a temporary multi-home surcharge waiver applies. The calculator uses the cutoff date in its current rate data.">?</span></label>
+            <input id="td-sellDate" name="sellDate" type="date" value="" />
+          </div>
+          <div class="field">
+            <label for="td-jointOwners">Ownership</label>
+            <select id="td-jointOwners" name="jointOwners">
+              <option value="1">Sole</option>
+              <option value="2">2-way joint (e.g. spouses)</option>
+              <option value="3">3-way joint</option>
+              <option value="4">4-way joint</option>
+            </select>
+            <span class="hint">For joint ownership, the gain is split equally and each owner's tax is calculated before summing the total.</span>
+          </div>
+        </div>
         <div class="field" data-house-only>
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="onlyHome" checked/>
             <span class="text">1-home household (as of sale date)<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="If, on the sale date, the household owns only 1 home nationwide and has held it 2+ years (2+ years of residence if bought in a regulated area), gains up to KRW 1.2B are exempt. Does not apply to non-housing.">?</span></span>
+          </label>
+        </div>
+        <div class="field" data-house-only>
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="surchargeExempt"/>
+            <span class="text">Surcharge-exempt home (long-term rental, inheritance, etc.)
+              <span class="note">Check this when a regulated-area multi-home sale qualifies for an exclusion. The base rate and long-term holding deduction then apply.</span>
+            </span>
           </label>
         </div>
         <p class="scn-note">The sale scenario focuses on capital gains tax, so income/DSR are not applied.</p>
@@ -341,6 +377,20 @@
           <input id="td-children" name="children" type="number" min="0" max="10" step="1" value="2" />
           <span class="hint">KRW 50M personal deduction per child (minors get an extra KRW 10M × remaining years to age 19).</span>
         </div>
+        <div class="calc-check-grid">
+          <div class="field">
+            <label class="check-item" style="padding:0; cursor:pointer;">
+              <input type="checkbox" name="inheritNoHome"/>
+              <span class="text">No-home household inheriting one home<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this if the heir and all household members own no other home and inherit one home. The special acquisition-tax rate is 0.8%; otherwise it is 2.8%.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding:0; cursor:pointer;">
+              <input type="checkbox" name="inheritAreaOver85"/>
+              <span class="text">Floor area over 85 m²<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this to include the rural special tax for an inherited home above 85 m².">?</span></span>
+            </label>
+          </div>
+        </div>
       </div>
 
       <!-- ===== Gift ===== -->
@@ -367,6 +417,27 @@
           <div class="input-suffix" data-suffix="KRW">
             <input id="td-prevGift" name="prevGift" type="text" inputmode="numeric" data-format="won" value="0" />
           </div>
+        </div>
+        <div class="calc-check-grid">
+          <div class="field">
+            <label class="check-item" style="padding:0; cursor:pointer;">
+              <input type="checkbox" name="giftRegulated"/>
+              <span class="text">Regulated area<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this if the gifted home is in a regulated area. The calculator combines it with value and donor ownership to determine whether the 12% rate applies.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding:0; cursor:pointer;">
+              <input type="checkbox" name="giftDonorMultiHome"/>
+              <span class="text">Donor is a multi-home owner<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this if the donor's household owns multiple homes. The remaining surcharge conditions are checked automatically.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding:0; cursor:pointer;">
+              <input type="checkbox" name="giftAreaOver85"/>
+              <span class="text">Floor area over 85 m²<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this to include the rural special tax for a gifted home above 85 m².">?</span></span>
+            </label>
+          </div>
+          <p class="acq-auto-status" data-gift-acq-status>The acquisition-tax rate is selected automatically from value, area status, and donor ownership.</p>
         </div>
       </div>
 
@@ -412,6 +483,18 @@
 
       <div class="breakdown" data-detail-breakdown style="border-top:1px solid var(--border); padding-top:14px; margin-top:8px;">
         <!-- Filled by JS -->
+      </div>
+
+      <div class="dsr-box" data-mortgage-limit-box>
+        <div class="dsr-box-head">
+          <strong>Estimated maximum mortgage</strong>
+          <span class="dsr-pct" data-out="mortgageLimit">—</span>
+        </div>
+        <div class="dsr-meta">
+          <span data-out="mortgageBinding">Lowest of LTV, price cap, and DSR</span>
+          <span data-out="mortgageInputs">—</span>
+        </div>
+        <p class="dsr-verdict" data-out="mortgageVerdict">Calculated automatically from the home, income, and loan inputs.</p>
       </div>
 
       <!-- DSR result (sale only) -->
@@ -504,7 +587,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="../../assets/rates.js?v=20260629"></script>
-<script src="../../assets/app.js?v=20260723"></script>
+<script src="../../assets/app.js?v=20260725"></script>
 <script>
 (function () {
   'use strict';

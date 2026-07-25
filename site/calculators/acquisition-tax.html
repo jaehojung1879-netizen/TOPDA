@@ -31,7 +31,7 @@
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/acquisition-tax.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260725" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -148,67 +148,57 @@
         <span class="hint">세대 기준 보유 주택 수입니다. 법인 명의 취득은 별도 규정이 적용됩니다.</span>
       </div>
 
-      <div class="field" data-show="purchase">
-        <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="regulated"/>
-          <span class="text">조정대상지역에 위치
-            <span class="note">2주택부터 중과세율(8·12%)이 적용됩니다. 1주택은 영향 없습니다.</span>
-          </span>
-        </label>
-      </div>
+      <div class="calc-check-grid">
+        <div class="field" data-show="purchase gift">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="regulated"/>
+            <span class="text">조정대상지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="정부 지정 지역 여부는 주소만으로 이 계산기에서 확정할 수 없어 직접 선택해야 합니다. 매매는 다주택 중과, 증여는 시가표준액 3억원 이상·다주택 증여자 조건과 함께 12% 중과 판정에 사용합니다.">?</span></span>
+          </label>
+        </div>
 
-      <div class="field" data-show="purchase">
-        <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="tempTwoHome"/>
-          <span class="text">일시적 2주택 (종전주택 처분 예정)
-            <span class="note">신규 주택 취득 후 종전 주택을 기한 내(조정지역 3년) 처분하면, 2주택이어도 <strong>1주택 표준세율</strong>로 신고합니다. 처분하지 못하면 중과세가 추징됩니다.</span>
-          </span>
-        </label>
-      </div>
+        <div class="field" data-show="purchase">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="tempTwoHome"/>
+            <span class="text">일시적 2주택<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="신규 주택 취득 후 종전 주택을 법정 기한 내 처분할 예정이면 선택하세요. 주택 수가 2채일 때만 선택할 수 있으며, 조건 충족 시 1주택 표준세율을 적용합니다. 처분 요건을 지키지 못하면 중과세가 추징될 수 있습니다.">?</span></span>
+          </label>
+        </div>
 
-      <div class="field" data-show="purchase">
-        <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="firstHome"/>
-          <span class="text">생애최초 주택 구입자
-            <span class="note">무주택 세대가 취득가액 12억원 이하 주택을 1주택 표준세율로 취득하면 취득세 최대 200만 원을 감면합니다 (지방세특례제한법 제36조의3).</span>
-          </span>
-        </label>
-      </div>
+        <div class="field" data-show="purchase">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="firstHome"/>
+            <span class="text">생애최초 구입<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="세대원 모두 과거 주택을 소유한 적이 없는 경우 선택하세요. 1주택·취득가액 12억원 이하일 때만 선택할 수 있고 취득세를 최대 200만원 감면합니다.">?</span></span>
+          </label>
+        </div>
 
-      <div class="field" data-show="inherit">
-        <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="inheritNoHome"/>
-          <span class="text">무주택 세대의 1가구 1주택 상속
-            <span class="note">상속인과 세대원 모두 무주택일 때, 상속으로 1주택을 취득하면 세율 0.8% 특례가 적용됩니다(그 외 2.8%).</span>
-          </span>
-        </label>
-      </div>
+        <div class="field" data-show="inherit">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="inheritNoHome"/>
+            <span class="text">무주택 세대 1주택 상속<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="상속인과 같은 세대원 모두 무주택이고 상속으로 1주택을 취득하는 경우 선택하세요. 해당하면 0.8%, 그 외 상속 취득은 2.8%를 적용합니다.">?</span></span>
+          </label>
+        </div>
 
-      <div class="field" data-show="gift">
-        <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="giftHeavy"/>
-          <span class="text">조정대상지역 + 시가표준 3억원 이상 (중과)
-            <span class="note">조정대상지역의 시가표준액 3억원 이상 주택을 다주택자가 증여하면 12% 중과세율이 적용됩니다(그 외 3.5%).</span>
-          </span>
-        </label>
-      </div>
+        <div class="field" data-show="gift">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="giftDonorMultiHome"/>
+            <span class="text">증여자가 다주택자<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="증여자의 세대가 여러 주택을 보유한 경우 선택하세요. 시가표준액 3억원 이상과 조정대상지역 여부는 입력값에서 자동 확인해 12% 중과 여부를 판정합니다.">?</span></span>
+          </label>
+        </div>
 
-      <div class="field">
-        <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="areaOver85"/>
-          <span class="text">전용면적 85㎡ 초과
-            <span class="note">국민주택규모(85㎡) 초과 시 농어촌특별세가 부과됩니다. 표준 0.2%, 중과 8% → 0.6%, 중과 12% → 1.0%. 85㎡ 이하는 면제됩니다.</span>
-          </span>
-        </label>
-      </div>
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="areaOver85"/>
+            <span class="text">전용 85㎡ 초과<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="85㎡를 초과하면 농어촌특별세가 붙습니다. 표준세율은 0.2%, 8% 중과는 0.6%, 12% 중과는 1.0%이며 85㎡ 이하는 면제됩니다.">?</span></span>
+          </label>
+        </div>
 
-      <div class="field" data-show="purchase">
-        <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="unsold2026"/>
-          <span class="text">2026 한시 — 지방 미분양 아파트 감면
-            <span class="note">전용 85㎡ 이하·취득가 6억 이하 지방 준공 후 미분양 아파트 취득 시 <strong>취득세 50% 감면</strong> + <strong>다주택 중과 제외</strong>(2026년 한시). 85㎡ 초과 또는 6억 초과는 적용되지 않습니다.</span>
-          </span>
-        </label>
+        <div class="field" data-show="purchase">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="unsold2026"/>
+            <span class="text">지방 준공 후 미분양<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="2026년 한시 감면 대상인 지방 준공 후 미분양 아파트라면 선택하세요. 취득가 6억원 이하·전용 85㎡ 이하인지는 자동 확인하며, 충족 시 취득세 50% 감면과 다주택 중과 제외를 적용합니다.">?</span></span>
+          </label>
+        </div>
+
+        <p class="acq-auto-status" data-acq-auto-status>가격·주택 수·면적에 따른 적용 가능 여부를 자동으로 확인합니다.</p>
       </div>
     </div>
 

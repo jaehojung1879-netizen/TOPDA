@@ -24,7 +24,7 @@
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260725" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -147,20 +147,32 @@
           </div>
         </div>
 
-        <div class="field" data-house-only>
-          <label class="check-item" style="padding: 0; cursor: pointer;">
-            <input type="checkbox" name="areaOver85"/>
-            <span class="text">전용면적 85㎡ 초과<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택규모(85㎡)를 넘는 주택은 농어촌특별세가 더해집니다. 85㎡ 이하는 농특세가 면제됩니다.">?</span></span>
-          </label>
-        </div>
-
-        <div class="field" data-house-only>
-          <label class="check-item" style="padding: 0; cursor: pointer;">
-            <input type="checkbox" name="firstHome"/>
-            <span class="text">생애최초 주택 구입자
-              <span class="note">무주택 세대 + 12억 이하 → 취득세 최대 200만 원 감면</span>
-            </span>
-          </label>
+        <div class="calc-check-grid" data-house-only>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="areaOver85"/>
+              <span class="text">전용 85㎡ 초과<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="85㎡를 초과하면 농어촌특별세가 추가됩니다. 85㎡ 이하는 면제되고, 이 선택에 따라 2026 미분양 감면 가능 여부도 자동 판정합니다.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="tempTwoHome"/>
+              <span class="text">일시적 2주택<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="종전 주택을 법정 기한 내 처분할 예정이면 선택하세요. 주택 수가 2채일 때만 활성화되며 1주택 표준세율을 적용합니다.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="firstHome"/>
+              <span class="text">생애최초 구입<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="세대원 모두 과거 주택 소유 이력이 없다면 선택하세요. 1주택·12억원 이하인지 자동 확인해 취득세를 최대 200만원 감면합니다.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="unsold2026"/>
+              <span class="text">지방 준공 후 미분양<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="2026년 한시 감면 대상 주택이면 선택하세요. 6억원 이하·85㎡ 이하인지 자동 확인해 취득세 50% 감면과 다주택 중과 제외를 적용합니다.">?</span></span>
+            </label>
+          </div>
+          <p class="acq-auto-status" data-dashboard-acq-status>가격·주택 수·면적으로 감면 적용 가능 여부를 자동 확인합니다.</p>
         </div>
 
         <h3 class="scn-section-title" data-loan-title>주담대</h3>
@@ -274,10 +286,34 @@
             <input id="td-liveYears" name="liveYears" type="number" min="0" max="50" step="0.5" value="4" />
           </div>
         </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-sellDate">양도일(예정일)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="다주택 중과 한시 유예 적용 여부를 판단하는 날짜입니다. 기준일과 유예 기간은 계산기 세율 데이터에 따라 적용됩니다.">?</span></label>
+            <input id="td-sellDate" name="sellDate" type="date" value="" />
+          </div>
+          <div class="field">
+            <label for="td-jointOwners">명의(공동명의)</label>
+            <select id="td-jointOwners" name="jointOwners">
+              <option value="1">단독 명의</option>
+              <option value="2">2인 공동(부부 등)</option>
+              <option value="3">3인 공동</option>
+              <option value="4">4인 공동</option>
+            </select>
+            <span class="hint">공동명의는 양도차익을 균등 안분한 뒤 소유자별 세액을 합산합니다.</span>
+          </div>
+        </div>
         <div class="field" data-house-only>
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="onlyHome" checked/>
             <span class="text">1세대 1주택 (양도일 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="양도일 현재 1세대가 국내에 주택 1채만 보유하고 2년 이상 보유(조정지역은 2년 거주)하면 12억까지 비과세됩니다. 비주택에는 적용되지 않습니다.">?</span></span>
+          </label>
+        </div>
+        <div class="field" data-house-only>
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="surchargeExempt"/>
+            <span class="text">중과 배제 주택 (장기임대·상속·조특법 감면 등)
+              <span class="note">조정대상지역 다주택이어도 중과 제외 요건에 해당하면 체크하세요. 일반세율과 장기보유특별공제가 적용됩니다.</span>
+            </span>
           </label>
         </div>
         <p class="scn-note">매도 시나리오는 양도소득세 산정이 중심이라 소득·DSR을 적용하지 않습니다.</p>
@@ -343,6 +379,20 @@
           <input id="td-children" name="children" type="number" min="0" max="10" step="1" value="2" />
           <span class="hint">자녀 1인당 5천만 원 인적공제(미성년은 만 19세까지 연수 × 1천만 원 추가).</span>
         </div>
+        <div class="calc-check-grid">
+          <div class="field">
+            <label class="check-item" style="padding:0; cursor:pointer;">
+              <input type="checkbox" name="inheritNoHome"/>
+              <span class="text">무주택 세대 1주택 상속<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="상속인과 세대원 모두 무주택이고 상속으로 1주택을 취득하는 경우 선택하세요. 취득세 0.8% 특례를 적용하며, 그 외에는 2.8%입니다.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding:0; cursor:pointer;">
+              <input type="checkbox" name="inheritAreaOver85"/>
+              <span class="text">전용 85㎡ 초과<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="상속 주택의 전용면적이 85㎡를 초과하면 농어촌특별세를 함께 계산합니다.">?</span></span>
+            </label>
+          </div>
+        </div>
       </div>
 
       <!-- ===== 증여 ===== -->
@@ -369,6 +419,27 @@
           <div class="input-suffix" data-suffix="원">
             <input id="td-prevGift" name="prevGift" type="text" inputmode="numeric" data-format="won" value="0" />
           </div>
+        </div>
+        <div class="calc-check-grid">
+          <div class="field">
+            <label class="check-item" style="padding:0; cursor:pointer;">
+              <input type="checkbox" name="giftRegulated"/>
+              <span class="text">조정대상지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="증여 주택이 조정대상지역에 있으면 선택하세요. 평가액 3억원 이상·증여자 다주택 여부와 결합해 12% 중과를 자동 판정합니다.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding:0; cursor:pointer;">
+              <input type="checkbox" name="giftDonorMultiHome"/>
+              <span class="text">증여자가 다주택자<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="증여자의 세대가 여러 주택을 보유한 경우 선택하세요. 나머지 중과 조건은 입력값에서 자동 확인합니다.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding:0; cursor:pointer;">
+              <input type="checkbox" name="giftAreaOver85"/>
+              <span class="text">전용 85㎡ 초과<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="증여 주택이 85㎡를 초과하면 적용 세율에 맞는 농어촌특별세를 함께 계산합니다.">?</span></span>
+            </label>
+          </div>
+          <p class="acq-auto-status" data-gift-acq-status>평가액·지역·증여자 보유 수로 취득세율을 자동 판정합니다.</p>
         </div>
       </div>
 
@@ -414,6 +485,18 @@
 
       <div class="breakdown" data-detail-breakdown style="border-top:1px solid var(--border); padding-top:14px; margin-top:8px;">
         <!-- JS에서 채움 -->
+      </div>
+
+      <div class="dsr-box" data-mortgage-limit-box>
+        <div class="dsr-box-head">
+          <strong>예상 주담대 최대한도</strong>
+          <span class="dsr-pct" data-out="mortgageLimit">—</span>
+        </div>
+        <div class="dsr-meta">
+          <span data-out="mortgageBinding">LTV·가격상한·DSR 중 최소값</span>
+          <span data-out="mortgageInputs">—</span>
+        </div>
+        <p class="dsr-verdict" data-out="mortgageVerdict">입력한 소득·주택·대출 조건으로 자동 계산합니다.</p>
       </div>
 
       <!-- DSR 결과 (sale에서만) -->
@@ -554,7 +637,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="../assets/rates.js?v=20260629"></script>
-<script src="../assets/app.js?v=20260723"></script>
+<script src="../assets/app.js?v=20260725"></script>
 <script>
 (function () {
   'use strict';
