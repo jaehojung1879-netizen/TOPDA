@@ -368,7 +368,8 @@ function calcAcquisitionTax(input) {
   const {
     price, homes, regulated, areaOver85, firstHome,
     acqType = 'purchase', tempTwoHome = false,
-    inheritNoHome = false, giftHeavy = false,
+    inheritNoHome = false, giftHeavy,
+    giftDonorMultiHome = false,
     unsold2026 = false, // 2026 한시: 지방 미분양 아파트 감면(85㎡↓·6억↓, 50%감면+중과제외)
   } = input;
   if (!price || price <= 0) return null;
@@ -390,7 +391,11 @@ function calcAcquisitionTax(input) {
     scenarioKey = inheritNoHome ? 'inherit-nohome' : 'inherit-other';
   } else if (acqType === 'gift') {
     // 무상취득(증여): 표준 3.5%. 조정대상지역 + 시가표준 3억 이상 다주택자 증여 → 12% 중과
-    if (giftHeavy) { baseRate = 0.12; isHeavy = true; scenario = '증여 · 조정대상 3억↑ 중과(12%)'; scenarioKey = 'gift-heavy'; }
+    // 기존 호출부가 giftHeavy를 명시하면 그 값을 존중하고, 새 UI에서는 객관 조건으로 자동 판정한다.
+    const giftHeavyApplied = giftHeavy == null
+      ? regulated && giftDonorMultiHome && price >= 300000000
+      : Boolean(giftHeavy);
+    if (giftHeavyApplied) { baseRate = 0.12; isHeavy = true; scenario = '증여 · 조정대상 3억↑ 중과(12%)'; scenarioKey = 'gift-heavy'; }
     else { baseRate = 0.035; scenario = '증여 취득(3.5%)'; scenarioKey = 'gift-standard'; }
   } else if (acqType === 'original') {
     // 원시취득(신축·신규 분양 등)
@@ -462,6 +467,7 @@ function calcAcquisitionTax(input) {
   return {
     baseRate, isHeavy, scenario, scenarioKey, acqType,
     acquisition, firstHomeDeduct, unsoldDeduct, unsoldEligible,
+    giftHeavyApplied: acqType === 'gift' && isHeavy,
     ruralTax, localEduTax,
     total,
   };
@@ -549,6 +555,45 @@ function exemptBoxHtml(r, lang, regulated, homes) {
       el.style.display = show ? '' : 'none';
     });
   };
+  // 사용자가 판단해야 하는 사실만 묻고, 가격·주택 수·면적으로 알 수 있는 적용 가능성은 자동 처리한다.
+  const syncEligibility = (price, acqType, homes, areaOver85) => {
+    const setEligible = (name, eligible) => {
+      const input = root.querySelector('[name="' + name + '"]');
+      if (!input) return;
+      input.disabled = !eligible;
+      if (!eligible) input.checked = false;
+      const field = input.closest('.field');
+      if (field) field.classList.toggle('is-disabled', !eligible);
+    };
+    setEligible('tempTwoHome', acqType === 'purchase' && homes === 2);
+    setEligible('firstHome', acqType === 'purchase' && homes === 1 && price <= 1200000000);
+    setEligible('unsold2026', acqType === 'purchase' && !areaOver85 && price <= 600000000);
+
+    const status = root.querySelector('[data-acq-auto-status]');
+    if (!status) return;
+    if (acqType === 'gift') {
+      const regulated = root.querySelector('[name="regulated"]')?.checked || false;
+      const donorMulti = root.querySelector('[name="giftDonorMultiHome"]')?.checked || false;
+      const heavy = price >= 300000000 && regulated && donorMulti;
+      status.textContent = isEn
+        ? (heavy ? 'Automatically applied: 12% gift acquisition-tax rate.' : 'Automatically applied: standard 3.5% gift acquisition-tax rate.')
+        : (heavy ? '자동 판정: 증여 취득세 12% 중과가 적용됩니다.' : '자동 판정: 증여 취득세 표준세율 3.5%가 적용됩니다.');
+      return;
+    }
+    if (acqType === 'purchase') {
+      const disabled = [];
+      if (homes !== 2) disabled.push(isEn ? 'temporary 2-home relief' : '일시적 2주택');
+      if (homes !== 1 || price > 1200000000) disabled.push(isEn ? 'first-home relief' : '생애최초 감면');
+      if (areaOver85 || price > 600000000) disabled.push(isEn ? '2026 unsold-unit relief' : '2026 미분양 감면');
+      status.textContent = disabled.length
+        ? (isEn ? 'Automatically unavailable under the current inputs: ' : '현재 입력값으로 자동 제외: ') + disabled.join(isEn ? ', ' : ' · ')
+        : (isEn ? 'Eligibility limits are checked automatically from price, home count, and floor area.' : '가격·주택 수·면적에 따른 적용 가능 여부를 자동으로 확인합니다.');
+      return;
+    }
+    status.textContent = isEn
+      ? 'The applicable acquisition-tax rate is selected automatically from the facts above.'
+      : '입력한 사실을 기준으로 적용 취득세율을 자동 판정합니다.';
+  };
   // 세율 요약 표에서 현재 적용 구간 하이라이트
   const highlightRateRow = (r, homes, regulated, eok) => {
     const table = document.querySelector('[data-rate-table]');
@@ -572,13 +617,19 @@ function exemptBoxHtml(r, lang, regulated, homes) {
     const homes = Number(root.querySelector('[name="homes"]:checked')?.value || 1);
     const regulated = root.querySelector('[name="regulated"]')?.checked || false;
     const areaOver85 = root.querySelector('[name="areaOver85"]')?.checked || false;
+    toggleFields(acqType);
+    syncEligibility(price, acqType, homes, areaOver85);
     const firstHome = root.querySelector('[name="firstHome"]')?.checked || false;
     const tempTwoHome = root.querySelector('[name="tempTwoHome"]')?.checked || false;
     const inheritNoHome = root.querySelector('[name="inheritNoHome"]')?.checked || false;
-    const giftHeavy = root.querySelector('[name="giftHeavy"]')?.checked || false;
+    const giftDonorMultiHome = root.querySelector('[name="giftDonorMultiHome"]')?.checked || false;
+    const legacyGiftHeavy = root.querySelector('[name="giftHeavy"]');
     const unsold2026 = root.querySelector('[name="unsold2026"]')?.checked || false;
-    toggleFields(acqType);
-    const r = calcAcquisitionTax({ price, homes, regulated, areaOver85, firstHome, acqType, tempTwoHome, inheritNoHome, giftHeavy, unsold2026 });
+    const r = calcAcquisitionTax({
+      price, homes, regulated, areaOver85, firstHome, acqType,
+      tempTwoHome, inheritNoHome, giftDonorMultiHome, unsold2026,
+      ...(legacyGiftHeavy ? { giftHeavy: legacyGiftHeavy.checked } : {}),
+    });
     if (!r) {
       setText('total', fmt.won(0));
       ['acquisition','ruralTax','localEduTax','firstHomeDeduct'].forEach(k => setText(k, fmt.won(0)));
@@ -629,6 +680,17 @@ function calcBrokerageFee({ price, type }) {
   let fee = price * rate;
   if (max != null) fee = Math.min(fee, max);
   return { rate, max, fee, vat: fee * 0.1, total: fee * 1.1 };
+}
+
+// ===== RTI 공통 계산 =====
+// 보증금의 간주임대료(기본 3.5%)까지 포함해 전용 계산기와 종합계산기가 같은 값을 사용한다.
+function calcRti({ monthlyRent, deposit = 0, loan, annualRate, depositRate = 0.035 }) {
+  const rent12 = Math.max(0, monthlyRent || 0) * 12;
+  const depositIncome = Math.max(0, deposit || 0) * depositRate;
+  const annualRent = rent12 + depositIncome;
+  const annualInterest = Math.max(0, loan || 0) * (Math.max(0, annualRate || 0) / 100);
+  const ratio = annualInterest > 0 ? annualRent / annualInterest : 0;
+  return { rent12, depositIncome, annualRent, annualInterest, ratio, depositRate };
 }
 
 (function () {
@@ -1098,6 +1160,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
     const detailBox = root.querySelector('[data-detail-breakdown]');
     const dsrBox = root.querySelector('[data-dsr-box]');
     const rtiBox = root.querySelector('[data-rti-box]');
+    const mortgageLimitBox = root.querySelector('[data-mortgage-limit-box]');
     const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
     const setLabel = (attr, txt) => { const el = root.querySelector('['+attr+']'); if (el) el.textContent = txt; };
     // 이 계산기의 라벨·안내문은 이 블록 안에서만 L(한국어, 영어)로 분기한다(isEn은 파일 상단에서 전역 선언).
@@ -1108,33 +1171,14 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
     const getRadio = (name) => root.querySelector('[name="'+name+'"]:checked')?.value;
     const getCheck = (name) => root.querySelector('[name="'+name+'"]')?.checked || false;
 
-    function acquisitionTotal(price, homes, regulated, areaOver85, firstHome) {
-      const r = calcAcquisitionTax({ price, homes, regulated, areaOver85, firstHome });
+    function acquisitionTotal(price, options) {
+      const r = calcAcquisitionTax({ price, ...options });
       return r || { total: 0, acquisition: 0, ruralTax: 0, localEduTax: 0, firstHomeDeduct: 0, baseRate: 0 };
     }
 
     function brokerFee(price, type) {
-      if (!price || price <= 0) return 0;
-      const eok = price / 100000000;
-      let rate, max;
-      if (type === 'lease') {
-        if (eok < 0.5) { rate = 0.005; max = 200000; }
-        else if (eok < 1) { rate = 0.004; max = 300000; }
-        else if (eok < 6) { rate = 0.003; max = null; }
-        else if (eok < 12) { rate = 0.004; max = null; }
-        else if (eok < 15) { rate = 0.005; max = null; }
-        else { rate = 0.006; max = null; }
-      } else {
-        if (eok < 0.5) { rate = 0.006; max = 250000; }
-        else if (eok < 2) { rate = 0.005; max = 800000; }
-        else if (eok < 9) { rate = 0.004; max = null; }
-        else if (eok < 12) { rate = 0.005; max = null; }
-        else if (eok < 15) { rate = 0.006; max = null; }
-        else { rate = 0.007; max = null; }
-      }
-      let fee = price * rate;
-      if (max != null) fee = Math.min(fee, max);
-      return Math.round(fee * 1.1);
+      const r = calcBrokerageFee({ price, type: type === 'lease' ? 'jeonse' : 'sale' });
+      return r ? Math.round(r.total) : 0;
     }
 
     function monthlyPayment(principal, annualRate, years) {
@@ -1413,12 +1457,12 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       if (addBtn) addBtn.addEventListener('click', function () { addOtherLoanRow(); recalc(); });
     }
 
-    function renderDSR(annualPmt) {
+    function renderDSR(annualPmt, existingAnnualDebt) {
       const income = getN('annualIncome');
       const credit = getN('creditDebt');
       const creditAnnual = credit / 5;
-      const other = otherLoansTotal();
-      const totalAnnualPmt = annualPmt + creditAnnual + other;
+      const existing = existingAnnualDebt == null ? creditAnnual + otherLoansTotal() : existingAnnualDebt;
+      const totalAnnualPmt = annualPmt + existing;
       const dsr = income > 0 ? totalAnnualPmt / income * 100 : 0;
       setText('dsrPct', income > 0 ? dsr.toFixed(1) + '%' : L('소득 입력 필요', 'Enter income'));
       const fillEl = root.querySelector('[data-out="dsrFill"]');
@@ -1438,7 +1482,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       setText('dsrVerdict', verdict);
     }
 
-    function renderRTI(annualRent, annualInterest, threshold) {
+    function renderRTI(annualRent, annualInterest, threshold, depositIncome) {
       const rti = annualInterest > 0 ? annualRent / annualInterest : 0;
       setText('rtiRatio', annualInterest > 0 ? rti.toFixed(2) + 'x' : L('이자 입력 필요', 'Enter interest'));
       const fillEl = root.querySelector('[data-out="rtiFill"]');
@@ -1454,7 +1498,69 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       else if (rti >= threshold + 0.25) verdict = L(`기준(${threshold}x) 이상 — 임대업 대출 승인이 가능한 수준입니다.`, `At or above the ${threshold}x threshold — normally approvable for a rental-business loan.`);
       else if (rti >= threshold) verdict = L(`기준(${threshold}x) 충족 — 다만 여유가 크지 않습니다.`, `Meets the ${threshold}x threshold, but with little margin.`);
       else verdict = L(`기준(${threshold}x) 미달 — 대출 금액 축소 또는 임대수입 증명이 필요합니다.`, `Below the ${threshold}x threshold — reduce the loan amount or document more rental income.`);
+      if (depositIncome > 0) verdict += L(
+        ` 보증금 간주임대료 ${fmt.won(depositIncome)} / 년을 포함했습니다.`,
+        ` Includes imputed deposit income of ${fmt.won(depositIncome)} / yr.`
+      );
       setText('rtiVerdict', verdict);
+    }
+
+    function syncDashboardAcquisition(price, homes, areaOver85) {
+      const setEligible = (name, eligible) => {
+        const input = root.querySelector('[name="' + name + '"]');
+        if (!input) return;
+        input.disabled = !eligible;
+        if (!eligible) input.checked = false;
+        const field = input.closest('.field');
+        if (field) field.classList.toggle('is-disabled', !eligible);
+      };
+      setEligible('tempTwoHome', homes === 2);
+      setEligible('firstHome', homes === 1 && price <= 1200000000);
+      setEligible('unsold2026', !areaOver85 && price <= 600000000);
+      const status = root.querySelector('[data-dashboard-acq-status]');
+      if (status) {
+        const excluded = [];
+        if (homes !== 2) excluded.push(L('일시적 2주택', 'temporary 2-home relief'));
+        if (homes !== 1 || price > 1200000000) excluded.push(L('생애최초 감면', 'first-home relief'));
+        if (areaOver85 || price > 600000000) excluded.push(L('2026 미분양 감면', '2026 unsold-unit relief'));
+        status.textContent = excluded.length
+          ? L('현재 입력값으로 자동 제외: ', 'Automatically unavailable: ') + excluded.join(L(' · ', ', '))
+          : L('가격·주택 수·면적으로 감면 적용 가능 여부를 자동 확인합니다.', 'Relief eligibility is checked automatically from price, home count, and floor area.');
+      }
+    }
+
+    function renderMortgageLimit(price, homes, regulated, firstHome, tempTwoHome, rate, term, repay, existingAnnualDebt, loan) {
+      const box = root.querySelector('[data-mortgage-limit-box]');
+      if (!box) return null;
+      const income = getN('annualIncome');
+      const loanCfg = (RATES.loan || {});
+      const ltv = loanCfg.ltv || {};
+      const isMulti = homes >= 2 && !tempTwoHome;
+      const ltvPercent = regulated
+        ? (firstHome ? (ltv.regulatedFirst ?? 70) : (isMulti ? 0 : (ltv.regulated ?? 50)))
+        : (firstHome ? (ltv.nonRegulatedFirst ?? 80) : (isMulti ? (ltv.nonRegulatedMulti ?? 60) : (ltv.nonRegulated ?? 70)));
+      const stress = loanCfg.stress || {};
+      const stressAdd = regulated ? (stress.metro ?? 1.5) : (stress.nonMetro ?? 0.75);
+      const r = calcMortgageLimit({
+        price, ltvPercent, regulatedMetro: regulated,
+        income, existingAnnualDebt, rate, stressAdd, termYears: term,
+        dsrLimitPercent: DSR_T1, repayType: repay === 'principal' ? 'principal' : 'equal',
+      });
+      box.hidden = !r;
+      if (!r) return null;
+      const bindingLabels = {
+        ltv: L('LTV 한도', 'LTV limit'),
+        priceCap: L('지역 가격대별 한도', 'regional price cap'),
+        dsr: L('스트레스 DSR 한도', 'stress-DSR limit'),
+      };
+      setText('mortgageLimit', fmt.won(r.limit));
+      setText('mortgageBinding', L('결정 요인: ', 'Binding constraint: ') + (bindingLabels[r.binding?.key] || '—'));
+      setText('mortgageInputs', `LTV ${ltvPercent}% · ${L('스트레스 금리', 'stress rate')} ${r.stressedRate.toFixed(2)}%`);
+      const over = loan > r.limit;
+      setText('mortgageVerdict', over
+        ? L(`입력 대출이 추정 한도를 ${fmt.won(loan - r.limit)} 초과합니다.`, `Entered loan exceeds the estimate by ${fmt.won(loan - r.limit)}.`)
+        : L(`입력 대출은 추정 한도보다 ${fmt.won(r.limit - loan)} 낮습니다.`, `Entered loan is ${fmt.won(r.limit - loan)} below the estimate.`));
+      return r;
     }
 
     function calcSale() {
@@ -1462,7 +1568,10 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const homes = Number(getRadio('homes') || 1);
       const regulated = getCheck('regulated');
       const areaOver85 = getCheck('areaOver85');
+      syncDashboardAcquisition(price, homes, areaOver85);
       const firstHome = getCheck('firstHome');
+      const tempTwoHome = getCheck('tempTwoHome');
+      const unsold2026 = getCheck('unsold2026');
       const loan = getN('loan');
       const rate = getNum('rate');
       const term = getNum('term');
@@ -1487,7 +1596,10 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         const base = price * 0.04, rural = price * 0.002, edu = price * 0.004;
         acq = { total: base + rural + edu, acquisition: base, ruralTax: rural, localEduTax: edu, firstHomeDeduct: 0, baseRate: 0.04 };
       } else {
-        acq = acquisitionTotal(price, homes, regulated, areaOver85, firstHome);
+        acq = acquisitionTotal(price, {
+          homes, regulated, areaOver85, firstHome, tempTwoHome, unsold2026,
+          acqType: 'purchase',
+        });
       }
       const broker = nonhouse ? Math.round(price * 0.009 * 1.1) : brokerFee(price, 'sale');
       const regStd = getN('regStd');
@@ -1508,6 +1620,13 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         monthlyLabel = L('월 원리금 상환', 'Monthly payment');
         totalInterest = monthly > 0 ? monthly * term * 12 - loan : 0;
         dsrAnnual = monthly * 12;
+      }
+      const existingAnnualDebt = getN('creditDebt') / 5 + otherLoansTotal();
+      const mortgageBox = root.querySelector('[data-mortgage-limit-box]');
+      if (!nonhouse && !isLeaseBiz) {
+        renderMortgageLimit(price, homes, regulated, firstHome, tempTwoHome, rate, term, repay, existingAnnualDebt, loan);
+      } else if (mortgageBox) {
+        mortgageBox.hidden = true;
       }
       const equity = Math.max(0, price - loan - jeonseDeposit);
       const initialCapital = equity + acq.total + broker + reg.total;
@@ -1538,6 +1657,8 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         ...(purpose === 'gap' ? [{ label: L('전세보증금 인수', 'Assumed Jeonse deposit'), value: jeonseDeposit, color: '#60a5fa' }] : []),
         { label: L('취득세 (감면 후)', 'Acquisition tax (after relief)'), value: acq.acquisition, color: '#f59e0b', sub: true },
         ...(acq.firstHomeDeduct > 0 ? [{ label: L('생애최초 감면', 'First-home relief'), value: '−' + fmt.won(acq.firstHomeDeduct), sub: true }] : []),
+        ...(acq.unsoldDeduct > 0 ? [{ label: L('2026 미분양 감면', '2026 unsold-unit relief'), value: '−' + fmt.won(acq.unsoldDeduct), sub: true }] : []),
+        ...(!nonhouse ? [{ label: L('취득세 자동 판정', 'Acquisition-tax rule'), value: scenarioText(acq, isEn ? 'en' : 'ko'), sub: true }] : []),
         { label: L('농어촌특별세', 'Rural special tax'), value: acq.ruralTax, sub: true },
         { label: L('지방교육세', 'Local education tax'), value: acq.localEduTax, sub: true },
         { label: L('중개수수료(VAT 포함)', 'Brokerage fee (incl. VAT)'), value: broker, color: '#ef4444' },
@@ -1553,16 +1674,20 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
 
       if (isLeaseBiz) {
         // 임대사업자 대출 → RTI (주택 1.25배 / 비주택 1.5배 기준)
-        const annualRent = getN('saleRent') * 12;
-        const annualInterest = loan * (rate / 100);
+        const rtiResult = calcRti({
+          monthlyRent: getN('saleRent'),
+          deposit: jeonseDeposit,
+          loan,
+          annualRate: rate,
+        });
         const rtiThreshold = nonhouse ? (RATES.rti && RATES.rti.commercial) || 1.5 : (RATES.rti && RATES.rti.residential) || 1.25;
         if (dsrBox) dsrBox.hidden = true;
         if (rtiBox) rtiBox.hidden = false;
-        renderRTI(annualRent, annualInterest, rtiThreshold);
+        renderRTI(rtiResult.annualRent, rtiResult.annualInterest, rtiThreshold, rtiResult.depositIncome);
       } else {
         if (rtiBox) rtiBox.hidden = true;
         if (dsrBox) dsrBox.hidden = false;
-        renderDSR(dsrAnnual);
+        renderDSR(dsrAnnual, existingAnnualDebt);
       }
     }
 
@@ -1683,6 +1808,8 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const debt = getN('debt');
       const hasSpouse = getCheck('hasSpouse');
       const children = getNum('children');
+      const inheritNoHome = getCheck('inheritNoHome');
+      const inheritAreaOver85 = getCheck('inheritAreaOver85');
       const grossAssets = propValue + other;
       const netAssets = Math.max(0, grossAssets - debt);
       const basicDeduct = 200000000;
@@ -1694,13 +1821,19 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const totalDeduct = publicDeduct + spouseDeduct;
       const taxBase = Math.max(0, netAssets - totalDeduct);
       const tax = inheritGiftTax(taxBase);
+      const acq = acquisitionTotal(propValue, {
+        acqType: 'inherit',
+        inheritNoHome,
+        areaOver85: inheritAreaOver85,
+      });
+      const totalBurden = tax + acq.total;
 
-      if (resultTitle) resultTitle.textContent = L('예상 상속세', 'Estimated inheritance tax');
-      setText('primaryTotal', fmt.won(tax));
-      setLabel('data-quick-label1', L('총 상속재산', 'Total estate'));
-      setText('quick1', fmt.won(grossAssets));
-      setLabel('data-quick-label2', L('공제 합계', 'Total deductions'));
-      setText('quick2', fmt.won(totalDeduct));
+      if (resultTitle) resultTitle.textContent = L('예상 총 부담 (상속세 + 취득세)', 'Estimated total (inheritance + acquisition tax)');
+      setText('primaryTotal', fmt.won(totalBurden));
+      setLabel('data-quick-label1', L('상속세', 'Inheritance tax'));
+      setText('quick1', fmt.won(tax));
+      setLabel('data-quick-label2', L('부동산 취득세', 'Property acquisition tax'));
+      setText('quick2', fmt.won(acq.total));
       setLabel('data-quick-label3', L('과세표준', 'Tax base'));
       setText('quick3', fmt.won(taxBase));
 
@@ -1708,6 +1841,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         { label: L('순 상속재산', 'Net estate'), value: netAssets, color: '#1e3a8a' },
         { label: L('공제 합계', 'Total deductions'), value: totalDeduct, color: '#047857' },
         { label: L('상속세', 'Inheritance tax'), value: tax, color: '#ef4444' },
+        { label: L('부동산 취득세', 'Property acquisition tax'), value: acq.total, color: '#f59e0b' },
       ]);
       renderDetail([
         { label: L('부동산 평가액', 'Property value'), value: propValue, sub: true },
@@ -1718,7 +1852,10 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         { label: L('일괄공제 5억 (max 적용)', 'Lump-sum deduction KRW 500M (max applied)'), value: '−' + fmt.won(publicDeduct), sub: true },
         ...(hasSpouse ? [{ label: L('배우자 공제 (추정)', 'Spousal deduction (estimated)'), value: '−' + fmt.won(spouseDeduct), sub: true }] : []),
         { label: L('과세표준', 'Tax base'), value: taxBase },
-        { divider: true, label: L('예상 상속세', 'Estimated inheritance tax'), value: tax },
+        { label: L('예상 상속세', 'Estimated inheritance tax'), value: tax, color: '#ef4444' },
+        { label: L('상속 취득세', 'Inheritance acquisition tax'), value: acq.total, color: '#f59e0b' },
+        { label: L('취득세 자동 판정', 'Acquisition-tax rule'), value: scenarioText(acq, isEn ? 'en' : 'ko'), sub: true },
+        { divider: true, label: L('예상 총 부담', 'Estimated total burden'), value: totalBurden },
       ]);
     }
 
@@ -1731,10 +1868,18 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const remainingDeduct = Math.max(0, baseDeduct - prev);
       const taxBase = Math.max(0, value - remainingDeduct);
       const tax = inheritGiftTax(taxBase);
-      const acqOnGift = value * 0.035 + value * 0.003;
+      const acq = acquisitionTotal(value, {
+        acqType: 'gift',
+        regulated: getCheck('giftRegulated'),
+        giftDonorMultiHome: getCheck('giftDonorMultiHome'),
+        areaOver85: getCheck('giftAreaOver85'),
+      });
+      const totalBurden = tax + acq.total;
+      const giftStatus = root.querySelector('[data-gift-acq-status]');
+      if (giftStatus) giftStatus.textContent = L('자동 판정: ', 'Automatically selected: ') + scenarioText(acq, isEn ? 'en' : 'ko');
 
-      if (resultTitle) resultTitle.textContent = L('예상 증여세', 'Estimated gift tax');
-      setText('primaryTotal', fmt.won(tax));
+      if (resultTitle) resultTitle.textContent = L('예상 총 부담 (증여세 + 취득세)', 'Estimated total (gift + acquisition tax)');
+      setText('primaryTotal', fmt.won(totalBurden));
       setLabel('data-quick-label1', L('공제 한도 (10년)', 'Deduction limit (10-yr)'));
       setText('quick1', fmt.won(baseDeduct));
       setLabel('data-quick-label2', L('잔여 공제', 'Remaining deduction'));
@@ -1746,7 +1891,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         { label: L('증여 평가액', 'Gift value'), value: value, color: '#1e3a8a' },
         { label: L('공제 한도', 'Deduction limit'), value: remainingDeduct, color: '#047857' },
         { label: L('증여세', 'Gift tax'), value: tax, color: '#ef4444' },
-        { label: L('취득세 (부동산)', 'Acquisition tax (property)'), value: acqOnGift, color: '#f59e0b' },
+        { label: L('취득세 (부동산)', 'Acquisition tax (property)'), value: acq.total, color: '#f59e0b' },
       ]);
       renderDetail([
         { label: L('증여 평가액', 'Gift value'), value: value, sub: true },
@@ -1754,8 +1899,9 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         { label: L('잔여 공제', 'Remaining deduction'), value: '−' + fmt.won(remainingDeduct), sub: true },
         { label: L('과세표준', 'Tax base'), value: taxBase },
         { label: L('증여세 (누진)', 'Gift tax (progressive)'), value: tax, color: '#ef4444' },
-        { label: L('부동산 취득세 (별도, 3.8% 추정)', 'Acquisition tax (separate, est. 3.8%)'), value: acqOnGift, color: '#f59e0b' },
-        { divider: true, label: L('예상 총 부담 (증여세 + 취득세)', 'Estimated total (gift tax + acquisition tax)'), value: tax + acqOnGift },
+        { label: L('부동산 취득세', 'Property acquisition tax'), value: acq.total, color: '#f59e0b' },
+        { label: L('취득세 자동 판정', 'Acquisition-tax rule'), value: scenarioText(acq, isEn ? 'en' : 'ko'), sub: true },
+        { divider: true, label: L('예상 총 부담 (증여세 + 취득세)', 'Estimated total (gift tax + acquisition tax)'), value: totalBurden },
       ]);
     }
 
@@ -1773,6 +1919,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       });
       if (dsrBox) dsrBox.hidden = (name !== 'sale');
       if (rtiBox) rtiBox.hidden = true; // 매수 시나리오에서 calcSale이 비주택 임대일 때만 노출
+      if (mortgageLimitBox) mortgageLimitBox.hidden = (name !== 'sale');
       recalc();
     }
     document.querySelectorAll('[data-scn]').forEach((t) => t.addEventListener('click', () => switchScn(t.dataset.scn)));
@@ -3757,19 +3904,22 @@ function calcJeonseLoanByAgency(deposit, opts) {
   /* ---------- 2) 음성 읽기 (TTS) ---------- */
   var synth = window.speechSynthesis;
   var supportsTTS = !!synth;
-  var koVoice = null;
-  function pickKoVoice() {
+  var ttsVoice = null;
+  var pageLang = document.documentElement.lang || 'ko';
+  var ttsLocale = pageLang === 'en' ? 'en-US' : (pageLang === 'ko' ? 'ko-KR' : pageLang);
+  function pickTtsVoice() {
     if (!supportsTTS) return null;
-    if (koVoice) return koVoice;
+    if (ttsVoice) return ttsVoice;
     var voices = synth.getVoices();
-    koVoice = voices.find(function (v) { return /ko(-|_)?KR/i.test(v.lang); })
-           || voices.find(function (v) { return /korean/i.test(v.name || ''); })
-           || null;
-    return koVoice;
+    var langPrefix = ttsLocale.split('-')[0];
+    ttsVoice = voices.find(function (v) { return (v.lang || '').toLowerCase() === ttsLocale.toLowerCase(); })
+            || voices.find(function (v) { return (v.lang || '').toLowerCase().startsWith(langPrefix.toLowerCase()); })
+            || null;
+    return ttsVoice;
   }
   if (supportsTTS) {
-    synth.onvoiceschanged = function () { koVoice = null; pickKoVoice(); };
-    pickKoVoice();
+    synth.onvoiceschanged = function () { ttsVoice = null; pickTtsVoice(); };
+    pickTtsVoice();
   }
 
   function cleanText(node) {
@@ -3785,7 +3935,7 @@ function calcJeonseLoanByAgency(deposit, opts) {
   }
 
   function speak(text, btn) {
-    if (!supportsTTS) { alert('이 브라우저는 음성 읽기를 지원하지 않습니다.'); return; }
+    if (!supportsTTS) { alert(isEn ? 'This browser does not support text-to-speech.' : '이 브라우저는 음성 읽기를 지원하지 않습니다.'); return; }
     if (synth.speaking) {
       synth.cancel();
       if (btn) btn.setAttribute('aria-pressed', 'false');
@@ -3793,8 +3943,8 @@ function calcJeonseLoanByAgency(deposit, opts) {
     }
     if (!text) return;
     var u = new SpeechSynthesisUtterance(text);
-    u.lang = 'ko-KR';
-    var v = pickKoVoice();
+    u.lang = ttsLocale;
+    var v = pickTtsVoice();
     if (v) u.voice = v;
     u.rate = 1.0; u.pitch = 1.0;
     u.onend = function () { if (btn) btn.setAttribute('aria-pressed', 'false'); };
@@ -3823,9 +3973,9 @@ function calcJeonseLoanByAgency(deposit, opts) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'tts-btn';
-      btn.setAttribute('aria-label', '결과 읽어주기');
+      btn.setAttribute('aria-label', isEn ? 'Read results aloud' : '결과 읽어주기');
       btn.setAttribute('aria-pressed', 'false');
-      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M19 5a9 9 0 010 14"/></svg><span>읽기</span>';
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M19 5a9 9 0 010 14"/></svg><span>' + (isEn ? 'Listen' : '읽기') + '</span>';
       btn.addEventListener('click', function () { speak(cleanText(el), btn); });
       el.style.position = el.style.position || 'relative';
       el.appendChild(btn);

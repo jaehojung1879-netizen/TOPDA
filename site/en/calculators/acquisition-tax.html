@@ -31,7 +31,7 @@
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/acquisition-tax.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="../../assets/styles.css?v=20260725" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -115,57 +115,98 @@
   <div class="article-header">
     <div class="breadcrumb"><a href="../index.html">Home</a> / <a href="index.html">Calculators</a> / Acquisition Tax</div>
     <h1>Acquisition Tax Calculator</h1>
-    <div class="meta"><span>Residential property · standard rates · same rates apply to foreigners</span></div>
+    <div class="meta"><span>Purchase · inheritance · gift · new build · automatic relief and surcharge checks</span></div>
   </div>
 
   <div class="calc-layout" data-calc="acquisition-tax">
 
     <div class="calc-form">
       <div class="field">
-        <label for="price">Purchase price (KRW)</label>
+        <label for="price">Acquisition value (KRW)</label>
         <div class="input-suffix" data-suffix="KRW">
           <input id="price" name="price" type="text" inputmode="numeric" data-format="won" placeholder="e.g. 800,000,000" autocomplete="off" value="800,000,000" />
         </div>
-        <span class="hint">Actual contract price.</span>
+        <span class="hint">Use the contract price for a purchase, or the recognized assessed value for a gift or inheritance.</span>
       </div>
 
       <div class="field">
-        <label>Number of homes (incl. this purchase)</label>
+        <label>Reason for acquisition</label>
+        <div class="radio-group">
+          <label><input type="radio" name="acqType" value="purchase" checked/><span>Purchase</span></label>
+          <label><input type="radio" name="acqType" value="inherit"/><span>Inheritance</span></label>
+          <label><input type="radio" name="acqType" value="gift"/><span>Gift</span></label>
+          <label><input type="radio" name="acqType" value="original"/><span>New build</span></label>
+        </div>
+      </div>
+
+      <div class="field" data-show="purchase">
+        <label>Number of homes (including this acquisition)</label>
         <div class="radio-group">
           <label><input type="radio" name="homes" value="1" checked/><span>1 home</span></label>
           <label><input type="radio" name="homes" value="2"/><span>2 homes</span></label>
           <label><input type="radio" name="homes" value="3"/><span>3 homes</span></label>
           <label><input type="radio" name="homes" value="4"/><span>4+ homes</span></label>
         </div>
-        <span class="hint">Includes Korean-owned homes by the household.</span>
+        <span class="hint">Household-level count. Corporate acquisitions follow separate rules.</span>
       </div>
 
-      <div class="field">
-        <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="regulated"/>
-          <span class="text">Located in a government-designated regulated area
-            <span class="note">From the 2nd home, the heavy-tax rate applies.</span>
-          </span>
-        </label>
-      </div>
-
-      <div class="field">
-        <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="areaOver85"/>
-          <span class="text">Floor area > 85 m²
-            <span class="note">Triggers a 0.2% rural special tax.</span>
-          </span>
-        </label>
+      <div class="calc-check-grid">
+        <div class="field" data-show="purchase gift">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="regulated"/>
+            <span class="text">Regulated area<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this if the property is in a government-designated regulated area. It affects multi-home purchase rates and, with the other facts entered, the 12% gift acquisition-tax test.">?</span></span>
+          </label>
+        </div>
+        <div class="field" data-show="purchase">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="tempTwoHome"/>
+            <span class="text">Temporary two-home case<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this when you will dispose of the former home within the statutory period. It is enabled only when the household count is two and applies the one-home standard rate, subject to later compliance.">?</span></span>
+          </label>
+        </div>
+        <div class="field" data-show="purchase">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="firstHome"/>
+            <span class="text">First-ever home purchase<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this only if no household member has ever owned a home. It is enabled for one home priced at KRW 1.2B or less and provides up to KRW 2M of acquisition-tax relief.">?</span></span>
+          </label>
+        </div>
+        <div class="field" data-show="inherit">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="inheritNoHome"/>
+            <span class="text">No-home household inheriting one home<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this if the heir and household members own no other home and acquire one home through inheritance. The special rate is 0.8%; otherwise inheritance is taxed at 2.8%.">?</span></span>
+          </label>
+        </div>
+        <div class="field" data-show="gift">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="giftDonorMultiHome"/>
+            <span class="text">Donor is a multi-home owner<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this if the donor's household owns multiple homes. The calculator automatically combines this with regulated-area status and a value of at least KRW 300M to determine whether the 12% rate applies.">?</span></span>
+          </label>
+        </div>
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="areaOver85"/>
+            <span class="text">Floor area over 85 m²<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="A rural special tax applies above 85 m²: 0.2% at standard rates, 0.6% with the 8% rate, or 1.0% with the 12% rate.">?</span></span>
+          </label>
+        </div>
+        <div class="field" data-show="purchase">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="unsold2026"/>
+            <span class="text">Qualifying regional unsold unit<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this for a qualifying completed but unsold regional apartment acquired under the temporary 2026 program. The calculator automatically checks the KRW 600M and 85 m² limits, then applies 50% relief and excludes the multi-home surcharge.">?</span></span>
+          </label>
+        </div>
+        <p class="acq-auto-status" data-acq-auto-status>Eligibility limits are checked automatically from price, home count, and floor area.</p>
       </div>
     </div>
 
     <div class="calc-result">
       <h3>Estimated total</h3>
+      <div class="result-scenario" data-out="scenario">Enter a value</div>
       <div class="total" data-out="total">KRW 0</div>
 
       <div class="breakdown">
         <div class="row"><span class="key">Applied rate</span><span class="val" data-out="rate">—</span></div>
-        <div class="row sub"><span class="key">Acquisition tax</span><span class="val" data-out="acquisition">KRW 0</span></div>
+        <div class="row sub"><span class="key">Acquisition tax (after relief)</span><span class="val" data-out="acquisition">KRW 0</span></div>
+        <div class="row sub"><span class="key">First-home relief</span><span class="val" data-out="firstHomeDeduct">N/A</span></div>
+        <div class="row sub"><span class="key">2026 unsold-unit relief</span><span class="val" data-out="unsoldDeduct">N/A</span></div>
         <div class="row sub"><span class="key">Rural special tax</span><span class="val" data-out="ruralTax">KRW 0</span></div>
         <div class="row sub"><span class="key">Local education tax</span><span class="val" data-out="localEduTax">KRW 0</span></div>
       </div>
@@ -173,7 +214,7 @@
       <div class="callout callout-info" style="margin-top:24px; margin-bottom:0;">
         <div class="icon">i</div>
         <div class="body">
-          <strong>Standard rates only.</strong> First-home buyer relief, newborn-household relief, and pre-sale rights are not modeled. Consult a tax accountant for non-standard cases.
+          <strong>The applicable rate and modeled relief are selected automatically from your facts.</strong> Newborn-household relief, pre-sale rights, officetels, and corporate acquisitions require a separate review.
         </div>
       </div>
     </div>
@@ -208,6 +249,6 @@
 
 <footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. General information only.</p></div></footer>
 <script src="../../assets/rates.js?v=20260629"></script>
-<script src="../../assets/app.js?v=20260723"></script>
+<script src="../../assets/app.js?v=20260725"></script>
 </body>
 </html>
