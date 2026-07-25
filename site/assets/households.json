@@ -47400,67 +47400,719 @@
     "경기 시흥시|산호3차": {
       "households": 114,
       "built_year": 1997,
-      "addr": "경기도 시흥시 신천동 870-2 산호3차"
+      "addr": "경기도 시흥시 신천동 870-2 산호3차",
+      "lat": 37.432785,
+      "lng": 126.789236,
+      "subway": {
+        "station": "신천역 서해선",
+        "distance_m": 749
+      },
+      "elementary": {
+        "name": "시흥신일초등학교",
+        "distance_m": 198
+      }
     },
     "경기 오산시|리버빌": {
       "households": 198,
       "built_year": 2004,
-      "addr": "경기도 오산시 은계동 117 21리버빌"
+      "addr_bad": true
     },
     "경기 오산시|오산SKVIEW2차": {
       "households": 380,
       "built_year": 2025,
-      "addr": "경기도 오산시 가수동 442- 오산 SK VIEW 2차"
+      "addr": "경기도 오산시 가수동 442- 오산 SK VIEW 2차",
+      "lat": 37.146222,
+      "lng": 127.053787,
+      "subway": {
+        "station": "오산역 1호선",
+        "distance_m": 1153
+      },
+      "elementary": {
+        "name": "오산초등학교",
+        "distance_m": 265
+      }
     },
     "경기 파주시|동문1차아파트201동": {
       "households": 118,
       "built_year": 1996,
-      "addr": "경기도 파주시 조리읍 봉일천리 147-1 동문1차아파트"
+      "addr": "경기도 파주시 조리읍 봉일천리 147-1 동문1차아파트",
+      "lat": 37.742061,
+      "lng": 126.807939,
+      "elementary": {
+        "name": "봉일천초등학교",
+        "distance_m": 328
+      }
     },
     "경기 파주시|운정시티프라디움": {
       "households": 486,
       "built_year": 2025,
-      "addr": "경기도 파주시 동패동 - 초롱꽃마을2단지 운정시티프라디움"
+      "addr_bad": true
     },
     "경기 파주시|양우내안애2단지": {
       "households": 365,
       "built_year": 2007,
-      "addr": "경기도 파주시 문산읍 선유리 1352 양우내안애"
+      "addr": "경기도 파주시 문산읍 선유리 1352 양우내안애",
+      "lat": 37.860912,
+      "lng": 126.795722,
+      "subway": {
+        "station": "문산역 경의중앙선",
+        "distance_m": 1011
+      },
+      "elementary": {
+        "name": "문산동초등학교",
+        "distance_m": 577
+      }
     },
     "경기 파주시|율곡3차": {
       "households": 180,
       "built_year": 2000,
-      "addr": "경기도 파주시 법원읍 법원리 674-2 법원율곡3차"
+      "addr": "경기도 파주시 법원읍 법원리 674-2 법원율곡3차",
+      "lat": 37.85226,
+      "lng": 126.872157,
+      "elementary": {
+        "name": "천현초등학교",
+        "distance_m": 614
+      }
     },
     "인천 계양구|중앙": {
       "households": 168,
       "built_year": 1989,
-      "addr": "인천광역시 계양구 효성동 293-1 중앙아파트"
+      "addr": "인천광역시 계양구 효성동 293-1 중앙아파트",
+      "lat": 37.529631,
+      "lng": 126.717731,
+      "subway": {
+        "station": "작전역 인천1호선",
+        "distance_m": 432
+      },
+      "elementary": {
+        "name": "인천효성남초등학교",
+        "distance_m": 185
+      }
     },
     "인천 계양구|무지개": {
       "households": 240,
       "built_year": 1989,
-      "addr": "인천광역시 계양구 작전동 103-2 작전 무지개 아파트"
+      "addr": "인천광역시 계양구 작전동 103-2 작전 무지개 아파트",
+      "lat": 37.529551,
+      "lng": 126.731354,
+      "subway": {
+        "station": "작전역 인천1호선",
+        "distance_m": 781
+      },
+      "elementary": {
+        "name": "인천화전초등학교",
+        "distance_m": 82
+      }
     },
     "세종 세종시|도램마을 19단지(모아미래도)": {
       "households": 732,
       "built_year": 2014,
-      "addr": "세종특별자치시  도담동 311-1 도램마을1단지"
+      "addr_bad": true
     },
     "세종 세종시|한스웰시티(CB5-1BL)": {
       "households": 145,
       "built_year": 2015,
-      "addr": "세종특별자치시  나성동 748- 한스웰시티"
+      "addr": "세종특별자치시  나성동 748- 한스웰시티",
+      "lat": 36.485554,
+      "lng": 127.25803,
+      "elementary": {
+        "name": "새뜸초등학교",
+        "distance_m": 420
+      }
     },
     "세종 세종시|도램마을18단지(모아미래도)": {
       "households": 732,
       "built_year": 2014,
-      "addr": "세종특별자치시  도담동 311-1 도램마을1단지"
+      "addr_bad": true
     },
     "세종 세종시|새뜸마을9단지(금성백조예미지)": {
       "households": 200,
       "built_year": 2017,
-      "addr": "세종특별자치시  새롬동 2202-9 새뜸마을9단지아파트"
+      "addr_bad": true
+    },
+    "서울 강남구|강남신동아파밀리에2단지": {
+      "households": 410,
+      "built_year": 2011,
+      "addr": "서울특별시 강남구 세곡동 511 강남신동아파밀리에2단지",
+      "lat": 37.464169,
+      "lng": 127.102754,
+      "elementary": {
+        "name": "서울대왕초등학교",
+        "distance_m": 258
+      }
+    },
+    "서울 강남구|대치효성": {
+      "households": 83,
+      "addr": "서울특별시 강남구 대치동 988-4 대치효성",
+      "lat": 37.499929,
+      "lng": 127.061182,
+      "subway": {
+        "station": "대치역 3호선",
+        "distance_m": 628
+      },
+      "elementary": {
+        "name": "서울대현초등학교",
+        "distance_m": 502
+      }
+    },
+    "서울 강남구|휴먼스타빌": {
+      "households": 191,
+      "built_year": 2005,
+      "addr": "서울특별시 강남구 청담동 5-25 청담휴먼스타빌",
+      "lat": 37.523583,
+      "lng": 127.045127,
+      "subway": {
+        "station": "압구정로데오역 수인분당선",
+        "distance_m": 592
+      },
+      "elementary": {
+        "name": "서울언북초등학교",
+        "distance_m": 414
+      }
+    },
+    "서울 마포구|대림2차": {
+      "households": 141,
+      "built_year": 2004,
+      "addr": "서울특별시 마포구 용강동 501- 마포대림2차e-편한세상아파트",
+      "lat": 37.540955,
+      "lng": 126.940722,
+      "subway": {
+        "station": "마포역 5호선",
+        "distance_m": 480
+      },
+      "elementary": {
+        "name": "서울신석초등학교",
+        "distance_m": 443
+      }
+    },
+    "서울 관악구|마에스트로캠퍼스타운": {
+      "households": 117,
+      "built_year": 2012,
+      "addr": "서울특별시 관악구 봉천동 893-12 마에스트로캠퍼스타운",
+      "lat": 37.48223,
+      "lng": 126.947375,
+      "subway": {
+        "station": "서울대입구역 2호선",
+        "distance_m": 483
+      },
+      "elementary": {
+        "name": "서울신봉초등학교",
+        "distance_m": 386
+      }
+    },
+    "서울 종로구|경희궁의아침4단지": {
+      "households": 120,
+      "built_year": 2004,
+      "addr": "서울특별시 종로구 내수동 73- 경희궁의아침4단지",
+      "lat": 37.572614,
+      "lng": 126.972273,
+      "subway": {
+        "station": "경복궁역 3호선",
+        "distance_m": 375
+      },
+      "elementary": {
+        "name": "서울덕수초등학교",
+        "distance_m": 486
+      }
+    },
+    "서울 동작구|명수대": {
+      "households": 660,
+      "built_year": 1988,
+      "addr": "서울특별시 동작구 흑석동 10 명수대현대아파트",
+      "lat": 37.507836,
+      "lng": 126.966996,
+      "subway": {
+        "station": "흑석역 9호선",
+        "distance_m": 345
+      },
+      "elementary": {
+        "name": "서울흑석초등학교",
+        "distance_m": 167
+      }
+    },
+    "서울 동작구|이수스위첸포레힐즈": {
+      "households": 366,
+      "built_year": 2022,
+      "addr": "서울특별시 동작구 동작동 102 이수스위첸포레힐즈아파트",
+      "lat": 37.496927,
+      "lng": 126.981672,
+      "subway": {
+        "station": "동작역 4호선",
+        "distance_m": 682
+      },
+      "elementary": {
+        "name": "서울동작초등학교",
+        "distance_m": 492
+      }
+    },
+    "경기 성남시 분당구|성원상떼뷰201동": {
+      "households": 88,
+      "built_year": 2004,
+      "addr": "경기도 성남분당구 정자동 12-3 성원상떼뷰",
+      "lat": 37.369752,
+      "lng": 127.105596,
+      "subway": {
+        "station": "정자역 신분당선",
+        "distance_m": 373
+      },
+      "elementary": {
+        "name": "성남정자초등학교",
+        "distance_m": 523
+      }
+    },
+    "경기 성남시 분당구|판교호반써밋플레이스": {
+      "households": 178,
+      "built_year": 2012,
+      "addr": "경기도 성남분당구 삼평동 740 판교호반써밋플레이스",
+      "lat": 37.397284,
+      "lng": 127.113533,
+      "subway": {
+        "station": "판교역 경강선",
+        "distance_m": 310
+      },
+      "elementary": {
+        "name": "보평초등학교",
+        "distance_m": 426
+      }
+    },
+    "경기 용인시 수지구|이스턴팰리스EasternPalace": {
+      "households": 174,
+      "built_year": 2000,
+      "addr": "경기도 용인수지구 풍덕천동 240-3 이스턴팰리스아파트",
+      "lat": 37.316237,
+      "lng": 127.087454,
+      "subway": {
+        "station": "성복역 신분당선",
+        "distance_m": 694
+      },
+      "elementary": {
+        "name": "수지초등학교",
+        "distance_m": 157
+      }
+    },
+    "인천 연수구|송도이안": {
+      "households": 108,
+      "built_year": 2006,
+      "addr": "인천광역시 연수구 송도동 2-3 송도이안아파트",
+      "lat": 37.396644,
+      "lng": 126.651989,
+      "subway": {
+        "station": "캠퍼스타운역 인천1호선",
+        "distance_m": 1283
+      },
+      "elementary": {
+        "name": "인천먼우금초등학교",
+        "distance_m": 424
+      }
+    },
+    "서울 용산구|우림필유": {
+      "households": 144,
+      "built_year": 2006,
+      "addr": "서울특별시 용산구 한강로3가 91 한강로우림필유",
+      "lat": 37.525435,
+      "lng": 126.959821,
+      "subway": {
+        "station": "용산역 경의중앙선",
+        "distance_m": 636
+      },
+      "elementary": {
+        "name": "서울한강초등학교",
+        "distance_m": 465
+      }
+    },
+    "서울 용산구|용산남영역롯데캐슬헤리티지": {
+      "households": 269,
+      "built_year": 2025,
+      "addr": "서울특별시 용산구 갈월동 98-6 용산 남영역 롯데캐슬 헤리티지",
+      "lat": 37.541362,
+      "lng": 126.971689,
+      "subway": {
+        "station": "남영역 1호선",
+        "distance_m": 93
+      },
+      "elementary": {
+        "name": "신광초등학교",
+        "distance_m": 181
+      }
+    },
+    "서울 용산구|현대하이페리온": {
+      "households": 122,
+      "built_year": 2002,
+      "addr": "서울특별시 용산구 한남동 805- 한남동현대하이페리온아파트",
+      "lat": 37.527687,
+      "lng": 127.004833,
+      "subway": {
+        "station": "한남역 경의중앙선",
+        "distance_m": 432
+      },
+      "elementary": {
+        "name": "서울보광초등학교",
+        "distance_m": 922
+      }
+    },
+    "서울 용산구|어반허브서울스테이션(UrbanHubSeoulStation)": {
+      "households": 265,
+      "built_year": 2025,
+      "addr": "서울특별시 용산구 서계동 100-1 어반허브 서울스테이션",
+      "lat": 37.551011,
+      "lng": 126.968221,
+      "subway": {
+        "station": "서울역 공항철도",
+        "distance_m": 290
+      },
+      "elementary": {
+        "name": "서울청파초등학교",
+        "distance_m": 482
+      }
+    },
+    "서울 성동구|서울숲아이파크리버포레2차": {
+      "households": 528,
+      "built_year": 2025,
+      "addr": "서울특별시 성동구 성수동1가 723- 서울숲 아이파크 리버포레2차",
+      "lat": 37.549371,
+      "lng": 127.043815,
+      "subway": {
+        "station": "뚝섬역 2호선",
+        "distance_m": 394
+      },
+      "elementary": {
+        "name": "서울경동초등학교",
+        "distance_m": 882
+      }
+    },
+    "서울 성동구|갤러리아포레": {
+      "households": 230,
+      "built_year": 2011,
+      "addr": "서울특별시 성동구 성수동1가 685-696 성수갤러리아포레",
+      "lat": 37.545784,
+      "lng": 127.042477,
+      "subway": {
+        "station": "서울숲역 수인분당선",
+        "distance_m": 310
+      },
+      "elementary": {
+        "name": "서울경일초등학교",
+        "distance_m": 704
+      }
+    },
+    "서울 성동구|대명루첸": {
+      "households": 114,
+      "built_year": 2009,
+      "addr": "서울특별시 성동구 성수동2가 840 성수 대명루첸아파트",
+      "lat": 37.537234,
+      "lng": 127.059101,
+      "subway": {
+        "station": "성수역 2호선",
+        "distance_m": 859
+      },
+      "elementary": {
+        "name": "서울경수초등학교",
+        "distance_m": 353
+      }
+    },
+    "서울 성동구|라체르보푸르지오써밋": {
+      "households": 958,
+      "built_year": 2025,
+      "addr_bad": true
+    },
+    "서울 중랑구|와이센트럴시티상봉": {
+      "households": 352,
+      "built_year": 2025,
+      "addr": "서울특별시 중랑구 상봉동 504- 와이센트럴시티상봉",
+      "lat": 37.597072,
+      "lng": 127.087027,
+      "subway": {
+        "station": "상봉역 경의중앙선",
+        "distance_m": 169
+      },
+      "elementary": {
+        "name": "서울상봉초등학교",
+        "distance_m": 329
+      }
+    },
+    "서울 노원구|상계우방유쉘": {
+      "households": 274,
+      "built_year": 2000,
+      "addr": "서울특별시 노원구 상계동 1295 상계우방",
+      "lat": 37.671978,
+      "lng": 127.056818,
+      "subway": {
+        "station": "수락산역 7호선",
+        "distance_m": 667
+      },
+      "elementary": {
+        "name": "서울노원초등학교",
+        "distance_m": 202
+      }
+    },
+    "부산 해운대구|해운파크맨션": {
+      "households": 160,
+      "built_year": 1985,
+      "addr": "부산광역시 해운대구 우동 397-68 해운파크맨션",
+      "lat": 35.167037,
+      "lng": 129.156844,
+      "subway": {
+        "station": "해운대역 부산2호선",
+        "distance_m": 420
+      },
+      "elementary": {
+        "name": "해동초등학교",
+        "distance_m": 381
+      }
+    },
+    "서울 서초구|현대홈타운": {
+      "households": 68,
+      "built_year": 2005,
+      "addr": "서울특별시 서초구 서초동 1506-88 서초현대홈타운",
+      "lat": 37.488498,
+      "lng": 127.005151,
+      "subway": {
+        "station": "서초역 2호선",
+        "distance_m": 433
+      },
+      "elementary": {
+        "name": "서울방일초등학교",
+        "distance_m": 689
+      }
+    },
+    "서울 송파구|상아1차아파트": {
+      "households": 226,
+      "built_year": 1984,
+      "addr": "서울특별시 송파구 오금동 166 가락상아1차",
+      "lat": 37.498554,
+      "lng": 127.135338,
+      "subway": {
+        "station": "개롱역 5호선",
+        "distance_m": 69
+      },
+      "elementary": {
+        "name": "서울개롱초등학교",
+        "distance_m": 423
+      }
+    },
+    "서울 송파구|아르누보팰리스": {
+      "households": 53,
+      "built_year": 2007,
+      "addr": "서울특별시 송파구 송파동 7-1 잠실아르누보팰리스",
+      "lat": 37.508767,
+      "lng": 127.104524,
+      "subway": {
+        "station": "석촌역 8호선",
+        "distance_m": 431
+      },
+      "elementary": {
+        "name": "서울송파초등학교",
+        "distance_m": 600
+      }
+    },
+    "경기 고양시 일산서구|풍원": {
+      "households": 102,
+      "built_year": 1996,
+      "addr": "경기도 고양일산서구 일산동 2084- 풍원아파트",
+      "lat": 37.691375,
+      "lng": 126.771154,
+      "subway": {
+        "station": "탄현역 경의중앙선",
+        "distance_m": 934
+      },
+      "elementary": {
+        "name": "현산초등학교",
+        "distance_m": 137
+      }
+    },
+    "경기 고양시 덕양구|능곡풍림아이원2단지": {
+      "households": 445,
+      "built_year": 2002,
+      "addr": "경기도 고양덕양구 토당동 60 능곡풍림아이원",
+      "lat": 37.625342,
+      "lng": 126.820317,
+      "subway": {
+        "station": "능곡역 경의중앙선",
+        "distance_m": 705
+      },
+      "elementary": {
+        "name": "능곡초등학교",
+        "distance_m": 396
+      }
+    },
+    "경기 고양시 덕양구|한화꿈에그린": {
+      "households": 122,
+      "built_year": 2003,
+      "addr": "경기도 고양덕양구 화정동 965-1 한화꿈에그린",
+      "lat": 37.634861,
+      "lng": 126.833989,
+      "subway": {
+        "station": "화정역 3호선",
+        "distance_m": 117
+      },
+      "elementary": {
+        "name": "백양초등학교",
+        "distance_m": 347
+      }
+    },
+    "경기 의정부시|신곡신일2": {
+      "households": 119,
+      "built_year": 1998,
+      "addr": "경기도 의정부시 신곡동 451-6 신일2차아파트",
+      "lat": 37.736277,
+      "lng": 127.063153,
+      "subway": {
+        "station": "동오역 의정부경전철",
+        "distance_m": 1136
+      },
+      "elementary": {
+        "name": "의정부초등학교",
+        "distance_m": 315
+      }
+    },
+    "경기 의정부시|아토팰리스": {
+      "households": 49,
+      "built_year": 2010,
+      "addr": "경기도 의정부시 의정부동 30-9 아토팰리스",
+      "lat": 37.739375,
+      "lng": 127.052985,
+      "subway": {
+        "station": "의정부중앙역 의정부경전철",
+        "distance_m": 560
+      },
+      "elementary": {
+        "name": "신동초등학교",
+        "distance_m": 215
+      }
+    },
+    "인천 미추홀구|대산고운누리": {
+      "households": 114,
+      "built_year": 2005,
+      "addr": "인천광역시 미추홀구 주안동 15-38 대산고운누리아파트",
+      "lat": 37.467758,
+      "lng": 126.681517,
+      "subway": {
+        "station": "주안역 1호선",
+        "distance_m": 329
+      },
+      "elementary": {
+        "name": "인천주안북초등학교",
+        "distance_m": 292
+      }
+    },
+    "서울 강동구|강동이루미아파트": {
+      "households": 75,
+      "addr": "서울특별시 강동구 천호동 46 강동이루미",
+      "lat": 37.543863,
+      "lng": 127.140448,
+      "subway": {
+        "station": "굽은다리역 5호선",
+        "distance_m": 282
+      },
+      "elementary": {
+        "name": "서울천동초등학교",
+        "distance_m": 406
+      }
+    },
+    "서울 강동구|성내1차e-편한세상": {
+      "households": 203,
+      "built_year": 2003,
+      "addr": "서울특별시 강동구 성내동 598 성내1차e-편한세상",
+      "lat": 37.533295,
+      "lng": 127.130952,
+      "subway": {
+        "station": "강동역 5호선",
+        "distance_m": 314
+      },
+      "elementary": {
+        "name": "서울성일초등학교",
+        "distance_m": 469
+      }
+    },
+    "경기 수원시 팔달구|포레스트나인아파트": {
+      "households": 184,
+      "built_year": 2014,
+      "addr": "경기도 수원팔달구 지동 365-20 포레스트",
+      "lat": 37.275992,
+      "lng": 127.023246,
+      "subway": {
+        "station": "매교역 수인분당선",
+        "distance_m": 1336
+      },
+      "elementary": {
+        "name": "지동초등학교",
+        "distance_m": 168
+      }
+    },
+    "경기 수원시 팔달구|화서맨션나동": {
+      "households": 115,
+      "built_year": 1980,
+      "addr": "경기도 수원팔달구 화서동 212-6 화서맨션",
+      "lat": 37.28137,
+      "lng": 126.996489,
+      "subway": {
+        "station": "화서역 1호선",
+        "distance_m": 676
+      },
+      "elementary": {
+        "name": "화양초등학교",
+        "distance_m": 274
+      }
+    },
+    "경기 성남시 수정구|신동아파밀리에": {
+      "households": 168,
+      "built_year": 2005,
+      "addr": "경기도 성남수정구 태평동 7341 태평신동아파밀리에",
+      "lat": 37.446532,
+      "lng": 127.140858,
+      "subway": {
+        "station": "신흥역 8호선",
+        "distance_m": 858
+      },
+      "elementary": {
+        "name": "금빛초등학교",
+        "distance_m": 102
+      }
+    },
+    "대구 수성구|태왕아너스클럽": {
+      "households": 108,
+      "built_year": 2005,
+      "addr": "대구광역시 수성구 수성동1가 96-322 태왕아너스클럽",
+      "lat": 35.86027,
+      "lng": 128.610489,
+      "subway": {
+        "station": "대구은행역 대구2호선",
+        "distance_m": 332
+      },
+      "elementary": {
+        "name": "대구삼덕초등학교",
+        "distance_m": 383
+      }
+    },
+    "경기 부천시 오정구|동진": {
+      "households": 250,
+      "built_year": 1987,
+      "addr": "경기도 부천오정구 원종동 180-3 동진아파트",
+      "lat": 37.530791,
+      "lng": 126.807165,
+      "subway": {
+        "station": "원종역 서해선",
+        "distance_m": 761
+      },
+      "elementary": {
+        "name": "부천원일초등학교",
+        "distance_m": 400
+      }
+    },
+    "경기 파주시|호반써밋이스트파크": {
+      "households": 1110,
+      "built_year": 2025,
+      "addr": "경기도 파주시 와동동 1664-478 파주호반써밋이스트파크",
+      "lat": 37.742888,
+      "lng": 126.760217,
+      "subway": {
+        "station": "금릉역 경의중앙선",
+        "distance_m": 1043
+      },
+      "elementary": {
+        "name": "별하람초등학교",
+        "distance_m": 153
+      }
     }
   },
   "as_of": "2026-07-25"
