@@ -10,7 +10,7 @@ const data = JSON.parse(readFileSync(searchIndexPath, 'utf8'));
 const recentPosts = [
   {
     title: '2026년 상반기 매매 이슈 정리 — 가격 흐름·규제지역·양도세',
-    desc: '2026년 상반기 주택가격 변화와 하반기 전망, 수도권·지방 격차, 새 규제지역, 다주택자 양도세와 매매 계약 체크포인트.',
+    desc: '2026년 1~6월 주택가격 변화와 권역별 격차를 차트로 비교하고, 1~5월 거래량·하반기 전망·규제·양도세를 함께 정리한 가이드.',
     url: 'posts/recent-sale-issues-2026.html',
     type: '가이드',
     cat: '매매'

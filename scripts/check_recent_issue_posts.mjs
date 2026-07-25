@@ -10,6 +10,11 @@ const posts = [
   { slug: 'recent-jeonse-issues-2026.html', category: 'lease.html' },
   { slug: 'recent-loan-issues-2026.html', category: 'loan.html' }
 ];
+const saleVisuals = [
+  '../assets/images/posts/2026-h1-sale-cumulative.svg',
+  '../assets/images/posts/2026-h1-sale-monthly-heatmap.svg',
+  '../assets/images/posts/2026-jan-may-sale-transactions.svg'
+];
 const errors = [];
 
 for (const { slug, category } of posts) {
@@ -34,7 +39,25 @@ for (const { slug, category } of posts) {
   for (const marker of required) {
     if (!html.includes(marker)) errors.push(`${slug}: 필수 콘텐츠 누락 (${marker})`);
   }
-  if (/<div class="g-hero-media"|<img\b/i.test(html)) {
+  if (slug === 'recent-sale-issues-2026.html') {
+    const saleMarkers = [
+      '서울은 4.52%',
+      '1~5월 누계 327,455건',
+      '6월 주택 매매거래량은 2026년 7월 25일 현재 공식 공표 전',
+      '<figure class="data-figure">'
+    ];
+    for (const marker of saleMarkers) {
+      if (!html.includes(marker)) errors.push(`${slug}: 상반기 리뷰 필수 내용 누락 (${marker})`);
+    }
+    const figureCount = (html.match(/<figure class="data-figure">/g) || []).length;
+    if (figureCount !== saleVisuals.length) {
+      errors.push(`${slug}: 데이터 시각화 수 불일치 (${figureCount}/${saleVisuals.length})`);
+    }
+    for (const visual of saleVisuals) {
+      if (!html.includes(`src="${visual}"`)) errors.push(`${slug}: 시각화 연결 누락 (${visual})`);
+      if (!existsSync(resolve(dirname(file), visual))) errors.push(`${slug}: 시각화 파일 누락 (${visual})`);
+    }
+  } else if (/<div class="g-hero-media"|<figure class="data-figure"|<img\b/i.test(html)) {
     errors.push(`${slug}: 요청하지 않은 본문 이미지가 포함됨`);
   }
   if (/빅 이슈|이슈\s+[1-9]|뷰 포인트/.test(html)) {
@@ -83,4 +106,4 @@ if (errors.length) {
   console.error(errors.map((error) => `- ${error}`).join('\n'));
   process.exit(1);
 }
-console.log('최근 이슈 포스트 3개: 콘텐츠·이미지 없음·내부 링크·노출 경로 검증 통과');
+console.log('최근 이슈 포스트 3개: 콘텐츠·매매 시각화·내부 링크·노출 경로 검증 통과');

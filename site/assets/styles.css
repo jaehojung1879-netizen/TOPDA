@@ -321,6 +321,37 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .prose ul.ref-list { padding-left: 0; }
 .prose ul.ref-list li { list-style: none; margin-bottom: 0; }
 .prose strong { font-weight: 700; color: var(--text); }
+.data-figure {
+  margin: 28px 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+}
+.data-figure img {
+  width: 100%;
+  height: auto;
+}
+.data-figure figcaption {
+  padding: 13px 16px 15px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+.data-figure figcaption strong {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--text);
+  font-size: 0.88rem;
+}
+.data-note {
+  margin: -10px 0 22px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
 .prose blockquote {
   margin: 24px 0; padding: 16px 20px;
   border-left: 3px solid var(--border-strong);
