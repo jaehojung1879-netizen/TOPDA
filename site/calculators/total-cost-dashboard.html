@@ -652,6 +652,9 @@
     var qs = new URLSearchParams(location.search);
     var qPrice = Number(String(qs.get('price') || '').replace(/[^0-9]/g, ''));
     var qStd = Number(String(qs.get('std') || '').replace(/[^0-9]/g, ''));
+    // 외부(실거래 단지 페이지 등)에서 넘어온 값이라 상한을 둔다 — 자릿수 오류·조작 값 무시.
+    if (!(qPrice >= 1e6 && qPrice <= 1e12)) qPrice = 0;
+    if (!(qStd >= 1e5 && qStd <= 1e12)) qStd = 0;
     if (qPrice > 0) {
       var priceEl = document.getElementById('td-price');
       if (priceEl) { priceEl.value = qPrice; priceEl.dispatchEvent(new Event('input', { bubbles: true })); }

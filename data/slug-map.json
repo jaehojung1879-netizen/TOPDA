@@ -1,0 +1,167 @@
+{
+  "_meta": {
+    "counts": {
+      "complexes": 10,
+      "regions": 10
+    },
+    "hubs": [
+      "경기 남양주시",
+      "경기 성남시 분당구",
+      "경기 평택시",
+      "대구 달서구",
+      "대전 서구",
+      "대전 유성구",
+      "부산 부산진구",
+      "서울 노원구",
+      "서울 동작구",
+      "세종 세종시"
+    ],
+    "note": "한글 지역·단지명 → URL 슬러그 매핑. 한 번 발급한 슬러그는 바꾸지 않는다. 복합 키는 '지역|법정동|단지명'.",
+    "romanization": "국어의 로마자 표기법(음절 단위, 자음동화 미적용)",
+    "updated": "2026-07-25"
+  },
+  "complexes": {
+    "경기 남양주시|묵현리|남양주두산위브트레지움": {
+      "history": [],
+      "name": "남양주두산위브트레지움",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-07-25",
+      "slug": "namyangjudusanwibeuteurejium",
+      "umd": "묵현리"
+    },
+    "경기 성남시 분당구|삼평동|봇들마을9단지(금호어울림)": {
+      "history": [],
+      "name": "봇들마을9단지(금호어울림)",
+      "region_slug": "gyeonggi-seongnam-bundang",
+      "since": "2026-07-25",
+      "slug": "botdeulmaeul9danji-geumhoeoulrim",
+      "umd": "삼평동"
+    },
+    "경기 평택시|합정동|평택뉴비전엘크루": {
+      "history": [],
+      "name": "평택뉴비전엘크루",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-07-25",
+      "slug": "pyeongtaeknyubijeonelkeuru",
+      "umd": "합정동"
+    },
+    "대구 달서구|진천동|진천역라온프라이빗센텀": {
+      "history": [],
+      "name": "진천역라온프라이빗센텀",
+      "region_slug": "daegu-dalseo",
+      "since": "2026-07-25",
+      "slug": "jincheonyeokraonpeuraibitsenteom",
+      "umd": "진천동"
+    },
+    "대전 서구|가장동|삼성래미안1": {
+      "history": [],
+      "name": "삼성래미안1",
+      "region_slug": "daejeon-seogu",
+      "since": "2026-07-25",
+      "slug": "samseongraemian1",
+      "umd": "가장동"
+    },
+    "대전 유성구|원신흥동|갑천1트리풀시티힐스테이트": {
+      "history": [],
+      "name": "갑천1트리풀시티힐스테이트",
+      "region_slug": "daejeon-yuseong",
+      "since": "2026-07-25",
+      "slug": "gapcheon1teuripulsitihilseuteiteu",
+      "umd": "원신흥동"
+    },
+    "부산 부산진구|전포동|한웅인터빌": {
+      "history": [],
+      "name": "한웅인터빌",
+      "region_slug": "busan-busanjin",
+      "since": "2026-07-25",
+      "slug": "hanunginteobil",
+      "umd": "전포동"
+    },
+    "서울 노원구|상계동|은빛2단지": {
+      "history": [],
+      "name": "은빛2단지",
+      "region_slug": "seoul-nowon",
+      "since": "2026-07-25",
+      "slug": "eunbit2danji",
+      "umd": "상계동"
+    },
+    "서울 동작구|흑석동|아크로리버하임": {
+      "history": [],
+      "name": "아크로리버하임",
+      "region_slug": "seoul-dongjak",
+      "since": "2026-07-25",
+      "slug": "akeuroribeohaim",
+      "umd": "흑석동"
+    },
+    "세종 세종시|어진동|더샵레이크파크": {
+      "history": [],
+      "name": "더샵레이크파크",
+      "region_slug": "sejong",
+      "since": "2026-07-25",
+      "slug": "deosyapreikeupakeu",
+      "umd": "어진동"
+    }
+  },
+  "regions": {
+    "경기 남양주시": {
+      "history": [],
+      "name": "경기 남양주시",
+      "since": "2026-07-25",
+      "slug": "gyeonggi-namyangju"
+    },
+    "경기 성남시 분당구": {
+      "history": [],
+      "name": "경기 성남시 분당구",
+      "since": "2026-07-25",
+      "slug": "gyeonggi-seongnam-bundang"
+    },
+    "경기 평택시": {
+      "history": [],
+      "name": "경기 평택시",
+      "since": "2026-07-25",
+      "slug": "gyeonggi-pyeongtaek"
+    },
+    "대구 달서구": {
+      "history": [],
+      "name": "대구 달서구",
+      "since": "2026-07-25",
+      "slug": "daegu-dalseo"
+    },
+    "대전 서구": {
+      "history": [],
+      "name": "대전 서구",
+      "since": "2026-07-25",
+      "slug": "daejeon-seogu"
+    },
+    "대전 유성구": {
+      "history": [],
+      "name": "대전 유성구",
+      "since": "2026-07-25",
+      "slug": "daejeon-yuseong"
+    },
+    "부산 부산진구": {
+      "history": [],
+      "name": "부산 부산진구",
+      "since": "2026-07-25",
+      "slug": "busan-busanjin"
+    },
+    "서울 노원구": {
+      "history": [],
+      "name": "서울 노원구",
+      "since": "2026-07-25",
+      "slug": "seoul-nowon"
+    },
+    "서울 동작구": {
+      "history": [],
+      "name": "서울 동작구",
+      "since": "2026-07-25",
+      "slug": "seoul-dongjak"
+    },
+    "세종 세종시": {
+      "history": [],
+      "name": "세종 세종시",
+      "since": "2026-07-25",
+      "slug": "sejong"
+    }
+  }
+}
