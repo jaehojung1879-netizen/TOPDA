@@ -42,13 +42,16 @@ jobs:
         run: bash _meta/git_commit_push.sh "지역 시세 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/market.json
 
       # 상업용부동산(상가·오피스) 임대시세 — 분기 통계지만 매일 호출(미변경 시 커밋 생략).
-      # RONE_COMM_TABLES(JSON: 유형→지표→STATBL_ID) 변수 미설정이면 수집기가 스킵하고 예시 보존.
+      # RONE_COMM_TABLES 미설정 시 최신 진행 통계표를 자동 탐색하고, 설정 시 지정 ID를 우선 사용한다.
+      # API 실패·빈 결과·품질 기준 미달이면 기존 commercial.json을 보존한다.
       - name: Collect commercial rents (R-ONE 상업용 임대동향)
         working-directory: _meta
         env:
           R_ONE: ${{ secrets.R_ONE }}
           REB_RONE_KEY: ${{ secrets.REB_RONE_KEY }}
+          # 미설정이면 통계표 목록에서 최신 진행 표를 자동 발견하고 실제 최신 분기를 검증한다.
           RONE_COMM_TABLES: ${{ vars.RONE_COMM_TABLES }}
+          TIME_BUDGET_MIN: "8"
         run: python collect_commercial.py
         continue-on-error: true
 

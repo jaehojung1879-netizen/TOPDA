@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-"""상업용부동산(상가·오피스) 임대시세 → site/assets/commercial.json
+"""한국부동산원 R-ONE 상업용부동산 임대동향 → commercial.json.
 
-한국부동산원 R-ONE **상업용부동산 임대동향조사**(분기)에서 지역·유형별
-  · 임대료(㎡당, 원/월)  · 공실률(%)  · 투자수익률(%)
-를 모아 '지역별 상가 임차시세' 대시보드용 JSON을 만든다.
+R-ONE 분기 자료는 ``DTACYCLE_CD=QY``와 한 개의
+``WRTTIME_IDTFR_ID=YYYY0Q``(예: 2026년 1분기 = 202601)로 조회한다.
+통계표가 개편될 때 ID가 바뀌므로 현재 진행 중인 표를 이름으로 찾고, 실제 행이
+반환되는 최신 분기를 확인한 뒤 게시한다. 실패나 비정상 결과는 기존 파일을
+덮어쓰지 않는다.
 
-R-ONE 통계표 ID(STATBL_ID)는 조사 개편마다 바뀌므로 **코드에 박지 않고**
-GitHub 변수 `RONE_COMM_TABLES`(JSON)로 주입한다. 미설정이면 데이터 없이 스킵하고
-기존 commercial.json(초기 예시)을 보존한다 → 화면은 '데이터 준비 중'으로 동작.
+선택적으로 GitHub 변수 ``RONE_COMM_TABLES``에 기존 형식의 JSON을 지정해 자동
+발견 결과를 고정할 수 있다.
 
-RONE_COMM_TABLES 예시(유형 key → 지표 → STATBL_ID):
   {
-    "office":     {"rent": "A_2024_xxxxx", "vacancy": "A_2024_xxxxx", "yield": "A_2024_xxxxx"},
-    "medium":     {"rent": "...", "vacancy": "...", "yield": "..."},
-    "small":      {"rent": "...", "vacancy": "...", "yield": "..."},
-    "collective": {"rent": "...", "vacancy": "...", "yield": "..."}
+    "office": {"rent": "TT...", "vacancy": "TT...", "yield": "TT..."},
+    "medium": {"rent": "TT...", "vacancy": "TT...", "yield": "TT..."}
   }
 """
 import datetime as dt
@@ -29,218 +27,395 @@ RONE = "https://www.reb.or.kr/r-one/openapi/SttsApiTblData.do"
 OUT_JSON = os.path.join(L.SITE_ASSETS, "commercial.json")
 
 TYPES = [
-    {"key": "office",     "name": "오피스"},
-    {"key": "medium",     "name": "중대형상가"},
-    {"key": "small",      "name": "소규모상가"},
+    {"key": "office", "name": "오피스"},
+    {"key": "medium", "name": "중대형상가"},
+    {"key": "small", "name": "소규모상가"},
     {"key": "collective", "name": "집합상가"},
 ]
-METRICS = ("rent", "vacancy", "yield")   # 임대료(원/㎡)·공실률(%)·투자수익률(%)
-
-# 지도용 시도 중심 좌표(상권 단위가 아니라 시도 단위 노출).
-SIDO_COORD = {
-    "서울": (37.5665, 126.9780), "부산": (35.1796, 129.0756), "대구": (35.8714, 128.6014),
-    "인천": (37.4563, 126.7052), "광주": (35.1595, 126.8526), "대전": (36.3504, 127.3845),
-    "울산": (35.5384, 129.3114), "세종": (36.4801, 127.2890), "경기": (37.4138, 127.5183),
-    "강원": (37.8228, 128.1555), "충북": (36.6357, 127.4917), "충남": (36.5184, 126.8000),
-    "전북": (35.7175, 127.1530), "전남": (34.8161, 126.4630), "경북": (36.4919, 128.8889),
-    "경남": (35.4606, 128.2132), "제주": (33.4996, 126.5312),
+METRICS = ("rent", "vacancy", "yield")
+TYPE_KW = {
+    "office": "오피스",
+    "medium": "중대형상가",
+    "small": "소규모상가",
+    "collective": "집합상가",
 }
 
+# 현재 화면은 시도 단위 지도를 제공한다. 상권(도심·강남·동대구 등)은 별도 행으로
+# 반환되지만 시도 마커와 중복되므로 이 payload에서는 시도 합계만 게시한다.
+SIDO_COORD = {
+    "서울": (37.5665, 126.9780),
+    "부산": (35.1796, 129.0756),
+    "대구": (35.8714, 128.6014),
+    "인천": (37.4563, 126.7052),
+    "광주": (35.1595, 126.8526),
+    "대전": (36.3504, 127.3845),
+    "울산": (35.5384, 129.3114),
+    "세종": (36.4801, 127.2890),
+    "경기": (37.4138, 127.5183),
+    "강원": (37.8228, 128.1555),
+    "충북": (36.6357, 127.4917),
+    "충남": (36.5184, 126.8000),
+    "전북": (35.7175, 127.1530),
+    "전남": (34.8161, 126.4630),
+    "경북": (36.4919, 128.8889),
+    "경남": (35.4606, 128.2132),
+    "제주": (33.4996, 126.5312),
+}
 
-def fetch_quarter(statbl, start, end, api_key):
-    """분기 통계표 → {지역명: {분기: 값}}.
+MAX_PROBE = 12
+_PROBE_CACHE = {}
 
-    collect_market.fetch_metric과 동일하게 R-ONE 오류를 RuntimeError로 올려 CI 로그에
-    사유가 드러나게 하고, 첫 페이지부터 빈 응답이면 원문 일부를 남긴다(2026-07-15 진단:
-    분기 시점 형식이 틀려 조용히 0행이 반환됐고, 오류 표면화가 없어 원인이 가려졌음)."""
-    import collect_market as M
-    out, page = {}, 1
-    while page <= 12:
-        j = L.get_json(RONE, {
-            "KEY": api_key, "Type": "json", "STATBL_ID": statbl, "DTACYCLE_CD": "QQ",
-            "START_WRTTIME": start, "END_WRTTIME": end, "pIndex": page, "pSize": 1000,
-        })
-        code, msg = M.rone_result(j)
-        if code and not code.upper().startswith("INFO-0"):
-            raise RuntimeError(f"R-ONE 응답 오류 [{code}] {msg} (STATBL_ID={statbl})")
-        rows = []
-        for block in (j.get("SttsApiTblData") or []):
-            if isinstance(block, dict) and block.get("row"):
-                rows = block["row"]
-        if not rows:
-            if page == 1 and not out:
-                print(f"  · {statbl}: row 없음(분기 {start}~{end}). 응답 키={list(j.keys())} "
-                      f"일부={str(j)[:200]}", file=sys.stderr)
-            break
-        for r in rows:
-            region = (r.get("CLS_NM") or "").strip()
-            q = (r.get("WRTTIME_IDTFR_ID") or "").strip()
-            try:
-                val = float(r.get("DTA_VAL"))
-            except (TypeError, ValueError):
-                continue
-            if region and q:
-                out.setdefault(region, {})[q] = val
-        if len(rows) < 1000:
-            break
-        page += 1
+
+def quarter_ids(today=None, lookback=16):
+    """기준일이 속한 분기부터 과거 순서로 R-ONE 분기 식별자를 만든다."""
+    today = today or dt.date.today()
+    year = today.year
+    quarter = (today.month - 1) // 3 + 1
+    out = []
+    for _ in range(lookback):
+        out.append(f"{year}{quarter:02d}")
+        quarter -= 1
+        if quarter == 0:
+            year -= 1
+            quarter = 4
     return out
 
 
-def latest(series):
-    if not series:
-        return None
-    return series[max(series.keys())]
+def format_quarter(period):
+    """R-ONE ``YYYY0Q``를 화면용 ``YYYYQn``으로 바꾼다."""
+    value = str(period or "").strip()
+    if re.fullmatch(r"\d{6}", value) and value[-2] == "0" and value[-1] in "1234":
+        return f"{value[:4]}Q{value[-1]}"
+    return value
 
 
-# ── 통계표 자동 발견 (RONE_COMM_TABLES 미설정 시) ──
-# 전세지수·전세가율에서 검증된 방식: 통계표 목록(SttsApiTbl.do)을 한 번 내려받아
-# 이름으로 유형×지표 표를 찾는다. 임대료는 '지수' 표(기준시점=100)와 혼동하지 않도록 제외.
-TYPE_KW = {"office": "오피스", "medium": "중대형", "small": "소규모", "collective": "집합"}
-METRIC_KW = {"rent": "임대료", "vacancy": "공실률", "yield": "투자수익률"}
+def _response_rows(payload):
+    rows = []
+    for block in payload.get("SttsApiTblData") or []:
+        if isinstance(block, dict) and isinstance(block.get("row"), list):
+            rows.extend(block["row"])
+    return rows
+
+
+def _response_total(payload):
+    for block in payload.get("SttsApiTblData") or []:
+        if not isinstance(block, dict):
+            continue
+        candidates = [block] + [head for head in (block.get("head") or []) if isinstance(head, dict)]
+        for candidate in candidates:
+            for key, value in candidate.items():
+                if str(key).lower() == "list_total_count":
+                    try:
+                        return int(value)
+                    except (TypeError, ValueError):
+                        return None
+    return None
+
+
+def fetch_period(statbl, period, api_key):
+    """한 통계표의 한 분기 원본 행을 전 페이지에서 가져온다.
+
+    ``INFO-200``은 아직 발표되지 않았거나 해당 표에 없는 분기이므로 빈 결과로
+    처리한다. 인증·파라미터 오류 등 다른 응답은 CI에서 원인이 보이도록 예외로
+    올린다.
+    """
+    import collect_market as M
+
+    cache_key = (statbl, period)
+    if cache_key in _PROBE_CACHE:
+        return _PROBE_CACHE[cache_key]
+
+    out = []
+    page = 1
+    while page <= 20:
+        payload = L.get_json(
+            RONE,
+            {
+                "KEY": api_key,
+                "Type": "json",
+                "STATBL_ID": statbl,
+                "DTACYCLE_CD": "QY",
+                "WRTTIME_IDTFR_ID": period,
+                "pIndex": page,
+                "pSize": 1000,
+            },
+        )
+        code, message = M.rone_result(payload)
+        normalized = str(code or "").upper()
+        if normalized == "INFO-200":
+            _PROBE_CACHE[cache_key] = []
+            return []
+        if normalized and normalized != "INFO-000":
+            raise RuntimeError(
+                f"R-ONE 응답 오류 [{code}] {message} "
+                f"(STATBL_ID={statbl}, WRTTIME_IDTFR_ID={period})"
+            )
+
+        rows = _response_rows(payload)
+        if not rows:
+            break
+        out.extend(rows)
+        total = _response_total(payload)
+        if (total is not None and len(out) >= total) or len(rows) < 1000:
+            break
+        page += 1
+
+    _PROBE_CACHE[cache_key] = out
+    return out
+
+
+def table_start_period(name):
+    """표 제목의 시작 시점을 정렬용 숫자로 반환한다."""
+    flat = str(name or "").replace(" ", "")
+    match = re.search(r"\((\d{4})년(?:(\d)분기)?~\)", flat)
+    if not match:
+        return 0
+    return int(match.group(1)) * 100 + int(match.group(2) or 1)
+
+
+def _is_closed_series(name):
+    flat = str(name or "").replace(" ", "")
+    return bool(re.search(r"\(\d{4}년[^)]*~\d{4}년", flat))
+
+
+def _matches_metric(name, metric):
+    flat = str(name or "").replace(" ", "")
+    if _is_closed_series(flat):
+        return False
+    if metric == "rent":
+        return "지역별임대료" in flat and "층별" not in flat and "지수" not in flat
+    if metric == "vacancy":
+        return "지역별공실률" in flat
+    if metric == "yield":
+        return (
+            "수익률(분기)" in flat
+            and "소득수익률" not in flat
+            and "자본수익률" not in flat
+        )
+    return False
 
 
 def _list_all_tables(api_key):
-    """R-ONE 통계표 목록 [(STATBL_ID, 이름)]. collect_market의 재시도 로직 재사용
-    (2026-07-17: 이 호출이 네트워크 타임아웃으로 실패해 상업용 임대 자동발견이
-    매번 스킵됐다 — 짧은 재시도로 일시적 지연에 견고하게 만들었다)."""
     import collect_market as M
+
     return M._list_all_tables(api_key)
 
 
-MAX_PROBE = 10   # 후보당 실호출 검증 상한(2026-07-18: 4로는 부족 — office/rent 등 10건
-                 # 후보 전부가 앞 4개에서 [INFO-200] 데이터없음으로 소진돼 자동발견 실패)
+def _latest_rows(statbl, periods, api_key, deadline=None):
+    for period in periods:
+        if L.out_of_time(deadline, margin_sec=20):
+            return None, []
+        try:
+            rows = fetch_period(statbl, period, api_key)
+        except Exception as exc:  # noqa: BLE001
+            print(f"  · {statbl}/{period} 조회 실패: {exc}", file=sys.stderr)
+            continue
+        if rows:
+            return period, rows
+    return None, []
 
 
-def discover_tables(api_key, probe_start, probe_end):
-    """유형(오피스/중대형/소규모/집합) × 지표(임대료/공실률/투자수익률) 표 자동 발견.
-
-    이름으로만 고르면 동명 이표(같은 조사의 개편 전/후 ID 등) 중 '이름은 최신인데
-    실제로는 빈 표'를 채택할 수 있다(2026-07-16 확인: [INFO-200] 해당 데이터 없음 —
-    후보 10개 중 데이터가 실제로 채워진 표가 다른 ID였음). 후보를 우선순위대로
-    최근 분기 1회 조회해 데이터가 실제로 나오는 첫 표를 채택한다.
-
-    잡 전체 시간예산(refresh-market.yml timeout-minutes: 15, market 스텝이 먼저
-    2분가량 사용)을 넘기지 않도록 자체 마감을 둔다 — 후보 하나가 네트워크 재시도로
-    최대 66초까지 걸릴 수 있어(2026-07-18 로그: 'Remote end closed connection' 재시도로
-    38초 지연 관측) 무제한 순회는 위험하다."""
-    deadline = L.deadline_from_env(default_min=8)
+def discover_tables(api_key, periods, deadline=None):
+    """표 이름과 실제 최신 분기 행을 함께 검증해 유형별 통계표를 고른다."""
     try:
         all_tables = _list_all_tables(api_key)
-    except Exception as e:  # noqa: BLE001
-        print(f"[skip] 통계표 목록 조회 실패({e}) — 자동 발견 불가", file=sys.stderr)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[skip] 통계표 목록 조회 실패({exc}) — 자동 발견 불가", file=sys.stderr)
         return None
-    tables = {}
-    for tkey, tkw in TYPE_KW.items():
-        for metric, mkw in METRIC_KW.items():
+
+    selected = {}
+    for type_key, type_name in TYPE_KW.items():
+        for metric in METRICS:
             if L.out_of_time(deadline, margin_sec=20):
-                print(f"[자동발견] 시간예산 초과 — {tkey}/{metric} 이후 탐색 중단", file=sys.stderr)
-                return tables or None
-            hits = []
-            for sid, name in all_tables:
+                print("[자동발견] 시간 예산 초과 — 남은 표 탐색 중단", file=sys.stderr)
+                return selected or None
+
+            candidates = []
+            for statbl, name in all_tables:
                 flat = name.replace(" ", "")
-                if tkw not in flat or mkw not in flat:
+                if type_name not in flat or not _matches_metric(name, metric):
                     continue
-                if "지수" in flat and metric == "rent":   # 임대료는 지수 표 제외
-                    continue
-                # 폐지된 과거 시계열(예: 투자수익률 '(2002년~2012년)') 배제 — 닫힌 연도범위 표.
-                # 현재 진행형 시계열은 '~)'로 끝나므로(예: '(2024년3분기~)') 그쪽을 선호한다.
-                if re.search(r"\(\d{4}년[^)]*~\d{4}년", flat):
-                    continue
-                current = "~)" in flat or "분기~" in flat
-                hits.append((0 if current else 1, sid, name))
-            hits.sort()   # 현재 진행형(0) 우선
+                candidates.append((table_start_period(name), statbl, name))
+            candidates.sort(key=lambda item: (item[0], item[1]), reverse=True)
+
             picked = None
-            for _, sid, name in hits[:MAX_PROBE]:
-                if L.out_of_time(deadline, margin_sec=20):
-                    print(f"  · {tkey}/{metric} 탐색 — 시간예산 초과로 후보 순회 중단", file=sys.stderr)
+            for _, statbl, name in candidates[:MAX_PROBE]:
+                period, rows = _latest_rows(statbl, periods, api_key, deadline)
+                if rows:
+                    picked = {"id": statbl, "name": name, "period": period}
                     break
-                try:
-                    data = fetch_quarter(sid, probe_start, probe_end, api_key)
-                except Exception as e:  # noqa: BLE001
-                    print(f"  · {tkey}/{metric} 후보 {sid} 검증 실패: {e}", file=sys.stderr)
-                    continue
-                if data:
-                    picked = (sid, name)
-                    break
-                print(f"  · {tkey}/{metric} 후보 {sid} ({name}) — 데이터 없음, 다음 후보 시도", file=sys.stderr)
             if picked:
-                sid, name = picked
-                tables.setdefault(tkey, {})[metric] = sid
-                extra = f" (검증 통과, 후보 {len(hits)}건 중)" if len(hits) > 1 else ""
-                print(f"[자동발견] {tkey}/{metric}: {sid} ({name}){extra}")
-            elif hits:
-                probed = min(len(hits), MAX_PROBE)
-                note = "" if probed >= len(hits) else f" (미탐색 {len(hits) - probed}건 남음)"
-                print(f"[자동발견] {tkey}/{metric}: 검증한 후보 {probed}/{len(hits)}건 모두 데이터 없음{note}",
-                      file=sys.stderr)
+                selected.setdefault(type_key, {})[metric] = picked
+                print(
+                    f"[자동발견] {type_key}/{metric}: {picked['id']} "
+                    f"({picked['period']}, {picked['name']})"
+                )
             else:
-                print(f"[자동발견] {tkey}/{metric}: 매칭 없음", file=sys.stderr)
-    return tables or None
+                print(
+                    f"[자동발견] {type_key}/{metric}: "
+                    f"후보 {min(len(candidates), MAX_PROBE)}/{len(candidates)}건에 최신 데이터 없음",
+                    file=sys.stderr,
+                )
+    return selected or None
+
+
+def _item_name(row):
+    return " ".join(
+        str(row.get(key) or "").strip()
+        for key in ("ITM_NM", "ITM_FULLNM")
+        if row.get(key)
+    )
+
+
+def metric_value(row, metric):
+    """행을 화면 단위로 변환한다. 대상이 아닌 수익률 세부 행은 None."""
+    if metric == "yield" and "투자수익률" not in _item_name(row):
+        return None
+    try:
+        value = float(row.get("DTA_VAL"))
+    except (TypeError, ValueError):
+        return None
+
+    if metric == "rent":
+        unit = str(row.get("UI_NM") or row.get("UNIT_NM") or "")
+        if "천원" in unit:
+            value *= 1000
+        elif "만원" in unit:
+            value *= 10000
+    return value
+
+
+def _normalize_override(raw_tables, periods, api_key, deadline):
+    """기존 ``{metric: id}`` 환경변수를 검증 결과 객체로 정규화한다."""
+    selected = {}
+    for type_key, metrics in (raw_tables or {}).items():
+        if type_key not in TYPE_KW or not isinstance(metrics, dict):
+            continue
+        for metric, value in metrics.items():
+            if metric not in METRICS:
+                continue
+            statbl = value.get("id") if isinstance(value, dict) else value
+            if not statbl:
+                continue
+            period, rows = _latest_rows(str(statbl), periods, api_key, deadline)
+            if rows:
+                selected.setdefault(type_key, {})[metric] = {
+                    "id": str(statbl),
+                    "name": value.get("name", "") if isinstance(value, dict) else "",
+                    "period": period,
+                }
+            else:
+                print(f"  · 고정 표 {type_key}/{metric}({statbl})에 최신 데이터 없음", file=sys.stderr)
+    return selected or None
+
+
+def _publishable(regions):
+    """빈 결과·단위 오류·명백한 이상치가 기존 정상 파일을 덮지 못하게 한다."""
+    if len(regions) < 5:
+        return False, f"시도 데이터가 {len(regions)}개뿐임(최소 5개 필요)"
+
+    rent_count = 0
+    for region in regions:
+        for values in (region.get("data") or {}).values():
+            rent = values.get("rent")
+            vacancy = values.get("vacancy")
+            yield_value = values.get("yield")
+            if rent is not None:
+                rent_count += 1
+                if not 500 <= rent <= 10_000_000:
+                    return False, f"임대료 단위/범위 이상: {region['key']}={rent}"
+            if vacancy is not None and not 0 <= vacancy <= 100:
+                return False, f"공실률 범위 이상: {region['key']}={vacancy}"
+            if yield_value is not None and not -100 <= yield_value <= 100:
+                return False, f"투자수익률 범위 이상: {region['key']}={yield_value}"
+    if not rent_count:
+        return False, "임대료 행이 한 건도 없음"
+    return True, ""
 
 
 def main():
     api_key = L.key(L.RONE_KEYS, required=True)
-    # R-ONE 분기 시점 식별자는 'YYYYQ'(예: 2024년 3분기 = '20243'). 과거엔 'YYYY0Q'(6자리)
-    # 형식을 보내 전 표에서 0행이 반환됐다(2026-07-15 원인). 범위를 넉넉히 잡고(미래 분기는
-    # 빈 응답) latest()가 최신 분기를 고르게 한다.
-    y = dt.date.today().year
-    start = f"{y - 3}1"   # 3년 전 1분기
-    end = f"{y}4"         # 올해 4분기까지
+    periods = quarter_ids()
+    deadline = L.deadline_from_env(default_min=8)
 
+    selected = None
     raw = os.environ.get("RONE_COMM_TABLES", "").strip()
-    tables = None
     if raw:
         try:
-            tables = json.loads(raw)
-        except json.JSONDecodeError as e:
-            print(f"! RONE_COMM_TABLES JSON 파싱 실패({e}) — 자동 발견으로 폴백", file=sys.stderr)
-    if not tables:
-        tables = discover_tables(api_key, start, end)
-    if not tables:
-        print("[skip] 상업용 임대 통계표를 찾지 못함 — 기존 commercial.json 보존. "
-              "R-ONE easyStat에서 표 ID를 확인해 RONE_COMM_TABLES 변수로 지정할 수 있습니다.",
-              file=sys.stderr)
+            selected = _normalize_override(json.loads(raw), periods, api_key, deadline)
+        except json.JSONDecodeError as exc:
+            print(f"! RONE_COMM_TABLES JSON 해석 실패({exc}) — 자동 발견으로 대체", file=sys.stderr)
+    if not selected:
+        selected = discover_tables(api_key, periods, deadline)
+    if not selected:
+        print("[skip] 유효한 상업용 임대 통계표를 찾지 못해 기존 commercial.json 보존", file=sys.stderr)
         return
 
-    # {region: {type: {metric: value}}}
-    agg = {}
-    for tkey, metrics in tables.items():
-        for metric, statbl in (metrics or {}).items():
-            if metric not in METRICS or not statbl:
-                continue
-            try:
-                data = fetch_quarter(statbl, start, end, api_key)
-            except Exception as e:  # noqa: BLE001
-                print(f"  ! {tkey}/{metric} ({statbl}) 수집 실패: {e}", file=sys.stderr)
-                continue
-            for region, series in data.items():
-                v = latest(series)
-                if v is None:
+    aggregate = {}
+    actual_periods = []
+    for type_key, metrics in selected.items():
+        for metric, info in (metrics or {}).items():
+            rows = fetch_period(info["id"], info["period"], api_key)
+            accepted = 0
+            for row in rows:
+                region = str(row.get("CLS_NM") or "").strip()
+                if region not in SIDO_COORD:
                     continue
-                agg.setdefault(region, {}).setdefault(tkey, {})[metric] = round(v, 2)
-
-    if not agg:
-        print("[skip] 수집 결과 없음 — 기존 commercial.json 유지", file=sys.stderr)
-        return
+                value = metric_value(row, metric)
+                if value is None:
+                    continue
+                aggregate.setdefault(region, {}).setdefault(type_key, {})[metric] = round(value, 2)
+                accepted += 1
+            if accepted:
+                actual_periods.append(info["period"])
+            else:
+                print(
+                    f"  · {type_key}/{metric}({info['id']}, {info['period']})에서 "
+                    "시도 대상 행을 찾지 못함",
+                    file=sys.stderr,
+                )
 
     regions = []
-    for region, by_type in sorted(agg.items()):
-        coord = SIDO_COORD.get(region)
-        regions.append({
-            "key": region, "sido": region, "name": region,
-            "lat": coord[0] if coord else None, "lng": coord[1] if coord else None,
-            "data": by_type,
-        })
+    for region, by_type in sorted(aggregate.items()):
+        lat, lng = SIDO_COORD[region]
+        regions.append(
+            {
+                "key": region,
+                "sido": region,
+                "name": region,
+                "lat": lat,
+                "lng": lng,
+                "data": by_type,
+            }
+        )
 
+    ok, reason = _publishable(regions)
+    if not ok:
+        print(f"[skip] 수집 품질검사 실패({reason}) — 기존 commercial.json 보존", file=sys.stderr)
+        return
+
+    table_ids = {
+        type_key: {metric: info["id"] for metric, info in metrics.items()}
+        for type_key, metrics in selected.items()
+    }
+    table_periods = {
+        type_key: {metric: info["period"] for metric, info in metrics.items()}
+        for type_key, metrics in selected.items()
+    }
+    table_names = {
+        type_key: {metric: info.get("name", "") for metric, info in metrics.items()}
+        for type_key, metrics in selected.items()
+    }
     payload = {
         "_meta": {
             "source": "한국부동산원 R-ONE 상업용부동산 임대동향조사(분기)",
             "units": {"rent": "원/㎡·월", "vacancy": "%", "yield": "%(분기)"},
-            "note": "유형: 오피스·중대형상가·소규모상가·집합상가. 지역·상권 구성에 따라 차이가 있습니다.",
-            "tables": tables,   # 사용한 STATBL_ID — 자동 발견분은 확인 후 RONE_COMM_TABLES에 고정 권장
+            "note": "시도 단위 자료. 임대료는 R-ONE 천원/㎡ 값을 원/㎡로 환산했습니다.",
+            "tables": table_ids,
+            "table_periods": table_periods,
+            "table_names": table_names,
         },
-        "as_of": end,
+        "as_of": format_quarter(max(actual_periods)),
         "types": TYPES,
         "regions": regions,
     }
