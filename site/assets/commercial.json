@@ -1,57 +1,586 @@
 {
   "_meta": {
     "source": "한국부동산원 R-ONE 상업용부동산 임대동향조사(분기)",
-    "units": { "rent": "원/㎡·월", "vacancy": "%", "yield": "%(분기)" },
-    "note": "초기 예시값입니다. R-ONE 통계표 ID(RONE_COMM_TABLES) 연동 시 실제 값으로 자동 갱신됩니다. 유형별·지역별 임대료·공실률·투자수익률."
+    "units": {
+      "rent": "원/㎡·월",
+      "vacancy": "%",
+      "yield": "%(분기)"
+    },
+    "note": "시도 단위 자료. 임대료는 R-ONE 천원/㎡ 값을 원/㎡로 환산했습니다.",
+    "tables": {
+      "office": {
+        "rent": "TT249843134237374",
+        "vacancy": "TT244763134428698",
+        "yield": "T245883135037859"
+      },
+      "medium": {
+        "rent": "T244363134858603",
+        "vacancy": "T249633134845544",
+        "yield": "T242083134887473"
+      },
+      "small": {
+        "rent": "T248223134698125",
+        "vacancy": "T241833134686576",
+        "yield": "T246253134913401"
+      },
+      "collective": {
+        "rent": "T244913134948657",
+        "vacancy": "T243283134931290",
+        "yield": "T246393134978815"
+      }
+    },
+    "table_periods": {
+      "office": {
+        "rent": "202601",
+        "vacancy": "202601",
+        "yield": "202601"
+      },
+      "medium": {
+        "rent": "202601",
+        "vacancy": "202504",
+        "yield": "202601"
+      },
+      "small": {
+        "rent": "202601",
+        "vacancy": "202601",
+        "yield": "202601"
+      },
+      "collective": {
+        "rent": "202504",
+        "vacancy": "202601",
+        "yield": "202601"
+      }
+    },
+    "table_names": {
+      "office": {
+        "rent": "임대동향 지역별 임대료(2024년3분기~)_오피스",
+        "vacancy": "임대동향 지역별 공실률(2024년3분기~)_오피스",
+        "yield": "임대동향 수익률(분기)(2024년3분기~)_오피스"
+      },
+      "medium": {
+        "rent": "임대동향 지역별 임대료(2024년3분기~)_중대형 상가",
+        "vacancy": "임대동향 지역별 공실률(2024년3분기~)_중대형 상가",
+        "yield": "임대동향 수익률(분기)(2024년3분기~)_중대형 상가"
+      },
+      "small": {
+        "rent": "임대동향 지역별 임대료(2024년3분기~)_소규모 상가",
+        "vacancy": "임대동향 지역별 공실률(2024년3분기~)_소규모 상가",
+        "yield": "임대동향 수익률(분기)(2024년3분기~)_소규모 상가"
+      },
+      "collective": {
+        "rent": "임대동향 지역별 임대료(2024년3분기~)_집합 상가",
+        "vacancy": "임대동향 지역별 공실률(2024년3분기~)_집합 상가",
+        "yield": "임대동향 수익률(분기)(2024년3분기~)_집합 상가"
+      }
+    }
   },
   "as_of": "2026Q1",
-  "seed": true,
   "types": [
-    { "key": "office", "name": "오피스" },
-    { "key": "medium", "name": "중대형상가" },
-    { "key": "small", "name": "소규모상가" },
-    { "key": "collective", "name": "집합상가" }
+    {
+      "key": "office",
+      "name": "오피스"
+    },
+    {
+      "key": "medium",
+      "name": "중대형상가"
+    },
+    {
+      "key": "small",
+      "name": "소규모상가"
+    },
+    {
+      "key": "collective",
+      "name": "집합상가"
+    }
   ],
   "regions": [
-    { "key": "서울", "sido": "서울", "name": "서울", "lat": 37.5665, "lng": 126.9780, "data": {
-      "office": { "rent": 23200, "vacancy": 6.8, "yield": 1.35 },
-      "medium": { "rent": 52000, "vacancy": 9.1, "yield": 1.10 },
-      "small": { "rent": 47000, "vacancy": 7.4, "yield": 1.05 },
-      "collective": { "rent": 28000, "vacancy": 10.2, "yield": 1.20 } } },
-    { "key": "경기", "sido": "경기", "name": "경기", "lat": 37.4138, "lng": 127.5183, "data": {
-      "office": { "rent": 14500, "vacancy": 9.6, "yield": 1.28 },
-      "medium": { "rent": 31000, "vacancy": 11.0, "yield": 1.15 },
-      "small": { "rent": 27000, "vacancy": 8.9, "yield": 1.12 },
-      "collective": { "rent": 21000, "vacancy": 12.4, "yield": 1.18 } } },
-    { "key": "인천", "sido": "인천", "name": "인천", "lat": 37.4563, "lng": 126.7052, "data": {
-      "office": { "rent": 12800, "vacancy": 12.1, "yield": 1.30 },
-      "medium": { "rent": 26000, "vacancy": 12.8, "yield": 1.22 },
-      "small": { "rent": 22000, "vacancy": 10.5, "yield": 1.20 },
-      "collective": { "rent": 18500, "vacancy": 14.0, "yield": 1.25 } } },
-    { "key": "부산", "sido": "부산", "name": "부산", "lat": 35.1796, "lng": 129.0756, "data": {
-      "office": { "rent": 13500, "vacancy": 13.4, "yield": 1.18 },
-      "medium": { "rent": 29000, "vacancy": 13.2, "yield": 1.08 },
-      "small": { "rent": 24000, "vacancy": 11.9, "yield": 1.05 },
-      "collective": { "rent": 19000, "vacancy": 15.1, "yield": 1.12 } } },
-    { "key": "대구", "sido": "대구", "name": "대구", "lat": 35.8714, "lng": 128.6014, "data": {
-      "office": { "rent": 11800, "vacancy": 14.2, "yield": 1.10 },
-      "medium": { "rent": 24500, "vacancy": 14.6, "yield": 1.02 },
-      "small": { "rent": 20500, "vacancy": 12.7, "yield": 1.00 },
-      "collective": { "rent": 16500, "vacancy": 16.3, "yield": 1.08 } } },
-    { "key": "대전", "sido": "대전", "name": "대전", "lat": 36.3504, "lng": 127.3845, "data": {
-      "office": { "rent": 12200, "vacancy": 11.8, "yield": 1.24 },
-      "medium": { "rent": 25500, "vacancy": 12.1, "yield": 1.14 },
-      "small": { "rent": 21000, "vacancy": 10.2, "yield": 1.10 },
-      "collective": { "rent": 17500, "vacancy": 13.5, "yield": 1.16 } } },
-    { "key": "광주", "sido": "광주", "name": "광주", "lat": 35.1595, "lng": 126.8526, "data": {
-      "office": { "rent": 11500, "vacancy": 12.6, "yield": 1.20 },
-      "medium": { "rent": 23500, "vacancy": 13.0, "yield": 1.12 },
-      "small": { "rent": 19500, "vacancy": 11.1, "yield": 1.10 },
-      "collective": { "rent": 16000, "vacancy": 14.2, "yield": 1.14 } } },
-    { "key": "울산", "sido": "울산", "name": "울산", "lat": 35.5384, "lng": 129.3114, "data": {
-      "office": { "rent": 11000, "vacancy": 15.1, "yield": 1.16 },
-      "medium": { "rent": 22500, "vacancy": 15.5, "yield": 1.06 },
-      "small": { "rent": 18500, "vacancy": 13.4, "yield": 1.04 },
-      "collective": { "rent": 15000, "vacancy": 17.0, "yield": 1.10 } } }
+    {
+      "key": "강원",
+      "sido": "강원",
+      "name": "강원",
+      "lat": 37.8228,
+      "lng": 128.1555,
+      "data": {
+        "office": {
+          "rent": 6308.75,
+          "vacancy": 22.42,
+          "yield": 0.75
+        },
+        "medium": {
+          "rent": 14928.3,
+          "vacancy": 15.28,
+          "yield": 0.74
+        },
+        "small": {
+          "rent": 13340.72,
+          "vacancy": 8.25,
+          "yield": 0.72
+        },
+        "collective": {
+          "rent": 18358.19,
+          "vacancy": 17.08,
+          "yield": 0.66
+        }
+      }
+    },
+    {
+      "key": "경기",
+      "sido": "경기",
+      "name": "경기",
+      "lat": 37.4138,
+      "lng": 127.5183,
+      "data": {
+        "office": {
+          "rent": 13097.3,
+          "vacancy": 11.13,
+          "yield": 1.49
+        },
+        "medium": {
+          "rent": 26744.33,
+          "vacancy": 11.29,
+          "yield": 1.14
+        },
+        "small": {
+          "rent": 23892.24,
+          "vacancy": 8.26,
+          "yield": 0.95
+        },
+        "collective": {
+          "rent": 30335.66,
+          "vacancy": 5.38,
+          "yield": 1.11
+        }
+      }
+    },
+    {
+      "key": "경남",
+      "sido": "경남",
+      "name": "경남",
+      "lat": 35.4606,
+      "lng": 128.2132,
+      "data": {
+        "office": {
+          "rent": 5726.98,
+          "vacancy": 16.88,
+          "yield": 0.41
+        },
+        "medium": {
+          "rent": 15626.53,
+          "vacancy": 17.84,
+          "yield": 0.38
+        },
+        "small": {
+          "rent": 13037.68,
+          "vacancy": 8.58,
+          "yield": 0.46
+        },
+        "collective": {
+          "rent": 19622.84,
+          "vacancy": 12.8,
+          "yield": 0.54
+        }
+      }
+    },
+    {
+      "key": "경북",
+      "sido": "경북",
+      "name": "경북",
+      "lat": 36.4919,
+      "lng": 128.8889,
+      "data": {
+        "office": {
+          "rent": 5970.5,
+          "vacancy": 23.62,
+          "yield": 0.59
+        },
+        "medium": {
+          "rent": 12770.59,
+          "vacancy": 19.36,
+          "yield": 0.61
+        },
+        "small": {
+          "rent": 13107.07,
+          "vacancy": 9.74,
+          "yield": 0.65
+        },
+        "collective": {
+          "rent": 15840.14,
+          "vacancy": 27.42,
+          "yield": 0.84
+        }
+      }
+    },
+    {
+      "key": "광주",
+      "sido": "광주",
+      "name": "광주",
+      "lat": 35.1595,
+      "lng": 126.8526,
+      "data": {
+        "office": {
+          "rent": 5448.18,
+          "vacancy": 18.86,
+          "yield": 0.48
+        },
+        "medium": {
+          "rent": 21529.79,
+          "vacancy": 16.23,
+          "yield": 0.6
+        },
+        "small": {
+          "rent": 16688.73,
+          "vacancy": 9.54,
+          "yield": 0.55
+        },
+        "collective": {
+          "rent": 20948.7,
+          "vacancy": 8.83,
+          "yield": 0.79
+        }
+      }
+    },
+    {
+      "key": "대구",
+      "sido": "대구",
+      "name": "대구",
+      "lat": 35.8714,
+      "lng": 128.6014,
+      "data": {
+        "office": {
+          "rent": 7375.72,
+          "vacancy": 10.84,
+          "yield": 0.6
+        },
+        "medium": {
+          "rent": 21753.53,
+          "vacancy": 18.13,
+          "yield": 0.55
+        },
+        "small": {
+          "rent": 20590.69,
+          "vacancy": 10.37,
+          "yield": 0.46
+        },
+        "collective": {
+          "rent": 22900.24,
+          "vacancy": 11.56,
+          "yield": 0.8
+        }
+      }
+    },
+    {
+      "key": "대전",
+      "sido": "대전",
+      "name": "대전",
+      "lat": 36.3504,
+      "lng": 127.3845,
+      "data": {
+        "office": {
+          "rent": 4721.91,
+          "vacancy": 13.85,
+          "yield": 0.82
+        },
+        "medium": {
+          "rent": 18675.53,
+          "vacancy": 13.52,
+          "yield": 0.92
+        },
+        "small": {
+          "rent": 15095.58,
+          "vacancy": 6.45,
+          "yield": 0.76
+        },
+        "collective": {
+          "rent": 22691.8,
+          "vacancy": 9.14,
+          "yield": 0.89
+        }
+      }
+    },
+    {
+      "key": "부산",
+      "sido": "부산",
+      "name": "부산",
+      "lat": 35.1796,
+      "lng": 129.0756,
+      "data": {
+        "office": {
+          "rent": 7059.82,
+          "vacancy": 14.68,
+          "yield": 0.8
+        },
+        "medium": {
+          "rent": 30094.45,
+          "vacancy": 15.39,
+          "yield": 0.75
+        },
+        "small": {
+          "rent": 26316.69,
+          "vacancy": 7.8,
+          "yield": 0.64
+        },
+        "collective": {
+          "rent": 29029.85,
+          "vacancy": 9.02,
+          "yield": 0.83
+        }
+      }
+    },
+    {
+      "key": "서울",
+      "sido": "서울",
+      "name": "서울",
+      "lat": 37.5665,
+      "lng": 126.978,
+      "data": {
+        "office": {
+          "rent": 24948.76,
+          "vacancy": 5.19,
+          "yield": 2.35
+        },
+        "medium": {
+          "rent": 56364.3,
+          "vacancy": 9.13,
+          "yield": 1.63
+        },
+        "small": {
+          "rent": 52539.72,
+          "vacancy": 6.31,
+          "yield": 1.53
+        },
+        "collective": {
+          "rent": 49426.01,
+          "vacancy": 9.29,
+          "yield": 1.81
+        }
+      }
+    },
+    {
+      "key": "세종",
+      "sido": "세종",
+      "name": "세종",
+      "lat": 36.4801,
+      "lng": 127.289,
+      "data": {
+        "medium": {
+          "rent": 15747.68,
+          "vacancy": 24.16,
+          "yield": 0.66
+        },
+        "small": {
+          "rent": 15851.48,
+          "vacancy": 10.51,
+          "yield": 0.61
+        },
+        "collective": {
+          "rent": 18246.05,
+          "vacancy": 13.04,
+          "yield": -0.21
+        }
+      }
+    },
+    {
+      "key": "울산",
+      "sido": "울산",
+      "name": "울산",
+      "lat": 35.5384,
+      "lng": 129.3114,
+      "data": {
+        "office": {
+          "rent": 6800.33,
+          "vacancy": 14.62,
+          "yield": 0.82
+        },
+        "medium": {
+          "rent": 16567.03,
+          "vacancy": 17.23,
+          "yield": 0.43
+        },
+        "small": {
+          "rent": 14005.08,
+          "vacancy": 6.52,
+          "yield": 0.38
+        },
+        "collective": {
+          "rent": 21078.69,
+          "vacancy": 20.27,
+          "yield": 0.53
+        }
+      }
+    },
+    {
+      "key": "인천",
+      "sido": "인천",
+      "name": "인천",
+      "lat": 37.4563,
+      "lng": 126.7052,
+      "data": {
+        "office": {
+          "rent": 8293.27,
+          "vacancy": 16.88,
+          "yield": 0.98
+        },
+        "medium": {
+          "rent": 25020.97,
+          "vacancy": 14.22,
+          "yield": 1.08
+        },
+        "small": {
+          "rent": 21426.35,
+          "vacancy": 10.36,
+          "yield": 0.93
+        },
+        "collective": {
+          "rent": 27579.6,
+          "vacancy": 9.47,
+          "yield": 1.21
+        }
+      }
+    },
+    {
+      "key": "전남",
+      "sido": "전남",
+      "name": "전남",
+      "lat": 34.8161,
+      "lng": 126.463,
+      "data": {
+        "office": {
+          "rent": 4617.75,
+          "vacancy": 22.77,
+          "yield": 0.58
+        },
+        "medium": {
+          "rent": 12641.85,
+          "vacancy": 13.41,
+          "yield": 0.53
+        },
+        "small": {
+          "rent": 10868.45,
+          "vacancy": 10.64,
+          "yield": 0.48
+        },
+        "collective": {
+          "rent": 14845.39,
+          "vacancy": 22.94,
+          "yield": 0.49
+        }
+      }
+    },
+    {
+      "key": "전북",
+      "sido": "전북",
+      "name": "전북",
+      "lat": 35.7175,
+      "lng": 127.153,
+      "data": {
+        "office": {
+          "rent": 4264.65,
+          "vacancy": 17.45,
+          "yield": 0.4
+        },
+        "medium": {
+          "rent": 14178.77,
+          "vacancy": 18.14,
+          "yield": 0.62
+        },
+        "small": {
+          "rent": 10866.51,
+          "vacancy": 9.4,
+          "yield": 0.58
+        },
+        "collective": {
+          "rent": 19315.19,
+          "vacancy": 19.82,
+          "yield": 0.66
+        }
+      }
+    },
+    {
+      "key": "제주",
+      "sido": "제주",
+      "name": "제주",
+      "lat": 33.4996,
+      "lng": 126.5312,
+      "data": {
+        "office": {
+          "rent": 4907.76,
+          "vacancy": 4.45,
+          "yield": 0.54
+        },
+        "medium": {
+          "rent": 15012.62,
+          "vacancy": 11.82,
+          "yield": 0.42
+        },
+        "small": {
+          "rent": 14799.04,
+          "vacancy": 2.26,
+          "yield": 0.44
+        },
+        "collective": {
+          "rent": 12650.76,
+          "vacancy": 19.03,
+          "yield": 0.52
+        }
+      }
+    },
+    {
+      "key": "충남",
+      "sido": "충남",
+      "name": "충남",
+      "lat": 36.5184,
+      "lng": 126.8,
+      "data": {
+        "office": {
+          "rent": 7000.03,
+          "vacancy": 12.68,
+          "yield": 0.69
+        },
+        "medium": {
+          "rent": 14416.14,
+          "vacancy": 15.59,
+          "yield": 0.82
+        },
+        "small": {
+          "rent": 12903.18,
+          "vacancy": 7.57,
+          "yield": 0.8
+        },
+        "collective": {
+          "rent": 15792.28,
+          "vacancy": 11.45,
+          "yield": 0.96
+        }
+      }
+    },
+    {
+      "key": "충북",
+      "sido": "충북",
+      "name": "충북",
+      "lat": 36.6357,
+      "lng": 127.4917,
+      "data": {
+        "office": {
+          "rent": 4268.92,
+          "vacancy": 29.86,
+          "yield": 0.66
+        },
+        "medium": {
+          "rent": 17070.9,
+          "vacancy": 19.68,
+          "yield": 0.86
+        },
+        "small": {
+          "rent": 12638.87,
+          "vacancy": 9.12,
+          "yield": 0.78
+        },
+        "collective": {
+          "rent": 14959.14,
+          "vacancy": 15.51,
+          "yield": 0.9
+        }
+      }
+    }
   ]
 }
