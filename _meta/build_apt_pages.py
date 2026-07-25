@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""지역별 정적 단지 시세 페이지 생성 → site/apt/*.html + sitemap.xml 갱신
+"""지역별 정적 단지 시세 페이지 생성 → site/apt/*.html + sitemap-all.xml 갱신
 
 왜 필요한가: 단지 정보(실거래·세대수·추세)가 전부 JS fetch로 렌더링돼 정적 HTML에는
 단지명 텍스트 자체가 없었다. 구글은 JS를 렌더링하지만 네이버(Yeti)는 제한적이라
@@ -8,7 +8,7 @@
 생성물:
   site/apt/index.html            — 전 지역 색인
   site/apt/{지역-slug}.html      — 지역별 단지 표(단지명·준공·세대수·최근 실거래·㎡당 추세)
-  sitemap.xml                    — /apt/ 항목 재생성(다른 항목 보존)
+  sitemap-all.xml                — /apt/ 항목 재생성(다른 항목 보존)
 
 원칙(CLAUDE.md): 단일 HTML(CSS 인라인)·클라이언트 저장 없음·모바일 360px·출처/면책 하단 고정.
 가격 추세는 월별 ㎡당가 평균 기준 — 평형 혼합 왜곡 방지(왕십리자이 상승가치 민원과 동일 원인).
@@ -25,7 +25,9 @@ import lib_pdata as L
 
 SITE = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "site"))
 APT_DIR = os.path.join(SITE, "apt")
-SITEMAP = os.path.join(SITE, "sitemap.xml")
+# 생성기들은 평면 목록(sitemap-all.xml)에 쓴다. 공개용 sitemap.xml은 build_sitemaps.py가
+# 이 목록을 분류별로 쪼개 만드는 sitemap index다.
+SITEMAP = os.path.join(SITE, "sitemap-all.xml")
 BASE = "https://topda.kr"
 
 MIN_DEALS = 2   # 표본 1건짜리 단지는 추세·가격 신뢰도가 낮아 표 하단으로만 노출
@@ -322,7 +324,7 @@ def index_page(region_rows, as_of, hubs=None):
 
 
 def update_sitemap(region_rows, today, skip=()):
-    """sitemap.xml에서 한글 지역 URL(/apt/*.html)과 /apt/ 색인만 재생성(다른 항목 보존).
+    """sitemap-all.xml에서 한글 지역 URL(/apt/*.html)과 /apt/ 색인만 재생성(다른 항목 보존).
 
     슬러그 URL(/apt/{slug}/...)은 build_complex_pages.py 소관이라 정규식이 겹치지 않게
     `.html`로 끝나는 항목과 `/apt/` 자신만 지운다. skip에 든 지역은 canonical을 슬러그

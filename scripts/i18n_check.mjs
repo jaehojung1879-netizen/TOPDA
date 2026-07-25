@@ -45,7 +45,7 @@ for (const l of LANGS) {
   new RegExp(`code:\\s*'${l}'`).test(appjs) ? ok.push(`switcher:${l}`) : add('error', `app.js 언어 스위처에 ${l} 미포함`);
 }
 // 5) sitemap 언어 홈
-const sitemap = existsSync(join(SITE, 'sitemap.xml')) ? readFileSync(join(SITE, 'sitemap.xml'), 'utf8') : '';
+const sitemap = existsSync(join(SITE, 'sitemap-all.xml')) ? readFileSync(join(SITE, 'sitemap-all.xml'), 'utf8') : '';
 for (const l of NEW_LANGS) {
   const loc = l === 'ko' ? 'https://topda.kr/' : `https://topda.kr/${l}/index.html`;
   sitemap.includes(loc) ? ok.push(`sitemap:${l}`) : add('warn', `sitemap 에 ${l} 홈 누락 (gen_i18n_sitemap.mjs 실행 필요)`);

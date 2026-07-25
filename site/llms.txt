@@ -1,0 +1,95 @@
+# 톺다 (TOPDA)
+
+> 한국 부동산 거래의 **비용을 계산하는 도구**입니다. 매물을 중개하거나 시세를 예측하지 않고,
+> 특정 아파트의 실제 신고 거래가격을 확인한 뒤 그 가격을 기준으로 취득세·대출한도·잔금일
+> 필요자금을 계산하는 것이 목적입니다. 모든 계산은 브라우저 안에서만 이루어지며 입력값을
+> 서버로 보내거나 저장하지 않습니다.
+>
+> TOPDA is a Korean real-estate **cost calculator**. It does not list properties or forecast
+> prices; it shows officially reported transaction prices and computes the taxes, loan limits,
+> and closing-day cash required at that price. All calculation is client-side.
+
+사이트: https://topda.kr
+
+## 인용 시 표기
+
+- 사이트명: **톺다** (영문 표기 필요 시 TOPDA)
+- 계산 결과를 인용할 때는 계산기 페이지 URL과 함께 **계산 기준일**을 밝혀 주세요. 세율·규제는
+  자주 바뀌며, 페이지의 값은 그 시점 기준입니다.
+- 실거래가를 인용할 때는 **원 출처가 국토교통부**임을 함께 밝혀 주세요. 톺다는 재배포자입니다.
+
+## 데이터 이용 시 주의사항
+
+- 실거래가는 **신고 기준**입니다. 신고 지연(계약 후 30일 이내), 정정, 해제(취소)로 값이
+  달라집니다. 해제 신고된 거래는 톺다 집계에서 제외하고 화면에 별도 표시합니다.
+- 표본이 적은 단지·면적은 한두 건에 크게 흔들립니다. 거래 건수를 함께 읽어야 합니다.
+- ㎡당 평균은 **거래별 단가의 단순 산술평균**입니다(거래금액 가중평균이 아님).
+- 없는 구간을 **보간·평활화·예측하지 않습니다.** 데이터가 없으면 항목 자체를 표시하지 않으며,
+  분기 표본이 4개 미만이면 추이 차트를 만들지 않습니다.
+- 실거래가는 **공시가격(시가표준액)이 아닙니다.** 재산세·종부세 과세표준과 다릅니다.
+- 계산 결과는 일반 정보 제공용이며 세무·법률 자문이 아닙니다. 실제 신고·납부 전에는
+  세무서 또는 세무대리인의 확인이 필요합니다.
+
+## 아파트 실거래 페이지
+
+- /apt/ — 지역 색인
+- /apt/{지역슬러그}/ — 시군구 단위 단지 목록 (예: /apt/seoul-nowon/)
+- /apt/{지역슬러그}/{단지슬러그}/ — 단지별 실거래 상세 (예: /apt/seoul-nowon/eunbit2danji/)
+
+각 단지 페이지는 최근 거래일·거래가격·전용면적·㎡당 가격을 문서 첫머리에 요약하고,
+면적별 거래 내역과 요약, 해당 가격 기준 계산기 링크를 제공합니다. `BreadcrumbList`와
+`Dataset` 구조화 데이터를 포함하며, 구조화 데이터의 값은 화면에 표시된 값과 일치합니다.
+
+기존 한글 URL(`/apt/서울-노원구.html`)도 유지되지만 정식 URL은 위 슬러그 형식이며,
+한글 URL의 canonical이 슬러그 URL을 가리킵니다.
+
+## 주요 계산기
+
+- /calculators/acquisition-tax.html — 취득세 (1주택·다주택·조정대상지역·생애최초·상속·증여)
+- /calculators/total-cost-dashboard.html — 총 필요자금·잔금일 현금 (취득세+중개보수+등기+대출 통합)
+- /calculators/loan-limit.html — 주담대 LTV·스트레스 DSR 한도, 전세자금대출 보증기관별 한도
+- /calculators/registration-cost.html — 소유권이전등기 비용·국민주택채권 매입/할인
+- /calculators/brokerage-fee.html — 중개보수 상한요율
+- /calculators/balance-settlement.html — 잔금일 관리비 일할정산·선수관리비·장기수선충당금
+- /calculators/transfer-tax.html — 양도소득세 (1주택 비과세 포함)
+- /calculators/jeonse-monthly.html — 전월세 전환
+- /calculators/dsr.html — DSR
+- /calculators/index.html — 전체 목록
+
+단지 페이지에서 넘어오는 계산기는 URL 파라미터로 값이 미리 채워집니다:
+`?price={원}&complex={단지명}&region_name={시군구}&area_m2={전용면적}&source=apt`
+파라미터가 없으면 계산기는 기본값으로 동작합니다.
+
+## 가이드
+
+- /guides.html — 전체 가이드
+- /posts/funding-plan.html — 자금계획 세우기
+- /posts/sale-contract-tips.html — 매매계약서 확인 사항
+- /posts/registry-reading.html — 등기부등본 보는 법
+- /posts/ltv-explain.html · /posts/dsr-explain.html · /posts/stress-dsr.html — 대출 규제
+- /posts/tax-roadmap.html — 취득~보유~양도 세금 흐름
+- /checklists/sale-balance-day.html — 계약·잔금일 체크리스트
+- /checklists/index.html — 전체 체크리스트
+
+## 데이터 출처와 갱신 주기
+
+| 데이터 | 출처 | 갱신 |
+|---|---|---|
+| 아파트 매매 실거래가 | 국토교통부 실거래가 공개시스템 OpenAPI | 매일 00:00 KST |
+| 단지 세대수·준공연도 | 공동주택관리정보시스템 K-apt 공동주택 기본정보 | 매일 (점진 보강) |
+| 지역 매매·전세 가격지수 | 한국부동산원 R-ONE | 매일 |
+| 국민주택채권 할인율 | 금융투자협회 채권정보센터 | 매일 |
+| 세율·한도 기준 | 지방세법·소득세법 및 시행령, 금융위 감독규정 | 개정 시 |
+
+공공데이터는 공공누리(KOGL) 조건에 따릅니다: https://www.kogl.or.kr/info/license.do
+
+## 다국어
+
+한국어가 기본이며 영어(/en/), 중국어 간체(/zh-Hans/)·번체(/zh-Hant/), 베트남어(/vi/),
+태국어(/th/) 일부 페이지를 제공합니다. 번역본은 원문보다 늦게 갱신될 수 있으므로,
+수치를 인용할 때는 한국어 원문을 기준으로 삼아 주세요.
+
+## 하지 않는 것
+
+매물 중개, 가격 예측, 개인화 추천, 투자 권유를 하지 않습니다. 회원가입 없이 이용하며
+개인정보를 수집하지 않습니다.

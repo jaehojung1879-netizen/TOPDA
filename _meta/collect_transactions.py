@@ -26,6 +26,13 @@ collect_apartments.py 가 '단지 집계'라면, 이 수집기는 '개별 거래
       · 1순위 = 최근 RECENT_REFRESH_MONTHS개월 × 전 지역 (신고 지연·정정·해제가 몰리는 구간)
       · 2순위 = 나머지 과거 월 (미보유 월 우선 → 오래된 갱신 순, 지역은 날짜 기준 회전)
 
+ 4) 파일 크기 억제.
+    12개월치는 현행 포맷으로 약 89MB — GitHub 파일 한도(100MB)에 근접하고, 이 파일은
+    실거래가 조회 페이지가 통째로 내려받는다. 최소 포맷 저장 + 파생 필드 제거로 63MB
+    수준으로 낮췄다. 제거한 필드는 모두 남은 값에서 그대로 복원된다.
+      · sido   = region_key.split()[0]      (읽는 소비처 없음)
+      · umd    = region.split()[-1]          (region이 이미 법정동까지 포함)
+
 또한 numOfRows=1000 1페이지만 읽어 월 1,000건이 넘는 시군구는 조용히 잘렸다. totalCount를
 보고 끝까지 페이지네이션한다.
 """
@@ -69,10 +76,12 @@ def _parse_items(root, region_name):
             y, m, d = int(g("dealYear")), int(g("dealMonth")), int(g("dealDay"))
         except ValueError:
             continue
+        # 파생 가능한 필드는 싣지 않는다 — 12개월 확장으로 파일이 GitHub 100MB 한도에
+        # 근접하기 때문(89MB 추정). sido는 어떤 소비처도 읽지 않고(= region_key.split()[0]),
+        # 법정동은 region 문자열이 이미 담고 있다(= region.split()[-1]).
         rec = {
-            "apt": g("aptNm"), "region_key": region_name, "sido": region_name.split()[0],
+            "apt": g("aptNm"), "region_key": region_name,
             "region": f"{region_name} {g('umdNm')}",
-            "umd": g("umdNm"),
             "area_m2": round(area, 1), "pyeong": round(area / 3.3058),
             "price": price, "floor": int(g("floor") or 0),
             "date": f"{y:04d}-{m:02d}-{d:02d}", "build_year": int(g("buildYear") or 0) or None,
@@ -207,7 +216,9 @@ def main():
         "_fetched": fetched,
         "deals": all_deals,
     }
-    L.save_json_safe(TX_JSON, data, min_items_key="deals")
+    # 원장은 사람이 diff로 읽는 파일이 아니고 크기가 지배적이라 최소 포맷으로 저장한다
+    # (indent=2 대비 약 23% 절감 — 12개월 89MB → 63MB).
+    L.save_json_safe(TX_JSON, data, min_items_key="deals", indent=None)
     print(f"[ok] 갱신 {ok}쌍(실패 {fail}) · 지역 {len(touched_regions)}개 · "
           f"총 {len(all_deals):,}건(해제 {canceled:,}건) · "
           f"커버리지 {len(pairs)}/{len(L.LAWD) * len(months)}쌍")

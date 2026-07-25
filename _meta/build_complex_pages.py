@@ -11,7 +11,7 @@
   site/apt/{지역슬러그}/index.html                지역 허브(슬러그 URL 정식판)
   site/apt/{한글지역}.html                        기존 URL 유지 + canonical을 허브로 이전
   data/slug-map.json                              슬러그 매핑·이력
-  site/sitemap.xml                                /apt/{slug}/ 항목 재생성
+  site/sitemap-all.xml                            /apt/{slug}/ 항목 재생성
 
 생성 기준(지시서 4단계)
   최근 12개월 유효(비취소) 거래 MIN_DEALS건 이상
@@ -475,7 +475,7 @@ def update_sitemap(entries):
 def dedupe_locs(xml):
     """같은 <loc>이 두 번 이상 실린 <url> 블록에서 첫 번째만 남긴다.
 
-    sitemap.xml은 여러 생성기(i18n·지역·단지)가 나눠 쓰는 공유 파일이라 서로 다른
+    sitemap-all.xml은 여러 생성기(i18n·지역·단지)가 나눠 쓰는 공유 파일이라 서로 다른
     스크립트가 같은 URL을 추가하면 중복이 남는다(현재 i18n 허브 9건). 이 스크립트가
     파이프라인의 마지막 sitemap 기록자이므로 여기서 정규화한다.
     """
