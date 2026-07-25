@@ -1,0 +1,82 @@
+#!/usr/bin/env node
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const site = join(root, 'site');
+const posts = [
+  { slug: 'recent-sale-issues-2026.html', category: 'sale.html' },
+  { slug: 'recent-jeonse-issues-2026.html', category: 'lease.html' },
+  { slug: 'recent-loan-issues-2026.html', category: 'loan.html' }
+];
+const errors = [];
+
+for (const { slug, category } of posts) {
+  const file = join(site, 'posts', slug);
+  if (!existsSync(file)) {
+    errors.push(`누락된 포스트: ${slug}`);
+    continue;
+  }
+
+  const html = readFileSync(file, 'utf8');
+  const required = [
+    '<meta name="description"',
+    '<link rel="canonical"',
+    '"@type": "Article"',
+    '"datePublished": "2026-07-25"',
+    '자료 기준 2026.07.25',
+    '공식 자료',
+    '<nav class="g-toc"',
+    '<h2'
+  ];
+  for (const marker of required) {
+    if (!html.includes(marker)) errors.push(`${slug}: 필수 콘텐츠 누락 (${marker})`);
+  }
+  if (/<div class="g-hero-media"|<img\b/i.test(html)) {
+    errors.push(`${slug}: 요청하지 않은 본문 이미지가 포함됨`);
+  }
+
+  const hrefPattern = /href="([^"]+)"/g;
+  for (const match of html.matchAll(hrefPattern)) {
+    const href = match[1];
+    if (/^(?:https?:|mailto:|tel:|#)/.test(href)) continue;
+    const target = resolve(dirname(file), href.split(/[?#]/)[0]);
+    if (!existsSync(target)) errors.push(`${slug}: 존재하지 않는 내부 링크 ${href}`);
+  }
+
+  const categoryHtml = readFileSync(join(site, 'categories', category), 'utf8');
+  if (!categoryHtml.includes(`../posts/${slug}`)) {
+    errors.push(`${category}: ${slug} 링크 누락`);
+  }
+}
+
+const expectedSurfaces = [
+  join(site, 'posts', 'index.html'),
+  join(site, 'guides.html'),
+  join(site, 'feed.xml'),
+  join(site, 'sitemap.xml'),
+  join(root, 'sitemap.xml')
+];
+for (const surface of expectedSurfaces) {
+  const text = readFileSync(surface, 'utf8');
+  for (const { slug } of posts) {
+    if (!text.includes(slug)) errors.push(`${surface}: ${slug} 링크 누락`);
+  }
+}
+
+const searchIndex = JSON.parse(readFileSync(join(site, 'assets', 'search-index.json'), 'utf8'));
+if (searchIndex.count !== searchIndex.items.length) {
+  errors.push(`검색 인덱스 count 불일치: ${searchIndex.count} / ${searchIndex.items.length}`);
+}
+for (const { slug } of posts) {
+  if (!searchIndex.items.some((item) => item.url === `posts/${slug}`)) {
+    errors.push(`검색 인덱스 누락: ${slug}`);
+  }
+}
+
+if (errors.length) {
+  console.error(errors.map((error) => `- ${error}`).join('\n'));
+  process.exit(1);
+}
+console.log('최근 이슈 포스트 3개: 콘텐츠·이미지 없음·내부 링크·노출 경로 검증 통과');
