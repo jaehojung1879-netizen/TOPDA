@@ -1,22 +1,27 @@
 {
   "_meta": {
     "counts": {
-      "complexes": 17,
-      "regions": 13
+      "complexes": 23,
+      "regions": 18
     },
     "hubs": [
       "경기 남양주시",
       "경기 성남시 분당구",
+      "경기 용인시 수지구",
       "경기 파주시",
       "경기 평택시",
       "대구 달서구",
+      "대구 수성구",
       "대전 서구",
       "대전 유성구",
       "부산 동래구",
       "부산 부산진구",
+      "부산 해운대구",
+      "서울 강남구",
       "서울 광진구",
       "서울 노원구",
       "서울 동작구",
+      "서울 성북구",
       "세종 세종시"
     ],
     "note": "한글 지역·단지명 → URL 슬러그 매핑. 한 번 발급한 슬러그는 바꾸지 않는다. 복합 키는 '지역|법정동|단지명'.",
@@ -47,6 +52,22 @@
       "since": "2026-07-25",
       "slug": "botdeulmaeul9danji-geumhoeoulrim",
       "umd": "삼평동"
+    },
+    "경기 성남시 분당구|정자동|동양정자파라곤(2단지)": {
+      "history": [],
+      "name": "동양정자파라곤(2단지)",
+      "region_slug": "gyeonggi-seongnam-bundang",
+      "since": "2026-07-25",
+      "slug": "dongyangjeongjaparagon-2danji",
+      "umd": "정자동"
+    },
+    "경기 용인시 수지구|풍덕천동|진산마을삼성5차": {
+      "history": [],
+      "name": "진산마을삼성5차",
+      "region_slug": "gyeonggi-yongin-suji",
+      "since": "2026-07-25",
+      "slug": "jinsanmaeulsamseong5cha",
+      "umd": "풍덕천동"
     },
     "경기 파주시|문산리|문산호수": {
       "history": [],
@@ -79,6 +100,14 @@
       "since": "2026-07-25",
       "slug": "jincheonyeokraonpeuraibitsenteom",
       "umd": "진천동"
+    },
+    "대구 수성구|수성동4가|수성하이츠": {
+      "history": [],
+      "name": "수성하이츠",
+      "region_slug": "daegu-suseong",
+      "since": "2026-07-25",
+      "slug": "suseonghaicheu",
+      "umd": "수성동4가"
     },
     "대전 서구|가장동|삼성래미안1": {
       "history": [],
@@ -128,6 +157,22 @@
       "slug": "hanunginteobil",
       "umd": "전포동"
     },
+    "부산 해운대구|중동|삼강": {
+      "history": [],
+      "name": "삼강",
+      "region_slug": "busan-haeundae",
+      "since": "2026-07-25",
+      "slug": "samgang",
+      "umd": "중동"
+    },
+    "서울 강남구|역삼동|개나리래미안": {
+      "history": [],
+      "name": "개나리래미안",
+      "region_slug": "seoul-gangnam",
+      "since": "2026-07-25",
+      "slug": "gaenariraemian",
+      "umd": "역삼동"
+    },
     "서울 광진구|광장동|워커힐": {
       "history": [],
       "name": "워커힐",
@@ -152,6 +197,14 @@
       "slug": "akeuroribeohaim",
       "umd": "흑석동"
     },
+    "서울 성북구|길음동|롯데캐슬클라시아": {
+      "history": [],
+      "name": "롯데캐슬클라시아",
+      "region_slug": "seoul-seongbuk",
+      "since": "2026-07-25",
+      "slug": "rotdekaeseulkeulrasia",
+      "umd": "길음동"
+    },
     "세종 세종시|어진동|더샵레이크파크": {
       "history": [],
       "name": "더샵레이크파크",
@@ -174,6 +227,12 @@
       "since": "2026-07-25",
       "slug": "gyeonggi-seongnam-bundang"
     },
+    "경기 용인시 수지구": {
+      "history": [],
+      "name": "경기 용인시 수지구",
+      "since": "2026-07-25",
+      "slug": "gyeonggi-yongin-suji"
+    },
     "경기 파주시": {
       "history": [],
       "name": "경기 파주시",
@@ -191,6 +250,12 @@
       "name": "대구 달서구",
       "since": "2026-07-25",
       "slug": "daegu-dalseo"
+    },
+    "대구 수성구": {
+      "history": [],
+      "name": "대구 수성구",
+      "since": "2026-07-25",
+      "slug": "daegu-suseong"
     },
     "대전 서구": {
       "history": [],
@@ -216,6 +281,18 @@
       "since": "2026-07-25",
       "slug": "busan-busanjin"
     },
+    "부산 해운대구": {
+      "history": [],
+      "name": "부산 해운대구",
+      "since": "2026-07-25",
+      "slug": "busan-haeundae"
+    },
+    "서울 강남구": {
+      "history": [],
+      "name": "서울 강남구",
+      "since": "2026-07-25",
+      "slug": "seoul-gangnam"
+    },
     "서울 광진구": {
       "history": [],
       "name": "서울 광진구",
@@ -233,6 +310,12 @@
       "name": "서울 동작구",
       "since": "2026-07-25",
       "slug": "seoul-dongjak"
+    },
+    "서울 성북구": {
+      "history": [],
+      "name": "서울 성북구",
+      "since": "2026-07-25",
+      "slug": "seoul-seongbuk"
     },
     "세종 세종시": {
       "history": [],
