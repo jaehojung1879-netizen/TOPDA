@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="440" viewBox="0 0 960 440" role="img" aria-labelledby="title desc">
+  <title id="title">2026년 상반기 권역별 주택 매매가격 누계 변동률</title>
+  <desc id="desc">서울 4.52%, 수도권 2.67%, 전국 1.37%, 지방 0.16% 순으로 상반기 매매가격 누계 상승률을 비교한 가로 막대그래프입니다.</desc>
+  <style>
+    text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif; fill: #111827; }
+    .mono { font-variant-numeric: tabular-nums; }
+  </style>
+  <rect width="960" height="440" fill="#ffffff"/>
+  <text x="48" y="54" font-size="26" font-weight="750">2026년 상반기 권역별 매매가격 누계</text>
+  <text x="48" y="82" font-size="14" fill="#6b7280">주택종합 매매가격지수 · 2025년 말 대비 · 단위: %</text>
+
+  <g stroke="#e5e7eb" stroke-width="1">
+    <line x1="260" y1="120" x2="260" y2="352"/>
+    <line x1="372" y1="120" x2="372" y2="352"/>
+    <line x1="484" y1="120" x2="484" y2="352"/>
+    <line x1="596" y1="120" x2="596" y2="352"/>
+    <line x1="708" y1="120" x2="708" y2="352"/>
+    <line x1="820" y1="120" x2="820" y2="352"/>
+  </g>
+  <g font-size="12" fill="#6b7280" text-anchor="middle" class="mono">
+    <text x="260" y="375">0</text>
+    <text x="372" y="375">1</text>
+    <text x="484" y="375">2</text>
+    <text x="596" y="375">3</text>
+    <text x="708" y="375">4</text>
+    <text x="820" y="375">5%</text>
+  </g>
+
+  <g font-size="17" font-weight="650">
+    <text x="48" y="157">서울</text>
+    <text x="48" y="217">수도권 <tspan font-size="12" font-weight="500" fill="#6b7280">(서울 포함)</tspan></text>
+    <text x="48" y="277">전국</text>
+    <text x="48" y="337">지방 <tspan font-size="12" font-weight="500" fill="#6b7280">(수도권 제외)</tspan></text>
+  </g>
+
+  <g>
+    <rect x="260" y="132" width="506.2" height="36" rx="4" fill="#2563eb"/>
+    <rect x="260" y="192" width="299.0" height="36" rx="4" fill="#3b82f6"/>
+    <rect x="260" y="252" width="153.4" height="36" rx="4" fill="#93c5fd"/>
+    <rect x="260" y="312" width="17.9" height="36" rx="4" fill="#dbeafe" stroke="#2563eb"/>
+  </g>
+  <g font-size="16" font-weight="750" class="mono">
+    <text x="780" y="157" fill="#1d4ed8">+4.52%</text>
+    <text x="573" y="217" fill="#1d4ed8">+2.67%</text>
+    <text x="427" y="277" fill="#1d4ed8">+1.37%</text>
+    <text x="293" y="337" fill="#1d4ed8">+0.16%</text>
+  </g>
+
+  <line x1="48" y1="399" x2="912" y2="399" stroke="#e5e7eb"/>
+  <text x="48" y="422" font-size="12" fill="#6b7280">자료: 한국부동산원, 2026년 6월 전국주택가격동향조사</text>
+</svg>

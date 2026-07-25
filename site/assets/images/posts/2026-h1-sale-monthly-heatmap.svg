@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" role="img" aria-labelledby="title desc">
+  <title id="title">2026년 상반기 월별 권역별 주택 매매가격 변동률</title>
+  <desc id="desc">1월부터 6월까지 서울, 수도권, 전국, 지방의 주택종합 매매가격 전월 대비 변동률을 색상 농도와 숫자로 표시한 표형 인포그래픽입니다.</desc>
+  <style>
+    text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif; fill: #111827; }
+    .mono { font-variant-numeric: tabular-nums; }
+  </style>
+  <rect width="960" height="560" fill="#ffffff"/>
+  <text x="48" y="54" font-size="26" font-weight="750">2026년 상반기 월별 매매가격 변화</text>
+  <text x="48" y="82" font-size="14" fill="#6b7280">주택종합 매매가격지수 · 전월 대비 · 단위: %</text>
+
+  <g font-size="14" font-weight="650" fill="#4b5563" text-anchor="middle">
+    <text x="342" y="130">1월</text>
+    <text x="438" y="130">2월</text>
+    <text x="534" y="130">3월</text>
+    <text x="630" y="130">4월</text>
+    <text x="726" y="130">5월</text>
+    <text x="822" y="130">6월</text>
+  </g>
+  <g font-size="17" font-weight="650">
+    <text x="48" y="188">서울</text>
+    <text x="48" y="260">수도권 <tspan font-size="12" font-weight="500" fill="#6b7280">(서울 포함)</tspan></text>
+    <text x="48" y="332">전국</text>
+    <text x="48" y="404">지방 <tspan font-size="12" font-weight="500" fill="#6b7280">(수도권 제외)</tspan></text>
+  </g>
+
+  <g class="mono" font-size="15" font-weight="720" text-anchor="middle">
+    <!-- 서울 -->
+    <rect x="298" y="150" width="88" height="52" rx="5" fill="#3b82f6"/><text x="342" y="182" fill="#ffffff">+0.91</text>
+    <rect x="394" y="150" width="88" height="52" rx="5" fill="#60a5fa"/><text x="438" y="182" fill="#ffffff">+0.66</text>
+    <rect x="490" y="150" width="88" height="52" rx="5" fill="#93c5fd"/><text x="534" y="182">+0.39</text>
+    <rect x="586" y="150" width="88" height="52" rx="5" fill="#60a5fa"/><text x="630" y="182" fill="#ffffff">+0.55</text>
+    <rect x="682" y="150" width="88" height="52" rx="5" fill="#3b82f6"/><text x="726" y="182" fill="#ffffff">+0.90</text>
+    <rect x="778" y="150" width="88" height="52" rx="5" fill="#2563eb"/><text x="822" y="182" fill="#ffffff">+1.03</text>
+
+    <!-- 수도권 -->
+    <rect x="298" y="222" width="88" height="52" rx="5" fill="#60a5fa"/><text x="342" y="254" fill="#ffffff">+0.51</text>
+    <rect x="394" y="222" width="88" height="52" rx="5" fill="#93c5fd"/><text x="438" y="254">+0.42</text>
+    <rect x="490" y="222" width="88" height="52" rx="5" fill="#bfdbfe"/><text x="534" y="254">+0.27</text>
+    <rect x="586" y="222" width="88" height="52" rx="5" fill="#93c5fd"/><text x="630" y="254">+0.31</text>
+    <rect x="682" y="222" width="88" height="52" rx="5" fill="#93c5fd"/><text x="726" y="254">+0.46</text>
+    <rect x="778" y="222" width="88" height="52" rx="5" fill="#60a5fa"/><text x="822" y="254" fill="#ffffff">+0.67</text>
+
+    <!-- 전국 -->
+    <rect x="298" y="294" width="88" height="52" rx="5" fill="#bfdbfe"/><text x="342" y="326">+0.28</text>
+    <rect x="394" y="294" width="88" height="52" rx="5" fill="#dbeafe"/><text x="438" y="326">+0.23</text>
+    <rect x="490" y="294" width="88" height="52" rx="5" fill="#dbeafe"/><text x="534" y="326">+0.15</text>
+    <rect x="586" y="294" width="88" height="52" rx="5" fill="#dbeafe"/><text x="630" y="326">+0.16</text>
+    <rect x="682" y="294" width="88" height="52" rx="5" fill="#dbeafe"/><text x="726" y="326">+0.21</text>
+    <rect x="778" y="294" width="88" height="52" rx="5" fill="#93c5fd"/><text x="822" y="326">+0.33</text>
+
+    <!-- 지방 -->
+    <rect x="298" y="366" width="88" height="52" rx="5" fill="#eff6ff" stroke="#bfdbfe"/><text x="342" y="398">+0.06</text>
+    <rect x="394" y="366" width="88" height="52" rx="5" fill="#eff6ff" stroke="#bfdbfe"/><text x="438" y="398">+0.06</text>
+    <rect x="490" y="366" width="88" height="52" rx="5" fill="#eff6ff" stroke="#bfdbfe"/><text x="534" y="398">+0.03</text>
+    <rect x="586" y="366" width="88" height="52" rx="5" fill="#eff6ff" stroke="#bfdbfe"/><text x="630" y="398">+0.02</text>
+    <rect x="682" y="366" width="88" height="52" rx="5" fill="#ffedd5" stroke="#fdba74"/><text x="726" y="398" fill="#9a3412">−0.02</text>
+    <rect x="778" y="366" width="88" height="52" rx="5" fill="#eff6ff" stroke="#bfdbfe"/><text x="822" y="398">+0.01</text>
+  </g>
+
+  <g font-size="12" fill="#6b7280">
+    <rect x="298" y="454" width="20" height="14" rx="2" fill="#eff6ff" stroke="#bfdbfe"/>
+    <text x="326" y="466">낮은 상승</text>
+    <rect x="418" y="454" width="20" height="14" rx="2" fill="#93c5fd"/>
+    <text x="446" y="466">중간 상승</text>
+    <rect x="548" y="454" width="20" height="14" rx="2" fill="#2563eb"/>
+    <text x="576" y="466">높은 상승</text>
+    <rect x="676" y="454" width="20" height="14" rx="2" fill="#ffedd5" stroke="#fdba74"/>
+    <text x="704" y="466">하락</text>
+  </g>
+  <line x1="48" y1="505" x2="912" y2="505" stroke="#e5e7eb"/>
+  <text x="48" y="529" font-size="12" fill="#6b7280">자료: 한국부동산원, 2026년 6월 전국주택가격동향조사</text>
+</svg>
