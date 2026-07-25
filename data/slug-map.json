@@ -1,17 +1,20 @@
 {
   "_meta": {
     "counts": {
-      "complexes": 10,
-      "regions": 10
+      "complexes": 17,
+      "regions": 13
     },
     "hubs": [
       "경기 남양주시",
       "경기 성남시 분당구",
+      "경기 파주시",
       "경기 평택시",
       "대구 달서구",
       "대전 서구",
       "대전 유성구",
+      "부산 동래구",
       "부산 부산진구",
+      "서울 광진구",
       "서울 노원구",
       "서울 동작구",
       "세종 세종시"
@@ -21,6 +24,14 @@
     "updated": "2026-07-25"
   },
   "complexes": {
+    "경기 남양주시|다산동|다산한양수자인리버팰리스": {
+      "history": [],
+      "name": "다산한양수자인리버팰리스",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-07-25",
+      "slug": "dasanhanyangsujainribeopaelriseu",
+      "umd": "다산동"
+    },
     "경기 남양주시|묵현리|남양주두산위브트레지움": {
       "history": [],
       "name": "남양주두산위브트레지움",
@@ -37,6 +48,14 @@
       "slug": "botdeulmaeul9danji-geumhoeoulrim",
       "umd": "삼평동"
     },
+    "경기 파주시|문산리|문산호수": {
+      "history": [],
+      "name": "문산호수",
+      "region_slug": "gyeonggi-paju",
+      "since": "2026-07-25",
+      "slug": "munsanhosu",
+      "umd": "문산리"
+    },
     "경기 평택시|합정동|평택뉴비전엘크루": {
       "history": [],
       "name": "평택뉴비전엘크루",
@@ -44,6 +63,14 @@
       "since": "2026-07-25",
       "slug": "pyeongtaeknyubijeonelkeuru",
       "umd": "합정동"
+    },
+    "대구 달서구|본동|빌리브라디체": {
+      "history": [],
+      "name": "빌리브라디체",
+      "region_slug": "daegu-dalseo",
+      "since": "2026-07-25",
+      "slug": "bilribeuradiche",
+      "umd": "본동"
     },
     "대구 달서구|진천동|진천역라온프라이빗센텀": {
       "history": [],
@@ -61,6 +88,14 @@
       "slug": "samseongraemian1",
       "umd": "가장동"
     },
+    "대전 서구|둔산동|둥지": {
+      "history": [],
+      "name": "둥지",
+      "region_slug": "daejeon-seogu",
+      "since": "2026-07-25",
+      "slug": "dungji",
+      "umd": "둔산동"
+    },
     "대전 유성구|원신흥동|갑천1트리풀시티힐스테이트": {
       "history": [],
       "name": "갑천1트리풀시티힐스테이트",
@@ -69,6 +104,22 @@
       "slug": "gapcheon1teuripulsitihilseuteiteu",
       "umd": "원신흥동"
     },
+    "부산 동래구|명륜동|명륜한신": {
+      "history": [],
+      "name": "명륜한신",
+      "region_slug": "busan-dongrae",
+      "since": "2026-07-25",
+      "slug": "myeongryunhansin",
+      "umd": "명륜동"
+    },
+    "부산 부산진구|범천동|범일역풍림아이원": {
+      "history": [],
+      "name": "범일역풍림아이원",
+      "region_slug": "busan-busanjin",
+      "since": "2026-07-25",
+      "slug": "beomilyeokpungrimaiwon",
+      "umd": "범천동"
+    },
     "부산 부산진구|전포동|한웅인터빌": {
       "history": [],
       "name": "한웅인터빌",
@@ -76,6 +127,14 @@
       "since": "2026-07-25",
       "slug": "hanunginteobil",
       "umd": "전포동"
+    },
+    "서울 광진구|광장동|워커힐": {
+      "history": [],
+      "name": "워커힐",
+      "region_slug": "seoul-gwangjin",
+      "since": "2026-07-25",
+      "slug": "wokeohil",
+      "umd": "광장동"
     },
     "서울 노원구|상계동|은빛2단지": {
       "history": [],
@@ -115,6 +174,12 @@
       "since": "2026-07-25",
       "slug": "gyeonggi-seongnam-bundang"
     },
+    "경기 파주시": {
+      "history": [],
+      "name": "경기 파주시",
+      "since": "2026-07-25",
+      "slug": "gyeonggi-paju"
+    },
     "경기 평택시": {
       "history": [],
       "name": "경기 평택시",
@@ -139,11 +204,23 @@
       "since": "2026-07-25",
       "slug": "daejeon-yuseong"
     },
+    "부산 동래구": {
+      "history": [],
+      "name": "부산 동래구",
+      "since": "2026-07-25",
+      "slug": "busan-dongrae"
+    },
     "부산 부산진구": {
       "history": [],
       "name": "부산 부산진구",
       "since": "2026-07-25",
       "slug": "busan-busanjin"
+    },
+    "서울 광진구": {
+      "history": [],
+      "name": "서울 광진구",
+      "since": "2026-07-25",
+      "slug": "seoul-gwangjin"
     },
     "서울 노원구": {
       "history": [],
