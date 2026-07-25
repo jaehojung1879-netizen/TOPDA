@@ -53,16 +53,13 @@
     const lang = LANG_PREFIX.includes(segs[0]) ? segs.shift() : 'ko';
     return { lang, base: segs.join('/') || 'index.html' };
   }
-  // A language changes only when the visitor explicitly uses the switcher.  For
-  // normal internal navigation, keep the stored locale when that page exists.
-  let preferredLang = null;
-  try { preferredLang = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+  // The URL is the source of truth on page load. A stored preference must not
+  // override an explicit URL opened from the address bar, a bookmark or search
+  // result (for example /calculators/... must stay Korean even if "vi" was
+  // selected in an earlier session). Internal links are normalized below, so
+  // an English/Vietnamese/etc. journey still retains its current URL language.
   const current = pathInfo(location.pathname);
-  const navigationLang = preferredLang || current.lang;
-  if (preferredLang && preferredLang !== current.lang && pageExists(preferredLang, current.base)) {
-    location.replace(langHref(preferredLang, current.base) + location.search + location.hash);
-    return;
-  }
+  const navigationLang = current.lang;
 
   try {
     const header = document.querySelector('.site-header .row');
