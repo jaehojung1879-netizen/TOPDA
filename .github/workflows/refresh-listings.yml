@@ -28,7 +28,7 @@ concurrency:
 jobs:
   listings:
     runs-on: ubuntu-latest
-    timeout-minutes: 110   # 스텝 타임아웃 합계(26+17+22+20+4+6=95분) + 커밋·셋업 여유
+    timeout-minutes: 110   # 스텝 타임아웃 합계(26+17+22+20+4+6+3=98분) + 커밋·셋업 여유
     # ⚠ 이 합계는 반드시 job timeout보다 작아야 한다(설계 원칙 3). 스텝을 늘릴 때 같이 올릴 것.
     # ※ 전월세 API 미승인 동안 전세가율 스텝은 선확인 후 수 초 만에 끝나므로 실제 소요는 훨씬 짧다.
     steps:
@@ -128,5 +128,13 @@ jobs:
         run: python build_complex_pages.py
         continue-on-error: true
 
+      # sitemap 분할 — 생성기들이 쓴 평면 목록(sitemap-all.xml)을 분류별 파일 +
+      # sitemap index(sitemap.xml)로 변환한다. 반드시 모든 생성기 뒤에 온다.
+      - name: Split sitemap into index
+        working-directory: _meta
+        timeout-minutes: 3
+        run: python build_sitemaps.py
+        continue-on-error: true
+
       - name: Commit region/complex pages
-        run: bash _meta/git_commit_push.sh "단지·지역 페이지 자동 생성 ($(date -u +%Y-%m-%d))" site/apt site/sitemap.xml data/slug-map.json
+        run: bash _meta/git_commit_push.sh "단지·지역 페이지 자동 생성 ($(date -u +%Y-%m-%d))" site/apt site/sitemap.xml site/sitemap-all.xml site/sitemap-*.xml data/slug-map.json

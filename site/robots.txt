@@ -1,4 +1,22 @@
 User-agent: *
 Allow: /
 
+# AI 크롤러 정책 (2026-07 확인 — 지시서 8단계)
+# 톺다는 공공데이터를 가공한 계산 도구를 제공하며, AI 검색이 출처를 밝히고 인용하는 것을
+# 허용한다. 인용 시 표기 규칙과 데이터 이용 주의사항은 /llms.txt 를 참고할 것.
+# (차단으로 바꾸려면 아래 Allow 를 Disallow 로 고치면 된다.)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# sitemap.xml 은 sitemap index 다(분류별 파일을 가리킨다).
+# sitemap-all.xml 은 생성기들이 쓰는 내부 평면 목록이라 여기 싣지 않는다.
 Sitemap: https://topda.kr/sitemap.xml

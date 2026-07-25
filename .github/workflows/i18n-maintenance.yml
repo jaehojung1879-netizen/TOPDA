@@ -31,6 +31,11 @@ jobs:
       - name: Regenerate i18n sitemap entries
         run: node scripts/gen_i18n_sitemap.mjs
 
+      # 평면 목록(sitemap-all.xml)이 바뀌었으니 공개용 sitemap index를 다시 만든다.
+      - name: Rebuild sitemap index
+        working-directory: _meta
+        run: python3 build_sitemaps.py
+
       - name: i18n consistency & coverage check
         id: check
         run: node scripts/i18n_check.mjs
@@ -43,10 +48,10 @@ jobs:
       - name: Commit sitemap if changed
         if: github.ref == 'refs/heads/main'
         run: |
-          if ! git diff --quiet -- site/sitemap.xml; then
+          if ! git diff --quiet -- site/sitemap.xml site/sitemap-all.xml site/sitemap-*.xml; then
             git config user.name "topda-bot"
             git config user.email "bot@topda.kr"
-            git add site/sitemap.xml
+            git add site/sitemap.xml site/sitemap-all.xml site/sitemap-*.xml
             git commit -m "i18n 사이트맵 자동 갱신 ($(date -u +%Y-%m-%d))"
             git push
           else

@@ -82,7 +82,10 @@ const expectedSurfaces = [
   join(site, 'posts', 'index.html'),
   join(site, 'guides.html'),
   join(site, 'feed.xml'),
-  join(site, 'sitemap.xml'),
+  // site/sitemap.xml 은 sitemap index 라 URL 자체를 담지 않는다.
+  // 평면 목록(sitemap-all.xml)과, 분할 결과 중 글이 들어가는 묶음을 함께 확인한다.
+  join(site, 'sitemap-all.xml'),
+  join(site, 'sitemap-guides.xml'),
   join(root, 'sitemap.xml')
 ];
 for (const surface of expectedSurfaces) {

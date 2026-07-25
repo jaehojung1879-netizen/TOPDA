@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// site/sitemap.xml 에 다국어 홈(+주요 페이지) 항목을 멱등적으로 보강한다.
+// site/sitemap-all.xml 에 다국어 홈(+주요 페이지) 항목을 멱등적으로 보강한다.
 // 기존 항목/포맷은 건드리지 않고, 없는 loc 만 </urlset> 앞에 추가한다.
 // i18n-maintenance 워크플로가 매월 실행하며, 로컬에서도 `node scripts/gen_i18n_sitemap.mjs` 로 실행 가능.
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -7,7 +7,9 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const SITEMAP = join(ROOT, 'site', 'sitemap.xml');
+// 공개 sitemap.xml은 sitemap index다. 평면 목록은 sitemap-all.xml 이고,
+// _meta/build_sitemaps.py 가 이걸 분류별로 쪼개 index를 만든다.
+const SITEMAP = join(ROOT, 'site', 'sitemap-all.xml');
 const BASE = 'https://topda.kr';
 const today = new Date().toISOString().slice(0, 10);
 

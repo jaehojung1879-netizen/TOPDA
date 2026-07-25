@@ -325,8 +325,12 @@ def load_json(path, default=None):
         return default
 
 
-def save_json_safe(path, data, min_items_key=None):
-    """비어 있으면 저장하지 않음(기존 데이터 보존). min_items_key가 주어지면 그 리스트가 비면 skip."""
+def save_json_safe(path, data, min_items_key=None, indent=2):
+    """비어 있으면 저장하지 않음(기존 데이터 보존). min_items_key가 주어지면 그 리스트가 비면 skip.
+
+    indent=None이면 구분자까지 붙여 최소 크기로 저장한다(대용량 원장용). 사람이 diff를 읽는
+    작은 파일은 기본값(2)을 그대로 쓴다.
+    """
     if data is None:
         print(f"[skip] {os.path.basename(path)}: 수집 결과 없음 — 기존 파일 유지")
         return False
@@ -334,10 +338,11 @@ def save_json_safe(path, data, min_items_key=None):
         print(f"[skip] {os.path.basename(path)}: '{min_items_key}' 비어 있음 — 기존 파일 유지")
         return False
     tmp = path + ".tmp"
+    kw = {"indent": indent} if indent is not None else {"separators": (",", ":")}
     with open(tmp, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(data, f, ensure_ascii=False, **kw)
     os.replace(tmp, path)
-    print(f"[ok] {os.path.basename(path)} 저장")
+    print(f"[ok] {os.path.basename(path)} 저장 ({os.path.getsize(path) / 1024 / 1024:.1f}MB)")
     return True
 
 
