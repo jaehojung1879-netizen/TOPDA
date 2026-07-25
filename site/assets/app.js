@@ -3200,9 +3200,64 @@ function calcInteriorEstimate({ area, grade, items }) {
     toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2400);
   }
 
+  // ---- 실거래가 페이지(/apt/...)에서 넘어온 프리필 ----
+  // 단지 페이지의 '이 거래가격으로 계산' 링크가 ?price=…&source=apt 로 값을 넘긴다.
+  // 계산식은 건드리지 않고 입력값만 채우되, 외부에서 온 값이므로 범위를 검증한다.
+  //
+  // 파라미터 이름 주의: 지역·면적은 region/area가 아니라 region_name/area_m2로 받는다.
+  // region은 loan-limit·registration-cost의 '규제지역' 라디오 name과, area는
+  // interior-estimate의 면적 입력 name과 같아, 그대로 쓰면 프리필이 그 필드를 잘못 건드린다.
+  const PREFILL_LIMITS = { price: [1e6, 1e12], std: [1e5, 1e12] };  // 원 단위
+
+  function sanitizeParams(params) {
+    Object.keys(PREFILL_LIMITS).forEach((k) => {
+      if (!params.has(k)) return;
+      const n = Number(String(params.get(k)).replace(/[^0-9.]/g, ''));
+      const lim = PREFILL_LIMITS[k];
+      if (!isFinite(n) || n < lim[0] || n > lim[1]) params.delete(k);   // 비정상 값은 무시
+      else params.set(k, String(Math.round(n)));
+    });
+    return params;
+  }
+
+  function prefillBanner(params) {
+    if (params.get('source') !== 'apt') return;
+    const form = document.querySelector('.calc-form, [data-calc]');
+    if (!form || document.querySelector('[data-prefill-banner]')) return;
+    const name = (params.get('complex') || '').slice(0, 40);
+    const price = Number(params.get('price') || 0);
+    // price가 sanitizeParams에서 걸러졌으면(범위 밖·비숫자) 아무것도 채워지지 않았으므로
+    // 배너를 띄우지 않는다 — 안 채운 값을 채웠다고 말하면 안 된다.
+    if (!price) return;
+
+    const eok = price / 100000000;
+    const money = eok >= 1
+      ? eok.toFixed(eok >= 10 ? 1 : 2).replace(/\.?0+$/, '') + '억원'
+      : Math.round(price / 10000).toLocaleString() + '만원';
+    const area = params.get('area_m2');
+    const what = [name, area ? '전용 ' + area + '㎡' : ''].filter(Boolean).join(' ');
+    const box = document.createElement('div');
+    box.className = 'calc-prefill';
+    box.setAttribute('data-prefill-banner', '');
+    box.innerHTML =
+      '<strong>' + (what || '선택한 단지') + '</strong>의 최근 실거래가 '
+      + '<strong>' + money + '</strong>이 입력되었습니다. '
+      + '주택 수·조정대상지역·소득 등 나머지 조건은 직접 확인하고 조정하세요. '
+      + '<a href="' + (params.get('back') || '/apt/') + '">← 단지 페이지로</a>';
+    form.parentNode.insertBefore(box, form);
+    if (window.topdaTrack) {
+      window.topdaTrack('calculator_prefill_loaded', {
+        calculator_type: location.pathname.split('/').pop().replace('.html', ''),
+        complex: name, region: params.get('region_name') || '',
+        source_page: 'apt', prefill_used: true
+      });
+    }
+  }
+
   // ---- 입력값 저장/복원 + 공유/인쇄 툴바 ----
   function setup() {
-    const params = new URLSearchParams(location.search);
+    const params = sanitizeParams(new URLSearchParams(location.search));
+    prefillBanner(params);
 
     // 1) 폼 단위 저장/복원 (URL > localStorage)
     const forms = document.querySelectorAll('.calc-form, [data-calc]');

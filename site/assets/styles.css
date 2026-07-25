@@ -3129,3 +3129,18 @@ table.data.cmp th:first-child, table.data.cmp td:first-child { min-width: 116px;
 .resume-hint { font-size: 0.8rem; color: var(--warning); display: block; margin-top: 6px; font-weight: 600; }
 .resume-bar { height: 6px; border-radius: 999px; background: var(--border); margin-top: 8px; overflow: hidden; }
 .resume-bar > span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+
+/* 실거래 단지 페이지에서 넘어온 프리필 안내 배너 (app.js prefillBanner) —
+   값이 미리 채워졌다는 사실과 '나머지 조건은 직접 확인'을 눈에 보이게 알린다. */
+.calc-prefill {
+  border: 1px solid var(--accent);
+  border-left-width: 4px;
+  border-radius: 10px;
+  background: var(--accent-soft, #f2f7fc);
+  padding: 12px 14px;
+  margin: 0 0 14px;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+.calc-prefill a { color: var(--accent); font-weight: 600; white-space: nowrap; }
+@media (max-width: 420px) { .calc-prefill { font-size: 0.86rem; padding: 10px 12px; } }

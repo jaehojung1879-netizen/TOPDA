@@ -234,8 +234,16 @@ def summary_html(rk, ms):
     return cards + prose
 
 
-def region_page(rk, rows, as_of, ms=None):
+def region_page(rk, rows, as_of, ms=None, canonical=None, complex_urls=None):
+    """지역 단지 표 페이지.
+
+    canonical    None이면 자기 자신(한글 URL). 슬러그 허브로 색인을 이전한 지역은
+                 build_complex_pages.py가 허브 URL을 넘겨 준다.
+    complex_urls {단지명: 단지 페이지 경로} — 있으면 '상세→'가 단지 페이지를 가리킨다.
+    """
     url = f"{BASE}/apt/{urllib.parse.quote(slug(rk))}.html"
+    canonical = canonical or url
+    complex_urls = complex_urls or {}
     top = [r["name"] for r in rows[:5]]
     title = f"{rk} 아파트 실거래가·세대수·시세 추이 — 톺다"
     desc = (f"{rk} 아파트 단지별 최근 실거래가, 세대수, ㎡당 가격 추이 ({as_of} 기준). "
@@ -248,9 +256,11 @@ def region_page(rk, rows, as_of, ms=None):
         hh = f'{r["households"]:,}세대' if r["households"] else '<span class="muted">—</span>'
         built = r["built"] or '<span class="muted">—</span>'
         q = urllib.parse.quote(r["name"])
+        # 단지 페이지가 있으면 그쪽으로(실거래 상세 + 계산기 동선), 없으면 기존 맞춤검색으로.
+        deep = complex_urls.get(r["name"]) or f"/calculators/search.html?apt={q}"
         return (
             f'<tr id="{anchor}"><td class="name">{esc(r["name"])} '
-            f'<a class="deep" href="/calculators/search.html?apt={q}">상세→</a></td>'
+            f'<a class="deep" href="{esc(deep)}">상세→</a></td>'
             f'<td>{built}</td><td>{hh}</td>'
             f'<td>{esc(r["last_date"])} · {r["last_pyeong"]}평 · <strong>{fmt_price(r["last_price"])}</strong></td>'
             f'<td>{trend_html(r)}</td><td>{r["n"]}건</td></tr>'
@@ -268,7 +278,8 @@ def region_page(rk, rows, as_of, ms=None):
         "numberOfItems": len(rows),
         "itemListElement": [
             {"@type": "ListItem", "position": i + 1, "name": r["name"],
-             "url": f"{url}#{urllib.parse.quote(r['name'])}"}
+             "url": complex_urls.get(r["name"]) and BASE + complex_urls[r["name"]]
+                    or f"{canonical}#{urllib.parse.quote(r['name'])}"}
             for i, r in enumerate(rows[:30])
         ],
     }, ensure_ascii=False)
@@ -278,23 +289,27 @@ def region_page(rk, rows, as_of, ms=None):
         '<header><a href="/index.html">톺다</a></header>\n'
         f'<nav class="crumb"><a href="/apt/">아파트 실거래 지역별</a> › {esc(rk)}</nav>\n'
         f'<h1>{esc(rk)} 아파트 실거래가·세대수</h1>\n'
-        f'<p class="lead">최근 4개월 국토교통부 실거래 기준 {len(rows)}개 단지 · {esc(as_of)} 갱신. '
+        f'<p class="lead">국토교통부 실거래 신고 기준 {len(rows)}개 단지 · {esc(as_of)} 갱신. '
         '추이는 월별 ㎡당 평균가 기준으로, 어느 평형이 거래됐는지에 따른 왜곡을 제거한 값입니다.</p>\n'
         + summary_html(rk, ms)
         + table +
         ('<p class="note">표 하단 거래 1건 단지는 표본이 적어 추이를 표시하지 않습니다.</p>\n' if thin_rows else '')
         + f'<script type="application/ld+json">{ld}</script>\n'
     )
-    return page_head(title, desc, url) + body + footer_html(as_of)
+    return page_head(title, desc, canonical) + body + footer_html(as_of)
 
 
-def index_page(region_rows, as_of):
+def index_page(region_rows, as_of, hubs=None):
+    hubs = hubs or {}
     url = f"{BASE}/apt/"
     title = "아파트 실거래가·세대수 지역별 — 톺다"
     n_apt = sum(len(v) for v in region_rows.values())
     desc = f"전국 {len(region_rows)}개 지역 {n_apt:,}개 아파트 단지의 최근 실거래가·세대수·㎡당 추이 ({as_of} 기준)."
     links = "\n".join(
-        f'<li><a href="/apt/{urllib.parse.quote(slug(rk))}.html">{esc(rk)} <span class="muted">({len(rows)})</span></a></li>'
+        '<li><a href="{}">{} <span class="muted">({})</span></a></li>'.format(
+            esc(hubs[rk][len(BASE):] if rk in hubs
+                else f"/apt/{urllib.parse.quote(slug(rk))}.html"),
+            esc(rk), len(rows))
         for rk, rows in sorted(region_rows.items())
     )
     body = (
@@ -306,23 +321,45 @@ def index_page(region_rows, as_of):
     return page_head(title, desc, url) + body + footer_html(as_of)
 
 
-def update_sitemap(region_rows, today):
-    """sitemap.xml에서 /apt/ 항목만 재생성(다른 항목 보존)."""
+def update_sitemap(region_rows, today, skip=()):
+    """sitemap.xml에서 한글 지역 URL(/apt/*.html)과 /apt/ 색인만 재생성(다른 항목 보존).
+
+    슬러그 URL(/apt/{slug}/...)은 build_complex_pages.py 소관이라 정규식이 겹치지 않게
+    `.html`로 끝나는 항목과 `/apt/` 자신만 지운다. skip에 든 지역은 canonical을 슬러그
+    허브로 넘겼으므로 sitemap에서 제외한다(정식 URL만 싣는다).
+    """
     try:
         with open(SITEMAP, encoding="utf-8") as f:
             xml = f.read()
     except FileNotFoundError:
         xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>\n')
-    # 기존 /apt/ 항목 제거
-    xml = re.sub(r"  <url>\s*<loc>" + re.escape(BASE) + r"/apt/[^<]*</loc>.*?</url>\n", "", xml, flags=re.S)
+    # 기존 한글 지역 항목 + /apt/ 색인만 제거
+    xml = re.sub(r"  <url>\s*<loc>" + re.escape(BASE) + r"/apt/(?:[^<]*\.html)?</loc>.*?</url>\n",
+                 "", xml, flags=re.S)
     entries = [f"  <url>\n    <loc>{BASE}/apt/</loc>\n    <lastmod>{today}</lastmod>\n    <priority>0.7</priority>\n  </url>\n"]
     for rk in sorted(region_rows):
+        if rk in skip:
+            continue
         loc = f"{BASE}/apt/{urllib.parse.quote(slug(rk))}.html"
         entries.append(f"  <url>\n    <loc>{loc}</loc>\n    <lastmod>{today}</lastmod>\n    <priority>0.7</priority>\n  </url>\n")
     xml = xml.replace("</urlset>", "".join(entries) + "</urlset>")
     with open(SITEMAP, "w", encoding="utf-8") as f:
         f.write(xml)
+
+
+def migrated_hubs():
+    """슬러그 허브로 색인을 이전한 지역 → {region_key: hub_url}.
+    data/slug-map.json의 _meta.hubs를 읽는다(build_complex_pages.py가 기록)."""
+    path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "slug-map.json"))
+    m = L.load_json(path, default=None) or {}
+    regions = m.get("regions") or {}
+    out = {}
+    for rk in (m.get("_meta", {}).get("hubs") or []):
+        rec = regions.get(rk)
+        if rec and rec.get("slug"):
+            out[rk] = f"{BASE}/apt/{rec['slug']}/"
+    return out
 
 
 def main():
@@ -336,15 +373,20 @@ def main():
         return
     as_of = max(d.get("date", "") for d in deals)[:7] or dt.date.today().strftime("%Y-%m")
     os.makedirs(APT_DIR, exist_ok=True)
+    hubs = migrated_hubs()
     for rk, rows in region_rows.items():
         path = os.path.join(APT_DIR, f"{slug(rk)}.html")
         with open(path, "w", encoding="utf-8") as f:
-            f.write(region_page(rk, rows, as_of, market_summary(rk, market)))
+            # 허브로 이전한 지역은 canonical만 허브를 가리키고, 페이지 자체는 그대로 둔다
+            # (기존 색인·북마크를 살려 두기 위해 즉시 삭제하지 않는다).
+            f.write(region_page(rk, rows, as_of, market_summary(rk, market),
+                                canonical=hubs.get(rk)))
     with open(os.path.join(APT_DIR, "index.html"), "w", encoding="utf-8") as f:
-        f.write(index_page(region_rows, as_of))
-    update_sitemap(region_rows, dt.date.today().strftime("%Y-%m-%d"))
+        f.write(index_page(region_rows, as_of, hubs))
+    update_sitemap(region_rows, dt.date.today().strftime("%Y-%m-%d"), skip=set(hubs))
     n = sum(len(v) for v in region_rows.values())
-    print(f"[ok] 지역 페이지 {len(region_rows)}개 + 색인 1개 생성 · 단지 {n:,}개 노출 · sitemap 갱신")
+    print(f"[ok] 지역 페이지 {len(region_rows)}개 + 색인 1개 생성 · 단지 {n:,}개 노출 · "
+          f"슬러그 허브 이전 {len(hubs)}개 · sitemap 갱신")
 
 
 if __name__ == "__main__":
