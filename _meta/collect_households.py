@@ -46,8 +46,39 @@ def deals_only_names(apts):
     return out
 
 
+def _merge_kmaps(maps):
+    """여러 LAWD 코드에서 받은 K-apt 단지목록을 하나로 합친다.
+    같은 변형키를 서로 다른 코드가 주장하면 kapt_map과 같은 규칙으로 ''(모호) 표식."""
+    out = {"sig": {}, "dong": {}, "n": 0, "n_dong": 0}
+    for m in maps:
+        if not m:
+            continue
+        out["n"] += m.get("n", 0)
+        out["n_dong"] += m.get("n_dong", 0)
+        for k, v in m.get("sig", {}).items():
+            out["sig"][k] = "" if (k in out["sig"] and out["sig"][k] != v) else v
+        for dong, tbl in m.get("dong", {}).items():
+            cur = out["dong"].setdefault(dong, {})
+            for k, v in tbl.items():
+                cur[k] = "" if (k in cur and cur[k] != v) else v
+    return out
+
+
+def _recent_yms(n=2):
+    """최근 n개월(YYYYMM) — LAWD 자가탐색이 코드 유효성을 확인하는 데 쓴다."""
+    d = dt.date.today().replace(day=1)
+    out = []
+    for _ in range(n):
+        out.append(d.strftime("%Y%m"))
+        d = (d - dt.timedelta(days=1)).replace(day=1)
+    return out
+
+
 def main():
     kapt_key = L.key(L.KAPT_KEYS)
+    # 실거래 API 키 — LAWD 자가탐색이 후보 코드의 거래 유무를 확인하는 데만 쓴다.
+    trade_key = L.key(L.DATA_GO_KEYS)
+    recent_yms = _recent_yms(2)
     if not kapt_key:
         print("[K-apt] 키 없음(DATA_GO_APT_BASIC_INFO/DATA_GO_*) — 세대수 보강 건너뜀", file=sys.stderr)
         return
@@ -83,7 +114,8 @@ def main():
     regions = list(dict.fromkeys(list(by_region) + list(extra_by_region)))
     print(f"세대수 보강 대상 — 큐레이션 {need}개 · 실거래전용 {extra_need}개 / {len(regions)}개 지역")
     stat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0, "extra_filled": 0, "dong_ok": 0}
-    unmatched = []   # 이름매칭 실패 샘플 — 매칭률이 낮을 때 표기 차이를 바로 볼 수 있게
+    unmatched = []   # 이름매칭 실패 샘플
+    unmatched_by_region = []   # 매칭률이 낮은 지역 진단(대상/목록/매칭 + 미매칭 이름 예시) — 매칭률이 낮을 때 표기 차이를 바로 볼 수 있게
 
     # 시간 예산: 스텝 타임아웃으로 강제 종료되면 진행분이 통째로 유실된다(2026-07-03:
     # 25분 내내 돌고 저장 0건). 마감 전에 멈추고, 지역 단위로 중간 저장(checkpoint)한다.
@@ -103,8 +135,22 @@ def main():
         if L.out_of_time(region_deadline, margin_sec=30):
             print(f"시간 예산 소진 — 남은 지역은 다음 실행에서 이어서 보강 (누적 {stat['filled']}건)")
             break
-        lawd = L.LAWD[region]
-        kmap = CA.kapt_map(lawd, kapt_key)
+        # 행정구역 개편으로 기본 LAWD 코드가 죽은 지역(화성시 41590 폐지, 인천 서구 검단구
+        # 분리)은 그 코드로 K-apt를 물으면 단지목록이 빈다. 실거래·전세가율·단지 수집기는
+        # 모두 자가탐색(resolve_lawd_codes)을 쓰는데 이 수집기만 빠져 있었다 — 그 결과
+        # 인천 서구(190개)·경기 화성시(353개) 단지가 세대수 0% 상태로 남아 있었다.
+        # 채택된 코드가 여러 개면 각각의 목록을 합쳐 쓴다.
+        matched_before = stat["matched"]
+        codes = ([L.LAWD[region]] if not trade_key
+                 else L.resolve_lawd_codes(region, L.LAWD[region], trade_key, recent_yms))
+        maps, auth_fail = [], False
+        for code in codes:
+            m = CA.kapt_map(code, kapt_key)
+            if m is None:
+                auth_fail = True
+                break
+            maps.append(m)
+        kmap = None if auth_fail else _merge_kmaps(maps)
         if kmap is None:    # 403 권한 오류 → 활용신청 필요. 더 돌려도 동일하므로 중단.
             print("‼ K-apt 권한 오류(403) — data.go.kr에서 '공동주택 단지목록(AptListService)'·"
                   "'공동주택 기본정보(AptBasisInfoService)' API를 같은 계정으로 활용신청·승인하세요. "
@@ -150,7 +196,18 @@ def main():
                     entry["addr"] = addr   # 좌표·역·학교 보강용 (아래 위치 보강 패스)
                 hh_map[f"{region}|{name}"] = entry
                 stat["extra_filled"] += 1
-        print(f"[{region}] 매칭 진행 — 누적 세대수확보 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}")
+        # 지역별 진단 — 남은 미보강분이 'K-apt에 아예 없어서'인지 '이름이 안 맞아서'인지를
+        # 가른다. 목록(K-apt 단지 수)이 대상 수보다 훨씬 적으면 수록범위 한계(의무관리대상만
+        # 수록)라 이름 규칙을 손봐도 소용이 없고, 목록은 충분한데 매칭이 적으면 표기 차이다.
+        # 이 두 경우의 대응이 정반대라 로그에 남긴다.
+        r_target = len(by_region.get(region, [])) + len(extra_by_region.get(region, []))
+        r_matched = stat["matched"] - matched_before
+        print(f"[{region}] 대상 {r_target} · K-apt목록 {kmap.get('n', 0)} · 매칭 {r_matched}"
+              f" · 코드 {','.join(codes)}"
+              f" — 누적 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}")
+        if r_target and r_matched * 2 < r_target and len(unmatched_by_region) < 8:
+            sample = [n for n, _ in extra_by_region.get(region, [])][:6]
+            unmatched_by_region.append(f"{region}(대상{r_target}/목록{kmap.get('n', 0)}/매칭{r_matched}): {', '.join(sample)}")
         # 지역 단위 체크포인트 — 이후 어떤 이유로 중단돼도 여기까지의 확보분은 남는다.
         if stat["filled"] > saved_filled:
             if L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments"):
@@ -200,6 +257,8 @@ def main():
           f"위치보강 {loc_filled}건")
     if unmatched:
         print(f"  · 미매칭 샘플({len(unmatched)}): {', '.join(unmatched)}", file=sys.stderr)
+    for line in unmatched_by_region:
+        print(f"  · 매칭률 낮은 지역 — {line}", file=sys.stderr)
     if (need or extra_need) and not (stat["filled"] or stat["extra_filled"]):
         print("  ! 세대수 0건 — 위 단계 카운터로 원인 확인(권한/목록빈값/이름매칭/기본정보응답).", file=sys.stderr)
         for d in getattr(CA, "_info_diag", []):
