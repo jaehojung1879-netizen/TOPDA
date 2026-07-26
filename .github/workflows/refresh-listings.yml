@@ -28,7 +28,7 @@ concurrency:
 jobs:
   listings:
     runs-on: ubuntu-latest
-    timeout-minutes: 110   # 스텝 타임아웃 합계(26+17+22+20+4+6+3=98분) + 커밋·셋업 여유
+    timeout-minutes: 110   # 스텝 타임아웃 합계(26+3+17+22+20+4+6+3=101분) + 커밋·셋업 여유
     # ⚠ 이 합계는 반드시 job timeout보다 작아야 한다(설계 원칙 3). 스텝을 늘릴 때 같이 올릴 것.
     # ※ 전월세 API 미승인 동안 전세가율 스텝은 선확인 후 수 초 만에 끝나므로 실제 소요는 훨씬 짧다.
     steps:
@@ -53,6 +53,19 @@ jobs:
 
       - name: Commit transactions.json
         run: bash _meta/git_commit_push.sh "실거래 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/transactions.json
+
+      # 1-b) 파인더 전용 사전집계본. 맞춤 내집 찾기는 거래 한 건씩이 아니라 단지별
+      # 집계만 쓰는데, 원장을 통째로 받아 브라우저에서 매번 다시 집계하고 있었다.
+      # 12개월 확장으로 원장이 59MB가 되면서 방문마다 60MB를 내려받게 됐다(로딩 지연의
+      # 직접 원인). 집계를 여기서 미리 끝내 원장의 13% 크기로 내보낸다.
+      - name: Build finder index (맞춤 내집 찾기 사전집계)
+        working-directory: _meta
+        timeout-minutes: 3
+        run: python build_finder_index.py
+        continue-on-error: true
+
+      - name: Commit finder_index.json
+        run: bash _meta/git_commit_push.sh "파인더 인덱스 갱신 ($(date -u +%Y-%m-%d))" site/assets/finder_index.json
 
       # 2) 전세가율 (매매·전세 실거래 중위가) — 전세가율 지도용. 평소 ~9분.
       - name: Collect jeonse ratio (매매·전세 실거래 중위가)
