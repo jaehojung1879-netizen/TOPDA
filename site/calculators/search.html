@@ -88,32 +88,95 @@
     .finder-results { grid-template-columns: 1fr; }
   }
 
-  /* 단지 상세 팝업 (지도 + 실거래 기본정보) */
+  /* ── 단지 상세 팝업 ──────────────────────────────────────────────
+     실거래가 조회(transactions.html) 모달과 같은 정보 위계를 쓴다:
+     헤더(스티키) → 지도 → 대표가 헤드라인 → 팩트 → 매수비용 CTA → 거래 내역.
+     두 화면을 오가는 사용자가 같은 자리에서 같은 정보를 찾게 하기 위해서다. */
   .apt-modal { position: fixed; inset: 0; display: none; z-index: 1000; }
   .apt-modal.open { display: block; }
-  .apt-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.5); }
+  .apt-modal-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,0.55); }
   .apt-modal-panel {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    width: min(560px, calc(100vw - 32px)); max-height: 90vh; overflow: auto;
-    background: #fff; border-radius: 18px; padding: 22px;
-    box-shadow: 0 20px 60px -16px rgba(15,23,42,0.4);
+    width: min(680px, calc(100vw - 24px)); max-height: 92vh; overflow: auto;
+    background: var(--surface,#fff); border-radius: 20px;
+    box-shadow: 0 24px 70px -18px rgba(15,23,42,0.45);
   }
-  .apt-modal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
-  .apt-modal-head h2 { margin: 0; font-size: 1.2rem; letter-spacing: -0.02em; }
-  .apt-modal-sub { margin: 4px 0 0; color: var(--text-muted); font-size: 0.86rem; }
+  .apt-modal-head {
+    position: sticky; top: 0; z-index: 3; background: var(--surface,#fff);
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+    padding: 20px 22px 14px; border-bottom: 1px solid var(--border,#e5e7eb);
+  }
+  .apt-modal-head h2 { margin: 0; font-size: 1.26rem; letter-spacing: -0.03em; }
+  .apt-modal-sub { margin: 5px 0 0; color: var(--text-muted); font-size: 0.85rem; }
   .apt-modal-close { background: none; border: 0; padding: 4px; cursor: pointer; color: var(--text-muted); flex-shrink: 0; }
   .apt-modal-close:hover { color: var(--text); }
-  #aptModalMap { width: 100%; height: 200px; border-radius: 12px; border: 1px solid var(--border, #e5e7eb); background: #f1f5f9; margin-bottom: 14px; }
-  .apt-modal-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 8px; margin-bottom: 16px; }
-  .apt-modal-meta .item { background: var(--surface-2, #f8fafc); border-radius: 10px; padding: 8px 10px; }
-  .apt-modal-meta .lbl { font-size: 0.72rem; color: var(--text-muted); }
-  .apt-modal-meta .val { font-size: 0.98rem; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
-  .apt-modal-list h3 { font-size: 0.9rem; margin: 0 0 8px; }
+  .apt-modal-body { padding: 16px 22px 22px; }
+  .apt-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+  .apt-pill { font-size: 0.73rem; font-weight: 600; padding: 3px 9px; border-radius: 999px;
+    background: var(--surface-2,#f5f5f7); color: var(--text-muted); }
+
+  #aptModalMap { width: 100%; height: 210px; border-radius: 14px; border: 1px solid var(--border, #e5e7eb);
+    background: var(--surface-2,#f1f5f9); margin-bottom: 16px; }
+  .apt-map-note { font-size: 0.72rem; color: var(--text-muted); margin: -10px 0 16px; }
+
+  .apt-headline {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 16px 18px; border-radius: 16px; border: 1px solid var(--border,#e5e7eb);
+    background: var(--surface-2,#f5f5f7); margin-bottom: 14px;
+  }
+  .apt-headline .k { font-size: 0.74rem; color: var(--text-muted); font-weight: 600; }
+  .apt-headline .v { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1;
+    margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .apt-headline .when { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; }
+  .apt-delta { font-size: 0.82rem; font-weight: 700; padding: 4px 9px; border-radius: 8px; white-space: nowrap; }
+  .apt-delta.up { color: var(--danger,#b91c1c); background: var(--danger-soft,#fef2f2); }
+  .apt-delta.down { color: #1d4ed8; background: #eff6ff; }
+  .apt-delta.flat { color: var(--text-muted); background: var(--surface,#fff); }
+  .apt-range { margin-bottom: 18px; }
+  .apt-range .bar { position: relative; height: 6px; border-radius: 999px; background: linear-gradient(90deg,#dbeafe,#fee2e2); }
+  .apt-range .pin { position: absolute; top: -5px; width: 3px; height: 16px; border-radius: 2px;
+    background: var(--text,#0f172a); transform: translateX(-1.5px); }
+  .apt-range .ends { display: flex; justify-content: space-between; font-size: 0.72rem;
+    color: var(--text-muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
+
+  .apt-facts { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 0 24px; margin-bottom: 18px; }
+  .apt-facts .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+    padding: 9px 0; border-bottom: 1px solid var(--border,#e5e7eb); font-size: 0.86rem; }
+  .apt-facts .row .k { color: var(--text-muted); white-space: nowrap; }
+  .apt-facts .row .v { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+  .apt-facts .row .v small { font-weight: 500; color: var(--text-muted); }
+
+  .apt-cta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 16px;
+    border-radius: 14px; background: var(--surface-2,#f5f5f7); border: 1px solid var(--border,#e5e7eb); margin-bottom: 20px; }
+  .apt-cta a { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 10px;
+    font-weight: 700; background: var(--accent,#2563eb); color: #fff; text-decoration: none; font-size: 0.9rem; }
+  .apt-cta a:hover { filter: brightness(0.92); }
+  .apt-cta .note { font-size: 0.78rem; color: var(--text-muted); }
+
+  .apt-modal-list h3 { font-size: 0.84rem; font-weight: 700; margin: 0 0 10px;
+    display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .apt-modal-list h3 .hint { font-weight: 500; color: var(--text-muted); font-size: 0.76rem; }
   .apt-modal-list table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  .apt-modal-list th, .apt-modal-list td { padding: 7px 8px; border-bottom: 1px solid var(--border, #eee); text-align: left; }
-  .apt-modal-list td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .apt-modal-list th { padding: 7px 8px; border-bottom: 1px solid var(--border, #e5e7eb); text-align: right;
+    font-size: 0.73rem; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+  .apt-modal-list th:first-child { text-align: left; }
+  .apt-modal-list td { padding: 9px 8px; border-bottom: 1px solid var(--border, #e5e7eb); text-align: right;
+    font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .apt-modal-list td:first-child { text-align: left; }
+  .apt-badge { display: inline-block; font-size: 0.67rem; font-weight: 700; padding: 1px 6px;
+    border-radius: 5px; margin-left: 5px; vertical-align: middle; }
+  .apt-badge.cancel { background: var(--danger-soft,#fef2f2); color: var(--danger,#b91c1c); }
+  .apt-badge.floor { background: var(--surface-2,#f5f5f7); color: var(--text-muted); }
+  .apt-modal-list tr.is-cancel td { color: var(--text-subtle,#9ca3af); }
+  .apt-modal-list tr.is-cancel td.num { text-decoration: line-through; }
+  .apt-note { font-size: 0.76rem; color: var(--text-muted); line-height: 1.65; margin: 10px 0 0; }
   .apt-modal-more { display: inline-block; margin-top: 14px; color: var(--accent, #2563eb); font-weight: 600; text-decoration: none; font-size: 0.88rem; }
   .apt-modal-more:hover { text-decoration: underline; }
+  @media (max-width: 600px) {
+    .apt-modal-head { padding: 16px 16px 12px; }
+    .apt-modal-body { padding: 14px 16px 20px; }
+    .apt-headline .v { font-size: 1.65rem; }
+  }
 </style>
 </head>
 <body>
@@ -321,21 +384,28 @@
       <div>
         <h2 id="aptModalTitle">—</h2>
         <p id="aptModalSub" class="apt-modal-sub">—</p>
+        <div class="apt-pills" id="aptModalPills"></div>
       </div>
       <button class="apt-modal-close" data-apt-close aria-label="닫기">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
-    <div id="aptModalMap" role="region" aria-label="단지 위치 지도"></div>
-    <div class="apt-modal-meta" id="aptModalMeta"></div>
-    <div class="apt-modal-list">
-      <h3>최근 실거래</h3>
-      <table>
-        <thead><tr><th>거래일</th><th>전용(평)</th><th class="num">금액</th></tr></thead>
-        <tbody id="aptModalBody"></tbody>
-      </table>
+    <div class="apt-modal-body">
+      <div id="aptModalMap" role="region" aria-label="단지 위치 지도"></div>
+      <p class="apt-map-note" id="aptMapNote"></p>
+      <div id="aptModalHeadline"></div>
+      <div class="apt-facts" id="aptModalFacts"></div>
+      <div class="apt-cta" id="aptModalCalc"></div>
+      <div class="apt-modal-list">
+        <h3>실거래 내역 <span class="hint" id="aptListHint"></span></h3>
+        <table>
+          <thead><tr><th>거래일</th><th>전용(평)</th><th>층</th><th class="num">금액</th><th class="num">㎡당(만원)</th></tr></thead>
+          <tbody id="aptModalBody"></tbody>
+        </table>
+        <p class="apt-note" id="aptModalNote"></p>
+      </div>
+      <a href="#" id="aptModalMore" class="apt-modal-more">실거래가 조회에서 전체 내역 보기 →</a>
     </div>
-    <a href="#" id="aptModalMore" class="apt-modal-more">실거래가 조회에서 전체 내역 보기 →</a>
   </div>
 </div>
 
@@ -346,6 +416,7 @@
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="../assets/kmap.js?v=20260726"></script>
 <script src="../assets/score.js?v=20260629"></script>
 <script src="../assets/region.js?v=20260629"></script>
 <script src="../assets/app.js?v=20260723"></script>
@@ -406,8 +477,8 @@
     if (mode === 'price_desc') return function (a, b) { return (b.price || 0) - (a.price || 0); };
     if (mode === 'recent') {
       return function (a, b) {
-        var ad = (DEALS_BY_APT[a.apt.name] || {}).latest || '';
-        var bd = (DEALS_BY_APT[b.apt.name] || {}).latest || '';
+        var ad = (DEALS_BY_APT[aptKeyOf(a.apt)] || {}).latest || '';
+        var bd = (DEALS_BY_APT[aptKeyOf(b.apt)] || {}).latest || '';
         return bd < ad ? -1 : bd > ad ? 1 : b.total - a.total;
       };
     }
@@ -421,25 +492,47 @@
     return function (a, b) { return b.total - a.total; };
   }
 
-  var DEALS_BY_APT = {};   // 단지명 → {latest:거래일, prices:[]}
+  var DEALS_BY_APT = {};   // '지역키|단지명' → {latest:거래일, prices:[], canceled:n}
+
+  // 단지 식별은 '지역+단지명' 복합키. 단지명만 쓰면 전국 동명 단지가 한 덩어리로 합쳐진다
+  // (실측: 827개 단지명이 2개 이상 지역에 중복, '삼환'은 14개 지역). 그러면 거래 건수·
+  // 평균가·가격 이력이 전혀 다른 동네 거래로 오염돼 추천 점수까지 틀어진다.
+  function aptKey(regionKey, name) { return (regionKey || '') + '|' + name; }
+  function aptKeyOf(a) { return aptKey(a.region_key || '', a.name); }
+
+  // 원장이 실제로 담고 있는 기간 — "거래 건수 32건"이 몇 개월치인지 밝히는 데 쓴다.
+  var WINDOW = { months: 0, from: '', to: '', label: '최근' };
+  function computeWindow(deals) {
+    var lo = '', hi = '';
+    for (var i = 0; i < deals.length; i++) {
+      var mo = (deals[i].date || '').slice(0, 7);
+      if (!mo) continue;
+      if (!lo || mo < lo) lo = mo;
+      if (!hi || mo > hi) hi = mo;
+    }
+    if (!lo) return;
+    var n = (+hi.slice(0, 4) - +lo.slice(0, 4)) * 12 + (+hi.slice(5, 7) - +lo.slice(5, 7)) + 1;
+    WINDOW = { months: n, from: lo, to: hi, label: '최근 ' + n + '개월' };
+  }
 
   // 실거래(transactions.json) 데이터를 단지(apartments.json)에 enrich.
   // 단지가 apartments.json에 없으면 가벼운 placeholder를 생성해 finder에 노출시킨다.
   function enrichWithDeals() {
     if (!DEALS.length) return;
     var byName = {};
-    DATA.forEach(function (a) { byName[a.name] = a; });
+    DATA.forEach(function (a) { byName[aptKeyOf(a)] = a; });
     var newApts = {};
     DEALS.forEach(function (d) {
-      var apt = byName[d.apt];
+      var dk = aptKey(d.region_key || '', d.apt);
+      var apt = byName[dk];
       if (!apt) {
         // transactions에만 있는 단지 — 실거래 원장의 sido/region_key/region을 그대로 사용
-        if (!newApts[d.apt]) {
+        if (!newApts[dk]) {
           var rk = d.region_key || '';
           var rkParts = rk.split(' ');
           var sido = d.sido || rkParts[0] || '';
           var sigungu = rkParts.slice(1).join(' ');
-          newApts[d.apt] = {
+          newApts[dk] = {
             name: d.apt,
             region: d.region || rk,
             region_key: rk,
@@ -450,14 +543,19 @@
             _from_deals: true,
           };
         }
-        apt = newApts[d.apt];
+        apt = newApts[dk];
       }
-      // 단지명별 거래 집계
-      var key = d.apt;
-      if (!DEALS_BY_APT[key]) DEALS_BY_APT[key] = { latest: '', prices: [] };
-      var agg = DEALS_BY_APT[key];
+      // 단지별 거래 집계 (지역+단지명 복합키)
+      if (!DEALS_BY_APT[dk]) DEALS_BY_APT[dk] = { latest: '', prices: [], canceled: [] };
+      var agg = DEALS_BY_APT[dk];
+      // 해제(거래취소) 신고분은 체결되지 않은 거래다. 시세·점수 어디에도 넣지 않고
+      // 모달 내역에서만 '해제' 배지로 보여준다.
+      if (d.canceled) {
+        agg.canceled.push({ area_m2: d.area_m2, price: d.price, date: d.date, floor: d.floor });
+        return;
+      }
       if (d.date > agg.latest) agg.latest = d.date;
-      agg.prices.push({ area_m2: d.area_m2, price: d.price, date: d.date });
+      agg.prices.push({ area_m2: d.area_m2, price: d.price, date: d.date, floor: d.floor });
       // units 보강(없으면)
       if (!apt.units || !apt.units.length) {
         // 평형 밴드별로 가장 최신 거래만 채택
@@ -472,6 +570,9 @@
     // units finalize
     Object.keys(newApts).forEach(function (n) {
       var a = newApts[n];
+      // 원장에 있는 거래가 전부 해제 신고분이면(실측 15개 단지) 유효 가격이 하나도 없다.
+      // 그대로 두면 가격 없는 빈 카드가 추천 목록에 뜨므로 아예 싣지 않는다.
+      if (!(DEALS_BY_APT[n] && DEALS_BY_APT[n].prices.length)) return;
       if (a._unitMap) {
         a.units = Object.keys(a._unitMap).map(function (k) { return a._unitMap[k]; })
           .sort(function (x, y) { return x.area_m2 - y.area_m2; })
@@ -501,9 +602,10 @@
     });
     // 큐레이션 단지에도 recent_tx_count 보강
     DATA.forEach(function (a) {
-      if (a.recent_tx_count == null && DEALS_BY_APT[a.name]) {
+      var k = aptKeyOf(a);
+      if (a.recent_tx_count == null && DEALS_BY_APT[k]) {
         var cut = new Date(Date.now() - 180 * 86400000).toISOString().slice(0, 10);
-        a.recent_tx_count = DEALS_BY_APT[a.name].prices.filter(function (p) { return p.date >= cut; }).length;
+        a.recent_tx_count = DEALS_BY_APT[k].prices.filter(function (p) { return p.date >= cut; }).length;
       }
     });
   }
@@ -518,9 +620,16 @@
   }
 
   // 단지별 가장 최근 거래일 ("YYYY-MM-DD") — DEALS_BY_APT 기반
-  function latestDealOf(aptName) {
-    var x = DEALS_BY_APT[aptName];
+  function latestDealOf(a) {
+    var x = DEALS_BY_APT[aptKeyOf(a)];
     return x ? x.latest : '';
+  }
+  // 국토부 공개 자료에 동·호수는 없다(개인정보). 공개되는 세로 위치는 층뿐이라
+  // 단지 내 관측 최고층 대비 저/중/고를 붙여 같은 평형 안의 가격 차이를 읽게 한다.
+  function floorBand(floor, maxFloor) {
+    if (!floor || !maxFloor || maxFloor < 6) return '';
+    var r = floor / maxFloor;
+    return r <= 1 / 3 ? '저층' : r <= 2 / 3 ? '중층' : '고층';
   }
   function daysSince(s) {
     if (!s) return null; var d = new Date(s); if (isNaN(d)) return null;
@@ -551,7 +660,7 @@
     var house = a.households ? a.households.toLocaleString() + '세대' : '세대수 미상';
     if (a.builder && a.builder !== '기타') house += (a.households ? ' · ' : '') + esc(a.builder);
     // 가격 옆 최근 실거래 표시 (가격이 곧 최근 실거래가이므로, 거래 일자만 작게)
-    var latest = latestDealOf(a.name);
+    var latest = latestDealOf(a);
     var dealNote = latest ? esc(r.rep ? r.rep.label : '') + ' · ' + latest + ' (' + ago(daysSince(latest)) + ')'
                           : esc(r.rep ? r.rep.label : '') + ' 최근 실거래';
     return '' +
@@ -619,7 +728,7 @@
 
   // ── 단지 상세 팝업 (지도 + 실거래가 기본정보) ──────────────
   var aptModal = document.getElementById('aptModal');
-  var aptMap = null, aptMapInit = false, aptMarker = null;
+  var aptMap = null, aptMapInit = false;
 
   function findApt(name, regionKey) {
     for (var i = 0; i < DATA.length; i++) {
@@ -629,29 +738,67 @@
     return null;
   }
 
-  function ensureAptMap() {
-    if (aptMapInit) return;
-    if (typeof L === 'undefined') return;
-    aptMap = L.map('aptModalMap', { zoomControl: true, scrollWheelZoom: false });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18, attribution: '&copy; OpenStreetMap'
-    }).addTo(aptMap);
-    aptMapInit = true;
-  }
-
+  // 지도는 공용 어댑터(kmap.js)를 쓴다 — Kakao 지도 우선, JS 키 미주입이나 SDK 로딩 실패 시
+  // Leaflet(OSM)으로 자동 폴백. 전세가율·상가임대 지도와 같은 엔진을 쓰게 되어, 국내 주소·
+  // 지하철·건물 표기가 다른 화면과 일치한다(직접 Leaflet을 호출하던 이전 구현의 문제).
+  var aptMapPending = null;
   function renderAptMap(a) {
     var mapEl = document.getElementById('aptModalMap');
+    var noteEl = document.getElementById('aptMapNote');
     if (a.lat == null || a.lng == null) {
       mapEl.style.display = 'none';
+      noteEl.textContent = '';
       return;
     }
     mapEl.style.display = '';
-    ensureAptMap();
-    if (!aptMapInit) return;
-    aptMap.setView([a.lat, a.lng], 16);
-    if (aptMarker) aptMap.removeLayer(aptMarker);
-    aptMarker = L.marker([a.lat, a.lng]).addTo(aptMap);
-    setTimeout(function () { aptMap.invalidateSize(); aptMap.setView([a.lat, a.lng], 16); }, 60);
+    aptMapPending = a;
+
+    function place() {
+      if (!aptMap || aptMapPending !== a) return;
+      aptMap.clear();
+      aptMap.addCircle(a.lat, a.lng, {
+        fillColor: '#2563eb', radius: 11, title: a.name,
+        popupHtml: '<strong>' + esc(a.name) + '</strong><br>' + esc(a.region || ''),
+      });
+      // 모달은 열릴 때까지 display:none이라 컨테이너 크기가 0이다. 보이게 된 뒤 재배치해야
+      // 타일이 깨지지 않는다(relayout/invalidateSize).
+      setTimeout(function () {
+        if (!aptMap || aptMapPending !== a) return;
+        aptMap.relayout();
+        aptMap.setCenter(a.lat, a.lng, aptMap.engine === 'kakao' ? 3 : 16);
+      }, 80);
+    }
+
+    if (aptMapInit) { place(); return; }
+    if (!window.TopdaKMap) { mapEl.style.display = 'none'; return; }
+    aptMapInit = true;
+    window.TopdaKMap.init('aptModalMap', { center: [a.lat, a.lng], level: 3, zoom: 16 }, function (adapter) {
+      aptMap = adapter;
+      if (!aptMap) { mapEl.style.display = 'none'; return; }
+      if (aptMap.engine !== 'kakao') {
+        noteEl.textContent = 'Kakao 지도를 불러올 수 없어 OpenStreetMap으로 표시합니다.';
+      }
+      place();
+    });
+  }
+
+  // 거래 유무와 무관한 단지 팩트 (준공·세대수·역·학교·전세가율·주차)
+  function pushCommonFacts(facts, a, maxFloor, canceled) {
+    if (a.built_year) facts.push({ k: '준공', v: a.built_year + '년' });
+    if (a.households) facts.push({ k: '세대수', v: a.households.toLocaleString() + '세대' });
+    if (maxFloor) facts.push({ k: '거래 최고층', v: maxFloor + '층' });
+    if (a.subway && a.subway.station) {
+      facts.push({ k: '가까운 역', v: esc(a.subway.station) +
+        (a.subway.line ? ' <small>' + esc(a.subway.line) + '</small>' : '') + ' ' + a.subway.distance_m + 'm' });
+    }
+    if (a.elementary && a.elementary.name) {
+      facts.push({ k: '초등학교', v: esc(a.elementary.name) + ' ' + a.elementary.distance_m + 'm' });
+    }
+    if (a.jeonse_ratio != null) {
+      facts.push({ k: '전세가율', v: a.jeonse_ratio + '%' + (a._jr_region ? ' <small>지역 평균</small>' : '') });
+    }
+    if (a.parking_per_household != null) facts.push({ k: '세대당 주차', v: a.parking_per_household.toFixed(2) + '대' });
+    if (canceled && canceled.length) facts.push({ k: '해제 신고', v: canceled.length + '건 <small>집계 제외</small>' });
   }
 
   function openAptModal(name, regionKey) {
@@ -660,31 +807,106 @@
     document.getElementById('aptModalTitle').textContent = a.name;
     document.getElementById('aptModalSub').textContent = a.region || '';
 
-    var agg = DEALS_BY_APT[a.name] || { prices: [] };
+    var agg = DEALS_BY_APT[aptKeyOf(a)] || { prices: [], canceled: [] };
+    // 최신 → 과거. 해제분은 집계에서 이미 빠져 있고(enrichWithDeals), 내역에서만 합쳐 보여준다.
     var deals = agg.prices.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; });
-    var meta = [];
-    if (deals.length) {
-      var last = deals[0];
+    var canceled = (agg.canceled || []).slice();
+    var maxFloor = deals.concat(canceled).reduce(function (m, d) { return Math.max(m, d.floor || 0); }, 0);
+
+    // 헤더 pill
+    var pills = [];
+    if (a.built_year) pills.push(a.built_year + '년 준공 · ' + (new Date().getFullYear() - a.built_year) + '년차');
+    if (a.households) pills.push(a.households.toLocaleString() + '세대');
+    if (a.subway && a.subway.distance_m != null) pills.push('역 도보 ' + S.walkMin(a.subway.distance_m) + '분');
+    document.getElementById('aptModalPills').innerHTML =
+      pills.map(function (p) { return '<span class="apt-pill">' + esc(p) + '</span>'; }).join('');
+
+    // 대표가 헤드라인 + 가격 레인지
+    var headEl = document.getElementById('aptModalHeadline');
+    var last = deals[0] || null;
+    if (last) {
       var vals = deals.map(function (d) { return d.price; });
       var avg = Math.round(vals.reduce(function (s, v) { return s + v; }, 0) / vals.length);
-      meta.push({ lbl: '최근 거래', val: fmt(last.price) + ' · ' + last.date });
-      meta.push({ lbl: '거래 건수', val: deals.length.toLocaleString() + '건' });
-      meta.push({ lbl: '평균가', val: fmt(avg) });
-    }
-    if (a.built_year) meta.push({ lbl: '준공', val: a.built_year + '년' });
-    if (a.households) meta.push({ lbl: '세대수', val: a.households.toLocaleString() + '세대' });
-    if (a.subway && a.subway.station) meta.push({ lbl: '가까운 역', val: a.subway.station + ' ' + a.subway.distance_m + 'm' });
-    if (a.elementary && a.elementary.name) meta.push({ lbl: '초등학교', val: a.elementary.name + ' ' + a.elementary.distance_m + 'm' });
-    if (a.jeonse_ratio != null) meta.push({ lbl: '전세가율', val: a.jeonse_ratio + '%' });
-    if (a.parking_per_household != null) meta.push({ lbl: '세대당 주차', val: a.parking_per_household.toFixed(2) + '대' });
-    document.getElementById('aptModalMeta').innerHTML = meta.map(function (m) {
-      return '<div class="item"><div class="lbl">' + esc(m.lbl) + '</div><div class="val">' + esc(m.val) + '</div></div>';
-    }).join('');
+      var hi = Math.max.apply(null, vals), lo = Math.min.apply(null, vals);
+      var lastPy = Math.round(last.area_m2 / 3.3058);
+      // 변동률은 같은 평형 직전 거래 대비 (평형이 섞이면 의미 없는 숫자가 된다)
+      var delta = null;
+      for (var i = 1; i < deals.length; i++) {
+        if (Math.round(deals[i].area_m2 / 3.3058) === lastPy) {
+          delta = { pct: (last.price - deals[i].price) / deals[i].price * 100, prev: deals[i] };
+          break;
+        }
+      }
+      var deltaHtml = '';
+      if (delta) {
+        var cls = Math.abs(delta.pct) < 0.5 ? 'flat' : (delta.pct > 0 ? 'up' : 'down');
+        deltaHtml = '<span class="apt-delta ' + cls + '" title="같은 평형 직전 거래(' + delta.prev.date + ', ' +
+          fmt(delta.prev.price) + ') 대비">' + (delta.pct > 0 ? '+' : '') + delta.pct.toFixed(1) +
+          '% <small>직전 동일평형</small></span>';
+      }
+      var rangeHtml = '';
+      if (hi > lo) {
+        var pos = Math.round((last.price - lo) / (hi - lo) * 100);
+        rangeHtml = '<div class="apt-range"><div class="bar"><span class="pin" style="left:' + pos + '%"></span></div>' +
+          '<div class="ends"><span>최저 ' + fmt(lo) + '</span><span>최고 ' + fmt(hi) + '</span></div></div>';
+      }
+      headEl.innerHTML = '<div class="apt-headline"><div>' +
+          '<div class="k">최근 실거래 · 전용 ' + last.area_m2 + '㎡(' + lastPy + '평)' +
+            (last.floor ? ' ' + last.floor + '층' : '') + '</div>' +
+          '<div class="v">' + fmt(last.price) + '</div>' +
+          '<div class="when">' + last.date + ' (' + ago(daysSince(last.date)) + ')</div>' +
+        '</div>' + deltaHtml + '</div>' + rangeHtml;
 
-    document.getElementById('aptModalBody').innerHTML = deals.slice(0, 8).map(function (d) {
-      var py = Math.round(d.area_m2 / 3.3058);
-      return '<tr><td>' + d.date + '</td><td>' + d.area_m2 + '㎡(' + py + ')</td><td class="num">' + fmt(d.price) + '</td></tr>';
-    }).join('') || '<tr><td colspan="3" style="color:var(--text-muted);">실거래 내역이 없습니다.</td></tr>';
+      // 팩트 — 집계 구간을 함께 적는다. "32건"이 몇 개월치인지 없으면 못 읽는 숫자다.
+      var facts = [
+        { k: '거래 건수', v: deals.length.toLocaleString() + '건 <small>/ ' + WINDOW.label + '</small>' },
+        { k: '평균가', v: fmt(avg) },
+        { k: '최고 / 최저', v: fmt(hi) + ' / ' + fmt(lo) },
+        { k: '㎡당 평균', v: Math.round(deals.reduce(function (s, d) { return s + d.price / d.area_m2; }, 0) / deals.length).toLocaleString() + '만원' },
+      ];
+      pushCommonFacts(facts, a, maxFloor, canceled);
+      document.getElementById('aptModalFacts').innerHTML = facts.map(function (f) {
+        return '<div class="row"><span class="k">' + f.k + '</span><span class="v">' + f.v + '</span></div>';
+      }).join('');
+
+      // 실거래가 → 계산기 동선. transactions.html 모달과 같은 흐름을 맞춤 내집 찾기에도 둔다.
+      // price는 원 단위로 넘긴다(원장은 만원 단위).
+      document.getElementById('aptModalCalc').innerHTML =
+        '<a href="total-cost-dashboard.html?price=' + (last.price * 10000) + '&apt=' + encodeURIComponent(a.name) + '">' +
+        fmt(last.price) + '으로 총 매수비용 계산 →</a>' +
+        '<span class="note">취득세 · 등기 · 중개수수료 · 대출한도까지 한 번에</span>';
+    } else {
+      headEl.innerHTML = '';
+      var facts0 = [];
+      pushCommonFacts(facts0, a, maxFloor, canceled);
+      document.getElementById('aptModalFacts').innerHTML = facts0.map(function (f) {
+        return '<div class="row"><span class="k">' + f.k + '</span><span class="v">' + f.v + '</span></div>';
+      }).join('');
+      document.getElementById('aptModalCalc').innerHTML =
+        '<span class="note">최근 실거래가 없어 매수비용 계산으로 넘길 가격이 없습니다.</span>';
+    }
+
+    // 내역: 유효 거래 + 해제 거래를 날짜순으로 합쳐 보여준다(해제는 배지로 구분)
+    var rows = deals.map(function (d) { return { d: d, cancel: false }; })
+      .concat(canceled.map(function (d) { return { d: d, cancel: true }; }))
+      .sort(function (x, y) { return x.d.date < y.d.date ? 1 : -1; })
+      .slice(0, 12);
+    document.getElementById('aptModalBody').innerHTML = rows.map(function (r) {
+      var d = r.d, py = Math.round(d.area_m2 / 3.3058), fb = floorBand(d.floor, maxFloor);
+      return '<tr class="' + (r.cancel ? 'is-cancel' : '') + '">' +
+        '<td>' + d.date + (r.cancel ? '<span class="apt-badge cancel">해제</span>' : '') + '</td>' +
+        '<td>' + d.area_m2 + '㎡(' + py + ')</td>' +
+        '<td>' + (d.floor ? d.floor + '층' : '—') + (fb ? '<span class="apt-badge floor">' + fb + '</span>' : '') + '</td>' +
+        '<td class="num">' + fmt(d.price) + '</td>' +
+        '<td class="num">' + (d.area_m2 ? Math.round(d.price / d.area_m2).toLocaleString() : '—') + '</td></tr>';
+    }).join('') || '<tr><td colspan="5" style="color:var(--text-muted);text-align:left;">실거래 내역이 없습니다.</td></tr>';
+    document.getElementById('aptListHint').textContent = deals.length
+      ? WINDOW.label + ' 중 최신 ' + rows.length + '건' + (canceled.length ? ' · 해제 ' + canceled.length + '건 포함' : '')
+      : '';
+    document.getElementById('aptModalNote').innerHTML =
+      '국토교통부 실거래가 공개시스템은 <strong>동·호수를 제공하지 않습니다</strong>(개인정보). ' +
+      '공개 범위는 전용면적 · 층 · 법정동까지이며, 위 표의 층과 저/중/고 구분이 그 안에서 가장 상세한 정보입니다. ' +
+      '해제 신고분은 평균·최고·최저·건수와 추천 점수 계산에서 제외했습니다.';
 
     document.getElementById('aptModalMore').href = '../calculators/transactions.html?q=' + encodeURIComponent(a.name);
 
@@ -783,6 +1005,7 @@
   ]).then(function (results) {
     DATA = (results[0].apartments || []).slice();
     DEALS = results[1].deals || [];
+    computeWindow(DEALS);
     enrichWithDeals();
     // 실거래 원장에만 있는 단지(placeholder)의 세대수·준공연도·좌표·역·학교 — K-apt/Kakao 보강분 병합
     var HH = (results[2] && results[2].map) || {};
