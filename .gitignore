@@ -1,2 +1,9 @@
 __pycache__/
 *.pyc
+
+# 단지 페이지 HTML(site/apt/{지역}/{단지}/index.html)은 커밋하지 않는다.
+# 4,500개 이상이 매일 데이터 갱신과 함께 재생성돼, 커밋하면 git 이력이 하루 5MB씩
+# (연 1.8GB) 늘어난다. 대신 배포(deploy-pages.yml)가 매번 생성해 올린다 —
+# 생성에 11초밖에 안 걸리고, 슬러그는 data/slug-map.json으로 영속화돼 URL은 그대로다.
+# 지역 허브(site/apt/{지역}/index.html)와 한글 지역 페이지는 수가 적어 계속 커밋한다.
+site/apt/*/*/
