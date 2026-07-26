@@ -37,28 +37,109 @@
   table.tx tbody tr:hover { background: var(--accent-soft, #eff6ff); }
   @media (max-width:600px){ table.tx .hide-sm { display:none; } }
 
-  /* 단지 상세 모달 */
+  /* ── 단지 상세 모달 ───────────────────────────────────────────────
+     구조: 헤더(스티키) → 대표가 헤드라인 → 가격 레인지 → 단지 팩트 →
+           매수비용 CTA → 평형별 요약 → 추이 차트 → 거래 내역.
+     "카드 8개 나열"에서 정보 위계가 있는 레이아웃으로 재구성한 것. 큰 숫자는
+     대표가 하나만 두고 나머지는 보조 지표로 내려, 눈이 갈 곳을 하나로 만든다. */
   .tx-modal { position:fixed; inset:0; display:none; z-index:1000; }
   .tx-modal.open { display:block; }
-  .tx-modal-backdrop { position:absolute; inset:0; background:rgba(15,23,42,0.5); }
+  .tx-modal-backdrop { position:absolute; inset:0; background:rgba(15,23,42,0.55); }
   .tx-modal-panel {
     position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-    width:min(720px, calc(100vw - 32px)); max-height:90vh; overflow:auto;
-    background:#fff; border-radius:18px; padding:24px;
-    box-shadow: 0 20px 60px -16px rgba(15,23,42,0.4);
+    width:min(760px, calc(100vw - 24px)); max-height:92vh; overflow:auto;
+    background:var(--surface,#fff); border-radius:20px;
+    box-shadow: 0 24px 70px -18px rgba(15,23,42,0.45);
   }
-  .tx-modal-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:16px; }
-  .tx-modal-head h2 { margin:0; font-size:1.25rem; letter-spacing:-0.02em; }
-  .tx-modal-sub { margin:4px 0 0; color:var(--text-muted); font-size:0.88rem; }
-  .tx-modal-close { background:none; border:0; padding:4px; cursor:pointer; color:var(--text-muted); }
+  /* 헤더는 스크롤해도 단지명이 남도록 고정 */
+  .tx-modal-head {
+    position:sticky; top:0; z-index:3; background:var(--surface,#fff);
+    display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+    padding:20px 24px 14px; border-bottom:1px solid var(--border,#e5e7eb);
+  }
+  .tx-modal-head h2 { margin:0; font-size:1.3rem; letter-spacing:-0.03em; }
+  .tx-modal-sub { margin:5px 0 0; color:var(--text-muted); font-size:0.85rem; }
+  .tx-modal-close { background:none; border:0; padding:4px; cursor:pointer; color:var(--text-muted); flex-shrink:0; }
   .tx-modal-close:hover { color:var(--text); }
-  .tx-modal-meta { display:grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap:10px; margin-bottom:18px; }
-  .tx-modal-meta .item { background:var(--surface-2, #f8fafc); border-radius:10px; padding:10px 12px; }
-  .tx-modal-meta .lbl { font-size:0.74rem; color:var(--text-muted); }
-  .tx-modal-meta .val { font-size:1.05rem; font-weight:700; margin-top:2px; font-variant-numeric:tabular-nums; }
+  .tx-modal-body { padding:18px 24px 24px; }
+  .tx-pills { display:flex; flex-wrap:wrap; gap:6px; margin-top:9px; }
+  .tx-pill { font-size:0.73rem; font-weight:600; padding:3px 9px; border-radius:999px;
+    background:var(--surface-2,#f5f5f7); color:var(--text-muted); }
+
+  /* 대표가 헤드라인 */
+  .tx-headline {
+    display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    padding:16px 18px; border-radius:16px; border:1px solid var(--border,#e5e7eb);
+    background:var(--surface-2,#f5f5f7); margin-bottom:14px;
+  }
+  .tx-headline .k { font-size:0.74rem; color:var(--text-muted); font-weight:600; }
+  .tx-headline .v { font-size:2rem; font-weight:800; letter-spacing:-0.04em; line-height:1.1;
+    margin-top:3px; font-variant-numeric:tabular-nums; }
+  .tx-headline .when { font-size:0.8rem; color:var(--text-muted); margin-top:5px; }
+  .tx-delta { font-size:0.82rem; font-weight:700; padding:4px 9px; border-radius:8px; white-space:nowrap; }
+  .tx-delta.up { color:var(--danger,#b91c1c); background:var(--danger-soft,#fef2f2); }
+  .tx-delta.down { color:#1d4ed8; background:#eff6ff; }
+  .tx-delta.flat { color:var(--text-muted); background:var(--surface,#fff); }
+
+  /* 가격 레인지 바 — 최저~최고 구간에서 최근 거래가 어디쯤인지 */
+  .tx-range { margin-bottom:18px; }
+  .tx-range .bar { position:relative; height:6px; border-radius:999px;
+    background:linear-gradient(90deg,#dbeafe,#fee2e2); }
+  .tx-range .pin { position:absolute; top:-5px; width:3px; height:16px; border-radius:2px;
+    background:var(--text,#0f172a); transform:translateX(-1.5px); }
+  .tx-range .ends { display:flex; justify-content:space-between; font-size:0.72rem;
+    color:var(--text-muted); margin-top:6px; font-variant-numeric:tabular-nums; }
+
+  /* 단지 팩트 — 큰 카드 대신 조밀한 2단 정의 목록 */
+  .tx-facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:0 24px; margin-bottom:18px; }
+  .tx-facts .row { display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+    padding:9px 0; border-bottom:1px solid var(--border,#e5e7eb); font-size:0.86rem; }
+  .tx-facts .row .k { color:var(--text-muted); white-space:nowrap; }
+  .tx-facts .row .v { font-weight:700; text-align:right; font-variant-numeric:tabular-nums; }
+  .tx-facts .row .v small { font-weight:500; color:var(--text-muted); }
+
+  /* 섹션 제목 */
+  .tx-sec { margin-bottom:20px; }
+  .tx-sec > h3 { font-size:0.84rem; font-weight:700; margin:0 0 10px; display:flex;
+    align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .tx-sec > h3 .hint { font-weight:500; color:var(--text-muted); font-size:0.76rem; }
+
+  /* 매수비용 CTA */
+  .tx-cta { display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:14px 16px;
+    border-radius:14px; background:var(--surface-2,#f5f5f7); border:1px solid var(--border,#e5e7eb); margin-bottom:20px; }
+  .tx-cta a { display:inline-flex; align-items:center; gap:6px; padding:10px 16px; border-radius:10px;
+    font-weight:700; background:var(--accent,#2563eb); color:#fff; text-decoration:none; font-size:0.9rem; }
+  .tx-cta a:hover { filter:brightness(0.92); }
+  .tx-cta .note { font-size:0.78rem; color:var(--text-muted); }
+
+  /* 평형별 요약 */
+  table.tx-units { width:100%; border-collapse:collapse; font-size:0.85rem; }
+  table.tx-units th { font-size:0.73rem; color:var(--text-muted); font-weight:600; text-align:right;
+    padding:7px 8px; border-bottom:1px solid var(--border,#e5e7eb); white-space:nowrap; }
+  table.tx-units th:first-child { text-align:left; }
+  table.tx-units td { padding:9px 8px; border-bottom:1px solid var(--border,#e5e7eb); text-align:right;
+    font-variant-numeric:tabular-nums; white-space:nowrap; }
+  table.tx-units td:first-child { text-align:left; font-weight:700; }
+  table.tx-units .sw { display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:6px; vertical-align:middle; }
+  table.tx-units .sub { display:block; font-size:0.73rem; color:var(--text-muted); font-weight:500; }
+
   .tx-modal-chart { margin-bottom:18px; }
-  .tx-modal-chart h3, .tx-modal-list h3 { font-size:0.95rem; margin:0 0 10px; }
-  .tx-modal-chart canvas { width:100% !important; height:200px !important; }
+  .tx-modal-chart canvas { width:100% !important; height:210px !important; }
+
+  /* 해제(취소) 거래 표시 */
+  .tx-badge { display:inline-block; font-size:0.67rem; font-weight:700; padding:1px 6px;
+    border-radius:5px; margin-left:5px; vertical-align:middle; }
+  .tx-badge.cancel { background:var(--danger-soft,#fef2f2); color:var(--danger,#b91c1c); }
+  .tx-badge.floor { background:var(--surface-2,#f5f5f7); color:var(--text-muted); }
+  table.tx tr.is-cancel td { color:var(--text-subtle,#9ca3af); }
+  table.tx tr.is-cancel td.num { text-decoration:line-through; }
+
+  .tx-note { font-size:0.76rem; color:var(--text-muted); line-height:1.65; margin:10px 0 0; }
+  @media (max-width:600px) {
+    .tx-modal-head { padding:16px 16px 12px; }
+    .tx-modal-body { padding:16px 16px 20px; }
+    .tx-headline .v { font-size:1.7rem; }
+  }
 
   /* 뷰 토글 (리스트/지도) */
   .tx-view-toggle { display: inline-flex; gap: 0; border: 1px solid var(--border,#e5e7eb); border-radius: 10px; overflow: hidden; margin-bottom: 14px; }
@@ -207,27 +288,39 @@
       <div>
         <h2 id="txModalTitle">—</h2>
         <p id="txModalSub" class="tx-modal-sub">—</p>
+        <div class="tx-pills" id="txModalPills"></div>
       </div>
       <button class="tx-modal-close" data-tx-close aria-label="닫기">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
     <div class="tx-modal-body">
-      <div class="tx-modal-meta" id="txModalMeta"></div>
-      <p class="tx-modal-calc" id="txModalCalc" style="margin:10px 0 0;"></p>
-      <div class="tx-modal-chart">
-        <h3>최근 실거래가 추이</h3>
+      <div id="txModalHeadline"></div>
+      <div class="tx-facts" id="txModalFacts"></div>
+      <div class="tx-cta" id="txModalCalc"></div>
+      <div class="tx-sec" id="txUnitsSec">
+        <h3>평형별 요약 <span class="hint" id="txUnitsHint"></span></h3>
+        <div class="tx-wrap">
+          <table class="tx-units">
+            <thead><tr><th>전용면적</th><th>거래</th><th>최근가</th><th>최저~최고</th><th>㎡당(만원)</th></tr></thead>
+            <tbody id="txUnitsBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tx-sec tx-modal-chart">
+        <h3>실거래가 추이 <span class="hint" id="txChartHint"></span></h3>
         <div class="tx-area-chips" id="txAreaChips" role="tablist" aria-label="평형 선택"></div>
         <canvas id="txModalChart"></canvas>
       </div>
-      <div class="tx-modal-list">
-        <h3>거래 내역</h3>
+      <div class="tx-sec tx-modal-list">
+        <h3>거래 내역 <span class="hint" id="txListHint"></span></h3>
         <div class="tx-wrap" style="max-height: 320px;">
           <table class="tx">
-            <thead><tr><th>거래일</th><th>전용(평)</th><th class="num">금액</th><th class="hide-sm">층</th></tr></thead>
+            <thead><tr><th>거래일</th><th>전용(평)</th><th class="num">금액</th><th>층</th><th class="hide-sm num">㎡당(만원)</th></tr></thead>
             <tbody id="txModalBody"></tbody>
           </table>
         </div>
+        <p class="tx-note" id="txModalNote"></p>
       </div>
     </div>
   </div>
@@ -286,6 +379,38 @@
     if (days < 30) return Math.floor(days / 7) + '주 전';
     if (days < 365) return Math.floor(days / 30) + '개월 전';
     return Math.floor(days / 365) + '년 전';
+  }
+
+  // 원장이 실제로 담고 있는 기간. "거래 건수 27건"이 몇 개월치인지 밝히는 데 쓴다.
+  // 선언된 수집 창(_meta.window_months)이 아니라 실제 최소~최대 거래월을 쓴다 — 12개월
+  // 수집기가 며칠에 걸쳐 채워지는 동안 없는 기간을 있다고 말하지 않기 위해서.
+  var WINDOW = { months: 0, from: '', to: '', label: '최근' };
+  function computeWindow(deals) {
+    var lo = '', hi = '';
+    for (var i = 0; i < deals.length; i++) {
+      var mo = (deals[i].date || '').slice(0, 7);
+      if (!mo) continue;
+      if (!lo || mo < lo) lo = mo;
+      if (!hi || mo > hi) hi = mo;
+    }
+    if (!lo) return;
+    var n = (+hi.slice(0, 4) - +lo.slice(0, 4)) * 12 + (+hi.slice(5, 7) - +lo.slice(5, 7)) + 1;
+    WINDOW = { months: n, from: lo, to: hi, label: '최근 ' + n + '개월' };
+  }
+
+  // 국토부 공개 자료에는 동·호수가 없다(개인정보). 공개되는 세로 위치 정보는 층뿐이라,
+  // 단지 내 관측된 최고층 대비 저/중/고를 붙여 같은 평형 안의 가격 차이를 읽을 수 있게 한다.
+  function floorBand(floor, maxFloor) {
+    if (!floor || !maxFloor || maxFloor < 6) return '';
+    var r = floor / maxFloor;
+    return r <= 1 / 3 ? '저층' : r <= 2 / 3 ? '중층' : '고층';
+  }
+
+  // Chart.js 눈금값은 5.450000000000001 같은 부동소수 오차를 그대로 담고 있어
+  // 그냥 문자열로 이어붙이면 축에 노출된다(실제 발생 버그). 반올림 후 표기한다.
+  function axisWon(v) {
+    var r = Math.round(v * 10) / 10;
+    return (Number.isInteger(r) ? r : r.toFixed(1)) + '억';
   }
 
   function sidoOf(d) { return R.normSido(d.sido || (d.region_key || '').split(' ')[0] || (d.region || '').split(' ')[0]); }
@@ -363,8 +488,9 @@
     body.innerHTML = top.map(function (d) {
       var when = ago(daysSince(d.date));
       var aptName = escapeHtml(d.apt);
-      return '<tr data-apt="' + aptName + '" data-region="' + escapeHtml(d.region_key || '') + '">' +
-        '<td>' + d.date + ' <span style="color:var(--text-muted); font-size:0.78rem;">(' + when + ')</span></td>' +
+      return '<tr class="' + (d.canceled ? 'is-cancel' : '') + '" data-apt="' + aptName + '" data-region="' + escapeHtml(d.region_key || '') + '">' +
+        '<td>' + d.date + ' <span style="color:var(--text-muted); font-size:0.78rem;">(' + when + ')</span>' +
+          (d.canceled ? '<span class="tx-badge cancel">해제</span>' : '') + '</td>' +
         '<td><span class="tx-link">' + aptName + '</span></td>' +
         '<td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
         '<td class="num">' + won(d.price) + '</td>' +
@@ -376,34 +502,86 @@
 
   // ── 단지 상세 모달 ─────────────────────────────────────
   function openModal(aptName, regionKey) {
-    var deals = DATA.filter(function (d) { return d.apt === aptName && (!regionKey || (d.region_key || '') === regionKey); })
+    var all = DATA.filter(function (d) { return d.apt === aptName && (!regionKey || (d.region_key || '') === regionKey); })
       .sort(function (a, b) { return a.date < b.date ? -1 : 1; });
-    if (!deals.length) return;
-    var first = deals[0], last = deals[deals.length - 1];
+    if (!all.length) return;
+    // 해제(거래취소) 신고분은 체결되지 않은 거래다. 평균·최고·최저·건수 어디에도 넣으면 안 된다.
+    // 다만 내역 표에서는 지우지 않고 '해제' 배지로 남긴다 — 왜 집계에서 빠졌는지 보여야 하기 때문.
+    var canceled = all.filter(function (d) { return d.canceled; });
+    var deals = all.filter(function (d) { return !d.canceled; });
+    var hasValid = deals.length > 0;
+    var base = hasValid ? deals : all;
+    var first = base[0], last = base[base.length - 1];
     // 좌표·역·학교 등은 같은 지역의 동명 단지만 매칭(복합키). 못 찾으면 비워둔다(잘못된 역 표시 방지).
     var apt = APARTMENTS[aptKey(regionKey || last.region_key, aptName)] || {};
     document.getElementById('txModalTitle').textContent = aptName;
     document.getElementById('txModalSub').textContent = (last.region || first.region || apt.region || '');
 
-    // 메타 정보
-    var prices = deals.map(function (d) { return d.price; });
+    var prices = base.map(function (d) { return d.price; });
     var avg = Math.round(prices.reduce(function (a, b) { return a + b; }, 0) / prices.length);
     var hi = Math.max.apply(null, prices);
     var lo = Math.min.apply(null, prices);
     var built = last.build_year || apt.built_year;
-    var meta = [
-      { lbl: '최근 거래', val: won(last.price) + ' · ' + last.date + ' (' + ago(daysSince(last.date)) + ')' },
-      { lbl: '거래 건수', val: deals.length.toLocaleString() + '건' },
-      { lbl: '평균가', val: won(avg) },
-      { lbl: '최고가', val: won(hi) },
-      { lbl: '최저가', val: won(lo) },
+    var maxFloor = base.reduce(function (m, d) { return Math.max(m, d.floor || 0); }, 0);
+
+    // 헤더 pill — 단지 정체성(준공·세대수·평형 수)을 이름 바로 밑에서 한눈에
+    var pills = [];
+    if (built) pills.push(built + '년 준공 · ' + (new Date().getFullYear() - built) + '년차');
+    if (apt.households) pills.push(apt.households.toLocaleString() + '세대');
+    var pyeongSet = {};
+    base.forEach(function (d) { pyeongSet[d.pyeong] = true; });
+    pills.push(Object.keys(pyeongSet).length + '개 평형 거래');
+    document.getElementById('txModalPills').innerHTML =
+      pills.map(function (p) { return '<span class="tx-pill">' + escapeHtml(p) + '</span>'; }).join('');
+
+    // 대표가 헤드라인 — 큰 숫자는 '최근 실거래' 하나만. 변동률은 같은 평형 직전 거래 대비.
+    var delta = null;
+    for (var di = base.length - 2; di >= 0; di--) {
+      if (base[di].pyeong === last.pyeong) {
+        delta = { pct: (last.price - base[di].price) / base[di].price * 100, prev: base[di] };
+        break;
+      }
+    }
+    var deltaHtml = '';
+    if (delta) {
+      var cls = Math.abs(delta.pct) < 0.5 ? 'flat' : (delta.pct > 0 ? 'up' : 'down');
+      var sign = delta.pct > 0 ? '+' : '';
+      deltaHtml = '<span class="tx-delta ' + cls + '" title="같은 평형 직전 거래(' + delta.prev.date + ', ' +
+        won(delta.prev.price) + ') 대비">' + sign + delta.pct.toFixed(1) + '% <small>직전 동일평형</small></span>';
+    }
+    var rangeHtml = '';
+    if (hi > lo) {
+      var pos = Math.round((last.price - lo) / (hi - lo) * 100);
+      rangeHtml = '<div class="tx-range"><div class="bar"><span class="pin" style="left:' + pos + '%"></span></div>' +
+        '<div class="ends"><span>최저 ' + won(lo) + '</span><span>최고 ' + won(hi) + '</span></div></div>';
+    }
+    document.getElementById('txModalHeadline').innerHTML =
+      '<div class="tx-headline"><div>' +
+        '<div class="k">최근 실거래 · 전용 ' + last.area_m2 + '㎡(' + last.pyeong + '평) ' + last.floor + '층</div>' +
+        '<div class="v">' + won(last.price) + '</div>' +
+        '<div class="when">' + last.date + ' (' + ago(daysSince(last.date)) + ')</div>' +
+      '</div>' + deltaHtml + '</div>' + rangeHtml;
+
+    // 단지 팩트 — 집계 구간을 반드시 함께 적는다. "27건"이 몇 개월치인지 모르면 읽을 수 없는 숫자다.
+    var facts = [
+      { k: '거래 건수', v: base.length.toLocaleString() + '건 <small>/ ' + WINDOW.label + '</small>' },
+      { k: '평균가', v: won(avg) },
+      { k: '최고 / 최저', v: won(hi) + ' / ' + won(lo) },
+      { k: '㎡당 평균', v: Math.round(base.reduce(function (s, d) { return s + d.price / d.area_m2; }, 0) / base.length).toLocaleString() + '만원' },
     ];
-    if (built) meta.push({ lbl: '준공', val: built + '년' });
-    if (apt.households) meta.push({ lbl: '세대수', val: apt.households.toLocaleString() + '세대' });
-    if (apt.subway && apt.subway.station) meta.push({ lbl: '가까운 역', val: apt.subway.station + ' ' + apt.subway.distance_m + 'm' });
-    if (apt.elementary && apt.elementary.name) meta.push({ lbl: '초등학교', val: apt.elementary.name + ' ' + apt.elementary.distance_m + 'm' });
-    document.getElementById('txModalMeta').innerHTML = meta.map(function (m) {
-      return '<div class="item"><div class="lbl">' + escapeHtml(m.lbl) + '</div><div class="val">' + escapeHtml(m.val) + '</div></div>';
+    if (built) facts.push({ k: '준공', v: built + '년' });
+    if (apt.households) facts.push({ k: '세대수', v: apt.households.toLocaleString() + '세대' });
+    if (maxFloor) facts.push({ k: '거래 최고층', v: maxFloor + '층' });
+    if (apt.subway && apt.subway.station) {
+      facts.push({ k: '가까운 역', v: escapeHtml(apt.subway.station) +
+        (apt.subway.line ? ' <small>' + escapeHtml(apt.subway.line) + '</small>' : '') + ' ' + apt.subway.distance_m + 'm' });
+    }
+    if (apt.elementary && apt.elementary.name) {
+      facts.push({ k: '초등학교', v: escapeHtml(apt.elementary.name) + ' ' + apt.elementary.distance_m + 'm' });
+    }
+    if (canceled.length) facts.push({ k: '해제 신고', v: canceled.length + '건 <small>집계 제외</small>' });
+    document.getElementById('txModalFacts').innerHTML = facts.map(function (f) {
+      return '<div class="row"><span class="k">' + f.k + '</span><span class="v">' + f.v + '</span></div>';
     }).join('');
 
     // 실거래 데이터 → 계산기 동선: 최근 실거래가를 매매가로 넘겨 취득세·등기비용·중개수수료까지
@@ -411,10 +589,8 @@
     var calcUrl = 'total-cost-dashboard.html?price=' + (last.price * 10000) +
       '&apt=' + encodeURIComponent(aptName);
     document.getElementById('txModalCalc').innerHTML =
-      '<a href="' + calcUrl + '" style="display:inline-block;padding:8px 14px;border-radius:8px;font-weight:600;' +
-      'background:var(--accent,#2563eb);color:#fff;text-decoration:none;font-size:0.9rem;">' +
-      '최근 실거래 ' + won(last.price) + '으로 총 매수비용 계산 →</a> ' +
-      '<span style="color:var(--text-muted);font-size:0.8rem;">취득세 · 등기 · 중개수수료 · 대출한도까지 한 번에</span>';
+      '<a href="' + calcUrl + '">' + won(last.price) + '으로 총 매수비용 계산 →</a>' +
+      '<span class="note">취득세 · 등기 · 중개수수료 · 대출한도까지 한 번에</span>';
 
     // 추이 차트 — 평형(전용면적)별로 나눠 본다. 59㎡와 114㎡를 한 평균선에 섞으면 오해되므로
     // 평형 밴드별 월평균 라인을 따로 그리고, 칩으로 특정 평형만 보거나 전체를 비교한다.
@@ -446,12 +622,12 @@
       }
       return out;
     }
-    var fullMonths = fillMonths(Object.keys(monthlyOf(deals)).sort());
+    var fullMonths = fillMonths(Object.keys(monthlyOf(base)).sort());
 
     // 평형 밴드 그룹화 (평 기준) → 거래 많은 순 상위 7개
     var PAL = ['#2563eb', '#dc2626', '#059669', '#d97706', '#7c3aed', '#0891b2', '#db2777'];
     var bandMap = {};
-    deals.forEach(function (d) {
+    base.forEach(function (d) {
       var key = d.pyeong;
       if (!bandMap[key]) bandMap[key] = { key: key, deals: [], areas: [] };
       bandMap[key].deals.push(d); bandMap[key].areas.push(d.area_m2);
@@ -488,7 +664,9 @@
         options: {
           responsive: true, maintainAspectRatio: false,
           plugins: {
-            legend: { display: datasets.length > 1, position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } },
+            // 범례는 켜지 않는다 — 위 평형 칩이 같은 색·같은 라벨·건수까지 이미 보여주고 있어
+            // 범례를 함께 띄우면 같은 정보가 두 번 나온다.
+            legend: { display: false },
             tooltip: { callbacks: { label: function (c) {
               var b = c.dataset._band, m = b.monthly[c.label];
               if (!m) return b.label + ' 거래 없음';
@@ -496,19 +674,48 @@
                 (m.lo !== m.hi ? ' (' + won(m.lo) + '~' + won(m.hi) + ')' : '');
             } } },
           },
-          scales: { x: { grid: { display: false } }, y: { ticks: { callback: function (v) { return v + '억'; } } } },
+          scales: {
+            x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkipPadding: 12 } },
+            // Chart.js가 만드는 눈금값에는 5.450000000000001 같은 부동소수 오차가 그대로 담긴다.
+            // 문자열로 이어붙이면 축에 그 숫자가 노출되므로 반드시 반올림해서 찍는다.
+            y: { ticks: { callback: axisWon } },
+          },
         },
       });
     }
     function renderList() {
-      var ds = (selectedBand === 'all') ? deals : deals.filter(function (d) { return String(d.pyeong) === String(selectedBand); });
+      // 목록에는 해제 거래까지 모두 싣는다(배지로 구분). 선택된 평형 필터만 적용.
+      var ds = (selectedBand === 'all') ? all : all.filter(function (d) { return String(d.pyeong) === String(selectedBand); });
       document.getElementById('txModalBody').innerHTML = ds.slice().reverse().map(function (d) {
-        return '<tr><td>' + d.date + '</td><td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
-          '<td class="num">' + won(d.price) + '</td><td class="hide-sm">' + d.floor + '층</td></tr>';
+        var fb = floorBand(d.floor, maxFloor);
+        return '<tr class="' + (d.canceled ? 'is-cancel' : '') + '">' +
+          '<td>' + d.date + (d.canceled ? '<span class="tx-badge cancel">해제</span>' : '') + '</td>' +
+          '<td>' + d.area_m2 + '㎡(' + d.pyeong + ')</td>' +
+          '<td class="num">' + won(d.price) + '</td>' +
+          '<td>' + (d.floor || '—') + '층' + (fb ? '<span class="tx-badge floor">' + fb + '</span>' : '') + '</td>' +
+          '<td class="hide-sm num">' + (d.area_m2 ? Math.round(d.price / d.area_m2).toLocaleString() : '—') + '</td></tr>';
       }).join('');
+      document.getElementById('txListHint').textContent =
+        ds.length.toLocaleString() + '건' + (canceled.length ? ' · 해제 ' + canceled.length + '건 포함' : '');
+    }
+    // 평형별 요약 — 같은 단지 안에서 평형별 가격대와 거래 두께를 한 표로 비교한다.
+    function renderUnits() {
+      document.getElementById('txUnitsBody').innerHTML = bands.map(function (b) {
+        var ps = b.deals.map(function (d) { return d.price; });
+        var bl = Math.min.apply(null, ps), bh = Math.max.apply(null, ps);
+        var lastD = b.deals[b.deals.length - 1];
+        var unit = Math.round(b.deals.reduce(function (s, d) { return s + d.price / d.area_m2; }, 0) / b.deals.length);
+        return '<tr><td><span class="sw" style="background:' + b.color + '"></span>' + escapeHtml(b.label) + '</td>' +
+          '<td>' + b.count + '건</td>' +
+          '<td>' + won(lastD.price) + '<span class="sub">' + lastD.date + '</span></td>' +
+          '<td>' + (bl === bh ? won(bl) : won(bl) + '~' + won(bh)) + '</td>' +
+          '<td>' + unit.toLocaleString() + '만원</td></tr>';
+      }).join('');
+      document.getElementById('txUnitsHint').textContent = WINDOW.label + ' (' + WINDOW.from + ' ~ ' + WINDOW.to + ') 집계';
+      document.getElementById('txUnitsSec').style.display = bands.length ? '' : 'none';
     }
     function renderChips() {
-      var html = '<button data-band="all" class="' + (selectedBand === 'all' ? 'active' : '') + '">전체 <span class="n">' + deals.length + '</span></button>';
+      var html = '<button data-band="all" class="' + (selectedBand === 'all' ? 'active' : '') + '">전체 <span class="n">' + base.length + '</span></button>';
       html += bands.map(function (b) {
         return '<button data-band="' + b.key + '" class="' + (String(selectedBand) === String(b.key) ? 'active' : '') + '">' +
           '<span class="swatch" style="background:' + b.color + '"></span>' + escapeHtml(b.label) + ' <span class="n">' + b.count + '</span></button>';
@@ -522,7 +729,13 @@
       selectedBand = btn.dataset.band;
       renderChips(); renderChart(); renderList();
     };
-    renderChips(); renderChart(); renderList();
+    document.getElementById('txChartHint').textContent = '월평균 · 평형별' + (canceled.length ? ' · 해제 거래 제외' : '');
+    // 국토부 공개 자료의 한계를 화면에서 명시한다. 물어보기 전에 답이 있어야 한다.
+    document.getElementById('txModalNote').innerHTML =
+      '국토교통부 실거래가 공개시스템은 <strong>동·호수를 제공하지 않습니다</strong>(개인정보). ' +
+      '공개되는 위치 정보는 전용면적 · 층 · 법정동까지이며, 위 표의 층과 저/중/고 구분이 그 범위에서 가장 상세한 정보입니다. ' +
+      '해제 신고분은 평균·최고·최저·건수 집계에서 제외했습니다.';
+    renderChips(); renderChart(); renderList(); renderUnits();
 
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
@@ -561,6 +774,7 @@
   function aggregateByApt() {
     var byApt = {};
     filtered().forEach(function (d) {
+      if (d.canceled) return;   // 해제 신고분은 거래 활성도(마커 크기·색)에 넣지 않는다
       var k = aptKey(d.region_key, d.apt);
       if (!byApt[k]) byApt[k] = { count: 0, latest: '', price: 0, name: d.apt, region_key: d.region_key || '' };
       byApt[k].count += 1;
@@ -746,6 +960,7 @@
   ]).then(function (results) {
     DATA = results[0].deals || [];
     (results[1].apartments || []).forEach(function (a) { APARTMENTS[aptKey(a.region_key || a.region, a.name)] = a; });
+    computeWindow(DATA);
     var latest = '';
     for (var i = 0; i < DATA.length; i++) if (DATA[i].date > latest) latest = DATA[i].date;
     if (asofEl) {
