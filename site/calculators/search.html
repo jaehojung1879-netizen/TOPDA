@@ -515,7 +515,47 @@
     WINDOW = { months: n, from: lo, to: hi, label: '최근 ' + n + '개월' };
   }
 
+  // 사전집계본(finder_index.json)으로 단지를 enrich. 브라우저에서 30만 건을 다시
+  // 집계하던 일을 빌드 시점으로 옮긴 것이라, 여기서는 완성된 값을 옮겨 담기만 한다.
+  // 집계값(c/av/hi/lo/ua)은 최근 12건이 아니라 **전 기간 유효 거래** 기준이므로,
+  // 모달이 표시용 거래 목록으로 평균을 다시 내지 않도록 agg에 따로 실어 보낸다.
+  function toDeal(a) { return { date: a[0], area_m2: a[1], price: a[2], floor: a[3] }; }
+  function enrichFromIndex(list) {
+    var byKey = {};
+    DATA.forEach(function (a) { byKey[aptKeyOf(a)] = a; });
+    for (var i = 0; i < list.length; i++) {
+      var c = list[i];
+      var key = aptKey(c.rk, c.n);
+      var apt = byKey[key];
+      if (!apt) {
+        var parts = (c.rk || '').split(' ');
+        apt = {
+          name: c.n, region: c.r || c.rk, region_key: c.rk,
+          sido: parts[0] || '', sigungu: parts.slice(1).join(' '),
+          built_year: c.by || null, units: [], price_history: [], _from_deals: true,
+        };
+        DATA.push(apt);
+      }
+      if (!apt.units || !apt.units.length) {
+        apt.units = (c.u || []).map(function (u) {
+          return { label: u[0] + '㎡(' + Math.round(u[0] / 3.3058) + '평)', area_m2: u[0], recent_price: u[1] };
+        });
+      }
+      if (!apt.price_history || !apt.price_history.length) apt.price_history = c.ph || [];
+      if (apt.recent_tx_count == null) apt.recent_tx_count = c.r6;
+      if (!apt.built_year && c.by) apt.built_year = c.by;
+      DEALS_BY_APT[key] = {
+        latest: c.lt,
+        prices: (c.d || []).map(toDeal),
+        canceled: (c.x || []).map(toDeal),
+        agg: { c: c.c, av: c.av, hi: c.hi, lo: c.lo, ua: c.ua, mf: c.mf || 0, xc: c.xc || 0,
+               pv: c.pv || null },
+      };
+    }
+  }
+
   // 실거래(transactions.json) 데이터를 단지(apartments.json)에 enrich.
+  // 인덱스가 없을 때만 쓰는 폴백 경로다(과도기 안전장치).
   // 단지가 apartments.json에 없으면 가벼운 placeholder를 생성해 finder에 노출시킨다.
   function enrichWithDeals() {
     if (!DEALS.length) return;
@@ -783,7 +823,7 @@
   }
 
   // 거래 유무와 무관한 단지 팩트 (준공·세대수·역·학교·전세가율·주차)
-  function pushCommonFacts(facts, a, maxFloor, canceled) {
+  function pushCommonFacts(facts, a, maxFloor, canceled, canceledTotal) {
     if (a.built_year) facts.push({ k: '준공', v: a.built_year + '년' });
     if (a.households) facts.push({ k: '세대수', v: a.households.toLocaleString() + '세대' });
     if (maxFloor) facts.push({ k: '거래 최고층', v: maxFloor + '층' });
@@ -798,7 +838,9 @@
       facts.push({ k: '전세가율', v: a.jeonse_ratio + '%' + (a._jr_region ? ' <small>지역 평균</small>' : '') });
     }
     if (a.parking_per_household != null) facts.push({ k: '세대당 주차', v: a.parking_per_household.toFixed(2) + '대' });
-    if (canceled && canceled.length) facts.push({ k: '해제 신고', v: canceled.length + '건 <small>집계 제외</small>' });
+    // 총 해제 건수(xc)는 표시 상한과 무관한 실제 값이다. 없으면 목록 길이로 대체.
+    var xn = (canceledTotal != null) ? canceledTotal : (canceled ? canceled.length : 0);
+    if (xn) facts.push({ k: '해제 신고', v: xn + '건 <small>집계 제외</small>' });
   }
 
   function openAptModal(name, regionKey) {
@@ -825,16 +867,30 @@
     var headEl = document.getElementById('aptModalHeadline');
     var last = deals[0] || null;
     if (last) {
+      // 집계값은 전 기간 유효 거래 기준(A). 표에 보이는 최신 12건으로 평균을 내면
+      // 전혀 다른 숫자가 되므로, 사전집계본이 있으면 반드시 그쪽을 쓴다.
+      var A = agg.agg || null;
       var vals = deals.map(function (d) { return d.price; });
-      var avg = Math.round(vals.reduce(function (s, v) { return s + v; }, 0) / vals.length);
-      var hi = Math.max.apply(null, vals), lo = Math.min.apply(null, vals);
+      var count = A ? A.c : deals.length;
+      var avg = A ? A.av : Math.round(vals.reduce(function (s, v) { return s + v; }, 0) / vals.length);
+      var hi = A ? A.hi : Math.max.apply(null, vals);
+      var lo = A ? A.lo : Math.min.apply(null, vals);
+      var unitAvg = A ? A.ua
+        : Math.round(deals.reduce(function (s, d) { return s + d.price / d.area_m2; }, 0) / deals.length);
+      if (A && A.mf) maxFloor = A.mf;
       var lastPy = Math.round(last.area_m2 / 3.3058);
-      // 변동률은 같은 평형 직전 거래 대비 (평형이 섞이면 의미 없는 숫자가 된다)
+      // 변동률은 같은 평형 직전 거래 대비 (평형이 섞이면 의미 없는 숫자가 된다).
+      // 사전집계본은 전 기간에서 찾은 직전 거래(pv)를 실어 준다 — 표에 보이는 최근
+      // 12건만 뒤지면 거래가 많은 단지에서 직전 거래를 놓쳐 변동률이 사라진다.
       var delta = null;
-      for (var i = 1; i < deals.length; i++) {
-        if (Math.round(deals[i].area_m2 / 3.3058) === lastPy) {
-          delta = { pct: (last.price - deals[i].price) / deals[i].price * 100, prev: deals[i] };
-          break;
+      if (A && A.pv) {
+        delta = { pct: (last.price - A.pv[1]) / A.pv[1] * 100, prev: { date: A.pv[0], price: A.pv[1] } };
+      } else {
+        for (var i = 1; i < deals.length; i++) {
+          if (Math.round(deals[i].area_m2 / 3.3058) === lastPy) {
+            delta = { pct: (last.price - deals[i].price) / deals[i].price * 100, prev: deals[i] };
+            break;
+          }
         }
       }
       var deltaHtml = '';
@@ -859,12 +915,12 @@
 
       // 팩트 — 집계 구간을 함께 적는다. "32건"이 몇 개월치인지 없으면 못 읽는 숫자다.
       var facts = [
-        { k: '거래 건수', v: deals.length.toLocaleString() + '건 <small>/ ' + WINDOW.label + '</small>' },
+        { k: '거래 건수', v: count.toLocaleString() + '건 <small>/ ' + WINDOW.label + '</small>' },
         { k: '평균가', v: fmt(avg) },
         { k: '최고 / 최저', v: fmt(hi) + ' / ' + fmt(lo) },
-        { k: '㎡당 평균', v: Math.round(deals.reduce(function (s, d) { return s + d.price / d.area_m2; }, 0) / deals.length).toLocaleString() + '만원' },
+        { k: '㎡당 평균', v: unitAvg.toLocaleString() + '만원' },
       ];
-      pushCommonFacts(facts, a, maxFloor, canceled);
+      pushCommonFacts(facts, a, maxFloor, canceled, agg.agg ? agg.agg.xc : null);
       document.getElementById('aptModalFacts').innerHTML = facts.map(function (f) {
         return '<div class="row"><span class="k">' + f.k + '</span><span class="v">' + f.v + '</span></div>';
       }).join('');
@@ -878,7 +934,7 @@
     } else {
       headEl.innerHTML = '';
       var facts0 = [];
-      pushCommonFacts(facts0, a, maxFloor, canceled);
+      pushCommonFacts(facts0, a, maxFloor, canceled, agg.agg ? agg.agg.xc : null);
       document.getElementById('aptModalFacts').innerHTML = facts0.map(function (f) {
         return '<div class="row"><span class="k">' + f.k + '</span><span class="v">' + f.v + '</span></div>';
       }).join('');
@@ -988,25 +1044,45 @@
   searchInp.addEventListener('input', render);
   sortSel.addEventListener('change', render);
 
-  // 데이터 로드: apartments + transactions(있으면) 병합 + 세대수 보강(households.json)
+  // 데이터 로드.
+  //
+  // 캐시: 예전에는 '?t=' + Date.now() 로 URL을 매번 바꾸고 cache:'no-store'까지 걸어,
+  // 방문할 때마다 전 파일을 새로 받았다. 원장이 12개월로 커지며 한 번 열 때 60MB를
+  // 내려받는 상태가 됐다("로딩이 너무 오래 걸린다"의 직접 원인). 두 장치를 모두 걷어내고
+  // 브라우저 캐시 + ETag 재검증에 맡긴다 — 내용이 그대로면 304로 끝나므로 갱신은 그대로
+  // 반영되면서 재방문 비용이 사라진다.
+  //
+  // 원장: 파인더는 거래 한 건씩이 아니라 단지별 집계만 쓴다. 그래서 전용 사전집계본
+  // (finder_index.json, 원장의 13%)을 읽는다. 없으면 원장으로 폴백해 동작은 유지한다.
+  function getJson(path, fallback) {
+    return fetch('../assets/' + path)
+      .then(function (r) { if (!r.ok) throw new Error(path); return r.json(); })
+      .catch(function () { return fallback; });
+  }
   Promise.all([
-    fetch('../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('apt'); return r.json(); })
-      .catch(function () { return { apartments: [] }; }),
-    fetch('../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('deals'); return r.json(); })
-      .catch(function () { return { deals: [] }; }),
-    fetch('../assets/households.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('hh'); return r.json(); })
-      .catch(function () { return { map: {} }; }),
-    fetch('../assets/jeonse_ratio.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('jr'); return r.json(); })
-      .catch(function () { return { regions: [] }; }),
+    getJson('apartments.json', { apartments: [] }),
+    getJson('finder_index.json', null),
+    getJson('households.json', { map: {} }),
+    getJson('jeonse_ratio.json', { regions: [] }),
   ]).then(function (results) {
     DATA = (results[0].apartments || []).slice();
-    DEALS = results[1].deals || [];
-    computeWindow(DEALS);
-    enrichWithDeals();
+    var index = results[1];
+    if (index && index.complexes) {
+      WINDOW = {
+        months: index.window.months, from: index.window.from, to: index.window.to,
+        label: '최근 ' + index.window.months + '개월',
+      };
+      enrichFromIndex(index.complexes);
+      return results;
+    }
+    // 인덱스가 아직 배포되지 않은 과도기에도 화면이 죽지 않도록 원장으로 폴백한다.
+    return getJson('transactions.json', { deals: [] }).then(function (tx) {
+      DEALS = tx.deals || [];
+      computeWindow(DEALS);
+      enrichWithDeals();
+      return results;
+    });
+  }).then(function (results) {
     // 실거래 원장에만 있는 단지(placeholder)의 세대수·준공연도·좌표·역·학교 — K-apt/Kakao 보강분 병합
     var HH = (results[2] && results[2].map) || {};
     DATA.forEach(function (a) {
