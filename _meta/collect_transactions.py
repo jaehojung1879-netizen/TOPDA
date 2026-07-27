@@ -38,6 +38,7 @@ collect_apartments.py 가 '단지 집계'라면, 이 수집기는 '개별 거래
 """
 import datetime as dt
 import os
+import re
 import sys
 
 import lib_pdata as L
@@ -55,6 +56,58 @@ TX_JSON = os.path.join(L.SITE_ASSETS, "transactions.json")
 # 대상만 실어 전국 단지의 71%밖에 못 덮지만(2026-07-27 실측), 지번은 거래가 있으면 항상
 # 온다 — 역거리·초등학교 공백(파인더 노출 단지의 78%)을 푸는 열쇠다.
 COMPLEX_ADDR_JSON = os.path.join(L.SITE_ASSETS, "complex_addr.json")
+
+
+# 끝의 '숫자+동'. 앞자리가 쉼표·하이픈·숫자로 끝나면 여러 동을 나열한 정식 이름이므로
+# 대상에서 뺀다 — 느슨하게 자르면 '대치우성아파트1동,2동,3동,5동,6동,7동'이
+# '대치우성아파트1동,2동,3동,5동,6동,'으로, '유호엔시티101-103동'이 '유호엔시티101-'로
+# 망가진다(2026-07-27 실측 8건).
+_BLDG_SUFFIX = re.compile(r"^(?P<base>.*[^\s,\-·0-9])\s*\d+동$")
+
+
+def building_base_name(name):
+    """'시티프라디움더강남101동' → '시티프라디움더강남'. 해당 없으면 None."""
+    m = _BLDG_SUFFIX.match(name or "")
+    base = m.group("base").strip() if m else ""
+    return base if len(base) >= 2 else None
+
+
+def merge_building_suffix_names(deals):
+    """동 단위로 쪼개져 들어온 단지를 한 단지로 합친다. {(지역, 옛이름): 새이름} 반환.
+
+    국토부는 주상복합·도시형생활주택처럼 동별로 집합건물이 등록된 단지를 '시티프라디움
+    더강남101동'·'201동'같이 별개 단지로 준다. 그대로 두면 파인더에 같은 단지가 여러 번
+    나오고 거래건수·평균가·추천점수가 갈린다.
+
+    이름 모양만 보고 자르지는 않는다. '동 접미가 건물 번호'라는 증거가 있을 때만 합친다.
+      ① 같은 지역에 기본명 단지가 이미 있다
+         (예: 서울 관악구 '관악푸르지오' 145건 + '관악푸르지오102동').
+      ② 같은 기본명을 가진 동 항목이 둘 이상이다
+         (예: 경기 화성시 '진명101동'·'102동'·'103동').
+    둘 다 아닌 단독 항목(실측 112개)은 합쳐도 중복이 사라지지 않고 이름만 바뀌므로 둔다 —
+    정식 이름에 동 번호가 들어간 단지를 잘못 개명할 위험만 진다.
+    """
+    names = {}
+    for d in deals:
+        rk, n = d.get("region_key"), d.get("apt")
+        if rk and n:
+            names.setdefault(rk, set()).add(n)
+    groups = {}
+    for rk, ns in names.items():
+        for n in ns:
+            base = building_base_name(n)
+            if base:
+                groups.setdefault((rk, base), []).append(n)
+    rename = {}
+    for (rk, base), members in groups.items():
+        if base in names[rk] or len(members) >= 2:
+            for n in members:
+                rename[(rk, n)] = base
+    for d in deals:
+        new = rename.get((d.get("region_key"), d.get("apt")))
+        if new:
+            d["apt"] = new
+    return rename
 
 
 def recent_months(n):
@@ -211,6 +264,15 @@ def main():
               + ", ".join(zero_regions), file=sys.stderr)
 
     all_deals.sort(key=lambda d: d["date"], reverse=True)
+    # 동 단위로 쪼개진 단지를 먼저 합친다. 증분 갱신이라 이번에 다시 받지 않은 쌍의 거래도
+    # 원장 전체를 대상으로 손봐야 옛 이름이 남지 않는다(다음 실행은 이미 합쳐진 이름을
+    # 읽으므로 결과가 같다). 아래 지번 접기보다 앞서야 주소도 한 단지로 모인다.
+    renamed = merge_building_suffix_names(all_deals)
+    if renamed:
+        targets = sorted({v for v in renamed.values()})
+        print(f"[동 병합] 동별로 쪼개진 항목 {len(renamed)}개 → 단지 {len(targets)}개로 합침"
+              f" (예: {', '.join(targets[:3])})")
+
     # 단지별 지번을 접는다. 같은 단지가 여러 지번에 걸치면(여러 동) 가장 흔한 지번을 쓴다 —
     # 대표 위치 한 점만 필요하고, 최빈값이 단지 중심에 가장 가깝다.
     jibun_votes = {}
