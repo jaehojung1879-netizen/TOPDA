@@ -80,6 +80,31 @@ def _recent_yms(n=2):
     return out
 
 
+def region_coverage(target, filled, kapt_list):
+    """지역별 커버리지 판정 지표. target·filled·kapt_list → total·kapt_ratio·name_gap.
+
+    분모는 항상 total = target(잔여 보강대상) + filled(기보강)이다. target만 kapt_list와
+    견주면 이미 채운 몫이 분모에서 빠져 K-apt 수록범위를 과대평가한다 — 2026-07-27
+    리포트가 전국 kapt_list 11,542 ≥ target 9,164라 '표기 차이'로 읽혔지만, 실제 분모인
+    전체 단지 16,241 대비로는 0.71이었다(79개 지역 중 kapt_list ≥ total은 13곳뿐).
+    두 경우의 조치가 정반대라 이 분모를 틀리면 엉뚱한 곳을 고치게 된다.
+
+    kapt_ratio : K-apt 목록이 그 지역 전체 실거래 단지를 덮는 비율(상한 추정).
+                 1.0에 못 미치는 몫은 의무관리대상 외라 이름 규칙을 고쳐도 안 붙는다.
+    name_gap   : K-apt에 있을 법한데 아직 못 붙인 단지 수(상한). 이름 정규화로 회수
+                 가능한 최대치이므로, 이 값이 큰 지역부터 손대면 된다.
+    """
+    total = target + filled
+    # K-apt 목록에는 실거래가 없는 단지(임대 등)도 섞여 있어 total을 넘을 수 있다.
+    # 그대로 빼면 회수 여지가 부풀려지므로 total에서 자른다.
+    listed = min(kapt_list, total)
+    return {
+        "total": total,
+        "kapt_ratio": round(kapt_list / total, 2) if total else None,
+        "name_gap": max(0, listed - filled),
+    }
+
+
 def main():
     kapt_key = L.key(L.KAPT_KEYS)
     # 실거래 API 키 — LAWD 자가탐색이 후보 코드의 거래 유무를 확인하는 데만 쓴다.
@@ -116,6 +141,17 @@ def main():
         entries[:] = [(n, d) for (n, d) in entries if f"{rk}|{n}" not in hh_map]
         extra_need += len(entries)
 
+    # 지역별 기보강 단지 수(루프 시작 시점 고정). 리포트에서 kapt_list와 견줄 분모
+    # total = target + filled 을 만드는 데 쓴다. target이 '아직 못 채운 잔여분'이라
+    # 이 값을 더해야 그 지역의 전체 실거래 단지 수가 된다.
+    prior_filled = {}
+    for a in apts:
+        if a.get("households") and a.get("region_key"):
+            prior_filled[a["region_key"]] = prior_filled.get(a["region_key"], 0) + 1
+    for k in hh_map:
+        rk = k.split("|", 1)[0]
+        prior_filled[rk] = prior_filled.get(rk, 0) + 1
+
     need = sum(len(v) for v in by_region.values())
     regions = list(dict.fromkeys(list(by_region) + list(extra_by_region)))
     print(f"세대수 보강 대상 — 큐레이션 {need}개 · 실거래전용 {extra_need}개 / {len(regions)}개 지역")
@@ -148,6 +184,7 @@ def main():
         # 인천 서구(190개)·경기 화성시(353개) 단지가 세대수 0% 상태로 남아 있었다.
         # 채택된 코드가 여러 개면 각각의 목록을 합쳐 쓴다.
         matched_before = stat["matched"]
+        r_unmatched = []   # 이 지역에서 실제로 매칭 실패한 이름(진단 샘플의 원천)
         codes = ([L.LAWD[region]] if not trade_key
                  else L.resolve_lawd_codes(region, L.LAWD[region], trade_key, recent_yms))
         maps, auth_fail = [], False
@@ -176,6 +213,7 @@ def main():
                 break
             code = CA.kapt_match(kmap, a["name"], CA._dong_of(a))
             if not code:
+                r_unmatched.append(a["name"])
                 if len(unmatched) < 10:
                     unmatched.append(f"{region}/{a['name']}")
                 continue
@@ -192,6 +230,7 @@ def main():
                 break
             code = CA.kapt_match(kmap, name, dong)
             if not code:
+                r_unmatched.append(name)
                 continue
             stat["matched"] += 1
             hh, yr, addr = CA.kapt_info(code, kapt_key)
@@ -204,22 +243,27 @@ def main():
                 hh_map[f"{region}|{name}"] = entry
                 stat["extra_filled"] += 1
         # 지역별 진단 — 남은 미보강분이 'K-apt에 아예 없어서'인지 '이름이 안 맞아서'인지를
-        # 가른다. 목록(K-apt 단지 수)이 대상 수보다 훨씬 적으면 수록범위 한계(의무관리대상만
-        # 수록)라 이름 규칙을 손봐도 소용이 없고, 목록은 충분한데 매칭이 적으면 표기 차이다.
+        # 가른다. 목록(K-apt 단지 수)을 대상 수가 아니라 전체 단지 수(total = 잔여 + 기보강)와
+        # 견줘야 한다. 대상은 잔여분이라 분모로 쓰면 수록범위가 부풀려진다 — region_coverage 참고.
         # 이 두 경우의 대응이 정반대라 로그에 남긴다.
         r_target = len(by_region.get(region, [])) + len(extra_by_region.get(region, []))
         r_matched = stat["matched"] - matched_before
+        cov = region_coverage(r_target, prior_filled.get(region, 0), kmap.get("n", 0))
         per_region.append({
-            "region": region, "target": r_target, "kapt_list": kmap.get("n", 0),
+            "region": region, "target": r_target, "filled": prior_filled.get(region, 0),
+            "total": cov["total"], "kapt_list": kmap.get("n", 0),
+            "kapt_ratio": cov["kapt_ratio"], "name_gap": cov["name_gap"],
             "matched": r_matched, "codes": codes,
-            "unmatched_sample": [n for n, _ in extra_by_region.get(region, [])][:8],
+            "unmatched_sample": r_unmatched[:8],
         })
-        print(f"[{region}] 대상 {r_target} · K-apt목록 {kmap.get('n', 0)} · 매칭 {r_matched}"
+        print(f"[{region}] 대상 {r_target}/전체 {cov['total']} · K-apt목록 {kmap.get('n', 0)}"
+              f"(덮개 {cov['kapt_ratio']}) · 매칭 {r_matched} · 회수여지 {cov['name_gap']}"
               f" · 코드 {','.join(codes)}"
               f" — 누적 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}")
         if r_target and r_matched * 2 < r_target and len(unmatched_by_region) < 8:
-            sample = [n for n, _ in extra_by_region.get(region, [])][:6]
-            unmatched_by_region.append(f"{region}(대상{r_target}/목록{kmap.get('n', 0)}/매칭{r_matched}): {', '.join(sample)}")
+            unmatched_by_region.append(
+                f"{region}(대상{r_target}/전체{cov['total']}/목록{kmap.get('n', 0)}"
+                f"/덮개{cov['kapt_ratio']}/매칭{r_matched}): {', '.join(r_unmatched[:6])}")
         # 지역 단위 체크포인트 — 이후 어떤 이유로 중단돼도 여기까지의 확보분은 남는다.
         if stat["filled"] > saved_filled:
             if L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments"):
@@ -276,22 +320,40 @@ def main():
         for d in getattr(CA, "_info_diag", []):
             print(f"    · 기본정보 실패 샘플: {d}", file=sys.stderr)
 
-    # 커버리지 리포트 저장 — 다음 조치를 정하는 근거다.
-    #   kapt_list << target  → K-apt 수록범위 한계(의무관리대상만). 이름 규칙을 고쳐도
-    #                          안 붙으므로 다른 출처를 찾아야 한다.
-    #   kapt_list >= target 인데 matched 가 낮음 → 표기 차이. 정규화 규칙으로 해결된다.
+    # 커버리지 리포트 저장 — 다음 조치를 정하는 근거다. 판정은 반드시 total(=target+filled)을
+    # 분모로 본다. target은 '아직 못 채운 잔여분'이라 kapt_list와 직접 견주면 이미 채운 몫이
+    # 빠져 수록범위가 부풀려진다.
+    #   kapt_ratio << 1  → K-apt 수록범위 한계(의무관리대상만). 이름 규칙을 고쳐도 안 붙으므로
+    #                      다른 출처(건축물대장 등)를 찾아야 한다.
+    #   kapt_ratio ≈ 1 이상인데 name_gap 이 큼 → 표기 차이. 정규화 규칙으로 회수된다.
+    # name_gap 내림차순으로 정렬해 손댈 값어치가 큰 지역이 위에 오게 한다.
     try:
         os.makedirs(os.path.dirname(COVERAGE_JSON), exist_ok=True)
-        per_region.sort(key=lambda r: (r["matched"] / r["target"]) if r["target"] else 1)
+        per_region.sort(key=lambda r: -r["name_gap"])
+        tot_complexes = sum(r["total"] for r in per_region)
+        tot_prior = sum(r["filled"] for r in per_region)
+        tot_kapt = sum(r["kapt_list"] for r in per_region)
         with open(COVERAGE_JSON, "w", encoding="utf-8") as f:
             json.dump({
                 "as_of": dt.date.today().strftime("%Y-%m-%d"),
-                "note": "지역별 세대수 보강 커버리지. target=보강 대상 단지, "
-                        "kapt_list=K-apt 단지목록 수, matched=이름매칭 성공. "
-                        "kapt_list가 target보다 훨씬 작으면 수록범위 한계, "
-                        "충분한데 matched가 낮으면 이름 표기 차이다.",
-                "total": {"target": need + extra_need, "matched": stat["matched"],
-                          "filled": stat["filled"] + stat["extra_filled"]},
+                "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지"
+                        "(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, "
+                        "kapt_ratio=kapt_list/total(수록범위 상한), "
+                        "name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), "
+                        "matched=이번 실행의 이름매칭 성공. "
+                        "kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, "
+                        "1에 가까운데 name_gap이 크면 표기 차이다. "
+                        "target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
+                "total": {
+                    "complexes": tot_complexes,      # 전체 실거래 단지(분모)
+                    "filled": tot_prior,             # 이번 실행 시작 시점까지 보강된 수
+                    "target": need + extra_need,     # 남은 보강 대상
+                    "kapt_list": tot_kapt,
+                    "kapt_ratio": round(tot_kapt / tot_complexes, 2) if tot_complexes else None,
+                    "name_gap": sum(r["name_gap"] for r in per_region),
+                    "matched_this_run": stat["matched"],
+                    "filled_this_run": stat["filled"] + stat["extra_filled"],
+                },
                 "regions": per_region,
             }, f, ensure_ascii=False, indent=1)
         print(f"[리포트] {COVERAGE_JSON} 저장 — 지역 {len(per_region)}개")
