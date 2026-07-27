@@ -51,25 +51,52 @@
     const t = readTokens(); delete t[id]; localStorage.setItem(KEY_TOKENS, JSON.stringify(t));
   }
 
+  // Supabase에 글 한 건 저장.
+  //
+  // id를 서버 기본값(gen_random_uuid)에 맡기지 않고 여기서 만들어 넣는다. 저장된 행을
+  // 돌려받으려면(.select()) board_posts에 select 정책이 필요한데, 이 테이블은 owner_token·
+  // 비밀글이 그대로 노출되지 않도록 select 정책을 **일부러 두지 않는다**(SUPABASE_SETUP.md).
+  // 그래서 .select()를 붙이면 PostgREST가 0행을 돌려주며 요청 전체를 롤백해 — 정책상
+  // 정상인 스키마인데도 — 모든 글쓰기가 실패한다. id를 미리 알고 있으면 읽기가 아예
+  // 필요 없으므로 이 충돌이 사라진다.
+  async function insertPost(sb, p, isSecret) {
+    const id = uuid();
+    const token = uuid();
+    const { error } = await sb.from('board_posts').insert({
+      id, category: p.category || 'etc', title: p.title, author: p.author || null,
+      page: p.page || null, body: p.body, secret: isSecret, owner_token: token,
+    });
+    if (error) return { ok: false, error };
+    saveToken(id, token);
+    return { ok: true, id };
+  }
+
   // 기존에 로컬에만 쌓여있던 글(공개+비밀)을 Supabase로 최초 1회 옮긴다(공유가 소급 적용되도록).
+  // 옮기지 **못한** 글은 로컬에 그대로 남긴다. 예전에는 성공 여부와 무관하게 로컬 키를
+  // 지워서, 서버 저장이 실패하면 그동안 쓴 글이 통째로 사라졌다.
   async function migrateLocalPosts() {
     if (localStorage.getItem(KEY_MIGRATED)) return;
     const sb = await getSupabase();
     if (!sb) return;
+    let allMoved = true;
     for (const [key, isSecret] of [[KEY_PUB, false], [KEY_SEC, true]]) {
       const local = read(key);
       if (!local.length) continue;
+      const failed = [];
       for (const p of local) {
-        const token = uuid();
-        const { data, error } = await sb.from('board_posts').insert({
-          category: p.category || 'etc', title: p.title, author: p.author || null,
-          page: p.page || null, body: p.body, secret: isSecret, owner_token: token,
-        }).select('id').single();
-        if (!error && data) saveToken(data.id, token);
+        const r = await insertPost(sb, p, isSecret);
+        if (!r.ok) failed.push(p);
       }
-      localStorage.removeItem(key);
+      if (failed.length) {
+        write(key, failed);
+        allMoved = false;
+        if (window.console) console.warn('[게시판] 로컬 글 이전 실패 — 로컬에 그대로 보관합니다.', failed.length);
+      } else {
+        localStorage.removeItem(key);
+      }
     }
-    localStorage.setItem(KEY_MIGRATED, '1');
+    // 전부 옮겼을 때만 완료로 표시 — 남은 글은 다음 방문에 다시 시도한다.
+    if (allMoved) localStorage.setItem(KEY_MIGRATED, '1');
   }
 
   // ----- 카테고리 정의 -----
@@ -121,6 +148,20 @@
   const openBtns = document.querySelectorAll('[data-fb-open]');
   const closeBtns = document.querySelectorAll('[data-fb-close]');
   const catSelect = form?.querySelector('select[name="category"]');
+  const statusEl = root.querySelector('[data-fb-status]');
+
+  // 게시판 상태 한 줄 안내. 저장이 어디로 가는지(서버/이 브라우저)를 감추지 않는다.
+  function showStatus(msg, kind) {
+    if (!statusEl) return;
+    if (!msg) { statusEl.hidden = true; statusEl.textContent = ''; return; }
+    statusEl.textContent = msg;
+    statusEl.className = 'fb-status' + (kind ? ' fb-status-' + kind : '');
+    statusEl.hidden = false;
+  }
+
+  if (!supabaseConfigured) {
+    showStatus('공유 저장소가 아직 연결되지 않아, 지금 쓰는 글은 이 브라우저에만 저장됩니다 — 다른 기기나 다른 방문자에게는 보이지 않습니다.', 'warn');
+  }
 
   // 카테고리 드롭다운(작성 폼·필터) 채움
   if (catSelect && !catSelect.options.length) {
@@ -162,9 +203,19 @@
     if (sb) {
       const { data, error } = await sb.from('board_posts_public').select('*')
         .order('created_at', { ascending: true }).limit(300);
-      if (!error && data) publicCache = data.map(rowToPost);
+      if (!error && data) {
+        publicCache = data.map(rowToPost);
+      } else {
+        // 조회 실패를 조용히 넘기면 "남들 글이 하나도 안 올라온다"로만 보인다.
+        if (window.console) console.warn('[게시판] 공개글 조회 실패:', error);
+        showStatus('글 목록을 불러오지 못했습니다. 네트워크를 확인하고 새로고침해 주세요.', 'error');
+      }
     } else {
       publicCache = read(KEY_PUB);
+      if (supabaseConfigured) {
+        // 설정은 돼 있는데 클라이언트 로딩에 실패한 경우(스크립트 차단·오프라인 등).
+        showStatus('게시판 서버에 연결하지 못했습니다. 지금 쓰는 글은 이 브라우저에만 저장됩니다.', 'error');
+      }
     }
     render();
   }
@@ -213,9 +264,19 @@
     return c === 'all' ? items : items.filter((p) => (p.category || 'etc') === c);
   }
 
+  // 서버 목록 + 아직 서버에 못 올린 로컬 잔여 글을 합친다(중복 id는 서버 쪽 우선).
+  // 로컬 잔여 글은 저장 실패·이전 실패 때만 남으며, 나중에 이전에 성공하면 자동으로 사라진다.
+  function mergePosts(remote, local) {
+    if (!local.length) return remote;
+    const seen = new Set(remote.map((p) => p.id));
+    return remote.concat(local.filter((p) => !seen.has(p.id)))
+      .sort((a, b) => (a.ts || 0) - (b.ts || 0));
+  }
+
   function render() {
-    const pubSource = publicCache !== null ? publicCache : read(KEY_PUB);
-    const secSource = (supabaseConfigured && mineCache !== null) ? mineCache : read(KEY_SEC);
+    const pubSource = publicCache !== null ? mergePosts(publicCache, read(KEY_PUB)) : read(KEY_PUB);
+    const secSource = (supabaseConfigured && mineCache !== null)
+      ? mergePosts(mineCache, read(KEY_SEC)) : read(KEY_SEC);
     const pub = applyCat(pubSource);
     const sec = applyCat(secSource);
     if (secretCountEl) secretCountEl.textContent = sec.length;
@@ -230,6 +291,8 @@
     if (!list) return;
     list.innerHTML = '';
     const tokens = readTokens();
+    // 서버에 올리지 못해 로컬에만 남은 글 — 소유 토큰은 없지만 본인 글이므로 지울 수 있어야 한다.
+    const localIds = new Set(read(isMine ? KEY_SEC : KEY_PUB).map((p) => p.id));
     items.slice().reverse().forEach((p) => {
       const li = document.createElement('li');
       li.className = 'fb-item';
@@ -240,7 +303,7 @@
       const visBadge = isMine ? '<span class="badge badge-warn">비밀</span>' : '';
       // Supabase 모드에선 내가 쓴 글(토큰 보유)만 삭제 버튼 노출 — 운영자 열람 글도 삭제는 불가.
       // 로컬 폴백(Supabase 미설정)은 기존처럼 항상 삭제 가능.
-      const canDelete = supabaseConfigured ? !!tokens[p.id] : true;
+      const canDelete = supabaseConfigured ? (!!tokens[p.id] || localIds.has(p.id)) : true;
       const delBtn = canDelete
         ? `<button class="fb-del" data-id="${p.id}" data-mine="${isMine ? '1' : '0'}">삭제</button>` : '';
       li.innerHTML = `
@@ -333,37 +396,38 @@
       };
       if (!data.title || !data.body) return;
 
-      {
-        const sb = await getSupabase();
-        let saved = false;
-        if (sb) {
-          const token = uuid();
-          const { data: row, error } = await sb.from('board_posts').insert({
-            category: data.category, title: data.title, author: data.author || null,
-            page: data.page || null, body: data.body, secret: data.secret, owner_token: token,
-          }).select('id').single();
-          if (!error && row) {
-            saved = true;
-            saveToken(row.id, token);
-            if (data.secret) await refreshMinePosts();
-            else await refreshPublicPosts();
-          } else if (window.console) {
-            console.warn('[게시판] 글 저장 실패 — 로컬에만 임시 저장합니다:', error);
-          }
+      const sb = await getSupabase();
+      let saved = false;
+      let saveError = null;
+      if (sb) {
+        const r = await insertPost(sb, data, data.secret);
+        if (r.ok) {
+          saved = true;
+          if (data.secret) await refreshMinePosts();
+          else await refreshPublicPosts();
+        } else {
+          saveError = r.error;
+          if (window.console) console.warn('[게시판] 글 저장 실패 — 로컬에만 임시 저장합니다:', r.error);
         }
-        if (!saved) {
-          // Supabase 미설정이거나 저장 실패 — 기존처럼 로컬에만 남긴다(오프라인 폴백)
-          const entry = { id: uid(), ts: Date.now(), ...data };
-          const key = data.secret ? KEY_SEC : KEY_PUB;
-          const arr = read(key); arr.push(entry); write(key, arr);
-          if (!data.secret) publicCache = arr;
-        }
+      }
+      if (!saved) {
+        // Supabase 미설정이거나 저장 실패 — 기존처럼 로컬에만 남긴다(오프라인 폴백)
+        const entry = { id: uid(), ts: Date.now(), ...data };
+        const key = data.secret ? KEY_SEC : KEY_PUB;
+        const arr = read(key); arr.push(entry); write(key, arr);
+      }
+
+      // 서버 저장이 기대되는 상황(백엔드 설정됨)에서 실패했다면 조용히 넘기지 않는다.
+      // 예전에는 실패해도 목록에 글이 보여서 정상 등록된 줄 알았다가, 다른 기기에서는
+      // 글이 없는 상태가 됐다.
+      if (saveError) {
+        showStatus('글을 서버에 저장하지 못했습니다. 이 브라우저에만 임시 보관되며 다른 방문자에게는 보이지 않습니다. 잠시 후 다시 시도해 주세요.', 'error');
       }
 
       // 닉네임 기억(다음 글 자동 채움)
       if (data.author) localStorage.setItem(KEY_AUTHOR, data.author);
-      // 임시저장 비움
-      localStorage.removeItem(KEY_DRAFT);
+      // 임시저장 비움 — 서버 저장에 실패했다면 원문을 남겨 다시 시도할 수 있게 한다.
+      if (!saveError) localStorage.removeItem(KEY_DRAFT);
       form.reset();
       // 카테고리 필터를 작성 카테고리로 맞춰서 바로 보이게
       if (catFilter) catFilter.value = data.category;
@@ -381,6 +445,15 @@
     const id = btn.dataset.id;
     const isMine = btn.dataset.mine === '1';
     if (!confirm('이 글을 삭제할까요?')) return;
+
+    // 서버에 못 올린 로컬 잔여 글은 로컬에서 바로 지운다(서버에는 애초에 없다).
+    const localKey = isMine ? KEY_SEC : KEY_PUB;
+    const localArr = read(localKey);
+    if (localArr.some((p) => p.id === id)) {
+      write(localKey, localArr.filter((p) => p.id !== id));
+      render();
+      return;
+    }
 
     const sb = await getSupabase();
     if (sb) {
