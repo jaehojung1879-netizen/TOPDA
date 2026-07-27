@@ -140,7 +140,57 @@ grant select on board_posts_public to anon;
    그 브라우저에 관리 키가 저장되고, '내 비밀글' 탭에서 **모든 사용자의 비밀글**이 보입니다.
 3. 해제하려면 `?admin=off` 로 접속합니다.
 
-## 5) 글이 사라지거나 남의 글이 안 보일 때
+## 5) 지금 상태 점검 (SQL Editor에 붙여넣기)
+
+무엇이 빠졌는지 한 번에 확인합니다.
+
+```sql
+-- ① 무엇이 만들어져 있나 (테이블·뷰 not null, 정책 1개, 함수 3개가 정상)
+select
+  to_regclass('public.board_posts')        as 테이블,
+  to_regclass('public.board_posts_public') as 공개뷰,
+  (select count(*) from pg_policies
+     where schemaname = 'public' and tablename = 'board_posts') as 정책수,
+  (select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+     where n.nspname = 'public' and p.proname in
+       ('get_posts_by_tokens', 'admin_list_secret_posts', 'delete_board_post')) as 함수수;
+
+-- ② anon 권한 (board_posts에 INSERT, board_posts_public에 SELECT가 있어야 함)
+select table_name, string_agg(privilege_type, ',' order by privilege_type) as 권한
+from information_schema.role_table_grants
+where table_schema = 'public' and grantee = 'anon'
+  and table_name in ('board_posts', 'board_posts_public')
+group by table_name;
+
+-- ③ 실제로 서버에 저장된 글
+select count(*) filter (where not secret) as 공개글,
+       count(*) filter (where secret)     as 비밀글,
+       max(created_at)                    as 마지막_글
+from board_posts;
+
+-- ④ 운영자 관리 키
+select coalesce(current_setting('app.board_admin_key', true), '(미설정)') as 관리키;
+```
+
+**뷰·함수를 방금 만들었다면 반드시 실행**하세요. PostgREST가 스키마를 캐시하고 있어,
+새로 만든 뷰·함수가 API에서 404(`PGRST205`)로 보일 수 있습니다.
+
+```sql
+notify pgrst, 'reload schema';
+```
+
+④가 `(미설정)`인데 SQL은 실행했다면, `alter database ... set`은 **새 세션부터** 적용되기
+때문입니다. 프로젝트를 재시작하거나 잠시 뒤 다시 확인하세요.
+
+에러 코드로도 원인을 좁힐 수 있습니다 (Dashboard → Logs → API Gateway).
+
+| 코드 | 뜻 | 조치 |
+|---|---|---|
+| `PGRST205` | 뷰·함수를 API가 아직 모름 | 위 `notify pgrst, 'reload schema'` |
+| `PGRST116` | 0행인데 단일 행을 요구함 | insert에 `.select()`를 붙이지 말 것(아래 참고) |
+| `42501` | 권한/RLS 거부 | 2)의 정책·grant 재실행 |
+
+## 6) 글이 사라지거나 남의 글이 안 보일 때
 
 증상별로 원인이 다릅니다. 게시판 상단 안내 문구가 어느 상태인지 알려줍니다.
 
@@ -164,7 +214,7 @@ grant select on board_posts_public to anon;
 반환하면서 **요청 전체를 롤백** — 스키마는 정상인데 글쓰기가 전부 실패합니다.
 `feedback.js`는 id를 클라이언트에서 만들어 넣어 읽기 자체를 없앴습니다.
 
-## 6) 스팸 방지 — 알려진 한계
+## 7) 스팸 방지 — 알려진 한계
 현재 설계는 로그인 없이 누구나 글을 쓸 수 있어(기존 UX 유지), 서버 쪽 스팸 필터링은 없습니다.
 악용이 심해지면 Supabase 대시보드에서 개별 글 삭제, 또는 `anyone can insert` 정책에
 Cloudflare Turnstile 검증 등을 추가하는 방안을 검토하세요.
