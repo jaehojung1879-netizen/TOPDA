@@ -131,8 +131,13 @@ MOLIT_TRADE = "https://apis.data.go.kr/1613000/RTMSDataSvcAptTradeDev/getRTMSDat
 LAWD_CANDIDATES = {
     # 화성시: 41590 폐지 가능성 — 신설 4개 구 코드 후보(4159x 대역)
     "경기 화성시": ["41591", "41592", "41593", "41594", "41595", "41596", "41597", "41598", "41599"],
-    # 인천 서구: 2026.7 검단구 분리 — 잔여 서구/신설 구 코드 후보(2826x~287x 대역 일부)
-    "인천 서구": ["28262", "28264", "28266", "28270", "28275", "28280"],
+    # 인천 서구: 2026-07 개편으로 **서해구·검단구로 분할**(중구→영종구, 동구→제물포구도 같은 개편).
+    # 옛 서구 코드(28260)로도 거래가 조회돼 '0건일 때만 탐색' 조건에 안 걸렸고, 그 결과
+    # 갈라져 나간 구의 단지가 조용히 누락돼 있었다(세대수 보강 29.5%). 이제 기본 코드가
+    # 살아 있어도 후보를 합산한다(resolve_lawd_codes 참고). 신설 구 코드가 미확인이라
+    # 2826x·287x 대역을 넓게 둔다 — 거래가 실제로 나오는 코드만 채택하므로 오채택은 없다.
+    "인천 서구": ["28261", "28262", "28263", "28264", "28265", "28266", "28267",
+                "28270", "28271", "28272", "28275", "28280", "28285"],
     # 광주 서구·남구: 2026-07-01 전남광주통합특별시 출범으로 광주(29)·전남(46) 코드 체계
     # 개편 — 기존 29140/29155 전 기간 0건의 원인. 새 시도코드가 미확인이라 유력 대역을
     # 자가탐색한다(1차 후보 53~55 대역은 2026-07-13 런에서 전부 0건 → 범위 확대).
@@ -161,20 +166,41 @@ def _trade_count(code, ym, service_key):
 
 
 def resolve_lawd_codes(region, default_code, service_key, recent_yms):
-    """지역의 유효 LAWD 코드 목록. 기본 코드가 최근 2개월 0건이고 후보가 있으면 탐색해 채택."""
+    """지역의 유효 LAWD 코드 목록.
+
+    행정구역 개편에는 두 가지가 있고, 대응이 다르다.
+
+    ① 코드 폐지·교체 — 기본 코드가 0건이 된다. 후보 중 거래가 나오는 코드로 **대체**한다.
+       (경기 화성시 41590 폐지 → 41591·41593·41595·41597 채택)
+
+    ② 분할 — 기본 코드가 **살아 있는 채로** 일부만 담게 된다. 2026-07 개편으로
+       인천 서구가 서해구·검단구로, 중구가 영종구로, 동구가 제물포구로 나뉘었다.
+       옛 코드로도 여전히 거래가 조회되니 ①의 '0건일 때만 탐색' 조건에 걸려
+       탐색 자체가 돌지 않고, 갈라져 나간 구의 단지가 통째로 누락된다.
+       그래서 기본 코드가 살아 있어도 후보를 확인해 거래가 있으면 **합친다**.
+
+    ②는 조용히 누락되기 때문에 ①보다 발견이 늦다. 실제로 인천 서구는 세대수 보강이
+    0%가 아니라 29.5%로 '조금은 되는' 상태라 한동안 정상으로 보였다.
+    """
     if region in _lawd_resolved:
         return _lawd_resolved[region]
     codes = [default_code]
     if region in LAWD_CANDIDATES:
         yms = list(recent_yms)[:2]
-        if all(_trade_count(default_code, ym, service_key) == 0 for ym in yms):
-            found = [c for c in LAWD_CANDIDATES[region]
-                     if c != default_code and any(_trade_count(c, ym, service_key) > 0 for ym in yms)]
+        alive = any(_trade_count(default_code, ym, service_key) > 0 for ym in yms)
+        found = [c for c in LAWD_CANDIDATES[region]
+                 if c != default_code and any(_trade_count(c, ym, service_key) > 0 for ym in yms)]
+        if not alive:
             if found:
-                print(f"[LAWD 자가탐색] {region}: {default_code} 0건 → 채택 코드 {found}")
+                print(f"[LAWD 자가탐색] {region}: {default_code} 0건 → 대체 코드 {found}")
                 codes = found
             else:
                 print(f"[LAWD 자가탐색] {region}: 기본·후보 코드 모두 0건 — 코드 고시 확인 필요")
+        elif found:
+            print(f"[LAWD 자가탐색] {region}: {default_code} 유효 + 분할 코드 {found} 합산")
+            codes = [default_code] + found
+        else:
+            print(f"[LAWD 자가탐색] {region}: {default_code} 유효 · 추가 코드 없음")
     _lawd_resolved[region] = codes
     return codes
 
