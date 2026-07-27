@@ -638,10 +638,18 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="../assets/rates.js?v=20260629"></script>
 <script src="../assets/app.js?v=20260725"></script>
+<script src="../assets/official_price.js?v=20260728"></script>
 <script>
 (function () {
   'use strict';
   var regStdInput = document.getElementById('td-regStd');
+
+  // 단지 검색으로 시가표준액 채우기. 이 칸은 정의상 시가표준액이라 공시가격을 그대로 넣으면 된다
+  // (아파트는 지방세법 제4조 제1항에 따라 시가표준액 = 공동주택가격). 실거래가는 넣지 않는다 —
+  // 2026-07-19에 실거래가로 채우던 기능을 걷어낸 이유가 그것이다.
+  if (regStdInput && window.TopdaOfficialPrice) {
+    TopdaOfficialPrice.attach({ input: regStdInput });
+  }
 
   // URL 파라미터 프리필 — 실거래가 페이지 등 데이터 화면에서 '이 가격으로 계산' 동선용.
   //  ?price=매매가(원) & std=시가표준액(원) (모두 선택). 값은 숫자만 채택.

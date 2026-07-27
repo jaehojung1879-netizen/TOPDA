@@ -3166,3 +3166,41 @@ table.data.cmp th:first-child, table.data.cmp td:first-child { min-width: 116px;
 }
 .calc-prefill a { color: var(--accent); font-weight: 600; white-space: nowrap; }
 @media (max-width: 420px) { .calc-prefill { font-size: 0.86rem; padding: 10px 12px; } }
+
+/* ── 단지 검색으로 공시가격 넣기 (assets/official_price.js) ─────────────────
+   취득세·종합 대시보드의 시가표준액 입력란 아래에 붙는다. 값과 함께 '어느 단지의
+   언제 기준' 가격인지 보여줘야 해서 토글 라벨에 그 요약을 남긴다. */
+.op-picker { margin-top: 6px; }
+.op-toggle {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  color: var(--accent, #2563eb); font-size: 0.82rem; font-weight: 600;
+  text-align: left; line-height: 1.5;
+}
+.op-toggle:hover { text-decoration: underline; }
+.op-filled {
+  display: block; color: var(--text-muted, #64748b); font-weight: 500;
+  text-decoration: none; font-variant-numeric: tabular-nums;
+}
+.op-panel {
+  margin-top: 8px; padding: 10px; border: 1px solid var(--border, #e5e7eb);
+  border-radius: 10px; background: var(--surface-2, #f8fafc);
+}
+.op-q {
+  width: 100%; padding: 8px 10px; border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px; font-size: 0.9rem; background: #fff;
+}
+.op-q:disabled { background: var(--surface-2, #f1f5f9); color: var(--text-muted, #94a3b8); }
+.op-list { margin-top: 8px; }
+.op-note { margin: 4px 2px; font-size: 0.82rem; color: var(--text-muted, #64748b); }
+.op-hit {
+  display: grid; grid-template-columns: 1fr auto; gap: 0 10px; width: 100%;
+  padding: 8px 10px; margin-bottom: 4px; cursor: pointer; text-align: left;
+  border: 1px solid var(--border, #e5e7eb); border-radius: 8px; background: #fff;
+}
+.op-hit:hover { border-color: var(--accent, #2563eb); }
+.op-name { font-weight: 600; font-size: 0.88rem; }
+.op-region { grid-column: 1; font-size: 0.76rem; color: var(--text-muted, #64748b); }
+.op-price {
+  grid-row: 1 / span 2; align-self: center; font-weight: 700; font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
