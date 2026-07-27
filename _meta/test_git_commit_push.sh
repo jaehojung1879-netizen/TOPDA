@@ -10,6 +10,8 @@
 #   2) 다른 실행이 '같은 생성물'을 먼저 푸시한 경우 — 이번 실행 결과로 확정되고,
 #      그 실행이 함께 넣은 다른 파일 변경은 보존된다
 #      (rebase 중 --theirs 가 재적용 중인 우리 커밋이라는 방향을 여기서 고정한다)
+#   3) 아직 만들어지지 않은 산출물이 인자에 섞인 경우 — 나머지는 정상 커밋된다
+#      (git add 는 매칭 안 되는 pathspec 하나에도 fatal 로 끝나 그날 수집분을 다 잃는다)
 set -euo pipefail
 
 SCRIPT="$(cd "$(dirname "$0")" && pwd)/git_commit_push.sh"
@@ -72,3 +74,30 @@ echo "✅ 케이스2 — 같은 생성물 충돌: 이번 실행 결과로 확정
 
 echo
 echo "모든 검증 통과"
+
+# ── 3) 아직 없는 파일이 섞여도 나머지는 커밋된다 ───────────────────────────────
+# collect_transactions.py 는 응답에 지번이 없으면 complex_addr.json 을 만들지 않는다.
+# 그 상태로 두 파일을 함께 넘겼을 때 transactions.json 까지 못 올리면 안 된다.
+git clone -q "$TMP/remote.git" "$TMP/missing"
+(
+  cd "$TMP/missing"
+  echo '{"deals":["with-missing-sibling"]}' > site/assets/transactions.json
+  bash "$SCRIPT" "일부 산출물 없음" site/assets/transactions.json site/assets/complex_addr.json
+) || fail "없는 파일이 섞이자 커밋이 통째로 실패했다"
+
+git clone -q "$TMP/remote.git" "$TMP/verify3"
+grep -q "with-missing-sibling" "$TMP/verify3/site/assets/transactions.json" \
+  || fail "3) transactions.json 이 푸시되지 않았다"
+[ ! -e "$TMP/verify3/site/assets/complex_addr.json" ] \
+  || fail "3) 없던 파일이 어디선가 생겼다"
+echo "✅ 3) 없는 산출물은 건너뛰고 나머지는 커밋된다"
+
+# ── 4) 전부 없는 경우 — 조용히 생략하고 성공으로 끝난다 ──────────────────────
+git clone -q "$TMP/remote.git" "$TMP/none"
+(
+  cd "$TMP/none"
+  bash "$SCRIPT" "대상 전무" site/assets/nope-a.json site/assets/nope-b.json
+) || fail "대상이 하나도 없을 때 실패로 끝났다"
+echo "✅ 4) 대상이 전무하면 생략하고 성공으로 끝난다"
+
+echo "전부 통과"
