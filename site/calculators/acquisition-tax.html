@@ -455,5 +455,29 @@
 </footer>
 <script src="../assets/rates.js?v=20260629"></script>
 <script src="../assets/app.js?v=20260725-2"></script>
+<script src="../assets/official_price.js?v=20260728"></script>
+<script>
+(function () {
+  'use strict';
+  // 단지 검색으로 공시가격 넣기 — 증여·상속일 때만 연다.
+  //
+  // 매매의 과세표준은 실제 취득가액(실거래가)이라 이 칸에 공시가격을 넣으면 세액이 틀린다.
+  // 증여·상속은 시가인정액 기준이고, 시가를 알 수 없을 때 시가표준액을 쓰며, 증여 12% 중과의
+  // '시가표준액 3억원 이상' 판정도 이 값으로 한다 — 그 경우에만 채우는 게 맞다.
+  var priceInput = document.getElementById('price');
+  if (!priceInput || !window.TopdaOfficialPrice) return;
+  var picker = TopdaOfficialPrice.attach({ input: priceInput });
+  if (!picker) return;
+
+  function sync() {
+    var sel = document.querySelector('input[name="acqType"]:checked');
+    var v = sel ? sel.value : 'purchase';
+    if (v === 'gift' || v === 'inherit') picker.show(); else picker.hide();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="acqType"]'),
+    function (el) { el.addEventListener('change', sync); });
+  sync();
+})();
+</script>
 </body>
 </html>

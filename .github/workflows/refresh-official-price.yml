@@ -1,32 +1,23 @@
 name: Refresh official price (공동주택 공시가격)
 
 # 단지 공동주택가격(시가표준액)을 점진 보강 → site/assets/official_price.json.
-# 공식 오픈API가 없어 Kakao(주소→PNU) + V-World(PNU→공시가격) 조합으로 단지당 API
-# 호출이 여러 번 걸린다.
 #
-# ⚠ 2026-07-18 확인: V-World(api.vworld.kr) 호출이 GitHub Actions의 클라우드 IP에서는
-# 항상 502/연결끊김으로 실패한다(브라우저·가정용 네트워크에서는 동일 키·파라미터로
-# 정상 응답 — key/domain 문제가 아니라 IP 차단으로 판단). data.go.kr에도 같은 데이터가
-# 있지만 API 유형이 LINK라 실제로는 vworld.kr로 리다이렉트되는 카탈로그 항목일 뿐,
-# 별도 채널이 아니어서 우회가 안 된다.
+# 2026-07-27 전환: V-World → 건축HUB 건축물대장 주택가격(getBrHsprcInfo).
+#   이전 경로는 Kakao 키워드검색 → PNU 변환 → V-World 3단계였고 한 건도 못 모았다.
+#   api.vworld.kr이 GitHub Actions 클라우드 IP를 막기 때문이다(2026-07-18 확인 — 같은
+#   키·파라미터가 브라우저·가정용 네트워크에서는 정상 응답). data.go.kr의 같은 데이터는
+#   API 유형이 LINK라 vworld.kr로 리다이렉트될 뿐이어서 우회가 안 됐다.
+#   건축HUB는 apis.data.go.kr에 있어 IP 차단과 무관하고(다른 수집기가 매일 정상 호출),
+#   조회키(시군구·법정동·본번·부번)는 실거래 원장이 주는 값이라 단지명을 대조하지 않는다.
 #
-# 공동주택 공시가격은 애초에 연 1회(매년 1월 1일 기준, 보통 4~5월 발표)만 갱신되는
-# 데이터라 자동화의 실익이 적다 — 그래서 매일 새벽 자동 스케줄은 빼고, 수동 실행만
-# 남겨둔다. 정기 갱신은 사람이 연 1회 로컬 네트워크(IP 차단 없음)에서
-# `TIME_BUDGET_MIN=0 python collect_official_price.py`로 전량 수집 후 결과를
-# 커밋·푸시하는 방식을 권장한다(_meta/DATA_PIPELINE.md 참고). 이 워크플로는 필요할 때
-# (예: V-World 쪽 차단이 풀렸는지 재확인) 수동으로만 돌린다.
+# 공시가격은 연 1회(1월 1일 기준, 4~5월 발표) 갱신이라 이미 올해 기준일로 채운 단지는
+# 건너뛴다. 다만 첫 전수 수집은 단지 수가 많아 여러 날에 걸린다 — 매일 돌리되 시간 예산
+# 안에서 처리한 만큼만 저장하고 다음 실행이 이어받는다. 다 채우고 나면 대상이 0이라
+# 사실상 아무 일도 하지 않는다.
 on:
+  schedule:
+    - cron: "45 15 * * *"   # 매일 00:45 KST (listings 00:00 / news 00:10 / market 00:30 뒤)
   workflow_dispatch:
-    inputs:
-      diag:
-        description: "진단 모드 (V-World 응답 본문을 로그로 남기고 저장 생략)"
-        type: boolean
-        default: false
-      limit:
-        description: "처리할 단지 수 제한 (진단용, 0=제한 없음)"
-        type: string
-        default: "0"
 
 permissions:
   contents: write
@@ -45,22 +36,15 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Collect official price (Kakao PNU 변환 + V-World 공시가격)
+      - name: Collect official price (건축HUB 건축물대장 주택가격)
         working-directory: _meta
         timeout-minutes: 20
         env:
           TIME_BUDGET_MIN: "18"
-          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
-          VWORLD_KEY: ${{ secrets.VWORLD_KEY }}
-          # lib_pdata.py VWORLD_KEYS 별칭 목록과 맞춤 — 시크릿을 어느 이름으로 등록했든 인식되게 함
-          V_WORLD_KEY: ${{ secrets.V_WORLD_KEY }}
-          VWORLD_API_KEY: ${{ secrets.VWORLD_API_KEY }}
-          VWORLD_KR_KEY: ${{ secrets.VWORLD_KR_KEY }}
-          # V-World 인증키 발급 시 등록한 도메인 — 요청 domain 파라미터가 이와 일치해야
-          # API가 응답한다(불일치/누락 시 502로 추정). 시크릿 미설정 시 사이트 실도메인 사용.
-          VWORLD_DOMAIN: ${{ secrets.VWORLD_DOMAIN || 'topda.kr' }}
-          OFFICIAL_PRICE_DIAG: ${{ inputs.diag && '1' || '' }}
-          OFFICIAL_PRICE_LIMIT: ${{ inputs.limit || '0' }}
+          # 건축HUB는 data.go.kr 계정 인증키를 쓴다 — '건축HUB 건축물대장정보 서비스'를
+          # 같은 계정으로 활용신청·승인해야 한다(미승인 시 수집기가 권한 오류를 남기고 중단).
+          DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
         run: python collect_official_price.py
         continue-on-error: true
 

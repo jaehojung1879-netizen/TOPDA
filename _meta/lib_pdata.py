@@ -6,7 +6,7 @@
   KAKAO_REST_API_KEY   Kakao Developers REST API 키 (주소→좌표, 지하철·학교 거리)
   REB_RONE_KEY         한국부동산원 R-ONE OpenAPI 키 (부동산 통계)
   NAVER_MAP_CLIENT_ID / NAVER_MAP_CLIENT_SECRET  (선택, Kakao 대체)
-  JUSO_API_KEY, VWORLD_KEY                        (선택, 주소→좌표 대체)
+  JUSO_API_KEY                                    (선택, 주소→좌표 대체)
 
 설계 원칙
   - 외부 의존성 없음(urllib/json/xml). CI에서 pip install 불필요.
@@ -118,8 +118,10 @@ DATA_GO_KEYS = ["DATA_GO_APT_PRICE", "DATA_GO_KR_KEY", "DATA_GO_KR_SERVICE_KEY",
 # K-apt 단지 기본정보(세대수·준공) 키 — 보강용. 없으면 위 PRICE 키로 폴백.
 KAPT_KEYS = ["DATA_GO_APT_BASIC_INFO"] + DATA_GO_KEYS
 RONE_KEYS = ["R_ONE", "REB_RONE_KEY", "R_ONE_KEY", "RONE_KEY", "REB_KEY"]
-# 공동주택가격(시가표준액) — V-World 'ned/data' 서비스 키. 발급 시 등록명이 갈릴 수 있어 별칭 지원.
-VWORLD_KEYS = ["VWORLD_KEY", "V_WORLD_KEY", "VWORLD_API_KEY", "VWORLD_KR_KEY"]
+# 공동주택 공시가격은 2026-07-27부터 건축HUB 건축물대장 주택가격(getBrHsprcInfo)으로
+# 받는다 — apis.data.go.kr이라 DATA_GO_KEYS를 그대로 쓴다. V-World 경로(PNU 변환 +
+# api.vworld.kr)는 Actions 클라우드 IP가 차단돼 한 건도 못 모아 걷어냈다(이력은 git 참조).
+# 따라서 VWORLD_* 시크릿은 더 이상 쓰이지 않는다.
 
 
 # ── 행정구역 개편 자가 탐색 ──
@@ -221,88 +223,6 @@ def geocode_kakao(address):
         return float(d["x"]), float(d["y"])
     except Exception:
         return None
-
-
-def address_to_pnu(address_text):
-    """지번·도로명 주소 문자열 → PNU(19자리) 또는 None.
-    Kakao 주소 검색 결과의 address 객체(법정동코드 10자리 + 산여부 + 본번 + 부번)로 조립한다.
-    V-World 공동주택가격 API(getApartHousingPriceAttr)의 필수 입력이 이 PNU다."""
-    try:
-        j = get_json("https://dapi.kakao.com/v2/local/search/address.json",
-                     {"query": address_text}, headers=kakao_headers())
-        docs = j.get("documents") or []
-        if not docs:
-            return None
-        addr = docs[0].get("address") or docs[0].get("road_address")
-        if not addr:
-            return None
-        b_code = str(addr.get("b_code") or "").strip()
-        main_no = str(addr.get("main_address_no") or "0").strip() or "0"
-        sub_no = str(addr.get("sub_address_no") or "0").strip() or "0"
-        mountain = "2" if str(addr.get("mountain_yn") or "N").upper() == "Y" else "1"
-        if len(b_code) != 10 or not main_no.isdigit() or not sub_no.isdigit():
-            return None
-        return b_code + mountain + main_no.zfill(4) + sub_no.zfill(4)
-    except Exception:
-        return None
-
-
-def get_apart_official_price(pnu, api_key, dong_nm=None, ho_nm=None, timeout=15, diag=None, domain=None):
-    """PNU(19자리) → 공동주택가격(시가표준액) 레코드 목록.
-    V-World 'ned/data' 공동주택가격 속성정보 서비스(getApartHousingPriceAttr) 호출.
-    dong_nm·ho_nm을 생략하면 그 PNU(단지)의 전 동·호 레코드가 반환된다.
-    응답 XML의 정확한 감싸는 태그명이 문서에 없어, 'pblntfPc'(공시가격) 자식을 가진
-    임의의 엘리먼트를 레코드로 취급한다(래핑 태그 이름 변화에 강함).
-    실패·빈 응답 시 빈 리스트.
-
-    domain: V-World 인증키 발급 시 등록한 도메인. V-World WMS/WFS·배경지도 API 문서에
-    공통으로 "인증키 URL(인증받은 도메인)이 없으면 API가 작동하지 않습니다"라고 명시돼
-    있다 — ned/data도 같은 인증 체계를 쓸 가능성이 높다. https 전환(2026-07-18) 후에도
-    전 요청이 502/연결끊김으로 실패한 것은 http 여부가 아니라 이 domain 파라미터 누락이
-    원인일 가능성. 값이 없으면 파라미터를 생략(기존 동작 유지, 등록 안 한 키일 수도 있음).
-
-    diag: dict를 넘기면 진단 정보를 채운다 — {reason, sample}. reason은
-    'request_error'|'parse_error'|'no_records'|'ok', sample은 응답 본문 앞부분(키 노출 없음).
-    V-World가 인증오류·서비스 오류를 200 OK + 에러 XML/JSON로 돌려주는 일이 많아,
-    '가격없음'만으로는 원인을 알 수 없으므로 호출부에서 sample을 로그로 남기게 한다."""
-    params = {"key": api_key, "pnu": pnu, "format": "xml", "numOfRows": 1000, "pageNo": 1}
-    if domain:
-        params["domain"] = domain
-    if dong_nm:
-        params["dongNm"] = dong_nm
-    if ho_nm:
-        params["hoNm"] = ho_nm
-    url = "https://api.vworld.kr/ned/data/getApartHousingPriceAttr?" + urllib.parse.urlencode(params)
-
-    def _mask(s):
-        # 진단 문자열에 API 키가 (URL 일부로) 새지 않게 마스킹 — Actions 로그는 공개 저장소에서 누구나 본다.
-        return str(s).replace(api_key, "***") if api_key else str(s)
-
-    try:
-        req_headers = {"Referer": f"https://{domain}/"} if domain else None
-        text = _request(url, headers=req_headers, timeout=timeout)
-    except Exception as e:  # noqa: BLE001
-        if diag is not None:
-            diag["reason"] = "request_error"
-            diag["sample"] = _mask(e)[:400]
-        return []
-    try:
-        root = ET.fromstring(text)
-    except Exception as e:  # noqa: BLE001
-        if diag is not None:
-            diag["reason"] = "parse_error"
-            diag["sample"] = _mask(str(e)[:120] + " | 본문: " + (text or "")[:400])
-        return []
-    records = []
-    for el in root.iter():
-        if el.find("pblntfPc") is not None:
-            records.append({child.tag: (child.text or "").strip() for child in el})
-    if diag is not None:
-        diag["reason"] = "ok" if records else "no_records"
-        if not records:
-            # 공시가격 레코드가 없을 때 응답 본문을 남긴다 — 인증오류/빈결과/구조변경 구분용.
-            diag["sample"] = _mask((text or "")[:400])
-    return records
 
 
 def nearest_kakao(lng, lat, category_code=None, keyword=None, radius=1500):

@@ -1,167 +1,223 @@
 #!/usr/bin/env python3
-"""단지 공동주택가격(시가표준액) 점진 보강 → site/assets/official_price.json.
+"""단지 공동주택가격(공시가격) 점진 보강 → site/assets/official_price.json.
 
-흐름: apartments.json 큐레이션 단지의 '지역+단지명' → Kakao 키워드 검색으로 도로명주소
-확보 → 그 주소를 Kakao 주소 검색으로 PNU(19자리)까지 변환 → V-World
-'공동주택가격 속성정보' 서비스(getApartHousingPriceAttr)에 PNU로 조회 → 평형(전용면적)별
-공시가격을 저장한다.
+■ 용어 주의 — '공시가격'과 '시가표준액'을 같은 말로 쓰면 안 된다
 
-⚠ 공식 오픈API가 없어 여러 벤더를 조합했다(공공데이터포털에 동/호별 공시가격 API가
-없다는 사실은 PR #96 조사 결과 참고). 단지별로 Kakao 2회 + V-World 1회 호출이 필요해
-느리다 — collect_households.py와 동일한 TIME_BUDGET_MIN·체크포인트 방식으로 하루 예산
-안에서 처리한 만큼만 저장하고, 다음 실행이 안 된 단지부터 이어서 채운다.
+  아파트·연립·다세대(주택)   시가표준액 = 공동주택가격   (지방세법 제4조 제1항:
+                             "토지 및 주택에 대한 시가표준액은 「부동산 가격공시에 관한
+                             법률」에 따라 공시된 가액") → 같은 값이다.
+  단독주택                   시가표준액 = 개별주택가격
+  오피스텔·상가(주택 외 건축물) 시가표준액 ≠ 공시가격. 지방세법 제4조 제2항의 별도 산정
+                             (신축가격기준액 × 구조·용도·위치지수 × 경과연수 등)을 쓴다.
+  공시가격 미공시(신축 등)    지자체장 산정액
 
-PNU 변환은 Kakao 지오코딩 결과의 법정동코드(10자리)+산여부+본번+부번 조합에 의존한다.
-Kakao가 반환하는 주소 정확도에 따라 실패할 수 있으며, 실패한 단지는 이번엔 건너뛰고
-다음 실행에서 재시도한다(영구 실패 목록을 별도로 두지 않음 — 원인이 일시적일 수 있어서).
+이 수집기가 모으는 값은 '공동주택가격'이다. 아파트에 한해 시가표준액과 같으므로 취득세
+등 계산에 그대로 쓸 수 있지만, 오피스텔로 대상을 넓히면 그 전제가 깨진다.
+또한 건축물대장의 주택가격은 공시가격을 전재한 값이라 정본(부동산공시가격알리미)보다
+갱신이 늦을 수 있다 — 저장 레코드의 std_day(공시기준일)를 반드시 함께 보여줘야 한다.
+
+건축HUB 건축물대장 주택가격 조회(getBrHsprcInfo)를 지번으로 직접 부른다.
+  sigunguCd + bjdongCd + bun + ji → hsprc(주택가격) · stdDay(공시기준일)
+
+■ 왜 이 경로인가 (2026-07-27 전환)
+
+이전 구현은 Kakao 키워드 검색으로 단지 주소를 찾고 → Kakao 주소검색으로 PNU(19자리)를
+만든 뒤 → V-World 공동주택가격 서비스를 부르는 3단계였다. 두 가지 이유로 한 건도 못 모았다.
+
+  1) V-World(api.vworld.kr)가 GitHub Actions 클라우드 IP를 막는다. 같은 키·파라미터가
+     브라우저·가정용 네트워크에서는 정상 응답한다(2026-07-18 확인). data.go.kr에 있는
+     같은 데이터는 API 유형이 LINK라 vworld.kr로 리다이렉트될 뿐이어서 우회가 안 됐다.
+  2) 시작이 '단지명 검색'이라 K-apt 이름매칭과 같은 취약함을 그대로 안고 있었다.
+
+건축HUB는 apis.data.go.kr에 있어 IP 차단과 무관하고(다른 수집기가 매일 정상 호출한다),
+조회키는 실거래 원장이 주는 값이라 단지명을 한 글자도 대조하지 않는다. 그 키는
+collect_transactions.py가 complex_addr.json에 적어 둔다.
+
+■ 수집 단위
+
+응답은 전유부(호) 하나가 항목 하나다. 단지 하나를 끝까지 페이징해 최저·중앙·최고가를
+저장한다. 첫 페이지만 보면 동·호 순서 탓에 저층 편향이 생겨 공시가격을 낮게 보이게 한다.
+
+공시가격은 연 1회(1월 1일 기준, 4~5월 발표) 갱신이라 급할 게 없다. 시간 예산 안에서
+처리한 만큼만 저장하고 다음 실행이 이어받는다. 이미 올해 기준일로 채운 단지는 건너뛴다.
 """
 import datetime as dt
 import os
+import statistics
 import sys
 
 import lib_pdata as L
 
-APARTMENTS_JSON = os.path.join(L.SITE_ASSETS, "apartments.json")
+HSPRC_URL = "https://apis.data.go.kr/1613000/BldRgstHubService/getBrHsprcInfo"
+COMPLEX_ADDR_JSON = os.path.join(L.SITE_ASSETS, "complex_addr.json")
 OUT_JSON = os.path.join(L.SITE_ASSETS, "official_price.json")
 
+ROWS = 100          # 명세상 페이지당 최대 100건
+MAX_PAGES = 60      # 6,000세대 초과 단지는 없다(안전 상한 — 무한 루프 방지)
+SAVE_EVERY = 50     # 체크포인트 주기(단지 수)
+# 기준연도가 올해가 아닌 단지를 다시 볼 간격(일). 대장의 주택가격은 공시가격을 전재한
+# 값이라 갱신이 늦을 수 있어, 매 실행 재조회하면 헛돈다. 공시는 4~5월에 발표된다.
+RECHECK_DAYS = 30
 
-def area_band(m2):
-    """전용면적(㎡) → 정수 대표값(반올림). 실거래·검색 화면과 같은 방식으로 평형을 묶는다."""
-    return round(m2)
 
-
-def fetch_one(region, name, vworld_key, diag=None, vworld_domain=None):
-    """단지 하나 → (pnu, [{area_m2, official_price, stdr_year}, ...]) 또는 (None, [])."""
-    query = f"{region} {name}"
+def _to_int(v):
     try:
-        j = L.get_json("https://dapi.kakao.com/v2/local/search/keyword.json",
-                        {"query": query, "size": 1}, headers=L.kakao_headers())
-        docs = j.get("documents") or []
-    except Exception:
-        return None, []
-    if not docs:
-        return None, []
-    addr_text = docs[0].get("road_address_name") or docs[0].get("address_name")
-    if not addr_text:
-        return None, []
-    pnu = L.address_to_pnu(addr_text)
-    if not pnu:
-        return None, []
-    records = L.get_apart_official_price(pnu, vworld_key, diag=diag, domain=vworld_domain)
-    units = []
-    for r in records:
-        try:
-            area = float(r.get("prvuseAr") or 0)
-            price = int(r.get("pblntfPc") or 0)
-            year = int(r.get("stdrYear") or 0) or None
-        except (TypeError, ValueError):
-            continue
-        if area > 0 and price > 0:
-            units.append({"area_m2": round(area, 1), "official_price": price, "stdr_year": year})
-    return pnu, units
+        return int(float(str(v).strip()))
+    except (TypeError, ValueError):
+        return 0
 
 
-def summarize(units):
-    """평형(반올림 ㎡)별 대표 공시가격(같은 평형 여러 동/호 중 최고 stdr_year → 중앙값)."""
-    by_band = {}
-    for u in units:
-        band = area_band(u["area_m2"])
-        by_band.setdefault(band, []).append(u)
-    out = []
-    for band, arr in sorted(by_band.items()):
-        latest_year = max((u["stdr_year"] or 0) for u in arr)
-        prices = sorted(u["official_price"] for u in arr if (u["stdr_year"] or 0) == latest_year) or \
-            sorted(u["official_price"] for u in arr)
-        median = prices[len(prices) // 2]
-        out.append({"area_m2": band, "official_price": median, "stdr_year": latest_year or None})
-    return out
+def pad(v, width=4):
+    """본번·부번은 4자리 0채움이 규약이다('12' → '0012'). 숫자가 아니면 그대로 둔다."""
+    s = str(v or "").strip()
+    return s.zfill(width) if s.isdigit() else s
+
+
+def lookup_keys(entry):
+    """complex_addr.json 항목 → 조회키 dict. 부를 수 없으면 None.
+
+    주소 문자열만 담던 초기 형식에는 조회키가 없다. 부번은 없을 수 있어 '0000'으로 채우되,
+    시군구·법정동·본번이 하나라도 비면 부르지 않는다 — 엉뚱한 지번을 조회하게 된다.
+    """
+    if not isinstance(entry, dict):
+        return None
+    sgg, umd = str(entry.get("sgg") or "").strip(), str(entry.get("umd") or "").strip()
+    bun = pad(entry.get("bun"))
+    if not (sgg and umd and bun):
+        return None
+    return {"sgg": sgg, "umd": umd, "bun": bun, "ji": pad(entry.get("ji")) or "0000"}
+
+
+def summarize(prices, std_day, today=None):
+    """가격 목록 → 저장 레코드. 단지 하나를 대표하는 값은 중앙값으로 둔다.
+
+    fetched는 마지막 조회일 — 대장 기재가 늦은 단지를 재조회할 간격을 재는 데 쓴다."""
+    return {
+        "min": min(prices), "med": int(statistics.median(prices)), "max": max(prices),
+        "n": len(prices), "std_day": std_day,
+        "fetched": (today or dt.date.today()).strftime("%Y-%m-%d"),
+    }
+
+
+def needs_refresh(rec, this_year, today=None, min_days=RECHECK_DAYS):
+    """이미 채운 단지를 다시 부를지.
+
+    공시가격은 연 1회(1월 1일 기준) 갱신이므로 기준연도가 올해면 부를 이유가 없다.
+    문제는 건축물대장의 주택가격이 공시가격을 '전재'한 값이라 갱신이 늦을 수 있다는 것이다
+    (활용가이드 샘플의 stdDay가 20200101이다). 기준연도만 보고 판단하면 대장이 몇 해 전
+    값만 들고 있는 단지를 매 실행 다시 부르게 된다 — 16,000개 단지면 영원히 헛돈다.
+    그래서 마지막 조회일로 재조회 간격을 둔다."""
+    if not rec:
+        return True
+    std = str(rec.get("std_day") or "")
+    if len(std) >= 4 and std[:4] == str(this_year):
+        return False        # 올해 기준일을 이미 확보했다
+    last = str(rec.get("fetched") or "")
+    if not last:
+        return True         # 조회일 기록 전 데이터 — 한 번은 다시 본다
+    try:
+        gap = ((today or dt.date.today()) - dt.date.fromisoformat(last)).days
+    except ValueError:
+        return True
+    return gap >= min_days
+
+
+def fetch_prices(keys, service_key):
+    """지번 하나의 전유부 주택가격 전량 → ([가격, ...], 기준일)."""
+    prices, std_day = [], ""
+    for page in range(1, MAX_PAGES + 1):
+        items = L.get_items(HSPRC_URL, {
+            "serviceKey": service_key,
+            "sigunguCd": keys["sgg"], "bjdongCd": keys["umd"],
+            "platGbCd": "0", "bun": keys["bun"], "ji": keys["ji"],
+            "numOfRows": ROWS, "pageNo": page, "_type": "json",
+        })
+        for it in items:
+            p = _to_int(it.get("hsprc"))
+            if p > 0:
+                prices.append(p)
+                std_day = str(it.get("stdDay") or "").strip() or std_day
+        if len(items) < ROWS:
+            break
+    return prices, std_day
 
 
 def main():
-    kakao_key = L.key(L.KAKAO_KEYS)
-    vworld_key = L.key(L.VWORLD_KEYS)
-    if not kakao_key or not vworld_key:
-        print("KAKAO_REST_API_KEY/VWORLD_KEY 중 하나가 없음 — 공시가격 보강 건너뜀", file=sys.stderr)
+    service_key = L.key(L.DATA_GO_KEYS)
+    if not service_key:
+        print("[공시가격] data.go.kr 키 없음 — 건너뜀", file=sys.stderr)
         return
-    # V-World는 인증키 발급 시 등록한 도메인이 요청 domain 파라미터와 일치해야 정상 응답한다
-    # (문서: "인증키 URL(인증받은 도메인)이 없으면 API가 작동하지 않습니다"). 2026-07-18
-    # https 전환 후에도 전 요청이 502였던 것은 이 도메인 검증 때문일 가능성이 커, 등록한
-    # 도메인을 VWORLD_DOMAIN으로 넘길 수 있게 한다. 미설정 시 사이트 실제 도메인으로 폴백.
-    vworld_domain = os.environ.get("VWORLD_DOMAIN", "").strip() or "topda.kr"
-    apts_doc = L.load_json(APARTMENTS_JSON, default={"apartments": []})
-    apts = apts_doc.get("apartments") or []
-    if not apts:
-        print("apartments.json 비어 있음 — 보강 생략", file=sys.stderr)
+    addr = (L.load_json(COMPLEX_ADDR_JSON, default=None) or {}).get("map") or {}
+    if not addr:
+        print("[공시가격] complex_addr.json 없음/비어 있음 — collect_transactions.py를 "
+              "먼저 실행해야 조회키가 생긴다", file=sys.stderr)
         return
 
-    existing = L.load_json(OUT_JSON, default={"map": {}})
-    out_map = existing.get("map") or {}
+    data = L.load_json(OUT_JSON, default=None) or {}
+    out = data.setdefault("map", {})
+    this_year = dt.date.today().year
 
-    deadline = L.deadline_from_env(default_min=18)
-    # 진단 모드: OFFICIAL_PRICE_DIAG=1 이면 캐시 무시하고 소수 단지만 호출 후 V-World 응답
-    #  본문을 그대로 로그로 남긴다(수동 dispatch로 빠르게 원인 확인용). OFFICIAL_PRICE_LIMIT로
-    #  처리 단지 수 제한. 진단 모드에서는 out_map을 저장하지 않는다(원인 파악만).
-    diag_mode = os.environ.get("OFFICIAL_PRICE_DIAG", "").strip() in ("1", "true", "yes")
-    limit = int(os.environ.get("OFFICIAL_PRICE_LIMIT", "0") or 0)
-    # 진단 모드는 원인 확인용이므로 항상 소수 건만 — limit 미지정(0)이면 5건으로 강제.
-    # (7/18 진단 실행에서 limit=0 + 시간예산 미적용이 겹쳐 20분 스텝 타임아웃으로
-    #  강제종료된 사고 재발 방지. 시간 예산도 진단 모드에서 동일하게 지킨다.)
-    if diag_mode and limit <= 0:
-        limit = 5
+    todo, no_keys = [], 0
+    for name, entry in addr.items():
+        keys = lookup_keys(entry)
+        if not keys:
+            no_keys += 1
+        elif needs_refresh(out.get(name), this_year):
+            todo.append((name, keys))
+    print(f"[공시가격] 조회키 보유 {len(addr) - no_keys:,}/{len(addr):,}개 단지 · "
+          f"이번 대상 {len(todo):,}개 (키 없음 {no_keys:,})")
+    if no_keys and not todo:
+        print("‼ 조회키가 없어 한 건도 부를 수 없다 — complex_addr.json의 "
+              "_meta.resolved_fields로 행정코드 항목명을 확인하라", file=sys.stderr)
+        return
 
-    stat = {"filled": 0, "skipped_cached": 0, "no_pnu": 0, "no_price": 0}
-    processed = 0
-    vworld_logged = 0   # V-World 응답 샘플은 처음 몇 건만 로그(로그 폭주 방지)
-    for a in apts:
-        if L.out_of_time(deadline, margin_sec=15):
-            print(f"시간 예산 소진 — 남은 단지는 다음 실행에서 이어서 보강 (누적 {stat['filled']}건)")
+    deadline = L.deadline_from_env()
+    stat = {"ok": 0, "empty": 0, "fail": 0, "units": 0}
+    since_save = 0
+    for name, keys in todo:
+        if L.out_of_time(deadline, margin_sec=30):
+            print(f"시간 예산 소진 — {stat['ok']:,}개 저장 후 중단. "
+                  f"남은 단지는 다음 실행에서 이어서 수집")
             break
-        if limit and processed >= limit:
+        try:
+            prices, std_day = fetch_prices(keys, service_key)
+        except L.AuthError as e:
+            print(f"‼ 권한 오류 — data.go.kr에서 '국토교통부_건축HUB_건축물대장정보 서비스'를 "
+                  f"활용신청·승인했는지 확인하라 ({e})", file=sys.stderr)
             break
-        key = f"{a.get('region_key', '')}|{a.get('name', '')}"
-        if key in out_map and not diag_mode:
-            stat["skipped_cached"] += 1
+        except Exception as e:  # noqa: BLE001 — 개별 실패는 다음 단지로
+            stat["fail"] += 1
+            if stat["fail"] <= 3:
+                print(f"  ! {name} 실패: {e}", file=sys.stderr)
             continue
-        processed += 1
-        diag = {}
-        pnu, units = fetch_one(a.get("region", ""), a.get("name", ""), vworld_key, diag=diag, vworld_domain=vworld_domain)
-        if not pnu:
-            stat["no_pnu"] += 1
+        if not prices:
+            stat["empty"] += 1
             continue
-        # V-World가 '가격없음'을 줄 때 실제 응답 본문을 남겨 인증오류/구조변경/빈결과를 구분한다.
-        if diag.get("reason") and diag["reason"] != "ok" and vworld_logged < 3:
-            print(f"[vworld] {a.get('name','')} pnu={pnu} reason={diag['reason']} "
-                  f"sample={diag.get('sample','')!r}", file=sys.stderr)
-            vworld_logged += 1
-        summary = summarize(units)
-        if not summary:
-            stat["no_price"] += 1
-            continue
-        out_map[key] = {"pnu": pnu, "units": summary}
-        stat["filled"] += 1
+        out[name] = summarize(prices, std_day)
+        stat["ok"] += 1
+        stat["units"] += len(prices)
+        since_save += 1
+        if since_save >= SAVE_EVERY:
+            data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
+            if L.save_json_safe(OUT_JSON, data):
+                since_save = 0
 
-    if diag_mode:
-        print(f"[진단] 처리 {processed}건 · 신규 {stat['filled']} · PNU실패 {stat['no_pnu']} · "
-              f"가격없음 {stat['no_price']} — 저장 생략(진단 모드)")
-        return
-
-    print(f"공시가격 보강 — 신규 {stat['filled']}건 · 캐시생략 {stat['skipped_cached']}건 · "
-          f"PNU실패 {stat['no_pnu']}건 · 가격없음 {stat['no_price']}건 · 누적 {len(out_map)}개 단지")
-
-    if not out_map:
-        print("수집 결과 없음 — 기존 official_price.json 유지")
-        return
-    data = {
-        "_meta": {
-            "source": "V-World 공동주택가격 속성정보(getApartHousingPriceAttr) + Kakao 주소→PNU 변환",
-            "note": "공식 오픈API가 없어 Kakao(주소→PNU)와 V-World(PNU→공시가격)를 조합. "
-                    "PNU 변환 실패 단지는 자동 재시도(영구 제외 없음). 평형별 대표값은 최신 "
-                    "공시연도 기준 중앙값.",
-        },
-        "as_of": dt.date.today().isoformat(),
-        "map": out_map,
+    data["_meta"] = {
+        "source": "국토교통부 건축HUB 건축물대장정보 서비스(getBrHsprcInfo)",
+        "note": "'지역키|단지명' → {min, med, max, n, std_day, fetched}. 단지의 전유부(호)별 "
+                "주택가격을 전량 조회해 요약한 값(원). 이 값은 '공동주택가격'이며, "
+                "아파트에 한해 지방세법상 시가표준액과 같다(오피스텔·상가는 다르다). "
+                "std_day는 공시기준일 — 대장 기재가 늦을 수 있어 표시할 때 함께 보여줄 것. "
+                "fetched는 마지막 조회일(재조회 간격 계산용).",
+        "unit": "원",
     }
-    L.save_json_safe(OUT_JSON, data, min_items_key="map")
+    data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
+    print(f"[공시가격] 이번 실행 {stat['ok']:,}개 단지(전유부 {stat['units']:,}건) · "
+          f"응답없음 {stat['empty']:,} · 실패 {stat['fail']:,} · 누적 {len(out):,}개")
+    if stat["ok"]:
+        L.save_json_safe(OUT_JSON, data)
+    else:
+        print("변경 없음 — 저장 생략")
 
 
 if __name__ == "__main__":
