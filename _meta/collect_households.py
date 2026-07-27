@@ -15,6 +15,7 @@
 실거래-전용 단지도 함께 보강해 households.json에 축적한다. 우선순위는 큐레이션 단지 먼저.
 """
 import datetime as dt
+import json
 import os
 import sys
 
@@ -25,6 +26,11 @@ import collect_apartments as CA
 APARTMENTS_JSON = CA.APARTMENTS_JSON
 TRANSACTIONS_JSON = os.path.join(L.SITE_ASSETS, "transactions.json")
 HOUSEHOLDS_JSON = os.path.join(L.SITE_ASSETS, "households.json")
+# 지역별 보강 커버리지 리포트. 로그로만 남기면 실행이 끝난 뒤 확인하기 어렵고(스텝 로그가
+# 수천 줄이라 tail로 닿지 않는다), 무엇보다 "K-apt에 아예 없어서"인지 "이름이 안 맞아서"인지를
+# 가르는 데 매번 이 숫자가 필요하다. 커밋되는 파일로 남겨 언제든 바로 읽는다.
+COVERAGE_JSON = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                             "data", "households_coverage.json")
 
 
 def deals_only_names(apts):
@@ -115,6 +121,7 @@ def main():
     print(f"세대수 보강 대상 — 큐레이션 {need}개 · 실거래전용 {extra_need}개 / {len(regions)}개 지역")
     stat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0, "extra_filled": 0, "dong_ok": 0}
     unmatched = []   # 이름매칭 실패 샘플
+    per_region = []            # 지역별 커버리지(리포트 파일로 저장)
     unmatched_by_region = []   # 매칭률이 낮은 지역 진단(대상/목록/매칭 + 미매칭 이름 예시) — 매칭률이 낮을 때 표기 차이를 바로 볼 수 있게
 
     # 시간 예산: 스텝 타임아웃으로 강제 종료되면 진행분이 통째로 유실된다(2026-07-03:
@@ -202,6 +209,11 @@ def main():
         # 이 두 경우의 대응이 정반대라 로그에 남긴다.
         r_target = len(by_region.get(region, [])) + len(extra_by_region.get(region, []))
         r_matched = stat["matched"] - matched_before
+        per_region.append({
+            "region": region, "target": r_target, "kapt_list": kmap.get("n", 0),
+            "matched": r_matched, "codes": codes,
+            "unmatched_sample": [n for n, _ in extra_by_region.get(region, [])][:8],
+        })
         print(f"[{region}] 대상 {r_target} · K-apt목록 {kmap.get('n', 0)} · 매칭 {r_matched}"
               f" · 코드 {','.join(codes)}"
               f" — 누적 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}")
@@ -263,6 +275,28 @@ def main():
         print("  ! 세대수 0건 — 위 단계 카운터로 원인 확인(권한/목록빈값/이름매칭/기본정보응답).", file=sys.stderr)
         for d in getattr(CA, "_info_diag", []):
             print(f"    · 기본정보 실패 샘플: {d}", file=sys.stderr)
+
+    # 커버리지 리포트 저장 — 다음 조치를 정하는 근거다.
+    #   kapt_list << target  → K-apt 수록범위 한계(의무관리대상만). 이름 규칙을 고쳐도
+    #                          안 붙으므로 다른 출처를 찾아야 한다.
+    #   kapt_list >= target 인데 matched 가 낮음 → 표기 차이. 정규화 규칙으로 해결된다.
+    try:
+        os.makedirs(os.path.dirname(COVERAGE_JSON), exist_ok=True)
+        per_region.sort(key=lambda r: (r["matched"] / r["target"]) if r["target"] else 1)
+        with open(COVERAGE_JSON, "w", encoding="utf-8") as f:
+            json.dump({
+                "as_of": dt.date.today().strftime("%Y-%m-%d"),
+                "note": "지역별 세대수 보강 커버리지. target=보강 대상 단지, "
+                        "kapt_list=K-apt 단지목록 수, matched=이름매칭 성공. "
+                        "kapt_list가 target보다 훨씬 작으면 수록범위 한계, "
+                        "충분한데 matched가 낮으면 이름 표기 차이다.",
+                "total": {"target": need + extra_need, "matched": stat["matched"],
+                          "filled": stat["filled"] + stat["extra_filled"]},
+                "regions": per_region,
+            }, f, ensure_ascii=False, indent=1)
+        print(f"[리포트] {COVERAGE_JSON} 저장 — 지역 {len(per_region)}개")
+    except Exception as e:  # noqa: BLE001 — 리포트 실패가 수집 결과를 버리게 두지 않는다
+        print(f"[리포트] 저장 실패(무시): {e}", file=sys.stderr)
 
     if stat["filled"] > saved_filled:
         L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments")

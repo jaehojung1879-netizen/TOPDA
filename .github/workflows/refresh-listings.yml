@@ -112,8 +112,11 @@ jobs:
         run: python collect_households.py
         continue-on-error: true
 
+      # data/households_coverage.json 도 함께 커밋한다 — 지역별 '대상 / K-apt목록 / 매칭'
+      # 리포트다. 스텝 로그가 수천 줄이라 실행 후 tail로 닿지 않아, 미보강 원인을
+      # (수록범위 한계인지 이름 표기 차이인지) 확인할 방법이 사실상 없었다.
       - name: Commit household counts
-        run: bash _meta/git_commit_push.sh "단지 세대수 자동 보강 ($(date -u +%Y-%m-%d))" site/assets/apartments.json site/assets/households.json
+        run: bash _meta/git_commit_push.sh "단지 세대수 자동 보강 ($(date -u +%Y-%m-%d))" site/assets/apartments.json site/assets/households.json data/households_coverage.json
 
       # 4) 단지 집계 (Kakao 지오코딩 — 느림) — 예산이 줄면 보강을 먼저 멈추고,
       # 수집분을 병합·저장한 뒤 종료한다(merge가 기존 값을 보존하므로 점진 보강).
