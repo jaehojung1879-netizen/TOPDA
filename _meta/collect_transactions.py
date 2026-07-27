@@ -110,6 +110,36 @@ def merge_building_suffix_names(deals):
     return rename
 
 
+# 건축물대장(getBrTitleInfo) 조회 키. 실거래 상세 자료가 법정동시군구·읍면동·본번·부번
+# 코드를 함께 주므로, 이것만 모아두면 단지명을 한 글자도 대조하지 않고 대장을 직접 부를 수
+# 있다 — K-apt 이름매칭에서 겪은 문제(표기 차이·일반명 충돌·모호키)가 통째로 사라진다.
+# 영문 항목명이 명세서마다 다르게 적혀 있어 후보를 순서대로 시도한다(K-apt 필드 처리와 동일).
+_LOC_FIELDS = {
+    "sgg": ("sggCd", "bjdongSggCd", "lawdCd"),
+    "umd": ("umdCd", "bjdongCd", "umdNum"),
+    "bun": ("bonbun", "landBonbun", "bjdongBonbunCd"),
+    "ji":  ("bubun", "landBubun", "bjdongBubunCd"),
+}
+# 실제로 어떤 후보가 값을 줬는지 — 명세로 확인이 안 돼 실행 결과로 확정한다.
+_loc_seen = {}
+
+
+def _location_keys(g):
+    """거래 항목에서 지번·행정코드를 뽑는다. {jibun, sgg, umd, bun, ji} (없는 키는 생략)."""
+    out = {}
+    jibun = g("jibun")
+    if jibun:
+        out["jibun"] = jibun
+    for key, candidates in _LOC_FIELDS.items():
+        for tag in candidates:
+            v = g(tag)
+            if v:
+                out[key] = v
+                _loc_seen.setdefault(key, tag)
+                break
+    return out
+
+
 def recent_months(n):
     """오늘이 속한 달을 포함해 최근 n개월(YYYYMM 내림차순).
     국토부 실거래는 계약 후 신고에 시차가 있어 '현재 달'을 반드시 포함해야
@@ -144,11 +174,11 @@ def _parse_items(root, region_name):
             "price": price, "floor": int(g("floor") or 0),
             "date": f"{y:04d}-{m:02d}-{d:02d}", "build_year": int(g("buildYear") or 0) or None,
         }
-        # 지번은 원장(58MB)에 싣지 않고 단지별로 한 번만 모은다 — 거래마다 실으면 파일이
-        # GitHub 100MB 한도에 더 가까워지는데, 쓰임새는 '단지 위치 한 번 찍기'뿐이다.
-        jibun = g("jibun")
-        if jibun:
-            rec["_jibun"] = jibun   # main()에서 단지별로 접은 뒤 개별 거래에서는 제거한다
+        # 지번·행정코드는 원장(58MB)에 싣지 않고 단지별로 한 번만 모은다 — 거래마다 실으면
+        # 파일이 GitHub 100MB 한도에 더 가까워지는데, 쓰임새는 '단지 한 곳을 특정하기'뿐이다.
+        loc = _location_keys(g)
+        if loc:
+            rec["_loc"] = loc   # main()에서 단지별로 접은 뒤 개별 거래에서는 제거한다
         # 거래 해제(취소). cdealType='O'가 해제 신고분. cdealDay는 'YY.MM.DD' 형식으로 온다.
         if g("cdealType").upper() == "O":
             rec["canceled"] = True
@@ -273,33 +303,52 @@ def main():
         print(f"[동 병합] 동별로 쪼개진 항목 {len(renamed)}개 → 단지 {len(targets)}개로 합침"
               f" (예: {', '.join(targets[:3])})")
 
-    # 단지별 지번을 접는다. 같은 단지가 여러 지번에 걸치면(여러 동) 가장 흔한 지번을 쓴다 —
-    # 대표 위치 한 점만 필요하고, 최빈값이 단지 중심에 가장 가깝다.
-    jibun_votes = {}
+    # 단지별 위치를 접는다. 같은 단지가 여러 지번에 걸치면(여러 동) 가장 흔한 지번을 쓴다 —
+    # 대표 위치 한 점만 필요하고, 최빈값이 단지 중심에 가장 가깝다. 행정코드도 그 지번의
+    # 것으로 함께 고정해야 주소와 대장 조회 키가 어긋나지 않는다.
+    votes = {}
     for d in all_deals:
-        jb = d.pop("_jibun", None)
-        if not jb:
+        loc = d.pop("_loc", None)
+        if not loc or not loc.get("jibun"):
             continue
         key = f"{d['region_key']}|{d['apt']}"
-        votes = jibun_votes.setdefault(key, {})
         # region은 '시도 시군구 법정동'이라 지번만 붙이면 지오코딩 가능한 주소가 된다.
-        votes[f"{d['region']} {jb}"] = votes.get(f"{d['region']} {jb}", 0) + 1
-    fresh = {k: max(v.items(), key=lambda kv: kv[1])[0] for k, v in jibun_votes.items()}
+        rec = {"addr": f"{d['region']} {loc['jibun']}"}
+        for k in ("sgg", "umd", "bun", "ji"):
+            if loc.get(k):
+                rec[k] = loc[k]
+        tally = votes.setdefault(key, {})
+        sig = rec["addr"]
+        cur = tally.get(sig)
+        tally[sig] = (cur[0] + 1, cur[1]) if cur else (1, rec)
+    fresh = {k: max(v.values(), key=lambda c: c[0])[1] for k, v in votes.items()}
     # 증분 갱신이라 이번 실행에서 다시 받은 (지역,월) 쌍의 거래만 _jibun을 갖는다. 기존
     # 파일을 덮어쓰면 이번에 안 건드린 단지의 주소를 잃으므로 병합한다(이번 값 우선).
     prev = (L.load_json(COMPLEX_ADDR_JSON, default=None) or {}).get("map") or {}
     addr_map = dict(prev)
     addr_map.update(fresh)
+    keyed = sum(1 for v in addr_map.values() if isinstance(v, dict) and v.get("umd"))
     if addr_map:
         L.save_json_safe(COMPLEX_ADDR_JSON, {
-            "_meta": {"source": "국토교통부 실거래가 OpenAPI(jibun)",
-                      "note": "'지역키|단지명' → 지번 주소. 좌표·역·학교 보강용. "
-                              "한 단지가 여러 지번에 걸치면 최빈 지번."},
+            "_meta": {"source": "국토교통부 실거래가 OpenAPI(상세 자료)",
+                      "note": "'지역키|단지명' → {addr, sgg, umd, bun, ji}. addr은 좌표·역·학교 "
+                              "보강용 지번 주소, 나머지는 건축물대장(getBrTitleInfo) 조회 키"
+                              "(sigunguCd·bjdongCd·bun·ji). 한 단지가 여러 지번에 걸치면 최빈 지번.",
+                      # 응답 항목명이 명세서에 영문으로 안 적혀 있어 실행 결과로 확정한다.
+                      # 잡 로그는 잘려서 못 읽으므로 커밋되는 이 파일에 남긴다.
+                      "resolved_fields": dict(_loc_seen),
+                      "keyed": keyed},
             "as_of": today.strftime("%Y-%m-%d"),
             "map": addr_map,
         })
-    print(f"[지번] 이번 실행 {len(fresh):,}개 · 누적 {len(addr_map):,}개 단지 주소 "
-          f"→ {os.path.basename(COMPLEX_ADDR_JSON)}")
+    print(f"[지번] 이번 실행 {len(fresh):,}개 · 누적 {len(addr_map):,}개 단지 주소"
+          f"(건축물대장 조회키 보유 {keyed:,}개) → {os.path.basename(COMPLEX_ADDR_JSON)}")
+    if _loc_seen:
+        print(f"[행정코드] 실제 응답 항목명: {_loc_seen}")
+    missing = [k for k in ("sgg", "umd", "bun", "ji") if k not in _loc_seen]
+    if missing and fresh:
+        print(f"‼ 행정코드 항목 미확인 {missing} — 후보 이름이 실제 응답과 다르다. "
+              f"_LOC_FIELDS 후보를 늘려야 건축물대장 조회가 가능하다.", file=sys.stderr)
 
     canceled = sum(1 for d in all_deals if d.get("canceled"))
     data = {
