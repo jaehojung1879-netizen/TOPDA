@@ -124,5 +124,44 @@ class PurgeContradictingTests(unittest.TestCase):
         self.assertEqual([e[0] for e in remaining], ["목동두산위브"])
 
 
+class AddrBackfillQueueTests(unittest.TestCase):
+    """세대수는 있는데 주소가 없어 역거리·초등학교를 못 붙인 항목을 다시 물어보게 한다."""
+
+    def _extra(self, *names):
+        return {"서울 강남구": [(n, "역삼동", {"역삼동"}) for n in names]}
+
+    def test_entry_missing_addr_is_queued(self):
+        # 실측: households.json 5,710건 중 2,549건이 주소가 없어 영영 '정보 없음'이었다.
+        hh = {"서울 강남구|가": {"households": 300}}
+        q = H.addr_backfill_queue(hh, self._extra("가"))
+        self.assertEqual([n for n, _d, _ds in q["서울 강남구"]], ["가"])
+
+    def test_entry_with_addr_is_not_queued(self):
+        """주소가 이미 있으면 위치 보강 패스가 처리한다 — 다시 물어볼 이유가 없다."""
+        hh = {"서울 강남구|가": {"households": 300, "addr": "서울특별시 강남구 역삼동 1"}}
+        self.assertEqual(H.addr_backfill_queue(hh, self._extra("가")), {})
+
+    def test_known_no_addr_is_not_retried(self):
+        """K-apt가 주소를 안 주는 단지로 확인된 건 매 실행 같은 호출을 반복하지 않는다."""
+        hh = {"서울 강남구|가": {"households": 300, "no_addr": True}}
+        self.assertEqual(H.addr_backfill_queue(hh, self._extra("가")), {})
+
+    def test_ungeocodable_addr_is_not_retried(self):
+        """지오코딩 불가로 주소가 제거된 항목(addr_bad)은 다시 받아도 같은 결과다."""
+        hh = {"서울 강남구|가": {"households": 300, "addr_bad": True}}
+        self.assertEqual(H.addr_backfill_queue(hh, self._extra("가")), {})
+
+    def test_complex_not_in_households_is_not_queued(self):
+        """아직 세대수도 못 붙인 단지는 일반 보강 대상이지 백필 대상이 아니다."""
+        self.assertEqual(H.addr_backfill_queue({}, self._extra("가")), {})
+
+    def test_queue_is_grouped_by_region(self):
+        hh = {"서울 강남구|가": {"households": 1}, "부산 동래구|나": {"households": 2}}
+        extra = {"서울 강남구": [("가", "역삼동", {"역삼동"})],
+                 "부산 동래구": [("나", "온천동", {"온천동"})]}
+        q = H.addr_backfill_queue(hh, extra)
+        self.assertEqual(sorted(q), ["부산 동래구", "서울 강남구"])
+
+
 if __name__ == "__main__":
     unittest.main()
