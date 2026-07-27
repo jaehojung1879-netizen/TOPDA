@@ -109,6 +109,28 @@ def purge_contradicting(hh_map, extra_by_region):
     return bad
 
 
+def addr_backfill_queue(hh_map, extra_by_region):
+    """주소를 다시 물어봐야 할 기존 항목을 지역별로. {region_key: [(name, dong, dongs), ...]}
+
+    세대수는 확보했는데 주소가 없는 항목이 대상이다. 주소가 있어야 좌표·역·초등학교를
+    붙일 수 있는데, 이 항목들은 households가 있다는 이유로 보강 대상에서 빠져 다시
+    조회되지 않는다 — 파인더에서 영영 '역거리 정보 없음'으로 남는다.
+
+    제외 대상:
+      addr      이미 주소가 있다(위치 보강 패스가 알아서 처리한다).
+      no_addr   K-apt가 주소를 주지 않는 단지로 확인됐다. 매 실행 같은 호출을 반복하지 않는다.
+      addr_bad  주소는 받았지만 지오코딩이 안 되는 주소다(위치 보강 패스가 표식을 남긴다).
+    """
+    out = {}
+    for rk, entries in extra_by_region.items():
+        for name, dong, dongs in entries:
+            e = hh_map.get(f"{rk}|{name}")
+            if not e or e.get("addr") or e.get("no_addr") or e.get("addr_bad"):
+                continue
+            out.setdefault(rk, []).append((name, dong, dongs))
+    return out
+
+
 def region_coverage(target, filled, kapt_list):
     """지역별 커버리지 판정 지표. target·filled·kapt_list → total·kapt_ratio·name_gap.
 
@@ -168,6 +190,16 @@ def main():
     # 기존 항목 재검증 — 주소 검증은 새로 붙이는 건에만 걸리므로, 그 전에 잘못 붙은 것은
     # 그대로 남는다. 걷어내야 재매칭 대상이 되어 이번 실행에서 바로잡힌다.
     purged = purge_contradicting(hh_map, extra_by_region)
+
+    # 주소 백필 대기열 — 세대수는 확보했는데 주소가 없어 좌표·역·학교를 못 붙인 항목.
+    # 주소 수집은 2026-07-22에 들어왔고, 그 전에 채워진 항목은 households가 있다는 이유로
+    # 보강 대상에서 빠져 다시 조회되지 않는다(실측 2,549건 = households.json의 44.6%).
+    # 지오코딩 대기열은 0건이라 처리 속도가 아니라 '주소를 못 받은 것'이 병목이다 —
+    # 그대로 두면 파인더에서 영영 '역거리 정보 없음'으로 남는다.
+    # extra_by_region은 아래에서 기보강분이 걸러지므로, 그 전에 대기열을 떠둔다.
+    backfill = addr_backfill_queue(hh_map, extra_by_region)
+    backfill_need = sum(len(v) for v in backfill.values())
+
     extra_need = 0
     for rk, entries in extra_by_region.items():
         entries[:] = [e for e in entries if f"{rk}|{e[0]}" not in hh_map]
@@ -191,9 +223,13 @@ def main():
 
     need = sum(len(v) for v in by_region.values())
     regions = list(dict.fromkeys(list(by_region) + list(extra_by_region)))
-    print(f"세대수 보강 대상 — 큐레이션 {need}개 · 실거래전용 {extra_need}개 / {len(regions)}개 지역")
+    print(f"세대수 보강 대상 — 큐레이션 {need}개 · 실거래전용 {extra_need}개 / {len(regions)}개 지역"
+          f" · 주소 백필 대기 {backfill_need}개")
     stat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0, "extra_filled": 0,
-            "dong_ok": 0, "addr_reject": 0}
+            "dong_ok": 0, "addr_reject": 0, "addr_backfill": 0}
+    # 한 실행에서 백필할 상한. 수집 시간을 늘리지 않고 며칠에 걸쳐 메운다.
+    MAX_BACKFILL = 300
+    backfilled = 0
     unmatched = []   # 이름매칭 실패 샘플
     per_region = []            # 지역별 커버리지(리포트 파일로 저장)
     unmatched_by_region = []   # 매칭률이 낮은 지역 진단(대상/목록/매칭 + 미매칭 이름 예시) — 매칭률이 낮을 때 표기 차이를 바로 볼 수 있게
@@ -211,6 +247,7 @@ def main():
         region_deadline = deadline - loc_budget_min * 60
     saved_filled = 0        # apartments.json 마지막 저장 시점의 filled
     saved_extra = 0         # households.json 마지막 저장 시점의 extra_filled
+    saved_backfill = 0      # households.json 마지막 저장 시점의 addr_backfill
 
     for region in regions:
         if L.out_of_time(region_deadline, margin_sec=30):
@@ -291,6 +328,30 @@ def main():
                     entry["addr"] = addr   # 좌표·역·학교 보강용 (아래 위치 보강 패스)
                 hh_map[f"{region}|{name}"] = entry
                 stat["extra_filled"] += 1
+        # 3) 주소 백필 — 세대수는 있으나 주소가 없어 위치 보강을 못 한 항목을 다시 물어본다.
+        #    kaptCode를 저장해두지 않으므로 이름으로 재매칭한 뒤 기본정보를 한 번 더 부른다.
+        for name, dong, dongs in backfill.get(region, []):
+            if backfilled >= MAX_BACKFILL or L.out_of_time(region_deadline, margin_sec=30):
+                break
+            entry = hh_map.get(f"{region}|{name}")
+            if entry is None or entry.get("addr"):
+                continue
+            code, via = CA.kapt_match_via(kmap, name, dong)
+            if not code:
+                continue
+            _hh, _yr, addr = CA.kapt_info(code, kapt_key)
+            if not addr:
+                # K-apt가 이 단지의 주소를 주지 않는다 — 매 실행 같은 호출을 반복하지 않도록
+                # 표식을 남긴다. 나중에 수록이 바뀌면 이 표식만 지우면 다시 시도한다.
+                entry["no_addr"] = True
+                continue
+            if via == "sig" and CA.addr_contradicts_dong(addr, dongs):
+                stat["addr_reject"] += 1
+                continue
+            entry["addr"] = addr
+            stat["addr_backfill"] += 1
+            backfilled += 1
+
         # 지역별 진단 — 남은 미보강분이 'K-apt에 아예 없어서'인지 '이름이 안 맞아서'인지를
         # 가른다. 목록(K-apt 단지 수)을 대상 수가 아니라 전체 단지 수(total = 잔여 + 기보강)와
         # 견줘야 한다. 대상은 잔여분이라 분모로 쓰면 수록범위가 부풀려진다 — region_coverage 참고.
@@ -317,15 +378,18 @@ def main():
         if stat["filled"] > saved_filled:
             if L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments"):
                 saved_filled = stat["filled"]
-        if stat["extra_filled"] > saved_extra:
+        if stat["extra_filled"] > saved_extra or stat["addr_backfill"] > saved_backfill:
             hh_data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
             if L.save_json_safe(HOUSEHOLDS_JSON, hh_data):
                 saved_extra = stat["extra_filled"]
+                saved_backfill = stat["addr_backfill"]
 
     # ── 위치 보강 패스: 주소는 있는데 좌표가 없는 실거래 전용 단지에 Kakao 지오코딩 +
     # 최근접 역/초등학교를 점진 채운다(단지당 3회 호출 — 회당 상한·시간예산 내).
     # 맞춤찾기의 '역거리·초등학교 정보 없음' 공백을 해소하는 핵심 경로.
-    MAX_LOC = 150
+    # 백필이 한 실행에 최대 300건씩 주소를 채우므로, 지오코딩도 같은 보폭이어야 대기열이
+    # 쌓이지 않는다. 실제 상한은 아래 out_of_time(위치보강 몫으로 떼어둔 예산)이 잡는다.
+    MAX_LOC = 300
     loc_filled = 0
     if os.environ.get("KAKAO_REST_API_KEY"):
         for key_, entry in hh_map.items():
@@ -358,7 +422,8 @@ def main():
 
     print(f"[K-apt] 목록성공 {stat['list_ok']}/빈 {stat['list_empty']} · 단지코드 {stat['codes']}개"
           f"(법정동보유 {stat['dong_ok']}) · 이름매칭 {stat['matched']}"
-          f"(주소불일치 반려 {stat['addr_reject']}) → "
+          f"(주소불일치 반려 {stat['addr_reject']}) · 주소백필 {stat['addr_backfill']}"
+          f"/{backfill_need} → "
           f"세대수확보 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}건 · "
           f"위치보강 {loc_filled}건")
     if unmatched:
@@ -408,6 +473,9 @@ def main():
                     "addr_reject": stat["addr_reject"],
                     # 기존 항목 중 주소가 어긋나 걷어낸 수(소급 정리분).
                     "addr_purged": len(purged),
+                    # 주소가 없어 위치 보강을 못 하던 항목을 다시 조회해 채운 수 / 남은 대기열.
+                    "addr_backfill": stat["addr_backfill"],
+                    "addr_backfill_queue": backfill_need,
                     "dong_indexed": stat["dong_ok"],
                 },
                 "regions": per_region,
@@ -419,10 +487,10 @@ def main():
     if stat["filled"] > saved_filled:
         L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments")
     # 제거만 일어난 날에도 저장해야 잘못 붙은 항목이 남지 않는다.
-    if stat["extra_filled"] > saved_extra or purged:
+    if stat["extra_filled"] > saved_extra or stat["addr_backfill"] > saved_backfill or purged:
         hh_data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
         L.save_json_safe(HOUSEHOLDS_JSON, hh_data)
-    if not (stat["filled"] or stat["extra_filled"] or purged):
+    if not (stat["filled"] or stat["extra_filled"] or stat["addr_backfill"] or purged):
         print("변경 없음 — 저장 생략")
 
 
