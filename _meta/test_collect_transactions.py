@@ -96,5 +96,48 @@ class MergeBuildingSuffixTests(unittest.TestCase):
         self.assertEqual(C.merge_building_suffix_names(deals), {})
 
 
+class LocationKeyTests(unittest.TestCase):
+    """건축물대장은 시군구·법정동·본번·부번으로 직접 조회한다 — 단지명을 대조하지 않는다.
+
+    실거래 상세 자료가 이 코드들을 함께 주는데, 명세서에 영문 항목명이 안 적혀 있어
+    후보를 순서대로 시도하고 실제로 값을 준 이름을 기록한다.
+    """
+
+    def setUp(self):
+        C._loc_seen.clear()
+
+    def _getter(self, fields):
+        return lambda tag: fields.get(tag, "")
+
+    def test_primary_field_names_are_picked_up(self):
+        got = C._location_keys(self._getter({
+            "jibun": "736-1", "sggCd": "11680", "umdCd": "10100",
+            "bonbun": "0736", "bubun": "0001"}))
+        self.assertEqual(got, {"jibun": "736-1", "sgg": "11680", "umd": "10100",
+                               "bun": "0736", "ji": "0001"})
+
+    def test_alternate_field_names_are_tried(self):
+        """1순위 이름이 없으면 다음 후보로 넘어간다."""
+        got = C._location_keys(self._getter({
+            "jibun": "1", "bjdongSggCd": "11680", "bjdongCd": "10100",
+            "landBonbun": "0736", "landBubun": "0000"}))
+        self.assertEqual(got["sgg"], "11680")
+        self.assertEqual(got["umd"], "10100")
+        self.assertEqual(got["bun"], "0736")
+
+    def test_resolved_names_are_recorded_for_diagnosis(self):
+        """어떤 후보가 통했는지 남겨야 다음에 후보를 좁힐 수 있다."""
+        C._location_keys(self._getter({"jibun": "1", "bjdongCd": "10100"}))
+        self.assertEqual(C._loc_seen.get("umd"), "bjdongCd")
+
+    def test_missing_codes_are_omitted_not_blanked(self):
+        """코드가 안 오면 키 자체를 빼야 '조회키 보유' 집계가 정확하다."""
+        got = C._location_keys(self._getter({"jibun": "736-1"}))
+        self.assertEqual(got, {"jibun": "736-1"})
+
+    def test_empty_item_yields_nothing(self):
+        self.assertEqual(C._location_keys(self._getter({})), {})
+
+
 if __name__ == "__main__":
     unittest.main()

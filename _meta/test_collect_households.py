@@ -208,6 +208,26 @@ class MigrateBuildingSuffixTests(unittest.TestCase):
 class SeedJibunAddrTests(unittest.TestCase):
     """실거래 지번은 거래가 있으면 항상 온다 — K-apt 수록 여부와 무관하게 위치를 확보한다."""
 
+    def test_object_shaped_entry_is_read(self):
+        """complex_addr.json 값은 {addr, sgg, umd, bun, ji} 객체다(건축물대장 조회키 포함)."""
+        hh = {}
+        addr_map = {"서울 강남구|더샵": {"addr": "서울 강남구 역삼동 736-1",
+                                        "sgg": "11680", "umd": "10100",
+                                        "bun": "0736", "ji": "0001"}}
+        self.assertEqual(H.seed_jibun_addrs(hh, addr_map, []), 1)
+        self.assertEqual(hh["서울 강남구|더샵"], {"addr": "서울 강남구 역삼동 736-1"})
+
+    def test_legacy_string_entry_still_works(self):
+        """주소 문자열만 담던 초기 형식도 받아 준다."""
+        hh = {}
+        self.assertEqual(H.seed_jibun_addrs(hh, {"서울 강남구|더샵": "서울 강남구 역삼동 736-1"}, []), 1)
+        self.assertEqual(hh["서울 강남구|더샵"]["addr"], "서울 강남구 역삼동 736-1")
+
+    def test_entry_without_addr_field_is_skipped(self):
+        hh = {}
+        self.assertEqual(H.seed_jibun_addrs(hh, {"서울 강남구|더샵": {"sgg": "11680"}}, []), 0)
+        self.assertEqual(hh, {})
+
     def test_unmatched_complex_gets_location_only_entry(self):
         """K-apt에 없어 항목 자체가 없던 단지도 주소를 얻는다(전국 단지의 약 30%)."""
         hh = {}

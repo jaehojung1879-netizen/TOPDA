@@ -158,7 +158,9 @@ def seed_jibun_addrs(hh_map, addr_map, apts):
     have_coords = {f"{a.get('region_key')}|{a.get('name')}"
                    for a in apts if a.get("lat") is not None}
     seeded = 0
-    for key, addr in addr_map.items():
+    for key, val in addr_map.items():
+        # 값은 {addr, sgg, umd, bun, ji} 객체다. 주소 문자열만 쓰던 초기 형식도 받아 준다.
+        addr = val.get("addr") if isinstance(val, dict) else val
         if not addr or key in have_coords:
             continue
         e = hh_map.get(key)
