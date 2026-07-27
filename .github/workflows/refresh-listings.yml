@@ -65,8 +65,11 @@ jobs:
         run: python collect_transactions.py
         continue-on-error: true
 
+      # complex_addr.json(단지별 지번·행정코드)도 함께 커밋한다. 이 파일이 푸시되지 않으면
+      # ① 다음 실행이 빈 상태에서 시작해 그날 갱신한 (지역,월) 쌍의 단지만 남고 누적이 리셋되며
+      # ② 공시가격 워크플로는 다른 러너라 파일 자체를 못 읽어 한 건도 못 부른다.
       - name: Commit transactions.json
-        run: bash _meta/git_commit_push.sh "실거래 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/transactions.json
+        run: bash _meta/git_commit_push.sh "실거래 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/transactions.json site/assets/complex_addr.json
 
       # 1-b) 파인더 전용 사전집계본. 맞춤 내집 찾기는 거래 한 건씩이 아니라 단지별
       # 집계만 쓰는데, 원장을 통째로 받아 브라우저에서 매번 다시 집계하고 있었다.

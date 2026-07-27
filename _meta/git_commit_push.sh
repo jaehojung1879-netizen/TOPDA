@@ -14,13 +14,32 @@ MSG="$1"; shift
 git config user.name "topda-bot"
 git config user.email "actions@users.noreply.github.com"
 
-if [ -z "$(git status --porcelain -- "$@")" ]; then
-  echo "변경 없음 — 커밋 생략: $*"
+# 아직 만들어지지 않은 산출물이 인자에 섞여 있어도 커밋이 통째로 실패하면 안 된다.
+# git add 는 매칭되지 않는 pathspec 이 하나만 있어도 fatal(128)로 끝나고, set -e 와 겹치면
+# 함께 넘긴 다른 파일까지 못 올려 그날 수집분을 잃는다. 수집기는 조건에 따라 파일을
+# 아예 만들지 않을 수 있고(예: 응답에 지번이 없으면 complex_addr.json 생략), 워크플로가
+# 넘기는 glob(site/sitemap-*.xml)도 매칭이 없으면 리터럴 그대로 들어온다.
+# 이미 추적 중인 파일은 삭제된 경우에도 대상에 남긴다(삭제를 커밋해야 하므로).
+TARGETS=()
+for p in "$@"; do
+  if [ -e "$p" ] || git ls-files --error-unmatch -- "$p" >/dev/null 2>&1; then
+    TARGETS+=("$p")
+  else
+    echo "대상 없음 — 건너뜀: $p"
+  fi
+done
+if [ ${#TARGETS[@]} -eq 0 ]; then
+  echo "커밋할 대상이 하나도 없음 — 생략: $*"
+  exit 0
+fi
+
+if [ -z "$(git status --porcelain -- "${TARGETS[@]}")" ]; then
+  echo "변경 없음 — 커밋 생략: ${TARGETS[*]}"
   exit 0
 fi
 
 BRANCH="${GITHUB_REF_NAME:-main}"
-git add -- "$@"
+git add -- "${TARGETS[@]}"
 git commit -m "$MSG"
 
 for i in 1 2 3 4 5; do
@@ -60,5 +79,5 @@ for i in 1 2 3 4 5; do
   git rebase --abort 2>/dev/null || true
 done
 
-echo "::error::push 실패: $*"
+echo "::error::push 실패: ${TARGETS[*]}"
 exit 1
