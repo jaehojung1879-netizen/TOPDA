@@ -163,6 +163,48 @@ class AddrBackfillQueueTests(unittest.TestCase):
         self.assertEqual(sorted(q), ["부산 동래구", "서울 강남구"])
 
 
+class MigrateBuildingSuffixTests(unittest.TestCase):
+    """동 병합으로 옛 이름이 되면 애써 모은 세대수·좌표가 고아가 된다 — 옮겨야 한다."""
+
+    def test_orphaned_entry_moves_to_merged_complex(self):
+        # 실측: '동문2차아파트501동'이 세대수 128과 좌표를 들고 있었다.
+        hh = {"경기 파주시|동문2차아파트501동": {"households": 128, "lat": 37.77}}
+        moved = H.migrate_building_suffix_entries(hh, {"경기 파주시|동문2차아파트"})
+        self.assertEqual(moved, ["경기 파주시|동문2차아파트501동"])
+        self.assertEqual(hh, {"경기 파주시|동문2차아파트": {"households": 128, "lat": 37.77}})
+
+    def test_entry_still_in_ledger_is_untouched(self):
+        """원장에 옛 이름이 그대로 있으면 병합 대상이 아니었다는 뜻이다."""
+        hh = {"서울 은평구|우공101동": {"households": 50}}
+        self.assertEqual(H.migrate_building_suffix_entries(hh, {"서울 은평구|우공101동"}), [])
+        self.assertIn("서울 은평구|우공101동", hh)
+
+    def test_no_move_when_merged_complex_absent_from_ledger(self):
+        """기본명이 원장에 없으면 옮길 곳이 없다 — 근거 없이 개명하지 않는다."""
+        hh = {"서울 은평구|우공101동": {"households": 50}}
+        self.assertEqual(H.migrate_building_suffix_entries(hh, {"서울 은평구|다른단지"}), [])
+        self.assertIn("서울 은평구|우공101동", hh)
+
+    def test_existing_values_are_not_overwritten(self):
+        """합칠 곳에 이미 값이 있으면 덮지 않고 빈 항목만 채운다."""
+        hh = {"경기 화성시|진명": {"households": 300},
+              "경기 화성시|진명101동": {"households": 128, "lat": 37.1}}
+        H.migrate_building_suffix_entries(hh, {"경기 화성시|진명"})
+        self.assertEqual(hh["경기 화성시|진명"], {"households": 300, "lat": 37.1})
+
+    def test_siblings_both_migrate(self):
+        hh = {"경기 화성시|진명101동": {"households": 128},
+              "경기 화성시|진명102동": {"built_year": 1995}}
+        moved = H.migrate_building_suffix_entries(hh, {"경기 화성시|진명"})
+        self.assertEqual(len(moved), 2)
+        self.assertEqual(hh["경기 화성시|진명"], {"households": 128, "built_year": 1995})
+
+    def test_non_building_names_are_ignored(self):
+        hh = {"서울 강남구|래미안": {"households": 100}}
+        self.assertEqual(H.migrate_building_suffix_entries(hh, {"서울 강남구|다른곳"}), [])
+        self.assertIn("서울 강남구|래미안", hh)
+
+
 class SeedJibunAddrTests(unittest.TestCase):
     """실거래 지번은 거래가 있으면 항상 온다 — K-apt 수록 여부와 무관하게 위치를 확보한다."""
 

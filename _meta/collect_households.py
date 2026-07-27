@@ -22,6 +22,8 @@ import sys
 import lib_pdata as L
 # collect_apartments의 K-apt 헬퍼 재사용(중복 구현 방지).
 import collect_apartments as CA
+# 원장 단지명 규칙(동 병합)은 수집기와 같은 정의를 써야 한다.
+import collect_transactions as CT
 
 APARTMENTS_JSON = CA.APARTMENTS_JSON
 TRANSACTIONS_JSON = os.path.join(L.SITE_ASSETS, "transactions.json")
@@ -110,6 +112,36 @@ def purge_contradicting(hh_map, extra_by_region):
     for k in bad:
         del hh_map[k]
     return bad
+
+
+def migrate_building_suffix_entries(hh_map, ledger_keys):
+    """동 병합으로 옛 이름이 된 항목의 데이터를 합쳐진 단지로 옮긴다. 옮긴 키 목록 반환.
+
+    collect_transactions.py가 '진명101동'·'102동'을 '진명'으로 합치면, 그 전에 옛 이름으로
+    쌓아둔 세대수·좌표·역·학교가 고아가 된다(2026-07-27 실측 6건 — '동문2차아파트501동'이
+    세대수 128과 좌표를 들고 있었다). 다시 받으려면 API를 또 불러야 하므로 그냥 옮긴다.
+
+    원장에서 사라진 이름이면서 기본명이 원장에 있을 때만 옮긴다. 원장에 아직 옛 이름이
+    남아 있으면 병합 대상이 아니었다는 뜻이므로 손대지 않는다.
+    합칠 곳에 이미 값이 있으면 덮어쓰지 않는다 — 빈 항목만 채운다.
+    """
+    moved = []
+    for key in list(hh_map):
+        if key in ledger_keys:
+            continue
+        rk, _, name = key.partition("|")
+        base = CT.building_base_name(name)
+        if not base or f"{rk}|{base}" not in ledger_keys:
+            continue
+        src = hh_map.pop(key)
+        cur = hh_map.get(f"{rk}|{base}")
+        if cur is None:
+            hh_map[f"{rk}|{base}"] = src
+        else:
+            for k, v in src.items():
+                cur.setdefault(k, v)
+        moved.append(key)
+    return moved
 
 
 def seed_jibun_addrs(hh_map, addr_map, apts):
@@ -217,6 +249,14 @@ def main():
     }
     hh_map = hh_data.setdefault("map", {})
     extra_by_region = deals_only_names(apts)
+    # 동 병합으로 옛 이름이 된 항목을 먼저 옮긴다. 안 옮기면 애써 모은 세대수·좌표가
+    # 고아가 되고, 합쳐진 단지는 처음부터 다시 API를 불러야 한다.
+    ledger_keys = ({f"{rk}|{n}" for rk, es in extra_by_region.items() for (n, _d, _ds) in es}
+                   | {f"{a.get('region_key')}|{a.get('name')}" for a in apts})
+    migrated = migrate_building_suffix_entries(hh_map, ledger_keys)
+    if migrated:
+        print(f"동 병합 반영 — 옛 이름 항목 {len(migrated)}개의 세대수·좌표를 합쳐진 단지로 이관")
+
     # 기존 항목 재검증 — 주소 검증은 새로 붙이는 건에만 걸리므로, 그 전에 잘못 붙은 것은
     # 그대로 남는다. 걷어내야 재매칭 대상이 되어 이번 실행에서 바로잡힌다.
     purged = purge_contradicting(hh_map, extra_by_region)
@@ -536,10 +576,11 @@ def main():
         L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments")
     # 제거만 일어난 날에도 저장해야 잘못 붙은 항목이 남지 않는다.
     if (stat["extra_filled"] > saved_extra or stat["addr_backfill"] > saved_backfill
-            or purged or seeded):
+            or purged or seeded or migrated):
         hh_data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
         L.save_json_safe(HOUSEHOLDS_JSON, hh_data)
-    if not (stat["filled"] or stat["extra_filled"] or stat["addr_backfill"] or purged or seeded):
+    if not (stat["filled"] or stat["extra_filled"] or stat["addr_backfill"]
+            or purged or seeded or migrated):
         print("변경 없음 — 저장 생략")
 
 
