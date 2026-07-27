@@ -40,6 +40,11 @@
   .finder-count { font-weight: 700; margin: 0 0 14px; font-size: 1.05rem; }
   .finder-count .em { color: var(--accent, #2563eb); }
   .finder-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  /* 더보기 버튼은 카드 그리드 한 줄을 통째로 차지한다(그리드 칸에 끼면 카드처럼 보인다). */
+  .finder-more {
+    grid-column: 1 / -1; justify-self: center; min-width: 200px; margin-top: 4px;
+  }
+  .finder-more-left { opacity: .7; font-weight: 400; margin-left: 6px; }
   .apt-card {
     border: 1px solid var(--border, #e5e7eb); border-radius: 16px; padding: 18px; background: #fff;
     display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden;
@@ -729,17 +734,63 @@
       '</article>';
   }
 
+  // 결과는 한 번에 다 그리지 않고 PAGE개씩 이어붙인다. 조건이 느슨하면 수백 곳이
+  // 잡히는데, 카드 하나가 DOM 수십 노드라 한꺼번에 그리면 모바일에서 눈에 띄게 버벅인다.
+  // 잘라내는 게 아니라 나눠 그리는 것이라 전체 결과에는 그대로 접근할 수 있다.
+  var PAGE = 50;
+  var curList = [], shown = 0;
+
+  function paintMore() {
+    var next = curList.slice(shown, shown + PAGE);
+    if (!next.length) return;
+    var oldBtn = document.getElementById('finderMore');
+    if (oldBtn) oldBtn.parentNode.removeChild(oldBtn);
+    // 순위 번호는 이어서 매긴다(51번째가 다시 1이 되면 안 된다).
+    resultsEl.insertAdjacentHTML('beforeend', next.map(function (r, i) {
+      return card(r, shown + i + 1);
+    }).join(''));
+    shown += next.length;
+    var left = curList.length - shown;
+    if (left > 0) {
+      resultsEl.insertAdjacentHTML('beforeend',
+        '<button type="button" class="btn btn-secondary finder-more" id="finderMore">' +
+        '더보기<span class="finder-more-left">' + left + '곳 남음</span></button>');
+    }
+  }
+
+  function showList(list) {
+    curList = list;
+    shown = 0;
+    resultsEl.innerHTML = '';
+    paintMore();
+  }
+
+  // 결과 없음·안내 문구를 넣을 때도 상태를 비워야 이전 목록의 '더보기'가 되살아나지 않는다.
+  function showMessage(html) {
+    curList = [];
+    shown = 0;
+    resultsEl.innerHTML = html;
+  }
+
+  // 같은 조건이면 다시 그리지 않는다. 텍스트 입력은 input 이벤트로 이미 반영되는데,
+  // 포커스가 빠질 때 change 이벤트가 한 번 더 오기 때문에(예산 칸 입력 후 '더보기' 클릭)
+  // 그대로 두면 펼쳐둔 목록이 첫 50곳으로 되감긴다. 불필요한 재계산도 함께 줄인다.
+  var lastKey = null;
+
   function render() {
     if (!DATA.length) return;
     var f = readFilters();
     var q = f._search; delete f._search;
     var mode = sortSel.value || 'score';
+    var key = DATA.length + '|' + mode + '|' + (q || '') + '|' + JSON.stringify(f);
+    if (key === lastKey) return;
+    lastKey = key;
     curHub = f.commute_hub || '';
     var hasFilter = Object.keys(f).length > 0 || !!q;
     if (!hasFilter) {
       relaxedEl.innerHTML = '';
       countEl.textContent = '';
-      resultsEl.innerHTML = '<div class="finder-empty">왼쪽에서 <strong>키워드 검색이나 조건을 하나 이상</strong> 입력해보세요<br/>조건에 맞는 단지를 종합점수 순으로 추천해 드립니다</div>';
+      showMessage('<div class="finder-empty">왼쪽에서 <strong>키워드 검색이나 조건을 하나 이상</strong> 입력해보세요<br/>조건에 맞는 단지를 종합점수 순으로 추천해 드립니다</div>');
       return;
     }
     // 단지 풀: 검색어가 있으면 우선 좁힌다
@@ -750,18 +801,17 @@
     if (list.length) {
       var label = (mode === 'score') ? '점수 높은 순' : (mode === 'price_asc') ? '가격 낮은 순' : (mode === 'price_desc') ? '가격 높은 순' : (mode === 'recent') ? '최근 거래 순' : '상승 모멘텀 순';
       countEl.innerHTML = '조건에 맞는 단지 <span class="em">' + list.length + '곳</span> · ' + label;
-      // 더 많은 단지가 보이도록 200곳까지 노출
-      resultsEl.innerHTML = list.slice(0, 200).map(function (r, i) { return card(r, i + 1); }).join('');
+      showList(list);
     } else {
       // 조건을 1~2개 완화한 근접 추천
       var near = S.nearMatches(pool, f, null, 2);
       if (near.length) {
         countEl.innerHTML = '정확히 맞는 단지가 없어 <span class="em">조건을 조금 완화</span>한 추천이에요';
         relaxedEl.innerHTML = '<div class="finder-relaxed-banner">입력하신 조건을 모두 만족하는 단지는 없었지만, 조건을 1~2개 완화하면 맞는 단지들입니다 — 필터를 조금 넓혀보세요</div>';
-        resultsEl.innerHTML = near.slice(0, 100).map(function (r, i) { return card(r, i + 1); }).join('');
+        showList(near);
       } else {
         countEl.textContent = '조건에 맞는 단지가 없습니다';
-        resultsEl.innerHTML = '<div class="finder-empty">조건을 완화해 다시 시도해보세요</div>';
+        showMessage('<div class="finder-empty">조건을 완화해 다시 시도해보세요</div>');
       }
     }
   }
@@ -978,6 +1028,7 @@
     document.body.style.overflow = '';
   }
   resultsEl.addEventListener('click', function (e) {
+    if (e.target.closest('#finderMore')) { paintMore(); return; }
     var card = e.target.closest('.apt-card');
     if (!card) return;
     openAptModal(card.dataset.apt, card.dataset.region);
@@ -1109,7 +1160,7 @@
     }
     if (!DATA.length) {
       countEl.textContent = '';
-      resultsEl.innerHTML = '<div class="finder-empty">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요</div>';
+      showMessage('<div class="finder-empty">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요</div>');
       return;
     }
     var sidos = [];

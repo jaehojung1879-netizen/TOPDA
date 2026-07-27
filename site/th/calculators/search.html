@@ -46,6 +46,11 @@
   .finder-count { font-weight: 700; margin: 0 0 14px; font-size: 1.05rem; }
   .finder-count .em { color: var(--accent, #2563eb); }
   .finder-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  /* 더보기 버튼은 카드 그리드 한 줄을 통째로 차지한다(그리드 칸에 끼면 카드처럼 보인다). */
+  .finder-more {
+    grid-column: 1 / -1; justify-self: center; min-width: 200px; margin-top: 4px;
+  }
+  .finder-more-left { opacity: .7; font-weight: 400; margin-left: 6px; }
   .apt-card { border: 1px solid var(--border, #e5e7eb); border-radius: 16px; padding: 18px; background: #fff; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
   .apt-card .rank { position: absolute; top: 0; left: 0; background: var(--accent, #2563eb); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-bottom-right-radius: 10px; }
   .apt-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-top: 8px; }
@@ -320,9 +325,9 @@
 <script src="../../assets/score.js?v=20260722"></script>
 <script src="../../assets/region.js?v=20260629"></script>
 <script src="../../assets/kmap.js?v=20260722"></script>
-<script src="../../assets/app.js?v=20260723"></script>
+<script src="../../assets/app.js?v=20260722"></script>
 <script>
-var T = {"title":"ค้นหาบ้านตามใจ","metaDesc":"กรอกงบประมาณ พื้นที่ ขนาด อายุอาคาร ระยะถึงสถานี/โรงเรียน และจำนวนยูนิต ระบบจัดอันดับโครงการตามคะแนนรวม กรอกไม่กี่ข้อก็พอ","home":"หน้าแรก","h1":"ค้นหาบ้านตามใจ","intro":"แค่กรอกเงื่อนไข ระบบให้คะแนนโครงการตามโอกาสราคาขึ้น ใกล้รถไฟ เขตโรงเรียน ฯลฯ <strong>กรอกงบแล้วโครงการใกล้ระดับราคานั้นจะแสดงก่อน</strong> ","howtoToggle":"วิธีให้คะแนน ▾","condH":"กรอกเงื่อนไข","searchLabel":"ชื่อโครงการ · คำค้น","searchPh":"헬리오시티, 래미안","searchHint":"ค้นด้วยชื่อโครงการหรือพื้นที่","searchNote":"⌨️ การค้นหาจับคู่เฉพาะภาษาเกาหลี — พิมพ์ชื่อภาษาเกาหลี (เช่น 헬리오시티) หรือชื่อพื้นที่ อักษรโรมันเช่น “Helio” จะไม่ตรง รายการพื้นที่ด้านล่างแสดงเป็นภาษาอังกฤษเพื่ออ้างอิง","sortLabel":"จัดเรียง","sortScore":"คะแนนสูงสุด","sortPriceAsc":"ราคาต่ำสุด","sortPriceDesc":"ราคาสูงสุด","sortRecent":"ซื้อขายล่าสุด","sortMomentum":"โมเมนตัมแรงสุด","budgetLabel":"งบประมาณ (สูงสุด)","budgetSuffix":"พันล้าน","budgetPh":"1.5","budgetStep":"0.1","budgetScale":100000,"budgetHint":"หน่วยพันล้านวอน (1 = 1,000,000,000 วอน) แสดงเฉพาะโครงการที่มียูนิต ≤ ระดับนี้","sidoLabel":"พื้นที่ — จังหวัด","guLabel":"พื้นที่ — เขต/อำเภอ","optAll":"ทั้งหมด","areaLabel":"ขนาด (พื้นที่ใช้สอย)","areaAll":"ทั้งหมด","areaSmall":"เล็ก (~60㎡)","areaMs":"มาตรฐาน (60~85㎡)","areaMid":"กลาง (85~102㎡)","areaLarge":"ใหญ่ (102㎡~)","familyLabel":"จำนวนคน (ไม่บังคับ — แนะนำขนาด)","famNone":"ไม่เลือก","fam1":"1–2 คน","fam3":"3 คน","fam4":"4 คนขึ้นไป","ageLabel":"อายุอาคารสูงสุด","ageSuffix":"ปี","agePh":"เช่น 15","subwayLabel":"ระยะถึงสถานี (สูงสุด)","elemLabel":"ระยะถึงโรงเรียนประถม (สูงสุด)","mSuffix":"m","subwayPh":"เช่น 500","elemPh":"เช่น 400","houseLabel":"จำนวนยูนิตขั้นต่ำ","houseSuffix":"ยูนิต","housePh":"เช่น 1000","commuteLabel":"เดินทางไปย่านธุรกิจ","commuteNone":"ไม่เลือก","commuteSuffix":"นาที","commutePh":"40","commuteHint":"เลือกย่านธุรกิจและเวลาเดินทางสูงสุด (นาที) จะแสดงเฉพาะโครงการในเวลานั้น","parkingLabel":"ที่จอดขั้นต่ำต่อยูนิต","parkingSuffix":"คัน","parkingPh":"เช่น 1.2","ratioLabel":"เพดานอัตรา Jeonse","ratioSuffix":"%","ratioPh":"เช่น 55","ratioHint":"อัตรายิ่งต่ำมักเป็นย่านราคาสูงและเป็นที่ต้องการมากกว่า","submit":"รับคำแนะนำ","reset":"รีเซ็ต","loading":"กำลังโหลดโครงการ…","howtoSummary":"วิธีคำนวณคะแนนรวม","howtoP1":"แต่ละปัจจัยให้คะแนน 0–100 แล้ว<strong>ถัวเฉลี่ยแบบถ่วงน้ำหนัก</strong>เป็นคะแนนรวม (0–100) ปัจจัยที่ไม่มีข้อมูลหรือไม่ได้กรอกจะถูกตัดออก และกระจายน้ำหนักไปยังปัจจัยที่เหลือ","thFactor":"ปัจจัย","thWeight":"น้ำหนัก","thFormula":"สูตรคะแนน (0–100)","rows":[["โอกาสขึ้นราคา","23%","แนวโน้ม<strong>ราคาต่อ㎡</strong>ล่าสุด (ความชันถดถอย → ต่อปี) 65% บวก<strong>อัตรา Jeonse</strong> (ยิ่งต่ำยิ่งเป็นย่านพรีเมียม) 35% +20%/ปี = เต็ม, 0% = 50"],["ใกล้รถไฟ","19%","ระยะเดินถึงสถานีใกล้สุด ≤300m = 100, ≥1.5km = 0 (เชิงเส้น)"],["เขตโรงเรียน","19%","ระยะถึงโรงเรียนประถมใกล้สุด ≤150m = 100, ≥1.2km = 0 (เชิงเส้น)"],["เสถียรราคา","14%","ค่าสัมประสิทธิ์การผันแปร (SD ÷ ค่าเฉลี่ย) ของราคาล่าสุดยิ่งต่ำยิ่งได้คะแนน ต่ำกว่า 2 ตัวอย่าง = กลาง (60)"],["ขนาดโครงการ","10%","≥2,000 ยูนิต = 100, ≤300 = 20 (เชิงเส้น)"],["อายุอาคาร","10%","สร้างภายใน 2 ปี = 100, ≥35 ปี = 10 (เชิงเส้น)"],["สภาพคล่อง","5%","จำนวนซื้อขาย 6 เดือนล่าสุด ≥15 = 100, 0 = 30"],["เข้ากับงบ","25%<br/><span style=\"font-size:0.8em;color:var(--text-muted)\">เมื่อกรอกงบ</span>","ในยูนิตที่ ≤ งบ ยิ่งใกล้งบยิ่งได้คะแนน การกรอกงบจะเพิ่มปัจจัยนี้ด้วยน้ำหนักสูงสุด"]],"howtoP2":"※ แนวโน้มราคาใช้<strong>ราคาเฉลี่ยต่อ㎡รายเดือน</strong>เพื่อลดความบิดเบือนจากขนาดที่ซื้อขาย เมื่อโครงการไม่มีอัตรา Jeonse ของตัวเอง จะใช้<strong>ค่าเฉลี่ยพื้นที่</strong>และระบุ \"(พื้นที่)\" บนการ์ด คะแนนนี้เป็น<strong>ตัวชี้วัดอ้างอิง</strong>จากข้อมูลซื้อขาย/ข้อมูลเปิด ไม่รับประกันผลตอบแทน","sampleNote":"ตัวเลขเป็นตัวอย่างอ้างอิง โปรดตรวจสอบราคา สถานที่จริง และสถานะทางกฎหมายด้วยตนเองก่อนเซ็นสัญญาเสมอ","close":"ปิด","mapAria":"แผนที่ตำแหน่งโครงการ","recentDeals":"ซื้อขายล่าสุด","thDate":"วันที่","thAreaPy":"พื้นที่ (พยอง)","thAmount":"จำนวนเงิน","moreLink":"ดูทั้งหมดที่ค้นราคาซื้อขาย →","noDeals":"ไม่มีข้อมูลการซื้อขาย","curMode":"bn","curPrefix":"₩","curUnit":" พันล้าน","bars":{"fit":"งบ","appreciation":"ขึ้นราคา","subway":"ใกล้รถไฟ","school":"โรงเรียน","stability":"เสถียร","liquidity":"สภาพคล่อง","scale":"ขนาด","age":"อายุ"},"rankPre":"#","rankSuf":"","totalScore":"คะแนนรวม","units":" ยูนิต","unitsUnknown":"ไม่ทราบจำนวนยูนิต","noInfo":"ไม่มีข้อมูล","unknown":"ไม่ทราบ","specSubway":"ถึงสถานี","specElem":"ประถม","specBuilt":"สร้าง","specHouseholds":"ยูนิต","specRatio":"อัตรา Jeonse","specParking":"จอด/ยูนิต","walk":"เดิน","min":" นาที","builtYr":"","yrOld":" ปี","about":"~","areaAvg":"(พื้นที่)","perUnit":" คัน","toPrefix":"ถึง ","toSuffix":"","recentDeal":"ซื้อขายล่าสุด","reasons":{"subway":"🚇 {station} · เดิน {min} นาที","school":"🎒 {name} {dist}m{zone}","scale":"🏙 โครงการใหญ่ {n} ยูนิต","age":"🏗 สร้างปี {year} เกือบใหม่","momentum":"📈 ราคาล่าสุดขาขึ้น","stability":"🛡 ราคานิ่ง","commute":"🏢 {hub} {min} นาที","parking":"🅿 {per}/ยูนิต"},"assigned":" (เขต)","bestLabels":{"appreciation":"โอกาสขึ้นราคา","subway":"คมนาคม","school":"เขตโรงเรียน","stability":"เสถียรราคา","scale":"ขนาดโครงการ","age":"อายุอาคาร"},"bestSuffix":" เด่นที่สุด","relaxedCardPre":"⚠ ไม่ผ่าน <strong>","relaxedCardSuf":"</strong> แต่แนะนำเพราะปัจจัยอื่นดีเด่น","filterLabels":{"budget_max":"งบ","region":"พื้นที่","area_type":"ขนาด","max_age_years":"อายุ","subway_distance_max":"ระยะสถานี","elementary_distance_max":"ระยะโรงเรียน","min_households":"ยูนิต","commute":"เดินทาง","parking_min":"ที่จอด","jeonse_ratio_max":"อัตรา Jeonse"},"countMatch":"โครงการที่ตรง <span class=\"em\">{n}</span> แห่ง · {sort}","countUnit":"","countRelaxed":"ไม่มีที่ตรงพอดี — แนะนำแบบ<span class=\"em\">ผ่อนเงื่อนไขเล็กน้อย</span>","relaxedBanner":"ไม่มีโครงการที่ผ่านทุกเงื่อนไข แต่ผ่านหากผ่อน 1–2 เงื่อนไข ลองขยายตัวกรอง","noMatch":"ไม่มีโครงการที่ตรงเงื่อนไข","emptyRelax":"โปรดผ่อนเงื่อนไขแล้วลองใหม่","initialEmpty":"กรอก<strong>คำค้นหรืออย่างน้อยหนึ่งเงื่อนไข</strong>ทางซ้าย<br/>เราจะจัดอันดับโครงการที่ตรงตามคะแนนรวม","loadFail":"โหลดข้อมูลไม่สำเร็จ โปรดลองใหม่ภายหลัง","sortLabelsShort":{"score":"คะแนนสูงสุด","price_asc":"ราคาต่ำสุด","price_desc":"ราคาสูงสุด","recent":"ล่าสุด","momentum":"โมเมนตัมแรง"},"mLatest":"ล่าสุด","mDeals":"จำนวนซื้อขาย","mAvg":"เฉลี่ย","mBuilt":"สร้าง","mHouseholds":"ยูนิต","mStation":"สถานีใกล้สุด","mElem":"ประถม","mRatio":"อัตรา Jeonse","mParking":"จอด/ยูนิต","dealsCnt":" รายการ","py":"พยอง","ago":{"today":"วันนี้","d":" วันก่อน","mo":" เดือนก่อน","y":" ปีก่อน"}};
+var T = {"title":"ค้นหาบ้านตามใจ","metaDesc":"กรอกงบประมาณ พื้นที่ ขนาด อายุอาคาร ระยะถึงสถานี/โรงเรียน และจำนวนยูนิต ระบบจัดอันดับโครงการตามคะแนนรวม กรอกไม่กี่ข้อก็พอ","home":"หน้าแรก","h1":"ค้นหาบ้านตามใจ","intro":"แค่กรอกเงื่อนไข ระบบให้คะแนนโครงการตามโอกาสราคาขึ้น ใกล้รถไฟ เขตโรงเรียน ฯลฯ <strong>กรอกงบแล้วโครงการใกล้ระดับราคานั้นจะแสดงก่อน</strong> ","howtoToggle":"วิธีให้คะแนน ▾","condH":"กรอกเงื่อนไข","searchLabel":"ชื่อโครงการ · คำค้น","searchPh":"헬리오시티, 래미안","searchHint":"ค้นด้วยชื่อโครงการหรือพื้นที่","searchNote":"⌨️ การค้นหาจับคู่เฉพาะภาษาเกาหลี — พิมพ์ชื่อภาษาเกาหลี (เช่น 헬리오시티) หรือชื่อพื้นที่ อักษรโรมันเช่น “Helio” จะไม่ตรง รายการพื้นที่ด้านล่างแสดงเป็นภาษาอังกฤษเพื่ออ้างอิง","sortLabel":"จัดเรียง","sortScore":"คะแนนสูงสุด","sortPriceAsc":"ราคาต่ำสุด","sortPriceDesc":"ราคาสูงสุด","sortRecent":"ซื้อขายล่าสุด","sortMomentum":"โมเมนตัมแรงสุด","budgetLabel":"งบประมาณ (สูงสุด)","budgetSuffix":"พันล้าน","budgetPh":"1.5","budgetStep":"0.1","budgetScale":100000,"budgetHint":"หน่วยพันล้านวอน (1 = 1,000,000,000 วอน) แสดงเฉพาะโครงการที่มียูนิต ≤ ระดับนี้","sidoLabel":"พื้นที่ — จังหวัด","guLabel":"พื้นที่ — เขต/อำเภอ","optAll":"ทั้งหมด","areaLabel":"ขนาด (พื้นที่ใช้สอย)","areaAll":"ทั้งหมด","areaSmall":"เล็ก (~60㎡)","areaMs":"มาตรฐาน (60~85㎡)","areaMid":"กลาง (85~102㎡)","areaLarge":"ใหญ่ (102㎡~)","familyLabel":"จำนวนคน (ไม่บังคับ — แนะนำขนาด)","famNone":"ไม่เลือก","fam1":"1–2 คน","fam3":"3 คน","fam4":"4 คนขึ้นไป","ageLabel":"อายุอาคารสูงสุด","ageSuffix":"ปี","agePh":"เช่น 15","subwayLabel":"ระยะถึงสถานี (สูงสุด)","elemLabel":"ระยะถึงโรงเรียนประถม (สูงสุด)","mSuffix":"m","subwayPh":"เช่น 500","elemPh":"เช่น 400","houseLabel":"จำนวนยูนิตขั้นต่ำ","houseSuffix":"ยูนิต","housePh":"เช่น 1000","commuteLabel":"เดินทางไปย่านธุรกิจ","commuteNone":"ไม่เลือก","commuteSuffix":"นาที","commutePh":"40","commuteHint":"เลือกย่านธุรกิจและเวลาเดินทางสูงสุด (นาที) จะแสดงเฉพาะโครงการในเวลานั้น","parkingLabel":"ที่จอดขั้นต่ำต่อยูนิต","parkingSuffix":"คัน","parkingPh":"เช่น 1.2","ratioLabel":"เพดานอัตรา Jeonse","ratioSuffix":"%","ratioPh":"เช่น 55","ratioHint":"อัตรายิ่งต่ำมักเป็นย่านราคาสูงและเป็นที่ต้องการมากกว่า","submit":"รับคำแนะนำ","reset":"รีเซ็ต","loading":"กำลังโหลดโครงการ…","howtoSummary":"วิธีคำนวณคะแนนรวม","howtoP1":"แต่ละปัจจัยให้คะแนน 0–100 แล้ว<strong>ถัวเฉลี่ยแบบถ่วงน้ำหนัก</strong>เป็นคะแนนรวม (0–100) ปัจจัยที่ไม่มีข้อมูลหรือไม่ได้กรอกจะถูกตัดออก และกระจายน้ำหนักไปยังปัจจัยที่เหลือ","thFactor":"ปัจจัย","thWeight":"น้ำหนัก","thFormula":"สูตรคะแนน (0–100)","rows":[["โอกาสขึ้นราคา","23%","แนวโน้ม<strong>ราคาต่อ㎡</strong>ล่าสุด (ความชันถดถอย → ต่อปี) 65% บวก<strong>อัตรา Jeonse</strong> (ยิ่งต่ำยิ่งเป็นย่านพรีเมียม) 35% +20%/ปี = เต็ม, 0% = 50"],["ใกล้รถไฟ","19%","ระยะเดินถึงสถานีใกล้สุด ≤300m = 100, ≥1.5km = 0 (เชิงเส้น)"],["เขตโรงเรียน","19%","ระยะถึงโรงเรียนประถมใกล้สุด ≤150m = 100, ≥1.2km = 0 (เชิงเส้น)"],["เสถียรราคา","14%","ค่าสัมประสิทธิ์การผันแปร (SD ÷ ค่าเฉลี่ย) ของราคาล่าสุดยิ่งต่ำยิ่งได้คะแนน ต่ำกว่า 2 ตัวอย่าง = กลาง (60)"],["ขนาดโครงการ","10%","≥2,000 ยูนิต = 100, ≤300 = 20 (เชิงเส้น)"],["อายุอาคาร","10%","สร้างภายใน 2 ปี = 100, ≥35 ปี = 10 (เชิงเส้น)"],["สภาพคล่อง","5%","จำนวนซื้อขาย 6 เดือนล่าสุด ≥15 = 100, 0 = 30"],["เข้ากับงบ","25%<br/><span style=\"font-size:0.8em;color:var(--text-muted)\">เมื่อกรอกงบ</span>","ในยูนิตที่ ≤ งบ ยิ่งใกล้งบยิ่งได้คะแนน การกรอกงบจะเพิ่มปัจจัยนี้ด้วยน้ำหนักสูงสุด"]],"howtoP2":"※ แนวโน้มราคาใช้<strong>ราคาเฉลี่ยต่อ㎡รายเดือน</strong>เพื่อลดความบิดเบือนจากขนาดที่ซื้อขาย เมื่อโครงการไม่มีอัตรา Jeonse ของตัวเอง จะใช้<strong>ค่าเฉลี่ยพื้นที่</strong>และระบุ \"(พื้นที่)\" บนการ์ด คะแนนนี้เป็น<strong>ตัวชี้วัดอ้างอิง</strong>จากข้อมูลซื้อขาย/ข้อมูลเปิด ไม่รับประกันผลตอบแทน","sampleNote":"ตัวเลขเป็นตัวอย่างอ้างอิง โปรดตรวจสอบราคา สถานที่จริง และสถานะทางกฎหมายด้วยตนเองก่อนเซ็นสัญญาเสมอ","close":"ปิด","mapAria":"แผนที่ตำแหน่งโครงการ","recentDeals":"ซื้อขายล่าสุด","thDate":"วันที่","thAreaPy":"พื้นที่ (พยอง)","thAmount":"จำนวนเงิน","moreLink":"ดูทั้งหมดที่ค้นราคาซื้อขาย →","noDeals":"ไม่มีข้อมูลการซื้อขาย","curMode":"bn","curPrefix":"₩","curUnit":" พันล้าน","bars":{"fit":"งบ","appreciation":"ขึ้นราคา","subway":"ใกล้รถไฟ","school":"โรงเรียน","stability":"เสถียร","liquidity":"สภาพคล่อง","scale":"ขนาด","age":"อายุ"},"rankPre":"#","rankSuf":"","totalScore":"คะแนนรวม","units":" ยูนิต","unitsUnknown":"ไม่ทราบจำนวนยูนิต","noInfo":"ไม่มีข้อมูล","unknown":"ไม่ทราบ","specSubway":"ถึงสถานี","specElem":"ประถม","specBuilt":"สร้าง","specHouseholds":"ยูนิต","specRatio":"อัตรา Jeonse","specParking":"จอด/ยูนิต","walk":"เดิน","min":" นาที","builtYr":"","yrOld":" ปี","about":"~","areaAvg":"(พื้นที่)","perUnit":" คัน","toPrefix":"ถึง ","toSuffix":"","recentDeal":"ซื้อขายล่าสุด","reasons":{"subway":"🚇 {station} · เดิน {min} นาที","school":"🎒 {name} {dist}m{zone}","scale":"🏙 โครงการใหญ่ {n} ยูนิต","age":"🏗 สร้างปี {year} เกือบใหม่","momentum":"📈 ราคาล่าสุดขาขึ้น","stability":"🛡 ราคานิ่ง","commute":"🏢 {hub} {min} นาที","parking":"🅿 {per}/ยูนิต"},"assigned":" (เขต)","bestLabels":{"appreciation":"โอกาสขึ้นราคา","subway":"คมนาคม","school":"เขตโรงเรียน","stability":"เสถียรราคา","scale":"ขนาดโครงการ","age":"อายุอาคาร"},"bestSuffix":" เด่นที่สุด","relaxedCardPre":"⚠ ไม่ผ่าน <strong>","relaxedCardSuf":"</strong> แต่แนะนำเพราะปัจจัยอื่นดีเด่น","filterLabels":{"budget_max":"งบ","region":"พื้นที่","area_type":"ขนาด","max_age_years":"อายุ","subway_distance_max":"ระยะสถานี","elementary_distance_max":"ระยะโรงเรียน","min_households":"ยูนิต","commute":"เดินทาง","parking_min":"ที่จอด","jeonse_ratio_max":"อัตรา Jeonse"},"countMatch":"โครงการที่ตรง <span class=\"em\">{n}</span> แห่ง · {sort}","countUnit":"","countRelaxed":"ไม่มีที่ตรงพอดี — แนะนำแบบ<span class=\"em\">ผ่อนเงื่อนไขเล็กน้อย</span>","relaxedBanner":"ไม่มีโครงการที่ผ่านทุกเงื่อนไข แต่ผ่านหากผ่อน 1–2 เงื่อนไข ลองขยายตัวกรอง","noMatch":"ไม่มีโครงการที่ตรงเงื่อนไข","emptyRelax":"โปรดผ่อนเงื่อนไขแล้วลองใหม่","more":"ดูเพิ่มเติม","moreLeft":"เหลือ {n}","initialEmpty":"กรอก<strong>คำค้นหรืออย่างน้อยหนึ่งเงื่อนไข</strong>ทางซ้าย<br/>เราจะจัดอันดับโครงการที่ตรงตามคะแนนรวม","loadFail":"โหลดข้อมูลไม่สำเร็จ โปรดลองใหม่ภายหลัง","sortLabelsShort":{"score":"คะแนนสูงสุด","price_asc":"ราคาต่ำสุด","price_desc":"ราคาสูงสุด","recent":"ล่าสุด","momentum":"โมเมนตัมแรง"},"mLatest":"ล่าสุด","mDeals":"จำนวนซื้อขาย","mAvg":"เฉลี่ย","mBuilt":"สร้าง","mHouseholds":"ยูนิต","mStation":"สถานีใกล้สุด","mElem":"ประถม","mRatio":"อัตรา Jeonse","mParking":"จอด/ยูนิต","dealsCnt":" รายการ","py":"พยอง","ago":{"today":"วันนี้","d":" วันก่อน","mo":" เดือนก่อน","y":" ปีก่อน"}};
 var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","광화문":"Gwanghwamun"};
 </script>
 <script>
@@ -580,17 +585,63 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
       '</article>';
   }
 
+  // 결과는 한 번에 다 그리지 않고 PAGE개씩 이어붙인다. 조건이 느슨하면 수백 곳이
+  // 잡히는데, 카드 하나가 DOM 수십 노드라 한꺼번에 그리면 모바일에서 눈에 띄게 버벅인다.
+  // 잘라내는 게 아니라 나눠 그리는 것이라 전체 결과에는 그대로 접근할 수 있다.
+  var PAGE = 50;
+  var curList = [], shown = 0;
+
+  function paintMore() {
+    var next = curList.slice(shown, shown + PAGE);
+    if (!next.length) return;
+    var oldBtn = document.getElementById('finderMore');
+    if (oldBtn) oldBtn.parentNode.removeChild(oldBtn);
+    // 순위 번호는 이어서 매긴다(51번째가 다시 1이 되면 안 된다).
+    resultsEl.insertAdjacentHTML('beforeend', next.map(function (r, i) {
+      return card(r, shown + i + 1);
+    }).join(''));
+    shown += next.length;
+    var left = curList.length - shown;
+    if (left > 0) {
+      resultsEl.insertAdjacentHTML('beforeend',
+        '<button type="button" class="btn btn-secondary finder-more" id="finderMore">' +
+        T.more + '<span class="finder-more-left">' + T.moreLeft.replace('{n}', left) + '</span></button>');
+    }
+  }
+
+  function showList(list) {
+    curList = list;
+    shown = 0;
+    resultsEl.innerHTML = '';
+    paintMore();
+  }
+
+  // 결과 없음·안내 문구를 넣을 때도 상태를 비워야 이전 목록의 '더보기'가 되살아나지 않는다.
+  function showMessage(html) {
+    curList = [];
+    shown = 0;
+    resultsEl.innerHTML = html;
+  }
+
+  // 같은 조건이면 다시 그리지 않는다. 텍스트 입력은 input 이벤트로 이미 반영되는데,
+  // 포커스가 빠질 때 change 이벤트가 한 번 더 오기 때문에(예산 칸 입력 후 '더보기' 클릭)
+  // 그대로 두면 펼쳐둔 목록이 첫 50곳으로 되감긴다. 불필요한 재계산도 함께 줄인다.
+  var lastKey = null;
+
   function render() {
     if (!DATA.length) return;
     var f = readFilters();
     var q = f._search; delete f._search;
     var mode = sortSel.value || 'score';
+    var key = DATA.length + '|' + mode + '|' + (q || '') + '|' + JSON.stringify(f);
+    if (key === lastKey) return;
+    lastKey = key;
     curHub = f.commute_hub || '';
     var hasFilter = Object.keys(f).length > 0 || !!q;
     if (!hasFilter) {
       relaxedEl.innerHTML = '';
       countEl.textContent = '';
-      resultsEl.innerHTML = '<div class="finder-empty">' + T.initialEmpty + '</div>';
+      showMessage('<div class="finder-empty">' + T.initialEmpty + '</div>');
       return;
     }
     var pool = q ? DATA.filter(function (a) { return matchesSearch(a, q); }) : DATA;
@@ -600,16 +651,16 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
     if (list.length) {
       var sortLabel = T.sortLabelsShort[mode] || T.sortLabelsShort.score;
       countEl.innerHTML = T.countMatch.replace('{n}', list.length).replace('{sort}', sortLabel);
-      resultsEl.innerHTML = list.slice(0, 200).map(function (r, i) { return card(r, i + 1); }).join('');
+      showList(list);
     } else {
       var near = S.nearMatches(pool, f, null, 2);
       if (near.length) {
         countEl.innerHTML = T.countRelaxed;
         relaxedEl.innerHTML = '<div class="finder-relaxed-banner">' + T.relaxedBanner + '</div>';
-        resultsEl.innerHTML = near.slice(0, 100).map(function (r, i) { return card(r, i + 1); }).join('');
+        showList(near);
       } else {
         countEl.textContent = T.noMatch;
-        resultsEl.innerHTML = '<div class="finder-empty">' + T.emptyRelax + '</div>';
+        showMessage('<div class="finder-empty">' + T.emptyRelax + '</div>');
       }
     }
   }
@@ -693,6 +744,7 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
     document.body.style.overflow = '';
   }
   resultsEl.addEventListener('click', function (e) {
+    if (e.target.closest('#finderMore')) { paintMore(); return; }
     var card = e.target.closest('.apt-card');
     if (!card) return;
     openAptModal(card.dataset.apt, card.dataset.region);
@@ -790,7 +842,7 @@ var HUB_DISPLAY = {"강남":"Gangnam","판교":"Pangyo","여의도":"Yeouido","�
     }
     if (!DATA.length) {
       countEl.textContent = '';
-      resultsEl.innerHTML = '<div class="finder-empty">' + T.loadFail + '</div>';
+      showMessage('<div class="finder-empty">' + T.loadFail + '</div>');
       return;
     }
     var sidos = [];

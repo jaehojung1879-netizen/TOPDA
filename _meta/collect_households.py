@@ -34,21 +34,29 @@ COVERAGE_JSON = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__f
 
 
 def deals_only_names(apts):
-    """실거래 원장에만 있는 단지를 지역별로. {region_key: [(name, dong), ...]}
-    dong(법정동)은 세대수 매칭 정확도를 높이는 데 쓴다(일반명 충돌 해소)."""
+    """실거래 원장에만 있는 단지를 지역별로. {region_key: [(name, dong, dongs), ...]}
+
+    dong(법정동)은 세대수 매칭 정확도를 높이는 데 쓴다(일반명 충돌 해소). dongs는 그
+    단지명이 원장에서 걸친 법정동 전체 집합으로, 붙인 결과를 주소로 사후 검증할 때
+    쓴다 — 전국 1.9%는 한 이름이 여러 동에 걸쳐 있어(예: '벽산블루밍' 상현동·신봉동)
+    하나만 보고 판정하면 멀쩡한 매칭을 반려하게 된다."""
     tx = L.load_json(TRANSACTIONS_JSON, default=None) or {}
     in_apts = {(a.get("region_key"), a.get("name")) for a in apts}
-    out = {}
-    seen = set()
+    order, dongs = {}, {}
     for d in tx.get("deals", []):
         rk, name = d.get("region_key"), d.get("apt")
         if not (rk and name) or rk not in L.LAWD:
             continue
-        if (rk, name) in in_apts or (rk, name) in seen:
+        if (rk, name) in in_apts:
             continue
-        seen.add((rk, name))
         dong = CA._dong_of({"region": d.get("region"), "region_key": rk})
-        out.setdefault(rk, []).append((name, dong))
+        if (rk, name) not in order:
+            order[(rk, name)] = dong    # 매칭에 쓰는 대표 동(첫 거래 기준, 기존 동작)
+        if dong:
+            dongs.setdefault((rk, name), set()).add(dong)
+    out = {}
+    for (rk, name), dong in order.items():
+        out.setdefault(rk, []).append((name, dong, dongs.get((rk, name), set())))
     return out
 
 
@@ -78,6 +86,27 @@ def _recent_yms(n=2):
         out.append(d.strftime("%Y%m"))
         d = (d - dt.timedelta(days=1)).replace(day=1)
     return out
+
+
+def purge_contradicting(hh_map, extra_by_region):
+    """저장된 주소가 실거래 원장의 법정동과 어긋나는 기존 항목을 걷어낸다. 걷어낸 키 목록 반환.
+
+    주소 검증(addr_contradicts_dong)은 새로 붙이는 건에만 걸리므로, 그 규칙이 생기기 전에
+    이름만 보고 붙은 항목은 그대로 남는다 — 2026-07-27 실측 69건이 그렇다('목동두산위브'에
+    신월동의 '신정뉴타운두산위브'가, '전농동삼성래미안'에 이문동 단지가 붙어 있었다).
+    걷어낸 자리는 다시 보강 대상이 되므로 같은 실행에서 올바르게 재매칭된다.
+
+    저장된 주소만으로 판정하므로 API 호출이 없다. 판정 근거가 없는 항목(주소 미보유)은
+    건드리지 않는다 — 근거 없이 지우면 멀쩡한 세대수까지 잃는다."""
+    dongs = {}
+    for rk, entries in extra_by_region.items():
+        for name, _dong, ds in entries:
+            dongs[f"{rk}|{name}"] = ds
+    bad = [k for k, v in hh_map.items()
+           if CA.addr_contradicts_dong(v.get("addr"), dongs.get(k, set()))]
+    for k in bad:
+        del hh_map[k]
+    return bad
 
 
 def region_coverage(target, filled, kapt_list):
@@ -136,9 +165,12 @@ def main():
     }
     hh_map = hh_data.setdefault("map", {})
     extra_by_region = deals_only_names(apts)
+    # 기존 항목 재검증 — 주소 검증은 새로 붙이는 건에만 걸리므로, 그 전에 잘못 붙은 것은
+    # 그대로 남는다. 걷어내야 재매칭 대상이 되어 이번 실행에서 바로잡힌다.
+    purged = purge_contradicting(hh_map, extra_by_region)
     extra_need = 0
     for rk, entries in extra_by_region.items():
-        entries[:] = [(n, d) for (n, d) in entries if f"{rk}|{n}" not in hh_map]
+        entries[:] = [e for e in entries if f"{rk}|{e[0]}" not in hh_map]
         extra_need += len(entries)
 
     # 지역별 기보강 단지 수(루프 시작 시점 고정). 리포트에서 kapt_list와 견줄 분모
@@ -152,10 +184,16 @@ def main():
         rk = k.split("|", 1)[0]
         prior_filled[rk] = prior_filled.get(rk, 0) + 1
 
+    if purged:
+        print(f"기존 항목 재검증 — 주소의 법정동이 어긋나 {len(purged)}건 제거 "
+              f"(재매칭 대상으로 되돌림): {', '.join(k.split('|')[-1] for k in purged[:8])}"
+              + (" …" if len(purged) > 8 else ""), file=sys.stderr)
+
     need = sum(len(v) for v in by_region.values())
     regions = list(dict.fromkeys(list(by_region) + list(extra_by_region)))
     print(f"세대수 보강 대상 — 큐레이션 {need}개 · 실거래전용 {extra_need}개 / {len(regions)}개 지역")
-    stat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0, "extra_filled": 0, "dong_ok": 0}
+    stat = {"list_ok": 0, "list_empty": 0, "codes": 0, "matched": 0, "filled": 0, "extra_filled": 0,
+            "dong_ok": 0, "addr_reject": 0}
     unmatched = []   # 이름매칭 실패 샘플
     per_region = []            # 지역별 커버리지(리포트 파일로 저장)
     unmatched_by_region = []   # 매칭률이 낮은 지역 진단(대상/목록/매칭 + 미매칭 이름 예시) — 매칭률이 낮을 때 표기 차이를 바로 볼 수 있게
@@ -211,29 +249,40 @@ def main():
         for a in by_region.get(region, []):
             if L.out_of_time(region_deadline, margin_sec=30):
                 break
-            code = CA.kapt_match(kmap, a["name"], CA._dong_of(a))
+            a_dong = CA._dong_of(a)
+            code, via = CA.kapt_match_via(kmap, a["name"], a_dong)
             if not code:
                 r_unmatched.append(a["name"])
                 if len(unmatched) < 10:
                     unmatched.append(f"{region}/{a['name']}")
                 continue
+            hh, yr, addr = CA.kapt_info(code, kapt_key)
+            # 이름만으로 붙은 건(via='sig')은 주소로 사후 검증한다. 법정동이 어긋나면
+            # 다른 단지이므로 붙이지 않는다 — 엉뚱한 세대수가 붙는 게 비어 있는 것보다 나쁘다.
+            if via == "sig" and CA.addr_contradicts_dong(addr, {a_dong} if a_dong else set()):
+                stat["addr_reject"] += 1
+                r_unmatched.append(a["name"])
+                continue
             stat["matched"] += 1
-            hh, yr, _addr = CA.kapt_info(code, kapt_key)
             if hh:
                 a["households"] = hh
                 stat["filled"] += 1
             if yr and not a.get("built_year"):
                 a["built_year"] = yr
         # 2) 실거래 원장에만 있는 단지 — households.json에 축적 (법정동 병용)
-        for name, dong in extra_by_region.get(region, []):
+        for name, dong, dongs in extra_by_region.get(region, []):
             if L.out_of_time(region_deadline, margin_sec=30):
                 break
-            code = CA.kapt_match(kmap, name, dong)
+            code, via = CA.kapt_match_via(kmap, name, dong)
             if not code:
                 r_unmatched.append(name)
                 continue
-            stat["matched"] += 1
             hh, yr, addr = CA.kapt_info(code, kapt_key)
+            if via == "sig" and CA.addr_contradicts_dong(addr, dongs):
+                stat["addr_reject"] += 1
+                r_unmatched.append(name)
+                continue
+            stat["matched"] += 1
             if hh:
                 entry = {"households": hh}
                 if yr:
@@ -308,7 +357,8 @@ def main():
         print("[위치보강] KAKAO_REST_API_KEY 없음 — 좌표·역·학교 보강 생략", file=sys.stderr)
 
     print(f"[K-apt] 목록성공 {stat['list_ok']}/빈 {stat['list_empty']} · 단지코드 {stat['codes']}개"
-          f"(법정동보유 {stat['dong_ok']}) · 이름매칭 {stat['matched']} → "
+          f"(법정동보유 {stat['dong_ok']}) · 이름매칭 {stat['matched']}"
+          f"(주소불일치 반려 {stat['addr_reject']}) → "
           f"세대수확보 큐레이션 {stat['filled']} · 실거래전용 {stat['extra_filled']}건 · "
           f"위치보강 {loc_filled}건")
     if unmatched:
@@ -353,6 +403,12 @@ def main():
                     "name_gap": sum(r["name_gap"] for r in per_region),
                     "matched_this_run": stat["matched"],
                     "filled_this_run": stat["filled"] + stat["extra_filled"],
+                    # 이름만으로 붙었다가 주소의 법정동이 어긋나 반려된 수.
+                    # 늘어난다면 이름 규칙이 과하게 느슨해진 신호다.
+                    "addr_reject": stat["addr_reject"],
+                    # 기존 항목 중 주소가 어긋나 걷어낸 수(소급 정리분).
+                    "addr_purged": len(purged),
+                    "dong_indexed": stat["dong_ok"],
                 },
                 "regions": per_region,
             }, f, ensure_ascii=False, indent=1)
@@ -362,10 +418,11 @@ def main():
 
     if stat["filled"] > saved_filled:
         L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments")
-    if stat["extra_filled"] > saved_extra:
+    # 제거만 일어난 날에도 저장해야 잘못 붙은 항목이 남지 않는다.
+    if stat["extra_filled"] > saved_extra or purged:
         hh_data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
         L.save_json_safe(HOUSEHOLDS_JSON, hh_data)
-    if not (stat["filled"] or stat["extra_filled"]):
+    if not (stat["filled"] or stat["extra_filled"] or purged):
         print("변경 없음 — 저장 생략")
 
 

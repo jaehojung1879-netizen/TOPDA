@@ -252,17 +252,63 @@
       '</article>';
   }
 
+  // 결과는 한 번에 다 그리지 않고 PAGE개씩 이어붙인다. 조건이 느슨하면 수백 곳이
+  // 잡히는데, 카드 하나가 DOM 수십 노드라 한꺼번에 그리면 모바일에서 눈에 띄게 버벅인다.
+  // 잘라내는 게 아니라 나눠 그리는 것이라 전체 결과에는 그대로 접근할 수 있다.
+  var PAGE = 50;
+  var curList = [], shown = 0;
+
+  function paintMore() {
+    var next = curList.slice(shown, shown + PAGE);
+    if (!next.length) return;
+    var oldBtn = document.getElementById('finderMore');
+    if (oldBtn) oldBtn.parentNode.removeChild(oldBtn);
+    // 순위 번호는 이어서 매긴다(51번째가 다시 1이 되면 안 된다).
+    resultsEl.insertAdjacentHTML('beforeend', next.map(function (r, i) {
+      return card(r, shown + i + 1);
+    }).join(''));
+    shown += next.length;
+    var left = curList.length - shown;
+    if (left > 0) {
+      resultsEl.insertAdjacentHTML('beforeend',
+        '<button type="button" class="btn btn-secondary finder-more" id="finderMore">' +
+        T.more + '<span class="finder-more-left">' + T.moreLeft.replace('{n}', left) + '</span></button>');
+    }
+  }
+
+  function showList(list) {
+    curList = list;
+    shown = 0;
+    resultsEl.innerHTML = '';
+    paintMore();
+  }
+
+  // 결과 없음·안내 문구를 넣을 때도 상태를 비워야 이전 목록의 '더보기'가 되살아나지 않는다.
+  function showMessage(html) {
+    curList = [];
+    shown = 0;
+    resultsEl.innerHTML = html;
+  }
+
+  // 같은 조건이면 다시 그리지 않는다. 텍스트 입력은 input 이벤트로 이미 반영되는데,
+  // 포커스가 빠질 때 change 이벤트가 한 번 더 오기 때문에(예산 칸 입력 후 '더보기' 클릭)
+  // 그대로 두면 펼쳐둔 목록이 첫 50곳으로 되감긴다. 불필요한 재계산도 함께 줄인다.
+  var lastKey = null;
+
   function render() {
     if (!DATA.length) return;
     var f = readFilters();
     var q = f._search; delete f._search;
     var mode = sortSel.value || 'score';
+    var key = DATA.length + '|' + mode + '|' + (q || '') + '|' + JSON.stringify(f);
+    if (key === lastKey) return;
+    lastKey = key;
     curHub = f.commute_hub || '';
     var hasFilter = Object.keys(f).length > 0 || !!q;
     if (!hasFilter) {
       relaxedEl.innerHTML = '';
       countEl.textContent = '';
-      resultsEl.innerHTML = '<div class="finder-empty">' + T.initialEmpty + '</div>';
+      showMessage('<div class="finder-empty">' + T.initialEmpty + '</div>');
       return;
     }
     var pool = q ? DATA.filter(function (a) { return matchesSearch(a, q); }) : DATA;
@@ -272,16 +318,16 @@
     if (list.length) {
       var sortLabel = T.sortLabelsShort[mode] || T.sortLabelsShort.score;
       countEl.innerHTML = T.countMatch.replace('{n}', list.length).replace('{sort}', sortLabel);
-      resultsEl.innerHTML = list.slice(0, 200).map(function (r, i) { return card(r, i + 1); }).join('');
+      showList(list);
     } else {
       var near = S.nearMatches(pool, f, null, 2);
       if (near.length) {
         countEl.innerHTML = T.countRelaxed;
         relaxedEl.innerHTML = '<div class="finder-relaxed-banner">' + T.relaxedBanner + '</div>';
-        resultsEl.innerHTML = near.slice(0, 100).map(function (r, i) { return card(r, i + 1); }).join('');
+        showList(near);
       } else {
         countEl.textContent = T.noMatch;
-        resultsEl.innerHTML = '<div class="finder-empty">' + T.emptyRelax + '</div>';
+        showMessage('<div class="finder-empty">' + T.emptyRelax + '</div>');
       }
     }
   }
@@ -365,6 +411,7 @@
     document.body.style.overflow = '';
   }
   resultsEl.addEventListener('click', function (e) {
+    if (e.target.closest('#finderMore')) { paintMore(); return; }
     var card = e.target.closest('.apt-card');
     if (!card) return;
     openAptModal(card.dataset.apt, card.dataset.region);
@@ -462,7 +509,7 @@
     }
     if (!DATA.length) {
       countEl.textContent = '';
-      resultsEl.innerHTML = '<div class="finder-empty">' + T.loadFail + '</div>';
+      showMessage('<div class="finder-empty">' + T.loadFail + '</div>');
       return;
     }
     var sidos = [];

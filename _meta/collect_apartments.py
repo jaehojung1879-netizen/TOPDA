@@ -62,16 +62,36 @@ def _name_keys(s):
     return keys
 
 
+# 법정동 단위 접미사. 읍·면은 그보다 상위라 같은 층위가 아니다 — 아래 우선순위 참고.
+_BJD_SUFFIX = ("동", "가", "리")
+_UPPER_SUFFIX = ("읍", "면")
+
+
 def _kapt_dong(it):
-    """K-apt 목록 항목에서 읍면동명 추출. V3/V4 필드명이 다를 수 있어 방어적으로 시도."""
+    """K-apt 목록 항목에서 법정동명 추출. V3/V4 필드명이 다를 수 있어 방어적으로 시도.
+
+    읍·면 지역의 법정동 단위는 '리'다. '리'를 빼먹으면 '화도읍 묵현리 47-3'에서 상위
+    단위인 '화도읍'을 집어와, 실거래 원장이 주는 '묵현리'와 영영 어긋난다(2026-07-27
+    실측: 주소 대조 가능한 2,890건 중 236건이 전부 이 오류 — 남양주·평택 등 읍면 지역).
+    동 색인 키가 틀리면 법정동 대조 자체가 불발돼 일반명 단지가 시군구 전체 매칭으로
+    떠밀리므로, 근거를 정확히 뽑는 것이 매칭 정확도의 전제다."""
     for f in ("as3", "umdNm", "bjdongNm", "emdNm", "as4"):
         v = str(it.get(f) or "").strip()
-        if v and (v.endswith("동") or v.endswith("읍") or v.endswith("면") or v.endswith("가")):
+        if v.endswith(_BJD_SUFFIX) or v.endswith(_UPPER_SUFFIX):
             return v
-    # 주소 문자열에서 '○○동/읍/면/가' 추출 (폴백)
+    # 주소 문자열에서 추출 (폴백). 주소는 '시도 시군구 [읍면] 동/리 번지 단지명' 순이라
+    # ① 번지(숫자 시작 토큰)를 만나면 그 뒤는 단지명이므로 멈추고
+    # ② 같은 주소에 읍·면과 리가 함께 있으면 하위 단위인 리를 택한다.
     addr = str(it.get("kaptAddr") or it.get("doroJuso") or it.get("as3") or "")
-    m = re.search(r"([가-힣]+[0-9]?(?:동|읍|면|가))(?:\s|$)", addr)
-    return m.group(1) if m else ""
+    upper = ""
+    for tok in addr.split():
+        if tok[:1].isdigit():
+            break
+        if tok.endswith(_BJD_SUFFIX):
+            return tok
+        if not upper and tok.endswith(_UPPER_SUFFIX):
+            upper = tok
+    return upper
 
 
 def _put(d, k, code):
@@ -139,11 +159,41 @@ def _match_in(table, keys):
     return None
 
 
+def addr_contradicts_dong(addr, dongs):
+    """K-apt 주소가 실거래 원장의 법정동과 어긋나는가.
+
+    이름만으로 붙인 매칭을 사후 검증하는 용도다. 어긋난다는 '양성 증거'가 있을 때만
+    True를 돌려주고, 판단할 근거가 없으면(주소 없음·동 추출 실패) False로 통과시킨다 —
+    근거 없이 막으면 멀쩡한 보강까지 잃기 때문이다.
+    한 단지명이 여러 법정동에 걸치는 경우(전국 1.9%)가 있어 dongs는 집합으로 받는다."""
+    if not addr or not dongs:
+        return False
+    kd = _kapt_dong({"kaptAddr": addr})
+    if not kd or kd in dongs:
+        return False
+    # 추출이 빗나갔을 수도 있으니, 원장 동이 주소 문자열 어딘가에 있으면 통과시킨다.
+    return not any(d and d in addr for d in dongs)
+
+
+def kapt_match_via(kmap, name, dong=""):
+    """kapt_match와 같되 (kaptCode, via)를 돌려준다.
+
+    via='dong' — 법정동 색인 안에서 확정. 이름+법정동이 함께 맞은 것이라 근거가 있다.
+    via='sig'  — 시군구 전체에서 이름만으로 확정. 근거가 이름뿐이므로 호출부에서
+                 주소로 한 번 더 확인해야 한다(addr_contradicts_dong).
+    매칭 실패는 (None, "")."""
+    return _kapt_match_impl(kmap, name, dong)
+
+
 def kapt_match(kmap, name, dong=""):
     """단지명(+법정동) → kaptCode.
     ① 법정동 안에서 매칭(가장 정확 — '벽산'·'두산' 등 일반명 충돌을 동으로 해소)
     ② 실패 시 시군구 전체에서 매칭(기존 동작, 회귀 방지 폴백).
     실거래명이 법정동을 접두로 달고 오는 경우('대흥동태영')는 그 접두를 떼어 변형에 추가한다."""
+    return _kapt_match_impl(kmap, name, dong)[0]
+
+
+def _kapt_match_impl(kmap, name, dong=""):
     # 하위호환: 옛 평면 dict가 오면 시군구 맵으로 취급
     if "sig" not in kmap and "dong" not in kmap:
         sig, dmap = kmap, {}
@@ -163,8 +213,9 @@ def kapt_match(kmap, name, dong=""):
     if dong and dong in dmap:
         code = _match_in(dmap[dong], keys)
         if code:
-            return code
-    return _match_in(sig, keys)
+            return code, "dong"
+    code = _match_in(sig, keys)
+    return (code, "sig") if code else (None, "")
 
 
 _info_diag = []   # 기본정보 조회 실패 사유 샘플(첫 몇 건) — 0건일 때 원인 진단용
