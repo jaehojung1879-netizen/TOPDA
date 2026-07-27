@@ -88,6 +88,27 @@ def _recent_yms(n=2):
     return out
 
 
+def purge_contradicting(hh_map, extra_by_region):
+    """저장된 주소가 실거래 원장의 법정동과 어긋나는 기존 항목을 걷어낸다. 걷어낸 키 목록 반환.
+
+    주소 검증(addr_contradicts_dong)은 새로 붙이는 건에만 걸리므로, 그 규칙이 생기기 전에
+    이름만 보고 붙은 항목은 그대로 남는다 — 2026-07-27 실측 69건이 그렇다('목동두산위브'에
+    신월동의 '신정뉴타운두산위브'가, '전농동삼성래미안'에 이문동 단지가 붙어 있었다).
+    걷어낸 자리는 다시 보강 대상이 되므로 같은 실행에서 올바르게 재매칭된다.
+
+    저장된 주소만으로 판정하므로 API 호출이 없다. 판정 근거가 없는 항목(주소 미보유)은
+    건드리지 않는다 — 근거 없이 지우면 멀쩡한 세대수까지 잃는다."""
+    dongs = {}
+    for rk, entries in extra_by_region.items():
+        for name, _dong, ds in entries:
+            dongs[f"{rk}|{name}"] = ds
+    bad = [k for k, v in hh_map.items()
+           if CA.addr_contradicts_dong(v.get("addr"), dongs.get(k, set()))]
+    for k in bad:
+        del hh_map[k]
+    return bad
+
+
 def region_coverage(target, filled, kapt_list):
     """지역별 커버리지 판정 지표. target·filled·kapt_list → total·kapt_ratio·name_gap.
 
@@ -144,6 +165,9 @@ def main():
     }
     hh_map = hh_data.setdefault("map", {})
     extra_by_region = deals_only_names(apts)
+    # 기존 항목 재검증 — 주소 검증은 새로 붙이는 건에만 걸리므로, 그 전에 잘못 붙은 것은
+    # 그대로 남는다. 걷어내야 재매칭 대상이 되어 이번 실행에서 바로잡힌다.
+    purged = purge_contradicting(hh_map, extra_by_region)
     extra_need = 0
     for rk, entries in extra_by_region.items():
         entries[:] = [e for e in entries if f"{rk}|{e[0]}" not in hh_map]
@@ -159,6 +183,11 @@ def main():
     for k in hh_map:
         rk = k.split("|", 1)[0]
         prior_filled[rk] = prior_filled.get(rk, 0) + 1
+
+    if purged:
+        print(f"기존 항목 재검증 — 주소의 법정동이 어긋나 {len(purged)}건 제거 "
+              f"(재매칭 대상으로 되돌림): {', '.join(k.split('|')[-1] for k in purged[:8])}"
+              + (" …" if len(purged) > 8 else ""), file=sys.stderr)
 
     need = sum(len(v) for v in by_region.values())
     regions = list(dict.fromkeys(list(by_region) + list(extra_by_region)))
@@ -377,6 +406,8 @@ def main():
                     # 이름만으로 붙었다가 주소의 법정동이 어긋나 반려된 수.
                     # 늘어난다면 이름 규칙이 과하게 느슨해진 신호다.
                     "addr_reject": stat["addr_reject"],
+                    # 기존 항목 중 주소가 어긋나 걷어낸 수(소급 정리분).
+                    "addr_purged": len(purged),
                     "dong_indexed": stat["dong_ok"],
                 },
                 "regions": per_region,
@@ -387,10 +418,11 @@ def main():
 
     if stat["filled"] > saved_filled:
         L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments")
-    if stat["extra_filled"] > saved_extra:
+    # 제거만 일어난 날에도 저장해야 잘못 붙은 항목이 남지 않는다.
+    if stat["extra_filled"] > saved_extra or purged:
         hh_data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
         L.save_json_safe(HOUSEHOLDS_JSON, hh_data)
-    if not (stat["filled"] or stat["extra_filled"]):
+    if not (stat["filled"] or stat["extra_filled"] or purged):
         print("변경 없음 — 저장 생략")
 
 

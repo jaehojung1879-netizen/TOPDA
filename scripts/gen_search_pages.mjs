@@ -90,6 +90,7 @@ const T = {
     countRelaxed: 'No exact match — showing <span class="em">slightly relaxed</span> picks',
     relaxedBanner: 'No complex met every condition, but these match if you relax 1–2 conditions — try widening the filters.',
     noMatch: 'No matching complexes', emptyRelax: 'Try relaxing your conditions.',
+    more: 'Show more', moreLeft: '{n} left',
     initialEmpty: 'Enter <strong>a keyword or at least one condition</strong> on the left<br/>and we’ll rank matching complexes by overall score',
     loadFail: 'Could not load data. Please try again shortly.',
     sortLabelsShort: { score: 'highest score', price_asc: 'lowest price', price_desc: 'highest price', recent: 'most recent', momentum: 'strongest momentum' },
@@ -147,6 +148,7 @@ const T = {
     countRelaxed: '没有完全匹配，为您<span class="em">略微放宽条件</span>推荐',
     relaxedBanner: '没有满足全部条件的小区，但放宽1~2个条件即可匹配 — 试试放宽筛选。',
     noMatch: '没有符合条件的小区', emptyRelax: '请放宽条件后重试。',
+    more: '显示更多', moreLeft: '还有 {n} 个',
     initialEmpty: '在左侧输入<strong>关键词或至少一个条件</strong><br/>我们会按综合评分为您排序推荐',
     loadFail: '数据加载失败，请稍后重试。',
     sortLabelsShort: { score: '评分从高到低', price_asc: '价格从低到高', price_desc: '价格从高到低', recent: '最近成交', momentum: '上涨动能' },
@@ -204,6 +206,7 @@ const T = {
     countRelaxed: '沒有完全匹配，為您<span class="em">略微放寬條件</span>推薦',
     relaxedBanner: '沒有滿足全部條件的社區，但放寬1~2個條件即可匹配 — 試試放寬篩選。',
     noMatch: '沒有符合條件的社區', emptyRelax: '請放寬條件後重試。',
+    more: '顯示更多', moreLeft: '還有 {n} 個',
     initialEmpty: '在左側輸入<strong>關鍵詞或至少一個條件</strong><br/>我們會按綜合評分為您排序推薦',
     loadFail: '資料載入失敗，請稍後重試。',
     sortLabelsShort: { score: '評分從高到低', price_asc: '價格從低到高', price_desc: '價格從高到低', recent: '最近成交', momentum: '上漲動能' },
@@ -261,6 +264,7 @@ const T = {
     countRelaxed: 'Không khớp chính xác — gợi ý <span class="em">nới lỏng đôi chút</span>',
     relaxedBanner: 'Không chung cư nào đạt mọi điều kiện, nhưng khớp nếu nới 1–2 điều kiện — hãy mở rộng bộ lọc.',
     noMatch: 'Không có chung cư phù hợp', emptyRelax: 'Hãy nới điều kiện và thử lại.',
+    more: 'Xem thêm', moreLeft: 'còn {n}',
     initialEmpty: 'Nhập <strong>từ khóa hoặc ít nhất một điều kiện</strong> ở bên trái<br/>chúng tôi sẽ xếp hạng chung cư phù hợp theo điểm tổng hợp',
     loadFail: 'Không tải được dữ liệu. Vui lòng thử lại sau.',
     sortLabelsShort: { score: 'điểm cao nhất', price_asc: 'giá thấp nhất', price_desc: 'giá cao nhất', recent: 'gần nhất', momentum: 'đà tăng mạnh' },
@@ -318,6 +322,7 @@ const T = {
     countRelaxed: 'ไม่มีที่ตรงพอดี — แนะนำแบบ<span class="em">ผ่อนเงื่อนไขเล็กน้อย</span>',
     relaxedBanner: 'ไม่มีโครงการที่ผ่านทุกเงื่อนไข แต่ผ่านหากผ่อน 1–2 เงื่อนไข ลองขยายตัวกรอง',
     noMatch: 'ไม่มีโครงการที่ตรงเงื่อนไข', emptyRelax: 'โปรดผ่อนเงื่อนไขแล้วลองใหม่',
+    more: 'ดูเพิ่มเติม', moreLeft: 'เหลือ {n}',
     initialEmpty: 'กรอก<strong>คำค้นหรืออย่างน้อยหนึ่งเงื่อนไข</strong>ทางซ้าย<br/>เราจะจัดอันดับโครงการที่ตรงตามคะแนนรวม',
     loadFail: 'โหลดข้อมูลไม่สำเร็จ โปรดลองใหม่ภายหลัง',
     sortLabelsShort: { score: 'คะแนนสูงสุด', price_asc: 'ราคาต่ำสุด', price_desc: 'ราคาสูงสุด', recent: 'ล่าสุด', momentum: 'โมเมนตัมแรง' },
@@ -600,6 +605,11 @@ const STYLE = `<style>
   .finder-count { font-weight: 700; margin: 0 0 14px; font-size: 1.05rem; }
   .finder-count .em { color: var(--accent, #2563eb); }
   .finder-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  /* 더보기 버튼은 카드 그리드 한 줄을 통째로 차지한다(그리드 칸에 끼면 카드처럼 보인다). */
+  .finder-more {
+    grid-column: 1 / -1; justify-self: center; min-width: 200px; margin-top: 4px;
+  }
+  .finder-more-left { opacity: .7; font-weight: 400; margin-left: 6px; }
   .apt-card { border: 1px solid var(--border, #e5e7eb); border-radius: 16px; padding: 18px; background: #fff; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
   .apt-card .rank { position: absolute; top: 0; left: 0; background: var(--accent, #2563eb); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-bottom-right-radius: 10px; }
   .apt-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-top: 8px; }

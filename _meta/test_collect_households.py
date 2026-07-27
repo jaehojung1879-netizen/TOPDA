@@ -63,5 +63,66 @@ class RegionCoverageTests(unittest.TestCase):
         self.assertEqual(cov["name_gap"], 0)
 
 
+class PurgeContradictingTests(unittest.TestCase):
+    """주소 검증은 새로 붙이는 건에만 걸리므로, 그 전에 잘못 붙은 항목은 따로 걷어내야 한다."""
+
+    def _extra(self, rows):
+        out = {}
+        for rk, name, dongs in rows:
+            out.setdefault(rk, []).append((name, next(iter(dongs), ""), dongs))
+        return out
+
+    def test_contradicting_entry_is_removed(self):
+        # 실측: '목동두산위브'(목동)에 신월동의 '신정뉴타운두산위브'가 붙어 있었다.
+        hh = {"서울 양천구|목동두산위브": {
+            "households": 300,
+            "addr": "서울특별시 양천구 신월동 1055 신정뉴타운두산위브"}}
+        extra = self._extra([("서울 양천구", "목동두산위브", {"목동"})])
+        self.assertEqual(H.purge_contradicting(hh, extra), ["서울 양천구|목동두산위브"])
+        self.assertEqual(hh, {})
+
+    def test_agreeing_entry_is_kept(self):
+        hh = {"경기 남양주시|마석LIG아파트": {
+            "households": 200,
+            "addr": "경기도 남양주시 화도읍 묵현리 47-3 마석LIG아파트"}}
+        extra = self._extra([("경기 남양주시", "마석LIG아파트", {"묵현리"})])
+        self.assertEqual(H.purge_contradicting(hh, extra), [])
+        self.assertIn("경기 남양주시|마석LIG아파트", hh)
+
+    def test_multi_dong_complex_is_not_removed(self):
+        """원장이 여러 법정동에 거래를 가진 단지는 그중 하나만 맞아도 남긴다.
+
+        단일 동으로 판정하면 실측 69건이 걸리지만 10건은 멀쩡한 매칭이었다
+        (예: 안산 '두산위브' 신길동·초지동, 주소는 초지동)."""
+        hh = {"경기 안산시 단원구|두산위브": {
+            "households": 500,
+            "addr": "경기도 안산단원구 초지동 604 안산초지두산위브"}}
+        extra = self._extra([("경기 안산시 단원구", "두산위브", {"신길동", "초지동"})])
+        self.assertEqual(H.purge_contradicting(hh, extra), [])
+        self.assertIn("경기 안산시 단원구|두산위브", hh)
+
+    def test_entry_without_addr_is_left_alone(self):
+        """판정 근거가 없으면 건드리지 않는다 — 근거 없이 지우면 멀쩡한 세대수를 잃는다."""
+        hh = {"서울 강남구|무명": {"households": 100}}
+        extra = self._extra([("서울 강남구", "무명", {"역삼동"})])
+        self.assertEqual(H.purge_contradicting(hh, extra), [])
+        self.assertIn("서울 강남구|무명", hh)
+
+    def test_entry_with_no_ledger_dong_is_left_alone(self):
+        hh = {"대전 유성구|운암네오미아": {
+            "households": 100, "addr": "대전광역시 유성구 덕명동 524 운암네오미아아파트"}}
+        self.assertEqual(H.purge_contradicting(hh, {}), [])
+        self.assertIn("대전 유성구|운암네오미아", hh)
+
+    def test_purged_entries_become_targets_again(self):
+        """걷어낸 자리는 hh_map에서 빠져 같은 실행에서 재매칭 대상이 된다."""
+        key = "서울 양천구|목동두산위브"
+        hh = {key: {"households": 300, "addr": "서울특별시 양천구 신월동 1055 신정뉴타운두산위브"}}
+        extra = self._extra([("서울 양천구", "목동두산위브", {"목동"})])
+        H.purge_contradicting(hh, extra)
+        remaining = [e for e in extra["서울 양천구"] if f"서울 양천구|{e[0]}" not in hh]
+        self.assertEqual([e[0] for e in remaining], ["목동두산위브"])
+
+
 if __name__ == "__main__":
     unittest.main()
