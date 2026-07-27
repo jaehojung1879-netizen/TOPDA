@@ -50,6 +50,11 @@ RECENT_REFRESH_MONTHS = 3
 ROWS = 1000
 MAX_PAGES = 20          # 월 20,000건 초과 시군구는 없다(안전 상한 — 무한 루프 방지)
 TX_JSON = os.path.join(L.SITE_ASSETS, "transactions.json")
+# 단지별 지번 주소. 실거래 상세 API(RTMSDataSvcAptTradeDev)가 주는 jibun을 단지 단위로
+# 접어 둔 것으로, K-apt 매칭 없이도 좌표를 찍을 수 있는 유일한 경로다. K-apt는 의무관리
+# 대상만 실어 전국 단지의 71%밖에 못 덮지만(2026-07-27 실측), 지번은 거래가 있으면 항상
+# 온다 — 역거리·초등학교 공백(파인더 노출 단지의 78%)을 푸는 열쇠다.
+COMPLEX_ADDR_JSON = os.path.join(L.SITE_ASSETS, "complex_addr.json")
 
 
 def recent_months(n):
@@ -86,6 +91,11 @@ def _parse_items(root, region_name):
             "price": price, "floor": int(g("floor") or 0),
             "date": f"{y:04d}-{m:02d}-{d:02d}", "build_year": int(g("buildYear") or 0) or None,
         }
+        # 지번은 원장(58MB)에 싣지 않고 단지별로 한 번만 모은다 — 거래마다 실으면 파일이
+        # GitHub 100MB 한도에 더 가까워지는데, 쓰임새는 '단지 위치 한 번 찍기'뿐이다.
+        jibun = g("jibun")
+        if jibun:
+            rec["_jibun"] = jibun   # main()에서 단지별로 접은 뒤 개별 거래에서는 제거한다
         # 거래 해제(취소). cdealType='O'가 해제 신고분. cdealDay는 'YY.MM.DD' 형식으로 온다.
         if g("cdealType").upper() == "O":
             rec["canceled"] = True
@@ -201,6 +211,34 @@ def main():
               + ", ".join(zero_regions), file=sys.stderr)
 
     all_deals.sort(key=lambda d: d["date"], reverse=True)
+    # 단지별 지번을 접는다. 같은 단지가 여러 지번에 걸치면(여러 동) 가장 흔한 지번을 쓴다 —
+    # 대표 위치 한 점만 필요하고, 최빈값이 단지 중심에 가장 가깝다.
+    jibun_votes = {}
+    for d in all_deals:
+        jb = d.pop("_jibun", None)
+        if not jb:
+            continue
+        key = f"{d['region_key']}|{d['apt']}"
+        votes = jibun_votes.setdefault(key, {})
+        # region은 '시도 시군구 법정동'이라 지번만 붙이면 지오코딩 가능한 주소가 된다.
+        votes[f"{d['region']} {jb}"] = votes.get(f"{d['region']} {jb}", 0) + 1
+    fresh = {k: max(v.items(), key=lambda kv: kv[1])[0] for k, v in jibun_votes.items()}
+    # 증분 갱신이라 이번 실행에서 다시 받은 (지역,월) 쌍의 거래만 _jibun을 갖는다. 기존
+    # 파일을 덮어쓰면 이번에 안 건드린 단지의 주소를 잃으므로 병합한다(이번 값 우선).
+    prev = (L.load_json(COMPLEX_ADDR_JSON, default=None) or {}).get("map") or {}
+    addr_map = dict(prev)
+    addr_map.update(fresh)
+    if addr_map:
+        L.save_json_safe(COMPLEX_ADDR_JSON, {
+            "_meta": {"source": "국토교통부 실거래가 OpenAPI(jibun)",
+                      "note": "'지역키|단지명' → 지번 주소. 좌표·역·학교 보강용. "
+                              "한 단지가 여러 지번에 걸치면 최빈 지번."},
+            "as_of": today.strftime("%Y-%m-%d"),
+            "map": addr_map,
+        })
+    print(f"[지번] 이번 실행 {len(fresh):,}개 · 누적 {len(addr_map):,}개 단지 주소 "
+          f"→ {os.path.basename(COMPLEX_ADDR_JSON)}")
+
     canceled = sum(1 for d in all_deals if d.get("canceled"))
     data = {
         "_meta": {

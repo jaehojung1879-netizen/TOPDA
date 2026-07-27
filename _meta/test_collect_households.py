@@ -163,5 +163,63 @@ class AddrBackfillQueueTests(unittest.TestCase):
         self.assertEqual(sorted(q), ["부산 동래구", "서울 강남구"])
 
 
+class SeedJibunAddrTests(unittest.TestCase):
+    """실거래 지번은 거래가 있으면 항상 온다 — K-apt 수록 여부와 무관하게 위치를 확보한다."""
+
+    def test_unmatched_complex_gets_location_only_entry(self):
+        """K-apt에 없어 항목 자체가 없던 단지도 주소를 얻는다(전국 단지의 약 30%)."""
+        hh = {}
+        n = H.seed_jibun_addrs(hh, {"서울 강남구|더샵": "서울 강남구 역삼동 736-1"}, [])
+        self.assertEqual(n, 1)
+        self.assertEqual(hh["서울 강남구|더샵"], {"addr": "서울 강남구 역삼동 736-1"})
+        self.assertNotIn("households", hh["서울 강남구|더샵"])
+
+    def test_existing_entry_missing_addr_is_filled(self):
+        """세대수는 있는데 주소가 없던 항목 — K-apt 재조회 없이 지번으로 해결된다."""
+        hh = {"서울 송파구|가": {"households": 1945}}
+        n = H.seed_jibun_addrs(hh, {"서울 송파구|가": "서울 송파구 거여동 1"}, [])
+        self.assertEqual(n, 1)
+        self.assertEqual(hh["서울 송파구|가"]["households"], 1945)
+        self.assertEqual(hh["서울 송파구|가"]["addr"], "서울 송파구 거여동 1")
+
+    def test_existing_addr_is_not_overwritten(self):
+        """K-apt 주소가 이미 있으면 그대로 둔다 — 지번보다 단지 위치에 가깝다."""
+        hh = {"서울 송파구|가": {"addr": "서울특별시 송파구 거여동 100 시그니처"}}
+        self.assertEqual(H.seed_jibun_addrs(hh, {"서울 송파구|가": "서울 송파구 거여동 1"}, []), 0)
+        self.assertEqual(hh["서울 송파구|가"]["addr"], "서울특별시 송파구 거여동 100 시그니처")
+
+    def test_already_geocoded_entry_is_left_alone(self):
+        hh = {"서울 송파구|가": {"households": 1, "lat": 37.5, "lng": 127.1}}
+        self.assertEqual(H.seed_jibun_addrs(hh, {"서울 송파구|가": "서울 송파구 거여동 1"}, []), 0)
+        self.assertNotIn("addr", hh["서울 송파구|가"])
+
+    def test_ungeocodable_marker_is_respected(self):
+        """지오코딩 불가로 표식이 붙은 항목에 같은 동네 지번을 다시 넣지 않는다."""
+        hh = {"서울 송파구|가": {"households": 1, "addr_bad": True}}
+        self.assertEqual(H.seed_jibun_addrs(hh, {"서울 송파구|가": "서울 송파구 거여동 1"}, []), 0)
+
+    def test_curated_complex_with_coords_is_skipped(self):
+        """apartments.json에서 이미 좌표를 가진 단지는 건드리지 않는다."""
+        apts = [{"region_key": "경기 성남시 분당구", "name": "판교", "lat": 37.38, "lng": 127.11}]
+        hh = {}
+        n = H.seed_jibun_addrs(hh, {"경기 성남시 분당구|판교": "경기 성남시 분당구 백현동 1"}, apts)
+        self.assertEqual((n, hh), (0, {}))
+
+    def test_location_only_entries_do_not_count_as_enriched(self):
+        """위치 전용 항목이 세대수 보강분으로 세어지면 커버리지 분모가 오염된다."""
+        hh = {"서울 강남구|가": {"addr": "서울 강남구 역삼동 1"},
+              "서울 강남구|나": {"households": 500, "addr": "서울 강남구 역삼동 2"}}
+        filled = sum(1 for v in hh.values() if v.get("households"))
+        self.assertEqual(filled, 1)
+
+    def test_location_only_entry_stays_a_households_target(self):
+        """주소만 심었다고 세대수 보강 대상에서 빠지면 안 된다."""
+        hh = {"서울 강남구|가": {"addr": "서울 강남구 역삼동 1"}}
+        entries = [("가", "역삼동", {"역삼동"}), ("나", "역삼동", {"역삼동"})]
+        remaining = [e for e in entries
+                     if not (hh.get(f"서울 강남구|{e[0]}") or {}).get("households")]
+        self.assertEqual([e[0] for e in remaining], ["가", "나"])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -26,6 +26,9 @@ import collect_apartments as CA
 APARTMENTS_JSON = CA.APARTMENTS_JSON
 TRANSACTIONS_JSON = os.path.join(L.SITE_ASSETS, "transactions.json")
 HOUSEHOLDS_JSON = os.path.join(L.SITE_ASSETS, "households.json")
+# 단지별 지번 주소(collect_transactions.py 생성). K-apt 매칭 없이도 좌표를 찍을 수 있는
+# 경로라, K-apt 수록범위 밖 단지(전국의 약 30%)의 역거리·초등학교 공백을 푸는 데 쓴다.
+COMPLEX_ADDR_JSON = os.path.join(L.SITE_ASSETS, "complex_addr.json")
 # 지역별 보강 커버리지 리포트. 로그로만 남기면 실행이 끝난 뒤 확인하기 어렵고(스텝 로그가
 # 수천 줄이라 tail로 닿지 않는다), 무엇보다 "K-apt에 아예 없어서"인지 "이름이 안 맞아서"인지를
 # 가르는 데 매번 이 숫자가 필요하다. 커밋되는 파일로 남겨 언제든 바로 읽는다.
@@ -107,6 +110,33 @@ def purge_contradicting(hh_map, extra_by_region):
     for k in bad:
         del hh_map[k]
     return bad
+
+
+def seed_jibun_addrs(hh_map, addr_map, apts):
+    """실거래 지번 주소를 좌표 없는 단지에 심는다. 심은 키 수 반환.
+
+    좌표·역·초등학교는 주소가 있어야 붙는데, 지금은 그 주소를 K-apt에서만 받는다.
+    K-apt는 의무관리대상만 실어 전국 단지의 71%밖에 못 덮고(2026-07-27 실측), 그래서
+    파인더 노출 단지의 78%가 '역거리 정보 없음'이다. 실거래 원장의 지번은 거래가 있으면
+    항상 오므로, 매칭 여부와 무관하게 위치를 확보할 수 있다.
+
+    주소만 심고 세대수는 건드리지 않는다 — 세대수는 여전히 K-apt/건축물대장의 몫이다.
+    이미 좌표나 주소가 있으면 손대지 않는다(지오코딩 실패 표식 addr_bad도 존중).
+    """
+    have_coords = {f"{a.get('region_key')}|{a.get('name')}"
+                   for a in apts if a.get("lat") is not None}
+    seeded = 0
+    for key, addr in addr_map.items():
+        if not addr or key in have_coords:
+            continue
+        e = hh_map.get(key)
+        if e is None:
+            hh_map[key] = {"addr": addr}   # 세대수 없는 위치 전용 항목
+            seeded += 1
+        elif not e.get("addr") and e.get("lat") is None and not e.get("addr_bad"):
+            e["addr"] = addr
+            seeded += 1
+    return seeded
 
 
 def addr_backfill_queue(hh_map, extra_by_region):
@@ -197,12 +227,25 @@ def main():
     # 지오코딩 대기열은 0건이라 처리 속도가 아니라 '주소를 못 받은 것'이 병목이다 —
     # 그대로 두면 파인더에서 영영 '역거리 정보 없음'으로 남는다.
     # extra_by_region은 아래에서 기보강분이 걸러지므로, 그 전에 대기열을 떠둔다.
+    # 실거래 지번으로 주소를 먼저 심는다. K-apt 왕복 없이 좌표를 확보할 수 있으므로
+    # 아래 주소 백필 대기열도 그만큼 줄어든다 — 순서가 바뀌면 헛돈다.
+    addr_map = (L.load_json(COMPLEX_ADDR_JSON, default=None) or {}).get("map") or {}
+    seeded = seed_jibun_addrs(hh_map, addr_map, apts) if addr_map else 0
+    if seeded:
+        print(f"실거래 지번으로 주소 {seeded:,}건 확보 — K-apt 미매칭 단지 포함")
+    elif not addr_map:
+        print("complex_addr.json 없음 — 지번 기반 위치 보강 생략"
+              "(collect_transactions.py를 먼저 실행해야 생성된다)", file=sys.stderr)
+
     backfill = addr_backfill_queue(hh_map, extra_by_region)
     backfill_need = sum(len(v) for v in backfill.values())
 
     extra_need = 0
     for rk, entries in extra_by_region.items():
-        entries[:] = [e for e in entries if f"{rk}|{e[0]}" not in hh_map]
+        # 위치 전용 항목(지번 주소만 있고 세대수 없음)이 섞이므로 '키 존재'가 아니라
+        # '세대수 확보 여부'로 걸러야 한다 — 아니면 세대수 보강 대상에서 통째로 빠진다.
+        entries[:] = [e for e in entries
+                      if not (hh_map.get(f"{rk}|{e[0]}") or {}).get("households")]
         extra_need += len(entries)
 
     # 지역별 기보강 단지 수(루프 시작 시점 고정). 리포트에서 kapt_list와 견줄 분모
@@ -212,7 +255,9 @@ def main():
     for a in apts:
         if a.get("households") and a.get("region_key"):
             prior_filled[a["region_key"]] = prior_filled.get(a["region_key"], 0) + 1
-    for k in hh_map:
+    for k, v in hh_map.items():
+        if not v.get("households"):
+            continue    # 위치 전용 항목은 세대수 보강분이 아니다(커버리지 분모 오염 방지)
         rk = k.split("|", 1)[0]
         prior_filled[rk] = prior_filled.get(rk, 0) + 1
 
@@ -387,9 +432,10 @@ def main():
     # ── 위치 보강 패스: 주소는 있는데 좌표가 없는 실거래 전용 단지에 Kakao 지오코딩 +
     # 최근접 역/초등학교를 점진 채운다(단지당 3회 호출 — 회당 상한·시간예산 내).
     # 맞춤찾기의 '역거리·초등학교 정보 없음' 공백을 해소하는 핵심 경로.
-    # 백필이 한 실행에 최대 300건씩 주소를 채우므로, 지오코딩도 같은 보폭이어야 대기열이
-    # 쌓이지 않는다. 실제 상한은 아래 out_of_time(위치보강 몫으로 떼어둔 예산)이 잡는다.
-    MAX_LOC = 300
+    # 지번 시딩으로 주소 보유 단지가 한 번에 1만여 개 늘어난다. 보폭이 좁으면 대기열이
+    # 몇 달씩 남으므로 넓힌다. 단지당 Kakao 3회(지오코딩+역+학교)이고, 실제 상한은 아래
+    # out_of_time(위치보강 몫으로 떼어둔 예산)이 잡으므로 이 값은 안전 상한일 뿐이다.
+    MAX_LOC = 600
     loc_filled = 0
     if os.environ.get("KAKAO_REST_API_KEY"):
         for key_, entry in hh_map.items():
@@ -476,6 +522,8 @@ def main():
                     # 주소가 없어 위치 보강을 못 하던 항목을 다시 조회해 채운 수 / 남은 대기열.
                     "addr_backfill": stat["addr_backfill"],
                     "addr_backfill_queue": backfill_need,
+                    # 실거래 지번으로 주소를 확보한 수(K-apt 미매칭 단지 포함).
+                    "jibun_seeded": seeded,
                     "dong_indexed": stat["dong_ok"],
                 },
                 "regions": per_region,
@@ -487,10 +535,11 @@ def main():
     if stat["filled"] > saved_filled:
         L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments")
     # 제거만 일어난 날에도 저장해야 잘못 붙은 항목이 남지 않는다.
-    if stat["extra_filled"] > saved_extra or stat["addr_backfill"] > saved_backfill or purged:
+    if (stat["extra_filled"] > saved_extra or stat["addr_backfill"] > saved_backfill
+            or purged or seeded):
         hh_data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
         L.save_json_safe(HOUSEHOLDS_JSON, hh_data)
-    if not (stat["filled"] or stat["extra_filled"] or stat["addr_backfill"] or purged):
+    if not (stat["filled"] or stat["extra_filled"] or stat["addr_backfill"] or purged or seeded):
         print("변경 없음 — 저장 생략")
 
 
