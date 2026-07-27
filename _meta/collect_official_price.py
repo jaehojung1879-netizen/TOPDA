@@ -1,5 +1,20 @@
 #!/usr/bin/env python3
-"""단지 공동주택 공시가격(시가표준액) 점진 보강 → site/assets/official_price.json.
+"""단지 공동주택가격(공시가격) 점진 보강 → site/assets/official_price.json.
+
+■ 용어 주의 — '공시가격'과 '시가표준액'을 같은 말로 쓰면 안 된다
+
+  아파트·연립·다세대(주택)   시가표준액 = 공동주택가격   (지방세법 제4조 제1항:
+                             "토지 및 주택에 대한 시가표준액은 「부동산 가격공시에 관한
+                             법률」에 따라 공시된 가액") → 같은 값이다.
+  단독주택                   시가표준액 = 개별주택가격
+  오피스텔·상가(주택 외 건축물) 시가표준액 ≠ 공시가격. 지방세법 제4조 제2항의 별도 산정
+                             (신축가격기준액 × 구조·용도·위치지수 × 경과연수 등)을 쓴다.
+  공시가격 미공시(신축 등)    지자체장 산정액
+
+이 수집기가 모으는 값은 '공동주택가격'이다. 아파트에 한해 시가표준액과 같으므로 취득세
+등 계산에 그대로 쓸 수 있지만, 오피스텔로 대상을 넓히면 그 전제가 깨진다.
+또한 건축물대장의 주택가격은 공시가격을 전재한 값이라 정본(부동산공시가격알리미)보다
+갱신이 늦을 수 있다 — 저장 레코드의 std_day(공시기준일)를 반드시 함께 보여줘야 한다.
 
 건축HUB 건축물대장 주택가격 조회(getBrHsprcInfo)를 지번으로 직접 부른다.
   sigunguCd + bjdongCd + bun + ji → hsprc(주택가격) · stdDay(공시기준일)
@@ -40,6 +55,9 @@ OUT_JSON = os.path.join(L.SITE_ASSETS, "official_price.json")
 ROWS = 100          # 명세상 페이지당 최대 100건
 MAX_PAGES = 60      # 6,000세대 초과 단지는 없다(안전 상한 — 무한 루프 방지)
 SAVE_EVERY = 50     # 체크포인트 주기(단지 수)
+# 기준연도가 올해가 아닌 단지를 다시 볼 간격(일). 대장의 주택가격은 공시가격을 전재한
+# 값이라 갱신이 늦을 수 있어, 매 실행 재조회하면 헛돈다. 공시는 4~5월에 발표된다.
+RECHECK_DAYS = 30
 
 
 def _to_int(v):
@@ -70,20 +88,38 @@ def lookup_keys(entry):
     return {"sgg": sgg, "umd": umd, "bun": bun, "ji": pad(entry.get("ji")) or "0000"}
 
 
-def summarize(prices, std_day):
-    """가격 목록 → 저장 레코드. 단지 하나를 대표하는 값은 중앙값으로 둔다."""
+def summarize(prices, std_day, today=None):
+    """가격 목록 → 저장 레코드. 단지 하나를 대표하는 값은 중앙값으로 둔다.
+
+    fetched는 마지막 조회일 — 대장 기재가 늦은 단지를 재조회할 간격을 재는 데 쓴다."""
     return {
         "min": min(prices), "med": int(statistics.median(prices)), "max": max(prices),
         "n": len(prices), "std_day": std_day,
+        "fetched": (today or dt.date.today()).strftime("%Y-%m-%d"),
     }
 
 
-def needs_refresh(rec, this_year):
-    """이미 채운 단지를 다시 부를지. 공시가격은 연 1회라 기준연도가 같으면 건너뛴다."""
+def needs_refresh(rec, this_year, today=None, min_days=RECHECK_DAYS):
+    """이미 채운 단지를 다시 부를지.
+
+    공시가격은 연 1회(1월 1일 기준) 갱신이므로 기준연도가 올해면 부를 이유가 없다.
+    문제는 건축물대장의 주택가격이 공시가격을 '전재'한 값이라 갱신이 늦을 수 있다는 것이다
+    (활용가이드 샘플의 stdDay가 20200101이다). 기준연도만 보고 판단하면 대장이 몇 해 전
+    값만 들고 있는 단지를 매 실행 다시 부르게 된다 — 16,000개 단지면 영원히 헛돈다.
+    그래서 마지막 조회일로 재조회 간격을 둔다."""
     if not rec:
         return True
     std = str(rec.get("std_day") or "")
-    return not (len(std) >= 4 and std[:4] == str(this_year))
+    if len(std) >= 4 and std[:4] == str(this_year):
+        return False        # 올해 기준일을 이미 확보했다
+    last = str(rec.get("fetched") or "")
+    if not last:
+        return True         # 조회일 기록 전 데이터 — 한 번은 다시 본다
+    try:
+        gap = ((today or dt.date.today()) - dt.date.fromisoformat(last)).days
+    except ValueError:
+        return True
+    return gap >= min_days
 
 
 def fetch_prices(keys, service_key):
@@ -168,9 +204,11 @@ def main():
 
     data["_meta"] = {
         "source": "국토교통부 건축HUB 건축물대장정보 서비스(getBrHsprcInfo)",
-        "note": "'지역키|단지명' → {min, med, max, n, std_day}. 단지의 전유부(호)별 "
-                "주택가격을 전량 조회해 요약한 값(원). std_day는 공시기준일. "
-                "공시가격은 연 1회(1월 1일 기준) 갱신이라 기준연도가 같으면 다시 부르지 않는다.",
+        "note": "'지역키|단지명' → {min, med, max, n, std_day, fetched}. 단지의 전유부(호)별 "
+                "주택가격을 전량 조회해 요약한 값(원). 이 값은 '공동주택가격'이며, "
+                "아파트에 한해 지방세법상 시가표준액과 같다(오피스텔·상가는 다르다). "
+                "std_day는 공시기준일 — 대장 기재가 늦을 수 있어 표시할 때 함께 보여줄 것. "
+                "fetched는 마지막 조회일(재조회 간격 계산용).",
         "unit": "원",
     }
     data["as_of"] = dt.date.today().strftime("%Y-%m-%d")

@@ -4,6 +4,7 @@
 건축HUB 주택가격(getBrHsprcInfo)은 지번으로 직접 조회한다. 조회키가 하나라도 어긋나면
 엉뚱한 지번의 가격이 붙으므로, 키가 온전할 때만 부른다.
 """
+import datetime as dt
 import unittest
 from unittest import mock
 
@@ -43,28 +44,55 @@ class LookupKeyTests(unittest.TestCase):
 
 class SummarizeTests(unittest.TestCase):
     def test_median_is_the_representative_value(self):
-        got = C.summarize([100, 300, 200, 400], "20260101")
-        self.assertEqual(got, {"min": 100, "med": 250, "max": 400,
-                               "n": 4, "std_day": "20260101"})
+        got = C.summarize([100, 300, 200, 400], "20260101", dt.date(2026, 7, 28))
+        self.assertEqual(got, {"min": 100, "med": 250, "max": 400, "n": 4,
+                               "std_day": "20260101", "fetched": "2026-07-28"})
 
     def test_single_unit_complex(self):
-        got = C.summarize([500], "20260101")
+        got = C.summarize([500], "20260101", dt.date(2026, 7, 28))
         self.assertEqual((got["min"], got["med"], got["max"], got["n"]), (500, 500, 500, 1))
+
+    def test_fetch_date_is_recorded(self):
+        """재조회 간격을 재려면 마지막 조회일이 있어야 한다."""
+        self.assertEqual(C.summarize([1], "", dt.date(2026, 7, 28))["fetched"], "2026-07-28")
 
 
 class RefreshPolicyTests(unittest.TestCase):
-    """공시가격은 연 1회 갱신이라 같은 기준연도를 다시 부르면 호출만 낭비한다."""
+    """공시가격은 연 1회 갱신이지만, 건축물대장의 기재는 그보다 늦을 수 있다.
+
+    대장은 공시가격을 '전재'한 값이라 몇 해 전 기준일에 머물러 있을 수 있다(활용가이드
+    샘플의 stdDay가 20200101이다). 기준연도만 보고 판단하면 그런 단지를 매 실행 다시
+    부르게 되고, 16,000개 단지면 영원히 헛돈다.
+    """
+    TODAY = dt.date(2026, 7, 28)
 
     def test_current_year_is_skipped(self):
-        self.assertFalse(C.needs_refresh({"std_day": "20260101"}, 2026))
+        self.assertFalse(C.needs_refresh({"std_day": "20260101"}, 2026, self.TODAY))
 
-    def test_previous_year_is_refetched(self):
-        self.assertTrue(C.needs_refresh({"std_day": "20250101"}, 2026))
+    def test_stale_record_is_not_refetched_before_the_interval(self):
+        """대장이 몇 해 전 값만 들고 있어도 재조회 간격 전에는 부르지 않는다."""
+        rec = {"std_day": "20200101", "fetched": "2026-07-20"}   # 8일 전
+        self.assertFalse(C.needs_refresh(rec, 2026, self.TODAY))
+
+    def test_stale_record_is_refetched_after_the_interval(self):
+        rec = {"std_day": "20200101", "fetched": "2026-05-01"}   # 88일 전
+        self.assertTrue(C.needs_refresh(rec, 2026, self.TODAY))
+
+    def test_record_without_fetch_date_is_checked_once(self):
+        """조회일 기록 전 데이터는 한 번은 다시 본다."""
+        self.assertTrue(C.needs_refresh({"std_day": "20250101"}, 2026, self.TODAY))
 
     def test_missing_or_malformed_record_is_refetched(self):
-        self.assertTrue(C.needs_refresh(None, 2026))
-        self.assertTrue(C.needs_refresh({}, 2026))
-        self.assertTrue(C.needs_refresh({"std_day": ""}, 2026))
+        self.assertTrue(C.needs_refresh(None, 2026, self.TODAY))
+        self.assertTrue(C.needs_refresh({}, 2026, self.TODAY))
+        self.assertTrue(C.needs_refresh({"std_day": ""}, 2026, self.TODAY))
+        self.assertTrue(C.needs_refresh({"std_day": "20200101", "fetched": "엉망"},
+                                        2026, self.TODAY))
+
+    def test_current_year_wins_over_fetch_interval(self):
+        """올해 기준일을 확보했으면 조회일이 아무리 오래됐어도 부르지 않는다."""
+        rec = {"std_day": "20260101", "fetched": "2026-01-02"}
+        self.assertFalse(C.needs_refresh(rec, 2026, self.TODAY))
 
 
 class FetchPricesTests(unittest.TestCase):
