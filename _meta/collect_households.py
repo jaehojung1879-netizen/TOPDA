@@ -14,6 +14,7 @@
 영영 안 붙었다(왕십리자이 민원). 지역 목록(kmap)을 이미 손에 든 김에 그 지역의
 실거래-전용 단지도 함께 보강해 households.json에 축적한다. 우선순위는 큐레이션 단지 먼저.
 """
+import concurrent.futures as cf
 import datetime as dt
 import json
 import os
@@ -144,6 +145,29 @@ def migrate_building_suffix_entries(hh_map, ledger_keys):
     return moved
 
 
+def unlock_bad_addr_once(hh_data, hh_map, marker="2026-07-28"):
+    """옛 버그로 잠긴 addr_bad 표식을 한 번만 푼다. 푼 개수 반환.
+
+    geocode_kakao가 네트워크 오류·429까지 '결과 없음'과 뭉뚱그려 돌려주던 시절, 호출부가
+    그걸 '이 주소는 영영 안 됨'으로 기록했다(2026-07-28 실측 274건). 그중 일부는 멀쩡한
+    주소인데 그때 마침 호출이 실패한 것뿐이라 영구히 잃은 셈이다. 이제 두 경우를 구분하니
+    한 번은 풀어 재시도할 기회를 준다.
+
+    주소는 표식과 함께 지워졌으므로 여기서는 표식만 없앤다 — 지번 시딩이 다시 채운다.
+    좌표를 이미 얻은 항목은 건드리지 않는다. 매 실행 반복하면 진짜 불량 주소를 계속
+    다시 부르게 되므로 _meta에 표식을 남겨 한 번만 돈다.
+    """
+    meta = hh_data.setdefault("_meta", {})
+    if meta.get("addr_bad_reset") == marker:
+        return 0
+    n = 0
+    for e in hh_map.values():
+        if e.pop("addr_bad", None) and e.get("lat") is None:
+            n += 1
+    meta["addr_bad_reset"] = marker
+    return n
+
+
 def seed_jibun_addrs(hh_map, addr_map, apts):
     """실거래 지번 주소를 좌표 없는 단지에 심는다. 심은 키 수 반환.
 
@@ -255,6 +279,11 @@ def main():
     # 고아가 되고, 합쳐진 단지는 처음부터 다시 API를 불러야 한다.
     ledger_keys = ({f"{rk}|{n}" for rk, es in extra_by_region.items() for (n, _d, _ds) in es}
                    | {f"{a.get('region_key')}|{a.get('name')}" for a in apts})
+    unlocked = unlock_bad_addr_once(hh_data, hh_map)
+    if unlocked:
+        print(f"지오코딩 실패 표식 {unlocked:,}건 해제 — 옛 버그로 요청 실패까지 "
+              f"영구 잠금된 항목이다. 지번 주소를 다시 붙여 재시도한다")
+
     migrated = migrate_building_suffix_entries(hh_map, ledger_keys)
     if migrated:
         print(f"동 병합 반영 — 옛 이름 항목 {len(migrated)}개의 세대수·좌표를 합쳐진 단지로 이관")
@@ -330,7 +359,10 @@ def main():
     region_deadline = deadline
     if deadline is not None:
         budget_min = float(os.environ.get("TIME_BUDGET_MIN", "20") or 20)
-        loc_budget_min = min(5.0, budget_min * 0.25)
+        # 지번 시딩(#158)이 주소 백필을 대체하면서 K-apt 루프의 할 일이 크게 줄었고,
+        # 남은 미보강분은 대부분 K-apt 수록범위 밖이라 더 돌려도 안 붙는다. 반대로
+        # 지오코딩 대기열은 7천 건대라 여기가 병목이다 — 몫을 25% → 50%로 옮긴다.
+        loc_budget_min = float(os.environ.get("LOC_BUDGET_MIN", "0") or 0) or budget_min * 0.5
         region_deadline = deadline - loc_budget_min * 60
     saved_filled = 0        # apartments.json 마지막 저장 시점의 filled
     saved_extra = 0         # households.json 마지막 저장 시점의 extra_filled
@@ -477,32 +509,59 @@ def main():
     # 지번 시딩으로 주소 보유 단지가 한 번에 1만여 개 늘어난다. 보폭이 좁으면 대기열이
     # 몇 달씩 남으므로 넓힌다. 단지당 Kakao 3회(지오코딩+역+학교)이고, 실제 상한은 아래
     # out_of_time(위치보강 몫으로 떼어둔 예산)이 잡으므로 이 값은 안전 상한일 뿐이다.
-    MAX_LOC = 600
-    loc_filled = 0
+    # 단지당 Kakao 3회(지오코딩+역+학교)라 순차로는 초당 한 건 남짓이다. 대기열이 7천 건대라
+    # 순차로는 20일이 걸린다 — 호출은 전부 대기시간이 지배하므로 스레드로 겹쳐 부른다.
+    # 네트워크만 병렬로 하고 hh_map 쓰기는 메인 스레드가 모아서 한다(자료구조 경합 회피).
+    MAX_LOC = 3000          # 안전 상한 — 실제 상한은 아래 예산(out_of_time)이 잡는다
+    LOC_WORKERS = 4
+    loc_filled, loc_bad, loc_retry = 0, 0, 0
     if os.environ.get("KAKAO_REST_API_KEY"):
-        for key_, entry in hh_map.items():
-            if loc_filled >= MAX_LOC or L.out_of_time(deadline, margin_sec=30):
-                break
-            if entry.get("lat") or not entry.get("addr"):
-                continue
+        pending = [k for k, e in hh_map.items() if e.get("addr") and e.get("lat") is None]
+
+        def _locate(key_):
+            """네트워크만 담당. (키, 결과, 사유) — 결과 None이면 사유로 처리를 가른다."""
+            entry = hh_map[key_]
             try:
-                geo = L.geocode_kakao(entry["addr"])
-                if not geo:
-                    entry["addr_bad"] = True   # 지오코딩 불가 주소 — 재시도 방지
-                    entry.pop("addr", None)
-                    continue
-                lng, lat = geo
-                entry["lat"], entry["lng"] = round(lat, 6), round(lng, 6)
+                geo = L.geocode_kakao(entry["addr"], strict=True)
+            except Exception:  # noqa: BLE001 — 이번에 못 물어본 것(네트워크·429 등)
+                return key_, None, "retry"
+            if not geo:
+                return key_, None, "bad"     # 주소 자체가 지오코딩되지 않는다
+            lng, lat = geo
+            out = {"lat": round(lat, 6), "lng": round(lng, 6)}
+            try:
                 sub = L.nearest_kakao(lng, lat, category_code="SW8")
                 if sub:
-                    entry["subway"] = {"station": sub[0], "distance_m": sub[1]}
+                    out["subway"] = {"station": sub[0], "distance_m": sub[1]}
                 sch = L.nearest_school_kakao(lng, lat)
                 if sch:
-                    entry["elementary"] = {"name": CA.clean_school(sch[0]), "distance_m": sch[1]}
-                loc_filled += 1
-            except Exception as e:  # noqa: BLE001 — 개별 실패는 다음 단지로
-                print(f"  ! 위치 보강 실패 {key_}: {e}", file=sys.stderr)
-        if loc_filled:
+                    out["elementary"] = {"name": CA.clean_school(sch[0]), "distance_m": sch[1]}
+            except Exception:  # noqa: BLE001 — 좌표는 얻었으니 역·학교는 다음 실행에 채운다
+                pass
+            return key_, out, "ok"
+
+        # 배치 단위로 넘기고 배치 사이에서만 예산을 본다. 초과분은 최대 한 배치라
+        # 예측 가능하고, 스케줄링 코드가 단순해 검증하기 쉽다.
+        BATCH = LOC_WORKERS * 4
+        with cf.ThreadPoolExecutor(max_workers=LOC_WORKERS) as pool:
+            for i in range(0, len(pending), BATCH):
+                if loc_filled + loc_bad >= MAX_LOC or L.out_of_time(deadline, margin_sec=30):
+                    break
+                for key_, out, why in pool.map(_locate, pending[i:i + BATCH]):
+                    if why == "ok":
+                        hh_map[key_].update(out)
+                        loc_filled += 1
+                    elif why == "bad":
+                        # 주소가 잘못된 것만 잠근다. 요청 실패(retry)는 표식 없이 두어
+                        # 다음 실행이 다시 시도한다 — 여기서 잠그면 영구 유실이다.
+                        hh_map[key_]["addr_bad"] = True
+                        hh_map[key_].pop("addr", None)
+                        loc_bad += 1
+                    else:
+                        loc_retry += 1
+        print(f"[위치보강] 좌표 {loc_filled:,}건 · 주소불가 {loc_bad:,} · "
+              f"일시실패(다음 실행 재시도) {loc_retry:,} · 대기 {len(pending):,}")
+        if loc_filled or loc_bad:
             hh_data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
             L.save_json_safe(HOUSEHOLDS_JSON, hh_data)
     else:
@@ -578,11 +637,11 @@ def main():
         L.save_json_safe(APARTMENTS_JSON, data, min_items_key="apartments")
     # 제거만 일어난 날에도 저장해야 잘못 붙은 항목이 남지 않는다.
     if (stat["extra_filled"] > saved_extra or stat["addr_backfill"] > saved_backfill
-            or purged or seeded or migrated):
+            or purged or seeded or migrated or unlocked):
         hh_data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
         L.save_json_safe(HOUSEHOLDS_JSON, hh_data)
     if not (stat["filled"] or stat["extra_filled"] or stat["addr_backfill"]
-            or purged or seeded or migrated):
+            or purged or seeded or migrated or unlocked):
         print("변경 없음 — 저장 생략")
 
 

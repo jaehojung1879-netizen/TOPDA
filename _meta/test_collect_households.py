@@ -205,6 +205,42 @@ class MigrateBuildingSuffixTests(unittest.TestCase):
         self.assertIn("서울 강남구|래미안", hh)
 
 
+class UnlockBadAddrTests(unittest.TestCase):
+    """옛 geocode_kakao는 네트워크 오류·429까지 '결과 없음'과 뭉뚱그렸고, 호출부가 그걸
+    영구 표식으로 남겼다(실측 274건). 두 경우를 구분하게 됐으니 한 번은 풀어 준다."""
+
+    def test_marker_is_cleared_and_counted(self):
+        hh = {"a": {"addr_bad": True}, "b": {"addr_bad": True}}
+        data = {}
+        self.assertEqual(H.unlock_bad_addr_once(data, hh), 2)
+        self.assertNotIn("addr_bad", hh["a"])
+        self.assertEqual(data["_meta"]["addr_bad_reset"], "2026-07-28")
+
+    def test_runs_only_once(self):
+        """매 실행 반복하면 진짜 불량 주소를 계속 다시 부르게 된다."""
+        data = {"_meta": {"addr_bad_reset": "2026-07-28"}}
+        hh = {"a": {"addr_bad": True}}
+        self.assertEqual(H.unlock_bad_addr_once(data, hh), 0)
+        self.assertTrue(hh["a"]["addr_bad"])   # 그대로 둔다
+
+    def test_already_geocoded_entry_is_not_counted(self):
+        """좌표를 이미 얻었으면 되살릴 게 없다."""
+        hh = {"a": {"addr_bad": True, "lat": 37.5, "lng": 127.0}}
+        self.assertEqual(H.unlock_bad_addr_once({}, hh), 0)
+
+    def test_entries_without_marker_are_untouched(self):
+        hh = {"a": {"households": 100, "addr": "서울 강남구 역삼동 1"}}
+        H.unlock_bad_addr_once({}, hh)
+        self.assertEqual(hh["a"], {"households": 100, "addr": "서울 강남구 역삼동 1"})
+
+    def test_unlocked_entry_becomes_seedable_again(self):
+        """표식만 지운다 — 주소는 지번 시딩이 다시 채운다."""
+        hh = {"서울 강남구|가": {"addr_bad": True}}
+        H.unlock_bad_addr_once({}, hh)
+        n = H.seed_jibun_addrs(hh, {"서울 강남구|가": {"addr": "서울 강남구 역삼동 1"}}, [])
+        self.assertEqual((n, hh["서울 강남구|가"]["addr"]), (1, "서울 강남구 역삼동 1"))
+
+
 class SeedJibunAddrTests(unittest.TestCase):
     """실거래 지번은 거래가 있으면 항상 온다 — K-apt 수록 여부와 무관하게 위치를 확보한다."""
 
