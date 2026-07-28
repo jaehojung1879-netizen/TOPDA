@@ -1,7 +1,7 @@
 {
   "_meta": {
     "counts": {
-      "complexes": 4837,
+      "complexes": 4850,
       "regions": 79
     },
     "hubs": [
@@ -87,7 +87,7 @@
     ],
     "note": "한글 지역·단지명 → URL 슬러그 매핑. 한 번 발급한 슬러그는 바꾸지 않는다. 복합 키는 '지역|법정동|단지명'.",
     "romanization": "국어의 로마자 표기법(음절 단위, 자음동화 미적용)",
-    "updated": "2026-07-27"
+    "updated": "2026-07-28"
   },
   "complexes": {
     "경기 고양시 덕양구|고양동|고양동우방유쉘아파트": {
@@ -818,6 +818,14 @@
       "slug": "ilsandongyang-955-2",
       "umd": "일산동"
     },
+    "경기 고양시 일산서구|일산동|일산쌍용": {
+      "history": [],
+      "name": "일산쌍용",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-07-28",
+      "slug": "ilsanssangyong",
+      "umd": "일산동"
+    },
     "경기 고양시 일산서구|일산동|일산에이스(9차)": {
       "history": [],
       "name": "일산에이스(9차)",
@@ -977,6 +985,14 @@
       "since": "2026-07-26",
       "slug": "munchonmaeul6danjigisanssangyong",
       "umd": "주엽동"
+    },
+    "경기 고양시 일산서구|탄현동|쌍용스윗닷홈": {
+      "history": [],
+      "name": "쌍용스윗닷홈",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-07-28",
+      "slug": "ssangyongseuwitdathom",
+      "umd": "탄현동"
     },
     "경기 고양시 일산서구|탄현동|일산임광진흥아파트": {
       "history": [],
@@ -2218,6 +2234,14 @@
       "slug": "geumgangpenteriumsenteureolpakeu3cha",
       "umd": "도마교동"
     },
+    "경기 군포시|도마교동|숲속반디채": {
+      "history": [],
+      "name": "숲속반디채",
+      "region_slug": "gyeonggi-gunpo",
+      "since": "2026-07-28",
+      "slug": "supsokbandichae",
+      "umd": "도마교동"
+    },
     "경기 군포시|부곡동|삼성마을2단지": {
       "history": [],
       "name": "삼성마을2단지",
@@ -3160,6 +3184,14 @@
       "region_slug": "gyeonggi-namyangju",
       "since": "2026-07-26",
       "slug": "namyangjuraonpeuraibit5danji",
+      "umd": "녹촌리"
+    },
+    "경기 남양주시|녹촌리|신창현두산위브": {
+      "history": [],
+      "name": "신창현두산위브",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-07-28",
+      "slug": "sinchanghyeondusanwibeu",
       "umd": "녹촌리"
     },
     "경기 남양주시|녹촌리|화도센트럴우방아이유쉘": {
@@ -14178,6 +14210,14 @@
       "slug": "deoteuruelsenteuriji",
       "umd": "금촌동"
     },
+    "경기 파주시|금촌동|동문2차아파트": {
+      "history": [],
+      "name": "동문2차아파트",
+      "region_slug": "gyeonggi-paju",
+      "since": "2026-07-28",
+      "slug": "dongmun2chaapateu",
+      "umd": "금촌동"
+    },
     "경기 파주시|금촌동|동문2차아파트501동": {
       "history": [],
       "name": "동문2차아파트501동",
@@ -15753,6 +15793,22 @@
       "since": "2026-07-26",
       "slug": "rotdeinbenseuseukai",
       "umd": "평택동"
+    },
+    "경기 평택시|평택동|퍼스트시티": {
+      "history": [],
+      "name": "퍼스트시티",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-07-28",
+      "slug": "peoseuteusiti",
+      "umd": "평택동"
+    },
+    "경기 평택시|합정동|SK합정": {
+      "history": [],
+      "name": "SK합정",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-07-28",
+      "slug": "skhapjeong",
+      "umd": "합정동"
     },
     "경기 평택시|합정동|주공4": {
       "history": [],
@@ -25666,6 +25722,14 @@
       "slug": "woldeumereudiang-2",
       "umd": "염창동"
     },
+    "서울 강서구|염창동|이너스내안에": {
+      "history": [],
+      "name": "이너스내안에",
+      "region_slug": "seoul-gangseo",
+      "since": "2026-07-28",
+      "slug": "ineoseunaeane",
+      "umd": "염창동"
+    },
     "서울 강서구|염창동|일신건영휴먼빌": {
       "history": [],
       "name": "일신건영휴먼빌",
@@ -27522,6 +27586,14 @@
       "slug": "seongwon-saseum4",
       "umd": "월계동"
     },
+    "서울 노원구|월계동|세양청마루": {
+      "history": [],
+      "name": "세양청마루",
+      "region_slug": "seoul-nowon",
+      "since": "2026-07-28",
+      "slug": "seyangcheongmaru",
+      "umd": "월계동"
+    },
     "서울 노원구|월계동|월계센트럴아이파크": {
       "history": [],
       "name": "월계센트럴아이파크",
@@ -28408,6 +28480,14 @@
       "region_slug": "seoul-dongdaemun",
       "since": "2026-07-26",
       "slug": "janghanpyeongwoldeumereudiang",
+      "umd": "장안동"
+    },
+    "서울 동대문구|장안동|정은스카이빌": {
+      "history": [],
+      "name": "정은스카이빌",
+      "region_slug": "seoul-dongdaemun",
+      "since": "2026-07-28",
+      "slug": "jeongeunseukaibil",
       "umd": "장안동"
     },
     "서울 동대문구|장안동|현대썬앤빌601": {
@@ -31106,6 +31186,14 @@
       "slug": "koorong",
       "umd": "석관동"
     },
+    "서울 성북구|안암동3가|해링턴플레이스안암": {
+      "history": [],
+      "name": "해링턴플레이스안암",
+      "region_slug": "seoul-seongbuk",
+      "since": "2026-07-28",
+      "slug": "haeringteonpeulreiseuanam",
+      "umd": "안암동3가"
+    },
     "서울 성북구|장위동|꿈의숲대명루첸아파트": {
       "history": [],
       "name": "꿈의숲대명루첸아파트",
@@ -32506,6 +32594,14 @@
       "slug": "dangsandiobil",
       "umd": "당산동5가"
     },
+    "서울 영등포구|당산동5가|반도유보라": {
+      "history": [],
+      "name": "반도유보라",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-07-28",
+      "slug": "bandoyubora",
+      "umd": "당산동5가"
+    },
     "서울 영등포구|당산동5가|유원제일2차": {
       "history": [],
       "name": "유원제일2차",
@@ -33160,6 +33256,14 @@
       "region_slug": "seoul-yongsan",
       "since": "2026-07-26",
       "slug": "ribeotap",
+      "umd": "한남동"
+    },
+    "서울 용산구|한남동|한남동동원베네스트": {
+      "history": [],
+      "name": "한남동동원베네스트",
+      "region_slug": "seoul-yongsan",
+      "since": "2026-07-28",
+      "slug": "hannamdongdongwonbeneseuteu",
       "umd": "한남동"
     },
     "서울 용산구|효창동|용산롯데캐슬센터포레": {
