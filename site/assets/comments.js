@@ -1,4 +1,5 @@
-// 톺다 공통 댓글 컴포넌트. 사용자 입력은 모두 textContent로만 출력한다.
+// 톺다 공통 댓글. 커뮤니티 댓글창처럼 한 줄 입력 + 목록만 둔다.
+// 사용자 입력은 모두 textContent로만 출력한다(innerHTML 사용 금지).
 (function () {
   'use strict';
 
@@ -36,48 +37,42 @@
     localStorage.setItem(KEY_TOKENS, JSON.stringify(tokens));
   }
 
+  // 커뮤니티식 짧은 날짜 — 올해면 "07.28 14:22", 아니면 "25.12.31"
   function formatDate(value) {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return '';
-    return new Intl.DateTimeFormat('ko-KR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    }).format(date).replace(/\. /g, '.').replace(/\.$/, '');
+    const pad = (n) => String(n).padStart(2, '0');
+    const now = new Date();
+    if (date.getFullYear() !== now.getFullYear()) {
+      return String(date.getFullYear()).slice(2) + '.' + pad(date.getMonth() + 1) + '.' + pad(date.getDate());
+    }
+    return pad(date.getMonth() + 1) + '.' + pad(date.getDate()) + ' ' + pad(date.getHours()) + ':' + pad(date.getMinutes());
   }
 
   function setMessage(node, message, kind) {
     node.textContent = message || '';
-    node.className = 'comments-message' + (kind ? ' is-' + kind : '');
+    node.className = 'cmt-msg' + (kind ? ' is-' + kind : '');
     node.hidden = !message;
   }
 
-  function buildCommentRow(comment, options) {
-    const row = element('li', 'comment-item');
-    const head = element('div', 'comment-head');
-    const author = element('strong', 'comment-author', comment.author || '익명');
-    const date = element('time', 'comment-date', formatDate(comment.created_at));
-    head.append(author, date);
+  function buildRow(comment, options) {
+    const row = element('li', 'cmt-item');
+    row.append(
+      element('span', 'cmt-nick', comment.author || '익명'),
+      element('span', 'cmt-text', comment.body || ''),
+    );
 
-    const body = element('p', 'comment-body', comment.body || '');
-    row.append(head, body);
+    const meta = element('span', 'cmt-meta');
+    meta.appendChild(element('time', 'cmt-time', formatDate(comment.created_at)));
 
     const ownerToken = options.tokens[comment.id];
     if (ownerToken || options.adminKey) {
-      const actions = element('div', 'comment-actions');
-      const remove = element(
-        'button',
-        'comment-delete',
-        ownerToken ? '삭제' : '운영자 삭제',
-      );
+      const remove = element('button', 'cmt-del', ownerToken ? '삭제' : '운영자 삭제');
       remove.type = 'button';
       remove.addEventListener('click', () => options.onDelete(comment.id, ownerToken, remove));
-      actions.appendChild(remove);
-      row.appendChild(actions);
+      meta.appendChild(remove);
     }
+    row.appendChild(meta);
     return row;
   }
 
@@ -88,67 +83,61 @@
     const type = String(root.dataset.commentType || '').trim();
     const key = String(root.dataset.commentKey || '').trim();
     const title = String(root.dataset.commentTitle || document.title).trim();
-    const page = String(root.dataset.commentPage || '').trim();
-    const writeHref = String(root.dataset.commentWriteHref || '../board-write.html').trim();
     if (!type || !key) return;
 
-    const wrap = element('div', 'comments-inner');
-    const heading = element('div', 'comments-heading');
-    heading.append(
-      element('h2', '', '이 페이지에 한마디'),
-      element('p', '', '계산 결과나 이용 경험, 보완이 필요한 내용을 남겨주세요.'),
-    );
+    const wrap = element('div', 'cmt');
 
-    const form = element('form', 'comments-form');
-    const authorLabel = element('label', 'comments-field');
-    authorLabel.appendChild(element('span', '', '닉네임 (선택)'));
-    const author = element('input');
-    author.type = 'text';
-    author.name = 'author';
-    author.maxLength = 20;
-    author.placeholder = '익명';
-    author.autocomplete = 'nickname';
-    author.value = localStorage.getItem(KEY_AUTHOR) || '';
-    authorLabel.appendChild(author);
+    const head = element('div', 'cmt-head');
+    const count = element('span', 'cmt-count', '댓글 0');
+    head.appendChild(count);
 
-    const bodyLabel = element('label', 'comments-field comments-body-field');
-    bodyLabel.appendChild(element('span', '', '댓글'));
-    const body = element('textarea');
+    const list = element('ul', 'cmt-list');
+    const empty = element('p', 'cmt-empty', '첫 댓글을 남겨보세요.');
+    const message = element('p', 'cmt-msg');
+    message.hidden = true;
+
+    const form = element('form', 'cmt-form');
+    const nick = document.createElement('input');
+    nick.type = 'text';
+    nick.className = 'cmt-nick-input';
+    nick.name = 'author';
+    nick.maxLength = 20;
+    nick.placeholder = '닉네임';
+    nick.autocomplete = 'nickname';
+    nick.setAttribute('aria-label', '닉네임 (선택)');
+    nick.value = localStorage.getItem(KEY_AUTHOR) || '';
+
+    const body = document.createElement('textarea');
+    body.className = 'cmt-input';
     body.name = 'body';
-    body.rows = 4;
+    body.rows = 1;
     body.maxLength = 1000;
     body.required = true;
-    body.placeholder = '이 페이지에 대한 경험이나 의견을 남겨주세요.';
-    bodyLabel.appendChild(body);
+    body.placeholder = '댓글을 남겨보세요';
+    body.setAttribute('aria-label', '댓글 내용');
 
-    const formFooter = element('div', 'comments-form-footer');
-    const counter = element('span', 'comments-counter', '0 / 1,000');
-    const submit = element('button', 'btn btn-primary', '등록');
+    const submit = element('button', 'cmt-submit', '등록');
     submit.type = 'submit';
-    formFooter.append(counter, submit);
-    form.append(authorLabel, bodyLabel, formFooter);
 
-    const message = element('p', 'comments-message');
-    message.hidden = true;
-    const listHead = element('div', 'comments-list-head');
-    const count = element('strong', '', '댓글 0개');
-    listHead.appendChild(count);
-    const list = element('ul', 'comments-list');
-    const empty = element('p', 'comments-empty', '아직 댓글이 없습니다. 첫 의견을 남겨주세요.');
-
-    const boardLink = element('a', 'comments-board-link', '긴 질문이나 경험은 게시판에 자세히 작성하기 →');
-    const writeParams = new URLSearchParams({ category: 'question' });
-    if (page) writeParams.set('page', page);
-    boardLink.href = writeHref + '?' + writeParams.toString();
-
-    wrap.append(heading, form, message, listHead, list, empty, boardLink);
+    form.append(nick, body, submit);
+    wrap.append(head, list, empty, message, form);
     root.appendChild(wrap);
 
-    body.addEventListener('input', () => {
-      counter.textContent = body.value.length.toLocaleString('ko-KR') + ' / 1,000';
+    function autoGrow() {
+      body.style.height = 'auto';
+      body.style.height = Math.min(Math.max(body.scrollHeight, 38), 160) + 'px';
+    }
+    body.addEventListener('input', autoGrow);
+
+    // Enter 등록 / Shift+Enter 줄바꿈 — 커뮤니티 댓글창의 기본 동작
+    body.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
     });
-    author.addEventListener('change', () => {
-      localStorage.setItem(KEY_AUTHOR, author.value.trim());
+    nick.addEventListener('change', () => {
+      localStorage.setItem(KEY_AUTHOR, nick.value.trim());
     });
 
     let client = null;
@@ -158,12 +147,12 @@
     function render() {
       const tokens = readTokens();
       const adminKey = localStorage.getItem(KEY_ADMIN) || '';
-      list.replaceChildren(...comments.map((comment) => buildCommentRow(comment, {
+      list.replaceChildren(...comments.map((comment) => buildRow(comment, {
         tokens,
         adminKey,
         onDelete: deleteComment,
       })));
-      count.textContent = '댓글 ' + comments.length.toLocaleString('ko-KR') + '개';
+      count.textContent = '댓글 ' + comments.length.toLocaleString('ko-KR');
       empty.hidden = comments.length > 0;
     }
 
@@ -176,7 +165,7 @@
         .limit(50);
       if (result.error) {
         if (window.console) console.warn('[댓글] 목록 조회 실패:', result.error);
-        setMessage(message, '댓글을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.', 'error');
+        setMessage(message, '댓글을 불러오지 못했습니다.', 'error');
         return;
       }
       comments = result.data || [];
@@ -203,9 +192,7 @@
       }
 
       if (result.error || !result.data) {
-        setMessage(message, ownerToken
-          ? '댓글을 삭제하지 못했습니다.'
-          : '운영자 키가 올바르지 않거나 댓글을 삭제할 수 없습니다.', 'error');
+        setMessage(message, ownerToken ? '삭제하지 못했습니다.' : '운영자 키가 올바르지 않습니다.', 'error');
         button.disabled = false;
         return;
       }
@@ -218,14 +205,13 @@
       if (loading || !client) return;
       const text = body.value.trim();
       if (!text) {
-        setMessage(message, '댓글 내용을 입력해 주세요.', 'error');
         body.focus();
         return;
       }
 
       loading = true;
       submit.disabled = true;
-      submit.textContent = '등록 중…';
+      submit.textContent = '등록 중';
       setMessage(message, '', '');
 
       const id = api.uuid();
@@ -235,19 +221,19 @@
         target_type: type,
         target_key: key,
         target_title: title || null,
-        author: author.value.trim() || null,
+        author: nick.value.trim() || null,
         body: text,
         owner_token: token,
       });
 
       if (result.error) {
         if (window.console) console.warn('[댓글] 등록 실패:', result.error);
-        setMessage(message, '댓글을 서버에 저장하지 못했습니다. 등록되지 않았으니 잠시 후 다시 시도해 주세요.', 'error');
+        setMessage(message, '등록하지 못했습니다. 잠시 후 다시 시도해 주세요.', 'error');
       } else {
         saveToken(id, token);
-        localStorage.setItem(KEY_AUTHOR, author.value.trim());
+        localStorage.setItem(KEY_AUTHOR, nick.value.trim());
         body.value = '';
-        counter.textContent = '0 / 1,000';
+        autoGrow();
         await refresh();
       }
 
@@ -259,13 +245,15 @@
     render();
     if (!api || !api.isConfigured()) {
       submit.disabled = true;
-      setMessage(message, '댓글 서버 설정이 아직 연결되지 않았습니다.', 'warn');
+      body.disabled = true;
+      setMessage(message, '댓글 서버가 연결되지 않았습니다.', 'warn');
       return;
     }
     client = await api.getClient();
     if (!client) {
       submit.disabled = true;
-      setMessage(message, '댓글 서버에 연결하지 못했습니다. 네트워크를 확인해 주세요.', 'error');
+      body.disabled = true;
+      setMessage(message, '댓글 서버에 연결하지 못했습니다.', 'error');
       return;
     }
     await refresh();

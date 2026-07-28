@@ -34,40 +34,51 @@
 <main class="container-narrow board-editor-page">
   <div class="breadcrumb"><a href="index.html">홈</a> / <a href="board.html">게시판</a> / 글쓰기</div>
   <header class="board-editor-head">
-    <h1>게시글 작성</h1>
-    <p>질문이나 경험을 이해하기 쉽게 적어주세요. 작성 중인 내용은 이 브라우저에 자동 저장됩니다.</p>
+    <h1 data-write-heading>게시글 작성</h1>
+    <p>서식 버튼으로 굵게·제목·목록을 넣을 수 있습니다. 작성 중인 내용은 이 브라우저에 자동 저장됩니다.</p>
   </header>
 
   <p class="fb-status" data-board-write-status hidden></p>
 
   <form class="board-editor" data-board-write>
-    <div class="field">
-      <label for="board-category">카테고리</label>
-      <select id="board-category" name="category" required></select>
+    <div class="ed-meta">
+      <div class="field ed-field-cat">
+        <label for="board-category">분류</label>
+        <select id="board-category" name="category" required></select>
+      </div>
+      <div class="field ed-field-nick">
+        <label for="board-author">닉네임 <span class="label-optional">선택</span></label>
+        <input id="board-author" name="author" type="text" maxlength="20" autocomplete="nickname" placeholder="익명" />
+      </div>
     </div>
+
     <div class="field">
       <label for="board-title">제목</label>
       <input id="board-title" name="title" type="text" maxlength="80" required placeholder="예: 첫 전세 계약 전에 확인할 점이 궁금해요" />
     </div>
-    <div class="field">
-      <label for="board-author">닉네임 <span class="label-optional">선택</span></label>
-      <input id="board-author" name="author" type="text" maxlength="20" autocomplete="nickname" placeholder="입력하지 않으면 익명으로 표시됩니다" />
+
+    <div class="field board-body-field" data-editor-host>
+      <!-- 서식 툴바는 board.js가 여기 맨 앞에 끼워 넣는다. -->
+      <textarea id="board-body" name="body" rows="14" maxlength="2000" required
+                placeholder="나누고 싶은 경험이나 질문을 자유롭게 적어주세요.&#10;&#10;글자를 드래그한 뒤 위의 버튼을 누르면 서식이 적용됩니다."></textarea>
+      <div class="ed-foot">
+        <span class="ed-draft" data-draft-note hidden></span>
+        <span class="ed-count" data-body-count>0 / 2,000</span>
+        <button class="ed-preview-toggle" type="button" data-editor-preview-toggle aria-expanded="false">미리보기</button>
+      </div>
+      <div class="ed-preview board-post-body" data-editor-preview hidden></div>
     </div>
+
     <div class="field">
       <label for="board-page">관련 페이지 또는 링크 <span class="label-optional">선택</span></label>
       <input id="board-page" name="page" type="text" maxlength="120" placeholder="예: /calculators/acquisition-tax.html" />
     </div>
-    <div class="field board-body-field">
-      <div class="field-label-row">
-        <label for="board-body">내용</label>
-        <span data-body-count>0 / 2,000</span>
-      </div>
-      <textarea id="board-body" name="body" rows="14" maxlength="2000" required placeholder="나누고 싶은 경험이나 질문을 자유롭게 적어주세요."></textarea>
-    </div>
-    <label class="board-secret-option">
+
+    <label class="board-secret-option" data-secret-row>
       <input type="checkbox" name="secret" />
       <span><strong>비밀글로 작성</strong><small>작성한 브라우저와 운영자만 내용을 볼 수 있습니다.</small></span>
     </label>
+
     <div class="board-editor-actions">
       <a class="btn btn-secondary" href="board.html">취소</a>
       <button class="btn btn-primary" type="submit">게시</button>

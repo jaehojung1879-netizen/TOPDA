@@ -74,23 +74,54 @@
     </a>
   </header>
 
-  <div class="fb-app board-list-app" data-board-list>
-    <p class="fb-status" data-fb-status hidden></p>
-    <section class="fb-list-section" aria-label="게시글 목록">
-      <div class="fb-tabs-row">
-        <div class="fb-tabs" role="tablist" aria-label="게시글 공개 범위">
-          <button class="fb-tab active" type="button" data-fb-tab="public">전체 공개글</button>
-          <button class="fb-tab" type="button" data-fb-tab="mine">내 비밀글 <span class="count" data-fb-secret-count>0</span></button>
-        </div>
-        <select class="fb-cat-filter" data-fb-cat-filter aria-label="카테고리 필터"></select>
-      </div>
-      <ul class="fb-list" data-fb-list-public></ul>
-      <ul class="fb-list" data-fb-list-mine hidden></ul>
-      <p class="fb-empty" data-fb-empty hidden>등록된 글이 아직 없습니다. 첫 글을 남겨주세요.</p>
-    </section>
+  <!-- 운영자 모드 — 키가 맞아야 비밀글 전체가 목록에 나온다. -->
+  <div class="admin-bar" data-admin-bar>
+    <span class="admin-dot" aria-hidden="true"></span>
+    <span class="admin-state" data-admin-state>운영자 모드 꺼짐</span>
+    <button class="admin-btn" type="button" data-admin-open>운영자 키 입력</button>
+    <button class="admin-btn admin-btn-off" type="button" data-admin-clear hidden>해제</button>
+    <div class="admin-panel" data-admin-panel hidden>
+      <input class="admin-input" type="password" data-admin-input autocomplete="off"
+             placeholder="운영자 키" aria-label="운영자 키" />
+      <button class="btn btn-primary admin-save" type="button" data-admin-save>확인</button>
+      <p class="admin-message" data-admin-message></p>
+      <p class="admin-hint">Supabase Vault의 <code>board_admin_key</code> 값입니다. 공용 PC에서는 사용 후 해제하세요.</p>
+    </div>
   </div>
 
-  <p class="board-notice">공개글은 모든 방문자에게 공개되며, 비밀글은 작성자 본인과 운영자만 볼 수 있습니다. 개인정보·민감정보는 입력하지 마세요.</p>
+  <div class="fb-app board-list-app" data-board-list>
+    <p class="fb-status" data-fb-status hidden></p>
+
+    <div class="bl-toolbar">
+      <div class="fb-tabs" role="tablist" aria-label="게시글 공개 범위">
+        <button class="fb-tab active" type="button" data-fb-tab="public">전체글</button>
+        <button class="fb-tab" type="button" data-fb-tab="mine">비밀글 <span class="count" data-fb-secret-count>0</span></button>
+      </div>
+      <div class="bl-tools">
+        <select class="fb-cat-filter" data-fb-cat-filter aria-label="카테고리 필터"></select>
+        <input class="bl-search" type="search" data-bl-search placeholder="제목·내용 검색" aria-label="게시글 검색" />
+      </div>
+    </div>
+
+    <div class="table-wrap bl-wrap">
+      <table class="bl-table">
+        <thead>
+          <tr>
+            <th scope="col" class="bl-num">번호</th>
+            <th scope="col" class="bl-cat">분류</th>
+            <th scope="col">제목</th>
+            <th scope="col" class="bl-author">글쓴이</th>
+            <th scope="col" class="bl-date">날짜</th>
+          </tr>
+        </thead>
+        <tbody data-bl-body></tbody>
+      </table>
+    </div>
+    <p class="fb-empty" data-fb-empty hidden>등록된 글이 아직 없습니다. 첫 글을 남겨주세요.</p>
+    <nav class="bl-pager" data-bl-pager aria-label="페이지"></nav>
+  </div>
+
+  <p class="board-notice">공개글은 모든 방문자에게 공개되며, 비밀글은 작성한 브라우저와 운영자만 볼 수 있습니다. 개인정보·민감정보는 입력하지 마세요.</p>
 </main>
 
 <footer class="site-footer">
