@@ -19,11 +19,11 @@
       "name": "경기 이천시",
       "lat": 37.272268,
       "lng": 127.435089,
-      "sale_median": 19200,
-      "jeonse_median": 16108,
+      "sale_median": 19500,
+      "jeonse_median": 16360,
       "jeonse_ratio": 83.9,
       "ratio_region": "이천시",
-      "sale_n": 483,
+      "sale_n": 495,
       "jeonse_n": null
     },
     {
@@ -32,11 +32,11 @@
       "name": "경기 안성시",
       "lat": 37.008071,
       "lng": 127.27979,
-      "sale_median": 16700,
-      "jeonse_median": 12725,
+      "sale_median": 16500,
+      "jeonse_median": 12573,
       "jeonse_ratio": 76.2,
       "ratio_region": "안성시",
-      "sale_n": 465,
+      "sale_n": 475,
       "jeonse_n": null
     },
     {
@@ -45,11 +45,11 @@
       "name": "경기 평택시",
       "lat": 36.992261,
       "lng": 127.112688,
-      "sale_median": 31800,
-      "jeonse_median": 24072,
+      "sale_median": 31900,
+      "jeonse_median": 24148,
       "jeonse_ratio": 75.7,
       "ratio_region": "평택시",
-      "sale_n": 1908,
+      "sale_n": 1964,
       "jeonse_n": null
     },
     {
@@ -58,11 +58,11 @@
       "name": "경기 파주시",
       "lat": 37.760045,
       "lng": 126.779881,
-      "sale_median": 39700,
-      "jeonse_median": 29973,
+      "sale_median": 39500,
+      "jeonse_median": 29822,
       "jeonse_ratio": 75.5,
       "ratio_region": "파주시",
-      "sale_n": 1119,
+      "sale_n": 1146,
       "jeonse_n": null
     },
     {
@@ -71,11 +71,11 @@
       "name": "경기 광주시",
       "lat": 37.429394,
       "lng": 127.255139,
-      "sale_median": 47700,
-      "jeonse_median": 35584,
+      "sale_median": 48000,
+      "jeonse_median": 35807,
       "jeonse_ratio": 74.6,
       "ratio_region": "광주시",
-      "sale_n": 928,
+      "sale_n": 956,
       "jeonse_n": null
     },
     {
@@ -88,7 +88,7 @@
       "jeonse_median": 30917,
       "jeonse_ratio": 74.5,
       "ratio_region": "울산",
-      "sale_n": 961,
+      "sale_n": 981,
       "jeonse_n": null
     },
     {
@@ -97,11 +97,11 @@
       "name": "경기 고양시 일산서구",
       "lat": 37.675198,
       "lng": 126.750669,
-      "sale_median": 37850,
-      "jeonse_median": 28009,
+      "sale_median": 37950,
+      "jeonse_median": 28083,
       "jeonse_ratio": 74.0,
       "ratio_region": "일산서구",
-      "sale_n": 774,
+      "sale_n": 792,
       "jeonse_n": null
     },
     {
@@ -110,11 +110,11 @@
       "name": "인천 미추홀구",
       "lat": 37.4636,
       "lng": 126.6505,
-      "sale_median": 33400,
-      "jeonse_median": 24582,
+      "sale_median": 33750,
+      "jeonse_median": 24840,
       "jeonse_ratio": 73.6,
       "ratio_region": "미추홀구",
-      "sale_n": 688,
+      "sale_n": 698,
       "jeonse_n": null
     },
     {
@@ -127,7 +127,7 @@
       "jeonse_median": 37434,
       "jeonse_ratio": 73.4,
       "ratio_region": "남양주시",
-      "sale_n": 2592,
+      "sale_n": 2680,
       "jeonse_n": null
     },
     {
@@ -136,11 +136,24 @@
       "name": "경기 고양시 일산동구",
       "lat": 37.658875,
       "lng": 126.775008,
-      "sale_median": 53500,
-      "jeonse_median": 39108,
+      "sale_median": 54000,
+      "jeonse_median": 39473,
       "jeonse_ratio": 73.1,
       "ratio_region": "일산동구",
-      "sale_n": 548,
+      "sale_n": 560,
+      "jeonse_n": null
+    },
+    {
+      "key": "대구 달서구",
+      "sido": "대구",
+      "name": "대구 달서구",
+      "lat": 35.829915,
+      "lng": 128.532837,
+      "sale_median": 32450,
+      "jeonse_median": 23688,
+      "jeonse_ratio": 73.0,
+      "ratio_region": "달서구",
+      "sale_n": 1170,
       "jeonse_n": null
     },
     {
@@ -153,20 +166,7 @@
       "jeonse_median": 32631,
       "jeonse_ratio": 73.0,
       "ratio_region": "김포시",
-      "sale_n": 1049,
-      "jeonse_n": null
-    },
-    {
-      "key": "대구 달서구",
-      "sido": "대구",
-      "name": "대구 달서구",
-      "lat": 35.829915,
-      "lng": 128.532837,
-      "sale_median": 32150,
-      "jeonse_median": 23469,
-      "jeonse_ratio": 73.0,
-      "ratio_region": "달서구",
-      "sale_n": 1130,
+      "sale_n": 1081,
       "jeonse_n": null
     },
     {
@@ -175,11 +175,11 @@
       "name": "인천 남동구",
       "lat": 37.447349,
       "lng": 126.731488,
-      "sale_median": 36600,
-      "jeonse_median": 26608,
+      "sale_median": 37000,
+      "jeonse_median": 26899,
       "jeonse_ratio": 72.7,
       "ratio_region": "남동구",
-      "sale_n": 955,
+      "sale_n": 986,
       "jeonse_n": null
     },
     {
@@ -188,11 +188,11 @@
       "name": "경기 오산시",
       "lat": 37.149879,
       "lng": 127.077527,
-      "sale_median": 36750,
-      "jeonse_median": 26643,
+      "sale_median": 37000,
+      "jeonse_median": 26825,
       "jeonse_ratio": 72.5,
       "ratio_region": "오산시",
-      "sale_n": 876,
+      "sale_n": 909,
       "jeonse_n": null
     },
     {
@@ -201,11 +201,11 @@
       "name": "인천 계양구",
       "lat": 37.537496,
       "lng": 126.737705,
-      "sale_median": 26800,
-      "jeonse_median": 19430,
+      "sale_median": 26750,
+      "jeonse_median": 19393,
       "jeonse_ratio": 72.5,
       "ratio_region": "계양구",
-      "sale_n": 615,
+      "sale_n": 628,
       "jeonse_n": null
     },
     {
@@ -214,11 +214,11 @@
       "name": "경기 의정부시",
       "lat": 37.738057,
       "lng": 127.033899,
-      "sale_median": 35300,
-      "jeonse_median": 25521,
+      "sale_median": 35125,
+      "jeonse_median": 25395,
       "jeonse_ratio": 72.3,
       "ratio_region": "의정부시",
-      "sale_n": 1411,
+      "sale_n": 1452,
       "jeonse_n": null
     },
     {
@@ -227,11 +227,11 @@
       "name": "부산 부산진구",
       "lat": 35.162855,
       "lng": 129.053165,
-      "sale_median": 33850,
-      "jeonse_median": 24473,
+      "sale_median": 33950,
+      "jeonse_median": 24545,
       "jeonse_ratio": 72.3,
       "ratio_region": "부산진구",
-      "sale_n": 964,
+      "sale_n": 992,
       "jeonse_n": null
     },
     {
@@ -240,11 +240,11 @@
       "name": "경기 고양시 덕양구",
       "lat": 37.63748,
       "lng": 126.832188,
-      "sale_median": 59650,
-      "jeonse_median": 42888,
+      "sale_median": 59500,
+      "jeonse_median": 42780,
       "jeonse_ratio": 71.9,
       "ratio_region": "덕양구",
-      "sale_n": 1392,
+      "sale_n": 1440,
       "jeonse_n": null
     },
     {
@@ -253,11 +253,11 @@
       "name": "대전 서구",
       "lat": 36.355499,
       "lng": 127.38379,
-      "sale_median": 36600,
-      "jeonse_median": 26242,
+      "sale_median": 36550,
+      "jeonse_median": 26206,
       "jeonse_ratio": 71.7,
       "ratio_region": "대전",
-      "sale_n": 1173,
+      "sale_n": 1202,
       "jeonse_n": null
     },
     {
@@ -266,11 +266,11 @@
       "name": "인천 부평구",
       "lat": 37.507,
       "lng": 126.7219,
-      "sale_median": 36500,
-      "jeonse_median": 25951,
+      "sale_median": 36750,
+      "jeonse_median": 26129,
       "jeonse_ratio": 71.1,
       "ratio_region": "부평구",
-      "sale_n": 1261,
+      "sale_n": 1306,
       "jeonse_n": null
     },
     {
@@ -283,7 +283,7 @@
       "jeonse_median": 31852,
       "jeonse_ratio": 71.1,
       "ratio_region": "유성구",
-      "sale_n": 960,
+      "sale_n": 997,
       "jeonse_n": null
     },
     {
@@ -292,11 +292,11 @@
       "name": "인천 서구",
       "lat": 37.605594,
       "lng": 126.665652,
-      "sale_median": 49500,
-      "jeonse_median": 34303,
+      "sale_median": 49850,
+      "jeonse_median": 34546,
       "jeonse_ratio": 69.3,
       "ratio_region": "인천",
-      "sale_n": 830,
+      "sale_n": 848,
       "jeonse_n": null
     },
     {
@@ -305,11 +305,11 @@
       "name": "경기 용인시 처인구",
       "lat": 37.234306,
       "lng": 127.201357,
-      "sale_median": 41500,
-      "jeonse_median": 28510,
+      "sale_median": 42000,
+      "jeonse_median": 28854,
       "jeonse_ratio": 68.7,
       "ratio_region": "처인구",
-      "sale_n": 642,
+      "sale_n": 663,
       "jeonse_n": null
     },
     {
@@ -318,11 +318,11 @@
       "name": "경기 시흥시",
       "lat": 37.380115,
       "lng": 126.802978,
-      "sale_median": 42800,
-      "jeonse_median": 28890,
+      "sale_median": 42900,
+      "jeonse_median": 28957,
       "jeonse_ratio": 67.5,
       "ratio_region": "시흥시",
-      "sale_n": 1478,
+      "sale_n": 1522,
       "jeonse_n": null
     },
     {
@@ -335,7 +335,7 @@
       "jeonse_median": 41451,
       "jeonse_ratio": 67.4,
       "ratio_region": "기흥구",
-      "sale_n": 2118,
+      "sale_n": 2127,
       "jeonse_n": null
     },
     {
@@ -344,11 +344,11 @@
       "name": "경기 부천시 원미구",
       "lat": 37.496596,
       "lng": 126.787017,
-      "sale_median": 55000,
-      "jeonse_median": 37015,
+      "sale_median": 54800,
+      "jeonse_median": 36880,
       "jeonse_ratio": 67.3,
       "ratio_region": "원미구",
-      "sale_n": 1255,
+      "sale_n": 1290,
       "jeonse_n": null
     },
     {
@@ -357,11 +357,11 @@
       "name": "경기 부천시 소사구",
       "lat": 37.480058,
       "lng": 126.799953,
-      "sale_median": 56700,
-      "jeonse_median": 37989,
+      "sale_median": 56725,
+      "jeonse_median": 38005,
       "jeonse_ratio": 67.0,
       "ratio_region": "소사구",
-      "sale_n": 651,
+      "sale_n": 670,
       "jeonse_n": null
     },
     {
@@ -374,7 +374,7 @@
       "jeonse_median": 32683,
       "jeonse_ratio": 66.7,
       "ratio_region": "권선구",
-      "sale_n": 1439,
+      "sale_n": 1490,
       "jeonse_n": null
     },
     {
@@ -387,7 +387,7 @@
       "jeonse_median": 29969,
       "jeonse_ratio": 66.6,
       "ratio_region": "군포시",
-      "sale_n": 1197,
+      "sale_n": 1210,
       "jeonse_n": null
     },
     {
@@ -400,7 +400,7 @@
       "jeonse_median": 39117,
       "jeonse_ratio": 66.3,
       "ratio_region": "만안구",
-      "sale_n": 763,
+      "sale_n": 776,
       "jeonse_n": null
     },
     {
@@ -426,7 +426,7 @@
       "jeonse_median": 21092,
       "jeonse_ratio": 64.9,
       "ratio_region": "양주시",
-      "sale_n": 702,
+      "sale_n": 725,
       "jeonse_n": null
     },
     {
@@ -439,7 +439,7 @@
       "jeonse_median": 41730,
       "jeonse_ratio": 64.2,
       "ratio_region": "화성시",
-      "sale_n": 5261,
+      "sale_n": 5342,
       "jeonse_n": null
     },
     {
@@ -452,20 +452,7 @@
       "jeonse_median": 20416,
       "jeonse_ratio": 63.8,
       "ratio_region": "오정구",
-      "sale_n": 138,
-      "jeonse_n": null
-    },
-    {
-      "key": "서울 중랑구",
-      "sido": "서울",
-      "name": "서울 중랑구",
-      "lat": 37.606543,
-      "lng": 127.09282,
-      "sale_median": 57000,
-      "jeonse_median": 36138,
-      "jeonse_ratio": 63.4,
-      "ratio_region": "중랑구",
-      "sale_n": 922,
+      "sale_n": 140,
       "jeonse_n": null
     },
     {
@@ -478,7 +465,20 @@
       "jeonse_median": 30939,
       "jeonse_ratio": 63.4,
       "ratio_region": "동래구",
-      "sale_n": 633,
+      "sale_n": 656,
+      "jeonse_n": null
+    },
+    {
+      "key": "서울 중랑구",
+      "sido": "서울",
+      "name": "서울 중랑구",
+      "lat": 37.606543,
+      "lng": 127.09282,
+      "sale_median": 57000,
+      "jeonse_median": 36138,
+      "jeonse_ratio": 63.4,
+      "ratio_region": "중랑구",
+      "sale_n": 924,
       "jeonse_n": null
     },
     {
@@ -500,11 +500,11 @@
       "name": "경기 수원시 장안구",
       "lat": 37.303922,
       "lng": 127.010273,
-      "sale_median": 54200,
-      "jeonse_median": 34308,
+      "sale_median": 54250,
+      "jeonse_median": 34340,
       "jeonse_ratio": 63.3,
       "ratio_region": "장안구",
-      "sale_n": 833,
+      "sale_n": 842,
       "jeonse_n": null
     },
     {
@@ -517,7 +517,7 @@
       "jeonse_median": 41015,
       "jeonse_ratio": 63.1,
       "ratio_region": "영통구",
-      "sale_n": 1596,
+      "sale_n": 1619,
       "jeonse_n": null
     },
     {
@@ -530,7 +530,7 @@
       "jeonse_median": 30240,
       "jeonse_ratio": 63.0,
       "ratio_region": "단원구",
-      "sale_n": 717,
+      "sale_n": 741,
       "jeonse_n": null
     },
     {
@@ -539,11 +539,11 @@
       "name": "경기 의왕시",
       "lat": 37.34476,
       "lng": 126.968274,
-      "sale_median": 77000,
-      "jeonse_median": 48202,
+      "sale_median": 76775,
+      "jeonse_median": 48061,
       "jeonse_ratio": 62.6,
       "ratio_region": "의왕시",
-      "sale_n": 537,
+      "sale_n": 550,
       "jeonse_n": null
     },
     {
@@ -556,7 +556,7 @@
       "jeonse_median": 39616,
       "jeonse_ratio": 61.9,
       "ratio_region": "연수구",
-      "sale_n": 1388,
+      "sale_n": 1421,
       "jeonse_n": null
     },
     {
@@ -565,11 +565,11 @@
       "name": "대구 수성구",
       "lat": 35.858175,
       "lng": 128.630635,
-      "sale_median": 55000,
-      "jeonse_median": 33715,
+      "sale_median": 54250,
+      "jeonse_median": 33255,
       "jeonse_ratio": 61.3,
       "ratio_region": "수성구",
-      "sale_n": 887,
+      "sale_n": 910,
       "jeonse_n": null
     },
     {
@@ -582,7 +582,7 @@
       "jeonse_median": 42090,
       "jeonse_ratio": 61.0,
       "ratio_region": "팔달구",
-      "sale_n": 684,
+      "sale_n": 696,
       "jeonse_n": null
     },
     {
@@ -595,7 +595,7 @@
       "jeonse_median": 44530,
       "jeonse_ratio": 61.0,
       "ratio_region": "구리시",
-      "sale_n": 785,
+      "sale_n": 787,
       "jeonse_n": null
     },
     {
@@ -608,7 +608,7 @@
       "jeonse_median": 41290,
       "jeonse_ratio": 60.9,
       "ratio_region": "구로구",
-      "sale_n": 1197,
+      "sale_n": 1211,
       "jeonse_n": null
     },
     {
@@ -621,7 +621,7 @@
       "jeonse_median": 56287,
       "jeonse_ratio": 60.2,
       "ratio_region": "수지구",
-      "sale_n": 1597,
+      "sale_n": 1611,
       "jeonse_n": null
     },
     {
@@ -630,11 +630,11 @@
       "name": "서울 종로구",
       "lat": 37.574773,
       "lng": 126.979614,
-      "sale_median": 93500,
-      "jeonse_median": 56100,
+      "sale_median": 93000,
+      "jeonse_median": 55800,
       "jeonse_ratio": 60.0,
       "ratio_region": "종로구",
-      "sale_n": 145,
+      "sale_n": 146,
       "jeonse_n": null
     },
     {
@@ -643,11 +643,11 @@
       "name": "서울 금천구",
       "lat": 37.456841,
       "lng": 126.895457,
-      "sale_median": 62500,
-      "jeonse_median": 37375,
+      "sale_median": 62300,
+      "jeonse_median": 37255,
       "jeonse_ratio": 59.8,
       "ratio_region": "금천구",
-      "sale_n": 335,
+      "sale_n": 343,
       "jeonse_n": null
     },
     {
@@ -660,7 +660,7 @@
       "jeonse_median": 65230,
       "jeonse_ratio": 59.3,
       "ratio_region": "하남시",
-      "sale_n": 813,
+      "sale_n": 824,
       "jeonse_n": null
     },
     {
@@ -673,7 +673,7 @@
       "jeonse_median": 52894,
       "jeonse_ratio": 59.1,
       "ratio_region": "은평구",
-      "sale_n": 799,
+      "sale_n": 811,
       "jeonse_n": null
     },
     {
@@ -686,7 +686,7 @@
       "jeonse_median": 48462,
       "jeonse_ratio": 59.1,
       "ratio_region": "중원구",
-      "sale_n": 444,
+      "sale_n": 449,
       "jeonse_n": null
     },
     {
@@ -699,7 +699,7 @@
       "jeonse_median": 56256,
       "jeonse_ratio": 58.6,
       "ratio_region": "성북구",
-      "sale_n": 967,
+      "sale_n": 991,
       "jeonse_n": null
     },
     {
@@ -708,11 +708,11 @@
       "name": "서울 관악구",
       "lat": 37.478257,
       "lng": 126.951521,
-      "sale_median": 83000,
-      "jeonse_median": 48389,
+      "sale_median": 83750,
+      "jeonse_median": 48826,
       "jeonse_ratio": 58.3,
       "ratio_region": "관악구",
-      "sale_n": 641,
+      "sale_n": 660,
       "jeonse_n": null
     },
     {
@@ -721,11 +721,11 @@
       "name": "서울 동대문구",
       "lat": 37.574523,
       "lng": 127.039657,
-      "sale_median": 100900,
-      "jeonse_median": 58017,
+      "sale_median": 101000,
+      "jeonse_median": 58075,
       "jeonse_ratio": 57.5,
       "ratio_region": "동대문구",
-      "sale_n": 682,
+      "sale_n": 688,
       "jeonse_n": null
     },
     {
@@ -734,11 +734,11 @@
       "name": "부산 해운대구",
       "lat": 35.163067,
       "lng": 129.163596,
-      "sale_median": 46350,
-      "jeonse_median": 26465,
+      "sale_median": 46100,
+      "jeonse_median": 26323,
       "jeonse_ratio": 57.1,
       "ratio_region": "해운대구",
-      "sale_n": 902,
+      "sale_n": 930,
       "jeonse_n": null
     },
     {
@@ -747,11 +747,11 @@
       "name": "경기 성남시 수정구",
       "lat": 37.45039,
       "lng": 127.145617,
-      "sale_median": 126300,
-      "jeonse_median": 71738,
+      "sale_median": 126000,
+      "jeonse_median": 71568,
       "jeonse_ratio": 56.8,
       "ratio_region": "수정구",
-      "sale_n": 352,
+      "sale_n": 355,
       "jeonse_n": null
     },
     {
@@ -764,7 +764,7 @@
       "jeonse_median": 30792,
       "jeonse_ratio": 56.5,
       "ratio_region": "도봉구",
-      "sale_n": 764,
+      "sale_n": 779,
       "jeonse_n": null
     },
     {
@@ -773,11 +773,11 @@
       "name": "경기 안양시 동안구",
       "lat": 37.392606,
       "lng": 126.951423,
-      "sale_median": 74000,
-      "jeonse_median": 41662,
+      "sale_median": 74300,
+      "jeonse_median": 41830,
       "jeonse_ratio": 56.3,
       "ratio_region": "동안구",
-      "sale_n": 1343,
+      "sale_n": 1349,
       "jeonse_n": null
     },
     {
@@ -786,11 +786,11 @@
       "name": "서울 서대문구",
       "lat": 37.579162,
       "lng": 126.936816,
-      "sale_median": 105000,
-      "jeonse_median": 58170,
+      "sale_median": 104000,
+      "jeonse_median": 57616,
       "jeonse_ratio": 55.4,
       "ratio_region": "서대문구",
-      "sale_n": 623,
+      "sale_n": 640,
       "jeonse_n": null
     },
     {
@@ -799,11 +799,11 @@
       "name": "부산 수영구",
       "lat": 35.145538,
       "lng": 129.113125,
-      "sale_median": 61500,
-      "jeonse_median": 34071,
+      "sale_median": 59800,
+      "jeonse_median": 33129,
       "jeonse_ratio": 55.4,
       "ratio_region": "수영구",
-      "sale_n": 407,
+      "sale_n": 415,
       "jeonse_n": null
     },
     {
@@ -816,7 +816,7 @@
       "jeonse_median": 34524,
       "jeonse_ratio": 54.8,
       "ratio_region": "노원구",
-      "sale_n": 1859,
+      "sale_n": 1887,
       "jeonse_n": null
     },
     {
@@ -829,20 +829,7 @@
       "jeonse_median": 79674,
       "jeonse_ratio": 54.2,
       "ratio_region": "강동구",
-      "sale_n": 730,
-      "jeonse_n": null
-    },
-    {
-      "key": "서울 중구",
-      "sido": "서울",
-      "name": "서울 중구",
-      "lat": 37.563808,
-      "lng": 126.997555,
-      "sale_median": 143000,
-      "jeonse_median": 74789,
-      "jeonse_ratio": 52.3,
-      "ratio_region": "서울",
-      "sale_n": 209,
+      "sale_n": 742,
       "jeonse_n": null
     },
     {
@@ -855,7 +842,20 @@
       "jeonse_median": 46677,
       "jeonse_ratio": 52.3,
       "ratio_region": "서울",
-      "sale_n": 1112,
+      "sale_n": 1138,
+      "jeonse_n": null
+    },
+    {
+      "key": "서울 중구",
+      "sido": "서울",
+      "name": "서울 중구",
+      "lat": 37.563808,
+      "lng": 126.997555,
+      "sale_median": 138000,
+      "jeonse_median": 72174,
+      "jeonse_ratio": 52.3,
+      "ratio_region": "서울",
+      "sale_n": 214,
       "jeonse_n": null
     },
     {
@@ -868,7 +868,7 @@
       "jeonse_median": 77629,
       "jeonse_ratio": 52.1,
       "ratio_region": "광진구",
-      "sale_n": 313,
+      "sale_n": 318,
       "jeonse_n": null
     },
     {
@@ -877,11 +877,11 @@
       "name": "세종 세종시",
       "lat": 36.480065,
       "lng": 127.289195,
-      "sale_median": 49300,
-      "jeonse_median": 25586,
+      "sale_median": 49500,
+      "jeonse_median": 25690,
       "jeonse_ratio": 51.9,
       "ratio_region": "세종",
-      "sale_n": 979,
+      "sale_n": 997,
       "jeonse_n": null
     },
     {
@@ -890,11 +890,11 @@
       "name": "서울 동작구",
       "lat": 37.504237,
       "lng": 126.940272,
-      "sale_median": 143500,
-      "jeonse_median": 73759,
+      "sale_median": 144000,
+      "jeonse_median": 74016,
       "jeonse_ratio": 51.4,
       "ratio_region": "동작구",
-      "sale_n": 551,
+      "sale_n": 567,
       "jeonse_n": null
     },
     {
@@ -903,11 +903,11 @@
       "name": "경기 광명시",
       "lat": 37.478567,
       "lng": 126.864648,
-      "sale_median": 81500,
-      "jeonse_median": 41728,
+      "sale_median": 82000,
+      "jeonse_median": 41984,
       "jeonse_ratio": 51.2,
       "ratio_region": "광명시",
-      "sale_n": 771,
+      "sale_n": 791,
       "jeonse_n": null
     },
     {
@@ -916,11 +916,11 @@
       "name": "서울 영등포구",
       "lat": 37.526364,
       "lng": 126.896274,
-      "sale_median": 128500,
-      "jeonse_median": 63736,
+      "sale_median": 128000,
+      "jeonse_median": 63488,
       "jeonse_ratio": 49.6,
       "ratio_region": "영등포구",
-      "sale_n": 685,
+      "sale_n": 704,
       "jeonse_n": null
     },
     {
@@ -929,11 +929,11 @@
       "name": "서울 마포구",
       "lat": 37.5663,
       "lng": 126.9019,
-      "sale_median": 148500,
-      "jeonse_median": 73062,
+      "sale_median": 148000,
+      "jeonse_median": 72816,
       "jeonse_ratio": 49.2,
       "ratio_region": "마포구",
-      "sale_n": 477,
+      "sale_n": 481,
       "jeonse_n": null
     },
     {
@@ -942,11 +942,11 @@
       "name": "경기 과천시",
       "lat": 37.429233,
       "lng": 126.987721,
-      "sale_median": 217900,
-      "jeonse_median": 104156,
+      "sale_median": 219400,
+      "jeonse_median": 104873,
       "jeonse_ratio": 47.8,
       "ratio_region": "과천시",
-      "sale_n": 80,
+      "sale_n": 82,
       "jeonse_n": null
     },
     {
@@ -955,11 +955,11 @@
       "name": "서울 양천구",
       "lat": 37.516988,
       "lng": 126.866501,
-      "sale_median": 107000,
-      "jeonse_median": 50718,
+      "sale_median": 108500,
+      "jeonse_median": 51429,
       "jeonse_ratio": 47.4,
       "ratio_region": "양천구",
-      "sale_n": 646,
+      "sale_n": 657,
       "jeonse_n": null
     },
     {
@@ -968,11 +968,11 @@
       "name": "서울 서초구",
       "lat": 37.4836,
       "lng": 127.0327,
-      "sale_median": 263000,
-      "jeonse_median": 121506,
+      "sale_median": 262000,
+      "jeonse_median": 121044,
       "jeonse_ratio": 46.2,
       "ratio_region": "서초구",
-      "sale_n": 603,
+      "sale_n": 609,
       "jeonse_n": null
     },
     {
@@ -985,7 +985,7 @@
       "jeonse_median": 80100,
       "jeonse_ratio": 44.5,
       "ratio_region": "성동구",
-      "sale_n": 388,
+      "sale_n": 398,
       "jeonse_n": null
     },
     {
@@ -998,7 +998,7 @@
       "jeonse_median": 67735,
       "jeonse_ratio": 43.7,
       "ratio_region": "분당구",
-      "sale_n": 1159,
+      "sale_n": 1179,
       "jeonse_n": null
     },
     {
@@ -1007,11 +1007,11 @@
       "name": "서울 용산구",
       "lat": 37.532427,
       "lng": 126.990578,
-      "sale_median": 199000,
-      "jeonse_median": 86565,
+      "sale_median": 200000,
+      "jeonse_median": 87000,
       "jeonse_ratio": 43.5,
       "ratio_region": "용산구",
-      "sale_n": 235,
+      "sale_n": 239,
       "jeonse_n": null
     },
     {
@@ -1024,7 +1024,7 @@
       "jeonse_median": 115830,
       "jeonse_ratio": 42.9,
       "ratio_region": "강남구",
-      "sale_n": 728,
+      "sale_n": 741,
       "jeonse_n": null
     },
     {
@@ -1033,11 +1033,11 @@
       "name": "서울 송파구",
       "lat": 37.5145,
       "lng": 127.1059,
-      "sale_median": 195000,
-      "jeonse_median": 81705,
+      "sale_median": 193000,
+      "jeonse_median": 80867,
       "jeonse_ratio": 41.9,
       "ratio_region": "송파구",
-      "sale_n": 959,
+      "sale_n": 978,
       "jeonse_n": null
     }
   ]
