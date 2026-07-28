@@ -211,17 +211,27 @@ def kakao_headers():
     return {"Authorization": "KakaoAK " + key(KAKAO_KEYS, required=True)}
 
 
-def geocode_kakao(address):
-    """주소 → (lng, lat). 실패 시 None."""
+def geocode_kakao(address, strict=False):
+    """주소 → (lng, lat). 결과가 없으면 None.
+
+    strict=True면 요청 자체가 실패했을 때(네트워크·429·5xx) 예외를 그대로 올린다.
+    '주소가 잘못됐다'와 '이번에 못 물어봤다'를 구분해야 하는 호출부를 위한 것이다 —
+    전자는 영구 표식을 남겨도 되지만 후자에 표식을 남기면 멀쩡한 단지를 영영 잃는다
+    (2026-07-28: 두 경우를 뭉뚱그려 addr_bad로 잠근 항목이 274건 있었다)."""
     try:
         j = get_json("https://dapi.kakao.com/v2/local/search/address.json",
                      {"query": address}, headers=kakao_headers())
+    except Exception:
+        if strict:
+            raise
+        return None
+    try:
         docs = j.get("documents") or []
         if not docs:
             return None
         d = docs[0]
         return float(d["x"]), float(d["y"])
-    except Exception:
+    except Exception:   # noqa: BLE001 — 응답 형태가 예상과 다르면 '결과 없음'으로 본다
         return None
 
 
