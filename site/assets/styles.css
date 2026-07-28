@@ -3204,3 +3204,178 @@ table.data.cmp th:first-child, table.data.cmp td:first-child { min-width: 116px;
   grid-row: 1 / span 2; align-self: center; font-weight: 700; font-size: 0.9rem;
   font-variant-numeric: tabular-nums;
 }
+
+/* ===== 게시판 목록 · 작성 · 상세 (2026-07) ===== */
+.board-page { padding-top: 48px; padding-bottom: 64px; }
+.board-hero {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+  padding-bottom: 28px; border-bottom: 2px solid var(--text);
+}
+.board-hero h1 { margin: 8px 0 6px; }
+.board-hero p { color: var(--text-muted); }
+.board-write-link { flex: 0 0 auto; margin: 0; border-radius: var(--radius-sm); }
+.board-list-app { margin-top: 20px; }
+.board-list-app .fb-tabs-row { margin-bottom: 0; }
+.board-list-app .fb-list { gap: 0; }
+.board-list-app .fb-item {
+  padding: 0; border: 0; border-bottom: 1px solid var(--border);
+  border-radius: 0; background: transparent;
+}
+.board-list-link {
+  display: grid; grid-template-columns: minmax(220px, 1.4fr) minmax(260px, 2fr) 170px;
+  gap: 20px; align-items: center; min-width: 0; padding: 18px 10px;
+  transition: background .15s;
+}
+.board-list-link:hover { background: var(--surface); }
+.board-list-link .fb-item-head { min-width: 0; margin: 0; flex-wrap: nowrap; }
+.board-list-link .fb-item-title {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.fb-item-preview {
+  min-width: 0; color: var(--text-muted); font-size: .9rem; line-height: 1.55;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  overflow: hidden; word-break: break-word;
+}
+.board-list-link .fb-item-meta { margin: 0; text-align: right; white-space: nowrap; }
+
+.board-editor-page, .board-post-page { padding-top: 40px; padding-bottom: 72px; }
+.board-editor-head { margin: 18px 0 28px; }
+.board-editor-head h1 { margin-bottom: 8px; }
+.board-editor-head p { color: var(--text-muted); }
+.board-editor {
+  padding: 32px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);
+}
+.board-editor .field input[type="text"],
+.board-editor .field select,
+.board-editor textarea {
+  width: 100%; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background: #fff; padding: 11px 12px;
+}
+.board-editor textarea { display: block; min-height: 320px; resize: none; line-height: 1.7; overflow-y: hidden; }
+.board-editor input:focus, .board-editor select:focus, .board-editor textarea:focus,
+.comments-field input:focus, .comments-field textarea:focus {
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(30,58,138,.1);
+}
+.label-optional { color: var(--text-subtle); font-size: .78rem; font-weight: 500; margin-left: 4px; }
+.field-label-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.field-label-row > span { color: var(--text-subtle); font-size: .78rem; white-space: nowrap; }
+.board-secret-option {
+  display: flex; gap: 10px; align-items: flex-start; padding: 14px;
+  background: var(--surface-2); border-radius: var(--radius-sm); cursor: pointer;
+}
+.board-secret-option input { margin-top: 5px; accent-color: var(--accent); }
+.board-secret-option span { display: flex; flex-direction: column; gap: 2px; }
+.board-secret-option small { color: var(--text-muted); }
+.board-editor-actions {
+  display: flex; justify-content: flex-end; gap: 10px;
+  margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border);
+}
+.board-editor-actions .btn { justify-content: center; min-width: 96px; }
+.board-editor button:disabled, .comments-form button:disabled, .comment-delete:disabled {
+  opacity: .55; cursor: wait;
+}
+
+.board-post { margin-top: 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.board-post-head { padding: 28px 30px 24px; border-bottom: 1px solid var(--border); }
+.board-post-badges { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; }
+.board-post-head h1 { font-size: 1.8rem; margin-bottom: 14px; overflow-wrap: anywhere; }
+.board-post-meta { display: flex; gap: 8px; color: var(--text-muted); font-size: .88rem; }
+.board-post-related {
+  margin-top: 14px; color: var(--text-muted); font-size: .84rem;
+  display: flex; gap: 8px; align-items: baseline;
+}
+.board-post-related a { color: var(--accent); text-decoration: underline; overflow-wrap: anywhere; }
+.board-post-body {
+  min-height: 220px; padding: 32px 30px 48px; white-space: pre-wrap;
+  word-break: break-word; line-height: 1.85;
+}
+.board-post-actions {
+  display: flex; justify-content: space-between; gap: 10px;
+  padding: 18px 30px; border-top: 1px solid var(--border);
+}
+.board-delete-btn { border: 1px solid #fecaca; color: var(--danger); background: var(--danger-soft); }
+
+/* ===== 공통 콘텐츠 댓글 ===== */
+.content-comments {
+  width: 100%; max-width: var(--container-narrow); margin: 0 auto;
+  padding: 56px 20px 64px;
+}
+.comments-inner { border-top: 2px solid var(--text); padding-top: 26px; }
+.comments-heading { margin-bottom: 22px; }
+.comments-heading h2 { font-size: 1.35rem; margin-bottom: 6px; }
+.comments-heading p { color: var(--text-muted); font-size: .92rem; }
+.comments-form {
+  display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+  gap: 12px 14px; padding: 18px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.comments-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.comments-field > span { color: var(--text-muted); font-size: .82rem; font-weight: 600; }
+.comments-field input, .comments-field textarea {
+  width: 100%; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background: #fff; padding: 10px 11px;
+}
+.comments-field textarea { display: block; min-height: 104px; resize: vertical; line-height: 1.65; }
+.comments-body-field { grid-column: 2; grid-row: 1 / span 2; }
+.comments-form-footer {
+  grid-column: 1 / -1; display: flex; justify-content: flex-end; align-items: center; gap: 14px;
+}
+.comments-counter { color: var(--text-subtle); font-size: .78rem; }
+.comments-message {
+  margin-top: 12px; padding: 9px 11px; border-radius: var(--radius-sm);
+  font-size: .84rem; background: var(--surface-2); color: var(--text-muted);
+}
+.comments-message.is-error { color: var(--danger); background: var(--danger-soft); }
+.comments-message.is-warn { color: var(--warning); background: var(--warning-soft); }
+.comments-message[hidden] { display: none; }
+.comments-list-head { margin-top: 30px; padding-bottom: 10px; border-bottom: 1px solid var(--border-strong); }
+.comments-list { display: flex; flex-direction: column; }
+.comment-item { padding: 18px 2px 16px; border-bottom: 1px solid var(--border); }
+.comment-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 7px; }
+.comment-author { font-size: .9rem; }
+.comment-date { color: var(--text-subtle); font-size: .76rem; white-space: nowrap; }
+.comment-body { color: var(--text); font-size: .92rem; white-space: pre-wrap; word-break: break-word; }
+.comment-actions { margin-top: 8px; text-align: right; }
+.comment-delete { color: var(--danger); font-size: .76rem; padding: 3px 7px; border-radius: 4px; }
+.comment-delete:hover { background: var(--danger-soft); }
+.comments-empty { color: var(--text-subtle); text-align: center; padding: 32px 0; font-size: .88rem; }
+.comments-board-link {
+  display: inline-block; margin-top: 18px; color: var(--accent);
+  font-size: .88rem; font-weight: 600;
+}
+
+@media (max-width: 767px) {
+  .board-page { padding-top: 30px; padding-bottom: 48px; }
+  .board-hero { align-items: flex-start; }
+  .board-hero h1 { font-size: 1.8rem; }
+  .board-hero p { font-size: .9rem; }
+  .board-list-link {
+    display: flex; flex-direction: column; align-items: stretch; gap: 9px;
+    margin: 10px 0; padding: 16px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--surface);
+  }
+  .board-list-app .fb-item { border-bottom: 0; }
+  .board-list-link .fb-item-head { flex-wrap: wrap; }
+  .board-list-link .fb-item-title { flex-basis: 100%; white-space: normal; order: 3; }
+  .board-list-link .fb-item-meta { text-align: left; }
+  .board-editor-page, .board-post-page { padding-top: 28px; padding-bottom: 48px; }
+  .board-editor { padding: 22px 18px; }
+  .board-post-head, .board-post-body, .board-post-actions { padding-left: 20px; padding-right: 20px; }
+  .board-post-head h1 { font-size: 1.45rem; }
+  .comments-form { grid-template-columns: 1fr; }
+  .comments-body-field { grid-column: 1; grid-row: auto; }
+}
+
+@media (max-width: 420px) {
+  .board-hero { flex-direction: column; }
+  .board-write-link { width: 100%; justify-content: center; }
+  .fb-tabs-row { align-items: stretch; }
+  .fb-tabs { width: 100%; }
+  .fb-tab { flex: 1; padding-left: 8px; padding-right: 8px; }
+  .fb-cat-filter { max-width: none; width: 100%; }
+  .board-editor-actions .btn { flex: 1; min-width: 0; }
+  .board-post-meta { flex-wrap: wrap; }
+  .board-post-related { display: block; }
+  .comments-form-footer { justify-content: space-between; }
+}

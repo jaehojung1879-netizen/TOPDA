@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>게시글 — 톺다</title>
+<meta name="description" content="톺다 게시판의 부동산 질문과 경험을 읽습니다." />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="canonical" href="https://topda.kr/board-post.html" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="assets/styles.css?v=20260728" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="guides.html">가이드</a>
+      <a href="calculators/index.html">계산기</a>
+      <a href="market.html">시세정보</a>
+      <a href="checklists/index.html">체크리스트</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="guides.html">가이드</a><a href="calculators/index.html">계산기</a><a href="market.html">시세정보</a><a href="checklists/index.html">체크리스트</a><a href="board.html">게시판</a>
+  </div>
+</header>
+
+<main class="container-narrow board-post-page" data-board-post>
+  <div class="breadcrumb"><a href="index.html">홈</a> / <a href="board.html">게시판</a> / 게시글</div>
+  <p class="fb-status" data-board-post-status>게시글을 불러오는 중입니다.</p>
+
+  <article class="board-post" data-board-post-content hidden>
+    <header class="board-post-head">
+      <div class="board-post-badges">
+        <span data-post-category></span>
+        <span data-post-visibility></span>
+      </div>
+      <h1 data-post-title></h1>
+      <div class="board-post-meta"><span data-post-author></span><span aria-hidden="true">·</span><time data-post-date></time></div>
+      <div class="board-post-related" data-post-page-row>관련 페이지 <a data-post-page></a></div>
+    </header>
+    <div class="board-post-body" data-post-body></div>
+    <footer class="board-post-actions">
+      <a class="btn btn-secondary" href="board.html">목록</a>
+      <button class="btn board-delete-btn" type="button" data-board-delete hidden>삭제</button>
+    </footer>
+  </article>
+</main>
+
+<div data-board-comments-slot></div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div><div class="brand"><span class="brand-mark"></span>톺다</div><p>부동산, 하나하나 톺아보자.</p></div>
+      <div><h4>탐색</h4><ul><li><a href="index.html#categories">카테고리</a></li><li><a href="calculators/index.html">계산기</a></li><li><a href="checklists/index.html">체크리스트</a></li></ul></div>
+      <div><h4>사이트 정보</h4><ul><li><a href="about.html">안내</a></li><li><a href="about.html#disclaimer">면책고지</a></li></ul></div>
+    </div>
+    <p class="disclaimer">© 톺다.</p>
+  </div>
+</footer>
+
+<script src="assets/app.js?v=20260723"></script>
+<script src="assets/supabase-client.js?v=20260728"></script>
+<script src="assets/comments.js?v=20260728"></script>
+<script src="assets/board.js?v=20260728"></script>
+</body>
+</html>
