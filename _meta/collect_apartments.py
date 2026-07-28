@@ -538,6 +538,26 @@ def main():
     if fixed_school:
         print(f"학교 데이터 보정 대상 {fixed_school}건(초등학교 아님 → 제거/재조회)")
 
+    # 사전 보정: 좌표는 있는데 역거리가 비어 있는 큐레이션 단지를 메운다.
+    # 학교에는 위와 같은 보정 루프가 있는데 역에는 없었다. 큐레이션 단지는 좌표를 얻는
+    # 그 시점에 역을 딱 한 번 물어보므로, 그때 호출이 실패했거나 좌표를 나중에 얻은 단지는
+    # 영영 '역거리 정보 없음'으로 남는다(2026-07-28 실측 372건 — 학교 미보유는 3건뿐인데
+    # 역 미보유가 372건인 이유가 이 비대칭이다). 실거래 전용 단지의 위치 보강 패스는
+    # households.json만 돌기 때문에 여기까지 닿지 않는다.
+    subway_filled = 0
+    for a in existing.get("apartments", []):
+        if enriched_n >= MAX_ENRICH or L.out_of_time(deadline, margin_sec=300):
+            break
+        if a.get("subway") or not (a.get("lat") and a.get("lng")):
+            continue
+        sub = L.nearest_kakao(a["lng"], a["lat"], category_code="SW8")
+        if sub:
+            a["subway"] = {"station": sub[0], "distance_m": sub[1]}
+            subway_filled += 1
+        enriched_n += 1
+    if subway_filled:
+        print(f"역거리 보정 {subway_filled}건(좌표는 있으나 역 정보가 없던 단지)")
+
     for region, lawd in L.LAWD.items():
         if L.out_of_time(deadline, margin_sec=120):
             print("시간 예산 소진 — 남은 지역은 다음 실행에서 갱신 (merge가 기존 값 보존)")
