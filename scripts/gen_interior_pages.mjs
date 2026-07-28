@@ -51,7 +51,7 @@ const T = {
       kitchen: { h3: 'Kitchen', desc: 'Door materials (LPM, PET, painted) and countertops (engineered stone, etc.), plus built-in electrical/plumbing needs.', pro: 'Choose for daily workflow and durability', rec: 'Kitchen cabinet replacement / remodel' },
       windows: { h3: 'Windows & doors', desc: 'System vs double windows, insulation/airtightness grade (U-value), glazing, and condensation/noise solutions.', pro: 'Drives heating/cooling cost and condensation', rec: 'Balcony/exterior windows, door replacement' },
     },
-    brandNote: '※ A lighting & electrical finish guide is in preparation. For now, see the “Electrical & lighting” section of the cost guide.',
+    brandNote: '※ A lighting guide (colour temperature, colour rendering, downlight layout and circuit planning) is published in Korean at /interior/lighting.html — browser translation reads it well.',
     coTag: '02', coH: 'Choosing a contractor', coDesc: 'From first search through consultation, quote, contract, construction and defect repair — in the order a consumer should check. Each step links to a detailed (Korean) article.',
     steps: [
       ['1. Understand firm types', 'General / specialist / direct / platform — scope of responsibility and construction-business registration'],
@@ -108,7 +108,7 @@ const T = {
       kitchen: { h3: '厨房', desc: '门板材（LPM·PET·喷漆）与台面（人造大理石·石英石等）、嵌入式电气·管线条件比较。', pro: '按每日动线·耐用选择', rec: '厨房橱柜更换·改造' },
       windows: { h3: '门窗', desc: '系统窗·双层窗的隔热·气密等级（传热系数）、玻璃构成、结露·隔音对策。', pro: '决定冷暖费与结露的材料', rec: '阳台·外窗、房门更换' },
     },
-    brandNote: '※ 照明·电气饰面指南准备中。目前可在费用指南的"电气·照明"项查看概略。',
+    brandNote: '※ 照明指南（色温·显色性·筒灯布置·回路规划）已以韩文发布于 /interior/lighting.html，可用浏览器翻译阅读。',
     coTag: '02', coH: '选择装修公司', coDesc: '从初次找公司到咨询·报价·合同·施工·瑕疵维修，按消费者应确认的顺序整理。每一步链接到详细（韩文）文章。',
     steps: [
       ['1. 了解公司类型', '综合·专业·直营·平台——各类型的责任范围与建筑业登记与否'],
@@ -165,7 +165,7 @@ const T = {
       kitchen: { h3: '廚房', desc: '門板材（LPM·PET·烤漆）與檯面（人造大理石·石英石等）、嵌入式電氣·管線條件比較。', pro: '按每日動線·耐用選擇', rec: '廚具更換·改造' },
       windows: { h3: '門窗', desc: '系統窗·雙層窗的隔熱·氣密等級（熱傳透率）、玻璃構成、結露·隔音對策。', pro: '決定冷暖氣費與結露的材料', rec: '陽台·外窗、房門更換' },
     },
-    brandNote: '※ 照明·電氣飾面指南準備中。目前可在費用指南的「電氣·照明」項查看概略。',
+    brandNote: '※ 照明指南（色溫·顯色性·筒燈配置·迴路規劃）已以韓文發布於 /interior/lighting.html，可用瀏覽器翻譯閱讀。',
     coTag: '02', coH: '選擇裝修公司', coDesc: '從初次找公司到諮詢·報價·合約·施工·瑕疵維修，按消費者應確認的順序整理。每一步連結到詳細（韓文）文章。',
     steps: [
       ['1. 了解公司類型', '綜合·專業·直營·平台——各類型的責任範圍與營造業登記與否'],
@@ -222,7 +222,7 @@ const T = {
       kitchen: { h3: 'Bếp', desc: 'Vật liệu cánh (LPM·PET·sơn) và mặt bàn (đá nhân tạo, v.v.), cùng yêu cầu điện/nước âm.', pro: 'Chọn theo luồng công việc hằng ngày và độ bền', rec: 'Thay tủ bếp / cải tạo' },
       windows: { h3: 'Cửa sổ & cửa', desc: 'Cửa hệ vs cửa hai lớp, cấp cách nhiệt/kín khí (hệ số U), cấu tạo kính, và giải pháp đọng sương·tiếng ồn.', pro: 'Quyết định chi phí sưởi/làm mát và đọng sương', rec: 'Cửa ban công/ngoài, thay cửa phòng' },
     },
-    brandNote: '※ Hướng dẫn hoàn thiện chiếu sáng·điện đang chuẩn bị. Hiện có thể xem sơ lược ở mục “Điện·chiếu sáng” của hướng dẫn chi phí.',
+    brandNote: '※ Hướng dẫn chiếu sáng (nhiệt độ màu, độ hoàn màu, bố trí đèn âm trần, chia mạch) đã đăng bằng tiếng Hàn tại /interior/lighting.html — dịch bằng trình duyệt đọc tốt.',
     coTag: '02', coH: 'Chọn nhà thầu', coDesc: 'Từ lúc tìm nhà thầu tới tư vấn·báo giá·hợp đồng·thi công·sửa lỗi, theo thứ tự người tiêu dùng nên kiểm tra. Mỗi bước dẫn tới bài viết chi tiết (tiếng Hàn).',
     steps: [
       ['1. Hiểu loại hình công ty', 'Tổng hợp / chuyên môn / trực tiếp / nền tảng — phạm vi trách nhiệm và việc đăng ký ngành xây dựng'],
@@ -279,7 +279,7 @@ const T = {
       kitchen: { h3: 'ครัว', desc: 'วัสดุบานตู้ (LPM·PET·พ่นสี) และเคาน์เตอร์ (หินสังเคราะห์ ฯลฯ) พร้อมเงื่อนไขไฟฟ้า·ประปาแบบบิลต์อิน', pro: 'เลือกตามการใช้งานประจำวันและความทน', rec: 'เปลี่ยนตู้ครัว / รีโนเวต' },
       windows: { h3: 'หน้าต่าง & ประตู', desc: 'หน้าต่างระบบ vs สองชั้น ระดับฉนวน/กันอากาศ (ค่า U) โครงสร้างกระจก และแก้หยดน้ำ·เสียง', pro: 'กำหนดค่าไฟทำความร้อน/เย็นและหยดน้ำ', rec: 'หน้าต่างระเบียง/ภายนอก เปลี่ยนประตูห้อง' },
     },
-    brandNote: '※ คู่มืองานไฟ·ระบบไฟฟ้ากำลังจัดเตรียม ตอนนี้ดูสังเขปได้ที่หัวข้อ “ไฟฟ้า·แสงสว่าง” ในคู่มือค่าใช้จ่าย',
+    brandNote: '※ คู่มือแสงสว่าง (อุณหภูมิสี ค่าความถูกต้องของสี การจัดวางดาวน์ไลท์ และการแบ่งวงจร) เผยแพร่เป็นภาษาเกาหลีที่ /interior/lighting.html — ใช้การแปลของเบราว์เซอร์อ่านได้ดี',
     coTag: '02', coH: 'การเลือกผู้รับเหมา', coDesc: 'ตั้งแต่เริ่มหาผู้รับเหมาจนถึงปรึกษา·ใบเสนอราคา·สัญญา·ก่อสร้าง·ซ่อมข้อบกพร่อง ตามลำดับที่ผู้บริโภคควรตรวจ แต่ละขั้นลิงก์ไปบทความละเอียด (ภาษาเกาหลี)',
     steps: [
       ['1. เข้าใจประเภทบริษัท', 'รวม / เฉพาะทาง / ตรง / แพลตฟอร์ม — ขอบเขตความรับผิดชอบและการจดทะเบียนธุรกิจก่อสร้าง'],

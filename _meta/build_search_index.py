@@ -18,6 +18,7 @@ SECTIONS = [
     ("calculators", "계산기", "calculators/"),
     ("checklists", "체크리스트", "checklists/"),
     ("interior", "인테리어", "interior/"),
+    ("loan", "대출·금융", "loan/"),
     ("categories", "카테고리", "categories/"),
 ]
 
