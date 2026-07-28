@@ -46,7 +46,7 @@ def classify(loc):
         return "apt-complexes" if rest.count("/") >= 1 else "apt-regions"
     if "/calculators/" in p:
         return "calculators"
-    if p.startswith(("/posts/", "/checklists/", "/interior/")) or p.endswith("/guides.html"):
+    if p.startswith(("/posts/", "/checklists/", "/interior/", "/loan/")) or p.endswith("/guides.html"):
         return "guides"
     return "pages"
 

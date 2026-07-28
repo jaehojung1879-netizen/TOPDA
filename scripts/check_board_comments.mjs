@@ -47,6 +47,7 @@ const groups = [
   ['site/checklists', 'checklist', ['index.html']],
   ['site/interior', 'interior', ['index.html']],
   ['site/posts', 'guide', ['index.html']],
+  ['site/loan', 'loan', []],
 ];
 const commentPages = [];
 for (const [directory, type, excluded] of groups) {
@@ -64,7 +65,7 @@ for (const [directory, type, excluded] of groups) {
     commentPages.push(join(directory, filename).replaceAll('\\', '/'));
   }
 }
-assert.equal(commentPages.length, 65);
+assert.equal(commentPages.length, 68);
 
 const dashboard = read('site/calculators/total-cost-dashboard.html');
 assert.match(dashboard, /data-comment-type="page"/);
