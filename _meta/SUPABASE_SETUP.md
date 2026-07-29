@@ -219,6 +219,32 @@ Supabase SQL Editor에서 실행합니다.
 이 토큰은 **Supabase 서버에만** 저장되며(Vault) 브라우저로 내려가지 않습니다. 브라우저에
 GitHub 토큰을 두지 않는 것이 이 설계의 핵심입니다.
 
+### 토큰이 401 로 거절될 때
+
+`net._http_response` 의 `status_code` 로 원인이 갈립니다.
+
+| 코드 | 원인 | 조치 |
+|---|---|---|
+| 204 | 정상 | Actions 탭에 실행이 뜹니다 |
+| 401 | 토큰 값이 틀렸거나 폐기됨 | 토큰을 다시 발급해 Vault 에 넣습니다 |
+| 403 | 권한 부족 | 토큰에 **Contents: Read and write** 를 줍니다 |
+| 404 | 저장소 선택 누락 | **Only select repositories** 에서 이 저장소를 고릅니다 |
+
+응답을 볼 때는 `order by created desc` 로 최신 행을 보지 마세요. **예전 실패 기록을
+잘못 읽기 쉽습니다.** `net.http_post` 가 돌려준 `request_id` 로 짚어야 합니다.
+
+```sql
+select status_code, left(content, 300) as 응답
+from net._http_response where id = <request_id>;
+```
+
+인증 헤더는 `Bearer` 가 아니라 **`token`** 형식을 씁니다. GitHub 문서상 둘 다
+지원하지만, fine-grained PAT 으로 `dispatches` 를 호출할 때 `Bearer` 가 401 로
+거절되는 사례가 보고돼 있습니다. `token` 은 classic·fine-grained 양쪽에서 통합니다.
+
+⚠ **토큰을 넣는 SQL 은 실행만 하고 화면을 캡처하지 마세요.** 캡처·공유된 토큰은
+즉시 폐기하고 새로 발급해야 합니다.
+
 > **비용**: GitHub 토큰 발급·사용은 무료입니다. 이 저장소는 public 이라 GitHub Actions
 > 실행 시간도 무제한 무료이고, `pg_net` 도 Supabase 무료 플랜에 포함됩니다.
 

@@ -68,7 +68,10 @@ begin
   perform net.http_post(
     url := 'https://api.github.com/repos/jaehojung1879-netizen/TOPDA/dispatches',
     headers := jsonb_build_object(
-      'Authorization', 'Bearer ' || token,
+      -- 'token ' 형식을 쓴다. GitHub 문서는 Bearer 도 된다고 하지만, fine-grained
+      -- PAT 으로 dispatches 를 호출할 때 Bearer 가 401 로 거절되는 사례가 보고돼 있다.
+      -- 'token ' 은 classic·fine-grained 양쪽에서 모두 통한다.
+      'Authorization', 'token ' || token,
       'Accept', 'application/vnd.github+json',
       'Content-Type', 'application/json',
       'User-Agent', 'topda-supabase-webhook'
@@ -108,9 +111,33 @@ select
 -- ---------------------------------------------------------------------------
 -- 잘 되는지 실제로 시험해 보기
 --
--- 아래를 실행하면 가짜 수정본이 하나 들어가면서 워크플로가 깨어난다.
--- GitHub → Actions 탭에 "Apply content edits" 실행이 뜨는지 확인하면 된다.
--- (page 가 실제 파일이 아니므로 워크플로는 "블록 없음"으로 건너뛴다 — 안전하다.)
+-- (가) 토큰 자체가 GitHub 에서 통하는지 — 트리거를 거치지 않고 직접 쏴 본다.
+--
+--   select net.http_post(
+--     url := 'https://api.github.com/repos/jaehojung1879-netizen/TOPDA/dispatches',
+--     headers := jsonb_build_object(
+--       'Authorization', 'token ' || (select decrypted_secret from vault.decrypted_secrets
+--                                      where name = 'github_dispatch_token'
+--                                      order by created_at desc limit 1),
+--       'Accept', 'application/vnd.github+json',
+--       'Content-Type', 'application/json',
+--       'User-Agent', 'topda-supabase-webhook'
+--     ),
+--     body := jsonb_build_object('event_type', 'content-edit')
+--   ) as request_id;
+--
+-- 5~10초 뒤, **위에서 받은 request_id 로** 응답을 본다.
+-- (order by created desc 로 보면 예전 실패 기록을 잘못 읽기 쉽다 — id 로 짚는다.)
+--
+--   select status_code, left(content, 300) as 응답
+--   from net._http_response where id = <위에서 받은 request_id>;
+--
+--     204 → 성공. Actions 탭에 "Apply content edits" 실행이 뜬다.
+--     401 → 토큰 값이 틀렸거나 폐기됨
+--     403 → 토큰에 Contents: Read and write 권한이 없음
+--     404 → 저장소 선택이 안 됐거나 이름이 틀림
+--
+-- (나) 트리거까지 포함해 전 구간을 시험한다.
 --
 --   select public.admin_save_override(
 --     '<운영자 키>', '__webhook_test__.html', 'test', '<p>test</p>', '연결 시험'
