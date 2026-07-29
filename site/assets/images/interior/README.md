@@ -19,6 +19,10 @@ site/assets/images/interior/{카테고리}/{슬러그}.{확장자}
 | 주방 (싱크대·상판) | `kitchen/` |
 | 창호 (샷시) | `windows/` |
 | 타일 | `tile/` |
+| 조명 | `lighting/` |
+
+> **주의**: `hero/` 폴더는 각 페이지 상단의 대표 이미지 전용입니다 (`hero/{페이지명}.webp`).
+> 자재 카드용 사진을 `hero/` 에 넣으면 페이지에 표시되지 않고 placeholder 가 뜹니다.
 
 예시:
 
@@ -77,6 +81,13 @@ site/assets/images/interior/bathroom/dogyak.webp
 - `ceramic` — 도기질 타일
 - `polishing` — 폴리싱 타일
 - `wood-look` — 우드 타일
+
+### 조명 (`lighting/`)
+- `downlight` — 다운라이트 (매입등)
+- `cove` — 간접조명 (우물천장)
+- `track` — 레일 조명
+- `pendant` — 펜던트 조명
+- `ceiling` — 직부등 (방등)
 
 ---
 
