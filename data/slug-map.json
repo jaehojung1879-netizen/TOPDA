@@ -1,7 +1,7 @@
 {
   "_meta": {
     "counts": {
-      "complexes": 4850,
+      "complexes": 4857,
       "regions": 79
     },
     "hubs": [
@@ -87,7 +87,7 @@
     ],
     "note": "한글 지역·단지명 → URL 슬러그 매핑. 한 번 발급한 슬러그는 바꾸지 않는다. 복합 키는 '지역|법정동|단지명'.",
     "romanization": "국어의 로마자 표기법(음절 단위, 자음동화 미적용)",
-    "updated": "2026-07-28"
+    "updated": "2026-07-29"
   },
   "complexes": {
     "경기 고양시 덕양구|고양동|고양동우방유쉘아파트": {
@@ -7201,6 +7201,22 @@
       "since": "2026-07-26",
       "slug": "elrisia",
       "umd": "고등동"
+    },
+    "경기 수원시 팔달구|매교동|건영캐스빌": {
+      "history": [],
+      "name": "건영캐스빌",
+      "region_slug": "gyeonggi-suwon-paldal",
+      "since": "2026-07-29",
+      "slug": "geonyeongkaeseubil",
+      "umd": "매교동"
+    },
+    "경기 수원시 팔달구|우만동|동도센트리움": {
+      "history": [],
+      "name": "동도센트리움",
+      "region_slug": "gyeonggi-suwon-paldal",
+      "since": "2026-07-29",
+      "slug": "dongdosenteurium",
+      "umd": "우만동"
     },
     "경기 수원시 팔달구|우만동|우만주공1단지": {
       "history": [],
@@ -15912,6 +15928,14 @@
       "region_slug": "gyeonggi-hanam",
       "since": "2026-07-26",
       "slug": "gamilsujain",
+      "umd": "감이동"
+    },
+    "경기 하남시|감이동|감일스윗시티10단지": {
+      "history": [],
+      "name": "감일스윗시티10단지",
+      "region_slug": "gyeonggi-hanam",
+      "since": "2026-07-29",
+      "slug": "gamilseuwitsiti10danji",
       "umd": "감이동"
     },
     "경기 하남시|감이동|감일스타힐스": {
@@ -25706,6 +25730,14 @@
       "slug": "yeomchang2chahanhwakkumegeurin",
       "umd": "염창동"
     },
+    "서울 강서구|염창동|염창힐스테이트": {
+      "history": [],
+      "name": "염창힐스테이트",
+      "region_slug": "seoul-gangseo",
+      "since": "2026-07-29",
+      "slug": "yeomchanghilseuteiteu",
+      "umd": "염창동"
+    },
     "서울 강서구|염창동|우성2": {
       "history": [],
       "name": "우성2",
@@ -28186,6 +28218,14 @@
       "slug": "changdonghyeondae4cha",
       "umd": "창동"
     },
+    "서울 도봉구|창동|창동현대타운": {
+      "history": [],
+      "name": "창동현대타운",
+      "region_slug": "seoul-dobong",
+      "since": "2026-07-29",
+      "slug": "changdonghyeondaetaun",
+      "umd": "창동"
+    },
     "서울 도봉구|창동|초안산신도브래뉴": {
       "history": [],
       "name": "초안산신도브래뉴",
@@ -29640,6 +29680,14 @@
       "region_slug": "seoul-mapo",
       "since": "2026-07-26",
       "slug": "sinchontaeyeongdesiang",
+      "umd": "창전동"
+    },
+    "서울 마포구|창전동|중앙하이츠": {
+      "history": [],
+      "name": "중앙하이츠",
+      "region_slug": "seoul-mapo",
+      "since": "2026-07-29",
+      "slug": "junganghaicheu",
       "umd": "창전동"
     },
     "서울 마포구|창전동|창전동현대홈타운": {
@@ -33241,6 +33289,14 @@
       "since": "2026-07-26",
       "slug": "byeoksanmegateurium",
       "umd": "한강로2가"
+    },
+    "서울 용산구|한강로3가|시티파크(2단지)": {
+      "history": [],
+      "name": "시티파크(2단지)",
+      "region_slug": "seoul-yongsan",
+      "since": "2026-07-29",
+      "slug": "sitipakeu-2danji",
+      "umd": "한강로3가"
     },
     "서울 용산구|한남동|나인원한남": {
       "history": [],
