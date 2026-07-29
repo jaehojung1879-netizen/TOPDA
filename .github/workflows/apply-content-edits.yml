@@ -8,8 +8,9 @@ name: Apply content edits
 #   주지 않아도 되고, 배포 루프도 생기지 않는다(이 워크플로는 push 로 돌지 않는다).
 #
 # 언제 도는가
-#   1) repository_dispatch — Supabase Database Webhook 이 content_overrides 변경 시
-#      호출한다. 저장 → 약 2분 내 방문자 화면 반영. (설정법은 _meta/SUPABASE_SETUP.md)
+#   1) repository_dispatch — Supabase 의 트리거가 content_overrides 변경 시 호출한다.
+#      저장 → 약 2분 내 방문자 화면 반영.
+#      설치: _meta/SUPABASE_CONTENT_WEBHOOK.sql
 #   2) workflow_dispatch — Actions 탭에서 수동 실행.
 #   3) schedule — 웹훅이 아직 설정되지 않았거나 한 번 놓쳤을 때를 위한 보정. 매시 정각.
 on:
@@ -25,7 +26,11 @@ permissions:
 # 같은 시각에 두 번 돌면 같은 블록을 두 번 쓰게 된다(결과는 같지만 커밋이 갈린다).
 concurrency:
   group: apply-content-edits
-  cancel-in-progress: false
+  # 문단을 잇달아 저장하면 dispatch 가 그 수만큼 쌓인다. 각 실행이 '대기 중인 것
+  # 전부'를 처리하므로 뒤따르는 실행은 대개 할 일이 없다. 새 실행이 오면 이전 것을
+  # 접는다 — 커밋 전에 접혀도 수정본은 대기 상태로 남아 다음 실행이 주워 가므로
+  # 잃는 것이 없다.
+  cancel-in-progress: true
 
 jobs:
   apply:
