@@ -140,7 +140,37 @@ Supabase SQL Editor에서 다음 파일 전체를 실행합니다.
 - `interior:windows`
 - 게시글 댓글은 `target_type=board_post`, `target_key={게시글 UUID}`
 
-## 5. 브라우저 호환 데이터
+## 5. 게시글 수정 · 운영자 모드 설치
+
+Supabase SQL Editor에서 다음 파일 전체를 실행합니다.
+
+[`_meta/SUPABASE_BOARD_EDIT.sql`](SUPABASE_BOARD_EDIT.sql)
+
+이 SQL은 다음을 추가합니다.
+
+- `board_posts.updated_at`: 수정 시각 컬럼
+- `board_posts_public`: `updated_at`을 포함하도록 재생성 (owner_token·비밀글 제외 경계는 그대로)
+- `update_board_post(uuid, uuid, text, text, text, text, text)`: 작성자 토큰으로 본인 글 수정
+- `admin_update_board_post(uuid, text, text, text, text, text, text)`: Vault 운영자 키로 수정
+- `verify_admin_key(text)`: 운영자 키가 맞는지만 확인 (비밀글을 받아오지 않음)
+
+`board_posts` 테이블과 `get_posts_by_tokens`, `admin_list_secret_posts`,
+`delete_board_post`는 건드리지 않습니다. 반환 타입을 바꾸려면 `drop`이 필요한데
+그럴 이유가 없어서, 비밀글 **목록**에는 ‘수정됨’ 표시가 뜨지 않습니다(상세 화면에서는 보입니다).
+
+공개 범위(`secret`)는 수정 함수로 바꾸지 않습니다. 공개글을 비밀글로 되돌려도 이미 본
+사람에게는 의미가 없고, 반대 방향은 사고가 큽니다. 공개 범위를 바꾸려면 지우고 다시 씁니다.
+
+### 운영자 모드 사용법
+
+`board.html` 상단의 **운영자 키 입력** 버튼에 Vault의 `board_admin_key` 값을 넣으면
+그 브라우저에 저장되고, 비밀글이 목록에 모두 나타납니다. 해제 버튼으로 지웁니다.
+
+기존 URL 방식(`board.html?admin=키`, `board.html?admin=off`)도 그대로 동작하지만,
+주소가 방문 기록·프록시 로그에 남으므로 화면의 입력창을 쓰는 편이 안전합니다.
+공용 PC에서는 사용 후 반드시 해제하세요.
+
+## 6. 브라우저 호환 데이터
 
 기존 localStorage 키는 모두 유지합니다.
 
@@ -153,7 +183,7 @@ Supabase SQL Editor에서 다음 파일 전체를 실행합니다.
 `owner_token`으로 판별합니다. localStorage를 삭제하거나 다른 브라우저를 쓰면 본인 권한을
 복구할 수 없습니다.
 
-## 6. 점검 방법
+## 7. 점검 방법
 
 ### 데이터베이스
 
@@ -189,6 +219,11 @@ where name = 'board_admin_key';
 5. 댓글 작성 브라우저에만 삭제 버튼이 보이는지 확인
 6. 댓글에 `<script>alert(1)</script>`를 입력해도 텍스트로만 표시되는지 확인
 7. 잘못된 운영자 키로 비밀글 조회·댓글 삭제가 거부되는지 확인
+8. 글 작성 후 상세에서 **수정**을 눌러 내용을 바꾸고, 목록·상세에 ‘수정됨’이 뜨는지 확인
+9. **다른 브라우저**로 같은 글을 열었을 때 수정·삭제 버튼이 보이지 않는지 확인
+10. 운영자 키를 넣은 브라우저에서 남의 비밀글이 목록에 보이고 수정까지 되는지 확인
+11. 본문에 `**굵게**`, `- 목록`, `[링크](javascript:alert(1))`을 넣고, 앞의 둘은 서식으로
+    보이되 `javascript:` 링크는 **글자로만** 남는지 확인
 
 새 뷰나 함수를 만든 직후 API에서 `PGRST205`가 나오면 다음을 실행합니다.
 
@@ -199,7 +234,7 @@ notify pgrst, 'reload schema';
 `PGRST116`과 함께 게시글 작성이 롤백되면 프론트엔드 `insert` 뒤에 `.select()`가 붙지
 않았는지 먼저 확인합니다.
 
-## 7. 알려진 보안·스팸 한계
+## 8. 알려진 보안·스팸 한계
 
 로그인 없이 누구나 게시글과 댓글을 작성할 수 있어 자동화된 스팸, 도배, 욕설을 서버에서
 완전히 막지는 못합니다. 운영량이 늘면 Edge Function과 Cloudflare Turnstile, IP별 속도
