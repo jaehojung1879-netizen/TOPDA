@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<title>본문 편집기 — 톺다 운영</title>
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260729" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="../index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav"><a href="../board.html" data-nav>게시판</a></nav>
+  </div>
+</header>
+
+<main class="container-narrow ce-page" data-content-editor>
+  <div class="breadcrumb"><a href="../index.html">홈</a> / 운영 / 본문 편집기</div>
+  <header class="board-editor-head">
+    <h1>가이드 본문 편집기</h1>
+    <p>가이드 페이지의 <strong>문단</strong>을 직접 고칩니다. 표·도식·체크리스트처럼 구조가 있는 부분은 여기서 바꾸지 않습니다.</p>
+  </header>
+
+  <!-- 운영자 키 관문 -->
+  <section class="ce-gate" data-ce-gate hidden>
+    <h2>운영자 키</h2>
+    <p>Supabase Vault의 <code>board_admin_key</code> 값을 입력하세요. 게시판 운영자 모드와 같은 키입니다.</p>
+    <div class="ce-gate-row">
+      <input class="admin-input" type="password" data-ce-key autocomplete="off" placeholder="운영자 키" aria-label="운영자 키" />
+      <button class="btn btn-primary" type="button" data-ce-key-save>확인</button>
+    </div>
+    <p class="ce-gate-msg" data-ce-key-msg></p>
+  </section>
+
+  <!-- 편집 화면 -->
+  <section data-ce-app hidden>
+    <div class="ce-bar">
+      <label class="ce-bar-label" for="ce-page">편집할 페이지</label>
+      <select id="ce-page" class="ce-select" data-ce-page></select>
+      <a class="ce-linkbtn" data-ce-open target="_blank" rel="noopener">페이지 열기 ↗</a>
+    </div>
+
+    <p class="ce-status" data-ce-status hidden></p>
+
+    <div class="ce-help">
+      <strong>저장하면 어떻게 되나요?</strong>
+      저장 즉시 <strong>이 브라우저(운영자 키가 있는 브라우저)</strong>에서는 해당 페이지에 바로 반영되어 보입니다.
+      방문자에게는 다음 배포 때 HTML 파일에 실제로 기록된 뒤 보입니다 — 보통 <strong>3~5분</strong>입니다.
+      되돌리려면 저장 전에는 ‘되돌리기’, 저장 후에는 다시 고쳐 저장하면 됩니다.
+    </div>
+
+    <div data-ce-blocks></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container"><p class="disclaimer">© 톺다. 운영자 전용 화면입니다.</p></div>
+</footer>
+
+<script src="../assets/supabase-client.js?v=20260729"></script>
+<script src="../assets/content-editor.js?v=20260729"></script>
+</body>
+</html>

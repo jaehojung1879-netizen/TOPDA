@@ -4314,3 +4314,26 @@ function calcJeonseLoanByAgency(deposit, opts) {
     intro.insertAdjacentElement('afterend', sec);
   } catch (e) { /* noop */ }
 })();
+
+/* ── 운영자 즉시 미리보기 부트스트랩 ──────────────────────────────────────────
+   가이드 본문 편집기(/admin/edit.html)로 저장한 수정본은 다음 배포 때 HTML에
+   구워진다. 그 사이 운영자 본인은 결과를 바로 보고 싶으므로, 운영자 키가 있고
+   이 페이지에 편집 대상([data-edit])이 있을 때만 미리보기 스크립트를 불러온다.
+   일반 방문자에게는 localStorage 읽기 한 번이 전부다 — 네트워크 요청은 0건. */
+(function () {
+  try {
+    if (!localStorage.getItem('board:admin_key')) return;
+    if (!document.querySelector('[data-edit]')) return;
+    var load = function (src) {
+      var s = document.createElement('script');
+      s.src = src;
+      s.defer = true;
+      document.head.appendChild(s);
+      return s;
+    };
+    if (window.TopdaSupabase) load('/assets/overrides-preview.js?v=20260729');
+    else load('/assets/supabase-client.js?v=20260729').addEventListener('load', function () {
+      load('/assets/overrides-preview.js?v=20260729');
+    });
+  } catch (e) { /* noop */ }
+})();

@@ -1,9 +1,18 @@
-# 가이드 본문 직접 수정 — 설계안
+# 가이드 본문 직접 수정 — 설계 기록
 
 > 목적: 조명·주담대 같은 **가이드 페이지의 문구를 브라우저에서 직접 고치고 저장**한다.
 > 오타·뉘앙스·수치 갱신을 매번 개발 요청으로 처리하지 않기 위한 것이다.
 >
-> 상태: **설계안**. 아직 구현하지 않았다. 게시판 에디터(2026-07)는 별개로 완료돼 있다.
+> 상태: **구현 완료 (2026-07-29)**. 아래는 왜 이 구조를 골랐는지에 대한 기록이다.
+> 설치·사용법은 [`SUPABASE_SETUP.md` 6장](SUPABASE_SETUP.md)에 있다.
+>
+> 구현된 것
+>   · `site/admin/edit.html` + `assets/content-editor.js` — 문단 편집기 (noindex)
+>   · `assets/overrides-preview.js` — 운영자 즉시 미리보기
+>   · `_meta/mark_editable.py` — `data-edit` 부착 + 편집 대상 목록 생성
+>   · `_meta/apply_overrides.py` — 수정본을 HTML 파일에 굽기
+>   · `.github/workflows/apply-content-edits.yml` — 굽고 커밋 (배포는 기존 경로)
+>   · `_meta/SUPABASE_CONTENT_OVERRIDES.sql` — 저장소 + 운영자 RPC
 
 ---
 
@@ -64,8 +73,24 @@ B로 저장하되, **배포 워크플로가 그 수정본을 HTML 파일에 실�
 - 장점: 브라우저에 GitHub 토큰이 없다. 서빙 HTML은 항상 정적 = SEO 영향 0.
   저장소가 다시 단일 진실이 되어 내가 편집하는 흐름과 충돌하지 않는다.
 - 단점: **반영까지 지연**이 있다(배포 1회, 수 분). 즉시 보고 싶으면 미리보기로 때운다.
-- 완화: 편집 화면에서는 override를 즉시 얹어 보여 준다(운영자에게만). 방문자에게는
-  구운 뒤에 보인다.
+- 완화: **운영자 브라우저에서는 저장 즉시 반영돼 보인다**(`overrides-preview.js`).
+  방문자에게는 구운 뒤에 보인다.
+
+### 반영까지 걸리는 시간 — 실제 측정 기준
+
+| 구간 | 시간 |
+|---|---|
+| 운영자 본인 화면 | **즉시** (미리보기가 얹는다) |
+| Supabase Webhook → Actions 시작 | 약 10~30초 |
+| 굽기 + 커밋 | 약 20초 |
+| 그 커밋이 트리거하는 Pages 배포 | 약 40~60초 |
+| **방문자 화면까지** | **약 2분** |
+
+Webhook을 설정하지 않으면 매시 정각 보정 실행에 걸려 최대 1시간이 된다.
+
+> 참고: 이 2분 중 대부분은 **GitHub Pages 의 빌드·배포 시간**이다. 브라우저에서
+> GitHub API 로 직접 커밋하는 방식(A안)을 써도 이 시간은 똑같이 든다. 정적 HTML 을
+> 유지하는 한 줄일 수 없는 하한이다.
 
 ---
 
@@ -88,13 +113,20 @@ B로 저장하되, **배포 워크플로가 그 수정본을 HTML 파일에 실�
 
 한 페이지에 20~40개쯤 붙이면 "문구 고치기"의 90%가 커버된다.
 
-### 3-2. 저장 형식은 게시판과 같은 마크다운-라이트
+### 3-2. 저장 형식 — contenteditable + 화이트리스트 (마크다운 아님)
 
-게시판 에디터에 이미 만들어 둔 것을 그대로 쓴다.
+처음에는 게시판과 같은 마크다운-라이트를 쓰려 했지만 바꿨다. 가이드 문단의 원본은
+이미 HTML(`<strong>`, `<a>`)이라 HTML ↔ 마크다운 **왕복 변환**이 필요해지는데,
+그 과정에서 조금씩 깨진다. 문구 하나 고치려다 문단이 뭉개지면 도구를 못 쓴다.
 
-- 툴바: 굵게 · 기울임 · 링크 · 목록 · 인용 · 코드
-- 저장은 텍스트, 렌더는 `renderRichText()`(DOM 직접 생성, `innerHTML` 미사용)
-- 굽는 단계에서도 같은 규칙으로 HTML을 만든다 → **화면과 결과가 같다**
+그래서 원본 HTML 을 그대로 `contenteditable` 에 넣고, 저장할 때만 **허용 태그
+화이트리스트**로 거른다. 변환이 없으니 손실도 없다.
+
+- 허용: `strong` `em` `a` `code` `br` (`b`→`strong`, `i`→`em` 로 정규화)
+- 통째로 버림: `script` `style` `template` `iframe` `object` `embed` `noscript`
+- 그 밖의 태그(`div` `span` …): 껍데기만 벗기고 글자는 살린다
+- `a[href]` 는 `safeUrl()` 통과 필수 — `javascript:` 는 링크가 되지 못하고 글자로 남는다
+- 굽는 쪽(`apply_overrides.py`)은 이 조각을 **그대로** 써 넣는다 → 화면과 결과가 같다
 
 ### 3-3. Supabase 스키마
 
@@ -103,7 +135,8 @@ create table public.content_overrides (
   id uuid primary key default gen_random_uuid(),
   page text not null,          -- 'interior/lighting.html'
   block text not null,         -- 'ch1.lead'
-  body text not null,          -- 마크다운-라이트 원문
+  html text not null,          -- 정제된 조각 HTML
+  prev_html text,              -- 직전 값 1단계 (되돌리기)
   updated_at timestamptz not null default now(),
   applied_at timestamptz,      -- 빌드가 HTML에 구운 시각
   unique (page, block)
@@ -113,6 +146,7 @@ create table public.content_overrides (
 - 쓰기·읽기 모두 **운영자 키 검증 RPC를 통해서만**. 익명 정책은 만들지 않는다.
   (게시판의 `verify_admin_key` / `admin_*` 패턴 재사용)
 - 방문자 페이지는 이 테이블을 아예 조회하지 않는다 → 로딩에 영향 0.
+  (운영자 키가 있는 브라우저에서만 `app.js` 가 미리보기 스크립트를 불러온다)
 
 ### 3-4. 굽는 스크립트
 
@@ -124,8 +158,13 @@ create table public.content_overrides (
 3. 바뀐 파일을 커밋
 4. 성공한 override에 `applied_at` 기록
 
-`deploy-pages.yml` 의 **맨 앞**에 넣는다. 단지 페이지 생성보다 먼저 돌아야 하고,
-실패하면 배포를 멈춘다(잘못 구운 HTML을 올리는 것보다 안 올리는 게 낫다).
+**`deploy-pages.yml` 에 넣지 않고 별도 워크플로(`apply-content-edits.yml`)로 뺐다.**
+여기서 커밋을 하면 그 푸시가 배포를 트리거하므로, 배포 워크플로에 쓰기 권한을 줄
+필요가 없고 배포 루프도 생기지 않는다(이 워크플로는 push 로 돌지 않는다).
+
+실패는 조용히 넘긴다 — 파일을 못 찾거나 블록이 사라진 수정본은 건너뛰고(반영 표시를
+하지 않으므로 다음 실행에서 다시 시도한다), 네트워크·인증 실패는 0으로 끝낸다.
+잘못 구운 HTML 을 올리는 것보다 안 굽는 쪽이 안전하다.
 
 ### 3-5. 편집 화면
 
@@ -134,8 +173,8 @@ sitemap에 넣지 않고, `check_en_routes` 대상에서도 제외한다.
 
 - 편집 가능한 페이지 목록 (data-edit 이 있는 파일을 빌드 때 목록으로 뽑아 둔다)
 - 페이지를 고르면 `data-edit` 블록들을 순서대로 나열
-- 각 블록은 게시판과 같은 툴바 + 미리보기
-- 저장 → Supabase, 상단에 "다음 배포 때 반영됩니다 (약 3~5분)" 안내
+- 각 블록은 툴바(굵게·기울임·코드·링크·서식 지우기) 달린 contenteditable
+- 저장 → Supabase. 해당 가이드 페이지를 열면 **운영자에게는 즉시** 반영돼 보인다
 - 운영자 키가 없으면 아무것도 보이지 않는다
 
 ---
@@ -166,10 +205,19 @@ sitemap에 넣지 않고, `check_en_routes` 대상에서도 제외한다.
 
 ---
 
-## 6. 먼저 정해야 할 것
+## 6. 정해진 것
 
-1. 반영 지연 3~5분을 받아들일 수 있는가? (아니라면 A안 + OAuth 중개 서버가 필요하다)
-2. 어느 페이지부터 `data-edit` 를 붙일까? (조명·주담대·전세대출부터 권장)
-3. 되돌리기는 1단계면 충분한가, 전체 이력이 필요한가?
+1. **반영 지연**: 방문자 기준 약 2분을 받아들인다. 운영자 본인은 즉시 본다.
+2. **적용 범위**: `interior/`, `loan/`, `posts/`, `categories/`, `checklists/` 와
+   `guides.html`·`about.html`·`market.html`. 단지 페이지(`apt/`)와 다국어(`en/` 등)는
+   제외 — 자동 생성물이라 손으로 고쳐도 다음 생성 때 덮어쓴다.
+3. **되돌리기**: 직전 1단계(`prev_html`) + git 이력. HTML 이 저장소에 커밋되므로
+   더 이전 값은 `git log -p` 로 찾을 수 있다.
 
-**Last updated**: 2026-07-28
+## 7. 앞으로 손볼 만한 것
+
+- 편집기에서 여러 문단을 한 번에 저장(지금은 문단별 저장)
+- `data-edit` 이름이 바뀐 블록의 고아 수정본 정리 도구
+- 문단 추가·삭제 (지금은 **기존 문단 고치기 전용**)
+
+**Last updated**: 2026-07-29
