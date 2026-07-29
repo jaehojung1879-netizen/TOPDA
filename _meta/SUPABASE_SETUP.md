@@ -199,25 +199,28 @@ Supabase SQL Editor에서 실행합니다.
 배포 파이프라인이 수정본을 읽어 HTML에 구울 때 씁니다. 이 값이 없으면
 `apply_overrides.py`가 아무 것도 하지 않고 정상 종료합니다(포크·미설정 환경 보호).
 
-### 6-3. 빠른 반영을 위한 Database Webhook (선택, 권장)
+### 6-3. 빠른 반영을 위한 웹훅 (선택, 권장)
 
-이걸 설정하지 않으면 수정본은 **매시 정각 보정 실행** 또는 다음 배포 때 반영됩니다.
-설정하면 저장 후 **약 2분**이면 방문자 화면까지 반영됩니다.
+설정하지 않으면 수정본은 **매시 정각 보정 실행** 때 반영됩니다. 설정하면 저장 후
+**약 2분**이면 방문자 화면까지 반영됩니다.
 
-1. GitHub에서 fine-grained PAT 발급 — 이 저장소 하나만, 권한은 `Contents: Read and write`
-2. Supabase Dashboard → **Database → Webhooks → Create a new hook**
-   - Table: `content_overrides`
-   - Events: `Insert`, `Update`
-   - Type: **HTTP Request**, Method `POST`
-   - URL: `https://api.github.com/repos/jaehojung1879-netizen/TOPDA/dispatches`
-   - Headers:
-     - `Authorization: Bearer <위에서 만든 PAT>`
-     - `Accept: application/vnd.github+json`
-     - `Content-Type: application/json`
-   - Body: `{"event_type":"content-edit"}`
+**대시보드가 아니라 SQL 로 설치합니다.** Supabase 의 `Database → Webhooks` 메뉴는
+버전에 따라 위치가 바뀌고 `pg_net` 확장이 꺼져 있으면 아예 보이지 않습니다. 그 메뉴가
+하는 일이 결국 트리거를 만드는 것이라, SQL 로 직접 만드는 편이 확실합니다.
 
-이 PAT은 **Supabase 서버에만** 저장되며 브라우저로 내려가지 않습니다. 브라우저에
+1. GitHub 토큰 발급 — <https://github.com/settings/personal-access-tokens/new>
+   - Repository access: **Only select repositories** → 이 저장소 하나만
+   - Permissions → Repository permissions → **Contents: Read and write**
+   - 발급 후 나오는 값을 복사 (화면을 벗어나면 다시 못 봅니다)
+2. [`_meta/SUPABASE_CONTENT_WEBHOOK.sql`](SUPABASE_CONTENT_WEBHOOK.sql) 을 열어
+   `ghp_여기에_토큰을_붙여넣으세요` 를 실제 토큰으로 바꾼 뒤, 전체를 SQL Editor 에서 실행
+3. 파일 끝의 확인 쿼리로 세 칸이 모두 `1` 인지 확인
+
+이 토큰은 **Supabase 서버에만** 저장되며(Vault) 브라우저로 내려가지 않습니다. 브라우저에
 GitHub 토큰을 두지 않는 것이 이 설계의 핵심입니다.
+
+> **비용**: GitHub 토큰 발급·사용은 무료입니다. 이 저장소는 public 이라 GitHub Actions
+> 실행 시간도 무제한 무료이고, `pg_net` 도 Supabase 무료 플랜에 포함됩니다.
 
 ### 6-4. 쓰는 법
 
