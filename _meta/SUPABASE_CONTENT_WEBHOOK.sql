@@ -19,8 +19,12 @@
 
 -- ---------------------------------------------------------------------------
 -- 1) pg_net 확장 켜기 — Postgres 가 HTTP 요청을 보낼 수 있게 한다
+--
+-- 스키마를 지정하지 않는다. pg_net 은 이름 충돌을 피하려고 설치할 때 자기 스키마(net)를
+-- 직접 만들기 때문에, `with schema extensions` 를 붙이면 오히려 실패한다.
+-- 그래서 아래 함수들은 net.http_post 처럼 net. 을 붙여 부른다.
 -- ---------------------------------------------------------------------------
-create extension if not exists pg_net with schema extensions;
+create extension if not exists pg_net;
 
 -- ---------------------------------------------------------------------------
 -- 2) 토큰을 Vault 에 넣는다
@@ -44,7 +48,7 @@ create or replace function public.notify_content_edit()
 returns trigger
 language plpgsql
 security definer
-set search_path = public, extensions, pg_temp
+set search_path = public, net, pg_temp
 as $$
 declare
   token text;
