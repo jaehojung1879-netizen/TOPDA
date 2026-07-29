@@ -170,7 +170,74 @@ Supabase SQL Editor에서 다음 파일 전체를 실행합니다.
 주소가 방문 기록·프록시 로그에 남으므로 화면의 입력창을 쓰는 편이 안전합니다.
 공용 PC에서는 사용 후 반드시 해제하세요.
 
-## 6. 브라우저 호환 데이터
+## 6. 가이드 본문 편집기 설치
+
+브라우저에서 가이드 페이지의 문단을 직접 고치는 기능입니다. 설계 배경은
+[`CONTENT_EDITOR_PLAN.md`](CONTENT_EDITOR_PLAN.md)에 있습니다.
+
+### 6-1. SQL
+
+Supabase SQL Editor에서 실행합니다.
+
+[`_meta/SUPABASE_CONTENT_OVERRIDES.sql`](SUPABASE_CONTENT_OVERRIDES.sql)
+
+만들어지는 것: `content_overrides` 테이블과 운영자 전용 RPC 5개
+(`assert_admin_key`, `admin_save_override`, `admin_list_overrides`,
+`admin_mark_override_applied`, `admin_revert_override`).
+
+**이 테이블에는 RLS 정책을 하나도 만들지 않습니다.** 정책이 없으면 익명·인증
+사용자 모두 직접 접근할 수 없고, 오직 위 SECURITY DEFINER 함수로만 드나듭니다.
+
+### 6-2. GitHub Secret 하나 추가
+
+`Settings → Secrets and variables → Actions`
+
+| 이름 | 값 |
+|---|---|
+| `BOARD_ADMIN_KEY` | Vault의 `board_admin_key`와 **같은 값** |
+
+배포 파이프라인이 수정본을 읽어 HTML에 구울 때 씁니다. 이 값이 없으면
+`apply_overrides.py`가 아무 것도 하지 않고 정상 종료합니다(포크·미설정 환경 보호).
+
+### 6-3. 빠른 반영을 위한 Database Webhook (선택, 권장)
+
+이걸 설정하지 않으면 수정본은 **매시 정각 보정 실행** 또는 다음 배포 때 반영됩니다.
+설정하면 저장 후 **약 2분**이면 방문자 화면까지 반영됩니다.
+
+1. GitHub에서 fine-grained PAT 발급 — 이 저장소 하나만, 권한은 `Contents: Read and write`
+2. Supabase Dashboard → **Database → Webhooks → Create a new hook**
+   - Table: `content_overrides`
+   - Events: `Insert`, `Update`
+   - Type: **HTTP Request**, Method `POST`
+   - URL: `https://api.github.com/repos/jaehojung1879-netizen/TOPDA/dispatches`
+   - Headers:
+     - `Authorization: Bearer <위에서 만든 PAT>`
+     - `Accept: application/vnd.github+json`
+     - `Content-Type: application/json`
+   - Body: `{"event_type":"content-edit"}`
+
+이 PAT은 **Supabase 서버에만** 저장되며 브라우저로 내려가지 않습니다. 브라우저에
+GitHub 토큰을 두지 않는 것이 이 설계의 핵심입니다.
+
+### 6-4. 쓰는 법
+
+`https://topda.kr/admin/edit.html` — 운영자 키(게시판과 같은 키)를 넣으면 열립니다.
+`noindex` + `robots.txt` 차단이 걸려 있어 검색에는 노출되지 않습니다.
+
+편집 가능한 문단은 HTML에 `data-edit="이름"`으로 표시돼 있습니다. 새 페이지를 만든 뒤
+표시를 붙이려면:
+
+```bash
+python3 _meta/mark_editable.py        # 표시 부착 + 목록 갱신
+python3 _meta/mark_editable.py --list # 목록만 갱신
+```
+
+표·인라인 SVG 도식·체크리스트·JSON-LD에는 붙이지 않습니다. 구조 변경은 코드로 합니다.
+
+**⚠ 이미 붙은 `data-edit` 값은 바꾸지 마세요.** 이름이 바뀌면 그 블록에 저장해 둔
+수정본과의 연결이 끊깁니다(수정본은 남지만 반영되지 않습니다).
+
+## 7. 브라우저 호환 데이터
 
 기존 localStorage 키는 모두 유지합니다.
 
@@ -183,7 +250,7 @@ Supabase SQL Editor에서 다음 파일 전체를 실행합니다.
 `owner_token`으로 판별합니다. localStorage를 삭제하거나 다른 브라우저를 쓰면 본인 권한을
 복구할 수 없습니다.
 
-## 7. 점검 방법
+## 8. 점검 방법
 
 ### 데이터베이스
 
@@ -224,6 +291,12 @@ where name = 'board_admin_key';
 10. 운영자 키를 넣은 브라우저에서 남의 비밀글이 목록에 보이고 수정까지 되는지 확인
 11. 본문에 `**굵게**`, `- 목록`, `[링크](javascript:alert(1))`을 넣고, 앞의 둘은 서식으로
     보이되 `javascript:` 링크는 **글자로만** 남는지 확인
+12. `/admin/edit.html`에서 문단을 고쳐 저장한 뒤, 같은 브라우저로 해당 가이드 페이지를
+    열면 **바로 반영돼 보이고** 하단에 운영자 미리보기 띠가 뜨는지 확인
+13. 운영자 키가 **없는** 브라우저에서 같은 페이지를 열면 옛 문구가 보이고, 네트워크 탭에
+    Supabase 요청이 **한 건도 없는지** 확인
+14. Actions에서 `Apply content edits`가 돌고 나면 저장소 HTML에 글자가 실제로
+    들어갔는지(= 소스 보기에 보이는지) 확인
 
 새 뷰나 함수를 만든 직후 API에서 `PGRST205`가 나오면 다음을 실행합니다.
 
@@ -234,7 +307,7 @@ notify pgrst, 'reload schema';
 `PGRST116`과 함께 게시글 작성이 롤백되면 프론트엔드 `insert` 뒤에 `.select()`가 붙지
 않았는지 먼저 확인합니다.
 
-## 8. 알려진 보안·스팸 한계
+## 9. 알려진 보안·스팸 한계
 
 로그인 없이 누구나 게시글과 댓글을 작성할 수 있어 자동화된 스팸, 도배, 욕설을 서버에서
 완전히 막지는 못합니다. 운영량이 늘면 Edge Function과 Cloudflare Turnstile, IP별 속도

@@ -1,0 +1,56 @@
+name: Apply content edits
+
+# 가이드 본문 편집기(/admin/edit.html)에서 저장한 수정본을 실제 HTML 파일에 굽는다.
+#
+# 왜 별도 워크플로인가
+#   여기서 커밋을 하면 그 푸시가 deploy-pages.yml 을 트리거한다. 그래서 이 워크플로는
+#   '굽고 커밋'만 하고 배포는 기존 경로에 맡긴다. deploy-pages.yml 에 쓰기 권한을
+#   주지 않아도 되고, 배포 루프도 생기지 않는다(이 워크플로는 push 로 돌지 않는다).
+#
+# 언제 도는가
+#   1) repository_dispatch — Supabase Database Webhook 이 content_overrides 변경 시
+#      호출한다. 저장 → 약 2분 내 방문자 화면 반영. (설정법은 _meta/SUPABASE_SETUP.md)
+#   2) workflow_dispatch — Actions 탭에서 수동 실행.
+#   3) schedule — 웹훅이 아직 설정되지 않았거나 한 번 놓쳤을 때를 위한 보정. 매시 정각.
+on:
+  repository_dispatch:
+    types: [content-edit]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+
+permissions:
+  contents: write
+
+# 같은 시각에 두 번 돌면 같은 블록을 두 번 쓰게 된다(결과는 같지만 커밋이 갈린다).
+concurrency:
+  group: apply-content-edits
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 세 값이 모두 있어야 동작한다. 하나라도 없으면 스크립트가 조용히 0으로 끝난다
+      # (포크·미설정 환경에서 워크플로가 실패로 보이지 않게).
+      - name: Apply pending overrides
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          BOARD_ADMIN_KEY: ${{ secrets.BOARD_ADMIN_KEY }}
+        run: python3 _meta/apply_overrides.py
+
+      # 편집 대상 목록을 다시 만든다(문단이 추가/삭제된 경우 대비).
+      - name: Refresh editable page manifest
+        run: python3 _meta/mark_editable.py --list
+
+      # 바뀐 게 없으면 커밋하지 않는다 → 배포도 돌지 않는다.
+      - name: Commit
+        run: bash _meta/git_commit_push.sh "본문 수정본 반영 ($(date -u +%Y-%m-%d\ %H:%M) UTC)" site
