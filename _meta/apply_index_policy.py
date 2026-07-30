@@ -58,11 +58,6 @@ NOT_OURS_GLOBS = ("/apt/*/*/", "/apt/*/*/index.html")
 # ── AdSense 를 넣지 않는 경로 (noindex 페이지는 자동 포함)
 NO_ADS_GLOBS = (
     "/privacy.html", "/*/privacy.html",
-    "/contact.html", "/*/contact.html",
-    "/editorial-policy.html",
-    "/corrections.html",
-    "/data-methodology.html",
-    "/authors/*",
     "/about.html", "/*/about.html",
 )
 

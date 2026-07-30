@@ -112,7 +112,7 @@ def render(issues):
         '    </div>\n'
         '    <p class="news-note">'
         '무엇이 바뀌었는지 확인한 시점을 각 항목에 적었습니다. 투자 권유가 아니며, '
-        '적용 여부는 <a href="editorial-policy.html">운영·편집 원칙</a>과 개별 조문을 확인하세요.'
+        '적용 여부는 개별 조문을 확인하세요.'
         '</p>\n'
         '  </div>\n'
         '</section>\n')

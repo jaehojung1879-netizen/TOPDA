@@ -26,7 +26,7 @@
        거래 APT_INDEX_MIN_DEALS건 · 거래 분기 APT_INDEX_MIN_QUARTERS개 ·
        면적 유형 APT_INDEX_MIN_AREA_TYPES개 · 세대수·준공연도·최근 거래 확인
        AND 상한 APT_INDEX_MAX_PAGES개(거래량 상위, 시군구 분산)
-     → 통과분만 색인 허용 + sitemap 등재. 기준은 site/data-methodology.html 에 공개한다.
+     → 통과분만 색인 허용 + sitemap 등재.
 
   왜: 얇은 표본의 단지 페이지를 수천 개 색인하면, 템플릿을 걷어냈을 때 남는 고유 정보가
   표 몇 줄뿐인 페이지가 사이트의 대부분을 차지한다. 커버리지는 유지하면서 색인 품질만
@@ -85,7 +85,7 @@ METRO = {"서울", "경기", "인천"}
 # 페이지가 수천 개 색인되는 결과가 된다. 그것이 '가치가 별로 없는 콘텐츠' 판정의 실체다.
 #
 # 그래서 모든 단지 페이지는 그대로 만들어 접근 가능하게 두고, 기본값을 noindex,follow 로 두고,
-# 아래 게이트를 통과한 소수만 색인을 허용한다. 기준은 site/data-methodology.html 에 공개한다.
+# 아래 게이트를 통과한 소수만 색인을 허용한다.
 #
 # 환경변수로 덮어쓸 수 있다(운영 중 조정용):
 #   APT_INDEX_MIN_DEALS  APT_INDEX_MIN_QUARTERS  APT_INDEX_MIN_AREA_TYPES  APT_INDEX_MAX_PAGES
@@ -165,7 +165,7 @@ def eligible(c):
 def index_quality(c):
     """검색 색인 품질 게이트 → (통과, 미달 사유 목록).
 
-    통과 조건(모두 충족). site/data-methodology.html 의 공개 기준과 같아야 한다.
+    통과 조건(모두 충족).
       · 최근 12개월 유효(비해제) 거래 APT_INDEX_MIN_DEALS 건 이상
       · 거래가 존재하는 분기 APT_INDEX_MIN_QUARTERS 개 이상 → 보간 없이 추이 차트를 그릴 수 있음
       · 면적 유형 APT_INDEX_MIN_AREA_TYPES 개 이상  → 면적별 가격 비교가 성립함
