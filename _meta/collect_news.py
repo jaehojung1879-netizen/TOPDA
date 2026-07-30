@@ -171,6 +171,14 @@ def inject_static(payload):
     """news.json 내용을 site/index.html 정적 폴백(마커 구간)에도 주입.
 
     JS(fetch) 실패·크롤러 대응용. 마커가 없으면 조용히 건너뛴다.
+
+    ⚠ 2026-07-30 부터 site/index.html 에는 news:weekly:static / news:daily:static 마커가
+    없다. 홈의 기사 헤드라인 자동 나열을 없애고 운영자가 직접 쓴 '핵심 이슈'
+    (_meta/home_issues.json → build_home_issues.py)로 대체했기 때문이다. 따라서 이 함수는
+    현재 아무것도 쓰지 않는다(마커가 없으면 _replace_between 이 None 을 반환한다).
+    news.json 수집 자체는 그대로 두어, 운영자가 '무엇이 바뀌었는지' 단서를 찾는 데 쓴다.
+    홈에 기사 목록을 되살리려면 마커를 다시 넣는 것만으로는 안 되고,
+    운영·편집 원칙(광고·편집 분리, 기사 본문 미복사)을 먼저 검토해야 한다.
     """
     try:
         src = open(SITE_INDEX, encoding="utf-8").read()

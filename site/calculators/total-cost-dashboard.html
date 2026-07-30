@@ -11,6 +11,9 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="canonical" href="https://topda.kr/calculators/total-cost-dashboard.html" />
 <link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://topda.kr/feed.xml" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/calculators/total-cost-dashboard.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/calculators/total-cost-dashboard.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/total-cost-dashboard.html" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="톺다" />
 <meta property="og:title" content="부동산 종합 계산 대시보드 — 톺다" />
@@ -850,8 +853,33 @@
       <strong>참고해 주세요</strong> 여기 나오는 금액은 입력값으로 계산한 예상치예요. 실제 세금과 대출 한도는 공시가격·과세관청 판단·은행 심사·개인 공제에 따라 달라질 수 있으니, 계약 전에 세무사·법무사·은행에서 한 번 더 확인하시는 걸 권합니다.
     </div>
   </div>
-</main>
 
+<!-- calc:meta:start -->
+<section class="calc-meta" aria-labelledby="calc-meta-h">
+  <h2 id="calc-meta-h">이 계산기 정보</h2>
+  <h3>어떤 경우에 쓰는 계산기인가</h3>
+<p>매수 결정 직전에 &#x27;잔금일까지 현금이 얼마나 필요한가&#x27;를 한 화면에서 확인하려는 사람. 취득세·중개보수·등기비용·대출·인테리어·이사비를 따로 계산하다 빠뜨리는 항목을 막는 것이 목적입니다.</p>
+  <h3>미리 준비할 값</h3>
+<ul><li>매매가, 자산 유형(주택·비주택), 본 거래 포함 주택 수, 조정대상지역 여부</li><li>전용면적 85㎡ 초과 여부와 감면 요건</li><li>대출 금액·금리·기간·상환 방식</li><li>시가표준액(국민주택채권 매입 기준) — 공시가격 조회 링크를 함께 제공합니다</li><li>계약금·중도금 비율, 인테리어·수리비, 이사비 등 예상 지출</li></ul>
+  <h3>적용 공식과 가정</h3>
+<ul><li>총비용 = 매매가 + 취득세·지방교육세·농어촌특별세 + 중개보수 + 등기비용(채권 매입·할인 + 법무사 보수 + 인지세) + 부대비용(인테리어·이사 등).</li><li>필요 현금 = 총비용 − 대출금 − (갭투자 시 인수하는 전세보증금).</li><li>월 상환액은 선택한 상환 방식(원리금균등·원금균등)으로 산출합니다.</li><li>각 세목은 개별 계산기와 같은 공통 함수를 씁니다 — 취득세 계산기와 결과가 어긋나지 않도록 로직을 공유합니다.</li></ul>
+  <h3>결과가 달라질 수 있는 조건</h3>
+<ul><li>채권 할인율은 매일 바뀝니다. 기본값은 최근 시장 수준이며 직접 조정해야 정확해집니다.</li><li>중개보수는 상한요율 기준이며 실제로는 협의로 정해집니다.</li><li>대출 실행 가능액은 은행 심사 결과이므로, 여기 입력한 금액이 그대로 나온다는 보장은 없습니다.</li><li>임대사업자 대출·갭투자 조건은 상품별 규제가 달라 별도 확인이 필요합니다.</li></ul>
+  <h3>함께 보기</h3>
+<ul><li><a href="acquisition-tax.html">취득세 계산기</a></li><li><a href="loan-limit.html">대출 한도 계산기</a></li><li><a href="balance-settlement.html">잔금일 정산 계산기</a></li><li><a href="../checklists/sale-balance-day.html">매매 잔금일 체크리스트</a></li></ul>
+  <h3>근거와 기준일</h3>
+<div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">지방세법·소득세법·상속세및증여세법, 금융위 DSR·RTI 가이드</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-07-30 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
+  <details class="explain">
+  <summary>계산 방식 변경 이력 (최근 6건)</summary>
+  <div class="explain-body">
+  <p class="note">계산 결과가 달라지는 변경만 기록합니다. 표기·문구만 다듬은 수정은 남기지 않습니다.</p>
+  <div class="def-list"><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.</span></div><div class="row"><span class="k">2026-06-14</span><span class="v">국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).</span></div><div class="row"><span class="k">2026-06-13</span><span class="v">국민주택채권 매입금액 만원 단위 절상 적용 + 지역(특별시·광역시/그 밖의 지역) 매입률 구분. 양도세 장기보유특별공제 표1 정정(연 2%·3년 6%~15년 30%).</span></div><div class="row"><span class="k">2026-06-04</span><span class="v">대출 한도 규정 블록 신설(LTV·가격대별 한도·스트레스 DSR·전세 보증기관 HF/HUG/SGI).</span></div></div>
+  </div>
+</details>
+</section>
+<!-- calc:meta:end -->
+
+</main>
 
 <section class="content-comments" data-comments data-comment-type="page" data-comment-key="calculator:total-cost-dashboard" data-comment-title="부동산 종합 계산 대시보드" data-comment-page="/calculators/total-cost-dashboard.html"></section>
 <script src="../assets/supabase-client.js?v=20260728"></script>

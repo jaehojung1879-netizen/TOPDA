@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Privacy Policy — TOPDA</title>
+<meta name="description" content="What TOPDA actually processes: Google Analytics 4, Naver Analytics, Google AdSense, Supabase, and browser localStorage — plus your rights and how to opt out." />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="canonical" href="https://topda.kr/en/privacy.html" />
+<meta property="og:type" content="website" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/privacy.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/privacy.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/privacy.html" />
+<meta property="og:site_name" content="TOPDA" />
+<meta property="og:title" content="Privacy Policy — TOPDA" />
+<meta property="og:description" content="What TOPDA actually processes, and your rights." />
+<meta property="og:url" content="https://topda.kr/en/privacy.html" />
+<meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
+<meta property="og:locale" content="en" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260730" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="index.html" class="brand"><span class="brand-mark"></span>TOPDA</a>
+    <nav class="nav">
+      <a href="guides.html" data-nav>Guides</a>
+      <a href="calculators/index.html" data-nav>Calculators</a>
+      <a href="market.html" data-nav>Market Data</a>
+      <a href="../checklists/index.html" data-nav>Checklists (KO)</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="guides.html">Guides</a>
+    <a href="calculators/index.html">Calculators</a>
+    <a href="market.html">Market Data</a>
+    <a href="../checklists/index.html">Checklists (KO)</a>
+    <a href="about.html">About</a>
+    <a href="../privacy.html">Korean</a>
+  </div>
+</header>
+
+<main class="container-narrow">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Privacy Policy</div>
+    <h1>Privacy Policy</h1>
+    <p class="lead">
+      This page describes what TOPDA actually does, based on the code that is running on the site.
+      Every tool listed below is live today — none of it is a future plan.
+    </p>
+  </div>
+
+  <div class="prose">
+    <div class="callout">
+      <div class="icon">i</div>
+      <div class="body">
+        <strong>Summary</strong>
+        TOPDA has no accounts and no sign-up, and calculator inputs are never sent to a server.
+        However, <strong>analytics (Google Analytics 4, Naver Analytics)</strong> and
+        <strong>advertising (Google AdSense)</strong> are active, and the
+        <strong>message board and comments are stored in Supabase</strong> so other visitors can read them.
+        Calculator and checklist values stay in your browser's <strong>localStorage</strong>.
+      </div>
+    </div>
+
+    <h2>1. What we process</h2>
+    <ul>
+      <li><strong>Device and access data</strong> — browser and device type, approximate region, referrer,
+        pages visited, time on page. Collected automatically by the analytics tools.</li>
+      <li><strong>Cookies and advertising identifiers</strong> — for analytics and for serving and measuring ads.</li>
+      <li><strong>Text you write yourself</strong> — the title, body, and nickname you type into the board or comments.</li>
+      <li><strong>Owner token</strong> — a random UUID that lets you edit or delete your own post later.
+        It is not linked to your name or contact details.</li>
+      <li><strong>Browser-local values</strong> — calculator inputs, checklist state, chosen language. Never sent to a server.</li>
+      <li><strong>Usage events</strong> — calculator runs, share-button clicks, outbound link clicks, checklist ticks.
+        These record <em>which</em> tool was used, not the amounts you entered.</li>
+    </ul>
+    <p>
+      TOPDA has <strong>no login and no sign-up</strong>, and no form asks for your name, national ID,
+      phone number, or email. If you type contact details into a board nickname or body field, they are
+      stored as part of that post — so please do not post personal or sensitive information.
+    </p>
+
+    <h2>2. Google Analytics 4</h2>
+    <p>
+      We use Google Analytics 4 (measurement ID <code>G-7NE57E1KLH</code>) on every page via
+      <code>/assets/analytics.js</code>, with <code>anonymize_ip: true</code> enabled.
+      Custom events include <code>calculator_run</code>, <code>calc_complete</code>,
+      <code>share_click</code>, <code>outbound_click</code>, <code>checklist_check</code>,
+      <code>apt_page_view</code>, <code>apt_calculator_click</code>, and <code>guide_click</code>.
+      Event parameters record the calculator name and entry path only — never the figures you entered.
+    </p>
+    <p>
+      See <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">how Google uses data from partner sites</a>,
+      and opt out with the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Browser Add-on</a>.
+    </p>
+
+    <h2>3. Naver Analytics</h2>
+    <p>
+      For Korean search traffic analysis we use Naver Analytics (account ID <code>25db1b1d375e68</code>),
+      loading <code>wcs.naver.net/wcslog.js</code> on every page to record referrers and page views.
+      Collection and opt-out follow Naver's own policies.
+    </p>
+
+    <h2>4. Google AdSense, cookies, and ad identifiers</h2>
+    <p>
+      TOPDA serves ads through Google AdSense (<code>ca-pub-6725359021570843</code>).
+      Google and other third-party vendors may use cookies and advertising identifiers to serve ads
+      based on your visits to this and other sites.
+    </p>
+    <ul>
+      <li>Ad scripts run <strong>only on finished content and calculator pages</strong>.
+        This privacy policy, the contact, editorial-policy and corrections pages, the board and comments,
+        internal search results, pages excluded from search indexing, and error pages carry no ad script.</li>
+      <li>Turn off personalised ads at <a href="https://myadcenter.google.com/" target="_blank" rel="noopener">Google Ad Settings</a>,
+        or opt out across participating vendors at <a href="https://optout.aboutads.info/" target="_blank" rel="noopener">aboutads.info</a>.</li>
+      <li>Google's advertising data practices are covered by its
+        <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Advertising and Data policies</a>.</li>
+    </ul>
+
+    <h2>5. Supabase</h2>
+    <p>
+      Board posts and comments must be visible to every visitor, so those two features — and only those —
+      are stored in <strong>Supabase</strong>, a hosted PostgreSQL service. Calculator and checklist values
+      are never sent to Supabase.
+    </p>
+    <ul>
+      <li><strong>Tables</strong> — <code>board_posts</code> and <code>content_comments</code>.
+        Public reads go through views (<code>board_posts_public</code>, <code>content_comments_public</code>)
+        that exclude private-post bodies and owner tokens.</li>
+      <li><strong>Fields stored</strong> — category, title, body, nickname (blank shows as "anonymous"),
+        created and updated timestamps, private flag, owner token (UUID).</li>
+      <li><strong>Access control</strong> — the key exposed in the browser is a public anon key;
+        actual read and write permissions are enforced by Supabase row-level security policies.</li>
+      <li><strong>If Supabase is not configured</strong>, posts stay only in the localStorage of the browser that wrote them.</li>
+    </ul>
+    <p class="note">
+      The Supabase project's data region and backup retention period follow that service's project
+      settings, and Google Analytics data retention follows the setting in the GA4 dashboard.
+      TOPDA does not assert specific countries or durations of its own — those services' policies
+      and settings govern.
+    </p>
+
+    <h2>6. Values stored in your browser</h2>
+    <p>These stay on your device and are never transmitted:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Key</th><th>Contents</th></tr></thead>
+        <tbody>
+          <tr><td><code>topda:autosave:*</code></td><td>Per-calculator input values, restored on your next visit</td></tr>
+          <tr><td><code>cl-hub</code></td><td>Checklist tick state and progress</td></tr>
+          <tr><td><code>dday:type</code></td><td>Schedule type chosen in the D-Day scheduler</td></tr>
+          <tr><td><code>topda-language</code></td><td>Your selected display language</td></tr>
+          <tr><td><code>board:author</code> · <code>comments:author</code></td><td>Nickname, pre-filled on your next post</td></tr>
+          <tr><td><code>board:draft</code></td><td>Draft of a post you are writing</td></tr>
+          <tr><td><code>board:owner_tokens</code> · <code>comments:owner_tokens</code></td><td>Owner tokens for your own posts and comments</td></tr>
+          <tr><td><code>board:public</code> · <code>board:secret</code> · <code>fb:public</code> · <code>fb:secret</code></td><td>Local post storage when Supabase is not configured</td></tr>
+          <tr><td><code>board:migrated_to_supabase</code></td><td>Whether local posts have been moved to the server</td></tr>
+          <tr><td><code>board:admin_key</code> · <code>topda_admin</code></td><td>Operator admin/edit-mode keys (created only in the operator's browser)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Clearing site data in your browser removes all of these at any time.</p>
+
+    <h2>7. Board and comments</h2>
+    <ul>
+      <li><strong>Public posts</strong> — title, body, nickname, and timestamp are visible to everyone.</li>
+      <li><strong>Private posts</strong> — the title appears in the list with a lock icon, but only a browser
+        holding the owner token, and the operator, can open the body.</li>
+      <li><strong>Owner token</strong> — generated randomly when you post and stored in your browser.
+        If you clear browser data the token is gone, and you will need to ask the operator to delete that post.</li>
+      <li><strong>IP addresses and email</strong> — TOPDA's code does not collect or store either.</li>
+    </ul>
+
+    <h2>8. Retention and deletion</h2>
+    <ul>
+      <li><strong>Posts and comments</strong> — kept until you or the operator delete them. There is no automatic purge schedule.</li>
+      <li><strong>localStorage values</strong> — until you clear browser data or use a tool's reset button. The operator cannot access them.</li>
+      <li><strong>Analytics</strong> — governed by each provider's retention policy and dashboard settings (see section 5).</li>
+      <li><strong>Ad cookies</strong> — until each cookie expires or you delete it.</li>
+    </ul>
+
+    <h2>9. Third parties and international transfers</h2>
+    <p>
+      TOPDA does not sell personal data or pass it to third parties for advertising.
+      Because of the services below, access data and cookies are shared with those providers and
+      <strong>may be transferred to and processed on servers outside Korea.</strong>
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Provider</th><th>Role</th><th>What is shared</th></tr></thead>
+        <tbody>
+          <tr><td>Google LLC</td><td>Analytics 4, AdSense</td><td>Access data, cookies and ad identifiers, usage events</td></tr>
+          <tr><td>NAVER Corp.</td><td>Naver Analytics</td><td>Access data, referrers</td></tr>
+          <tr><td>Supabase Inc.</td><td>Board and comment database</td><td>Post and comment content, nickname, owner token</td></tr>
+          <tr><td>GitHub, Inc.</td><td>Hosting (GitHub Pages)</td><td>Web server requests</td></tr>
+          <tr><td>jsDelivr</td><td>Font and script CDN</td><td>Access data accompanying file requests</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>10. Refusing cookies</h2>
+    <p>You can block or delete cookies in your browser settings. Calculators and checklists keep working without cookies.</p>
+    <ul>
+      <li><strong>Chrome</strong> — Settings › Privacy and security › Third-party cookies</li>
+      <li><strong>Safari</strong> — Settings › Privacy › Block all cookies</li>
+      <li><strong>Edge</strong> — Settings › Cookies and site permissions</li>
+      <li><strong>Personalised ads only</strong> — <a href="https://myadcenter.google.com/" target="_blank" rel="noopener">Google Ad Settings</a></li>
+      <li><strong>Analytics only</strong> — <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Add-on</a></li>
+    </ul>
+
+    <h2>11. Your rights</h2>
+    <ul>
+      <li><strong>Delete a post you wrote</strong> — use the delete control in the browser you wrote it from,
+        or ask through the contact channel with the post title and approximate time.</li>
+      <li><strong>Delete browser-stored values</strong> — clear site data in your browser at any time.</li>
+      <li><strong>Refuse analytics and ad collection</strong> — see section 10.</li>
+      <li>Under Korea's Personal Information Protection Act you may request access, correction, deletion,
+        or suspension of processing.</li>
+      <li>TOPDA is not directed at children under 14 and has no guardian-consent flow.</li>
+    </ul>
+
+    <h2>12. Contact</h2>
+    <p>
+      Privacy questions and deletion requests are received through the
+      <a href="../board.html">TOPDA board <small>(KO)</small></a>. No sign-up is required, and posting
+      privately keeps the body visible only to you and the operator. When requesting a deletion,
+      include the post title and roughly when it was written so it can be identified.
+      TOPDA does not operate a separate email intake — the board is the contact channel.
+    </p>
+
+    <h2>13. Changes</h2>
+    <p>
+      If this policy changes because of new features or legal requirements, the updated version and its
+      effective date are published on this page. New measurement, advertising, or storage tools are
+      documented here at the time they are introduced.
+    </p>
+
+    <hr/>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      First effective: 2026-05-31 · Last revised: 2026-07-30 ·
+      English translation of the <a href="/en/privacy.html">Korean privacy policy</a>, which governs in case of discrepancy.<br/>
+      This page describes TOPDA's data handling and is not legal advice.
+    </p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="brand"><span class="brand-mark"></span>TOPDA</div>
+        <p>Korea real estate, one detail at a time.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="calculators/index.html">Calculators</a></li>
+          <li><a href="guides.html">Guides</a></li>
+          <li><a href="market.html">Market Data</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Site</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="../authors/jaeho-jung.html">Author</a></li>
+          <li><a href="../editorial-policy.html">Editorial Policy</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li><a href="../index.html">Korean</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="disclaimer">© TOPDA.</p>
+  </div>
+</footer>
+
+<script src="../assets/app.js?v=20260730"></script>
+</body>
+</html>

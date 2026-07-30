@@ -242,8 +242,33 @@
     <div class="icon">⚠</div>
     <div class="body"><strong>면책</strong> 본 계산기는 일반 정보 제공용 추정치이며, 실제 비용은 거래·지역·시점에 따라 달라집니다.</div>
   </div>
-</main>
 
+<!-- calc:meta:start -->
+<section class="calc-meta" aria-labelledby="calc-meta-h">
+  <h2 id="calc-meta-h">이 계산기 정보</h2>
+  <h3>어떤 경우에 쓰는 계산기인가</h3>
+<p>소유권이전등기에 드는 실제 비용(국민주택채권 매입·할인, 법무사 보수, 인지세)을 확인하려는 매수자. 셀프 등기를 검토하는 경우 절감액도 함께 볼 수 있습니다.</p>
+  <h3>미리 준비할 값</h3>
+<ul><li>거래금액과 시가표준액 — 채권 매입 기준은 시가표준액입니다(공시가격 조회 링크 제공)</li><li>소재지 — 특별시·광역시와 그 밖의 지역의 채권 매입률이 다릅니다</li><li>국민주택채권 할인율(고객부담률) — 매일 바뀌므로 확인 후 입력</li><li>셀프 등기 여부</li><li>취득세까지 포함해 계산할 경우 주택 수·조정대상지역·전용면적·감면 요건</li></ul>
+  <h3>적용 공식과 가정</h3>
+<ul><li>국민주택채권 매입액 = 시가표준액 × 지역별 매입률, 만원 단위 절상.</li><li>실제 부담액 = 매입액 × 할인율(고객부담률). 채권을 즉시 매도할 때 생기는 손실분입니다.</li><li>법무사 보수는 대한법무사협회 보수표의 구간별 누진 방식으로 계산합니다.</li><li>인지세는 인지세법의 계약금액 구간별 정액입니다.</li><li>가정: 등록면허세·증지대 등 소액 항목과 법무사별 실비 차이는 반영하지 않습니다.</li></ul>
+  <h3>결과가 달라질 수 있는 조건</h3>
+<ul><li>채권 할인율은 시장 금리에 따라 매일 바뀝니다 — 잔금일 당일 값으로 다시 계산해야 정확합니다.</li><li>법무사 보수는 보수표가 상한이 아니라 기준이며, 사무소마다 실비·부가세 처리가 다릅니다.</li><li>시가표준액과 매매가가 크게 다르면 채권 매입액이 예상과 달라집니다.</li></ul>
+  <h3>함께 보기</h3>
+<ul><li><a href="acquisition-tax.html">취득세 계산기</a></li><li><a href="total-cost-dashboard.html">총비용 대시보드</a></li><li><a href="../posts/registry-reading.html">등기부등본 보는 법</a></li></ul>
+  <h3>근거와 기준일</h3>
+<div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">인지세법 제3조, 주택도시기금 국민주택채권, 대한법무사협회 보수표(2024.9.12 시행)</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-07-30 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
+  <details class="explain">
+  <summary>계산 방식 변경 이력 (최근 6건)</summary>
+  <div class="explain-body">
+  <p class="note">계산 결과가 달라지는 변경만 기록합니다. 표기·문구만 다듬은 수정은 남기지 않습니다.</p>
+  <div class="def-list"><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.</span></div><div class="row"><span class="k">2026-06-14</span><span class="v">국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).</span></div><div class="row"><span class="k">2026-06-13</span><span class="v">국민주택채권 매입금액 만원 단위 절상 적용 + 지역(특별시·광역시/그 밖의 지역) 매입률 구분. 양도세 장기보유특별공제 표1 정정(연 2%·3년 6%~15년 30%).</span></div><div class="row"><span class="k">2026-06-04</span><span class="v">대출 한도 규정 블록 신설(LTV·가격대별 한도·스트레스 DSR·전세 보증기관 HF/HUG/SGI).</span></div></div>
+  </div>
+</details>
+</section>
+<!-- calc:meta:end -->
+
+</main>
 
 <section class="content-comments" data-comments data-comment-type="page" data-comment-key="calculator:registration-cost" data-comment-title="등기·법무사 비용 계산기" data-comment-page="/calculators/registration-cost.html"></section>
 <script src="../assets/supabase-client.js?v=20260728"></script>

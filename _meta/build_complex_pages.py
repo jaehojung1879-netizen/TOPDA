@@ -13,10 +13,24 @@
   data/slug-map.json                              슬러그 매핑·이력
   site/sitemap-all.xml                            /apt/{slug}/ 항목 재생성
 
-생성 기준(지시서 4단계)
-  최근 12개월 유효(비취소) 거래 MIN_DEALS건 이상
-  AND 세대수 MIN_HOUSEHOLDS 이상
-  AND 최근 거래일·거래가격 확인 가능
+생성 기준 — '페이지 생성'과 '검색 색인 허용'은 분리한다.
+
+  ① 생성(커버리지) 기준
+       최근 12개월 유효(비취소) 거래 MIN_DEALS건 이상
+       AND 세대수 MIN_HOUSEHOLDS 이상
+       AND 최근 거래일·거래가격 확인 가능
+     → 통과한 단지는 모두 페이지를 만들고, **기본값은 noindex,follow** 다.
+       사이트 내부 검색·지역 허브·계산기 연결에서는 그대로 쓸 수 있다.
+
+  ② 색인 허용 기준 (index_quality) — 보수적으로 좁게 잡는다
+       거래 APT_INDEX_MIN_DEALS건 · 거래 분기 APT_INDEX_MIN_QUARTERS개 ·
+       면적 유형 APT_INDEX_MIN_AREA_TYPES개 · 세대수·준공연도·최근 거래 확인
+       AND 상한 APT_INDEX_MAX_PAGES개(거래량 상위, 시군구 분산)
+     → 통과분만 색인 허용 + sitemap 등재. 기준은 site/data-methodology.html 에 공개한다.
+
+  왜: 얇은 표본의 단지 페이지를 수천 개 색인하면, 템플릿을 걷어냈을 때 남는 고유 정보가
+  표 몇 줄뿐인 페이지가 사이트의 대부분을 차지한다. 커버리지는 유지하면서 색인 품질만
+  통제하는 것이 목적이다.
 
 데이터 원칙
   · 추정·보간·평활화·예측을 하지 않는다. 값이 없으면 항목 자체를 숨긴다.
@@ -60,6 +74,34 @@ WINDOW_MONTHS = 12
 MIN_QUARTERS_FOR_CHART = 4     # 지시서 2-D: 4개 분기 미만이면 차트를 표시하지 않는다
 SAMPLE_SIZE = 10
 METRO = {"서울", "경기", "인천"}
+
+# ─────────────────────────────────────────────────────── 검색 색인 품질 게이트
+#
+# '페이지를 만드는 기준'(위의 MIN_DEALS)과 '검색 색인을 허용하는 기준'(아래)을 분리한다.
+#
+# 왜 분리하나: 위 기준은 커버리지 기준이다. 거래 5건짜리 단지도 "○○아파트 실거래가"로
+# 검색해 들어온 사람에게는 필요한 페이지고, 사이트 내부 검색·지역 허브·계산기 연결에도 쓰인다.
+# 하지만 그 페이지를 검색 색인에 올리면, 템플릿을 걷어냈을 때 남는 고유 정보가 표 몇 줄뿐인
+# 페이지가 수천 개 색인되는 결과가 된다. 그것이 '가치가 별로 없는 콘텐츠' 판정의 실체다.
+#
+# 그래서 모든 단지 페이지는 그대로 만들어 접근 가능하게 두고, 기본값을 noindex,follow 로 두고,
+# 아래 게이트를 통과한 소수만 색인을 허용한다. 기준은 site/data-methodology.html 에 공개한다.
+#
+# 환경변수로 덮어쓸 수 있다(운영 중 조정용):
+#   APT_INDEX_MIN_DEALS  APT_INDEX_MIN_QUARTERS  APT_INDEX_MIN_AREA_TYPES  APT_INDEX_MAX_PAGES
+def _env_int(name, default):
+    try:
+        return int(os.environ[name])
+    except (KeyError, ValueError):
+        return default
+
+
+APT_INDEX_MIN_DEALS = _env_int("APT_INDEX_MIN_DEALS", 30)
+APT_INDEX_MIN_QUARTERS = _env_int("APT_INDEX_MIN_QUARTERS", 4)
+APT_INDEX_MIN_AREA_TYPES = _env_int("APT_INDEX_MIN_AREA_TYPES", 2)
+# 초기 상한. 기준을 통과한 단지가 많아도 이 수만큼만 색인을 허용한다(거래량 상위 순).
+# 색인율과 검색 성과를 확인한 뒤 단계적으로 올린다. 0 이면 상한 없음.
+APT_INDEX_MAX_PAGES = _env_int("APT_INDEX_MAX_PAGES", 100)
 
 # 화면에 쓰는 '최근 N개월'의 N. 수집 창(WINDOW_MONTHS)이 아니라 **실제 보유 데이터가 덮는
 # 개월 수**를 쓴다. 수집기가 12개월로 확장돼도 실제로는 며칠에 걸쳐 채워지므로, 아직 6개월치
@@ -114,9 +156,67 @@ def aggregate(deals, hh_map, since):
 
 
 def eligible(c):
+    """페이지를 만들 것인가 (커버리지 기준). 색인 허용 여부와는 별개다."""
     return bool(c["n"] >= MIN_DEALS
                 and (c["households"] or 0) >= MIN_HOUSEHOLDS
                 and c["last"].get("price") and c["last"].get("date"))
+
+
+def index_quality(c):
+    """검색 색인 품질 게이트 → (통과, 미달 사유 목록).
+
+    통과 조건(모두 충족). site/data-methodology.html 의 공개 기준과 같아야 한다.
+      · 최근 12개월 유효(비해제) 거래 APT_INDEX_MIN_DEALS 건 이상
+      · 거래가 존재하는 분기 APT_INDEX_MIN_QUARTERS 개 이상 → 보간 없이 추이 차트를 그릴 수 있음
+      · 면적 유형 APT_INDEX_MIN_AREA_TYPES 개 이상  → 면적별 가격 비교가 성립함
+      · 세대수·준공연도 확인됨               → 가격을 해석할 기본 변수가 있음
+      · 최근 거래일·거래가격 확인됨          → 계산기로 넘길 기준 가격이 있음
+    """
+    fails = []
+    if c["n"] < APT_INDEX_MIN_DEALS:
+        fails.append(f"유효 거래 {c['n']}건 < {APT_INDEX_MIN_DEALS}건")
+    nq = len(quarterly(c))
+    if nq < APT_INDEX_MIN_QUARTERS:
+        fails.append(f"거래 분기 {nq}개 < {APT_INDEX_MIN_QUARTERS}개")
+    if len(c["areas"]) < APT_INDEX_MIN_AREA_TYPES:
+        fails.append(f"면적 유형 {len(c['areas'])}개 < {APT_INDEX_MIN_AREA_TYPES}개")
+    if not c["households"]:
+        fails.append("세대수 미확인")
+    if not c["built_year"]:
+        fails.append("준공연도 미확인")
+    if not (c["last"].get("price") and c["last"].get("date")):
+        fails.append("최근 거래일·가격 미확인")
+    return (not fails), fails
+
+
+def select_indexable(targets):
+    """게이트를 통과한 단지 중 색인을 허용할 집합. 거래량 상위 → 상한까지.
+
+    같은 시군구가 색인 목록을 독점하지 않도록 시군구별로 한 바퀴씩 돌며 뽑는다
+    (한 지역 100개보다 여러 지역 100개가 검색 성과를 판단하기에 낫다).
+    """
+    passed = [c for c in targets if index_quality(c)[0]]
+    passed.sort(key=lambda c: (-c["n"], c["region_key"], c["name"]))
+    if not APT_INDEX_MAX_PAGES or len(passed) <= APT_INDEX_MAX_PAGES:
+        return {(c["region_key"], c["umd"], c["name"]) for c in passed}, len(passed)
+
+    by_region = defaultdict(list)
+    for c in passed:
+        by_region[c["region_key"]].append(c)
+    order = sorted(by_region, key=lambda rk: (-by_region[rk][0]["n"], rk))
+    picked, i = [], 0
+    while len(picked) < APT_INDEX_MAX_PAGES:
+        added = False
+        for rk in order:
+            if i < len(by_region[rk]):
+                picked.append(by_region[rk][i])
+                added = True
+                if len(picked) >= APT_INDEX_MAX_PAGES:
+                    break
+        if not added:
+            break
+        i += 1
+    return {(c["region_key"], c["umd"], c["name"]) for c in picked}, len(passed)
 
 
 def area_summary(c):
@@ -245,10 +345,21 @@ tr.cancel td{color:var(--sub);text-decoration:line-through}
 """
 
 
-def head(title, desc, canonical, region=None, complex_name=None):
+def head(title, desc, canonical, region=None, complex_name=None, indexable=False):
     html = BAP.page_head(title, desc, canonical)
     html = html.replace("</style>", EXTRA_STYLE + "</style>")
     # GA4 퍼널용 식별자(analytics.js가 읽는다) + 측정 스크립트
+    # 기본은 noindex,follow — 색인 품질 게이트를 통과한 단지만 색인을 허용한다.
+    # follow 를 유지하는 이유: 이 페이지에서 계산기·가이드로 가는 링크는 계속 따라가게 둔다.
+    #
+    # ⚠ robots 메타는 </head> 앞이 아니라 <title> 바로 뒤에 넣는다. page_head 가 만드는
+    #   <style> 블록이 3KB 넘게 들어가서, 뒤쪽에 두면 head 앞부분만 읽는 도구(sitemap
+    #   생성기·검증 스크립트·일부 크롤러)가 noindex 를 못 보고 색인 대상으로 오판한다.
+    if not indexable:
+        html = re.sub(r"(</title>\s*\n)",
+                      lambda m: m.group(1) + '<meta name="robots" content="noindex,follow" />\n',
+                      html, count=1)
+
     tags = ""
     if region:
         tags += f'<meta name="topda:region" content="{esc(region)}" />\n'
@@ -385,15 +496,30 @@ def links_block(c, hub_url, siblings):
             '</ul>\n')
 
 
-def source_block(c, as_of_date, window_from):
+def source_block(c, as_of_date, window_from, indexable=True, region_slug=""):
     kapt = ('<p>세대수·준공연도는 공동주택관리정보시스템(K-apt) 공동주택 기본정보를 사용했습니다.</p>'
             if (c["households"] or c["built_year"]) else "")
+    # 표본이 얇은 단지에는 그 사실을 알린다.
+    # ⚠ 여기에 '검색 색인에서 제외했다'고 쓰지 않는다. 색인 여부는 사이트 운영 사정이고
+    #   이 페이지를 보러 온 사람에게는 아무 쓸모가 없다. 방문자에게 필요한 것은
+    #   "이 숫자를 얼마나 믿어도 되는가" 하나다.
+    gate = ""
+    if not indexable:
+        n_q = len(quarterly(c))
+        gate = ('<p class="note">이 단지는 최근 '
+                f'{_ACTUAL_MONTHS}개월 유효 거래가 <strong>{c["n"]}건</strong>'
+                + (f', 거래가 있었던 분기가 {n_q}개' if n_q < APT_INDEX_MIN_QUARTERS else "")
+                + '으로 표본이 적은 편입니다. 위 숫자는 신고된 자료 그대로이고 추정치가 아니지만, '
+                '거래가 적을수록 특이 거래 한두 건에 평균이 크게 흔들립니다. '
+                '가격대를 가늠하는 참고로 보시고, '
+                f'<a href="/apt/{esc(region_slug)}/">{esc(c["region_key"])}의 다른 단지</a> 시세도 '
+                '함께 확인하시는 편이 좋습니다.</p>\n')
     return ('<h2>출처와 주의사항</h2>\n'
             f'<p class="note">국토교통부 아파트 매매 실거래가 공개자료를 기준으로 제공하며, '
             f'신고 정정·해제 또는 데이터 갱신 시 실제 내용과 달라질 수 있습니다.<br>'
             f'집계 구간: {esc(window_from)} ~ {esc(as_of_date)} · '
             f'데이터 기준일: {esc(as_of_date)}</p>\n'
-            + kapt)
+            + kapt + gate)
 
 
 def ld_json(c, url, hub_url, as_of_date, window_from):
@@ -424,7 +550,7 @@ def ld_json(c, url, hub_url, as_of_date, window_from):
                     for o in (crumbs, dataset)))
 
 
-def complex_page(c, region_slug, cslug, siblings, as_of_date, window_from):
+def complex_page(c, region_slug, cslug, siblings, as_of_date, window_from, indexable=False):
     url = f"{BASE}/apt/{region_slug}/{cslug}/"
     hub_url = f"{BASE}/apt/{region_slug}/"
     sigungu = c["region_key"].split()[-1]
@@ -444,10 +570,10 @@ def complex_page(c, region_slug, cslug, siblings, as_of_date, window_from):
         + '<h2>분기별 ㎡당 가격 추이</h2>\n' + quarter_chart(c)
         + '<h2>이 가격으로 구매비용 계산하기</h2>\n' + calc_block(c)
         + '<h2>함께 보기</h2>\n' + links_block(c, f"/apt/{region_slug}/", siblings)
-        + source_block(c, as_of_date, window_from)
+        + source_block(c, as_of_date, window_from, indexable, region_slug)
         + ld_json(c, url, hub_url, as_of_date, window_from)
     )
-    return (head(title, desc, url, c["region_key"], c["name"])
+    return (head(title, desc, url, c["region_key"], c["name"], indexable=indexable)
             + body + BAP.footer_html(as_of_date))
 
 
@@ -505,7 +631,7 @@ def dedupe_locs(xml):
 # ────────────────────────────────────────────────────────────── main
 
 def counts_report(cands):
-    print("조건별 예상 페이지 수 (현재 보유 데이터 기준)")
+    print("① 페이지 생성(커버리지) 기준별 예상 페이지 수")
     for nd in (3, 5):
         for nh in (100, 300):
             n = sum(1 for c in cands
@@ -515,6 +641,29 @@ def counts_report(cands):
     known = sum(1 for c in cands if c["households"])
     print(f"  (참고) 집계 단지 {len(cands):,}개 중 세대수 확보 {known:,}개 "
           f"— 세대수 미확보 단지는 위 숫자에서 전부 탈락합니다")
+
+    pool = [c for c in cands if eligible(c)]
+    print()
+    print(f"② 색인 품질 게이트 (생성 대상 {len(pool):,}개 기준)")
+    passed = [c for c in pool if index_quality(c)[0]]
+    print(f"  현재 기준(거래 {APT_INDEX_MIN_DEALS} · 분기 {APT_INDEX_MIN_QUARTERS} · "
+          f"면적 {APT_INDEX_MIN_AREA_TYPES}) 통과 → {len(passed):,}개")
+    print(f"  상한 APT_INDEX_MAX_PAGES={APT_INDEX_MAX_PAGES or '없음'} 적용 후 색인 허용 → "
+          f"{min(len(passed), APT_INDEX_MAX_PAGES) if APT_INDEX_MAX_PAGES else len(passed):,}개")
+    print("  거래 기준을 바꾸면(다른 조건 고정):")
+    for nd in (10, 20, 30, 40, 60):
+        n = sum(1 for c in pool
+                if c["n"] >= nd and len(quarterly(c)) >= APT_INDEX_MIN_QUARTERS
+                and len(c["areas"]) >= APT_INDEX_MIN_AREA_TYPES
+                and c["households"] and c["built_year"])
+        print(f"    거래 {nd:3}건 이상 → {n:,}개")
+    reasons = defaultdict(int)
+    for c in pool:
+        for f in index_quality(c)[1]:
+            reasons[f.split(" ")[0]] += 1
+    print("  미달 사유별 단지 수:")
+    for r, n in sorted(reasons.items(), key=lambda x: -x[1]):
+        print(f"    {r:12} {n:,}개")
 
 
 def main():
@@ -567,10 +716,14 @@ def main():
         v.sort(key=lambda c: (-c["n"], c["name"]))
 
     target_keys = {(c["region_key"], c["umd"], c["name"]) for c in targets}
+    # 색인을 허용할 단지 — 게이트 통과분 중 상한까지. 나머지는 noindex,follow 로 만든다.
+    indexable_keys, n_passed = select_indexable(targets)
     made, entries = [], []
     hubs = defaultdict(list)
 
     for c in targets:
+        key = (c["region_key"], c["umd"], c["name"])
+        indexable = key in indexable_keys
         rslug, cslug = smap.complex(c["region_key"], c["umd"], c["name"])
         sibs = []
         for o in by_region[c["region_key"]]:
@@ -585,10 +738,13 @@ def main():
         d = os.path.join(APT_DIR, rslug, cslug)
         os.makedirs(d, exist_ok=True)
         with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
-            f.write(complex_page(c, rslug, cslug, sibs, as_of_date, actual_from))
+            f.write(complex_page(c, rslug, cslug, sibs, as_of_date, actual_from, indexable))
         url = f"{BASE}/apt/{rslug}/{cslug}/"
-        entries.append((url, as_of_date, "0.7"))
-        made.append((c["region_key"], c["name"], url, c["n"], c["households"]))
+        # sitemap 에는 색인 허용 URL만 넣는다. noindex 페이지를 sitemap 에 실으면
+        # "색인해 달라"와 "색인하지 말라"를 동시에 보내는 모순된 신호가 된다.
+        if indexable:
+            entries.append((url, as_of_date, "0.7"))
+        made.append((c["region_key"], c["name"], url, c["n"], c["households"], indexable))
         hubs[c["region_key"]].append((c, cslug))
 
     # 지역 허브(슬러그 URL 정식판) — 기존 한글 지역 페이지와 같은 표를 쓰되 단지 페이지로 링크한다.
@@ -611,9 +767,21 @@ def main():
     smap.save(force=True)
 
     update_sitemap(sorted(set(entries)))
-    print(f"[ok] 단지 페이지 {len(made)}개 · 지역 허브 {len(hubs)}개 · sitemap {len(entries)}개 URL")
-    for rk, name, url, n, hh in made:
-        print(f"   · {rk:16} {name[:20]:22} 거래{n:3}건 세대{hh or '-':>6} {url}")
+    n_index = sum(1 for m in made if m[5])
+    print(f"[ok] 단지 페이지 {len(made):,}개 생성 · 지역 허브 {len(hubs)}개")
+    print(f"     검색 색인 허용 {n_index:,}개 / 게이트 통과 {n_passed:,}개 / 전체 {len(made):,}개"
+          f"  (기준: 거래 {APT_INDEX_MIN_DEALS}건 · 분기 {APT_INDEX_MIN_QUARTERS}개 · "
+          f"면적 {APT_INDEX_MIN_AREA_TYPES}유형 · 상한 {APT_INDEX_MAX_PAGES or '없음'})")
+    print(f"     나머지 {len(made) - n_index:,}개는 noindex,follow — 접근·내부검색·계산기 연결은 그대로 동작")
+    print(f"     sitemap 항목 {len(entries):,}개 (색인 허용분 + 지역 허브)")
+    if len(made) <= 60:
+        for rk, name, url, n, hh, ix in made:
+            print(f"   · {'색인' if ix else '보류'} {rk:16} {name[:20]:22} 거래{n:3}건 세대{hh or '-':>6} {url}")
+    else:
+        print("     색인 허용 단지 (거래량 상위):")
+        for rk, name, url, n, hh, ix in sorted((m for m in made if m[5]),
+                                               key=lambda m: -m[3])[:20]:
+            print(f"   · {rk:16} {name[:20]:22} 거래{n:3}건 세대{hh or '-':>6} {url}")
     print("→ 한글 지역 URL의 canonical 이전은 build_apt_pages.py 재실행 시 반영됩니다.")
 
 

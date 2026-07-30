@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>데이터 기준 — 톺다</title>
+<meta name="description" content="톺다가 쓰는 공공데이터의 출처, 집계 방법, 갱신 주기, 그리고 단지 실거래 페이지의 검색 색인 품질 기준을 그대로 공개합니다." />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="canonical" href="https://topda.kr/data-methodology.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="톺다" />
+<meta property="og:title" content="데이터 기준 — 톺다" />
+<meta property="og:description" content="공공데이터 출처·집계 방법·갱신 주기와 단지 페이지 색인 품질 기준." />
+<meta property="og:url" content="https://topda.kr/data-methodology.html" />
+<meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
+<meta property="og:locale" content="ko_KR" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="assets/styles.css?v=20260730" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="guides.html" data-nav>가이드</a>
+      <a href="calculators/index.html" data-nav>계산기</a>
+      <a href="market.html" data-nav>시세정보</a>
+      <a href="checklists/index.html" data-nav>체크리스트</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="guides.html">가이드</a>
+    <a href="calculators/index.html">계산기</a>
+    <a href="market.html">시세정보</a>
+    <a href="checklists/index.html">체크리스트</a>
+    <a href="board.html">게시판</a>
+    <a href="about.html">안내</a>
+  </div>
+</header>
+
+<main class="container-narrow">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="index.html">홈</a> / 데이터 기준</div>
+    <h1>데이터 기준</h1>
+    <p class="lead">톺다의 시세·실거래 페이지가 어떤 자료를 어떻게 집계하는지, 그리고 어떤 페이지를 검색 색인에 올리는지를 공개합니다.</p>
+  </div>
+
+  <div class="prose">
+    <h2>1. 사용하는 원자료</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>자료</th><th>제공 기관</th><th>쓰이는 곳</th></tr></thead>
+        <tbody>
+          <tr><td>아파트 매매 실거래가 자료</td><td>국토교통부</td><td>단지·지역 실거래 페이지, 실거래가 조회, 맞춤 단지 검색</td></tr>
+          <tr><td>공동주택 기본정보(세대수·준공연도)</td><td>공동주택관리정보시스템(K-apt)</td><td>단지 요약 카드, 단지 필터</td></tr>
+          <tr><td>건축물대장</td><td>국토교통부</td><td>K-apt에 없는 단지의 세대수·준공연도 보강</td></tr>
+          <tr><td>주택가격동향 지수·전세가율</td><td>한국부동산원(R-ONE)</td><td>지역 시세 대시보드, 지역 페이지 시황 요약, 전세가율 지도</td></tr>
+          <tr><td>공시가격</td><td>국토교통부</td><td>보유세·양도세 계산 보조</td></tr>
+          <tr><td>상업용 부동산 임대시장 동향</td><td>한국부동산원</td><td>오피스·상가 임대시세</td></tr>
+          <tr><td>국민주택채권 수익률</td><td>금융투자협회</td><td>등기비용 계산기의 채권 할인액</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      각 페이지 하단에 그 페이지가 실제로 사용한 출처와 데이터 기준일을 표시합니다.
+      원자료는 공공누리 등 제공 기관의 이용 조건을 따릅니다.
+    </p>
+
+    <h2>2. 집계 방법</h2>
+    <ul>
+      <li><strong>해제(취소) 거래 제외</strong> — 국토교통부에 거래 해제로 신고된 건은 평균·중앙값·거래량 등
+        모든 집계에서 제외하고, 거래 내역 표에만 ‘해제’ 표시로 남깁니다.</li>
+      <li><strong>㎡당 가격</strong> — 거래별로 (거래금액 ÷ 전용면적)을 구한 뒤 그 값을
+        <strong>단순 산술평균</strong>합니다. 거래금액 가중평균이 아닙니다. 화면에도 이 방식을 명시합니다.</li>
+      <li><strong>면적 유형</strong> — 전용면적을 소수점 첫째 자리로 반올림해 같은 값을 하나의 유형으로 묶습니다.</li>
+      <li><strong>분기 집계</strong> — 유효 거래가 존재하는 분기만 표시하고, 각 분기의 거래 건수(n)를 함께 씁니다.</li>
+      <li><strong>지역 추세</strong> — 평형 구성이 달라져 생기는 왜곡을 막기 위해 월별 ㎡당 가격 평균의 변화를 씁니다.
+        단순 거래금액 평균의 변화를 쓰지 않습니다.</li>
+      <li><strong>‘최근 N개월’ 표기</strong> — 수집 설정값이 아니라 <strong>실제로 보유한 데이터가 덮는 기간</strong>을 씁니다.
+        6개월치만 있으면 “최근 6개월”로 표시합니다.</li>
+    </ul>
+
+    <h2>3. 하지 않는 처리</h2>
+    <div class="callout callout-warn">
+      <div class="icon">⚠</div>
+      <div class="body">
+        <strong>추정·보간·평활화·예측을 하지 않습니다.</strong>
+        거래가 없는 기간은 빈 상태로 두고, 값이 없는 항목은 “—”로 표시하거나 항목 자체를 숨깁니다.
+        분기 표본이 4개 미만이면 추이 차트를 그리지 않고, 대신 “분기가 몇 개뿐이라 표시하지 않는다”고 적습니다.
+        표본이 적은 면적 유형에는 한두 건에 크게 흔들린다는 주의사항을 붙입니다.
+      </div>
+    </div>
+
+    <h2>4. 데이터의 한계</h2>
+    <ul>
+      <li><strong>신고 기준</strong> — 실거래가는 계약 후 신고된 자료입니다. 신고 지연이 있어 최근 며칠의 거래는 아직 안 보일 수 있습니다.</li>
+      <li><strong>정정·해제</strong> — 신고 내용이 나중에 정정되거나 해제되면 값이 바뀝니다. 과거 화면과 지금 화면이 다를 수 있습니다.</li>
+      <li><strong>표본</strong> — 거래가 드문 단지는 한 건의 특이 거래가 평균을 크게 움직입니다. 표본 수를 함께 보고 판단하셔야 합니다.</li>
+      <li><strong>동·향·층·상태 미반영</strong> — 같은 면적이라도 층·향·수리 상태에 따라 실제 가격이 다릅니다. 톺다는 이 요인을 보정하지 않습니다.</li>
+      <li><strong>세대수·준공연도 결측</strong> — 원자료에 없는 단지가 있습니다. 결측 시 그 항목을 표시하지 않습니다.</li>
+      <li><strong>지역 매칭</strong> — R-ONE 지역 목록에는 광역시 구 이름이 시·도 없이 들어 있어, ‘중구·동구·서구·남구·북구·강서구’처럼
+        여러 광역시에 같은 이름이 있는 경우 지수를 매칭하지 않습니다. 잘못된 지역 지수를 붙이는 것보다 표시하지 않는 편을 택했습니다.</li>
+    </ul>
+
+    <h2>5. 단지 실거래 페이지의 검색 색인 품질 기준</h2>
+    <p>
+      단지 페이지는 수천 개가 생성됩니다. 데이터가 얇은 단지의 페이지는
+      숫자만 바뀐 같은 템플릿이 되어 검색 결과에 기여하지 못하므로,
+      톺다는 <strong>페이지 생성과 검색 색인 허용을 분리</strong>합니다.
+    </p>
+    <div class="callout">
+      <div class="icon">i</div>
+      <div class="body">
+        <strong>모든 단지 페이지는 접근할 수 있습니다.</strong>
+        기준을 통과하지 못한 페이지도 사이트 내부 검색·지역 허브·계산기 연결에서 그대로 쓸 수 있습니다.
+        다만 검색엔진에는 <code>noindex,follow</code>로 표시해 색인에서 빼고 사이트맵에도 넣지 않습니다.
+      </div>
+    </div>
+    <h3>색인을 허용하는 조건 (모두 충족해야 함)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>조건</th><th>기준값</th><th>이유</th></tr></thead>
+        <tbody>
+          <tr><td>최근 12개월 유효(비해제) 거래</td><td>30건 이상</td><td>면적별·분기별로 나눠도 각 구간에 표본이 남는 최소 수준</td></tr>
+          <tr><td>거래가 존재하는 분기</td><td>4개 이상</td><td>분기별 추이를 보간 없이 그릴 수 있는 최소 조건</td></tr>
+          <tr><td>면적 유형</td><td>2개 이상</td><td>면적별 가격 비교가 성립해야 페이지 고유의 분석이 됨</td></tr>
+          <tr><td>세대수</td><td>확인됨</td><td>단지 규모 없이는 가격을 해석할 근거가 부족함</td></tr>
+          <tr><td>준공연도</td><td>확인됨</td><td>연식이 가격 해석의 기본 변수</td></tr>
+          <tr><td>최근 거래일·거래가격</td><td>확인됨</td><td>계산기로 넘길 기준 가격이 있어야 함</td></tr>
+          <tr><td>해제 거래 처리</td><td>집계 제외 + 표에 표시</td><td>취소된 거래가 평균에 섞이지 않아야 함</td></tr>
+          <tr><td>출처·데이터 기준일 표시</td><td>필수</td><td>어느 시점 자료인지 밝히지 않은 페이지는 색인하지 않음</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>페이지 고유 분석으로 인정하는 항목</h3>
+    <p>위 조건을 통과한 페이지는 다음을 실제로 담고 있어야 색인 대상이 됩니다.</p>
+    <ul>
+      <li>면적별 최근 거래가와 ㎡당 평균</li>
+      <li>면적별 가격 범위와 표본 수</li>
+      <li>분기별 거래량</li>
+      <li>분기별 ㎡당 가격 추이</li>
+      <li>해제 거래 비율(있는 경우)</li>
+      <li>표본 수에 따른 주의사항</li>
+      <li>해당 거래가격을 취득세·대출한도·잔금 계산기로 넘기는 동선</li>
+    </ul>
+    <p class="note">
+      <strong>같은 템플릿에서 숫자만 바뀐 문장은 고유 콘텐츠로 계산하지 않습니다.</strong>
+      톺다는 페이지별로 “공통 문구를 제외한 고유 본문 분량”을 자동으로 측정해,
+      템플릿을 걷어내면 남는 것이 거의 없는 페이지는 색인 대상에서 제외합니다.
+    </p>
+    <h3>색인 허용 상한</h3>
+    <p>
+      기준을 통과한 페이지가 많아도, 초기에는 <strong>상위 100개 이하</strong>만 색인을 허용합니다.
+      거래량이 많은 순으로 선정하며, 색인율과 검색 성과를 확인한 뒤 단계적으로 늘립니다.
+      기준값과 상한은 생성 코드의 설정값
+      (<code>APT_INDEX_MIN_DEALS</code>, <code>APT_INDEX_MIN_QUARTERS</code>,
+      <code>APT_INDEX_MIN_AREA_TYPES</code>, <code>APT_INDEX_MAX_PAGES</code>)으로 관리하며,
+      값이 바뀌면 이 페이지도 함께 고칩니다.
+    </p>
+
+    <h2>6. 갱신 주기</h2>
+    <div class="def-list">
+      <div class="row"><span class="k">실거래가</span><span class="v">매일</span></div>
+      <div class="row"><span class="k">세대수·준공연도</span><span class="v">원자료 갱신 시</span></div>
+      <div class="row"><span class="k">가격지수·전세가율·상업용 임대</span><span class="v">통계 발표 주기(월간)</span></div>
+      <div class="row"><span class="k">공시가격</span><span class="v">연간 공시 일정</span></div>
+      <div class="row"><span class="k">채권 수익률</span><span class="v">영업일 기준 갱신</span></div>
+      <div class="row"><span class="k">세율·요율</span><span class="v">법령·고시 개정 시점 기준(정기 주기 없음)</span></div>
+    </div>
+    <p>페이지에 표시된 “데이터 기준일”이 그 화면에 반영된 실제 시점입니다.</p>
+
+    <h2>7. 오류를 발견하면</h2>
+    <p>
+      특정 단지의 세대수가 틀렸거나, 있어야 할 거래가 빠져 있는 등의 문제를 보시면 알려주세요.
+      원자료와 대조해 확인하고, 수집 코드 문제라면 고친 뒤 <a href="corrections.html">정정 안내</a>에 남깁니다.
+      접수 창구는 <a href="contact.html">문의 안내</a>에 있습니다.
+    </p>
+
+    <hr/>
+    <p class="note">
+      작성·관리: <a href="authors/jaeho-jung.html">정재호</a> ·
+      함께 보기: <a href="editorial-policy.html">운영·편집 원칙</a> ·
+      시행: 2026-07-30 · 최종 수정: 2026-07-30
+    </p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="brand"><span class="brand-mark"></span>톺다</div>
+        <p>부동산, 하나하나 톺아보자.</p>
+      </div>
+      <div>
+        <h4>탐색</h4>
+        <ul>
+          <li><a href="calculators/index.html">계산기</a></li>
+          <li><a href="market.html">시세정보</a></li>
+          <li><a href="apt/">지역별 아파트 실거래</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>사이트 정보</h4>
+        <ul>
+          <li><a href="about.html">안내</a></li>
+          <li><a href="authors/jaeho-jung.html">작성자</a></li>
+          <li><a href="editorial-policy.html">운영·편집 원칙</a></li>
+          <li><a href="corrections.html">정정 안내</a></li>
+          <li><a href="privacy.html">개인정보 처리방침</a></li>
+          <li><a href="contact.html">문의</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="disclaimer">© 톺다.</p>
+  </div>
+</footer>
+
+<script src="assets/app.js?v=20260730"></script>
+</body>
+</html>

@@ -11,6 +11,9 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="canonical" href="https://topda.kr/calculators/acquisition-tax.html" />
 <link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://topda.kr/feed.xml" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/calculators/acquisition-tax.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/calculators/acquisition-tax.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/acquisition-tax.html" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="톺다" />
 <meta property="og:title" content="취득세 계산기 — 톺다" />
@@ -22,13 +25,6 @@
 <meta name="twitter:title" content="취득세 계산기 — 톺다" />
 <meta name="twitter:description" content="주택 매매 시 취득세, 농어촌특별세, 지방교육세를 합산해 총 부담액을 계산합니다. 1주택·다주택·조정대상지역 반영." />
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
-<link rel="alternate" hreflang="ko" href="https://topda.kr/calculators/acquisition-tax.html" />
-<link rel="alternate" hreflang="en" href="https://topda.kr/en/calculators/acquisition-tax.html" />
-<link rel="alternate" hreflang="zh-Hans" href="https://topda.kr/zh-Hans/calculators/acquisition-tax.html" />
-<link rel="alternate" hreflang="zh-Hant" href="https://topda.kr/zh-Hant/calculators/acquisition-tax.html" />
-<link rel="alternate" hreflang="vi" href="https://topda.kr/vi/calculators/acquisition-tax.html" />
-<link rel="alternate" hreflang="th" href="https://topda.kr/th/calculators/acquisition-tax.html" />
-<link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/acquisition-tax.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="../assets/styles.css?v=20260730" />
@@ -473,8 +469,35 @@
       법적 효력을 갖는 산정 결과가 아닙니다. 구체적 사안은 세무사와 상담하세요.
     </div>
   </div>
-</main>
 
+<!-- calc:meta:start -->
+<section class="calc-meta" aria-labelledby="calc-meta-h">
+  <h2 id="calc-meta-h">이 계산기 정보</h2>
+  <h3>어떤 경우에 쓰는 계산기인가</h3>
+<p>주택을 사기 전에 취득세·지방교육세·농어촌특별세를 합한 실제 납부액을 확인하려는 매수자. 주택 수·조정대상지역·감면 요건에 따라 세율이 크게 달라지는 구간을 미리 보려는 경우에 씁니다.</p>
+  <h3>미리 준비할 값</h3>
+<ul><li>취득가액 — 매매계약서상 거래금액(분양은 분양가, 상속·증여는 시가인정액)</li><li>취득 원인 — 매매·분양 신축주택·직접 신축·재개발 조합원·상속·증여 중 하나</li><li>본 거래를 포함한 주택 수, 조정대상지역 여부</li><li>전용면적이 85㎡를 넘는지 (농어촌특별세 부과 여부가 갈립니다)</li><li>감면 요건 — 생애최초, 출산·양육, 일시적 2주택, 지방 준공 후 미분양 해당 여부</li></ul>
+  <h3>적용 공식과 가정</h3>
+<ul><li>본세 = 취득가액 × 취득세율. 주택 유상거래는 6억 이하 1%, 6~9억 구간 누진, 9억 초과 3%가 기본이고, 주택 수·조정대상지역에 따라 8%·12% 중과가 적용됩니다.</li><li>지방교육세 = 본세 산출 기준에 따른 부가세율 적용.</li><li>농어촌특별세 = 전용 85㎡ 초과일 때만 부과(85㎡ 이하 면제).</li><li>감면은 세액에서 차감하며 각각 한도가 있습니다(생애최초 200만원, 소형 비아파트·인구감소지역 300만원, 출산·양육 500만원).</li><li>가정: 1세대 판정과 감면 요건 충족은 입력값을 그대로 신뢰합니다. 세대 분리 여부나 실거주 의무 이행은 계산기가 검증하지 않습니다.</li></ul>
+  <h3>예시</h3>
+<ul><li>취득가액 7억, 1주택, 비조정대상지역, 전용 84㎡ → 6~9억 누진구간 세율이 적용되고 85㎡ 이하이므로 농어촌특별세는 붙지 않습니다.</li><li>취득가액 10억, 3주택, 조정대상지역, 전용 100㎡ → 중과세율이 적용되고 85㎡ 초과이므로 농어촌특별세까지 더해집니다.</li></ul>
+  <h3>결과가 달라질 수 있는 조건</h3>
+<ul><li>취득 시점의 세율 — 계약일과 잔금일 사이에 세율이 바뀌면 경과규정에 따라 적용 세율이 달라집니다.</li><li>1세대 판정 — 같은 세대인지 아닌지에 따라 주택 수가 바뀌어 중과 여부가 갈립니다.</li><li>감면 사후관리 — 실거주·처분 의무를 지키지 못하면 감면세액이 추징됩니다.</li><li>과세관청 판단 — 시가인정액, 일시적 2주택 인정 여부 등은 지자체 판단이 개입합니다.</li></ul>
+  <h3>함께 보기</h3>
+<ul><li><a href="registration-cost.html">등기비용 계산기 — 채권매입·법무사 보수까지</a></li><li><a href="total-cost-dashboard.html">총비용 대시보드 — 잔금일에 필요한 현금</a></li><li><a href="../posts/funding-plan.html">자금계획 세우기</a></li><li><a href="../checklists/sale-balance-day.html">매매 잔금일 체크리스트</a></li></ul>
+  <h3>근거와 기준일</h3>
+<div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">지방세법 제11·15조, 지방세특례제한법 제36조의3·제36조의5</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-07-30 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
+  <details class="explain">
+  <summary>계산 방식 변경 이력 (최근 6건)</summary>
+  <div class="explain-body">
+  <p class="note">계산 결과가 달라지는 변경만 기록합니다. 표기·문구만 다듬은 수정은 남기지 않습니다.</p>
+  <div class="def-list"><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.</span></div><div class="row"><span class="k">2026-06-14</span><span class="v">국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).</span></div><div class="row"><span class="k">2026-06-13</span><span class="v">국민주택채권 매입금액 만원 단위 절상 적용 + 지역(특별시·광역시/그 밖의 지역) 매입률 구분. 양도세 장기보유특별공제 표1 정정(연 2%·3년 6%~15년 30%).</span></div><div class="row"><span class="k">2026-06-04</span><span class="v">대출 한도 규정 블록 신설(LTV·가격대별 한도·스트레스 DSR·전세 보증기관 HF/HUG/SGI).</span></div></div>
+  </div>
+</details>
+</section>
+<!-- calc:meta:end -->
+
+</main>
 
 <section class="content-comments" data-comments data-comment-type="page" data-comment-key="calculator:acquisition-tax" data-comment-title="취득세 계산기" data-comment-page="/calculators/acquisition-tax.html"></section>
 <script src="../assets/supabase-client.js?v=20260728"></script>
