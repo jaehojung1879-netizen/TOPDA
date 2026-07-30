@@ -8,7 +8,7 @@ index.html 밖에서는 해석되지 않는다. 즉 화면에도 구조화 데�
 
 무엇을 넣나 (모두 **확인 가능한 값만**)
   · 작성 주체      — 사이트(톺다). 운영자 실명을 쓰지 않는다 — 개인 신상은 공개 대상이 아니고,
-                    누가 어떤 절차로 쓰는지는 /editorial-policy.html 에 밝혀 두었다.
+                    사이트 소개·출처 원칙·면책은 /about.html 한 장에 모아 두었다.
   · 최초 게시일   — 그 파일을 추가한 커밋의 날짜 (git)
   · 최근 수정일   — 그 파일을 마지막으로 바꾼 사람 커밋의 날짜 (git, 봇 커밋 제외)
   · 주요 공식 출처 — **페이지에 이미 걸려 있는** 공공기관 링크에서 추출
@@ -40,7 +40,7 @@ SITE = os.path.join(ROOT, "site")
 BASE = "https://topda.kr"
 
 AUTHOR_NAME = "톺다"
-AUTHOR_URL = f"{BASE}/editorial-policy.html"   # 작성·검토 절차를 밝힌 페이지
+AUTHOR_URL = f"{BASE}/about.html"   # 사이트 소개·출처 원칙·면책·문의를 모아 둔 페이지
 
 # 자동 데이터 갱신 커밋 — 본문을 바꾼 것이 아니므로 '수정일' 계산에서 뺀다.
 BOT_AUTHORS = ("topda-bot",)
@@ -150,7 +150,7 @@ def official_sources(raw):
 # ────────────────────────────────────────────────── 화면 표시
 
 def byline_html(published, modified, sources):
-    parts = [f'<a href="/editorial-policy.html" rel="author">{esc(AUTHOR_NAME)}</a> 작성']
+    parts = [f'<a href="/about.html" rel="author">{esc(AUTHOR_NAME)}</a> 작성']
     if published:
         parts.append(f'게시 <time datetime="{published}">{published}</time>')
     if modified:

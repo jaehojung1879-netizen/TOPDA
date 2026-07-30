@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>안내 — 톺다</title>
-<meta name="description" content="톺다는 부동산 거래에 필요한 정보를 공식 자료 기반으로 정리합니다." />
+<meta name="description" content="톺다가 어떤 사이트이고, 숫자를 어디서 가져오며, 틀린 내용을 어떻게 알려주면 되는지 안내합니다." />
 <!-- seo:meta -->
 <link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
@@ -16,37 +16,17 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="톺다" />
 <meta property="og:title" content="안내 — 톺다" />
-<meta property="og:description" content="톺다는 부동산 거래에 필요한 정보를 공식 자료 기반으로 정리합니다." />
+<meta property="og:description" content="톺다가 어떤 사이트이고, 숫자를 어디서 가져오며, 틀린 내용을 어떻게 알려주면 되는지." />
 <meta property="og:url" content="https://topda.kr/about.html" />
 <meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <meta property="og:locale" content="ko_KR" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="안내 — 톺다" />
-<meta name="twitter:description" content="톺다는 부동산 거래에 필요한 정보를 공식 자료 기반으로 정리합니다." />
+<meta name="twitter:description" content="톺다가 어떤 사이트이고, 숫자를 어디서 가져오며, 틀린 내용을 어떻게 알려주면 되는지." />
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 <link rel="stylesheet" href="assets/styles.css?v=20260730" />
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "홈",
-      "item": "https://topda.kr/index.html"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "안내",
-      "item": "https://topda.kr/about.html"
-    }
-  ]
-}
-</script>
 </head>
 <body>
 
@@ -80,31 +60,69 @@
   </div>
 
   <div class="prose">
-    <h2>이 사이트가 다루는 내용</h2>
+    <h2>어떤 사이트인가</h2>
     <p data-edit="p">
-      부동산 매매·전세·월세·대출·세금·이사·인테리어·경매에 관한 실무 정보를
-      법령·국세청·국토교통부·지자체 고시 등 공식 자료를 기반으로 정리합니다.
-      계산기·체크리스트는 브라우저 안에서만 동작하며 입력값을 서버로 전송하지 않습니다.
-      (게시판·댓글만 예외로 서버에 저장됩니다 — <a href="privacy.html">개인정보 처리방침</a> 참고.)
+      톺다는 집을 사거나 빌릴 때 필요한 숫자를 직접 계산해 보는 도구 사이트입니다.
+      취득세·중개보수·등기비용을 합친 매수 총비용, 대출 한도와 월 상환액, 잔금일 정산,
+      계약 단계별 체크리스트를 한 곳에서 확인할 수 있습니다.
+      글은 계산 결과를 어떻게 읽어야 하는지 설명하기 위해 있습니다.
+    </p>
+
+    <h2>숫자는 어디서 가져오나</h2>
+    <p>
+      세율과 요율은 법령 조문과 소관 부처 고시에서 확인합니다. 실거래가·세대수·가격지수 같은
+      데이터는 국토교통부와 한국부동산원의 공공데이터를 그대로 씁니다.
+      각 계산기와 데이터 페이지 하단에 실제로 사용한 근거와 기준일을 적어 두었습니다.
+    </p>
+    <p>
+      데이터가 없는 기간을 추정해 채우지 않습니다. 값이 없으면 그 항목을 비워 두고,
+      거래가 적은 단지에는 표본이 적다는 사실을 함께 표시합니다.
+      특정 지역이나 단지의 가격 전망은 다루지 않습니다.
     </p>
 
     <h2 id="disclaimer">면책고지</h2>
     <div class="callout callout-warn">
       <div class="icon">⚠</div>
       <div class="body">
-        <strong>본 사이트의 모든 콘텐츠는 일반 정보 제공용입니다.</strong>
-        개별 사안에 대한 법률·세무·금융 자문이 아닙니다. 법령·세율·정책은 변경될 수 있으며,
-        게재 내용과 실제 법령이 다를 경우 법령이 우선합니다. 구체적인 의사결정은 변호사·세무사·공인중개사·자격 있는 금융기관과 상의하시기 바랍니다.
-        본 정보의 활용으로 발생한 결과에 대해 운영자는 책임을 지지 않습니다.
+        <strong>톺다의 모든 글·계산기·데이터는 일반 정보 제공용입니다.</strong>
+        개별 사안에 대한 법률·세무·금융 자문이 아닙니다. 법령·세율·정책은 바뀌며,
+        게재 내용과 실제 법령이 다를 경우 법령이 우선합니다.
+        계산기는 입력하신 조건에 따른 추정값을 보여주며, 감면·중과·특례 적용이나 지자체 판단에 따라
+        실제 고지·부과 금액과 다를 수 있습니다.
+        구체적인 결정은 변호사·세무사·공인중개사·자격 있는 금융기관과 상의하시기 바랍니다.
+        운영자는 부동산 관련 자격을 보유하고 있지 않으며, 외부 전문가 감수 절차를 두고 있지 않습니다.
       </div>
     </div>
 
-    <h2>오류 제보 · 수정 요청</h2>
+    <h2 id="contact">문의 · 오류 제보</h2>
     <p data-edit="p.2">
-      내용 오류나 추가 요청이 있다면 <a href="board.html?cat=fix">게시판의 ‘수정 요청’ 카테고리</a>에 남겨주세요.
-      비밀글로 등록하면 운영자만 확인할 수 있습니다.
-      처리 절차와 고친 내역은 <a href="corrections.html">정정 안내</a>에 있습니다.
+      틀린 숫자나 오해를 부르는 설명을 발견하면 <a href="board.html?cat=fix">게시판</a>에 남겨 주세요.
+      회원가입 없이 바로 쓸 수 있고, 확인하는 대로 같은 글에 답글로 답변드립니다.
+      공개하기 어려운 내용이라면 글쓰기 화면에서 <strong>비밀글</strong>에 체크하시면
+      본문은 작성한 브라우저와 운영자만 볼 수 있습니다.
     </p>
+    <p>
+      계산기 오류를 알려주실 때 <strong>페이지 주소</strong>와 <strong>입력하신 조건</strong>을
+      함께 적어 주시면 확인이 훨씬 빠릅니다. 다 몰라도 괜찮으니 아는 만큼만 적어 주세요.
+      제보를 받으면 법령 조문이나 원자료를 다시 확인해 고칩니다.
+    </p>
+    <p>
+      다만 “제 경우 취득세가 얼마인가요”, “이 계약서 괜찮은가요” 같은 개별 사안 상담은
+      답변드리지 못합니다. 어떤 조건에서 결과가 달라지는지는 각 계산기의
+      <strong>이 계산기 정보</strong>에 정리해 두었습니다.
+    </p>
+
+    <h2>그 밖에</h2>
+    <ul>
+      <li>계산기·체크리스트에 입력한 값은 브라우저 안에만 남고 서버로 전송되지 않습니다.
+        게시판과 댓글만 예외로 서버에 저장됩니다 — 자세한 내용은
+        <a href="privacy.html">개인정보 처리방침</a>에 있습니다.</li>
+      <li>사이트 운영비는 광고로 충당합니다. 광고주가 글의 내용이나 계산 결과에 관여하지 않으며,
+        특정 업체·상품을 유리하게 쓰는 대가를 받지 않습니다.</li>
+    </ul>
+
+    <hr/>
+    <p class="note">최종 수정 2026-07-30</p>
   </div>
 </main>
 
@@ -126,11 +144,8 @@
       <div>
         <h4>사이트 정보</h4>
         <ul>
-          <li><a href="editorial-policy.html">운영·편집 원칙</a></li>
-          <li><a href="data-methodology.html">데이터 기준</a></li>
-          <li><a href="corrections.html">정정 안내</a></li>
+          <li><a href="about.html">안내</a></li>
           <li><a href="privacy.html">개인정보 처리방침</a></li>
-          <li><a href="contact.html">문의</a></li>
           <li><a href="en/index.html">English</a></li>
         </ul>
       </div>

@@ -3,7 +3,7 @@
 
 검사 목록 (실패 = exit 1, 경고 = 통과하되 출력)
    1. placeholder 토큰 미존재
-   2. privacy 페이지에 GA4·네이버 애널리틱스·AdSense·Supabase 설명 존재
+   2. privacy 페이지에 분석 도구·광고·쿠키·브라우저 저장 설명 존재
    3. noindex URL 이 sitemap 에 없음
    4. sitemap 의 URL 에 실제 파일이 있음
    5. canonical 이 정상(자기 URL 을 가리킴)
@@ -146,10 +146,10 @@ def run(rep):
     rep.note(f"배포 시 치환되는 토큰은 검사 대상이 아님: {', '.join(DEPLOY_INJECTED)}")
 
     # ── 2. privacy 페이지 설명
-    for p, needed in (("/privacy.html", ("Google Analytics 4", "네이버 애널리틱스",
-                                         "AdSense", "Supabase", "localStorage")),
-                      ("/en/privacy.html", ("Google Analytics 4", "Naver Analytics",
-                                            "AdSense", "Supabase", "localStorage"))):
+    for p, needed in (("/privacy.html", ("Google Analytics", "네이버 애널리틱스",
+                                         "AdSense", "쿠키", "localStorage")),
+                      ("/en/privacy.html", ("Google Analytics", "Naver Analytics",
+                                            "AdSense", "cookies", "localStorage"))):
         d = pages.get(p)
         if not d:
             rep.fail("2 privacy", f"{p} 가 없습니다")
@@ -228,8 +228,7 @@ def run(rep):
         if not indexable[p] and "pagead2.googlesyndication.com" in d["raw"]:
             rep.fail("7 광고 범위", f"noindex 인 {p} 에 AdSense 스크립트가 있습니다")
     # 정책·문의 페이지에도 광고를 넣지 않는다.
-    for p in ("/privacy.html", "/en/privacy.html", "/contact.html", "/editorial-policy.html",
-              "/corrections.html", "/data-methodology.html"):
+    for p in ("/privacy.html", "/en/privacy.html", "/about.html", "/en/about.html"):
         d = pages.get(p)
         if d and "pagead2.googlesyndication.com" in d["raw"]:
             rep.fail("7 광고 범위", f"{p} 에 AdSense 스크립트가 있습니다(정책 페이지에는 넣지 않음)")

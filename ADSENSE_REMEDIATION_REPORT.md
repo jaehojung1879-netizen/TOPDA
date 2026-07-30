@@ -39,33 +39,31 @@ AdSense가 “가치가 별로 없는 콘텐츠”로 판정한 원인은 **문�
 
 | 항목 | 변경 전 | 변경 후 |
 |---|---:|---:|
-| 공개 HTML URL 총수 | 5,594 | 5,599 (신뢰 페이지 5개 추가) |
-| **색인 허용 URL** | **5,589** | **385** |
-| noindex URL | 5 | 5,214 |
-| 공개 sitemap 등재 URL | 5,493 | 292 |
-| AdSense 스크립트가 있는 페이지 | 175 | 106 |
+| 공개 HTML URL 총수 | 5,872 | 5,873 (사이트 정보 페이지 순증 1개) |
+| **색인 허용 URL** | **5,867** | **381** |
+| noindex URL | 5 | 5,492 |
+| 공개 sitemap 등재 URL | 5,771 | 288 |
+| AdSense 스크립트가 있는 페이지 | 175 | 104 |
 | 화면에 작성자·날짜가 표시된 글 | 3 | 49 |
 
 ### 공개 sitemap 파일별
 
 | 파일 | 변경 전 | 변경 후 |
 |---|---:|---:|
-| `sitemap-pages.xml` | 58 | 31 |
+| `sitemap-pages.xml` | 58 | 27 |
 | `sitemap-calculators.xml` | 55 | 27 |
 | `sitemap-guides.xml` | 58 | 54 |
 | `sitemap-apt-regions.xml` | 80 | 80 |
-| `sitemap-apt-complexes.xml` | 5,242 | 100 |
-| 합계 | 5,493 | 292 |
+| `sitemap-apt-complexes.xml` | 5,520 | 100 |
+| 합계 | 5,771 | 288 |
 
-**sitemap에서 제거된 URL: 5,206개 / 추가된 URL: 5개**
-(추가분은 `/editorial-policy.html`, `/data-methodology.html`,
-`/corrections.html`, `/contact.html`, `/en/privacy.html`)
+**sitemap에서 제거된 URL: 5,484개 / 추가된 URL: 1개**(`/en/privacy.html`)
 
 ### 언어별 색인 허용 URL
 
 | 언어 | 변경 전 | 변경 후 | 비고 |
 |---|---:|---:|---|
-| ko | 5,487 | 344 | 핵심 색인 언어 |
+| ko | 5,765 | 340 | 핵심 색인 언어 |
 | en | 46 | 41 | 게이트 통과분만 |
 | zh-Hans | 15 | 0 | noindex,follow — 접근·링크 유지 |
 | zh-Hant | 15 | 0 | 동일 |
@@ -76,16 +74,16 @@ AdSense가 “가치가 별로 없는 콘텐츠”로 판정한 원인은 **문�
 
 | 항목 | 값 |
 |---|---:|
-| 생성된 단지 페이지 (전체) | 5,242 |
-| 색인 품질 게이트 통과 | 1,149 |
+| 생성된 단지 페이지 (전체) | 5,520 |
+| 색인 품질 게이트 통과 | 1,272 |
 | **실제 색인 허용 (상한 100 적용)** | **100** |
-| noindex,follow (접근·내부검색·계산기 연결 유지) | 5,142 |
+| noindex,follow (접근·내부검색·계산기 연결 유지) | 5,420 |
 
 ---
 
 ## 2. 콘텐츠 인벤토리 감사 (1단계)
 
-`reports/content-inventory.csv` · `reports/content-inventory.json` — URL 5,599행.
+`reports/content-inventory.csv` · `reports/content-inventory.json` — URL 5,873행.
 생성기: `_meta/audit_content.py`
 
 URL마다 path · page_type · language · title · canonical · robots · sitemap 등재 여부 ·
@@ -166,7 +164,7 @@ GA4/Naver/Supabase 사용 · 등급(A/B/C) · 조치 사유를 담았습니다.
 
 생성기: `_meta/apply_index_policy.py` (여러 번 실행해도 결과 동일)
 
-`noindex,follow`를 적용한 72개(단지 페이지 5,142개는 별도):
+`noindex,follow`를 적용한 72개(단지 페이지 5,420개는 별도):
 
 | 사유 | 수 |
 |---|---:|
@@ -218,12 +216,12 @@ GA4/Naver/Supabase 사용 · 등급(A/B/C) · 조치 사유를 담았습니다.
 
 ```
 ① 생성(커버리지) 기준  — 기존 그대로: 거래 5건 · 세대수 100 · 최근 거래 확인
-   → 5,242개 전부 생성, 기본값 noindex,follow
+   → 5,520개 전부 생성, 기본값 noindex,follow
 ② 색인 품질 게이트     — 신설
    거래 30건 이상 AND 거래 분기 4개 이상 AND 면적 유형 2개 이상
    AND 세대수·준공연도·최근 거래일·거래가격 확인 AND 해제 거래 집계 제외
    AND 출처·데이터 기준일 표시
-   → 1,149개 통과 → 상한 100개만 색인 허용 (거래량 상위, 시군구 분산)
+   → 1,272개 통과 → 상한 100개만 색인 허용 (거래량 상위, 시군구 분산)
 ```
 
 ### 설정값 (환경변수로 조정 가능)
@@ -251,7 +249,7 @@ GA4/Naver/Supabase 사용 · 등급(A/B/C) · 조치 사유를 담았습니다.
 색인 여부는 사이트 운영 사정이므로 화면에 쓰지 않습니다 — 방문자에게 필요한 것은
 “이 숫자를 얼마나 믿어도 되는가”이지 검색 색인 정책이 아닙니다.
 
-품질 기준은 코드와 `site/data-methodology.html` 5절에 같은 내용으로 공개했습니다.
+품질 기준은 코드에 상수로 두고, 요약을 `site/about.html`에 한 문단으로 밝혔습니다.
 
 ---
 
@@ -271,42 +269,29 @@ GA4/Naver/Supabase 사용 · 등급(A/B/C) · 조치 사유를 담았습니다.
   않으며, `news.json` 수집은 운영자가 “무엇이 바뀌었는지” 단서를 찾는 데 계속 쓸 수
   있습니다. `refresh-news.yml`의 커밋 대상에서 `site/index.html`을 뺐습니다.
 
-### 신뢰 페이지 (6단계)
+### 사이트 정보 페이지 (6단계)
 
-| 파일 | 내용 | 본문 |
+**2개 페이지로 통합했습니다.** 초안에서는 작성자·운영원칙·데이터기준·정정안내·문의를 각각
+별도 페이지로 만들었으나(5개), 애드센스가 실제로 요구하는 것은 **쿠키·제3자 광고를 밝힌
+개인정보 처리방침** 하나뿐입니다. 나머지는 읽히지 않는 문서만 늘렸습니다.
+
+| 페이지 | 담는 내용 | 본문 |
 |---|---|---:|
-| `site/editorial-policy.html` | 무엇을 하는 사이트인가, 출처 원칙, 하지 않는 것(자격·감수 미표기 포함), 자문이 아님, 오류 제보 | 1,392자 |
-| `site/data-methodology.html` | 원자료 6종, 집계 방법, 데이터의 한계, 단지 페이지 색인 기준, 갱신 주기 | 1,911자 |
-| `site/corrections.html` | 제보 방법, 처리 절차, 정정 내역 표(현재 비어 있음), 정정 대상이 아닌 것 | 1,033자 |
-| `site/contact.html` | 게시판 바로가기, 비밀글 안내, 무엇을 적으면 좋은지, 답변이 어려운 질문 | 949자 |
+| `site/privacy.html` | 쿠키·방문 통계, 광고, 거부 방법, 게시판 저장 내용, 브라우저 저장값, 보관·삭제·권리 | 1,418자 |
+| `site/about.html` | 어떤 사이트인가, 숫자를 어디서 가져오나, 면책고지, 문의·오류 제보 | 1,499자 |
+| `site/en/privacy.html` | 위 개인정보 처리방침의 영어판 | 2,711자 |
 
-정책 페이지는 **필요한 내용만 남기고 압축**했습니다. 초안은 절 수가 많아(개인정보 14개 절,
-운영 원칙 10개 절) 읽히지 않는 문서였습니다. 개인정보 처리방침은 도구별 처리 내용을 표 하나로
-합쳐 5개 절(2,068자)로, 운영·편집 원칙은 4개 절로 줄였습니다. 애드센스가 요구하는 공개 항목
-(쿠키·제3자 광고·분석 도구·거부 방법·연락 창구)은 모두 그대로 있습니다.
+**삭제**: `editorial-policy.html` · `data-methodology.html` · `corrections.html` ·
+`contact.html`. 내용 중 필요한 부분(출처 원칙, 추정하지 않는다는 방침, 면책, 오류 제보 절차)은
+`about.html`에 문단 단위로 흡수했고, 링크는 전부 `about.html`로 돌렸습니다(49개 파일).
 
-**창작하지 않은 것**: 보유하지 않은 자격·경력, 외부 감수자, 응답 시간 약속(SLA),
-정정 내역(페이지 신설 시점부터 쌓기 시작한다고 명시).
+**측정 ID를 화면에 쓰지 않습니다.** 초안에는 GA4 측정 ID·네이버 애널리틱스 계정 ID·AdSense
+게시자 ID를 개인정보 처리방침에 적어 두었습니다. 공개 의무가 있는 값이 아니고 운영 정보에
+가까워 전부 뺐습니다. 어떤 도구를 쓰는지(Google Analytics·네이버 애널리틱스·AdSense)는
+그대로 밝힙니다 — 그게 실제 공개 요건입니다.
 
-**운영자 실명은 사이트 어디에도 쓰지 않습니다.** 초안에서는 개인 작성자 페이지
-(`site/authors/…`)를 만들고 글 49개의 바이라인·Article JSON-LD에 실명을 넣었으나,
-운영자 요청에 따라 전부 걷어냈습니다.
-
-- 작성자 페이지를 삭제하고 sitemap·전 페이지 푸터에서 링크를 뺐습니다.
-- 바이라인을 `톺다 작성 · 게시 … · 최근 수정 …` 으로 바꾸고, 이름 대신
-  <a href="editorial-policy.html">운영·편집 원칙</a>으로 연결합니다 — 누가 어떤 절차로
-  쓰는지는 그 페이지가 설명합니다.
-- Article JSON-LD 의 `author` 를 `Person` → `Organization`(톺다)로 바꿨습니다.
-  schema.org 에서 author 는 Organization 도 허용합니다.
-- 신뢰 페이지 하단의 “작성·관리: (이름)” 서명도 제거했습니다.
-- `about.html` 의 “누가 만드나”·“어떤 원칙으로 만드나” 절은 통째로 뺐습니다.
-  신뢰 페이지들은 모든 페이지 푸터의 ‘사이트 정보’에서 계속 연결됩니다.
-
-자격을 보유하지 않았고 외부 감수 절차가 없다는 사실은 `editorial-policy.html` 4항에
-남아 있습니다 — 개인 신상 없이 밝힐 수 있는 내용입니다.
-
-`about.html` 은 계산기 입력값이 서버로 가지 않는다는 문장에 “게시판·댓글만 예외”를
-덧붙였습니다.
+**창작하지 않은 것**: 보유하지 않은 자격·경력, 외부 감수자, 응답 시간 약속(SLA), 정정 내역.
+운영자 실명과 개인 연락처는 사이트 어디에도 표시하지 않습니다.
 
 ### 작성자·날짜·구조화 데이터 (7단계)
 
@@ -368,14 +353,13 @@ GA4/Naver/Supabase 사용 · 등급(A/B/C) · 조치 사유를 담았습니다.
 
 175개 → 106개. 제거한 69개:
 
-- 정책·안내: `privacy.html`, `en/privacy.html`, `contact.html`, `editorial-policy.html`,
-  `corrections.html`, `data-methodology.html`, `about.html`, `en/about.html`
+- 정책·안내: `privacy.html`, `en/privacy.html`, `about.html`, `en/about.html`
 - 게시판·수정 요청: `board.html`, `board-write.html`, `board-post.html`, `feedback.html`, `en/feedback.html`
 - 내부 검색 결과: `find.html`, `calculators/search.html` 및 각 언어판
 - 오류 페이지: `404.html`, `en/404.html`
 - noindex 콘텐츠: zh-Hans·zh-Hant·vi·th 전체, `market.html` 및 각 언어판, EN 게이트 미달 3개
 
-단지 페이지 5,242개에는 원래부터 광고 스크립트가 없어 그대로 두었습니다.
+단지 페이지 5,520개에는 원래부터 광고 스크립트가 없어 그대로 두었습니다.
 광고 단위 배치는 변경하지 않았습니다(본문보다 먼저 보이거나 탐색을 방해하는 위치에
 새로 넣지 않았습니다).
 
@@ -418,7 +402,7 @@ GA4/Naver/Supabase 사용 · 등급(A/B/C) · 조치 사유를 담았습니다.
 
 ### 구조 무결성
 
-- HTML 5,598개 전수 파싱: **구조 이상 0건**, canonical·robots·main 태그 중복 0건.
+- HTML 5,872개 전수 파싱: **구조 이상 0건**, canonical·robots·main 태그 중복 0건.
 - `apply_index_policy.py`·`build_home_issues.py`·`add_bylines.py`·`build_calc_meta.py`
   모두 재실행 시 변경 0건(idempotent) 확인.
 - 계산기 로직·입력 필드·`app.js`·`rates.js` 계산 코드는 변경하지 않았습니다.
@@ -477,10 +461,10 @@ GA4/Naver/Supabase 사용 · 등급(A/B/C) · 조치 사유를 담았습니다.
    `en/foreigner-tax.html`. 한국어판을 만들면 색인 대상이 됩니다. 또는
    `apply_index_policy.py`의 EN 게이트에서 “한국어 대응 페이지 존재” 조건을 EN 전용
    콘텐츠에 대해 완화할 수 있습니다(코드 한 줄).
-10. **아파트 색인 상한 단계적 확대** — 게이트 통과 1,149개 중 100개만 열었습니다.
+10. **아파트 색인 상한 단계적 확대** — 게이트 통과 1,272개 중 100개만 열었습니다.
     색인율과 검색 성과를 2~4주 확인한 뒤 `APT_INDEX_MAX_PAGES`를 200 → 400 순으로 올리고,
-    올릴 때마다 `site/data-methodology.html` 5절의 “상위 100개 이하” 문장도 함께 고쳐야
-    합니다(코드와 공개 문서가 어긋나면 안 됩니다).
+    올릴 때마다 `site/about.html`의 “상위 100개” 문장도 함께 고쳐야 합니다
+    (코드와 공개 문서가 어긋나면 안 됩니다).
 11. **저장소 루트 잔재** — `/sitemap.xml`(95개 URL)·`/robots.txt`·`/naverad….html`은
     배포되지 않습니다(GitHub Pages는 `site/`만 업로드). 다만 `/sitemap.xml`은
     `scripts/check_recent_issue_posts.mjs`가 참조하므로 삭제하면 그 스크립트가 깨집니다.
@@ -493,9 +477,7 @@ GA4/Naver/Supabase 사용 · 등급(A/B/C) · 조치 사유를 담았습니다.
 1. **sitemap 재제출** — Search Console → Sitemaps → `https://topda.kr/sitemap.xml`
    재제출(이미 등록돼 있으면 “다시 크롤링 요청”). 하위 5개 파일이 자동으로 읽힙니다.
 2. **핵심 페이지 개별 색인 요청** — URL 검사 → 색인 생성 요청:
-   `/`, `/privacy.html`, `/about.html`, `/editorial-policy.html`,
-   `/data-methodology.html`, `/corrections.html`, `/contact.html`,
-   `/calculators/index.html`,
+   `/`, `/privacy.html`, `/about.html`, `/calculators/index.html`,
    `/calculators/acquisition-tax.html`, `/calculators/total-cost-dashboard.html`
 3. **색인 삭제는 요청하지 않습니다.** noindex 태그를 붙였고 크롤을 허용했으므로,
    재크롤 시 자동으로 색인에서 빠집니다. “URL 삭제” 도구는 임시 조치(약 6개월)이므로
@@ -518,8 +500,7 @@ GA4/Naver/Supabase 사용 · 등급(A/B/C) · 조치 사유를 담았습니다.
       (비어 있으면) 아예 보이지 않는지
 - [ ] `https://topda.kr/privacy.html` — GA4·네이버 애널리틱스·AdSense·Supabase·localStorage
       설명이 있고, **광고가 노출되지 않는지**
-- [ ] `https://topda.kr/editorial-policy.html` · `/data-methodology.html` ·
-      `/corrections.html` · `/contact.html` — 열리고 광고가 없는지
+- [ ] `https://topda.kr/about.html` — 소개·면책·문의가 한 페이지에 있고 광고가 없는지
 - [ ] `https://topda.kr/posts/dsr-explain.html` — 상단에 `톺다 작성 · 게시 … · 최근 수정 …`이
       보이는지
 - [ ] `https://topda.kr/calculators/acquisition-tax.html` — 하단 ‘이 계산기 정보’에
@@ -553,10 +534,6 @@ GA4/Naver/Supabase 사용 · 등급(A/B/C) · 조치 사유를 담았습니다.
 ADSENSE_REMEDIATION_REPORT.md
 reports/content-inventory.csv
 reports/content-inventory.json
-site/editorial-policy.html
-site/data-methodology.html
-site/corrections.html
-site/contact.html
 site/en/privacy.html
 _meta/audit_content.py            콘텐츠 인벤토리 감사
 _meta/apply_index_policy.py       robots·AdSense·canonical·hreflang 일괄 적용

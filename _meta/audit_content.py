@@ -152,8 +152,7 @@ def page_type_of(path):
         return "feedback"
     if p == "/404.html":
         return "error"
-    if p in ("/privacy.html", "/editorial-policy.html", "/corrections.html",
-             "/data-methodology.html", "/contact.html"):
+    if p == "/privacy.html":
         return "policy"
     if p in ("/about.html",):
         return "about"
