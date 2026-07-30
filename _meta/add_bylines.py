@@ -7,7 +7,8 @@ index.html 밖에서는 해석되지 않는다. 즉 화면에도 구조화 데�
 없었다.
 
 무엇을 넣나 (모두 **확인 가능한 값만**)
-  · 작성자        — 정재호 (/authors/jaeho-jung.html 로 연결)
+  · 작성 주체      — 사이트(톺다). 운영자 실명을 쓰지 않는다 — 개인 신상은 공개 대상이 아니고,
+                    누가 어떤 절차로 쓰는지는 /editorial-policy.html 에 밝혀 두었다.
   · 최초 게시일   — 그 파일을 추가한 커밋의 날짜 (git)
   · 최근 수정일   — 그 파일을 마지막으로 바꾼 사람 커밋의 날짜 (git, 봇 커밋 제외)
   · 주요 공식 출처 — **페이지에 이미 걸려 있는** 공공기관 링크에서 추출
@@ -38,8 +39,8 @@ ROOT = os.path.abspath(os.path.join(HERE, ".."))
 SITE = os.path.join(ROOT, "site")
 BASE = "https://topda.kr"
 
-AUTHOR_NAME = "정재호"
-AUTHOR_URL = f"{BASE}/authors/jaeho-jung.html"
+AUTHOR_NAME = "톺다"
+AUTHOR_URL = f"{BASE}/editorial-policy.html"   # 작성·검토 절차를 밝힌 페이지
 
 # 자동 데이터 갱신 커밋 — 본문을 바꾼 것이 아니므로 '수정일' 계산에서 뺀다.
 BOT_AUTHORS = ("topda-bot",)
@@ -149,7 +150,7 @@ def official_sources(raw):
 # ────────────────────────────────────────────────── 화면 표시
 
 def byline_html(published, modified, sources):
-    parts = [f'작성 <a href="/authors/jaeho-jung.html" rel="author">{esc(AUTHOR_NAME)}</a>']
+    parts = [f'<a href="/editorial-policy.html" rel="author">{esc(AUTHOR_NAME)}</a> 작성']
     if published:
         parts.append(f'게시 <time datetime="{published}">{published}</time>')
     if modified:
@@ -208,7 +209,9 @@ PUBLISHER = {
 
 
 def author_node():
-    return {"@type": "Person", "name": AUTHOR_NAME, "url": AUTHOR_URL}
+    # Person 이 아니라 Organization 으로 둔다. 개인 실명을 구조화 데이터에 넣지 않으며,
+    # schema.org 에서 author 는 Organization 도 허용한다.
+    return {"@type": "Organization", "name": AUTHOR_NAME, "url": AUTHOR_URL}
 
 
 def patch_jsonld(raw, url, title, desc, published, modified):

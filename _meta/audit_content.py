@@ -175,7 +175,7 @@ DATE_LABEL_RE = {
     "modified": re.compile(r"(최근\s*수정|수정일|최종\s*수정|갱신일|Updated)\s*\d{4}-\d{2}-\d{2}"),
     "reviewed": re.compile(r"(검토일|최근\s*검토|감수일|Reviewed)\s*\d{4}-\d{2}-\d{2}"),
 }
-AUTHOR_RE = re.compile(r"(작성\s|작성자|글쓴이|Author|정재호)")
+AUTHOR_RE = re.compile(r"(작성\s|작성자|글쓴이|Author|톺다 작성)")
 SOURCE_RE = re.compile(r"(출처|근거 법령|법적 근거|기준 법령|법령|Source|국토교통부|행정안전부|"
                        r"기획재정부|국세청|한국부동산원|지방세법|소득세법|Sources)")
 ASOF_RE = re.compile(r"(기준일|적용 기준|기준 시점|as of|as-of)", re.I)
