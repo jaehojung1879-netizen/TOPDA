@@ -206142,13 +206142,13 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "",
-   "body_chars": 1361,
+   "body_chars": 1041,
    "external_links": 2,
    "internal_links": 13,
    "news_aggregation": false,
    "has_author": false,
    "has_published_date": false,
-   "has_modified_date": false,
+   "has_modified_date": true,
    "has_reviewed_date": false,
    "has_source": true,
    "has_as_of": false,
@@ -206158,13 +206158,13 @@
    "uses_naver_analytics": true,
    "uses_supabase": false,
    "has_meta_refresh": false,
-   "unique_chars": 1104,
-   "template_share_pct": 18.9,
+   "unique_chars": 834,
+   "template_share_pct": 19.9,
    "data_completeness": {
-    "unique_chars": 1104
+    "unique_chars": 834
    },
-   "grade": "A",
-   "action_reason": "고유 본문 확보 — 색인 대상"
+   "grade": "B",
+   "action_reason": "템플릿 제외 고유 본문 834자 — 색인 기준 미달, noindex,follow"
   },
   {
    "path": "/data-methodology.html",
@@ -206177,13 +206177,13 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "",
-   "body_chars": 3403,
+   "body_chars": 1953,
    "external_links": 2,
-   "internal_links": 13,
+   "internal_links": 14,
    "news_aggregation": false,
    "has_author": false,
    "has_published_date": false,
-   "has_modified_date": false,
+   "has_modified_date": true,
    "has_reviewed_date": false,
    "has_source": true,
    "has_as_of": true,
@@ -206193,10 +206193,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": false,
    "has_meta_refresh": false,
-   "unique_chars": 3034,
-   "template_share_pct": 10.8,
+   "unique_chars": 1697,
+   "template_share_pct": 13.1,
    "data_completeness": {
-    "unique_chars": 3034
+    "unique_chars": 1697
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -206212,13 +206212,13 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "",
-   "body_chars": 3523,
+   "body_chars": 1392,
    "external_links": 2,
-   "internal_links": 12,
+   "internal_links": 13,
    "news_aggregation": false,
-   "has_author": true,
+   "has_author": false,
    "has_published_date": false,
-   "has_modified_date": false,
+   "has_modified_date": true,
    "has_reviewed_date": false,
    "has_source": true,
    "has_as_of": true,
@@ -206228,10 +206228,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": false,
    "has_meta_refresh": false,
-   "unique_chars": 3246,
-   "template_share_pct": 7.9,
+   "unique_chars": 1198,
+   "template_share_pct": 13.9,
    "data_completeness": {
-    "unique_chars": 3246
+    "unique_chars": 1198
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -207875,9 +207875,9 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "ko=https://topda.kr/privacy.html;en=https://topda.kr/en/privacy.html;x-default=https://topda.kr/privacy.html",
-   "body_chars": 8660,
-   "external_links": 7,
-   "internal_links": 14,
+   "body_chars": 3722,
+   "external_links": 6,
+   "internal_links": 13,
    "news_aggregation": false,
    "has_author": false,
    "has_published_date": false,
@@ -207891,10 +207891,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": false,
    "has_meta_refresh": false,
-   "unique_chars": 8296,
-   "template_share_pct": 4.2,
+   "unique_chars": 3451,
+   "template_share_pct": 7.3,
    "data_completeness": {
-    "unique_chars": 8296
+    "unique_chars": 3451
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209767,15 +209767,15 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "ko=https://topda.kr/privacy.html;en=https://topda.kr/en/privacy.html;x-default=https://topda.kr/privacy.html",
-   "body_chars": 6292,
-   "external_links": 8,
+   "body_chars": 2092,
+   "external_links": 6,
    "internal_links": 13,
    "news_aggregation": false,
    "has_author": true,
    "has_published_date": false,
    "has_modified_date": false,
    "has_reviewed_date": false,
-   "has_source": true,
+   "has_source": false,
    "has_as_of": false,
    "is_tool": false,
    "has_adsense": true,
@@ -209783,10 +209783,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": false,
    "has_meta_refresh": false,
-   "unique_chars": 5965,
-   "template_share_pct": 5.2,
+   "unique_chars": 1870,
+   "template_share_pct": 10.6,
    "data_completeness": {
-    "unique_chars": 5965
+    "unique_chars": 1870
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"

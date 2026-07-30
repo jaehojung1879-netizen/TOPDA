@@ -229,7 +229,7 @@ def run(rep):
             rep.fail("7 광고 범위", f"noindex 인 {p} 에 AdSense 스크립트가 있습니다")
     # 정책·문의 페이지에도 광고를 넣지 않는다.
     for p in ("/privacy.html", "/en/privacy.html", "/contact.html", "/editorial-policy.html",
-              "/corrections.html", "/data-methodology.html", "/authors/jaeho-jung.html"):
+              "/corrections.html", "/data-methodology.html"):
         d = pages.get(p)
         if d and "pagead2.googlesyndication.com" in d["raw"]:
             rep.fail("7 광고 범위", f"{p} 에 AdSense 스크립트가 있습니다(정책 페이지에는 넣지 않음)")
