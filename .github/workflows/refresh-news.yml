@@ -32,5 +32,11 @@ jobs:
         run: python collect_news.py
 
       # 커밋·푸시는 공용 스크립트 사용 — 동시 실행 워크플로와의 푸시 경합을 rebase+재시도로 흡수.
-      - name: Commit news.json + index.html(정적 폴백)
-        run: bash _meta/git_commit_push.sh "부동산 뉴스 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/news.json site/index.html
+      #
+      # ⚠ site/index.html 은 더 이상 커밋 대상이 아니다(2026-07-30). 홈의 기사 헤드라인 자동
+      # 나열을 없애고, 운영자가 직접 쓴 '핵심 이슈'(_meta/home_issues.json →
+      # build_home_issues.py)로 대체했다. index.html 에는 news:weekly:static 마커가 없으므로
+      # collect_news.py 는 홈에 아무것도 쓰지 않으며, 여기서 index.html 을 커밋 목록에 넣으면
+      # 사람이 편집한 홈이 자동 커밋에 휩쓸릴 수 있어 제외한다.
+      - name: Commit news.json
+        run: bash _meta/git_commit_push.sh "부동산 뉴스 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/news.json

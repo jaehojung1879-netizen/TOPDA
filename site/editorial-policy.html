@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>운영·편집 원칙 — 톺다</title>
+<meta name="description" content="톺다가 정보를 만들고 고치는 절차. 공식 출처 우선, 추정 금지, 계산기 버전 관리, 자동 수집 데이터와 직접 작성 콘텐츠의 구분 원칙." />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="canonical" href="https://topda.kr/editorial-policy.html" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="톺다" />
+<meta property="og:title" content="운영·편집 원칙 — 톺다" />
+<meta property="og:description" content="톺다가 정보를 만들고 고치는 절차와 원칙." />
+<meta property="og:url" content="https://topda.kr/editorial-policy.html" />
+<meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
+<meta property="og:locale" content="ko_KR" />
+<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="stylesheet" href="assets/styles.css?v=20260730" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container row">
+    <a href="index.html" class="brand"><span class="brand-mark"></span>톺다</a>
+    <nav class="nav">
+      <a href="guides.html" data-nav>가이드</a>
+      <a href="calculators/index.html" data-nav>계산기</a>
+      <a href="market.html" data-nav>시세정보</a>
+      <a href="checklists/index.html" data-nav>체크리스트</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="메뉴 열기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" data-mobile-menu>
+    <a href="guides.html">가이드</a>
+    <a href="calculators/index.html">계산기</a>
+    <a href="market.html">시세정보</a>
+    <a href="checklists/index.html">체크리스트</a>
+    <a href="board.html">게시판</a>
+    <a href="about.html">안내</a>
+  </div>
+</header>
+
+<main class="container-narrow">
+  <div class="article-header">
+    <div class="breadcrumb"><a href="index.html">홈</a> / 운영·편집 원칙</div>
+    <h1>운영·편집 원칙</h1>
+    <p class="lead">톺다가 무엇을 위해 존재하고, 정보를 어떤 절차로 만들고 고치는지 밝힌 문서입니다.</p>
+  </div>
+
+  <div class="prose">
+    <h2>1. 사이트 운영 목적</h2>
+    <p>
+      톺다는 <strong>주택을 사거나 임차할 때 필요한 숫자를 직접 계산해 보게 하는 도구 사이트</strong>입니다.
+      다음 다섯 단계를 한 사이트 안에서 끝내는 것을 목표로 합니다.
+    </p>
+    <ol>
+      <li>주택 매수에 드는 <strong>총비용</strong> 계산 — 취득세·중개보수·등기비용·채권매입·잔금일 정산</li>
+      <li><strong>대출 가능액과 월 상환 부담</strong> 확인 — LTV·DSR·스트레스 DSR, 상환 방식 비교</li>
+      <li><strong>계약·전세·세금 위험</strong> 확인 — 등기부등본, 대항력·우선변제권, 세금 중과 조건</li>
+      <li>단계별 <strong>체크리스트</strong> 제공 — 계약·잔금일·이사 당일에 실제로 해야 하는 일</li>
+      <li>계산 결과의 <strong>저장·공유</strong> 및 관련 가이드 연결</li>
+    </ol>
+    <p>
+      트래픽을 늘리기 위해 페이지 수를 불리는 것은 목적이 아닙니다. 검색 유입이 되더라도 위 다섯 단계에
+      기여하지 않는 페이지는 검색 색인에서 제외합니다.
+    </p>
+
+    <h2>2. 공식 출처 우선 원칙</h2>
+    <p>모든 수치·요건은 1차 출처에서 확인합니다. 우선순위는 다음과 같습니다.</p>
+    <ol>
+      <li><strong>법령 조문</strong> — 국가법령정보센터의 법률·시행령·시행규칙 원문</li>
+      <li><strong>지방자치단체 조례·고시</strong> — 중개보수 상한요율 등 지자체가 정하는 항목</li>
+      <li><strong>소관 부처·공공기관 발표 자료</strong> — 국토교통부, 기획재정부, 행정안전부, 국세청, 금융위원회</li>
+      <li><strong>공공데이터 OpenAPI 원자료</strong> — 실거래가, 공동주택 기본정보, 건축물대장, R-ONE 통계</li>
+    </ol>
+    <p>
+      블로그·요약 기사·다른 계산기 사이트를 근거로 삼지 않습니다. 언론 보도는 “언제 무엇이 바뀌었는지”를
+      찾는 단서로만 쓰고, 실제 내용은 반드시 공식 원문으로 확인한 뒤 적습니다.
+    </p>
+
+    <h2>3. 정보 작성과 검토 절차</h2>
+    <div class="def-list">
+      <div class="row"><span class="k">작성</span><span class="v">1차 출처를 읽고, 적용 조문·기준일·가정을 페이지에 명시한 상태로 씁니다. 근거를 찾지 못한 항목은 넣지 않습니다.</span></div>
+      <div class="row"><span class="k">계산 검증</span><span class="v">계산기는 조문의 구간·상한을 놓고 경계값(0원, 구간 경계 금액, 상한 초과, 소수점)을 손으로 계산해 대조합니다. 세율·요율 변경 시 자동 테스트로 이전 결과와 차이를 확인합니다.</span></div>
+      <div class="row"><span class="k">표시</span><span class="v">직접 작성한 글에는 작성자, 최초 게시일, 최근 검토일, 사용한 공식 출처, 적용 기준일을 화면에 표시합니다.</span></div>
+      <div class="row"><span class="k">재검토</span><span class="v">세율·요율·규제가 바뀌었다는 단서가 있으면 해당 계산기와 관련 글을 함께 다시 봅니다. 정기 일정이 아니라 변경 사실을 기준으로 움직입니다.</span></div>
+      <div class="row"><span class="k">정정</span><span class="v">오류가 확인되면 고치고, 무엇을 언제 어떻게 고쳤는지 <a href="corrections.html">정정 안내</a>에 남깁니다.</span></div>
+    </div>
+
+    <h2>4. 하지 않는 것</h2>
+    <ul>
+      <li><strong>추정·보간·예측을 하지 않습니다.</strong> 데이터가 없는 기간은 비워 두고, 없는 값을 채우지 않습니다.
+        표본이 적으면 표본 수와 주의사항을 함께 표시합니다.</li>
+      <li><strong>보유하지 않은 자격·감수를 표기하지 않습니다.</strong> 톺다에는 외부 전문가 감수 절차가 없고,
+        운영자는 부동산 관련 자격을 보유하고 있지 않습니다. 그러므로 감수자·검수 전문가를 표시하지 않습니다.</li>
+      <li><strong>투자 권유를 하지 않습니다.</strong> 특정 지역·단지·상품을 사라거나 팔라고 하지 않고,
+        “오를 것”·“유망하다” 같은 전망을 쓰지 않습니다.</li>
+      <li><strong>기사 본문을 옮기지 않습니다.</strong> 외부 보도를 인용할 때는 무엇이 바뀌었는지 직접 요약하고
+        공식 원문 링크를 제시합니다. 기사 문장을 복사하거나 제목 목록을 자동으로 늘어놓지 않습니다.</li>
+      <li><strong>분량을 늘리기 위한 문장을 쓰지 않습니다.</strong> 검색 키워드를 반복하거나 일반론을 덧붙여
+        글자 수를 채우지 않습니다.</li>
+    </ul>
+
+    <h2>5. 자동 수집 데이터와 직접 작성 콘텐츠의 구분</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>구분</th><th>해당 페이지</th><th>표시 방식</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>직접 작성</td>
+            <td>가이드(<code>/posts/</code>), 체크리스트, 계산기, 안내·정책 페이지</td>
+            <td>작성자·최초 게시일·최근 검토일·사용 출처·적용 기준일을 본문에 표시</td>
+          </tr>
+          <tr>
+            <td>공공데이터 가공</td>
+            <td>지역·단지 실거래 페이지(<code>/apt/</code>), 시세 대시보드, 전세가율·상업용 임대 지도</td>
+            <td>출처 기관·집계 구간·데이터 기준일을 표시. 사람이 쓴 해설 문장이 없으므로 작성자를 붙이지 않음</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      공공데이터 가공 페이지는 값이 매일 바뀌므로 “문서”가 아니라 “조회 결과”에 가깝습니다.
+      그래서 이 페이지들은 사용자가 언제든 열어 볼 수 있게 유지하면서도,
+      데이터가 충분히 쌓여 페이지 고유의 분석이 성립할 때만 검색 색인을 허용합니다.
+      기준은 <a href="data-methodology.html">데이터 기준</a>에 공개했습니다.
+    </p>
+
+    <h2>6. 데이터 갱신 주기</h2>
+    <div class="def-list">
+      <div class="row"><span class="k">실거래가</span><span class="v">매일 수집. 국토교통부 신고 자료 기준이며 신고 지연·정정·해제로 값이 바뀝니다. 해제(취소) 거래는 모든 집계에서 제외하고 표에만 별도 표시합니다.</span></div>
+      <div class="row"><span class="k">공동주택 기본정보(세대수·준공연도)</span><span class="v">K-apt 및 건축물대장 기준. 원자료 갱신 시 반영합니다.</span></div>
+      <div class="row"><span class="k">가격지수·전세가율</span><span class="v">한국부동산원 R-ONE 월간 통계 기준. 통계 발표 주기에 맞춰 갱신합니다.</span></div>
+      <div class="row"><span class="k">세율·요율·규제</span><span class="v">정해진 주기가 없습니다. 법령·고시 개정 시점을 기준으로 갱신하고, 각 계산기에 적용 기준일을 표시합니다.</span></div>
+    </div>
+    <p class="note">각 페이지 하단의 “데이터 기준일”이 그 페이지에 실제로 반영된 시점입니다. 갱신 주기와 다를 수 있으므로 페이지에 적힌 기준일을 신뢰하시면 됩니다.</p>
+
+    <h2>7. 계산기 버전 관리 방식</h2>
+    <ul>
+      <li>계산 로직을 바꾸면 해당 계산기 페이지의 <strong>변경 이력</strong> 항목에 날짜와 바뀐 내용을 적습니다.</li>
+      <li>세율·요율 표는 코드에서 상수로 분리해 두고, 적용 기준일을 함께 기록합니다.
+        화면의 “적용 기준일”은 이 값에서 나옵니다.</li>
+      <li>세제·상환 계산에는 자동 테스트가 있어, 로직 변경이 기존 결과를 의도치 않게 바꾸면 배포 전에 실패합니다.</li>
+      <li>결과가 달라지는 변경(세율 개정 등)은 이력에 남기고, 표기·문구만 다듬은 변경은 남기지 않습니다.</li>
+    </ul>
+
+    <h2>8. 법률·세무·금융 자문이 아닙니다</h2>
+    <div class="callout callout-warn">
+      <div class="icon">⚠</div>
+      <div class="body">
+        톺다의 모든 글·계산기·데이터는 <strong>일반 정보 제공용</strong>입니다. 개별 사안에 대한
+        법률·세무·금융 자문이 아니며, 자문을 대신할 수 없습니다. 법령·세율·정책은 바뀌며,
+        게재 내용과 실제 법령이 다를 경우 <strong>법령이 우선</strong>합니다.
+        실제 계약·납세·대출 결정은 변호사·세무사·공인중개사·자격 있는 금융기관과 상의하십시오.
+        계산기는 입력 조건에 따른 <strong>추정값</strong>을 보여주며, 실제 고지·부과 금액과 다를 수 있습니다.
+      </div>
+    </div>
+
+    <h2>9. 오류 제보와 정정</h2>
+    <p>
+      잘못된 숫자나 오해를 부르는 설명을 발견하면 알려주세요. 접수·확인·정정 절차와 지금까지 고친 내역은
+      <a href="corrections.html">정정 안내</a>에 있습니다. 접수 창구는 <a href="contact.html">문의 안내</a>를 참고하세요.
+    </p>
+
+    <h2>10. 광고와 편집의 분리</h2>
+    <ul>
+      <li>톺다는 Google AdSense 광고로 운영비를 충당합니다. 광고 게재 사실과 쿠키 사용은
+        <a href="privacy.html">개인정보 처리방침</a>에 밝혀 두었습니다.</li>
+      <li>광고주가 글의 내용·계산 로직·평가에 관여하지 않습니다. 특정 업체·상품을 유리하게 쓰는 대가를 받지 않습니다.</li>
+      <li>광고는 <strong>완성된 콘텐츠와 계산기 페이지에만</strong> 넣습니다. 정책·문의·정정 안내, 게시판,
+        내부 검색 결과, 검색 색인에서 제외한 페이지, 오류 페이지에는 넣지 않습니다.</li>
+      <li>광고 단위를 본문보다 먼저 보이게 배치하거나, 탐색을 방해하는 위치에 넣지 않습니다.</li>
+      <li>대가를 받은 링크가 생기면 해당 위치에 광고·제휴 표시를 부착합니다. 현재 제휴 링크는 없습니다.</li>
+    </ul>
+
+    <hr/>
+    <p class="note">
+      작성·관리: <a href="authors/jaeho-jung.html">정재호</a> · 시행: 2026-07-30 · 최종 수정: 2026-07-30
+    </p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div>
+        <div class="brand"><span class="brand-mark"></span>톺다</div>
+        <p>부동산, 하나하나 톺아보자.</p>
+      </div>
+      <div>
+        <h4>탐색</h4>
+        <ul>
+          <li><a href="calculators/index.html">계산기</a></li>
+          <li><a href="checklists/index.html">체크리스트</a></li>
+          <li><a href="guides.html">가이드</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>사이트 정보</h4>
+        <ul>
+          <li><a href="about.html">안내</a></li>
+          <li><a href="authors/jaeho-jung.html">작성자</a></li>
+          <li><a href="data-methodology.html">데이터 기준</a></li>
+          <li><a href="corrections.html">정정 안내</a></li>
+          <li><a href="privacy.html">개인정보 처리방침</a></li>
+          <li><a href="contact.html">문의</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="disclaimer">© 톺다.</p>
+  </div>
+</footer>
+
+<script src="assets/app.js?v=20260730"></script>
+</body>
+</html>

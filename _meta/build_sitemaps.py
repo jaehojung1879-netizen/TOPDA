@@ -70,16 +70,23 @@ NOINDEX_RE = re.compile(r'<meta[^>]+name=["\']robots["\'][^>]*content=["\'][^"\'
 
 
 def is_noindex(loc):
-    """해당 URL의 실제 HTML이 noindex인지. 파일이 없으면 False(판단 보류)."""
+    """해당 URL의 실제 HTML이 noindex인지. 파일이 없으면 False(판단 보류).
+
+    ⚠ 앞 4KB만 읽으면 안 된다. 단지 페이지처럼 head 안에 큰 <style> 블록이 있는 문서는
+    robots 메타가 4KB 뒤로 밀려 noindex 를 놓치고, 그 URL이 sitemap 에 남는다.
+    head 전체를 읽는다(body 까지 읽을 필요는 없다).
+    """
     p = urllib.parse.unquote(loc.replace(BASE, ""))
     fp = os.path.join(SITE, p.lstrip("/"))
     if p.endswith("/"):
         fp = os.path.join(fp, "index.html")
     try:
         with open(fp, encoding="utf-8") as f:
-            return bool(NOINDEX_RE.search(f.read(4096)))
+            text = f.read()
     except OSError:
         return False
+    head = text.split("</head>", 1)[0]
+    return bool(NOINDEX_RE.search(head))
 
 
 def urlset(entries):

@@ -2,25 +2,26 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8" />
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6725359021570843" crossorigin="anonymous"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>개인정보 처리방침 — 톺다</title>
-<meta name="description" content="톺다의 개인정보 처리방침. 현재 별도 서버 없이 운영되며, 입력값은 이용자 브라우저에만 저장됩니다." />
+<meta name="description" content="톺다가 실제로 처리하는 데이터. Google Analytics 4·네이버 애널리틱스·Google AdSense·Supabase·localStorage 사용 내역과 이용자의 권리를 그대로 설명합니다." />
 <!-- seo:meta -->
 <link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="canonical" href="https://topda.kr/privacy.html" />
-<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://topda.kr/feed.xml" />
 <meta property="og:type" content="website" />
+<link rel="alternate" hreflang="ko" href="https://topda.kr/privacy.html" />
+<link rel="alternate" hreflang="en" href="https://topda.kr/en/privacy.html" />
+<link rel="alternate" hreflang="x-default" href="https://topda.kr/privacy.html" />
 <meta property="og:site_name" content="톺다" />
 <meta property="og:title" content="개인정보 처리방침 — 톺다" />
-<meta property="og:description" content="톺다의 개인정보 처리방침. 현재 별도 서버 없이 운영되며, 입력값은 이용자 브라우저에만 저장됩니다." />
+<meta property="og:description" content="톺다가 실제로 처리하는 데이터와 이용자의 권리." />
 <meta property="og:url" content="https://topda.kr/privacy.html" />
 <meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <meta property="og:locale" content="ko_KR" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="개인정보 처리방침 — 톺다" />
-<meta name="twitter:description" content="톺다의 개인정보 처리방침. 현재 별도 서버 없이 운영되며, 입력값은 이용자 브라우저에만 저장됩니다." />
+<meta name="twitter:description" content="톺다가 실제로 처리하는 데이터와 이용자의 권리." />
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -34,7 +35,7 @@
       "@type": "ListItem",
       "position": 1,
       "name": "홈",
-      "item": "https://topda.kr/index.html"
+      "item": "https://topda.kr/"
     },
     {
       "@type": "ListItem",
@@ -75,51 +76,236 @@
   <div class="article-header">
     <div class="breadcrumb"><a href="index.html">홈</a> / 개인정보 처리방침</div>
     <h1>개인정보 처리방침</h1>
-    <p class="lead">톺다는 이용자의 개인정보를 최소한으로만 다루는 것을 원칙으로 합니다. 본 방침은 현재 운영 상태를 그대로 설명하며, 수집 항목이 생기면 사전에 갱신·고지합니다.</p>
+    <p class="lead">
+      이 문서는 톺다가 <strong>실제로 사이트에 심어 둔 코드를 기준으로</strong> 작성했습니다.
+      아래에 적힌 도구·저장소는 모두 현재 동작 중인 것이며, 앞으로 도입할 계획을 미리 적어 둔 것이 아닙니다.
+    </p>
   </div>
 
   <div class="prose">
-    <div class="callout callout-success">
-      <div class="icon">✓</div>
+    <div class="callout">
+      <div class="icon">i</div>
       <div class="body">
         <strong>요약</strong>
-        현재 톺다는 별도 서버나 데이터베이스를 운영하지 않습니다. 계산기·체크리스트·게시판에 입력한 값은 <strong>이용자 본인의 브라우저(localStorage)에만</strong> 저장되며 외부로 전송되지 않습니다.
+        톺다는 회원가입이 없고, 계산기 입력값을 서버로 보내지 않습니다. 다만
+        <strong>방문 통계 도구(Google Analytics 4·네이버 애널리틱스)</strong>와
+        <strong>광고(Google AdSense)</strong>가 작동하며, <strong>게시판·댓글은 Supabase</strong>에
+        저장돼 다른 방문자에게도 보입니다. 계산기·체크리스트 입력값은 이용자 브라우저의
+        <strong>localStorage</strong>에만 남습니다.
       </div>
     </div>
 
-    <h2>1. 현재 수집·처리하는 개인정보</h2>
-    <p>본 사이트는 정적 페이지로 운영되어, 운영자가 서버에서 수집·저장하는 개인정보가 <strong>없습니다.</strong></p>
-    <ul>
-      <li><strong>계산기 입력값</strong> — 세금·대출·정산 계산을 위해 입력한 금액 등은 계산이 끝나면 사라지거나, 일부 도구의 경우 본인 브라우저에만 저장됩니다. 서버로 전송되지 않습니다.</li>
-      <li><strong>체크리스트·D-Day 스케줄러</strong> — 체크 상태·메모·일정은 본인 브라우저(localStorage)에만 저장됩니다.</li>
-      <li><strong>게시판·수정 요청</strong> — 공개글은 같은 기기에 표시되고, 비밀글은 작성한 브라우저에서만 보입니다. 민감정보·개인정보는 입력하지 않도록 안내합니다.</li>
-    </ul>
-
-    <h2>2. 쿠키·분석 도구</h2>
-    <p>현재 광고 식별자나 교차 사이트 추적은 사용하지 않습니다. 향후 방문 통계를 위해 분석 도구(예: Google Analytics 4)를 도입할 경우, 본 방침에 수집 항목·목적·보관 기간을 명시하고, 가능한 범위에서 IP 익명화 등 최소수집 설정을 적용합니다.</p>
-
-    <h2>3. 향후 기능 도입 시 (사전 고지)</h2>
-    <p>아래와 같이 개인정보가 실제로 수집되는 기능을 도입할 경우, 도입 <strong>전에</strong> 본 방침을 갱신하고 수집·이용 동의를 받습니다.</p>
+    <h2>1. 처리하는 데이터 유형</h2>
     <div class="def-list">
-      <div class="row"><span class="k">전문가 상담 연결</span><span class="v">세무사·법무사·대출·중개 등 연결 신청 시 이름·연락처·문의 내용 (목적: 상담 연결, 보유: 처리 완료 후 파기)</span></div>
-      <div class="row"><span class="k">뉴스레터·알림</span><span class="v">이메일 등 (목적: 정보 발송, 보유: 구독 해지 시까지)</span></div>
-      <div class="row"><span class="k">제휴 링크</span><span class="v">제휴사로 이동 시 해당 제휴사의 방침이 별도 적용됨을 고지하고, 제휴 링크에는 광고·제휴 표시를 부착</span></div>
+      <div class="row"><span class="k">기기·접속 정보</span><span class="v">브라우저·기기 종류, 대략적인 지역, 유입 경로, 방문한 페이지, 체류 시간. 방문 통계 도구가 자동으로 수집합니다.</span></div>
+      <div class="row"><span class="k">쿠키·광고 식별자</span><span class="v">방문 통계용 쿠키와 광고 게재·성과 측정을 위한 쿠키/광고 식별자. 3항·4항 참고.</span></div>
+      <div class="row"><span class="k">이용자가 직접 입력한 글</span><span class="v">게시판·댓글에 쓴 제목·본문·닉네임. 이용자가 스스로 적어 넣은 내용만 저장됩니다.</span></div>
+      <div class="row"><span class="k">소유자 토큰</span><span class="v">글·댓글을 쓴 사람이 본인 글을 나중에 수정·삭제할 수 있게 만드는 임의의 무작위 문자열(UUID). 이름·연락처와 연결되지 않습니다.</span></div>
+      <div class="row"><span class="k">브라우저 로컬 저장값</span><span class="v">계산기 입력값, 체크리스트 체크 상태, 언어 선택 등. 서버로 전송되지 않습니다. 6항에 항목별 목록이 있습니다.</span></div>
+      <div class="row"><span class="k">이용 행태 이벤트</span><span class="v">계산기 실행, 결과 공유 버튼 클릭, 외부 링크 클릭, 체크리스트 체크, 단지 페이지에서 계산기로 이동 등. 어떤 도구가 실제로 쓰이는지 파악하는 용도이며 입력한 금액은 담지 않습니다.</span></div>
+    </div>
+    <p>
+      톺다는 <strong>회원가입·로그인 기능이 없고</strong>, 이름·주민등록번호·전화번호·이메일을
+      입력받는 폼이 없습니다. 게시판 닉네임 칸에 이용자가 스스로 연락처를 적으면 그 글의 일부로
+      저장되므로, 게시판에는 개인정보·민감정보를 적지 않도록 안내하고 있습니다.
+    </p>
+
+    <h2>2. 서비스별 처리 목적</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>기능</th><th>처리하는 것</th><th>목적</th></tr></thead>
+        <tbody>
+          <tr><td>계산기·체크리스트</td><td>입력값(브라우저 안에서만)</td><td>계산 결과 산출, 다시 방문했을 때 값 복원</td></tr>
+          <tr><td>방문 통계</td><td>접속 정보, 페이지 이동, 이용 행태 이벤트</td><td>어떤 계산기·가이드가 실제로 쓰이는지 확인해 우선순위를 정하기 위함</td></tr>
+          <tr><td>광고</td><td>쿠키·광고 식별자</td><td>광고 게재와 성과 측정(사이트 운영비 충당)</td></tr>
+          <tr><td>게시판·댓글</td><td>제목·본문·닉네임·작성 시각·소유자 토큰</td><td>글 게시·조회, 본인 글 수정·삭제 확인, 비밀글 접근 제어</td></tr>
+          <tr><td>수정 요청</td><td>게시판과 동일</td><td>내용 오류 접수와 처리</td></tr>
+        </tbody>
+      </table>
     </div>
 
-    <h2>4. 제3자 제공·위탁</h2>
-    <p>현재 개인정보를 제3자에게 제공하거나 처리를 위탁하지 않습니다. 향후 상담 연결 등으로 제공이 필요해지면, 제공받는 자·목적·항목을 사전에 고지하고 동의를 받은 범위에서만 제공합니다.</p>
+    <h2>3. Google Analytics 4</h2>
+    <p>
+      방문 통계를 위해 Google Analytics 4(측정 ID <code>G-7NE57E1KLH</code>)를 사용합니다.
+      전 페이지에서 <code>/assets/analytics.js</code>가 로드되며, 다음이 적용돼 있습니다.
+    </p>
+    <ul>
+      <li><strong>IP 익명화</strong> — <code>anonymize_ip: true</code> 설정으로 IP 주소의 마지막 부분을 잘라 처리합니다.</li>
+      <li><strong>수집되는 이벤트</strong> — 페이지 조회 외에 <code>calc_complete</code>(계산 완료),
+        <code>calculator_run</code>(계산기 실행), <code>share_click</code>(공유 클릭),
+        <code>outbound_click</code>(외부 링크 클릭), <code>checklist_check</code>(체크리스트 체크),
+        <code>apt_page_view</code>·<code>apt_calculator_click</code>(단지 페이지 → 계산기 이동),
+        <code>guide_click</code>(가이드 이동)을 정의해 두었습니다.</li>
+      <li><strong>담지 않는 것</strong> — 이벤트 파라미터에 계산기에 입력한 금액·소득 같은 값은 넣지 않습니다.
+        어떤 계산기를 썼는지(계산기 이름), 어디서 들어왔는지(단지·지역명, 유입 페이지)만 담습니다.</li>
+    </ul>
+    <p>
+      Google Analytics는 쿠키를 사용합니다. Google의 데이터 처리 방식은
+      <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Google의 파트너 사이트 데이터 이용 안내</a>에서
+      확인할 수 있고, <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics 차단 브라우저 부가기능</a>으로
+      수집을 거부할 수 있습니다.
+    </p>
 
-    <h2>5. 이용자의 권리</h2>
-    <p>브라우저에 저장된 데이터는 이용자가 직접 통제할 수 있습니다. 브라우저의 사이트 데이터 삭제 기능으로 언제든 모두 지울 수 있으며, 각 도구의 ‘초기화’ 기능도 제공됩니다. 개인정보 보호법상 열람·정정·삭제·처리정지 요구권이 있으며, 수집 기능 도입 후에는 문의 창구를 통해 행사할 수 있습니다.</p>
+    <h2>4. 네이버 애널리틱스</h2>
+    <p>
+      국내 검색 유입 분석을 위해 네이버 애널리틱스(계정 ID <code>25db1b1d375e68</code>)를 사용합니다.
+      전 페이지에서 <code>wcs.naver.net/wcslog.js</code>가 로드되어 유입 경로와 페이지 조회를 기록합니다.
+      수집 항목과 거부 방법은 <a href="https://analytics.naver.com/" target="_blank" rel="noopener">네이버 애널리틱스</a> 및
+      네이버 개인정보처리방침을 따릅니다.
+    </p>
 
-    <h2>6. 문의</h2>
-    <p>본 방침이나 데이터 처리에 대한 문의는 <a href="feedback.html">수정 요청 게시판</a> 또는 <a href="board.html">게시판</a>을 통해 남겨주세요.</p>
+    <h2>5. Google AdSense와 쿠키·광고 식별자</h2>
+    <p>
+      톺다는 Google AdSense(<code>ca-pub-6725359021570843</code>)로 광고를 게재합니다.
+      Google을 포함한 제3자 광고 사업자는 쿠키와 광고 식별자를 사용해 이용자의 이 사이트 및
+      다른 사이트 방문 기록을 바탕으로 광고를 게재할 수 있습니다.
+    </p>
+    <ul>
+      <li>광고 스크립트는 <strong>완성된 콘텐츠·계산기 페이지에만</strong> 넣습니다.
+        이 개인정보 처리방침, <a href="contact.html">문의</a>,
+        <a href="editorial-policy.html">운영·편집 원칙</a>, <a href="corrections.html">정정 안내</a>,
+        게시판·댓글·수정 요청, 내부 검색 결과, 검색 색인에서 제외한 페이지, 오류 페이지에는
+        광고 스크립트를 넣지 않습니다.</li>
+      <li>맞춤 광고를 원하지 않으면
+        <a href="https://myadcenter.google.com/" target="_blank" rel="noopener">Google 광고 설정</a>에서 끌 수 있고,
+        <a href="https://optout.aboutads.info/" target="_blank" rel="noopener">aboutads.info</a>에서
+        참여 사업자의 맞춤 광고를 일괄 거부할 수 있습니다.</li>
+      <li>Google의 광고 관련 데이터 처리는
+        <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google 광고 및 데이터 정책</a>을 따릅니다.</li>
+    </ul>
 
-    <h2>7. 고지 의무</h2>
-    <p>법령·정책 변경 또는 기능 추가에 따라 본 방침이 변경될 수 있으며, 변경 시 본 페이지에 시행일과 함께 게시합니다.</p>
+    <h2>6. Supabase의 역할</h2>
+    <p>
+      게시판 글과 댓글을 여러 방문자가 함께 볼 수 있어야 하므로, 이 두 기능만
+      <strong>Supabase</strong>(PostgreSQL 기반 호스팅 데이터베이스)에 저장합니다.
+      계산기·체크리스트 입력값은 Supabase로 전송되지 않습니다.
+    </p>
+    <ul>
+      <li><strong>저장되는 테이블</strong> — <code>board_posts</code>(게시글), <code>content_comments</code>(댓글).
+        공개 조회는 비밀글·소유자 토큰을 제외한 뷰(<code>board_posts_public</code>,
+        <code>content_comments_public</code>)를 통해서만 이뤄집니다.</li>
+      <li><strong>저장되는 항목</strong> — 카테고리, 제목, 본문, 닉네임(비우면 ‘익명’), 작성·수정 시각,
+        비밀글 여부, 소유자 토큰(UUID).</li>
+      <li><strong>접근 제어</strong> — 브라우저에 노출되는 키는 공개용 anon 키이며, 실제 읽기·쓰기 권한은
+        Supabase의 행 수준 보안(RLS) 정책이 제한합니다. 비밀글 본문과 소유자 토큰은 공개 뷰에서 제외됩니다.</li>
+      <li><strong>미설정 시 동작</strong> — Supabase 설정이 주입되지 않은 환경에서는 글이 서버로 가지 않고
+        작성한 브라우저의 localStorage에만 남습니다.</li>
+    </ul>
+    <div class="callout callout-warn">
+      <div class="icon">⚠</div>
+      <div class="body">
+        <strong>운영자가 확인해야 하는 항목</strong>
+        Supabase 프로젝트의 <strong>데이터 저장 리전(서버 위치)</strong>과 <strong>백업 보관 기간</strong>은
+        프로젝트 설정에서 결정되는 값입니다. 저장소에 있는 코드만으로는 확인할 수 없으므로,
+        실제 설정값을 확인해 이 문단에 기재하기 전까지는 구체적인 국가명·기간을 적지 않았습니다.
+        Google Analytics의 데이터 보관 기간도 GA4 관리 화면에서 설정하는 값이라 같은 이유로 비워 두었습니다.
+      </div>
+    </div>
+
+    <h2>7. localStorage에 저장되는 항목</h2>
+    <p>아래 값은 <strong>이용자 브라우저에만</strong> 저장되며 서버로 전송되지 않습니다.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>키</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td><code>topda:autosave:*</code></td><td>계산기별 입력값 자동 저장(다시 방문 시 복원)</td></tr>
+          <tr><td><code>cl-hub</code></td><td>체크리스트 항목 체크 상태·진행률</td></tr>
+          <tr><td><code>dday:type</code></td><td>D-Day 스케줄러에서 고른 일정 유형</td></tr>
+          <tr><td><code>topda-language</code></td><td>선택한 표시 언어</td></tr>
+          <tr><td><code>board:author</code> · <code>comments:author</code></td><td>게시판·댓글에 쓴 닉네임(다음 글에 자동 입력)</td></tr>
+          <tr><td><code>board:draft</code></td><td>작성 중인 글 임시 저장</td></tr>
+          <tr><td><code>board:owner_tokens</code> · <code>comments:owner_tokens</code></td><td>내가 쓴 글·댓글의 소유자 토큰(본인 글 확인·삭제용)</td></tr>
+          <tr><td><code>board:public</code> · <code>board:secret</code> · <code>fb:public</code> · <code>fb:secret</code></td><td>Supabase 미설정 환경에서의 게시글 로컬 보관</td></tr>
+          <tr><td><code>board:migrated_to_supabase</code></td><td>로컬 글을 서버로 옮겼는지 표시</td></tr>
+          <tr><td><code>board:admin_key</code> · <code>topda_admin</code></td><td>운영자 관리·편집 모드 키(운영자 본인 브라우저에만 생성)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>브라우저의 사이트 데이터 삭제 기능으로 위 값을 언제든 전부 지울 수 있습니다.</p>
+
+    <h2>8. 게시판·댓글 작성 시 처리되는 항목</h2>
+    <ul>
+      <li><strong>공개글</strong> — 제목·본문·닉네임·작성 시각이 모든 방문자에게 보입니다.</li>
+      <li><strong>비밀글</strong> — 목록에는 제목이 자물쇠 표시와 함께 보이지만, 본문은 작성 시 발급된
+        소유자 토큰을 가진 브라우저와 운영자만 열 수 있습니다.</li>
+      <li><strong>소유자 토큰</strong> — 작성 시 무작위로 만들어 브라우저에 저장합니다. 브라우저 데이터를
+        지우면 토큰도 사라지고, 그 글은 본인이 직접 삭제할 수 없게 되므로 운영자에게 삭제를 요청해야 합니다.</li>
+      <li><strong>IP·이메일</strong> — 톺다 코드에서는 작성자 IP나 이메일을 받거나 저장하지 않습니다.</li>
+      <li>게시판에 적은 내용은 이용자가 스스로 공개한 정보입니다. 계약서 사본·주민등록번호·전화번호·계좌번호 등은
+        올리지 마시고, 이미 올렸다면 삭제하거나 운영자에게 삭제를 요청해 주세요.</li>
+    </ul>
+
+    <h2>9. 보유 및 삭제 기준</h2>
+    <div class="def-list">
+      <div class="row"><span class="k">게시글·댓글</span><span class="v">작성자가 삭제하거나 운영자가 삭제할 때까지 보관합니다. 별도의 자동 삭제 주기는 두지 않았습니다.</span></div>
+      <div class="row"><span class="k">localStorage 값</span><span class="v">이용자가 브라우저 데이터를 지우거나 각 도구의 초기화 기능을 쓸 때까지. 운영자가 접근할 수 없습니다.</span></div>
+      <div class="row"><span class="k">방문 통계</span><span class="v">Google Analytics 4·네이버 애널리틱스 각 서비스의 보관 정책과 관리 화면 설정에 따릅니다 — 6항의 ‘운영자가 확인해야 하는 항목’ 참고.</span></div>
+      <div class="row"><span class="k">광고 쿠키</span><span class="v">각 쿠키의 만료 기간 또는 이용자가 쿠키를 삭제할 때까지. Google 등 광고 사업자의 정책을 따릅니다.</span></div>
+    </div>
+
+    <h2>10. 제3자 처리 및 국외 처리 가능성</h2>
+    <p>
+      톺다는 개인정보를 판매하거나 광고 목적으로 제3자에게 넘기지 않습니다. 다만 아래 서비스를
+      사용하기 때문에, 접속 정보와 쿠키가 해당 사업자에게 전달되며 그 과정에서
+      <strong>국외 서버로 전송·처리될 수 있습니다.</strong>
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>사업자</th><th>역할</th><th>전달되는 것</th></tr></thead>
+        <tbody>
+          <tr><td>Google LLC</td><td>Analytics 4, AdSense</td><td>접속 정보, 쿠키·광고 식별자, 이용 행태 이벤트</td></tr>
+          <tr><td>네이버㈜</td><td>네이버 애널리틱스</td><td>접속 정보, 유입 경로</td></tr>
+          <tr><td>Supabase Inc.</td><td>게시판·댓글 데이터베이스</td><td>게시글·댓글 내용, 닉네임, 소유자 토큰</td></tr>
+          <tr><td>GitHub, Inc.</td><td>사이트 호스팅(GitHub Pages)</td><td>웹서버 접속 요청</td></tr>
+          <tr><td>jsDelivr</td><td>웹폰트·스크립트 배포(CDN)</td><td>파일 요청에 따르는 접속 정보</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      각 사업자의 서버 위치와 보관 기간은 해당 사업자의 정책과 프로젝트 설정에 따라 정해집니다.
+      톺다 저장소의 코드만으로 확정할 수 없는 값은 임의로 적지 않았습니다(6항 참고).
+    </p>
+
+    <h2>11. 쿠키 설정을 거부하는 방법</h2>
+    <p>브라우저 설정에서 쿠키를 차단하거나 삭제할 수 있습니다. 쿠키를 차단해도 계산기·체크리스트 기능은 그대로 동작합니다.</p>
+    <ul>
+      <li><strong>Chrome</strong> — 설정 › 개인 정보 보호 및 보안 › 서드 파티 쿠키</li>
+      <li><strong>Safari</strong> — 설정 › 개인정보 보호 › 쿠키 및 웹사이트 데이터 차단</li>
+      <li><strong>Edge</strong> — 설정 › 쿠키 및 사이트 권한 › 쿠키 및 사이트 데이터 관리</li>
+      <li><strong>맞춤 광고만 끄기</strong> — <a href="https://myadcenter.google.com/" target="_blank" rel="noopener">Google 광고 설정</a></li>
+      <li><strong>방문 통계만 끄기</strong> — <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics 차단 부가기능</a></li>
+    </ul>
+
+    <h2>12. 이용자의 권리</h2>
+    <p>이용자는 개인정보 보호법에 따라 열람·정정·삭제·처리정지를 요구할 수 있습니다. 톺다에서는 다음과 같이 행사할 수 있습니다.</p>
+    <ul>
+      <li><strong>내가 쓴 글 삭제</strong> — 작성한 브라우저에서 해당 글의 삭제 기능을 쓰거나,
+        <a href="contact.html">문의 창구</a>로 삭제를 요청합니다. 요청 시 글 제목·작성 시각처럼
+        글을 특정할 수 있는 정보를 알려주시면 됩니다.</li>
+      <li><strong>브라우저 저장값 삭제</strong> — 브라우저의 사이트 데이터 삭제 기능으로 이용자가 직접 전부 지울 수 있습니다.</li>
+      <li><strong>통계·광고 수집 거부</strong> — 11항의 방법으로 이용자가 직접 차단할 수 있습니다.</li>
+      <li>만 14세 미만 아동을 대상으로 하는 서비스가 아니며, 법정대리인 동의를 받는 절차를 두지 않았습니다.</li>
+    </ul>
+
+    <h2>13. 문의</h2>
+    <p>
+      개인정보 처리에 관한 문의·삭제 요청은 <a href="contact.html">문의 안내</a>에 정리된 창구로 접수합니다.
+      현재 사이트 내 창구는 <a href="board.html">게시판</a>(비밀글 사용 가능)이며,
+      전자우편 주소는 운영자가 확인 후 문의 안내 페이지에 게시합니다.
+    </p>
+
+    <h2>14. 방침 변경</h2>
+    <p>
+      법령·정책 변경 또는 기능 추가로 이 방침이 바뀌면, 시행일과 함께 이 페이지에 게시합니다.
+      새로운 측정·광고·저장 도구를 도입할 때는 도입과 동시에 이 문서를 갱신하는 것을 원칙으로 합니다.
+    </p>
 
     <hr/>
-    <p style="color: var(--text-muted); font-size: 0.9rem;">시행일: 2026-05-31 · 본 방침은 일반 정보 제공용이며, 구체적 법적 자문이 필요한 경우 전문가와 상의하시기 바랍니다.</p>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+      최초 시행일: 2026-05-31 · 최종 개정일: 2026-07-30
+      (실제 구현 기준으로 전면 개정 — GA4·네이버 애널리틱스·AdSense·Supabase 처리 내역 반영)<br/>
+      본 방침은 톺다 사이트의 데이터 처리 내역을 설명하는 문서이며, 개별 사안에 대한 법적 자문이 아닙니다.
+    </p>
   </div>
 </main>
 
@@ -142,8 +328,11 @@
         <h4>사이트 정보</h4>
         <ul>
           <li><a href="about.html">안내</a></li>
-          <li><a href="about.html#disclaimer">면책고지</a></li>
+          <li><a href="editorial-policy.html">운영·편집 원칙</a></li>
+          <li><a href="data-methodology.html">데이터 기준</a></li>
+          <li><a href="corrections.html">정정 안내</a></li>
           <li><a href="privacy.html">개인정보 처리방침</a></li>
+          <li><a href="contact.html">문의</a></li>
         </ul>
       </div>
     </div>

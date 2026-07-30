@@ -304,8 +304,30 @@
   </div>
   </details>
 </section>
-</main>
 
+<!-- calc:meta:start -->
+<section class="calc-meta" aria-labelledby="calc-meta-h">
+  <h2 id="calc-meta-h">이 계산기 정보</h2>
+  <h3>어떤 경우에 쓰는 계산기인가</h3>
+<p>집을 보러 다니기 전에 &#x27;얼마까지 빌릴 수 있는가&#x27;를 확인하려는 사람. 주택담보대출은 LTV와 DSR 중 더 낮은 쪽이 한도가 되므로, 두 기준을 함께 봐야 예산이 잡힙니다.</p>
+  <h3>미리 준비할 값</h3>
+<ul><li>주택가격 — KB시세 또는 감정가 기준</li><li>지역(규제지역·수도권 여부)과 보유 유형(무주택·생애최초·처분조건부 1주택·다주택)</li><li>세전 연소득, 기존 대출의 월 원리금 상환액</li><li>대출금리와 만기, 상환 방식</li><li>전세자금대출은 임차보증금, 지역, 부부합산 소득, 타행 신용대출 잔액, 보증기관(HF·HUG·SGI)</li></ul>
+  <h3>적용 공식과 가정</h3>
+<ul><li>LTV 한도 = 주택가격 × 적용 LTV. 수도권·규제지역은 주택가격 구간별 대출 상한이 추가로 적용됩니다.</li><li>DSR 한도 = (연소득 × DSR 한도율 − 기존 대출 연 원리금) 을 만기·금리로 역산한 원금.</li><li>스트레스 DSR — 실제 금리에 가산금리를 더한 금리로 한도를 계산합니다.</li><li>최종 한도 = LTV 한도와 DSR 한도 중 작은 값.</li><li>가정: 신용등급·직장 형태·기존 한도 소진 여부는 반영하지 않습니다. 은행 심사에서 더 낮아질 수 있습니다.</li></ul>
+  <h3>결과가 달라질 수 있는 조건</h3>
+<ul><li>규제지역 지정과 LTV·DSR 규제는 정책 발표에 따라 자주 바뀝니다.</li><li>스트레스 금리 가산폭은 지역·시기별로 다릅니다.</li><li>정책 대출상품(디딤돌·보금자리 등)은 별도 기준이 적용돼 이 계산과 다릅니다.</li><li>전세대출은 보증기관별 보증비율·한도가 달라 결과가 갈립니다.</li></ul>
+  <h3>함께 보기</h3>
+<ul><li><a href="dsr.html">DSR 한도 계산기</a></li><li><a href="loan-compare.html">원리금균등 vs 원금균등 비교</a></li><li><a href="../posts/dsr-explain.html">DSR 완벽 정리</a></li><li><a href="../posts/ltv-explain.html">LTV 완벽 정리</a></li><li><a href="../posts/stress-dsr.html">스트레스 DSR — 가산금리가 한도를 줄이는 방식</a></li></ul>
+  <h3>근거와 기준일</h3>
+<div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">관련 법령·고시 (각 계산기 하단 출처 참고)</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-07-30 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
+  <h3>변경 이력</h3>
+<p class="note">계산 결과가 달라지는 변경만 기록합니다. 표기·문구만 다듬은 수정은 남기지 않습니다. 전체 원본은 <code>site/assets/rates.js</code> 에서 관리합니다.</p>
+<div class="def-list"><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.</span></div><div class="row"><span class="k">2026-06-14</span><span class="v">국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).</span></div><div class="row"><span class="k">2026-06-13</span><span class="v">국민주택채권 매입금액 만원 단위 절상 적용 + 지역(특별시·광역시/그 밖의 지역) 매입률 구분. 양도세 장기보유특별공제 표1 정정(연 2%·3년 6%~15년 30%).</span></div><div class="row"><span class="k">2026-06-04</span><span class="v">대출 한도 규정 블록 신설(LTV·가격대별 한도·스트레스 DSR·전세 보증기관 HF/HUG/SGI).</span></div></div>
+  <p class="note">계산 결과는 입력 조건에 따른 <strong>추정값</strong>입니다. 실제 고지·부과·승인 금액과 다를 수 있으며, 개별 사안에 대한 법률·세무·금융 자문이 아닙니다. 작성·관리 원칙은 <a href="/editorial-policy.html">운영·편집 원칙</a>에, 오류 제보는 <a href="/corrections.html">정정 안내</a>에 있습니다.</p>
+</section>
+<!-- calc:meta:end -->
+
+</main>
 
 <section class="content-comments" data-comments data-comment-type="page" data-comment-key="calculator:loan-limit" data-comment-title="대출 한도 시뮬레이터" data-comment-page="/calculators/loan-limit.html"></section>
 <script src="../assets/supabase-client.js?v=20260728"></script>
