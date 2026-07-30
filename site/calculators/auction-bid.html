@@ -27,7 +27,7 @@
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/auction-bid.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260730" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -137,6 +137,14 @@
       </div>
 
       <div class="field">
+        <label>물건 종류<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="주택은 주택 수·조정지역에 따라 1~12%, 비주택(상가·업무용 오피스텔·토지)은 4.6%가 적용됩니다.">?</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="assetType" value="house" checked/><span>주택</span></label>
+          <label><input type="radio" name="assetType" value="nonhouse"/><span>비주택(상가·토지 등)</span></label>
+        </div>
+      </div>
+
+      <div class="field">
         <label>주택 수 (본 거래 포함)</label>
         <div class="radio-group">
           <label><input type="radio" name="homes" value="1" checked/><span>1주택</span></label>
@@ -145,11 +153,31 @@
         </div>
       </div>
 
-      <div class="field">
-        <label class="check-item" style="padding: 0; cursor: pointer;">
-          <input type="checkbox" name="regulated"/>
-          <span class="text">조정대상지역</span>
-        </label>
+      <div class="calc-check-grid">
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="regulated"/>
+            <span class="text">조정대상지역</span>
+          </label>
+        </div>
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="areaOver85"/>
+            <span class="text">전용 85㎡ 초과<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="85㎡ 이하는 농어촌특별세가 면제됩니다. 이전 버전은 취득세에 일률적으로 10%를 가산해 85㎡ 이하 물건의 세금을 과다 계산했습니다.">?</span></span>
+          </label>
+        </div>
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="tempTwoHome"/>
+            <span class="text">일시적 2주택</span>
+          </label>
+        </div>
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="firstHome"/>
+            <span class="text">생애최초 구입<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="경매로 취득해도 유상취득이므로 생애최초 감면 요건(무주택 세대·12억 이하·1주택)을 충족하면 최대 200만원 감면됩니다.">?</span></span>
+          </label>
+        </div>
       </div>
 
       <div class="field">
@@ -184,6 +212,10 @@
         <div class="row"><span class="key">입찰 낙찰가</span><span class="val" data-out="bid">0원</span></div>
         <div class="row sub"><span class="key">+ 인수 보증금</span><span class="val" data-out="depositOut">0원</span></div>
         <div class="row sub"><span class="key">+ 취득세 등</span><span class="val" data-out="taxOut">0원</span></div>
+        <div class="row sub"><span class="key">└ 적용 규칙</span><span class="val" data-out="taxScenario">—</span></div>
+        <div class="row sub"><span class="key">└ 취득세 (감면 후)</span><span class="val" data-out="taxAcquisition">0원</span></div>
+        <div class="row sub"><span class="key">└ 농어촌특별세</span><span class="val" data-out="taxRural">면제</span></div>
+        <div class="row sub"><span class="key">└ 지방교육세</span><span class="val" data-out="taxEdu">0원</span></div>
         <div class="row sub"><span class="key">+ 명도비</span><span class="val" data-out="evictOut">0원</span></div>
         <div class="row sub"><span class="key">+ 미납 관리비</span><span class="val" data-out="unpaidOut">0원</span></div>
         <div class="row sub"><span class="key">+ 기타 비용</span><span class="val" data-out="miscOut">0원</span></div>
@@ -194,10 +226,13 @@
         <div class="row"><span class="key">감정가 평가</span><span class="val" data-out="verdict">—</span></div>
       </div>
 
+      <ul class="acq-notes" data-acq-notes hidden></ul>
+
       <div class="callout callout-info" style="margin-top:24px; margin-bottom:0;">
         <div class="icon">i</div>
         <div class="body">
           <strong>참고</strong> 실수요는 5~10% 마진, 단기 차익은 15~20% 이상 마진을 목표로 입찰가를 역산하는 것이 일반적입니다.
+          취득세·농어촌특별세·지방교육세는 <a href="acquisition-tax.html">취득세 계산기</a>와 동일한 공통 계산 엔진으로 산정합니다.
         </div>
       </div>
     </div>
@@ -210,7 +245,7 @@
     <div class="explain-body">
     <ul class="ref-list">
       <li><strong>취득세</strong> — 일반 주택 매매와 동일한 세율을 적용합니다(지방세법 제10조 1항: 취득세 과세표준은 사실상 취득가액). 1주택 6억 이하 1.0%, 6~9억 누진, 9억 초과 3.0%, 다주택·조정대상 8~12%.</li>
-      <li><strong>지방교육세·농어촌특별세</strong> — 단순화를 위해 취득세의 10%를 가산해 표시합니다. 실제 세액은 면적·감면 여부에 따라 달라집니다.</li>
+      <li><strong>지방교육세·농어촌특별세</strong> — 취득세 계산기와 <strong>동일한 공통 계산 엔진</strong>으로 산정합니다. 농어촌특별세는 전용 85㎡ 이하면 면제되고, 8·12% 중과 시 지방교육세는 낙찰가의 0.4% 고정입니다. 생애최초·일시적 2주택 감면도 그대로 반영됩니다.</li>
       <li><strong>인수 보증금</strong> — 대항력 있는 선순위 임차인이 배당받지 못한 금액. 매각물건명세서·현황조사서로 사전 확인 필요.</li>
       <li><strong>미납 관리비</strong> — 공용 부분 한정 인수. 전용 부분은 점유자 책임이 원칙입니다.</li>
     </ul>
@@ -257,7 +292,7 @@
     <p class="disclaimer">© 톺다.</p>
   </div>
 </footer>
-<script src="../assets/rates.js?v=20260629"></script>
-<script src="../assets/app.js?v=20260723"></script>
+<script src="../assets/rates.js?v=20260730"></script>
+<script src="../assets/app.js?v=20260730"></script>
 </body>
 </html>

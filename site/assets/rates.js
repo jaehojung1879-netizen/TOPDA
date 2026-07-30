@@ -17,12 +17,15 @@
 
   window.TOPDA_RATES = {
     // 사이트 전체 최종 검토일 (계산기 하단에 표기됨)
-    lastReviewed: '2026-06-16',
+    lastReviewed: '2026-07-30',
 
     // 계산기별 주요 출처 (계산기 페이지 하단에 자동 표기)
     sources: {
-      'acquisition-tax': '지방세법 제11·15조, 지방세특례제한법 제36조의3',
-      'transfer-tax': '소득세법 제55·95·104조 (양도소득세)',
+      'acquisition-tax': '지방세법 제11·15조, 지방세특례제한법 제36조의3·제36조의5',
+      'transfer-tax': '소득세법 제55·95·97조의2·제104조 (양도소득세)',
+      'auction-bid': '민사집행법, 지방세법 제11·15조 (낙찰가 기준 취득세 공통 산정)',
+      'jeonse-monthly': '주택임대차보호법 제7조의2, 같은 법 시행령 제9조 (전월세전환율 상한)',
+      'housing-subscription': '주택공급에 관한 규칙 제28조 및 [별표1] (청약가점제)',
       'registration-cost': '인지세법 제3조, 주택도시기금 국민주택채권, 대한법무사협회 보수표(2024.9.12 시행)',
       'total-cost-dashboard': '지방세법·소득세법·상속세및증여세법, 금융위 DSR·RTI 가이드',
       'dsr': '금융위원회·금융감독원 가계대출 관리방안 (DSR)',
@@ -152,39 +155,144 @@
 
     // ── 아래는 reference: 각 계산기 코드에 동일 값 존재(점진 이관 대상) ──
 
-    // 취득세 (주택, 지방세법) reference
+    // 취득세 (주택, 지방세법) consumed — calcAcquisitionTax()가 직접 읽는다
     acquisitionTax: {
       base: { under6eok: 1.0, over9eok: 3.0 }, // 6억↓ 1%, 6~9억 누진, 9억↑ 3%
       heavy: { twoHomeRegulated: 8.0, threeHomeRegulated: 12.0, threeHomeNonReg: 8.0, fourPlus: 12.0 },
       nonHouse: 4.0, // 비주택 본세(%)
-      firstHomeDeductMax: 2000000, // 생애최초 감면 한도(원)
       ruralTaxOver85: 0.2, // 85㎡ 초과 농특세(%)
-      // 2026 한시: 지방 준공 후 미분양 아파트 — 전용 85㎡ 이하·취득가 6억 이하
-      //   취득세 50% 감면 + 다주택자 취득세 중과에서 제외 (1년 한시)
+
+      // ── 생애최초 주택 취득 감면 (지방세특례제한법 제36조의3) ──
+      //  일반 감면 한도 200만원. 다만 소형·비아파트(도시형생활주택·다가구 등) 및
+      //  인구감소지역 주택은 300만원 한도가 적용될 수 있다.
+      firstHomeRelief: {
+        priceMax: 1200000000,   // 취득 당시 가액 상한(원)
+        deductMax: 2000000,     // 일반 한도(원)
+        smallHouseDeductMax: 3000000, // 소형 비아파트·인구감소지역 한도(원)
+        smallHouseAreaMaxSqm: 60,     // 소형주택 판정 전용면적(㎡)
+        smallHousePriceMaxMetro: 300000000,    // 수도권 소형주택 가액 상한(원)
+        smallHousePriceMaxOther: 200000000,    // 비수도권 소형주택 가액 상한(원)
+        effectiveFrom: '2025-01-01',
+        reviewedAt: '2026-07-30',
+        jurisdiction: 'KR',
+        confidence: 'verified',
+        source: '지방세특례제한법 제36조의3 (생애최초 주택 취득에 대한 감면)',
+      },
+
+      // ── 출산·양육 가구 주택 취득세 감면 (지방세특례제한법 제36조의5) ──
+      //  자녀 출산일 전후 일정 기간 내 취득한 12억원 이하 1가구 1주택 → 최대 500만원 감면
+      childbirthRelief: {
+        priceMax: 1200000000,
+        deductMax: 5000000,
+        validUntil: '2028-12-31',
+        effectiveFrom: '2024-01-01',
+        reviewedAt: '2026-07-30',
+        jurisdiction: 'KR',
+        confidence: 'verified',
+        source: '지방세특례제한법 제36조의5 (출산·양육을 위한 주택 취득에 대한 감면)',
+      },
+
+      // ── 지방 준공 후 미분양 주택 한시 감면 ──
+      //  ⚠ 전국 일률 50%가 아니다. 법정 감면율은 25%이고, 지방자치단체 조례로
+      //    최대 25%p가 추가 감면되어 최종 25~50% 범위가 된다.
+      //    조례를 확인하지 못하면 법정 25%만 반영하고 결과에 그 사실을 밝힌다.
+      //  요건: 사업주체로부터 최초 유상취득 · 수도권 밖 · 준공 후 미분양 ·
+      //        실제 입주 사실 없음(입주 기간 1년 미만) · 전용 85㎡ 이하 · 취득가 6억 이하 ·
+      //        개인(법인·단체 제외)
       unsold2026Relief: {
         areaMaxSqm: 85,
         priceMax: 600000000,
-        discountRatio: 0.50,
-        excludeHeavySurcharge: true,
+        statutoryRatio: 0.25,        // 법률에 따른 기본 감면율
+        localMaxExtraRatio: 0.25,    // 조례로 추가 가능한 최대 감면율
+        localExtraOptions: [0, 0.10, 0.25], // UI 선택지(조례 미확인 시 0)
+        maxTotalRatio: 0.50,         // 법정 + 조례 상한
+        discountRatio: 0.50,         // (레거시) 이전 버전 호환용 최대치
+        excludeHeavySurcharge: true, // 다주택 취득세 중과 제외
+        metroExcluded: true,         // 수도권은 대상 아님
         validUntil: '2026-12-31',
-        source: '지방세특례제한법(2026년 개정) — 지방 미분양 해소 한시 감면',
+        effectiveFrom: '2026-01-01',
+        reviewedAt: '2026-07-30',
+        jurisdiction: 'KR',
+        confidence: 'verified',
+        source: '지방세특례제한법 — 지방 준공 후 미분양 주택 취득세 한시 감면(법정 25% + 조례 최대 25%)',
       },
+
+      // ── 취득 원인별 세율 체계 ──
+      //  ⚠ '신축'을 한 덩어리로 묶으면 안 된다. 직접 신축(원시취득 2.8%)과
+      //    시행사로부터 분양받은 신축주택(유상거래 1~3% 또는 중과)은 세율 체계가 다르다.
+      acqTypes: {
+        purchase: { label: '매매(유상거래)', rateBasis: 'progressive-1to3' },
+        presale:  { label: '분양받은 신축주택', rateBasis: 'progressive-1to3',
+          note: '시행사·건설사로부터 분양받아 소유권을 취득하면 유상거래 주택 취득(1~3% 또는 중과)입니다.' },
+        original: { label: '직접 신축·증축한 건축물', rate: 2.8,
+          note: '건축주가 직접 신축·증축해 원시취득한 경우입니다.' },
+        redevelop:{ label: '재개발·재건축 조합원 취득', rateBasis: 'mixed',
+          note: '종전 토지·건물 지분과 추가분담금(원시취득)의 과세표준을 나누어 판정해야 합니다. 본 계산기는 개략 추정만 제공합니다.' },
+        inherit:  { label: '상속', rate: 2.8, specialRate: 0.8 },
+        gift:     { label: '증여(무상취득)', rate: 3.5, heavyRate: 12.0 },
+      },
+
       effectiveFrom: '2026-01-01',
-      source: '지방세법 제11·15조, 지방세특례제한법 제36조의3 (2026 미분양 한시감면 반영)',
+      reviewedAt: '2026-07-30',
+      jurisdiction: 'KR',
+      confidence: 'verified',
+      source: '지방세법 제11·15조, 지방세특례제한법 제36조의3·제36조의5',
     },
 
-    // 양도소득세 (소득세법) reference
+    // 양도소득세 (소득세법) consumed
     transferTax: {
       onlyHomeExemptCap: 1200000000, // 1세대1주택 비과세 한도(원)
       shortTermHouse: { under1y: 70, under2y: 60 }, // 단기 세율(%)
       shortTermNonHouse: { under1y: 50, under2y: 40 },
       basicDeduct: 2500000, // 기본공제(원)
       localTaxRate: 10, // 지방소득세(국세의 %)
-      // 다주택 양도세 중과 한시 유예: 2년 이상 보유 시 2026-05-09까지 양도하면 중과 미적용
+
+      // 장기보유특별공제 표2(1세대1주택) 거주기간 공제
+      //  ⚠ 거주 2년 이상 3년 미만 구간(8%)이 존재한다. 3년부터 시작하면 과다 계산된다.
+      ltDeductResidence: {
+        minYears: 2,
+        under3yRate: 0.08,     // 2년 이상 3년 미만
+        from3yBaseRate: 0.12,  // 3년 이상 12%
+        perYearRate: 0.04,     // 이후 연 4%p
+        maxRate: 0.40,
+        source: '소득세법 제95조 제2항 [표2]',
+      },
+
+      // 다주택 양도세 중과 한시 유예 + 경과규정
+      //  ⚠ 잔금일이 유예 종료일 다음 날이라고 무조건 중과되는 것이 아니다.
+      //    유예 종료일까지 계약·계약금 수령을 마쳤다면 일정 기간 내 양도까지 유예가 이어진다.
       multiHomeSurchargeWaiverUntil: '2026-05-09',
       multiHomeSurchargeWaiverMinHoldYears: 2,
+      multiHomeSurchargeGrace: {
+        contractBy: '2026-05-09',        // 이 날짜까지 매매계약 + 계약금 수령
+        transferWithinMonths: 4,         // 계약일부터 4개월 이내 양도
+        newRegulatedWithinMonths: 6,     // 일부 신규 조정대상지역은 6개월
+        landPermitApplyBy: '2026-05-09', // 토지거래허가 대상은 이 날까지 허가 신청
+        landPermitWithinMonths: 6,
+        effectiveFrom: '2026-05-10',
+        reviewedAt: '2026-07-30',
+        jurisdiction: 'KR',
+        confidence: 'verified',
+        source: '소득세법 시행령 부칙 — 다주택자 중과 한시 배제 경과규정',
+      },
+
+      // 배우자·직계존비속 증여재산 이월과세 (소득세법 제97조의2)
+      //  증여받은 부동산을 일정 기간 내 양도하면 증여자의 취득가액이 이월 적용된다.
+      carryoverBasis: {
+        withinYears: 10,
+        appliesTo: '배우자 또는 직계존비속으로부터 증여받은 토지·건물·부동산에 관한 권리',
+        effectiveFrom: '2023-01-01',
+        reviewedAt: '2026-07-30',
+        jurisdiction: 'KR',
+        confidence: 'verified',
+        source: '소득세법 제97조의2 (양도소득의 필요경비 계산 특례)',
+      },
+
       effectiveFrom: '2026-01-01',
-      source: '소득세법 제55·95·104조 (다주택 중과 한시 유예 2026.5.9까지)',
+      reviewedAt: '2026-07-30',
+      jurisdiction: 'KR',
+      confidence: 'verified',
+      source: '소득세법 제55·95·97조의2·제104조',
     },
 
     // 인지세 (인지세법 제3조) reference — 구간별 정액(원)
@@ -197,16 +305,109 @@
       { upTo: Infinity, amount: 350000 },
     ],
 
-    // 상속·증여 공제 (상속세및증여세법) reference
+    // ── 상속·증여 (상속세 및 증여세법) consumed ──
+    //  ⚠ 상속세 배우자 상속공제는 '순재산 × 30%'가 아니다.
+    //    min(실제 상속받은 금액, 법정상속분 한도, 30억)이며 최소 5억이 보장된다.
+    //    가족 구성·분할 방식에 따라 결과가 크게 달라져 단일 값 대신 범위로 제시한다.
     inheritGift: {
-      lumpSumDeduct: 500000000, // 일괄공제(원)
-      spouseMinDeduct: 500000000,
-      giftDeduct: { spouse: 600000000, adult: 50000000, minor: 20000000, other: 10000000 },
-      source: '상속세 및 증여세법',
+      lumpSumDeduct: 500000000,   // 일괄공제(원)
+      basicDeduct: 200000000,     // 기초공제(원)
+      childDeduct: 50000000,      // 자녀 1인당 인적공제(원)
+      spouseMinDeduct: 500000000, // 배우자 최소 공제(원)
+      spouseMaxDeduct: 3000000000,// 배우자 공제 상한(원)
+      spouseStatutoryShareBonus: 0.5, // 배우자 법정상속분 가산(자녀 1인 대비 1.5)
+      // 증여재산공제 (10년 합산 기준, 원)
+      giftDeduct: {
+        spouse: 600000000,
+        adult: 50000000,   // 직계존비속(성년)
+        minor: 20000000,   // 직계존비속(미성년)
+        other: 10000000,   // 기타 친족 — 6촌 이내 혈족·4촌 이내 인척
+      },
+      // ⚠ 기타친족 1천만원 공제는 '친족'에게만 적용된다. 완전한 비친족(타인) 증여는
+      //   증여재산공제가 없다. UI에서 반드시 구분해야 한다.
+      otherRequiresKinship: true,
+      strangerDeduct: 0,
+      // 혼인·출산 증여재산공제 (상증법 제53조의2) — 혼인 + 출산 합산 1억원 한도
+      marriageBirthDeduct: { max: 100000000, source: '상속세 및 증여세법 제53조의2' },
+      // 세대생략 할증 (상증법 제57조)
+      generationSkipSurcharge: {
+        base: 0.30,          // 손자녀 등 세대생략 증여 30% 할증
+        minorHighValue: 0.40,// 미성년자가 20억원 초과를 받는 경우 40%
+        minorHighValueOver: 2000000000,
+      },
+      // 10년 합산 과세 (상증법 제47조 제2항) + 기납부세액공제 (제58조)
+      priorGiftAggregation: {
+        withinYears: 10,
+        sameDonorIncludesSpouseOfLineal: true, // 직계존속은 그 배우자를 동일인으로 봄
+        creditPriorTaxPaid: true,
+        source: '상속세 및 증여세법 제47조·제58조',
+      },
+      effectiveFrom: '2026-01-01',
+      reviewedAt: '2026-07-30',
+      jurisdiction: 'KR',
+      confidence: 'verified',
+      source: '상속세 및 증여세법 제18조의2·제19조·제47조·제53조·제53조의2·제57조·제58조',
+    },
+
+    // ── 중개보수 (공인중개사법 시행규칙 [별표1~3]) consumed ──
+    //  주택 상한요율은 시·도 조례로 정하며 아래는 서울특별시 기준.
+    //  주택 외(오피스텔·상가·토지)는 조례가 아닌 법령 상한(0.9% 이내 협의)이 적용된다.
+    brokerage: {
+      // 월세·보증부 월세 거래금액 환산 (시행규칙 제20조 제4항)
+      //  거래금액 = 보증금 + 월세 × 100. 다만 그 금액이 5천만원 미만이면 월세 × 70으로 환산.
+      monthlyRentMultiplier: 100,
+      monthlyRentMultiplierLow: 70,
+      monthlyRentLowThreshold: 50000000,
+      // 주거용 오피스텔(전용 85㎡ 이하 + 부엌·화장실·목욕시설 구비): 매매 0.5%, 임대차 0.4%
+      officetelResidential: { sale: 0.005, lease: 0.004, areaMaxSqm: 85 },
+      // 그 밖의 중개대상물(상가·토지·업무용 오피스텔): 0.9% 이내에서 협의
+      otherPropertyMaxRate: 0.009,
+      vatRate: 0.10,
+      vatNote: '부가가치세는 중개업자가 일반과세자일 때 10%가 붙습니다. 간이과세자는 통상 4%(업종별 부가율) 수준이거나 별도 청구하지 않는 경우도 있어 반드시 확인하세요.',
+      partyNote: '중개보수는 매도인·매수인(임대인·임차인)이 각각 부담합니다. 아래 금액은 “1인당” 부담액입니다.',
+      effectiveFrom: '2021-10-19',
+      reviewedAt: '2026-07-30',
+      jurisdiction: 'KR-11', // 서울특별시 조례 기준
+      confidence: 'verified',
+      source: '공인중개사법 시행규칙 제20조 및 [별표], 서울특별시 주택 중개보수 조례',
+    },
+
+    // ── 전월세 전환율 (주택임대차보호법 제7조의2) consumed ──
+    //  법정 상한 = min(연 10%, 한국은행 기준금리 + 2%p)
+    //  ⚠ 이 상한은 '기존 계약의 전세 → 월세 전환' 시 적용되는 법정 한도이며,
+    //    신규 계약의 시장 전환율과는 다르다. 화면에서 반드시 분리해 표시할 것.
+    jeonseConversion: {
+      baseRatePct: 2.75,      // 한국은행 기준금리(%)
+      baseRateAsOf: '2026-07-30',
+      addPct: 2.0,            // 대통령령으로 정하는 이율(%p)
+      hardCapPct: 10.0,       // 법정 절대 상한(%)
+      marketDefaultPct: 6.0,  // 시장 비교용 기본값(법정 상한 아님)
+      effectiveFrom: '2020-09-29',
+      reviewedAt: '2026-07-30',
+      jurisdiction: 'KR',
+      confidence: 'verified',
+      source: '주택임대차보호법 제7조의2, 같은 법 시행령 제9조 / 한국은행 기준금리',
+    },
+
+    // ── 청약가점제 (주택공급에 관한 규칙 [별표1]) consumed ──
+    subscription: {
+      maxScore: 84,
+      noHomeMax: 32,      // 무주택기간 (최대 32점)
+      dependentsMax: 35,  // 부양가족 (최대 35점)
+      accountMax: 17,     // 청약통장 가입기간 (최대 17점)
+      // 배우자 청약통장 가입기간의 50%를 합산 (최대 3점). 합산 후에도 통장 점수 상한 17점.
+      spouseAccountRatio: 0.5,
+      spouseAccountMaxPoints: 3,
+      effectiveFrom: '2024-03-25',
+      reviewedAt: '2026-07-30',
+      jurisdiction: 'KR',
+      confidence: 'verified',
+      source: '주택공급에 관한 규칙 제28조 및 [별표1] (배우자 통장 가입기간 합산)',
     },
 
     // 변경 이력
     changelog: [
+      { date: '2026-07-30', note: '세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.' },
       { date: '2026-06-16', note: '등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.' },
       { date: '2026-06-16', note: '법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.' },
       { date: '2026-06-14', note: '국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).' },

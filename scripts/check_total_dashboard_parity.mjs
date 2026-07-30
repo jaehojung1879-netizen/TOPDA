@@ -12,32 +12,18 @@ function functionBlock(startNeedle, endNeedle) {
   return appSource.slice(start, end);
 }
 
-const context = vm.createContext({
-  window: {
-    TOPDA_RATES: {
-      acquisitionTax: {
-        unsold2026Relief: {
-          areaMaxSqm: 85,
-          priceMax: 600_000_000,
-          discountRatio: 0.5,
-          excludeHeavySurcharge: true,
-        },
-      },
-      loan: {
-        metroPriceCaps: [
-          { upToEok: 15, cap: 600_000_000 },
-          { upToEok: 25, cap: 400_000_000 },
-          { upToEok: Infinity, cap: 200_000_000 },
-        ],
-      },
-    },
-  },
-});
+// rates.js를 그대로 로드해 계산기와 같은 기준정보로 검증한다(값이 어긋나면 여기서 잡힌다).
+const ratesSource = fs.readFileSync(new URL('../site/assets/rates.js', import.meta.url), 'utf8');
+const ratesContext = vm.createContext({ window: {} });
+vm.runInContext(ratesSource, ratesContext);
+const RATES = ratesContext.window.TOPDA_RATES;
+
+const context = vm.createContext({ window: { TOPDA_RATES: RATES } });
 
 vm.runInContext(
   [
     functionBlock('function calcAcquisitionTax(input)', '\n// scenarioKey'),
-    functionBlock('function calcBrokerageFee({ price, type })', '\n(function () {'),
+    functionBlock('function calcBrokerageFee(opts)', '\n(function () {'),
     functionBlock('function calcMortgageLimit(input)', '\n// 전세대출'),
     'globalThis.cores = { calcAcquisitionTax, calcBrokerageFee, calcRti, calcMortgageLimit };',
   ].join('\n'),
@@ -60,6 +46,8 @@ const temporaryTwoHome = calcAcquisitionTax({
 assert.equal(temporaryTwoHome.isHeavy, false);
 assert.equal(temporaryTwoHome.scenarioKey, 'temp-two-home');
 
+// 지방 준공 후 미분양 감면 — 전국 일률 50%가 아니라 법정 25% + 조례 추가 0~25%.
+// ① 조례 미확인(기본): 법정 25%만 적용되어야 한다.
 const unsold = calcAcquisitionTax({
   price: 600_000_000,
   homes: 3,
@@ -69,9 +57,80 @@ const unsold = calcAcquisitionTax({
   unsold2026: true,
 });
 assert.equal(unsold.unsoldEligible, true);
-assert.equal(unsold.isHeavy, false);
-closeTo(unsold.unsoldDeduct, 3_000_000, '미분양 취득세 50% 감면');
-closeTo(unsold.total, 3_600_000, '미분양 감면 후 총 취득세');
+assert.equal(unsold.isHeavy, false, '미분양 감면 대상은 다주택 중과에서 제외된다');
+closeTo(unsold.unsoldRatio, 0.25, '조례 미확인 시 법정 감면율');
+closeTo(unsold.unsoldDeduct, 1_500_000, '미분양 법정 25% 감면액'); // 6억 × 1% × 25%
+closeTo(unsold.total, 5_100_000, '법정 25% 감면 후 총 취득세');   // 4.5M + 교육세 0.6M
+assert.equal(unsold.unsoldLocalExtraKnown, false);
+assert.ok(
+  unsold.notes.some((n) => n.kind === 'warn' && n.text.includes('조례')),
+  '조례 미확인 시 추가 감면 가능성을 결과에 밝혀야 한다',
+);
+
+// ② 조례 추가 25% 확인: 최종 50%.
+const unsoldMax = calcAcquisitionTax({
+  price: 600_000_000,
+  homes: 3,
+  regulated: true,
+  areaOver85: false,
+  firstHome: false,
+  unsold2026: true,
+  unsold2026LocalExtra: 0.25,
+});
+closeTo(unsoldMax.unsoldRatio, 0.5, '조례 최대 추가 시 최종 감면율');
+closeTo(unsoldMax.unsoldDeduct, 3_000_000, '최종 50% 감면액');
+closeTo(unsoldMax.total, 3_600_000, '최종 50% 감면 후 총 취득세');
+
+// ③ 조례 추가 10%: 최종 35%.
+const unsoldMid = calcAcquisitionTax({
+  price: 600_000_000, homes: 1, regulated: false, areaOver85: false,
+  firstHome: false, unsold2026: true, unsold2026LocalExtra: 0.10,
+});
+closeTo(unsoldMid.unsoldRatio, 0.35, '조례 10% 추가 시 최종 감면율');
+
+// ④ 상한 초과 입력은 조례 상한(25%p)으로 제한된다.
+const unsoldOver = calcAcquisitionTax({
+  price: 600_000_000, homes: 1, regulated: false, areaOver85: false,
+  firstHome: false, unsold2026: true, unsold2026LocalExtra: 0.9,
+});
+closeTo(unsoldOver.unsoldRatio, 0.5, '조례 추가 감면은 25%p로 제한된다');
+
+// ⑤ 분양받은 신축주택은 원시취득 2.8%가 아니라 유상거래 세율로 계산되어야 한다.
+const presale = calcAcquisitionTax({
+  price: 800_000_000, homes: 1, regulated: false, areaOver85: false,
+  firstHome: false, acqType: 'presale',
+});
+const selfBuilt = calcAcquisitionTax({
+  price: 800_000_000, homes: 1, regulated: false, areaOver85: false,
+  firstHome: false, acqType: 'original',
+});
+closeTo(presale.baseRate, 800_000_000 / 100_000_000 * 2 / 3 / 100 - 0.03, '분양 신축주택 유상거래 누진세율');
+assert.equal(presale.isPaidTransfer, true);
+closeTo(selfBuilt.baseRate, 0.028, '직접 신축은 원시취득 2.8%');
+assert.ok(presale.total < selfBuilt.total, '분양 신축주택과 직접 신축의 세액은 달라야 한다');
+
+// ⑥ 생애최초 300만원 한도(소형 비아파트·인구감소지역) / 출산·양육 500만원 한도
+const firstHomeStandard = calcAcquisitionTax({
+  price: 500_000_000, homes: 1, regulated: false, areaOver85: false, firstHome: true,
+});
+closeTo(firstHomeStandard.firstHomeDeduct, 2_000_000, '생애최초 일반 한도');
+const firstHomeSmall = calcAcquisitionTax({
+  price: 500_000_000, homes: 1, regulated: false, areaOver85: false,
+  firstHome: true, firstHomeSmallHouse: true,
+});
+closeTo(firstHomeSmall.firstHomeDeduct, 3_000_000, '생애최초 소형주택 한도 300만원');
+const childbirthOnly = calcAcquisitionTax({
+  price: 500_000_000, homes: 1, regulated: false, areaOver85: false, childbirth: true,
+});
+closeTo(childbirthOnly.firstHomeDeduct, 5_000_000, '출산·양육 감면 500만원');
+assert.equal(childbirthOnly.appliedReliefKey, 'childbirth');
+// 중복 선택 시 단순 합산이 아니라 유리한 하나만 적용
+const bothRelief = calcAcquisitionTax({
+  price: 500_000_000, homes: 1, regulated: false, areaOver85: false,
+  firstHome: true, childbirth: true,
+});
+closeTo(bothRelief.firstHomeDeduct, 5_000_000, '생애최초·출산 감면은 중복 합산하지 않는다');
+assert.equal(bothRelief.appliedReliefKey, 'childbirth');
 
 const giftStandard = calcAcquisitionTax({
   price: 500_000_000,

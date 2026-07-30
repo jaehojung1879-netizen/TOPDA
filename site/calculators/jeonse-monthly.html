@@ -31,7 +31,7 @@
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/jeonse-monthly.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260730" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -151,9 +151,18 @@
       </div>
 
       <div class="field">
-        <label for="jm-rate">전월세전환율 (연 %)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="한국부동산원·국토부 통계 기준 평균 5~6%. 임대차보호법상 한도는 ‘기준금리 + 2%’와 10% 중 낮은 값.">?</span></label>
+        <label for="jm-rate">시장 전환율 (연 %)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="신규 계약에서 실제로 쓰이는 시장 전환율입니다. 한국부동산원·국토부 통계 기준 평균 5~6%. 아래 「법정 전환율 상한」과는 다른 값이니 구분해서 보세요.">?</span></label>
         <input id="jm-rate" name="rate" type="number" min="1" max="15" step="0.1" value="5.5" />
-        
+        <span class="hint">신규 계약의 <strong>시장 비교용</strong> 값입니다. 법정 상한이 아닙니다.</span>
+      </div>
+
+      <div class="callout callout-info" style="margin-bottom: 0;">
+        <div class="icon">i</div>
+        <div class="body">
+          <strong>법정 전환율 상한과 시장 전환율은 다릅니다.</strong>
+          주택임대차보호법 제7조의2의 상한(연 10%와 한국은행 기준금리 + 2%p 중 낮은 값)은
+          <strong>기존 계약의 전세를 월세로 전환</strong>할 때 적용됩니다. 신규 계약은 시장에서 정해집니다.
+        </div>
       </div>
 
     </div>
@@ -167,8 +176,12 @@
         <div class="breakdown">
           <div class="row"><span class="key">남는 보증금</span><span class="val" data-out="outBaseDeposit">0원</span></div>
           <div class="row"><span class="key">월세로 환산된 보증금</span><span class="val" data-out="outConverted">0원</span></div>
-          <div class="row"><span class="key">적용 전환율</span><span class="val" data-out="outRate">—</span></div>
+          <div class="row"><span class="key">적용 전환율 (시장)</span><span class="val" data-out="outRate">—</span></div>
+          <div class="row"><span class="key">법정 전환율 상한</span><span class="val" data-out="legalCap">—</span></div>
+          <div class="row sub"><span class="key">└ 산정 근거</span><span class="val" data-out="legalCapBasis">—</span></div>
+          <div class="row sub"><span class="key">└ 법정 상한 적용 시 월세</span><span class="val" data-out="outMonthlyLegal">0원</span></div>
         </div>
+        <p class="estimate-note" data-out="capWarn" style="display:none;"></p>
       </div>
 
       <div data-mode="toJeonse" style="display: none;">
@@ -176,7 +189,9 @@
         <div class="result-sub">전세 환산 보증금</div>
         <div class="breakdown">
           <div class="row"><span class="key">월세 환산 추가 보증금</span><span class="val" data-out="outAddedDeposit">0원</span></div>
-          <div class="row"><span class="key">적용 전환율</span><span class="val" data-out="outRate">—</span></div>
+          <div class="row"><span class="key">적용 전환율 (시장)</span><span class="val" data-out="outRate">—</span></div>
+          <div class="row"><span class="key">법정 전환율 상한</span><span class="val" data-out="legalCap">—</span></div>
+          <div class="row sub"><span class="key">└ 산정 근거</span><span class="val" data-out="legalCapBasis">—</span></div>
         </div>
       </div>
 
@@ -318,7 +333,7 @@
     <p class="disclaimer">© 톺다.</p>
   </div>
 </footer>
-<script src="../assets/rates.js?v=20260629"></script>
-<script src="../assets/app.js?v=20260723"></script>
+<script src="../assets/rates.js?v=20260730"></script>
+<script src="../assets/app.js?v=20260730"></script>
 </body>
 </html>

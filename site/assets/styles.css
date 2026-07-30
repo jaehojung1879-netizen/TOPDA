@@ -491,6 +491,30 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
   background: var(--accent-soft); color: var(--accent-text);
   font-size: 0.8rem; line-height: 1.5;
 }
+/* 간편 추정·범위 표시 안내 (상속·증여·자금계획) */
+.estimate-note {
+  margin: 20px 0 0; padding: 11px 13px;
+  border-radius: var(--radius-sm); border-left: 3px solid var(--warning);
+  background: var(--bg-subtle, rgba(0, 0, 0, 0.03));
+  color: var(--text-muted); font-size: 0.83rem; line-height: 1.6;
+}
+.estimate-note strong { color: var(--text); }
+
+/* 감면 적용·미적용 이유 목록 (계산 결과 하단) */
+.acq-notes { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 8px; }
+.acq-note {
+  display: flex; gap: 9px; align-items: flex-start;
+  padding: 9px 11px; border-radius: var(--radius-sm);
+  font-size: 0.82rem; line-height: 1.55;
+  background: var(--bg-subtle, rgba(0, 0, 0, 0.03));
+  color: var(--text-muted);
+  border-left: 3px solid var(--border-strong);
+}
+.acq-note-icon { flex: 0 0 auto; font-weight: 700; line-height: 1.55; }
+.acq-note-warn { border-left-color: #f59e0b; }
+.acq-note-skip { border-left-color: var(--border-strong); opacity: 0.9; }
+.acq-note-info { border-left-color: #3b82f6; }
+
 .result-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: -16px; margin-bottom: 22px; }
 .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
 .radio-group label {

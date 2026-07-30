@@ -24,7 +24,7 @@
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260730" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -123,10 +123,17 @@
         <span class="hint">배우자·직계존속(부모/배우자 부모, 3년 이상 동일 주민등록)·직계비속(자녀, 미혼).</span>
       </div>
 
-      <div class="field">
-        <label for="sub-acc">청약통장 가입기간 (년)</label>
-        <input id="sub-acc" name="accountYears" type="number" min="0" max="20" step="0.5" value="6" />
-        <span class="hint">주택청약종합저축 / 청약저축 등. 가입일~당첨자 발표일까지.</span>
+      <div class="field-row">
+        <div class="field">
+          <label for="sub-acc">청약통장 가입기간 (년)</label>
+          <input id="sub-acc" name="accountYears" type="number" min="0" max="20" step="0.5" value="6" />
+          <span class="hint">주택청약종합저축 / 청약저축 등. 가입일~당첨자 발표일까지.</span>
+        </div>
+        <div class="field">
+          <label for="sub-spouse-acc">배우자 청약통장 가입기간 (년)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="배우자의 청약통장 가입기간 점수의 50%를 최대 3점까지 합산할 수 있습니다. 합산 후에도 청약통장 항목 전체 상한은 17점입니다.">?</span></label>
+          <input id="sub-spouse-acc" name="spouseAccountYears" type="number" min="0" max="20" step="0.5" value="0" />
+          <span class="hint">배우자 통장 점수의 <strong>50%, 최대 3점</strong>까지 합산. 없으면 0.</span>
+        </div>
       </div>
     </div>
 
@@ -138,6 +145,8 @@
         <div class="row"><span class="key">① 무주택기간 (32점 만점)</span><span class="val" data-out="s1">0점</span></div>
         <div class="row"><span class="key">② 부양가족 (35점 만점)</span><span class="val" data-out="s2">0점</span></div>
         <div class="row"><span class="key">③ 청약통장 (17점 만점)</span><span class="val" data-out="s3">0점</span></div>
+        <div class="row sub"><span class="key">└ 본인 통장</span><span class="val" data-out="s3Own">0점</span></div>
+        <div class="row sub"><span class="key">└ 배우자 통장 합산 (50%, 최대 3점)</span><span class="val" data-out="s3Spouse">해당 없음</span></div>
       </div>
 
       <div class="callout callout-info" style="margin-top: 20px; margin-bottom: 0;">
@@ -308,7 +317,7 @@
     <p class="disclaimer">© 톺다.</p>
   </div>
 </footer>
-<script src="../assets/rates.js?v=20260629"></script>
-<script src="../assets/app.js?v=20260723"></script>
+<script src="../assets/rates.js?v=20260730"></script>
+<script src="../assets/app.js?v=20260730"></script>
 </body>
 </html>
