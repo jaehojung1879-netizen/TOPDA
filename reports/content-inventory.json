@@ -1,6 +1,6 @@
 {
  "generated_from": "site/",
- "total": 5600,
+ "total": 5599,
  "urls": [
   {
    "path": "/404.html",
@@ -48,11 +48,11 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "ko=https://topda.kr/about.html;en=https://topda.kr/en/about.html;x-default=https://topda.kr/about.html",
-   "body_chars": 1063,
+   "body_chars": 722,
    "external_links": 2,
-   "internal_links": 17,
+   "internal_links": 16,
    "news_aggregation": false,
-   "has_author": true,
+   "has_author": false,
    "has_published_date": false,
    "has_modified_date": false,
    "has_reviewed_date": false,
@@ -64,13 +64,13 @@
    "uses_naver_analytics": true,
    "uses_supabase": false,
    "has_meta_refresh": false,
-   "unique_chars": 1063,
+   "unique_chars": 722,
    "template_share_pct": 0.0,
    "data_completeness": {
-    "unique_chars": 1063
+    "unique_chars": 722
    },
-   "grade": "A",
-   "action_reason": "고유 본문 확보 — 색인 대상"
+   "grade": "B",
+   "action_reason": "템플릿 제외 고유 본문 722자 — 색인 기준 미달, noindex,follow"
   },
   {
    "path": "/admin/edit.html",
@@ -204869,41 +204869,6 @@
    "action_reason": "지역 허브 — 단지 페이지 진입점"
   },
   {
-   "path": "/authors/jaeho-jung.html",
-   "page_type": "author",
-   "language": "ko",
-   "title": "정재호 — 톺다 운영자·작성자",
-   "canonical": "https://topda.kr/authors/jaeho-jung.html",
-   "robots": "(none → index)",
-   "indexable": true,
-   "in_sitemap": true,
-   "sitemap_files": "sitemap-pages.xml",
-   "hreflang": "",
-   "body_chars": 1800,
-   "external_links": 2,
-   "internal_links": 13,
-   "news_aggregation": false,
-   "has_author": true,
-   "has_published_date": false,
-   "has_modified_date": false,
-   "has_reviewed_date": false,
-   "has_source": true,
-   "has_as_of": true,
-   "is_tool": false,
-   "has_adsense": false,
-   "uses_ga4": true,
-   "uses_naver_analytics": true,
-   "uses_supabase": false,
-   "has_meta_refresh": false,
-   "unique_chars": 1800,
-   "template_share_pct": 0.0,
-   "data_completeness": {
-    "unique_chars": 1800
-   },
-   "grade": "A",
-   "action_reason": "고유 본문 확보 — 색인 대상"
-  },
-  {
    "path": "/board-post.html",
    "page_type": "board",
    "language": "ko",
@@ -205932,7 +205897,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 650,
+   "body_chars": 649,
    "external_links": 2,
    "internal_links": 8,
    "news_aggregation": false,
@@ -205948,10 +205913,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 504,
+   "unique_chars": 503,
    "template_share_pct": 22.5,
    "data_completeness": {
-    "unique_chars": 504
+    "unique_chars": 503
    },
    "grade": "A",
    "action_reason": "도구 페이지 — 핵심 색인 대상"
@@ -206002,7 +205967,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/checklists/interior-contract.html;en=https://topda.kr/en/checklists/interior-contract.html;x-default=https://topda.kr/checklists/interior-contract.html",
-   "body_chars": 1091,
+   "body_chars": 1090,
    "external_links": 2,
    "internal_links": 12,
    "news_aggregation": false,
@@ -206037,7 +206002,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 1173,
+   "body_chars": 1172,
    "external_links": 2,
    "internal_links": 12,
    "news_aggregation": false,
@@ -206054,7 +206019,7 @@
    "uses_supabase": true,
    "has_meta_refresh": false,
    "unique_chars": 690,
-   "template_share_pct": 41.2,
+   "template_share_pct": 41.1,
    "data_completeness": {
     "unique_chars": 690
    },
@@ -206072,7 +206037,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 977,
+   "body_chars": 976,
    "external_links": 2,
    "internal_links": 12,
    "news_aggregation": false,
@@ -206089,7 +206054,7 @@
    "uses_supabase": true,
    "has_meta_refresh": false,
    "unique_chars": 565,
-   "template_share_pct": 42.2,
+   "template_share_pct": 42.1,
    "data_completeness": {
     "unique_chars": 565
    },
@@ -206107,7 +206072,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 1451,
+   "body_chars": 1450,
    "external_links": 2,
    "internal_links": 12,
    "news_aggregation": false,
@@ -206124,7 +206089,7 @@
    "uses_supabase": true,
    "has_meta_refresh": false,
    "unique_chars": 919,
-   "template_share_pct": 36.7,
+   "template_share_pct": 36.6,
    "data_completeness": {
     "unique_chars": 919
    },
@@ -206142,11 +206107,11 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "",
-   "body_chars": 964,
+   "body_chars": 949,
    "external_links": 2,
-   "internal_links": 14,
+   "internal_links": 13,
    "news_aggregation": false,
-   "has_author": true,
+   "has_author": false,
    "has_published_date": false,
    "has_modified_date": false,
    "has_reviewed_date": false,
@@ -206159,7 +206124,7 @@
    "uses_supabase": false,
    "has_meta_refresh": false,
    "unique_chars": 717,
-   "template_share_pct": 25.6,
+   "template_share_pct": 24.4,
    "data_completeness": {
     "unique_chars": 717
    },
@@ -206177,11 +206142,11 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "",
-   "body_chars": 1378,
+   "body_chars": 1361,
    "external_links": 2,
-   "internal_links": 14,
+   "internal_links": 13,
    "news_aggregation": false,
-   "has_author": true,
+   "has_author": false,
    "has_published_date": false,
    "has_modified_date": false,
    "has_reviewed_date": false,
@@ -206193,10 +206158,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": false,
    "has_meta_refresh": false,
-   "unique_chars": 1150,
-   "template_share_pct": 16.5,
+   "unique_chars": 1104,
+   "template_share_pct": 18.9,
    "data_completeness": {
-    "unique_chars": 1150
+    "unique_chars": 1104
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -206212,11 +206177,11 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "",
-   "body_chars": 3420,
+   "body_chars": 3403,
    "external_links": 2,
-   "internal_links": 14,
+   "internal_links": 13,
    "news_aggregation": false,
-   "has_author": true,
+   "has_author": false,
    "has_published_date": false,
    "has_modified_date": false,
    "has_reviewed_date": false,
@@ -206228,10 +206193,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": false,
    "has_meta_refresh": false,
-   "unique_chars": 3080,
-   "template_share_pct": 9.9,
+   "unique_chars": 3034,
+   "template_share_pct": 10.8,
    "data_completeness": {
-    "unique_chars": 3080
+    "unique_chars": 3034
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -206247,9 +206212,9 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "",
-   "body_chars": 3540,
+   "body_chars": 3523,
    "external_links": 2,
-   "internal_links": 13,
+   "internal_links": 12,
    "news_aggregation": false,
    "has_author": true,
    "has_published_date": false,
@@ -206263,10 +206228,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": false,
    "has_meta_refresh": false,
-   "unique_chars": 3293,
-   "template_share_pct": 7.0,
+   "unique_chars": 3246,
+   "template_share_pct": 7.9,
    "data_completeness": {
-    "unique_chars": 3293
+    "unique_chars": 3246
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -207910,11 +207875,11 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "ko=https://topda.kr/privacy.html;en=https://topda.kr/en/privacy.html;x-default=https://topda.kr/privacy.html",
-   "body_chars": 8667,
+   "body_chars": 8660,
    "external_links": 7,
-   "internal_links": 15,
+   "internal_links": 14,
    "news_aggregation": false,
-   "has_author": true,
+   "has_author": false,
    "has_published_date": false,
    "has_modified_date": false,
    "has_reviewed_date": false,
@@ -207927,7 +207892,7 @@
    "uses_supabase": false,
    "has_meta_refresh": false,
    "unique_chars": 8296,
-   "template_share_pct": 4.3,
+   "template_share_pct": 4.2,
    "data_completeness": {
     "unique_chars": 8296
    },
@@ -208087,11 +208052,11 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-pages.xml",
    "hreflang": "ko=https://topda.kr/;en=https://topda.kr/en/;x-default=https://topda.kr/",
-   "body_chars": 816,
+   "body_chars": 812,
    "external_links": 2,
-   "internal_links": 35,
+   "internal_links": 34,
    "news_aggregation": false,
-   "has_author": true,
+   "has_author": false,
    "has_published_date": false,
    "has_modified_date": false,
    "has_reviewed_date": false,
@@ -208104,7 +208069,7 @@
    "uses_supabase": false,
    "has_meta_refresh": false,
    "unique_chars": 407,
-   "template_share_pct": 50.1,
+   "template_share_pct": 49.9,
    "data_completeness": {
     "unique_chars": 407
    },
@@ -208122,7 +208087,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/interior/bathroom.html;en=https://topda.kr/en/interior/bathroom.html;x-default=https://topda.kr/interior/bathroom.html",
-   "body_chars": 3947,
+   "body_chars": 3946,
    "external_links": 2,
    "internal_links": 22,
    "news_aggregation": false,
@@ -208138,10 +208103,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3542,
+   "unique_chars": 3541,
    "template_share_pct": 10.3,
    "data_completeness": {
-    "unique_chars": 3542
+    "unique_chars": 3541
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208157,7 +208122,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/interior/cost.html;en=https://topda.kr/en/interior/cost.html;x-default=https://topda.kr/interior/cost.html",
-   "body_chars": 3291,
+   "body_chars": 3290,
    "external_links": 2,
    "internal_links": 26,
    "news_aggregation": false,
@@ -208173,10 +208138,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 2910,
+   "unique_chars": 2909,
    "template_share_pct": 11.6,
    "data_completeness": {
-    "unique_chars": 2910
+    "unique_chars": 2909
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208192,7 +208157,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/interior/flooring.html;en=https://topda.kr/en/interior/flooring.html;x-default=https://topda.kr/interior/flooring.html",
-   "body_chars": 5151,
+   "body_chars": 5150,
    "external_links": 2,
    "internal_links": 22,
    "news_aggregation": false,
@@ -208208,10 +208173,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 4360,
+   "unique_chars": 4359,
    "template_share_pct": 15.4,
    "data_completeness": {
-    "unique_chars": 4360
+    "unique_chars": 4359
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208262,7 +208227,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/interior/kitchen.html;en=https://topda.kr/en/interior/kitchen.html;x-default=https://topda.kr/interior/kitchen.html",
-   "body_chars": 4085,
+   "body_chars": 4084,
    "external_links": 2,
    "internal_links": 22,
    "news_aggregation": false,
@@ -208278,10 +208243,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3573,
+   "unique_chars": 3572,
    "template_share_pct": 12.5,
    "data_completeness": {
-    "unique_chars": 3573
+    "unique_chars": 3572
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208297,7 +208262,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 9073,
+   "body_chars": 9072,
    "external_links": 2,
    "internal_links": 21,
    "news_aggregation": false,
@@ -208313,10 +208278,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 8504,
+   "unique_chars": 8503,
    "template_share_pct": 6.3,
    "data_completeness": {
-    "unique_chars": 8504
+    "unique_chars": 8503
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208332,7 +208297,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/interior/tile.html;en=https://topda.kr/en/interior/tile.html;x-default=https://topda.kr/interior/tile.html",
-   "body_chars": 4226,
+   "body_chars": 4225,
    "external_links": 2,
    "internal_links": 22,
    "news_aggregation": false,
@@ -208348,10 +208313,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3628,
+   "unique_chars": 3627,
    "template_share_pct": 14.2,
    "data_completeness": {
-    "unique_chars": 3628
+    "unique_chars": 3627
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208367,7 +208332,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/interior/wallpaper.html;en=https://topda.kr/en/interior/wallpaper.html;x-default=https://topda.kr/interior/wallpaper.html",
-   "body_chars": 4424,
+   "body_chars": 4423,
    "external_links": 2,
    "internal_links": 22,
    "news_aggregation": false,
@@ -208383,10 +208348,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3841,
+   "unique_chars": 3840,
    "template_share_pct": 13.2,
    "data_completeness": {
-    "unique_chars": 3841
+    "unique_chars": 3840
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208402,7 +208367,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/interior/windows.html;en=https://topda.kr/en/interior/windows.html;x-default=https://topda.kr/interior/windows.html",
-   "body_chars": 4229,
+   "body_chars": 4228,
    "external_links": 2,
    "internal_links": 22,
    "news_aggregation": false,
@@ -208418,10 +208383,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3753,
+   "unique_chars": 3752,
    "template_share_pct": 11.3,
    "data_completeness": {
-    "unique_chars": 3753
+    "unique_chars": 3752
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208437,7 +208402,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 9065,
+   "body_chars": 9064,
    "external_links": 6,
    "internal_links": 24,
    "news_aggregation": false,
@@ -208453,10 +208418,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 9065,
+   "unique_chars": 9064,
    "template_share_pct": 0.0,
    "data_completeness": {
-    "unique_chars": 9065
+    "unique_chars": 9064
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208472,7 +208437,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 13005,
+   "body_chars": 13004,
    "external_links": 2,
    "internal_links": 29,
    "news_aggregation": false,
@@ -208488,10 +208453,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 13005,
+   "unique_chars": 13004,
    "template_share_pct": 0.0,
    "data_completeness": {
-    "unique_chars": 13005
+    "unique_chars": 13004
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208577,7 +208542,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/balance-day-settlement.html;en=https://topda.kr/en/posts/balance-day-settlement.html;x-default=https://topda.kr/posts/balance-day-settlement.html",
-   "body_chars": 4306,
+   "body_chars": 4305,
    "external_links": 4,
    "internal_links": 19,
    "news_aggregation": false,
@@ -208593,10 +208558,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3658,
-   "template_share_pct": 15.0,
+   "unique_chars": 3657,
+   "template_share_pct": 15.1,
    "data_completeness": {
-    "unique_chars": 3658
+    "unique_chars": 3657
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208612,7 +208577,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 4538,
+   "body_chars": 4537,
    "external_links": 6,
    "internal_links": 17,
    "news_aggregation": false,
@@ -208628,10 +208593,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 4034,
+   "unique_chars": 4033,
    "template_share_pct": 11.1,
    "data_completeness": {
-    "unique_chars": 4034
+    "unique_chars": 4033
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208647,7 +208612,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 1514,
+   "body_chars": 1513,
    "external_links": 3,
    "internal_links": 19,
    "news_aggregation": false,
@@ -208663,10 +208628,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 937,
+   "unique_chars": 936,
    "template_share_pct": 38.1,
    "data_completeness": {
-    "unique_chars": 937
+    "unique_chars": 936
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208682,7 +208647,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 5056,
+   "body_chars": 5055,
    "external_links": 5,
    "internal_links": 18,
    "news_aggregation": false,
@@ -208698,10 +208663,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 4387,
+   "unique_chars": 4386,
    "template_share_pct": 13.2,
    "data_completeness": {
-    "unique_chars": 4387
+    "unique_chars": 4386
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208717,7 +208682,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 6162,
+   "body_chars": 6161,
    "external_links": 8,
    "internal_links": 19,
    "news_aggregation": false,
@@ -208733,10 +208698,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 5273,
+   "unique_chars": 5272,
    "template_share_pct": 14.4,
    "data_completeness": {
-    "unique_chars": 5273
+    "unique_chars": 5272
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208787,7 +208752,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/interior-company.html;en=https://topda.kr/en/posts/interior-company.html;x-default=https://topda.kr/posts/interior-company.html",
-   "body_chars": 2782,
+   "body_chars": 2781,
    "external_links": 12,
    "internal_links": 17,
    "news_aggregation": false,
@@ -208803,10 +208768,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 2107,
+   "unique_chars": 2106,
    "template_share_pct": 24.3,
    "data_completeness": {
-    "unique_chars": 2107
+    "unique_chars": 2106
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208822,7 +208787,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/interior-contract.html;en=https://topda.kr/en/posts/interior-contract.html;x-default=https://topda.kr/posts/interior-contract.html",
-   "body_chars": 1405,
+   "body_chars": 1404,
    "external_links": 5,
    "internal_links": 17,
    "news_aggregation": false,
@@ -208838,10 +208803,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 949,
+   "unique_chars": 948,
    "template_share_pct": 32.5,
    "data_completeness": {
-    "unique_chars": 949
+    "unique_chars": 948
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208857,7 +208822,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/interior-defect.html;en=https://topda.kr/en/posts/interior-defect.html;x-default=https://topda.kr/posts/interior-defect.html",
-   "body_chars": 1346,
+   "body_chars": 1345,
    "external_links": 9,
    "internal_links": 17,
    "news_aggregation": false,
@@ -208873,10 +208838,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 913,
+   "unique_chars": 912,
    "template_share_pct": 32.2,
    "data_completeness": {
-    "unique_chars": 913
+    "unique_chars": 912
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208892,7 +208857,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/interior-quote.html;en=https://topda.kr/en/posts/interior-quote.html;x-default=https://topda.kr/posts/interior-quote.html",
-   "body_chars": 1966,
+   "body_chars": 1965,
    "external_links": 4,
    "internal_links": 18,
    "news_aggregation": false,
@@ -208908,10 +208873,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 1512,
+   "unique_chars": 1511,
    "template_share_pct": 23.1,
    "data_completeness": {
-    "unique_chars": 1512
+    "unique_chars": 1511
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208927,7 +208892,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 2332,
+   "body_chars": 2331,
    "external_links": 8,
    "internal_links": 19,
    "news_aggregation": false,
@@ -208943,10 +208908,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 1686,
+   "unique_chars": 1685,
    "template_share_pct": 27.7,
    "data_completeness": {
-    "unique_chars": 1686
+    "unique_chars": 1685
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208962,7 +208927,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 2768,
+   "body_chars": 2767,
    "external_links": 10,
    "internal_links": 19,
    "news_aggregation": false,
@@ -208978,10 +208943,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 2132,
+   "unique_chars": 2131,
    "template_share_pct": 23.0,
    "data_completeness": {
-    "unique_chars": 2132
+    "unique_chars": 2131
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -208997,7 +208962,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 1527,
+   "body_chars": 1526,
    "external_links": 5,
    "internal_links": 22,
    "news_aggregation": false,
@@ -209013,10 +208978,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 1040,
+   "unique_chars": 1039,
    "template_share_pct": 31.9,
    "data_completeness": {
-    "unique_chars": 1040
+    "unique_chars": 1039
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209032,7 +208997,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 1648,
+   "body_chars": 1647,
    "external_links": 5,
    "internal_links": 19,
    "news_aggregation": false,
@@ -209048,10 +209013,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 1122,
+   "unique_chars": 1121,
    "template_share_pct": 31.9,
    "data_completeness": {
-    "unique_chars": 1122
+    "unique_chars": 1121
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209067,7 +209032,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 1883,
+   "body_chars": 1882,
    "external_links": 10,
    "internal_links": 19,
    "news_aggregation": false,
@@ -209083,10 +209048,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 1319,
+   "unique_chars": 1318,
    "template_share_pct": 30.0,
    "data_completeness": {
-    "unique_chars": 1319
+    "unique_chars": 1318
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209102,7 +209067,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 4518,
+   "body_chars": 4517,
    "external_links": 8,
    "internal_links": 19,
    "news_aggregation": false,
@@ -209118,10 +209083,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3788,
+   "unique_chars": 3787,
    "template_share_pct": 16.2,
    "data_completeness": {
-    "unique_chars": 3788
+    "unique_chars": 3787
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209137,7 +209102,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 4074,
+   "body_chars": 4073,
    "external_links": 6,
    "internal_links": 19,
    "news_aggregation": false,
@@ -209153,10 +209118,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3435,
+   "unique_chars": 3434,
    "template_share_pct": 15.7,
    "data_completeness": {
-    "unique_chars": 3435
+    "unique_chars": 3434
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209172,7 +209137,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 1459,
+   "body_chars": 1458,
    "external_links": 3,
    "internal_links": 19,
    "news_aggregation": false,
@@ -209188,10 +209153,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 924,
+   "unique_chars": 923,
    "template_share_pct": 36.7,
    "data_completeness": {
-    "unique_chars": 924
+    "unique_chars": 923
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209207,7 +209172,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 3959,
+   "body_chars": 3958,
    "external_links": 6,
    "internal_links": 19,
    "news_aggregation": true,
@@ -209223,10 +209188,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3272,
+   "unique_chars": 3271,
    "template_share_pct": 17.4,
    "data_completeness": {
-    "unique_chars": 3272
+    "unique_chars": 3271
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209242,7 +209207,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/move-in-admin.html;en=https://topda.kr/en/posts/move-in-admin.html;x-default=https://topda.kr/posts/move-in-admin.html",
-   "body_chars": 1494,
+   "body_chars": 1493,
    "external_links": 7,
    "internal_links": 19,
    "news_aggregation": false,
@@ -209258,10 +209223,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 1030,
+   "unique_chars": 1029,
    "template_share_pct": 31.1,
    "data_completeness": {
-    "unique_chars": 1030
+    "unique_chars": 1029
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209277,7 +209242,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/moving-company.html;en=https://topda.kr/en/posts/moving-company.html;x-default=https://topda.kr/posts/moving-company.html",
-   "body_chars": 2690,
+   "body_chars": 2689,
    "external_links": 9,
    "internal_links": 17,
    "news_aggregation": false,
@@ -209293,10 +209258,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 2078,
+   "unique_chars": 2077,
    "template_share_pct": 22.8,
    "data_completeness": {
-    "unique_chars": 2078
+    "unique_chars": 2077
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209312,7 +209277,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/moving-day-tips.html;en=https://topda.kr/en/posts/moving-day-tips.html;x-default=https://topda.kr/posts/moving-day-tips.html",
-   "body_chars": 1348,
+   "body_chars": 1347,
    "external_links": 3,
    "internal_links": 19,
    "news_aggregation": false,
@@ -209328,13 +209293,13 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 876,
+   "unique_chars": 875,
    "template_share_pct": 35.0,
    "data_completeness": {
-    "unique_chars": 876
+    "unique_chars": 875
    },
    "grade": "B",
-   "action_reason": "템플릿 제외 고유 본문 876자 — 색인 기준 미달, noindex,follow"
+   "action_reason": "템플릿 제외 고유 본문 875자 — 색인 기준 미달, noindex,follow"
   },
   {
    "path": "/posts/moving-quote.html",
@@ -209347,7 +209312,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/moving-quote.html;en=https://topda.kr/en/posts/moving-quote.html;x-default=https://topda.kr/posts/moving-quote.html",
-   "body_chars": 1372,
+   "body_chars": 1371,
    "external_links": 4,
    "internal_links": 18,
    "news_aggregation": false,
@@ -209363,10 +209328,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 924,
+   "unique_chars": 923,
    "template_share_pct": 32.7,
    "data_completeness": {
-    "unique_chars": 924
+    "unique_chars": 923
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209382,7 +209347,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/moving-types.html;en=https://topda.kr/en/posts/moving-types.html;x-default=https://topda.kr/posts/moving-types.html",
-   "body_chars": 1206,
+   "body_chars": 1205,
    "external_links": 2,
    "internal_links": 17,
    "news_aggregation": false,
@@ -209398,13 +209363,13 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 848,
+   "unique_chars": 847,
    "template_share_pct": 29.7,
    "data_completeness": {
-    "unique_chars": 848
+    "unique_chars": 847
    },
    "grade": "B",
-   "action_reason": "템플릿 제외 고유 본문 848자 — 색인 기준 미달, noindex,follow"
+   "action_reason": "템플릿 제외 고유 본문 847자 — 색인 기준 미달, noindex,follow"
   },
   {
    "path": "/posts/property-tour.html",
@@ -209417,7 +209382,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/property-tour.html;en=https://topda.kr/en/posts/property-tour.html;x-default=https://topda.kr/posts/property-tour.html",
-   "body_chars": 4440,
+   "body_chars": 4439,
    "external_links": 5,
    "internal_links": 21,
    "news_aggregation": false,
@@ -209433,10 +209398,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3786,
+   "unique_chars": 3785,
    "template_share_pct": 14.7,
    "data_completeness": {
-    "unique_chars": 3786
+    "unique_chars": 3785
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209452,7 +209417,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 4390,
+   "body_chars": 4389,
    "external_links": 11,
    "internal_links": 18,
    "news_aggregation": false,
@@ -209468,10 +209433,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3919,
+   "unique_chars": 3918,
    "template_share_pct": 10.7,
    "data_completeness": {
-    "unique_chars": 3919
+    "unique_chars": 3918
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209487,7 +209452,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 4548,
+   "body_chars": 4547,
    "external_links": 8,
    "internal_links": 18,
    "news_aggregation": false,
@@ -209503,10 +209468,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 4086,
+   "unique_chars": 4085,
    "template_share_pct": 10.2,
    "data_completeness": {
-    "unique_chars": 4086
+    "unique_chars": 4085
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209522,7 +209487,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 7215,
+   "body_chars": 7214,
    "external_links": 15,
    "internal_links": 17,
    "news_aggregation": false,
@@ -209538,10 +209503,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 6641,
+   "unique_chars": 6640,
    "template_share_pct": 8.0,
    "data_completeness": {
-    "unique_chars": 6641
+    "unique_chars": 6640
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209557,7 +209522,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 3626,
+   "body_chars": 3625,
    "external_links": 5,
    "internal_links": 19,
    "news_aggregation": false,
@@ -209573,10 +209538,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 2984,
+   "unique_chars": 2983,
    "template_share_pct": 17.7,
    "data_completeness": {
-    "unique_chars": 2984
+    "unique_chars": 2983
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209592,7 +209557,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/registry-reading.html;en=https://topda.kr/en/posts/registry-reading.html;x-default=https://topda.kr/posts/registry-reading.html",
-   "body_chars": 4567,
+   "body_chars": 4566,
    "external_links": 8,
    "internal_links": 18,
    "news_aggregation": false,
@@ -209608,10 +209573,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3865,
+   "unique_chars": 3864,
    "template_share_pct": 15.4,
    "data_completeness": {
-    "unique_chars": 3865
+    "unique_chars": 3864
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209627,7 +209592,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/sale-contract-tips.html;en=https://topda.kr/en/posts/sale-contract-tips.html;x-default=https://topda.kr/posts/sale-contract-tips.html",
-   "body_chars": 4490,
+   "body_chars": 4489,
    "external_links": 7,
    "internal_links": 20,
    "news_aggregation": false,
@@ -209643,10 +209608,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 3804,
+   "unique_chars": 3803,
    "template_share_pct": 15.3,
    "data_completeness": {
-    "unique_chars": 3804
+    "unique_chars": 3803
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209662,7 +209627,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/storage-moving.html;en=https://topda.kr/en/posts/storage-moving.html;x-default=https://topda.kr/posts/storage-moving.html",
-   "body_chars": 1181,
+   "body_chars": 1180,
    "external_links": 2,
    "internal_links": 18,
    "news_aggregation": false,
@@ -209678,13 +209643,13 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 852,
+   "unique_chars": 851,
    "template_share_pct": 27.9,
    "data_completeness": {
-    "unique_chars": 852
+    "unique_chars": 851
    },
    "grade": "B",
-   "action_reason": "템플릿 제외 고유 본문 852자 — 색인 기준 미달, noindex,follow"
+   "action_reason": "템플릿 제외 고유 본문 851자 — 색인 기준 미달, noindex,follow"
   },
   {
    "path": "/posts/stress-dsr.html",
@@ -209697,7 +209662,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 1430,
+   "body_chars": 1429,
    "external_links": 4,
    "internal_links": 19,
    "news_aggregation": false,
@@ -209713,13 +209678,13 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 868,
+   "unique_chars": 867,
    "template_share_pct": 39.3,
    "data_completeness": {
-    "unique_chars": 868
+    "unique_chars": 867
    },
    "grade": "B",
-   "action_reason": "템플릿 제외 고유 본문 868자 — 색인 기준 미달, noindex,follow"
+   "action_reason": "템플릿 제외 고유 본문 867자 — 색인 기준 미달, noindex,follow"
   },
   {
    "path": "/posts/tax-roadmap.html",
@@ -209732,7 +209697,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "ko=https://topda.kr/posts/tax-roadmap.html;en=https://topda.kr/en/posts/tax-roadmap.html;x-default=https://topda.kr/posts/tax-roadmap.html",
-   "body_chars": 3497,
+   "body_chars": 3496,
    "external_links": 5,
    "internal_links": 19,
    "news_aggregation": false,
@@ -209748,10 +209713,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 2899,
+   "unique_chars": 2898,
    "template_share_pct": 17.1,
    "data_completeness": {
-    "unique_chars": 2899
+    "unique_chars": 2898
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"
@@ -209767,7 +209732,7 @@
    "in_sitemap": true,
    "sitemap_files": "sitemap-guides.xml",
    "hreflang": "",
-   "body_chars": 5685,
+   "body_chars": 5684,
    "external_links": 6,
    "internal_links": 16,
    "news_aggregation": false,
@@ -209783,10 +209748,10 @@
    "uses_naver_analytics": true,
    "uses_supabase": true,
    "has_meta_refresh": false,
-   "unique_chars": 4967,
+   "unique_chars": 4966,
    "template_share_pct": 12.6,
    "data_completeness": {
-    "unique_chars": 4967
+    "unique_chars": 4966
    },
    "grade": "A",
    "action_reason": "고유 본문 확보 — 색인 대상"

@@ -14,7 +14,7 @@
 
 AdSense가 “가치가 별로 없는 콘텐츠”로 판정한 원인은 **문장이 부족해서가 아니라, 사이트의
 93%가 같은 템플릿에 숫자만 바꿔 넣은 자동생성 페이지이고 그것이 전부 색인 대상이었기
-때문**입니다. 감사 결과 공개 URL 5,168개 중 4,816개(93.2%)가 단지 실거래 페이지였고(같은 날 오후 데이터 갱신 후 5,600개 중 5,242개),
+때문**입니다. 감사 결과 공개 URL 5,168개 중 4,816개(93.2%)가 단지 실거래 페이지였고(같은 날 오후 데이터 갱신 후 5,599개 중 5,242개),
 공통 문구를 걷어낸 고유 본문은 평균 1,458자 — 그중 대부분이 표 데이터였습니다.
 
 여기에 두 가지 정책 불일치가 겹쳐 있었습니다.
@@ -39,10 +39,10 @@ AdSense가 “가치가 별로 없는 콘텐츠”로 판정한 원인은 **문�
 
 | 항목 | 변경 전 | 변경 후 |
 |---|---:|---:|
-| 공개 HTML URL 총수 | 5,594 | 5,600 (신뢰 페이지 6개 추가) |
-| **색인 허용 URL** | **5,589** | **386** |
+| 공개 HTML URL 총수 | 5,594 | 5,599 (신뢰 페이지 5개 추가) |
+| **색인 허용 URL** | **5,589** | **385** |
 | noindex URL | 5 | 5,214 |
-| 공개 sitemap 등재 URL | 5,493 | 293 |
+| 공개 sitemap 등재 URL | 5,493 | 292 |
 | AdSense 스크립트가 있는 페이지 | 175 | 106 |
 | 화면에 작성자·날짜가 표시된 글 | 3 | 49 |
 
@@ -50,22 +50,22 @@ AdSense가 “가치가 별로 없는 콘텐츠”로 판정한 원인은 **문�
 
 | 파일 | 변경 전 | 변경 후 |
 |---|---:|---:|
-| `sitemap-pages.xml` | 58 | 32 |
+| `sitemap-pages.xml` | 58 | 31 |
 | `sitemap-calculators.xml` | 55 | 27 |
 | `sitemap-guides.xml` | 58 | 54 |
 | `sitemap-apt-regions.xml` | 80 | 80 |
 | `sitemap-apt-complexes.xml` | 5,242 | 100 |
-| 합계 | 5,493 | 293 |
+| 합계 | 5,493 | 292 |
 
-**sitemap에서 제거된 URL: 5,206개 / 추가된 URL: 6개**
-(추가분은 `/authors/jaeho-jung.html`, `/editorial-policy.html`, `/data-methodology.html`,
+**sitemap에서 제거된 URL: 5,206개 / 추가된 URL: 5개**
+(추가분은 `/editorial-policy.html`, `/data-methodology.html`,
 `/corrections.html`, `/contact.html`, `/en/privacy.html`)
 
 ### 언어별 색인 허용 URL
 
 | 언어 | 변경 전 | 변경 후 | 비고 |
 |---|---:|---:|---|
-| ko | 5,487 | 345 | 핵심 색인 언어 |
+| ko | 5,487 | 344 | 핵심 색인 언어 |
 | en | 46 | 41 | 게이트 통과분만 |
 | zh-Hans | 15 | 0 | noindex,follow — 접근·링크 유지 |
 | zh-Hant | 15 | 0 | 동일 |
@@ -85,7 +85,7 @@ AdSense가 “가치가 별로 없는 콘텐츠”로 판정한 원인은 **문�
 
 ## 2. 콘텐츠 인벤토리 감사 (1단계)
 
-`reports/content-inventory.csv` · `reports/content-inventory.json` — URL 5,600행.
+`reports/content-inventory.csv` · `reports/content-inventory.json` — URL 5,599행.
 생성기: `_meta/audit_content.py`
 
 URL마다 path · page_type · language · title · canonical · robots · sitemap 등재 여부 ·
@@ -267,7 +267,6 @@ TODO 문구를 남기지 않습니다 — 사실 서술로는 충분하고, TODO
 
 | 파일 | 내용 |
 |---|---|
-| `site/authors/jaeho-jung.html` | 운영자가 담당하는 분야, 작성·검토 절차, 자동 수집 데이터와 직접 작성 콘텐츠의 구분. Person JSON-LD |
 | `site/editorial-policy.html` | 운영 목적(5단계 사용자 흐름), 공식 출처 우선순위, 작성·검증·정정 절차, 하지 않는 것, 데이터 갱신 주기, 계산기 버전 관리, 광고와 편집의 분리 |
 | `site/data-methodology.html` | 원자료 7종과 제공 기관, 집계 방법, 하지 않는 처리, 데이터의 한계 6가지, **단지 페이지 색인 품질 기준 전문**, 갱신 주기 |
 | `site/corrections.html` | 오류 제보 방법, 5단계 처리 절차, 정정 기준, 정정 내역 표(현재 비어 있음), 정정 대상이 아닌 것 |
@@ -276,14 +275,31 @@ TODO 문구를 남기지 않습니다 — 사실 서술로는 충분하고, TODO
 **창작하지 않은 것**: 보유하지 않은 자격·경력, 외부 감수자, 응답 시간 약속(SLA),
 정정 내역(페이지 신설 시점부터 쌓기 시작한다고 명시).
 
-`about.html`은 “누가 만드나 / 어떤 원칙으로 만드나” 절을 추가해 위 5개 페이지로 연결하고,
-계산기 입력값이 서버로 가지 않는다는 문장에 “게시판·댓글만 예외”를 덧붙였습니다.
+**운영자 실명은 사이트 어디에도 쓰지 않습니다.** 초안에서는 개인 작성자 페이지
+(`site/authors/…`)를 만들고 글 49개의 바이라인·Article JSON-LD에 실명을 넣었으나,
+운영자 요청에 따라 전부 걷어냈습니다.
+
+- 작성자 페이지를 삭제하고 sitemap·전 페이지 푸터에서 링크를 뺐습니다.
+- 바이라인을 `톺다 작성 · 게시 … · 최근 수정 …` 으로 바꾸고, 이름 대신
+  <a href="editorial-policy.html">운영·편집 원칙</a>으로 연결합니다 — 누가 어떤 절차로
+  쓰는지는 그 페이지가 설명합니다.
+- Article JSON-LD 의 `author` 를 `Person` → `Organization`(톺다)로 바꿨습니다.
+  schema.org 에서 author 는 Organization 도 허용합니다.
+- 신뢰 페이지 하단의 “작성·관리: (이름)” 서명도 제거했습니다.
+- `about.html` 의 “누가 만드나”·“어떤 원칙으로 만드나” 절은 통째로 뺐습니다.
+  신뢰 페이지들은 모든 페이지 푸터의 ‘사이트 정보’에서 계속 연결됩니다.
+
+자격을 보유하지 않았고 외부 감수 절차가 없다는 사실은 `editorial-policy.html` 4항에
+남아 있습니다 — 개인 신상 없이 밝힐 수 있는 내용입니다.
+
+`about.html` 은 계산기 입력값이 서버로 가지 않는다는 문장에 “게시판·댓글만 예외”를
+덧붙였습니다.
 
 ### 작성자·날짜·구조화 데이터 (7단계)
 
 생성기: `_meta/add_bylines.py` — 대상 49개(posts 34 · interior 9 · checklists 5 · loan 1)
 
-- 화면: `작성 정재호 · 게시 2026-05-27 · 최근 수정 2026-07-30` + 주요 공식 출처 링크 +
+- 화면: `톺다 작성 · 게시 2026-05-27 · 최근 수정 2026-07-30` + 주요 공식 출처 링크 +
   “이 글의 내용은 YYYY-MM-DD 기준으로 작성·수정되었습니다” 문장.
 - 날짜 출처: **git 이력.** 게시일 = 파일을 추가한 커밋 날짜, 수정일 = 마지막 사람 커밋
   날짜(`topda-bot` 자동 데이터 갱신 커밋 제외). **49개 전부 확정했고 추정한 날짜는 없습니다.**
@@ -340,7 +356,7 @@ TODO 문구를 남기지 않습니다 — 사실 서술로는 충분하고, TODO
 175개 → 106개. 제거한 69개:
 
 - 정책·안내: `privacy.html`, `en/privacy.html`, `contact.html`, `editorial-policy.html`,
-  `corrections.html`, `data-methodology.html`, `authors/jaeho-jung.html`, `about.html`, `en/about.html`
+  `corrections.html`, `data-methodology.html`, `about.html`, `en/about.html`
 - 게시판·수정 요청: `board.html`, `board-write.html`, `board-post.html`, `feedback.html`, `en/feedback.html`
 - 내부 검색 결과: `find.html`, `calculators/search.html` 및 각 언어판
 - 오류 페이지: `404.html`, `en/404.html`
@@ -389,7 +405,7 @@ TODO 문구를 남기지 않습니다 — 사실 서술로는 충분하고, TODO
 
 ### 구조 무결성
 
-- HTML 5,599개 전수 파싱: **구조 이상 0건**, canonical·robots·main 태그 중복 0건.
+- HTML 5,598개 전수 파싱: **구조 이상 0건**, canonical·robots·main 태그 중복 0건.
 - `apply_index_policy.py`·`build_home_issues.py`·`add_bylines.py`·`build_calc_meta.py`
   모두 재실행 시 변경 0건(idempotent) 확인.
 - 계산기 로직·입력 필드·`app.js`·`rates.js` 계산 코드는 변경하지 않았습니다.
@@ -466,7 +482,7 @@ TODO 문구를 남기지 않습니다 — 사실 서술로는 충분하고, TODO
 2. **핵심 페이지 개별 색인 요청** — URL 검사 → 색인 생성 요청:
    `/`, `/privacy.html`, `/about.html`, `/editorial-policy.html`,
    `/data-methodology.html`, `/corrections.html`, `/contact.html`,
-   `/authors/jaeho-jung.html`, `/calculators/index.html`,
+   `/calculators/index.html`,
    `/calculators/acquisition-tax.html`, `/calculators/total-cost-dashboard.html`
 3. **색인 삭제는 요청하지 않습니다.** noindex 태그를 붙였고 크롤을 허용했으므로,
    재크롤 시 자동으로 색인에서 빠집니다. “URL 삭제” 도구는 임시 조치(약 6개월)이므로
@@ -489,10 +505,9 @@ TODO 문구를 남기지 않습니다 — 사실 서술로는 충분하고, TODO
       (비어 있으면) 아예 보이지 않는지
 - [ ] `https://topda.kr/privacy.html` — GA4·네이버 애널리틱스·AdSense·Supabase·localStorage
       설명이 있고, **광고가 노출되지 않는지**
-- [ ] `https://topda.kr/authors/jaeho-jung.html` — 열리는지, 자격을 주장하는 문장이 없는지
 - [ ] `https://topda.kr/editorial-policy.html` · `/data-methodology.html` ·
       `/corrections.html` · `/contact.html` — 열리고 광고가 없는지
-- [ ] `https://topda.kr/posts/dsr-explain.html` — 상단에 `작성 정재호 · 게시 … · 최근 수정 …`이
+- [ ] `https://topda.kr/posts/dsr-explain.html` — 상단에 `톺다 작성 · 게시 … · 최근 수정 …`이
       보이는지
 - [ ] `https://topda.kr/calculators/acquisition-tax.html` — 하단 ‘이 계산기 정보’에
       적용 기준일·근거·변경 이력이 보이는지
@@ -525,7 +540,6 @@ TODO 문구를 남기지 않습니다 — 사실 서술로는 충분하고, TODO
 ADSENSE_REMEDIATION_REPORT.md
 reports/content-inventory.csv
 reports/content-inventory.json
-site/authors/jaeho-jung.html
 site/editorial-policy.html
 site/data-methodology.html
 site/corrections.html
