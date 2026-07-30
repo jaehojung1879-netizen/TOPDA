@@ -191,16 +191,11 @@
       <li><strong>미설정 시 동작</strong> — Supabase 설정이 주입되지 않은 환경에서는 글이 서버로 가지 않고
         작성한 브라우저의 localStorage에만 남습니다.</li>
     </ul>
-    <div class="callout callout-warn">
-      <div class="icon">⚠</div>
-      <div class="body">
-        <strong>운영자가 확인해야 하는 항목</strong>
-        Supabase 프로젝트의 <strong>데이터 저장 리전(서버 위치)</strong>과 <strong>백업 보관 기간</strong>은
-        프로젝트 설정에서 결정되는 값입니다. 저장소에 있는 코드만으로는 확인할 수 없으므로,
-        실제 설정값을 확인해 이 문단에 기재하기 전까지는 구체적인 국가명·기간을 적지 않았습니다.
-        Google Analytics의 데이터 보관 기간도 GA4 관리 화면에서 설정하는 값이라 같은 이유로 비워 두었습니다.
-      </div>
-    </div>
+    <p class="note">
+      Supabase 프로젝트의 데이터 저장 리전과 백업 보관 기간은 해당 서비스의 프로젝트 설정에 따르며,
+      Google Analytics의 데이터 보관 기간도 GA4 관리 화면 설정에 따릅니다.
+      톺다는 이 값들을 임의로 단정해 적지 않고, 각 서비스의 정책과 설정을 그대로 따릅니다.
+    </p>
 
     <h2>7. localStorage에 저장되는 항목</h2>
     <p>아래 값은 <strong>이용자 브라우저에만</strong> 저장되며 서버로 전송되지 않습니다.</p>
@@ -239,7 +234,7 @@
     <div class="def-list">
       <div class="row"><span class="k">게시글·댓글</span><span class="v">작성자가 삭제하거나 운영자가 삭제할 때까지 보관합니다. 별도의 자동 삭제 주기는 두지 않았습니다.</span></div>
       <div class="row"><span class="k">localStorage 값</span><span class="v">이용자가 브라우저 데이터를 지우거나 각 도구의 초기화 기능을 쓸 때까지. 운영자가 접근할 수 없습니다.</span></div>
-      <div class="row"><span class="k">방문 통계</span><span class="v">Google Analytics 4·네이버 애널리틱스 각 서비스의 보관 정책과 관리 화면 설정에 따릅니다 — 6항의 ‘운영자가 확인해야 하는 항목’ 참고.</span></div>
+      <div class="row"><span class="k">방문 통계</span><span class="v">Google Analytics 4·네이버 애널리틱스 각 서비스의 보관 정책과 관리 화면 설정에 따릅니다(6항 참고).</span></div>
       <div class="row"><span class="k">광고 쿠키</span><span class="v">각 쿠키의 만료 기간 또는 이용자가 쿠키를 삭제할 때까지. Google 등 광고 사업자의 정책을 따릅니다.</span></div>
     </div>
 
@@ -289,9 +284,11 @@
 
     <h2>13. 문의</h2>
     <p>
-      개인정보 처리에 관한 문의·삭제 요청은 <a href="contact.html">문의 안내</a>에 정리된 창구로 접수합니다.
-      현재 사이트 내 창구는 <a href="board.html">게시판</a>(비밀글 사용 가능)이며,
-      전자우편 주소는 운영자가 확인 후 문의 안내 페이지에 게시합니다.
+      개인정보 처리에 관한 문의·삭제 요청은 <a href="board.html">톺다 게시판</a>으로 접수합니다.
+      회원가입 없이 글을 쓸 수 있고, <strong>비밀글</strong>로 등록하면 본문은 작성한 브라우저와
+      운영자만 볼 수 있습니다. 삭제를 요청하실 때는 글 제목과 대략적인 작성 시각처럼
+      글을 특정할 수 있는 정보를 함께 남겨 주세요. 자세한 안내는
+      <a href="contact.html">문의 안내</a>에 있습니다.
     </p>
 
     <h2>14. 방침 변경</h2>
