@@ -496,19 +496,24 @@ def links_block(c, hub_url, siblings):
             '</ul>\n')
 
 
-def source_block(c, as_of_date, window_from, indexable=True):
+def source_block(c, as_of_date, window_from, indexable=True, region_slug=""):
     kapt = ('<p>세대수·준공연도는 공동주택관리정보시스템(K-apt) 공동주택 기본정보를 사용했습니다.</p>'
             if (c["households"] or c["built_year"]) else "")
-    # 표본이 얇아 색인에서 제외한 페이지는 그 사실과 이유를 화면에도 밝힌다.
-    # 숨기지 않는 편이 낫다 — 방문자가 이 숫자를 얼마나 신뢰해야 하는지 판단할 근거가 된다.
+    # 표본이 얇은 단지에는 그 사실을 알린다.
+    # ⚠ 여기에 '검색 색인에서 제외했다'고 쓰지 않는다. 색인 여부는 사이트 운영 사정이고
+    #   이 페이지를 보러 온 사람에게는 아무 쓸모가 없다. 방문자에게 필요한 것은
+    #   "이 숫자를 얼마나 믿어도 되는가" 하나다.
     gate = ""
     if not indexable:
-        _, fails = index_quality(c)
-        gate = ('<p class="note">이 단지는 표본이 아직 얇아 <strong>검색 색인에서 제외</strong>했습니다'
-                + (f' ({esc(" · ".join(fails))})' if fails else "")
-                + '. 표시된 숫자는 실제 신고 자료 그대로이며 추정치가 아니지만, '
-                + '거래 건수가 적을수록 한두 건에 크게 흔들립니다. '
-                + '<a href="/data-methodology.html">색인 품질 기준</a>을 공개해 두었습니다.</p>\n')
+        n_q = len(quarterly(c))
+        gate = ('<p class="note">이 단지는 최근 '
+                f'{_ACTUAL_MONTHS}개월 유효 거래가 <strong>{c["n"]}건</strong>'
+                + (f', 거래가 있었던 분기가 {n_q}개' if n_q < APT_INDEX_MIN_QUARTERS else "")
+                + '으로 표본이 적은 편입니다. 위 숫자는 신고된 자료 그대로이고 추정치가 아니지만, '
+                '거래가 적을수록 특이 거래 한두 건에 평균이 크게 흔들립니다. '
+                '가격대를 가늠하는 참고로 보시고, '
+                f'<a href="/apt/{esc(region_slug)}/">{esc(c["region_key"])}의 다른 단지</a> 시세도 '
+                '함께 확인하시는 편이 좋습니다.</p>\n')
     return ('<h2>출처와 주의사항</h2>\n'
             f'<p class="note">국토교통부 아파트 매매 실거래가 공개자료를 기준으로 제공하며, '
             f'신고 정정·해제 또는 데이터 갱신 시 실제 내용과 달라질 수 있습니다.<br>'
@@ -565,7 +570,7 @@ def complex_page(c, region_slug, cslug, siblings, as_of_date, window_from, index
         + '<h2>분기별 ㎡당 가격 추이</h2>\n' + quarter_chart(c)
         + '<h2>이 가격으로 구매비용 계산하기</h2>\n' + calc_block(c)
         + '<h2>함께 보기</h2>\n' + links_block(c, f"/apt/{region_slug}/", siblings)
-        + source_block(c, as_of_date, window_from, indexable)
+        + source_block(c, as_of_date, window_from, indexable, region_slug)
         + ld_json(c, url, hub_url, as_of_date, window_from)
     )
     return (head(title, desc, url, c["region_key"], c["name"], indexable=indexable)

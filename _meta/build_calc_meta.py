@@ -80,7 +80,7 @@ def ul(items):
     return "<ul>" + "".join(f"<li>{i}</li>" for i in items) + "</ul>"
 
 
-def render(slug, meta, last_reviewed, source, changelog):
+def render(slug, meta, last_reviewed, source, changelog, has_disclaimer=False):
     """블록 HTML. 값이 없는 항목은 아예 출력하지 않는다."""
     parts = []
 
@@ -113,25 +113,31 @@ def render(slug, meta, last_reviewed, source, changelog):
                      f'<div class="def-list">{"".join(basis)}</div>')
 
     if changelog:
+        # ⚠ 변경 이력은 접어 둔다. rates.js 의 한 항목이 수백 자짜리 문단인 경우가 있어
+        #   펼쳐 두면 계산기 페이지 하단을 이력이 통째로 차지한다. 대부분의 방문자에게
+        #   필요한 정보가 아니고, 필요한 사람만 열어 보면 된다.
         rows = "".join(
             f'<div class="row"><span class="k">{esc(d)}</span>'
             f'<span class="v">{esc(n)}</span></div>'
             for d, n in changelog[:CHANGELOG_SHOW])
         parts.append(
-            '<h3>변경 이력</h3>\n'
-            '<p class="note">계산 결과가 달라지는 변경만 기록합니다. 표기·문구만 다듬은 수정은 남기지 않습니다. '
-            '전체 원본은 <code>site/assets/rates.js</code> 에서 관리합니다.</p>\n'
-            f'<div class="def-list">{rows}</div>')
+            '<details class="explain">\n'
+            f'  <summary>계산 방식 변경 이력 (최근 {min(len(changelog), CHANGELOG_SHOW)}건)</summary>\n'
+            '  <div class="explain-body">\n'
+            '  <p class="note">계산 결과가 달라지는 변경만 기록합니다. 표기·문구만 다듬은 수정은 남기지 않습니다.</p>\n'
+            f'  <div class="def-list">{rows}</div>\n'
+            '  </div>\n'
+            '</details>')
 
     if not parts:
         return ""
+    # 면책 문구가 이미 있는 페이지에는 다시 붙이지 않는다(같은 말이 두 번 나오면 읽지 않게 된다).
+    closing = ("" if has_disclaimer else
+               '\n  <p class="note">계산 결과는 입력하신 조건에 따른 <strong>추정값</strong>입니다. '
+               '실제 고지·부과·승인 금액과 다를 수 있으며, 개별 사안에 대한 법률·세무·금융 자문이 아닙니다.</p>')
     return ('<section class="calc-meta" aria-labelledby="calc-meta-h">\n'
             '  <h2 id="calc-meta-h">이 계산기 정보</h2>\n  '
-            + "\n  ".join(parts)
-            + '\n  <p class="note">계산 결과는 입력 조건에 따른 <strong>추정값</strong>입니다. '
-              '실제 고지·부과·승인 금액과 다를 수 있으며, 개별 사안에 대한 법률·세무·금융 자문이 아닙니다. '
-              '작성·관리 원칙은 <a href="/editorial-policy.html">운영·편집 원칙</a>에, '
-              '오류 제보는 <a href="/corrections.html">정정 안내</a>에 있습니다.</p>\n'
+            + "\n  ".join(parts) + closing + '\n'
             '</section>\n')
 
 
@@ -169,8 +175,11 @@ def main():
             no_authored.append(base)
         with open(fp, encoding="utf-8") as f:
             raw = f.read()
+        # 이미 면책 문구가 있는 페이지인지 — calc:meta 구간은 제외하고 본다.
+        outside = re.sub(re.escape(START) + r".*?" + re.escape(END), "", raw, flags=re.S)
+        has_disclaimer = "자문이 아" in outside or "일반적 정보 제공" in outside
         block = render(slug, meta, last_reviewed,
-                       sources.get(slug) or sources.get("default"), changelog)
+                       sources.get(slug) or sources.get("default"), changelog, has_disclaimer)
         new = inject(raw, block)
         if new is None:
             print(f"[warn] {base}: </main> 을 찾지 못해 건너뜀")
