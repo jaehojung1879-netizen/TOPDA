@@ -28,6 +28,7 @@
 |---|---|---|
 | `collect_apartments.py` | 국토부 실거래 + Kakao | `apartments.json`(단지·평형·실거래가·좌표·역/학교 거리) |
 | `collect_households.py` | K-apt | `apartments.json` 세대수·준공 + `households.json`(실거래 전용 단지 세대수) |
+| `collect_building_ledger.py` | 건축HUB 건축물대장(총괄표제부·표제부) + `complex_addr.json` 조회키 | `households.json` 세대수·준공연도 — **K-apt가 못 덮는 몫**. K-apt는 의무관리대상만 수록해 수록률 71%가 천장인데, 대장은 모든 건축물이 등재돼 그 천장이 없다. 단지명을 대조하지 않고 지번으로 부르므로 이름 표기 차이 문제도 없다. 대장에 없는 지번은 `data/ledger_misses.json`에 적어 45일간 다시 부르지 않는다 |
 | `build_apt_pages.py` | 위 JSON 3종(키 불필요) | `site/apt/*.html` 지역별 정적 단지 페이지(네이버·구글 SEO) + `site/sitemap.xml` |
 | `collect_market.py` | R-ONE | `market.json`(지역별 매매·전세 지수·전세가율) |
 | `collect_news.py` | 구글 뉴스 RSS(키 불필요) | `news.json`(홈 "이번 주 핵심 이슈" + "섹터별 부동산 뉴스") |
