@@ -24,7 +24,7 @@
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260725" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260730" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -98,6 +98,7 @@
   <!-- 시나리오 탭 -->
   <div class="scn-tabs" data-scn-tabs role="tablist">
     <button class="scn-tab active" data-scn="sale" role="tab" aria-selected="true">매수 (취득)</button>
+    <button class="scn-tab" data-scn="plan" role="tab" aria-selected="false">자금계획</button>
     <button class="scn-tab" data-scn="transfer" role="tab" aria-selected="false">매도 (양도)</button>
     <button class="scn-tab" data-scn="lease" role="tab" aria-selected="false">전세 임차</button>
     <button class="scn-tab" data-scn="inherit" role="tab" aria-selected="false">상속</button>
@@ -108,8 +109,8 @@
 
     <div class="calc-form">
 
-      <!-- ===== 공통: 자산 유형 (sale/transfer 노출) ===== -->
-      <div class="field" data-show-on="sale,transfer">
+      <!-- ===== 공통: 자산 유형 (sale/plan/transfer 노출) ===== -->
+      <div class="field" data-show-on="sale,plan,transfer">
         <label>자산 유형<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="주택(아파트·빌라·단독 등)과 비주택(상가·오피스텔(업무용)·토지 등)은 취득세율과 양도세 규정이 다릅니다. 비주택은 취득세 4.6%(농특·교육세 포함), 양도 시 단기세율 50/40%가 적용되고 1세대1주택 비과세·다주택 중과 같은 주택 전용 규정은 적용되지 않습니다.">?</span></label>
         <div class="radio-group">
           <label><input type="radio" name="assetType" value="house" checked/><span>주택</span></label>
@@ -118,7 +119,7 @@
       </div>
 
       <!-- ===== 공통: 주택 수 (sale/transfer/rent 노출) ===== -->
-      <div class="field" data-show-on="sale,transfer,rent" data-house-only>
+      <div class="field" data-show-on="sale,plan,transfer,rent" data-house-only>
         <label>현재 주택 수 (본 거래 포함)</label>
         <div class="radio-group">
           <label><input type="radio" name="homes" value="1" checked/><span>1주택</span></label>
@@ -127,7 +128,7 @@
         </div>
       </div>
 
-      <div class="field" data-show-on="sale,transfer" data-house-only>
+      <div class="field" data-show-on="sale,plan,transfer" data-house-only>
         <label class="check-item" style="padding: 0; cursor: pointer;">
           <input type="checkbox" name="regulated"/>
           <span class="text">조정대상지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="정부가 과열됐다고 지정한 지역. 지정되면 다주택 취득세 중과(8~12%)·양도세 중과·LTV·DSR 강화가 적용됩니다. 최근 기준 서울 강남·서초·송파·용산구가 대표적으로 지정돼 있고 그 외 지역은 대부분 해제됐습니다. 수시로 바뀌니 국토교통부 공고로 최신 현황을 확인하세요.">?</span></span>
@@ -168,11 +169,34 @@
           </div>
           <div class="field">
             <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="firstHomeSmallHouse"/>
+              <span class="text">└ 소형 비아파트·인구감소지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="도시형생활주택·다가구 등 아파트가 아닌 소형주택이거나 인구감소지역 주택이면 생애최초 감면 한도가 300만원으로 올라갑니다.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="childbirth"/>
+              <span class="text">출산·양육 가구<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="자녀 출산일 전후 법정 기간 내 12억원 이하 주택을 취득하는 1가구 1주택이면 취득세를 최대 500만원 감면받을 수 있습니다(2028년 말까지). 생애최초 감면과 중복되지 않고 유리한 하나만 적용됩니다.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
               <input type="checkbox" name="unsold2026"/>
-              <span class="text">지방 준공 후 미분양<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="2026년 한시 감면 대상 주택이면 선택하세요. 6억원 이하·85㎡ 이하인지 자동 확인해 취득세 50% 감면과 다주택 중과 제외를 적용합니다.">?</span></span>
+              <span class="text">지방 준공 후 미분양<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="사업주체로부터 최초로 유상취득하는 수도권 밖 준공 후 미분양 주택이면 선택하세요. 감면율은 전국 일률 50%가 아니라 법정 25%이며 지자체 조례로 최대 25%p가 추가됩니다.">?</span></span>
             </label>
           </div>
           <p class="acq-auto-status" data-dashboard-acq-status>가격·주택 수·면적으로 감면 적용 가능 여부를 자동 확인합니다.</p>
+        </div>
+
+        <div class="field" data-house-only>
+          <label for="td-unsold-local">지자체 조례 추가 감면<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="지방 미분양 감면은 법정 25%가 기본이고, 취득 예정지 시·군·구 조례로 최대 25%p가 추가됩니다. 조례를 확인하지 못했다면 「확인 못함」을 두세요.">?</span></label>
+          <select id="td-unsold-local" name="unsold2026LocalExtra">
+            <option value="unknown" selected>조례 확인 못함 — 법정 25%만 반영</option>
+            <option value="0">추가 감면 없음 (총 25%)</option>
+            <option value="0.10">조례 10%p 추가 (총 35%)</option>
+            <option value="0.25">조례 25%p 추가 (총 50%)</option>
+          </select>
+          <span class="hint">최종 감면율 = 법정 25% + 조례 추가 0~25%. <strong>전국 일률 50%가 아닙니다.</strong></span>
         </div>
 
         <h3 class="scn-section-title" data-loan-title>주담대</h3>
@@ -255,6 +279,102 @@
         </div>
       </div>
 
+      <!-- ===== 자금계획 ===== -->
+      <!-- 매수 탭의 거래 조건(매매가·대출·등기)을 그대로 재사용하고, 섞여 있던 세 레이어를
+           A. 필요 현금 / B. 총 취득원가 / C. 자금조달 / D. 보유비용 네 블록으로 분리한다. -->
+      <div class="scn-panel" data-scn-panel="plan" hidden>
+        <p class="scn-note"><strong>매수 탭에 입력한 매매가·주택 수·대출 조건·등기 입력을 그대로 사용합니다.</strong>
+          여기서는 “계약부터 잔금, 그리고 보유까지 현금이 언제 얼마나 필요한지”만 추가로 입력하세요.
+          취득세·중개보수·등기비용은 매수 탭과 동일한 공통 계산 엔진으로 산정됩니다.</p>
+
+        <h3 class="scn-section-title">A. 계약 단계별 현금</h3>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-downpct">계약금 비율 (%)</label>
+            <input id="td-downpct" name="planDownPct" type="number" min="0" max="100" step="1" value="10" />
+            <span class="hint">통상 매매가의 10%.</span>
+          </div>
+          <div class="field">
+            <label for="td-midpct">중도금 비율 (%)</label>
+            <input id="td-midpct" name="planMidPct" type="number" min="0" max="100" step="1" value="0" />
+            <span class="hint">없으면 0.</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-interior">인테리어·수리비</label>
+            <div class="input-suffix" data-suffix="원">
+              <input id="td-interior" name="planInterior" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+            <span class="hint">샷시·확장 등은 자본적 지출로 양도세 필요경비 인정 가능.</span>
+          </div>
+          <div class="field">
+            <label for="td-moving">이사비</label>
+            <div class="input-suffix" data-suffix="원">
+              <input id="td-moving" name="planMoving" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-prepaid">대출 실행 전 선납비용<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="감정평가 수수료, 인지대, 근저당 설정 관련 선납분 등 잔금 전에 먼저 나가는 비용입니다.">?</span></label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-prepaid" name="planPrepaid" type="text" inputmode="numeric" data-format="won" value="0" />
+          </div>
+        </div>
+
+        <h3 class="scn-section-title">C. 자금조달</h3>
+        <p class="scn-note">주택담보대출 금액·금리·기간은 <strong>매수 탭</strong>에서 가져옵니다.</p>
+        <div class="field">
+          <label for="td-equity">준비된 자기자본</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-equity" name="planEquity" type="text" inputmode="numeric" data-format="won" value="300,000,000" />
+          </div>
+          <span class="hint">예금·주식 매도 등 실제로 동원 가능한 현금.</span>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-creditloan">신용대출</label>
+            <div class="input-suffix" data-suffix="원">
+              <input id="td-creditloan" name="planCreditLoan" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="td-creditrate">신용대출 금리 (연 %)</label>
+            <input id="td-creditrate" name="planCreditRate" type="number" min="0" max="20" step="0.1" value="5.5" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-assumed">임차보증금 승계<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="기존 임차인의 보증금을 승계하면 그만큼 잔금일 현금이 줄어듭니다. 나중에 반환해야 할 부채입니다.">?</span></label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-assumed" name="planAssumedDeposit" type="text" inputmode="numeric" data-format="won" value="0" />
+          </div>
+        </div>
+
+        <h3 class="scn-section-title">D. 보유비용</h3>
+        <p class="scn-note">재산세·종합부동산세는 <strong>공시가격</strong> 기준 추정치입니다. 매수 탭의 「시가표준액」을 입력하면 정확도가 올라갑니다(비우면 매매가의 70%로 추정).</p>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-mgmt">월 관리비</label>
+            <div class="input-suffix" data-suffix="원">
+              <input id="td-mgmt" name="planMgmt" type="text" inputmode="numeric" data-format="won" value="250,000" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="td-insurance">연 보험료</label>
+            <div class="input-suffix" data-suffix="원">
+              <input id="td-insurance" name="planInsurance" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-repair">연 예상 수선비</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-repair" name="planRepair" type="text" inputmode="numeric" data-format="won" value="0" />
+          </div>
+          <span class="hint">보일러·누수·도배 등 연 단위로 잡아두는 예비비.</span>
+        </div>
+      </div>
+
       <!-- ===== 매도(양도) ===== -->
       <div class="scn-panel" data-scn-panel="transfer" hidden>
         <h3 class="scn-section-title">양도 정보</h3>
@@ -316,6 +436,63 @@
             </span>
           </label>
         </div>
+
+        <!-- 중과 유예 경과규정 (조정대상지역 다주택일 때만 노출) -->
+        <div data-tt-show="grace" style="display:none;" data-house-only>
+          <h3 class="scn-section-title">중과 유예 경과규정</h3>
+          <p class="scn-note">양도일이 <strong>2026.5.9 이후</strong>라도 그 날까지 <strong>매매계약 + 계약금 수령</strong>을 마쳤다면 계약일부터 4개월(신규 조정대상지역 6개월) 이내 양도까지 유예가 이어집니다.</p>
+          <div class="field-row">
+            <div class="field">
+              <label for="td-contractDate">매매계약일</label>
+              <input id="td-contractDate" name="contractDate" type="date" value="" />
+            </div>
+            <div class="field" data-tt-show="permit" style="display:none;">
+              <label for="td-permitDate">토지거래허가 신청일</label>
+              <input id="td-permitDate" name="landPermitApplyDate" type="date" value="" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="downPaymentReceived"/>
+              <span class="text">계약금을 수령했다<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="경과규정은 계약 체결만으로는 부족하고 계약금 수령까지 마쳐야 합니다. 입금 내역을 보관하세요.">?</span></span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="newRegulatedArea"/>
+              <span class="text">신규 조정대상지역 (유예 6개월)</span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="landPermitTarget"/>
+              <span class="text">토지거래허가 대상 물건</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 증여재산 이월과세 -->
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="giftedFromRelative"/>
+            <span class="text">배우자·직계존비속에게 증여받은 부동산
+              <span class="note">10년 이내 양도하면 취득가액에 <strong>증여자의 취득가액</strong>이 이월 적용됩니다(소득세법 제97조의2).</span>
+            </span>
+          </label>
+        </div>
+        <div class="field-row" data-tt-show="carryover" style="display:none;">
+          <div class="field">
+            <label for="td-giftReceivedDate">증여받은 날</label>
+            <input id="td-giftReceivedDate" name="giftReceivedDate" type="date" value="" />
+          </div>
+          <div class="field">
+            <label for="td-donorBuyPrice">증여자의 취득가액</label>
+            <div class="input-suffix" data-suffix="원">
+              <input id="td-donorBuyPrice" name="donorBuyPrice" type="text" inputmode="numeric" data-format="won" value="" />
+            </div>
+          </div>
+        </div>
+
         <p class="scn-note">매도 시나리오는 양도소득세 산정이 중심이라 소득·DSR을 적용하지 않습니다.</p>
       </div>
 
@@ -377,7 +554,14 @@
         <div class="field">
           <label for="td-children">자녀 수</label>
           <input id="td-children" name="children" type="number" min="0" max="10" step="1" value="2" />
-          <span class="hint">자녀 1인당 5천만 원 인적공제(미성년은 만 19세까지 연수 × 1천만 원 추가).</span>
+          <span class="hint">자녀 1인당 5천만 원 인적공제(미성년은 만 19세까지 연수 × 1천만 원 추가). 배우자 법정상속분(1.5 : 자녀 각 1) 계산에도 사용됩니다.</span>
+        </div>
+        <div class="field">
+          <label for="td-spouseShare">배우자가 실제로 상속받는 금액<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="배우자 상속공제는 순재산의 30%가 아니라 min(배우자가 실제 상속받은 금액, 민법상 법정상속분 한도, 30억원)이며 최소 5억원이 보장됩니다. 아직 분할 협의 전이면 비워두세요 — 최소~최대 범위로 계산합니다.">?</span></label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-spouseShare" name="spouseActualShare" type="text" inputmode="numeric" data-format="won" value="" />
+          </div>
+          <span class="hint">비워두면 최소 5억원 공제(세액 상한)와 법정상속분 한도 공제(세액 하한)의 <strong>범위</strong>로 표시합니다. 신고기한 내 분할·등기를 마쳐야 공제가 인정됩니다.</span>
         </div>
         <div class="calc-check-grid">
           <div class="field">
@@ -411,14 +595,47 @@
             <label><input type="radio" name="donee" value="adult" checked/><span>성년 자녀</span></label>
             <label><input type="radio" name="donee" value="minor"/><span>미성년 자녀</span></label>
             <label><input type="radio" name="donee" value="other"/><span>기타 친족</span></label>
+            <label><input type="radio" name="donee" value="stranger"/><span>비친족(타인)</span></label>
           </div>
-          <span class="hint">10년 합산 공제: 배우자 6억 / 성년 자녀 5천만 / 미성년 2천만 / 기타 친족 1천만 원.</span>
+          <span class="hint">10년 합산 공제: 배우자 6억 / 성년 자녀 5천만 / 미성년 2천만 / <strong>기타 친족 1천만 원(6촌 이내 혈족·4촌 이내 인척)</strong>. <strong>비친족(타인) 증여는 증여재산공제가 없습니다.</strong></span>
+        </div>
+        <div class="field" data-gift-mb-field>
+          <label for="td-marriageBirth">혼인·출산 증여재산공제<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="직계존속으로부터 혼인신고일 전후 2년 이내 또는 자녀 출생·입양일부터 2년 이내에 증여받으면 혼인·출산을 합해 최대 1억원까지 추가 공제됩니다(상증법 제53조의2). 일반 증여재산공제와 별도로 적용됩니다.">?</span></label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-marriageBirth" name="marriageBirthDeduct" type="text" inputmode="numeric" data-format="won" value="0" />
+          </div>
+          <span class="hint">혼인 + 출산 합산 최대 1억원. 해당 없으면 0.</span>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-prevGift">과거 10년 내 증여받은 금액<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="동일인(직계존속은 그 배우자도 동일인으로 봅니다)으로부터 10년 내 받은 증여재산은 이번 증여와 합산해 누진세율을 적용합니다. 공제 한도만 깎는 것이 아닙니다.">?</span></label>
+            <div class="input-suffix" data-suffix="원">
+              <input id="td-prevGift" name="prevGift" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+            <span class="hint">동일인 기준. 직계존속은 그 배우자 증여분도 합산.</span>
+          </div>
+          <div class="field">
+            <label for="td-prevGiftTax">그때 납부한 증여세<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="합산 과세 후 산출세액에서 이미 낸 증여세를 공제합니다(상증법 제58조). 입력하지 않으면 세액이 과다 계산됩니다.">?</span></label>
+            <div class="input-suffix" data-suffix="원">
+              <input id="td-prevGiftTax" name="prevGiftTax" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+            <span class="hint">기납부 증여세액공제로 차감됩니다.</span>
+          </div>
         </div>
         <div class="field">
-          <label for="td-prevGift">과거 10년 내 증여받은 금액 (동일 증여자 기준)</label>
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="generationSkip"/>
+            <span class="text">세대를 건너뛴 증여 (손자녀 등)
+              <span class="note">조부모 → 손자녀처럼 한 세대를 건너뛰면 산출세액에 30%(미성년자가 20억원 초과를 받으면 40%)가 할증됩니다(상증법 제57조).</span>
+            </span>
+          </label>
+        </div>
+        <div class="field">
+          <label for="td-giftDebt">부담부증여 승계 채무<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="수증자가 떠안는 전세보증금·대출 등 채무액입니다. 채무 부분은 증여가 아니라 유상취득으로 보아 증여자에게 양도소득세가 발생하고, 취득세도 유상거래 세율이 적용됩니다.">?</span></label>
           <div class="input-suffix" data-suffix="원">
-            <input id="td-prevGift" name="prevGift" type="text" inputmode="numeric" data-format="won" value="0" />
+            <input id="td-giftDebt" name="giftAssumedDebt" type="text" inputmode="numeric" data-format="won" value="0" />
           </div>
+          <span class="hint">입력하면 증여·양도를 분리해야 한다는 안내를 표시합니다(본 계산기는 무상취득 부분만 산정).</span>
         </div>
         <div class="calc-check-grid">
           <div class="field">
@@ -486,6 +703,12 @@
       <div class="breakdown" data-detail-breakdown style="border-top:1px solid var(--border); padding-top:14px; margin-top:8px;">
         <!-- JS에서 채움 -->
       </div>
+
+      <!-- 간편 추정·범위 안내 (상속·증여·자금계획) -->
+      <p class="estimate-note" data-estimate-note hidden></p>
+
+      <!-- 취득세 감면 적용·미적용 이유 -->
+      <ul class="acq-notes" data-acq-notes hidden></ul>
 
       <div class="dsr-box" data-mortgage-limit-box>
         <div class="dsr-box-head">
@@ -640,8 +863,8 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../assets/rates.js?v=20260629"></script>
-<script src="../assets/app.js?v=20260725"></script>
+<script src="../assets/rates.js?v=20260730"></script>
+<script src="../assets/app.js?v=20260730"></script>
 <script src="../assets/official_price.js?v=20260728"></script>
 <script>
 (function () {

@@ -27,7 +27,7 @@
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/total-cost-dashboard.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=20260725" />
+<link rel="stylesheet" href="../../assets/styles.css?v=20260730" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -96,6 +96,7 @@
   <!-- Scenario tabs -->
   <div class="scn-tabs" data-scn-tabs role="tablist">
     <button class="scn-tab active" data-scn="sale" role="tab" aria-selected="true">Buy (acquisition)</button>
+    <button class="scn-tab" data-scn="plan" role="tab" aria-selected="false">Funding plan</button>
     <button class="scn-tab" data-scn="transfer" role="tab" aria-selected="false">Sell (transfer)</button>
     <button class="scn-tab" data-scn="lease" role="tab" aria-selected="false">Jeonse lease</button>
     <button class="scn-tab" data-scn="inherit" role="tab" aria-selected="false">Inheritance</button>
@@ -107,7 +108,7 @@
     <div class="calc-form">
 
       <!-- Common: asset type (sale/transfer) -->
-      <div class="field" data-show-on="sale,transfer">
+      <div class="field" data-show-on="sale,plan,transfer">
         <label>Asset type<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Housing (apartments, villas, detached houses) and non-housing (retail, officetel for business use, land) have different acquisition-tax rates and capital-gains rules. Non-housing pays a flat 4.6% acquisition tax, short-term-holding rates of 50/40% on sale, and does not get the 1-home exemption or multi-home surcharges that only apply to housing.">?</span></label>
         <div class="radio-group">
           <label><input type="radio" name="assetType" value="house" checked/><span>Housing</span></label>
@@ -116,7 +117,7 @@
       </div>
 
       <!-- Common: number of homes (sale/transfer/rent) -->
-      <div class="field" data-show-on="sale,transfer,rent" data-house-only>
+      <div class="field" data-show-on="sale,plan,transfer,rent" data-house-only>
         <label>Current number of homes (incl. this deal)</label>
         <div class="radio-group">
           <label><input type="radio" name="homes" value="1" checked/><span>1 home</span></label>
@@ -125,7 +126,7 @@
         </div>
       </div>
 
-      <div class="field" data-show-on="sale,transfer" data-house-only>
+      <div class="field" data-show-on="sale,plan,transfer" data-house-only>
         <label class="check-item" style="padding: 0; cursor: pointer;">
           <input type="checkbox" name="regulated"/>
           <span class="text">Regulated area<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Areas the government has designated as overheated. Once designated, multi-home acquisition-tax surcharges (8-12%), capital-gains surcharges, and tighter LTV/DSR apply. As of the latest update, Seoul's Gangnam, Seocho, Songpa, and Yongsan districts are the main ones designated; most other areas have been de-designated. This changes often — check the Ministry of Land, Infrastructure and Transport notices for the latest status.">?</span></span>
@@ -170,7 +171,30 @@
               <span class="text">Qualifying regional unsold unit<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Select this for a qualifying completed but unsold regional unit under the temporary 2026 program. The KRW 600M and 85 m² limits are checked automatically.">?</span></span>
             </label>
           </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="firstHomeSmallHouse"/>
+              <span class="text">&#8627; Small non-apartment / population-decline area</span>
+            </label>
+          </div>
+          <div class="field">
+            <label class="check-item" style="padding: 0; cursor: pointer;">
+              <input type="checkbox" name="childbirth"/>
+              <span class="text">Childbirth / child-rearing household</span>
+            </label>
+          </div>
           <p class="acq-auto-status" data-dashboard-acq-status>Relief eligibility is checked automatically from price, home count, and floor area.</p>
+        </div>
+
+        <div class="field" data-house-only>
+          <label for="td-unsold-local">Local ordinance additional relief</label>
+          <select id="td-unsold-local" name="unsold2026LocalExtra">
+            <option value="unknown" selected>Ordinance not checked &mdash; statutory 25% only</option>
+            <option value="0">No additional relief (25% total)</option>
+            <option value="0.10">Ordinance adds 10%p (35% total)</option>
+            <option value="0.25">Ordinance adds 25%p (50% total)</option>
+          </select>
+          <span class="hint">Final relief = statutory 25% + ordinance 0&ndash;25%. <strong>Not a flat 50% nationwide.</strong></span>
         </div>
 
         <h3 class="scn-section-title" data-loan-title>Mortgage</h3>
@@ -253,6 +277,95 @@
         </div>
       </div>
 
+      <!-- ===== Funding plan ===== -->
+      <div class="scn-panel" data-scn-panel="plan" hidden>
+        <p class="scn-note"><strong>Uses the price, home count, loan terms, and registration inputs from the Buy tab.</strong>
+          Here you only add when the cash is actually needed. Acquisition tax, brokerage, and registration costs come from the
+          same shared calculation engine as the Buy tab.</p>
+
+        <h3 class="scn-section-title">A. Cash by contract stage</h3>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-downpct">Down payment (%)</label>
+            <input id="td-downpct" name="planDownPct" type="number" min="0" max="100" step="1" value="10" />
+          </div>
+          <div class="field">
+            <label for="td-midpct">Interim payment (%)</label>
+            <input id="td-midpct" name="planMidPct" type="number" min="0" max="100" step="1" value="0" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-interior">Interior / repairs</label>
+            <div class="input-suffix" data-suffix="KRW">
+              <input id="td-interior" name="planInterior" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="td-moving">Moving costs</label>
+            <div class="input-suffix" data-suffix="KRW">
+              <input id="td-moving" name="planMoving" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-prepaid">Costs paid before loan disbursement</label>
+          <div class="input-suffix" data-suffix="KRW">
+            <input id="td-prepaid" name="planPrepaid" type="text" inputmode="numeric" data-format="won" value="0" />
+          </div>
+        </div>
+
+        <h3 class="scn-section-title">C. Funding</h3>
+        <p class="scn-note">Mortgage amount, rate, and term come from the <strong>Buy</strong> tab.</p>
+        <div class="field">
+          <label for="td-equity">Available equity</label>
+          <div class="input-suffix" data-suffix="KRW">
+            <input id="td-equity" name="planEquity" type="text" inputmode="numeric" data-format="won" value="300,000,000" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-creditloan">Credit loan</label>
+            <div class="input-suffix" data-suffix="KRW">
+              <input id="td-creditloan" name="planCreditLoan" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="td-creditrate">Credit loan rate (annual %)</label>
+            <input id="td-creditrate" name="planCreditRate" type="number" min="0" max="20" step="0.1" value="5.5" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-assumed">Assumed lease deposit</label>
+          <div class="input-suffix" data-suffix="KRW">
+            <input id="td-assumed" name="planAssumedDeposit" type="text" inputmode="numeric" data-format="won" value="0" />
+          </div>
+        </div>
+
+        <h3 class="scn-section-title">D. Holding costs</h3>
+        <p class="scn-note">Property tax and comprehensive real-estate tax are <strong>estimates</strong> from the officially assessed price. Enter it in the Buy tab for better accuracy (otherwise 70% of the purchase price is assumed).</p>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-mgmt">Monthly maintenance fee</label>
+            <div class="input-suffix" data-suffix="KRW">
+              <input id="td-mgmt" name="planMgmt" type="text" inputmode="numeric" data-format="won" value="250,000" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="td-insurance">Annual insurance</label>
+            <div class="input-suffix" data-suffix="KRW">
+              <input id="td-insurance" name="planInsurance" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="td-repair">Annual expected repairs</label>
+          <div class="input-suffix" data-suffix="KRW">
+            <input id="td-repair" name="planRepair" type="text" inputmode="numeric" data-format="won" value="0" />
+          </div>
+        </div>
+      </div>
+
       <!-- ===== Sell (transfer) ===== -->
       <div class="scn-panel" data-scn-panel="transfer" hidden>
         <h3 class="scn-section-title">Sale details</h3>
@@ -315,6 +428,43 @@
           </label>
         </div>
         <p class="scn-note">The sale scenario focuses on capital gains tax, so income/DSR are not applied.</p>
+      
+        <div data-tt-show="grace" style="display:none;" data-house-only>
+          <h3 class="scn-section-title">Surcharge waiver — transitional rule</h3>
+          <p class="scn-note">A transfer after 9 May 2026 still qualifies if the contract was signed and the down payment received by that date, and the transfer occurs within 4 months (6 months in newly designated regulated areas).</p>
+          <div class="field-row">
+            <div class="field">
+              <label for="td-contractDate">Contract date</label>
+              <input id="td-contractDate" name="contractDate" type="date" value="" />
+            </div>
+            <div class="field" data-tt-show="permit" style="display:none;">
+              <label for="td-permitDate">Land-transaction permit application date</label>
+              <input id="td-permitDate" name="landPermitApplyDate" type="date" value="" />
+            </div>
+          </div>
+          <div class="field"><label class="check-item" style="padding:0; cursor:pointer;">
+            <input type="checkbox" name="downPaymentReceived"/><span class="text">Down payment was received</span></label></div>
+          <div class="field"><label class="check-item" style="padding:0; cursor:pointer;">
+            <input type="checkbox" name="newRegulatedArea"/><span class="text">Newly designated regulated area (6-month window)</span></label></div>
+          <div class="field"><label class="check-item" style="padding:0; cursor:pointer;">
+            <input type="checkbox" name="landPermitTarget"/><span class="text">Subject to land-transaction permit</span></label></div>
+        </div>
+
+        <div class="field"><label class="check-item" style="padding:0; cursor:pointer;">
+          <input type="checkbox" name="giftedFromRelative"/><span class="text">Gifted by a spouse or lineal relative
+            <span class="note">Sold within 10 years of the gift, the <strong>donor’s</strong> acquisition price carries over (Income Tax Act §97-2).</span></span></label></div>
+        <div class="field-row" data-tt-show="carryover" style="display:none;">
+          <div class="field">
+            <label for="td-giftReceivedDate">Date the gift was received</label>
+            <input id="td-giftReceivedDate" name="giftReceivedDate" type="date" value="" />
+          </div>
+          <div class="field">
+            <label for="td-donorBuyPrice">Donor’s acquisition price</label>
+            <div class="input-suffix" data-suffix="KRW">
+              <input id="td-donorBuyPrice" name="donorBuyPrice" type="text" inputmode="numeric" data-format="won" value="" />
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- ===== Jeonse lease ===== -->
@@ -377,6 +527,13 @@
           <input id="td-children" name="children" type="number" min="0" max="10" step="1" value="2" />
           <span class="hint">KRW 50M personal deduction per child (minors get an extra KRW 10M × remaining years to age 19).</span>
         </div>
+        <div class="field">
+          <label for="td-spouseShare">Amount the spouse actually inherits<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="The spousal deduction is min(amount actually inherited, statutory-share ceiling, KRW 3B), with a KRW 500M floor — it is not 30% of the net estate. Leave blank before the estate is divided and the result is shown as a range.">?</span></label>
+          <div class="input-suffix" data-suffix="KRW">
+            <input id="td-spouseShare" name="spouseActualShare" type="text" inputmode="numeric" data-format="won" value="" />
+          </div>
+          <span class="hint">Leave blank to see a <strong>range</strong> between the KRW 500M minimum deduction and the statutory-share ceiling.</span>
+        </div>
         <div class="calc-check-grid">
           <div class="field">
             <label class="check-item" style="padding:0; cursor:pointer;">
@@ -409,14 +566,41 @@
             <label><input type="radio" name="donee" value="adult" checked/><span>Adult child</span></label>
             <label><input type="radio" name="donee" value="minor"/><span>Minor child</span></label>
             <label><input type="radio" name="donee" value="other"/><span>Other relative</span></label>
+            <label><input type="radio" name="donee" value="stranger"/><span>Unrelated party</span></label>
           </div>
-          <span class="hint">10-year cumulative deduction: spouse KRW 600M / adult child KRW 50M / minor KRW 20M / other relative KRW 10M.</span>
+          <span class="hint">10-year cumulative deduction: spouse KRW 600M / adult child KRW 50M / minor KRW 20M / <strong>other relative KRW 10M (within 6 degrees of blood or 4 of affinity)</strong>. <strong>Gifts between unrelated parties get no deduction.</strong></span>
         </div>
-        <div class="field">
-          <label for="td-prevGift">Gifts received in the past 10 years (from the same donor)</label>
+        <div class="field" data-gift-mb-field>
+          <label for="td-marriageBirth">Marriage / childbirth gift deduction<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Gifts from a lineal ascendant within 2 years of marriage registration or a child\u2019s birth/adoption qualify for up to KRW 100M combined, on top of the ordinary relationship deduction.">?</span></label>
           <div class="input-suffix" data-suffix="KRW">
-            <input id="td-prevGift" name="prevGift" type="text" inputmode="numeric" data-format="won" value="0" />
+            <input id="td-marriageBirth" name="marriageBirthDeduct" type="text" inputmode="numeric" data-format="won" value="0" />
           </div>
+          <span class="hint">Marriage + childbirth combined, up to KRW 100M. Enter 0 if not applicable.</span>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="td-prevGift">Gifts received in the past 10 years<span class="tip" tabindex="0" role="button" aria-label="Help" data-tip="Prior gifts from the same donor (a lineal ascendant and their spouse count as one donor) are aggregated with this gift before the progressive rate applies — they do not merely reduce the deduction.">?</span></label>
+            <div class="input-suffix" data-suffix="KRW">
+              <input id="td-prevGift" name="prevGift" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="td-prevGiftTax">Gift tax already paid on those</label>
+            <div class="input-suffix" data-suffix="KRW">
+              <input id="td-prevGiftTax" name="prevGiftTax" type="text" inputmode="numeric" data-format="won" value="0" />
+            </div>
+            <span class="hint">Credited against the aggregated tax.</span>
+          </div>
+        </div>
+        <div class="field"><label class="check-item" style="padding:0; cursor:pointer;">
+          <input type="checkbox" name="generationSkip"/><span class="text">Generation-skipping gift (grandchild etc.)
+            <span class="note">A 30% surcharge applies (40% where a minor receives more than KRW 2B).</span></span></label></div>
+        <div class="field">
+          <label for="td-giftDebt">Debt assumed (gift with assumed debt)</label>
+          <div class="input-suffix" data-suffix="KRW">
+            <input id="td-giftDebt" name="giftAssumedDebt" type="text" inputmode="numeric" data-format="won" value="0" />
+          </div>
+          <span class="hint">The debt portion is treated as a paid transfer, not a gift.</span>
         </div>
         <div class="calc-check-grid">
           <div class="field">
@@ -484,6 +668,10 @@
       <div class="breakdown" data-detail-breakdown style="border-top:1px solid var(--border); padding-top:14px; margin-top:8px;">
         <!-- Filled by JS -->
       </div>
+
+      <p class="estimate-note" data-estimate-note hidden></p>
+
+      <ul class="acq-notes" data-acq-notes hidden></ul>
 
       <div class="dsr-box" data-mortgage-limit-box>
         <div class="dsr-box-head">
@@ -586,8 +774,8 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../../assets/rates.js?v=20260629"></script>
-<script src="../../assets/app.js?v=20260725"></script>
+<script src="../../assets/rates.js?v=20260730"></script>
+<script src="../../assets/app.js?v=20260730"></script>
 <script>
 (function () {
   'use strict';

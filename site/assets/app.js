@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 // ===== Acquisition Tax Calculator =====
-// 모델 (주거용 매매 기준, 지방세법 제11·제15조 / 지방세법 시행령 / 농어촌특별세법 / 지방세특례제한법 제36조의2):
+// 모델 (주거용 취득 기준, 지방세법 제11·제15조 / 지방세법 시행령 / 농어촌특별세법 / 지방세특례제한법):
 // 1) 본세(취득세)
 //    - 1주택: 6억 이하 1.0%, 6~9억 누진(가격×2/3-3)%, 9억 초과 3.0%
 //    - 2주택: 조정대상 8.0% / 비조정은 1주택과 동일
@@ -359,25 +359,63 @@ document.addEventListener('DOMContentLoaded', () => {
 // 3) 지방교육세
 //    - 표준세율 적용: 본 취득세 × 10% (= 표준세율의 1/10)
 //    - 중과세율 8%·12% 적용: 매매가의 0.4% 고정
-// 4) 생애최초 주택 취득 감면 (지방세특례제한법 제36조의2)
-//    - 무주택 세대 + 가액 12억 이하 → 취득세 최대 200만 원 한도 감면
+//
+// ⚠ 취득 원인 구분 (2026-07-30 정정)
+//    'purchase'  유상거래(기존 주택 매매)          → 1~3% 또는 중과
+//    'presale'   시행사·건설사로부터 분양받은 신축주택 → 유상거래와 같은 1~3% 또는 중과
+//    'original'  건축주가 직접 신축·증축(원시취득)   → 2.8%
+//    'redevelop' 재개발·재건축 조합원 취득          → 종전지분/추가분담금 과세표준 분리 필요(개략 추정)
+//    분양 아파트를 'original'로 처리하면 세액이 크게 달라지므로 반드시 구분한다.
+//
+// ⚠ 감면 (지방세특례제한법)
+//    생애최초(제36조의3): 12억 이하 · 한도 200만원. 소형 비아파트·인구감소지역은 300만원.
+//    출산·양육(제36조의5): 12억 이하 1가구 1주택 · 한도 500만원 (2028년 말까지).
+//    → 두 감면은 단순 합산하지 않고 납세자에게 유리한 하나를 적용한다.
+//    지방 준공 후 미분양(한시): 법정 25% + 조례 추가 0~25% = 최종 25~50%.
+//    → 전국 일률 50%가 아니다. 조례 미확인 시 25%만 적용하고 결과에 그 사실을 밝힌다.
 function calcAcquisitionTax(input) {
   const {
     price, homes, regulated, areaOver85, firstHome,
     acqType = 'purchase', tempTwoHome = false,
     inheritNoHome = false, giftHeavy,
     giftDonorMultiHome = false,
-    unsold2026 = false, // 2026 한시: 지방 미분양 아파트 감면(85㎡↓·6억↓, 50%감면+중과제외)
+    unsold2026 = false, // 지방 준공 후 미분양 한시감면(85㎡↓·6억↓, 중과제외 + 25~50% 감면)
+    unsold2026LocalExtra = null, // 지자체 조례 추가 감면율(0~0.25). null = 조례 미확인 → 법정 25%만
+    // 생애최초 감면 한도 상향(300만원) 판정용 사실
+    firstHomeSmallHouse = false, // 소형 비아파트(도시형생활주택·다가구 등) 또는 인구감소지역 주택
+    // 출산·양육 감면 (지방세특례제한법 제36조의5)
+    childbirth = false,
+    // 부담부증여 채무액 — 증여 취득세 과세표준에서 제외(그 부분은 유상취득으로 별도 과세)
+    giftAssumedDebt = 0,
   } = input;
   if (!price || price <= 0) return null;
   const eok = price / 100000000;
   // 유상취득 6~9억 누진식: 세율 = (취득가액×2/3억 − 3) / 100
   const progRate = eok <= 6 ? 0.01 : eok <= 9 ? ((eok * 2 / 3) - 3) / 100 : 0.03;
 
-  // 2026 한시 미분양 감면 적용 가능 여부 (유상취득 + 85㎡↓ + 6억↓)
+  // 감면 적용/미적용 이유를 사용자에게 그대로 보여주기 위한 메모
+  const notes = [];
+
+  // 분양받은 신축주택은 유상거래와 동일한 세율 체계를 쓴다(원시취득 2.8% 아님).
+  const isPaidTransfer = acqType === 'purchase' || acqType === 'presale';
+
   const R = (window.TOPDA_RATES && window.TOPDA_RATES.acquisitionTax) || {};
-  const relief = R.unsold2026Relief || { areaMaxSqm: 85, priceMax: 600000000, discountRatio: 0.50, excludeHeavySurcharge: true };
-  const unsoldEligible = unsold2026 && acqType === 'purchase' && !areaOver85 && price <= relief.priceMax;
+  const relief = R.unsold2026Relief || {};
+  const reliefPriceMax = relief.priceMax || 600000000;
+  const statutoryRatio = relief.statutoryRatio != null ? relief.statutoryRatio : 0.25;
+  const localMaxExtra = relief.localMaxExtraRatio != null ? relief.localMaxExtraRatio : 0.25;
+  const maxTotalRatio = relief.maxTotalRatio || 0.50;
+
+  // 미분양 한시감면 적용 가능 여부 (유상취득 + 85㎡↓ + 6억↓)
+  const unsoldEligible = unsold2026 && isPaidTransfer && !areaOver85 && price <= reliefPriceMax;
+  // 조례 확인 여부: null이면 미확인 → 법정 25%만 반영하고 "최대 25%p 추가 가능" 안내
+  const localExtraKnown = unsold2026LocalExtra != null && unsold2026LocalExtra !== '';
+  const localExtraRatio = localExtraKnown
+    ? Math.max(0, Math.min(localMaxExtra, Number(unsold2026LocalExtra) || 0))
+    : 0;
+  const unsoldRatio = unsoldEligible
+    ? Math.min(maxTotalRatio, statutoryRatio + localExtraRatio)
+    : 0;
 
   let baseRate, isHeavy = false, scenario = '', scenarioKey = '';
 
@@ -394,21 +432,34 @@ function calcAcquisitionTax(input) {
       : Boolean(giftHeavy);
     if (giftHeavyApplied) { baseRate = 0.12; isHeavy = true; scenario = '증여 · 조정대상 3억↑ 중과(12%)'; scenarioKey = 'gift-heavy'; }
     else { baseRate = 0.035; scenario = '증여 취득(3.5%)'; scenarioKey = 'gift-standard'; }
+    notes.push({ kind: 'info', text: '증여 취득세 과세표준은 「시가인정액」(매매사례가·감정가·경매가 등)이며, 중과 판정 기준인 「시가표준액」(공시가격)과는 다른 개념입니다. 두 값을 각각 확인해 입력하세요.', en: 'The tax base for a gift is the “recognised market value” (comparable sales, appraisal, auction price). The “standard market value” (officially assessed price) used to test the heavy rate is a different figure — check and enter both.' });
+    if (giftAssumedDebt > 0) {
+      notes.push({ kind: 'warn', text: '부담부증여로 승계한 채무 ' + Math.round(giftAssumedDebt).toLocaleString('ko-KR') + '원은 증여가 아니라 유상취득으로 봅니다. 채무 부분은 유상거래 취득세율(1~3% 또는 중과)로 따로 계산해야 하며, 증여자에게는 그 부분에 대한 양도소득세가 발생합니다. 이 계산기는 무상취득 부분만 산정합니다.', en: 'The KRW ' + Math.round(giftAssumedDebt).toLocaleString('en-US') + ' of debt assumed is treated as a paid transfer, not a gift. That portion is taxed at the paid-transfer rate (1–3% or the heavy rate) and triggers capital gains tax for the donor. This calculator covers only the gift portion.' });
+    }
   } else if (acqType === 'original') {
-    // 원시취득(신축·신규 분양 등)
+    // 원시취득: 건축주가 직접 신축·증축한 건축물 (분양받은 신축주택은 여기 해당하지 않음)
     baseRate = 0.028;
-    scenario = '원시취득·신축(2.8%)';
+    scenario = '원시취득 · 직접 신축·증축(2.8%)';
     scenarioKey = 'original';
+    notes.push({ kind: 'info', text: '건축주가 직접 신축·증축해 소유권을 원시취득한 경우입니다. 시행사·건설사로부터 분양받은 신축주택은 「분양받은 신축주택」을 선택하세요 — 유상거래 세율(1~3% 또는 중과)이 적용됩니다.', en: 'This is original acquisition — the owner built or extended the structure themselves. For a newly built home bought from a developer, choose “Newly built home bought from developer”: the paid-transfer rate (1–3% or the heavy rate) applies instead.' });
+  } else if (acqType === 'redevelop') {
+    // 재개발·재건축 조합원: 종전 부동산 지분 승계분과 추가분담금(원시취득)의 과세표준이 분리된다.
+    // 정밀 판정에는 관리처분계획상 종전자산 평가액·권리가액·분담금이 필요하므로 개략 추정만 제공한다.
+    baseRate = 0.028;
+    scenario = '재개발·재건축 조합원 취득(개략 추정 2.8%)';
+    scenarioKey = 'redevelop';
+    notes.push({ kind: 'warn', text: '조합원 취득은 종전 토지·건물 지분과 추가분담금의 과세표준을 나누어 판정해야 합니다. 이 결과는 원시취득 세율을 적용한 개략 추정치이며, 관리처분계획상 권리가액·분담금 기준으로 관할 지자체·세무사 확인이 필요합니다.', en: 'A redevelopment member’s acquisition splits into the prior land/building share and the additional contribution, each with its own tax base. This is a rough estimate at the original-acquisition rate — confirm with the local authority using the entitlement value and contribution in the management disposal plan.' });
   } else {
-    // 유상취득(매매). 일시적 2주택은 종전주택 처분 조건 충족 시 1주택 세율 적용
-    // 2026 미분양 한시감면 적용 시 다주택 중과 제외 → 표준세율로
+    // 유상취득(기존 주택 매매 또는 분양받은 신축주택).
+    // 일시적 2주택은 종전주택 처분 조건 충족 시 1주택 세율 적용.
+    // 미분양 한시감면 적용 시 다주택 중과 제외 → 표준세율로.
     const effHomes = (homes === 2 && tempTwoHome) ? 1 :
       (unsoldEligible && relief.excludeHeavySurcharge ? Math.min(homes, 1) : homes);
     if (effHomes === 1) {
       baseRate = progRate;
       if (homes === 2 && tempTwoHome) { scenario = '일시적 2주택 → 1주택 세율 적용'; scenarioKey = 'temp-two-home'; }
       else if (unsoldEligible && homes >= 2) { scenario = '미분양 한시 감면 — 다주택 중과 제외, 표준세율'; scenarioKey = 'unsold-relief'; }
-      else { scenario = '1주택 표준세율'; scenarioKey = 'h1-standard'; }
+      else { scenario = acqType === 'presale' ? '분양받은 신축주택 · 1주택 표준세율(유상거래)' : '1주택 표준세율'; scenarioKey = 'h1-standard'; }
     } else if (effHomes === 2) {
       if (regulated) { baseRate = 0.08; isHeavy = true; scenario = '조정대상지역 2주택 중과(8%)'; scenarioKey = 'h2-regulated'; }
       else { baseRate = progRate; scenario = '비조정 2주택 표준세율'; scenarioKey = 'h2-nonregulated'; }
@@ -424,20 +475,74 @@ function calcAcquisitionTax(input) {
 
   let acquisition = price * baseRate;
 
-  // 생애최초 주택 구입 감면 (유상취득·1주택 표준세율·취득가액 12억 이하, 최대 200만 원)
-  let firstHomeDeduct = 0;
-  const effHomesForFirst = (homes === 2 && tempTwoHome) ? 1 : homes;
-  if (acqType === 'purchase' && firstHome && effHomesForFirst === 1 && !isHeavy && eok <= 12) {
-    firstHomeDeduct = Math.min(2000000, acquisition);
-    acquisition = acquisition - firstHomeDeduct;
+  // ── 생애최초 / 출산·양육 감면 ──
+  //  두 감면은 단순 합산하지 않는다. 각각의 한도를 계산해 납세자에게 유리한 쪽 하나만 적용한다.
+  const fhR = R.firstHomeRelief || {};
+  const cbR = R.childbirthRelief || {};
+  const fhPriceMax = fhR.priceMax || 1200000000;
+  const cbPriceMax = cbR.priceMax || 1200000000;
+  const effHomesForRelief = (homes === 2 && tempTwoHome) ? 1 : homes;
+  const reliefBaseOk = isPaidTransfer && effHomesForRelief === 1 && !isHeavy;
+
+  // 생애최초: 12억 이하. 소형 비아파트·인구감소지역 주택은 한도 300만원.
+  let firstHomeCap = 0;
+  if (reliefBaseOk && firstHome && price <= fhPriceMax) {
+    firstHomeCap = firstHomeSmallHouse
+      ? (fhR.smallHouseDeductMax || 3000000)
+      : (fhR.deductMax || 2000000);
+  } else if (firstHome) {
+    if (!isPaidTransfer) notes.push({ kind: 'skip', text: '생애최초 감면 미적용 — 유상거래(매매·분양) 취득이 아닙니다.', en: 'First-home relief not applied — this is not a paid transfer (purchase or developer sale).' });
+    else if (effHomesForRelief !== 1) notes.push({ kind: 'skip', text: '생애최초 감면 미적용 — 취득 후 1주택이어야 합니다.', en: 'First-home relief not applied — the household must hold exactly one home after the acquisition.' });
+    else if (isHeavy) notes.push({ kind: 'skip', text: '생애최초 감면 미적용 — 중과세율 적용 대상입니다.', en: 'First-home relief not applied — the heavy rate applies to this acquisition.' });
+    else notes.push({ kind: 'skip', text: '생애최초 감면 미적용 — 취득가액이 12억원을 초과합니다.', en: 'First-home relief not applied — the acquisition price exceeds KRW 1.2B.' });
   }
 
-  // 2026 한시 미분양 50% 감면 (취득세 본세에서 차감)
+  // 출산·양육 감면: 12억 이하 1가구 1주택, 한도 500만원 (2028년 말까지)
+  let childbirthCap = 0;
+  if (reliefBaseOk && childbirth && price <= cbPriceMax) {
+    childbirthCap = cbR.deductMax || 5000000;
+  } else if (childbirth) {
+    notes.push({ kind: 'skip', text: '출산·양육 감면 미적용 — 12억원 이하 1가구 1주택 유상취득(중과 제외) 요건을 충족해야 합니다.', en: 'Childbirth relief not applied — it requires a one-home household paying KRW 1.2B or less in a paid transfer, outside the heavy rate.' });
+  }
+
+  let firstHomeDeduct = 0;      // 실제 적용된 감면액(생애최초 또는 출산·양육 중 유리한 쪽)
+  let appliedReliefKey = null;  // 'firstHome' | 'childbirth'
+  const bestCap = Math.max(firstHomeCap, childbirthCap);
+  if (bestCap > 0) {
+    appliedReliefKey = childbirthCap >= firstHomeCap ? 'childbirth' : 'firstHome';
+    firstHomeDeduct = Math.min(bestCap, acquisition);
+    acquisition = acquisition - firstHomeDeduct;
+    if (firstHomeCap > 0 && childbirthCap > 0) {
+      notes.push({ kind: 'info',
+        text: '생애최초(' + (firstHomeCap / 10000).toLocaleString('ko-KR') + '만원 한도)와 출산·양육(' + (childbirthCap / 10000).toLocaleString('ko-KR') + '만원 한도)은 중복 적용되지 않습니다. 유리한 ' + (appliedReliefKey === 'childbirth' ? '출산·양육' : '생애최초') + ' 감면을 적용했습니다.',
+        en: 'First-home relief (cap KRW ' + firstHomeCap.toLocaleString('en-US') + ') and childbirth relief (cap KRW ' + childbirthCap.toLocaleString('en-US') + ') cannot be combined. The more favourable ' + (appliedReliefKey === 'childbirth' ? 'childbirth' : 'first-home') + ' relief was applied.' });
+    }
+    if (appliedReliefKey === 'firstHome' && firstHomeSmallHouse) {
+      notes.push({ kind: 'info', text: '소형 비아파트·인구감소지역 주택에 해당해 생애최초 감면 한도를 300만원으로 적용했습니다. 실제 요건(주택 유형·전용면적·소재지)은 관할 지자체 확인이 필요합니다.', en: 'The first-home relief cap was raised to KRW 3M for small non-apartment or population-decline-area housing. Confirm the housing type, floor area, and location with the local authority.' });
+    }
+  }
+
+  // ── 지방 준공 후 미분양 주택 한시 감면 ──
+  //  법정 25% + 조례 추가 0~25%. 전국 일률 50%가 아니다.
   let unsoldDeduct = 0;
   if (unsoldEligible) {
-    unsoldDeduct = acquisition * relief.discountRatio;
+    unsoldDeduct = acquisition * unsoldRatio;
     acquisition = acquisition - unsoldDeduct;
-    scenario += ' · 미분양 한시 50% 감면';
+    scenario += ' · 미분양 한시 ' + Math.round(unsoldRatio * 100) + '% 감면';
+    if (!localExtraKnown) {
+      notes.push({ kind: 'warn',
+        text: '지방자치단체 조례에 따라 최대 ' + Math.round(localMaxExtra * 100) + '%가 추가 감면될 수 있습니다. 현재 결과에는 법정 감면 ' + Math.round(statutoryRatio * 100) + '%만 반영했습니다 — 취득 예정 시·군·구 조례를 확인하세요.',
+        en: 'A local ordinance may grant up to a further ' + Math.round(localMaxExtra * 100) + '%. This result reflects only the statutory ' + Math.round(statutoryRatio * 100) + '% — check the ordinance of the city/county/district where you are buying.' });
+    } else {
+      notes.push({ kind: 'info',
+        text: '법정 감면 ' + Math.round(statutoryRatio * 100) + '% + 조례 추가 감면 ' + Math.round(localExtraRatio * 100) + '% = 총 ' + Math.round(unsoldRatio * 100) + '%를 적용했습니다.',
+        en: 'Statutory ' + Math.round(statutoryRatio * 100) + '% + ordinance ' + Math.round(localExtraRatio * 100) + '% = ' + Math.round(unsoldRatio * 100) + '% total relief applied.' });
+    }
+    notes.push({ kind: 'info', text: '이 감면은 사업주체로부터 최초로 유상취득하는 수도권 밖 준공 후 미분양 주택(실제 입주 사실 없음·전용 85㎡ 이하·취득가 6억 이하·개인 취득)에만 적용됩니다. 법인·단체 취득은 대상이 아닙니다.', en: 'This relief applies only to a first paid acquisition from the developer of a completed-but-unsold home outside the capital region, never actually occupied, 85 m² or less, priced at KRW 600M or less, acquired by an individual. Corporations and other entities are not eligible.' });
+  } else if (unsold2026) {
+    if (!isPaidTransfer) notes.push({ kind: 'skip', text: '미분양 감면 미적용 — 유상거래(매매·분양) 취득이 아닙니다.', en: 'Unsold-unit relief not applied — this is not a paid transfer.' });
+    else if (areaOver85) notes.push({ kind: 'skip', text: '미분양 감면 미적용 — 전용 85㎡를 초과합니다.', en: 'Unsold-unit relief not applied — the floor area exceeds 85 m².' });
+    else notes.push({ kind: 'skip', text: '미분양 감면 미적용 — 취득가액이 6억원을 초과합니다.', en: 'Unsold-unit relief not applied — the acquisition price exceeds KRW 600M.' });
   }
 
   // 농어촌특별세: 전용 85㎡ 초과만 과세 (85㎡ 이하 면제)
@@ -452,8 +557,8 @@ function calcAcquisitionTax(input) {
   let localEduTax;
   if (isHeavy) {
     localEduTax = price * 0.004; // 중과(8·12%)는 0.4% 고정
-  } else if (acqType === 'purchase') {
-    localEduTax = (price * baseRate) * 0.10; // 주택 유상거래: 표준세율의 1/10
+  } else if (isPaidTransfer) {
+    localEduTax = (price * baseRate) * 0.10; // 주택 유상거래(매매·분양): 표준세율의 1/10
   } else {
     // 상속·증여·원시취득: (표준세율 − 2%) × 20%  예) 2.8%→0.16%, 3.5%→0.3%
     localEduTax = price * Math.max(0, (baseRate - 0.02)) * 0.20;
@@ -462,11 +567,17 @@ function calcAcquisitionTax(input) {
   const total = acquisition + ruralTax + localEduTax;
 
   return {
-    baseRate, isHeavy, scenario, scenarioKey, acqType,
+    baseRate, isHeavy, scenario, scenarioKey, acqType, isPaidTransfer,
     acquisition, firstHomeDeduct, unsoldDeduct, unsoldEligible,
+    // 감면 상세 — 어떤 감면이 왜 적용/미적용됐는지 UI가 그대로 보여준다.
+    appliedReliefKey, firstHomeCap, childbirthCap,
+    unsoldRatio, unsoldStatutoryRatio: statutoryRatio,
+    unsoldLocalExtraRatio: localExtraRatio, unsoldLocalExtraKnown: localExtraKnown,
+    unsoldLocalMaxExtraRatio: localMaxExtra,
     giftHeavyApplied: acqType === 'gift' && isHeavy,
     ruralTax, localEduTax,
     total,
+    notes,
   };
 }
 
@@ -476,7 +587,8 @@ const SCENARIO_I18N = {
   'inherit-other':    { en: 'Inheritance (2.8%)', 'zh-Hans': '继承取得（2.8%）', 'zh-Hant': '繼承取得（2.8%）', vi: 'Thừa kế (2,8%)', th: 'มรดก (2.8%)' },
   'gift-heavy':       { en: 'Gift · regulated area ≥300M heavy rate (12%)', 'zh-Hans': '赠与·调整地区3亿以上重课（12%）', 'zh-Hant': '贈與·調整地區3億以上重課（12%）', vi: 'Tặng cho · khu điều tiết ≥3 trăm triệu, thuế nặng (12%)', th: 'ให้เปล่า · เขตควบคุม ≥300 ล้าน อัตราสูง (12%)' },
   'gift-standard':    { en: 'Gift (3.5%)', 'zh-Hans': '赠与取得（3.5%）', 'zh-Hant': '贈與取得（3.5%）', vi: 'Tặng cho (3,5%)', th: 'ให้เปล่า (3.5%)' },
-  original:           { en: 'Original acquisition · new build (2.8%)', 'zh-Hans': '原始取得·新建（2.8%）', 'zh-Hant': '原始取得·新建（2.8%）', vi: 'Nguyên thủy · xây mới (2,8%)', th: 'ได้มาแรกเริ่ม · สร้างใหม่ (2.8%)' },
+  original:           { en: 'Original acquisition · self-built structure (2.8%)', 'zh-Hans': '原始取得·自建（2.8%）', 'zh-Hant': '原始取得·自建（2.8%）', vi: 'Nguyên thủy · tự xây (2,8%)', th: 'ได้มาแรกเริ่ม · สร้างเอง (2.8%)' },
+  redevelop:          { en: 'Redevelopment/reconstruction member acquisition (rough estimate, 2.8%)', 'zh-Hans': '重建·再开发组合员取得（概算2.8%）', 'zh-Hant': '重建·再開發組合員取得（概算2.8%）', vi: 'Thành viên tái phát triển (ước tính 2,8%)', th: 'สมาชิกโครงการพัฒนาใหม่ (ประมาณ 2.8%)' },
   'temp-two-home':    { en: 'Temporary 2-home → taxed as 1 home', 'zh-Hans': '一时性2套→按1套税率', 'zh-Hant': '一時性2戶→按1戶稅率', vi: 'Tạm thời 2 căn → áp thuế 1 căn', th: 'ชั่วคราว 2 หลัง → คิดภาษีเหมือน 1 หลัง' },
   'unsold-relief':    { en: '2026 unsold-unit relief — multi-home surcharge excluded, standard rate', 'zh-Hans': '2026滞销房减免—排除多套重课，标准税率', 'zh-Hant': '2026滯銷房減免—排除多戶重課，標準稅率', vi: 'Ưu đãi 2026 nhà tồn kho — miễn phụ thu đa nhà, thuế chuẩn', th: 'ลดหย่อนบ้านค้างขาย 2026 — ยกเว้นภาษีหลายหลัง อัตรามาตรฐาน' },
   'h1-standard':      { en: '1-home standard rate', 'zh-Hans': '1套标准税率', 'zh-Hant': '1戶標準稅率', vi: '1 căn, thuế suất chuẩn', th: 'อัตรามาตรฐาน 1 หลัง' },
@@ -486,11 +598,14 @@ const SCENARIO_I18N = {
   'h3-nonregulated':  { en: 'Non-regulated · 3-home heavy rate (8%)', 'zh-Hans': '非调整地区·3套重课（8%）', 'zh-Hant': '非調整地區·3戶重課（8%）', vi: 'Khu không điều tiết · 3 căn thuế nặng (8%)', th: 'นอกเขตควบคุม · 3 หลัง อัตราสูง (8%)' },
   h4plus:             { en: '4+ homes heavy rate (12%)', 'zh-Hans': '4套以上重课（12%）', 'zh-Hant': '4戶以上重課（12%）', vi: '4+ căn thuế nặng (12%)', th: '4+ หลัง อัตราสูง (12%)' },
 };
-const UNSOLD_SUFFIX = { en: ' · 2026 unsold-unit 50% relief', 'zh-Hans': ' · 2026滞销房50%减免', 'zh-Hant': ' · 2026滯銷房50%減免', vi: ' · Ưu đãi 50% nhà tồn kho 2026', th: ' · ลดหย่อนบ้านค้างขาย 2026 50%' };
+// 감면율은 법정 25% + 조례 0~25%로 달라지므로 문구에 실제 적용률을 끼워 넣는다.
+const UNSOLD_SUFFIX = { en: ' · unsold-unit relief {p}%', 'zh-Hans': ' · 滞销房减免{p}%', 'zh-Hant': ' · 滯銷房減免{p}%', vi: ' · Ưu đãi nhà tồn kho {p}%', th: ' · ลดหย่อนบ้านค้างขาย {p}%' };
 function scenarioText(r, lang) {
   if (lang === 'ko' || !lang) return r.scenario;
   const t = (SCENARIO_I18N[r.scenarioKey] && SCENARIO_I18N[r.scenarioKey][lang]) || (SCENARIO_I18N[r.scenarioKey] && SCENARIO_I18N[r.scenarioKey].en) || r.scenario;
-  return t + (r.unsoldDeduct ? ((UNSOLD_SUFFIX[lang] || UNSOLD_SUFFIX.en)) : '');
+  if (!r.unsoldDeduct) return t;
+  const pct = Math.round((r.unsoldRatio || 0) * 100);
+  return t + (UNSOLD_SUFFIX[lang] || UNSOLD_SUFFIX.en).replace('{p}', pct);
 }
 
 // ===== 양도소득세 계산기 — 비-한국어 라벨 조립 (계산 로직은 calcTransferTax 그대로, 표시만 언어별) =====
@@ -528,7 +643,10 @@ function exemptBoxHtml(r, lang, regulated, homes) {
   const L = (k) => (TT_I18N[k] && (TT_I18N[k][lang] || TT_I18N[k].en)) || '';
   if (lang === 'ko' || !lang) {
     if (r.exempted) return '<strong>1세대 1주택 비과세 대상</strong>양도가액 12억원 이하 + 보유 2년 이상 요건을 충족합니다. 별도 세부담이 없습니다.';
-    if (r.surchargeWaived && regulated && homes >= 2) return '<strong>다주택 중과 한시 유예 적용</strong>양도일이 ' + r.waiverUntil + ' 이전이고 보유 2년 이상이라 중과세율(20~30%p)이 자동으로 빠졌습니다.';
+    if (r.surchargeWaived && regulated && homes >= 2) {
+      if (r.graceApplied) return '<strong>다주택 중과 유예 — 경과규정 적용</strong>양도일이 ' + r.waiverUntil + ' 이후지만 경과규정(' + r.graceReason + ')을 충족해 중과세율(20~30%p)이 빠졌습니다. 계약서·계약금 입금내역 등 증빙을 보관하세요.';
+      return '<strong>다주택 중과 한시 유예 적용</strong>양도일이 ' + r.waiverUntil + ' 이전이고 보유 2년 이상이라 중과세율(20~30%p)이 자동으로 빠졌습니다.';
+    }
     if (r.surchargeRatePct > 0) return '<strong>다주택 중과 적용</strong>조정대상지역 ' + homes + '주택 양도로 기본세율에 ' + r.surchargeRatePct + '%p가 가산되고, 장기보유특별공제는 배제됩니다 (소득세법 제95조 제2항).';
     if (r.taxableGainRatio < 1 && r.taxableGainRatio > 0) return '<strong>고가주택 안분과세</strong>1세대1주택이나 12억 초과. 양도차익 중 ' + (r.taxableGainRatio * 100).toFixed(1) + '%만 과세대상입니다.';
     return '';
@@ -538,6 +656,25 @@ function exemptBoxHtml(r, lang, regulated, homes) {
   if (r.surchargeRatePct > 0) return '<strong>' + L('heavyTitle') + '</strong>' + L('heavyBody').replace('{p}', r.surchargeRatePct).replace('{n}', homes);
   if (r.taxableGainRatio < 1 && r.taxableGainRatio > 0) return '<strong>' + L('highValueTitle') + '</strong>' + L('highValueBody').replace('{p}', (r.taxableGainRatio * 100).toFixed(1));
   return '';
+}
+
+// 감면 적용/미적용 이유를 결과 하단에 그대로 노출한다.
+//  세무 계산기는 "얼마"보다 "왜 그 금액인지"가 신뢰를 만든다.
+function renderAcqNotes(scope, r) {
+  const box = scope.querySelector('[data-acq-notes]');
+  if (!box) return;
+  const notes = (r && r.notes) || [];
+  if (!notes.length) { box.hidden = true; box.innerHTML = ''; return; }
+  const icon = { warn: '⚠', skip: '✕', info: 'ℹ' };
+  box.hidden = false;
+  // 한국어 UI는 n.text, 그 외 언어는 n.en(없으면 n.text)로 표시한다.
+  const useEn = (document.documentElement.lang || 'ko') !== 'ko';
+  box.innerHTML = notes.map((n) => {
+    const safe = String((useEn && n.en) ? n.en : n.text)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return '<li class="acq-note acq-note-' + n.kind + '"><span class="acq-note-icon" aria-hidden="true">'
+      + (icon[n.kind] || 'ℹ') + '</span><span>' + safe + '</span></li>';
+  }).join('');
 }
 
 (function () {
@@ -562,9 +699,22 @@ function exemptBoxHtml(r, lang, regulated, homes) {
       const field = input.closest('.field');
       if (field) field.classList.toggle('is-disabled', !eligible);
     };
-    setEligible('tempTwoHome', acqType === 'purchase' && homes === 2);
-    setEligible('firstHome', acqType === 'purchase' && homes === 1 && price <= 1200000000);
-    setEligible('unsold2026', acqType === 'purchase' && !areaOver85 && price <= 600000000);
+    // 분양받은 신축주택(presale)도 유상거래이므로 감면 대상이 될 수 있다.
+    const paid = acqType === 'purchase' || acqType === 'presale';
+    setEligible('tempTwoHome', paid && homes === 2);
+    setEligible('firstHome', paid && homes === 1 && price <= 1200000000);
+    setEligible('childbirth', paid && homes === 1 && price <= 1200000000);
+    setEligible('unsold2026', paid && !areaOver85 && price <= 600000000);
+    // 소형주택 한도(300만원)와 조례 추가 감면은 상위 항목이 켜져 있을 때만 의미가 있다.
+    const firstHomeOn = root.querySelector('[name="firstHome"]')?.checked || false;
+    const unsoldOn = root.querySelector('[name="unsold2026"]')?.checked || false;
+    setEligible('firstHomeSmallHouse', paid && firstHomeOn);
+    const localSel = root.querySelector('[name="unsold2026LocalExtra"]');
+    if (localSel) {
+      localSel.disabled = !(paid && unsoldOn);
+      const f = localSel.closest('.field');
+      if (f) f.classList.toggle('is-disabled', localSel.disabled);
+    }
 
     const status = root.querySelector('[data-acq-auto-status]');
     if (!status) return;
@@ -577,14 +727,20 @@ function exemptBoxHtml(r, lang, regulated, homes) {
         : (heavy ? '자동 판정: 증여 취득세 12% 중과가 적용됩니다.' : '자동 판정: 증여 취득세 표준세율 3.5%가 적용됩니다.');
       return;
     }
-    if (acqType === 'purchase') {
+    if (acqType === 'purchase' || acqType === 'presale') {
       const disabled = [];
       if (homes !== 2) disabled.push(isEn ? 'temporary 2-home relief' : '일시적 2주택');
-      if (homes !== 1 || price > 1200000000) disabled.push(isEn ? 'first-home relief' : '생애최초 감면');
-      if (areaOver85 || price > 600000000) disabled.push(isEn ? '2026 unsold-unit relief' : '2026 미분양 감면');
+      if (homes !== 1 || price > 1200000000) disabled.push(isEn ? 'first-home relief' : '생애최초 감면', isEn ? 'childbirth relief' : '출산·양육 감면');
+      if (areaOver85 || price > 600000000) disabled.push(isEn ? 'unsold-unit relief' : '지방 미분양 감면');
       status.textContent = disabled.length
         ? (isEn ? 'Automatically unavailable under the current inputs: ' : '현재 입력값으로 자동 제외: ') + disabled.join(isEn ? ', ' : ' · ')
         : (isEn ? 'Eligibility limits are checked automatically from price, home count, and floor area.' : '가격·주택 수·면적에 따른 적용 가능 여부를 자동으로 확인합니다.');
+      return;
+    }
+    if (acqType === 'redevelop') {
+      status.textContent = isEn
+        ? 'Redevelopment member acquisition is a rough estimate — the prior-share and additional-contribution tax bases must be assessed separately.'
+        : '조합원 취득은 종전지분과 추가분담금의 과세표준을 나누어 판정해야 합니다. 아래 결과는 개략 추정치입니다.';
       return;
     }
     status.textContent = isEn
@@ -596,7 +752,7 @@ function exemptBoxHtml(r, lang, regulated, homes) {
     const table = document.querySelector('[data-rate-table]');
     if (!table) return;
     table.querySelectorAll('tr[data-row]').forEach((tr) => tr.classList.remove('is-active'));
-    if (r.acqType !== 'purchase') return; // 표는 유상취득 기준
+    if (!r.isPaidTransfer) return; // 표는 유상취득(매매·분양) 기준
     let key;
     if (r.isHeavy) {
       if (homes === 2) key = 'h2-reg';
@@ -622,9 +778,15 @@ function exemptBoxHtml(r, lang, regulated, homes) {
     const giftDonorMultiHome = root.querySelector('[name="giftDonorMultiHome"]')?.checked || false;
     const legacyGiftHeavy = root.querySelector('[name="giftHeavy"]');
     const unsold2026 = root.querySelector('[name="unsold2026"]')?.checked || false;
+    const localSelEl = root.querySelector('[name="unsold2026LocalExtra"]');
+    const localRaw = localSelEl ? localSelEl.value : '';
+    const unsold2026LocalExtra = (localRaw === '' || localRaw === 'unknown') ? null : Number(localRaw);
+    const firstHomeSmallHouse = root.querySelector('[name="firstHomeSmallHouse"]')?.checked || false;
+    const childbirth = root.querySelector('[name="childbirth"]')?.checked || false;
     const r = calcAcquisitionTax({
       price, homes, regulated, areaOver85, firstHome, acqType,
       tempTwoHome, inheritNoHome, giftDonorMultiHome, unsold2026,
+      unsold2026LocalExtra, firstHomeSmallHouse, childbirth,
       ...(legacyGiftHeavy ? { giftHeavy: legacyGiftHeavy.checked } : {}),
     });
     if (!r) {
@@ -632,6 +794,7 @@ function exemptBoxHtml(r, lang, regulated, homes) {
       ['acquisition','ruralTax','localEduTax','firstHomeDeduct'].forEach(k => setText(k, fmt.won(0)));
       setText('rate', '—');
       setText('scenario', isEn ? 'Enter a price' : '매매가를 입력하세요');
+      renderAcqNotes(root, null);
       return;
     }
     setText('scenario', scenarioText(r, document.documentElement.lang));
@@ -639,10 +802,19 @@ function exemptBoxHtml(r, lang, regulated, homes) {
     setText('acquisition', fmt.won(r.acquisition));
     setText('ruralTax', r.ruralTax ? fmt.won(r.ruralTax) : (isEn ? 'Exempt' : '면제'));
     setText('localEduTax', fmt.won(r.localEduTax));
+    // 어떤 감면이 적용됐는지 라벨로 함께 밝힌다(생애최초 / 출산·양육).
+    const reliefLabel = r.appliedReliefKey === 'childbirth'
+      ? (isEn ? 'Childbirth relief' : '출산·양육 감면')
+      : (isEn ? 'First-home relief' : '생애최초 감면');
+    const reliefLabelEl = root.querySelector('[data-out-label="firstHomeDeduct"]');
+    if (reliefLabelEl && r.firstHomeDeduct) reliefLabelEl.textContent = reliefLabel;
     setText('firstHomeDeduct', r.firstHomeDeduct ? '−' + fmt.won(r.firstHomeDeduct) : (isEn ? 'N/A' : '해당 없음'));
-    setText('unsoldDeduct', r.unsoldDeduct ? '−' + fmt.won(r.unsoldDeduct) : (isEn ? 'N/A' : '해당 없음'));
+    setText('unsoldDeduct', r.unsoldDeduct
+      ? '−' + fmt.won(r.unsoldDeduct) + ' (' + Math.round(r.unsoldRatio * 100) + '%)'
+      : (isEn ? 'N/A' : '해당 없음'));
     setText('total', fmt.won(r.total));
     highlightRateRow(r, homes, regulated, price / 100000000);
+    renderAcqNotes(root, r);
   };
   inputs.forEach((el) => el.addEventListener('input', recalc));
   inputs.forEach((el) => el.addEventListener('change', recalc));
@@ -650,33 +822,101 @@ function exemptBoxHtml(r, lang, regulated, homes) {
 })();
 
 // ===== Brokerage Fee Calculator =====
-// 주택 매매 기준 (서울 기준 상한요율, 협의 가능).
-// 출처: 공인중개사법 시행규칙 별표1 (지자체별 차이 있음, 본 위젯은 서울특별시 기준 단순화)
-function calcBrokerageFee({ price, type }) {
-  if (!price || price <= 0) return null;
-  const eok = price / 100000000;
-  let rate;
-  let max;
+// 출처: 공인중개사법 시행규칙 제20조 및 [별표] / 서울특별시 주택 중개보수 조례
+//  - 주택(매매·전세·월세): 시·도 조례 상한요율. 본 위젯은 서울특별시 기준.
+//  - 월세·보증부 월세: 거래금액 = 보증금 + 월세 × 100.
+//      그 금액이 5천만원 미만이면 월세 × 70으로 다시 환산한다(시행규칙 제20조 제4항).
+//  - 주거용 오피스텔(85㎡ 이하 + 부엌·화장실·목욕시설): 매매 0.5% / 임대차 0.4% — 상한 없음.
+//  - 그 밖의 중개대상물(상가·토지·업무용 오피스텔): 0.9% 이내 협의.
+//  - 중개보수는 매도인·매수인(임대인·임차인)이 '각각' 부담한다. 결과는 1인당 금액.
+//  - 부가가치세는 일반과세자 10%. 간이과세자는 다르므로 토글로 분리한다.
+//
+// deposit/monthlyRent를 주면 월세 환산 거래금액을 산출하고, price를 주면 그대로 쓴다.
+function calcBrokerageFee(opts) {
+  const {
+    price, type,
+    deposit = 0, monthlyRent = 0,
+    negotiatedRate = null,  // 협의 요율(%) 직접 입력. 상한을 넘으면 경고와 함께 상한으로 제한
+    includeVat = true,      // 부가세 포함 여부
+    vatRate = null,         // 간이과세자 등 다른 요율을 쓸 때
+  } = opts || {};
+
+  const R = (typeof window !== 'undefined' && window.TOPDA_RATES && window.TOPDA_RATES.brokerage) || {};
+  const mult = R.monthlyRentMultiplier || 100;
+  const multLow = R.monthlyRentMultiplierLow || 70;
+  const lowThreshold = R.monthlyRentLowThreshold || 50000000;
+  const otherMax = R.otherPropertyMaxRate || 0.009;
+  const oT = R.officetelResidential || { sale: 0.005, lease: 0.004 };
+  const vRate = vatRate != null ? vatRate : (R.vatRate != null ? R.vatRate : 0.10);
+
+  // ── 거래금액 산정 ──
+  let amount = price;
+  let conversionNote = '';
+  if (type === 'monthly' || type === 'officetel-monthly') {
+    // 보증부 월세: 보증금 + 월세 × 100, 5천만원 미만이면 월세 × 70으로 재환산
+    amount = deposit + monthlyRent * mult;
+    conversionNote = '보증금 + 월세 × ' + mult;
+    if (amount < lowThreshold) {
+      amount = deposit + monthlyRent * multLow;
+      conversionNote = '환산액 5천만원 미만 → 보증금 + 월세 × ' + multLow;
+    }
+  }
+  if (!amount || amount <= 0) return null;
+
+  const eok = amount / 100000000;
+  let rate = null, max = null, capRate = null, category = '';
+
   if (type === 'sale') {
-    // 매매 (서울 기준)
+    category = '주택 매매·교환';
     if (eok < 0.5) { rate = 0.006; max = 250000; }
     else if (eok < 2) { rate = 0.005; max = 800000; }
-    else if (eok < 9) { rate = 0.004; max = null; }
-    else if (eok < 12) { rate = 0.005; max = null; }
-    else if (eok < 15) { rate = 0.006; max = null; }
-    else { rate = 0.007; max = null; }
-  } else if (type === 'jeonse') {
-    // 전세 (서울 기준)
+    else if (eok < 9) { rate = 0.004; }
+    else if (eok < 12) { rate = 0.005; }
+    else if (eok < 15) { rate = 0.006; }
+    else { rate = 0.007; }
+  } else if (type === 'jeonse' || type === 'monthly') {
+    category = type === 'monthly' ? '주택 임대차(보증부 월세)' : '주택 임대차(전세)';
     if (eok < 0.5) { rate = 0.005; max = 200000; }
     else if (eok < 1) { rate = 0.004; max = 300000; }
-    else if (eok < 6) { rate = 0.003; max = null; }
-    else if (eok < 12) { rate = 0.004; max = null; }
-    else if (eok < 15) { rate = 0.005; max = null; }
-    else { rate = 0.006; max = null; }
+    else if (eok < 6) { rate = 0.003; }
+    else if (eok < 12) { rate = 0.004; }
+    else if (eok < 15) { rate = 0.005; }
+    else { rate = 0.006; }
+  } else if (type === 'officetel-sale') {
+    category = '주거용 오피스텔 매매';
+    rate = oT.sale;
+  } else if (type === 'officetel-jeonse' || type === 'officetel-monthly') {
+    category = '주거용 오피스텔 임대차';
+    rate = oT.lease;
+  } else if (type === 'other') {
+    category = '상가·토지·업무용 오피스텔 등';
+    rate = otherMax; // 0.9% 이내 협의 — 기본값은 상한
+  } else {
+    return null;
   }
-  let fee = price * rate;
-  if (max != null) fee = Math.min(fee, max);
-  return { rate, max, fee, vat: fee * 0.1, total: fee * 1.1 };
+
+  capRate = rate;
+  // 협의 요율: 상한 이내에서만 인정된다. 초과 입력은 상한으로 제한하고 경고.
+  let negotiatedExceeded = false;
+  if (negotiatedRate != null && negotiatedRate !== '') {
+    const nr = Math.max(0, Number(negotiatedRate) / 100);
+    if (nr > capRate) { negotiatedExceeded = true; rate = capRate; }
+    else rate = nr;
+  }
+
+  let fee = amount * rate;
+  let capApplied = false;
+  if (max != null && fee > max) { fee = max; capApplied = true; }
+
+  const vat = includeVat ? fee * vRate : 0;
+  return {
+    amount, category, conversionNote,
+    rate, capRate, max, capApplied, negotiatedExceeded,
+    fee, vat, vatRate: includeVat ? vRate : 0, includeVat,
+    total: fee + vat,
+    // 매도인·매수인(임대인·임차인) 각각 부담 → 거래 전체에서 중개업자가 받는 총액
+    bothParties: (fee + vat) * 2,
+  };
 }
 
 // ===== RTI 공통 계산 =====
@@ -693,26 +933,58 @@ function calcRti({ monthlyRent, deposit = 0, loan, annualRate, depositRate = 0.0
 (function () {
   const root = document.querySelector('[data-calc="brokerage-fee"]');
   if (!root) return;
+  const setText = (sel, txt) => { const el = root.querySelector(sel); if (el) el.textContent = txt; };
+  const isMonthly = (t) => t === 'monthly' || t === 'officetel-monthly';
   const recalc = () => {
-    const price = fmt.parseWon(root.querySelector('[name="price"]').value);
     const type = root.querySelector('[name="type"]:checked')?.value || 'sale';
-    const r = calcBrokerageFee({ price, type });
-    const setText = (sel, txt) => { const el = root.querySelector(sel); if (el) el.textContent = txt; };
+    // 거래 유형에 따라 입력 필드를 바꾼다: 월세면 보증금+월세, 그 외는 거래금액 하나.
+    root.querySelectorAll('[data-bf-show]').forEach((el) => {
+      const on = el.getAttribute('data-bf-show').split(' ').includes(isMonthly(type) ? 'monthly' : 'lump');
+      el.style.display = on ? '' : 'none';
+    });
+    const price = fmt.parseWon(root.querySelector('[name="price"]')?.value || '0');
+    const deposit = fmt.parseWon(root.querySelector('[name="deposit"]')?.value || '0');
+    const monthlyRent = fmt.parseWon(root.querySelector('[name="monthlyRent"]')?.value || '0');
+    const negRaw = root.querySelector('[name="negotiatedRate"]')?.value;
+    const negotiatedRate = (negRaw === '' || negRaw == null) ? null : negRaw;
+    const vatEl = root.querySelector('[name="includeVat"]');
+    const includeVat = vatEl ? vatEl.checked : true;
+    const r = calcBrokerageFee({ price, type, deposit, monthlyRent, negotiatedRate, includeVat });
     if (!r) {
-      setText('[data-out="rate"]', '—');
-      setText('[data-out="cap"]', '—');
-      setText('[data-out="fee"]', '0원');
-      setText('[data-out="vat"]', '0원');
-      setText('[data-out="total"]', '0원');
+      ['rate','cap','category','amount'].forEach(k => setText('[data-out="'+k+'"]', '—'));
+      ['fee','vat','total','bothParties'].forEach(k => setText('[data-out="'+k+'"]', fmt.won(0)));
+      const w = root.querySelector('[data-out="bfWarn"]'); if (w) w.style.display = 'none';
       return;
     }
-    setText('[data-out="rate"]', (r.rate * 100).toFixed(2) + '%');
-    setText('[data-out="cap"]', r.max ? fmt.won(r.max) : (isEn ? 'No cap (negotiable)' : '상한 없음(협의)'));
+    setText('[data-out="category"]', r.category);
+    setText('[data-out="amount"]', fmt.won(r.amount) + (r.conversionNote ? ' (' + r.conversionNote + ')' : ''));
+    setText('[data-out="rate"]', (r.rate * 100).toFixed(2) + '%'
+      + (r.rate < r.capRate ? (isEn ? ' (negotiated)' : ' (협의)') : ''));
+    setText('[data-out="cap"]', (r.capRate * 100).toFixed(2) + '%'
+      + (r.max ? ' · ' + (isEn ? 'cap ' : '한도 ') + fmt.won(r.max) : ''));
     setText('[data-out="fee"]', fmt.won(r.fee));
-    setText('[data-out="vat"]', fmt.won(r.vat));
+    setText('[data-out="vat"]', r.includeVat ? fmt.won(r.vat) : (isEn ? 'Excluded' : '미포함'));
     setText('[data-out="total"]', fmt.won(r.total));
+    setText('[data-out="bothParties"]', fmt.won(r.bothParties));
+    // 상한 초과 협의 요율은 무효 — 사용자에게 명시적으로 알린다.
+    const warn = root.querySelector('[data-out="bfWarn"]');
+    if (warn) {
+      const msgs = [];
+      if (r.negotiatedExceeded) {
+        msgs.push(isEn
+          ? 'The rate you entered exceeds the legal maximum, so the cap rate was applied instead.'
+          : '입력한 협의 요율이 법정 상한을 초과해 상한요율로 제한했습니다. 상한을 넘는 중개보수 약정은 초과분이 무효입니다.');
+      }
+      if (r.capApplied) {
+        msgs.push(isEn
+          ? 'A fixed maximum applies to this bracket, so the fee was capped.'
+          : '이 구간은 정액 한도가 있어 한도액으로 제한했습니다.');
+      }
+      warn.style.display = msgs.length ? '' : 'none';
+      warn.textContent = msgs.join(' ');
+    }
   };
-  root.querySelectorAll('input').forEach((el) => {
+  root.querySelectorAll('input, select').forEach((el) => {
     el.addEventListener('input', recalc);
     el.addEventListener('change', recalc);
   });
@@ -739,13 +1011,45 @@ function calcTransferTax(input) {
     homes, onlyHome, regulated,
     assetType = 'house', // 종합계산기의 비주택(상가·업무용 오피스텔·토지) 단기세율 분기용
     surchargeExempt = false, // 조정지역 다주택이라도 중과 제외 요건(장기임대·상속 등) 해당 시 true
-    sellDate,        // 'YYYY-MM-DD' — 다주택 중과 한시 유예(2026-05-09까지) 자동 판단용
+    sellDate,        // 'YYYY-MM-DD' — 다주택 중과 한시 유예 자동 판단용
     jointOwners = 1, // 공동명의 인원(1=단독, 2=부부 공동 등). 양도차익을 균등 분할 후 세액 합산
+    // ── 중과 유예 경과규정 판정용 (2026-05-09 이후 양도) ──
+    contractDate = '',           // 매매계약일
+    downPaymentReceived = false, // 계약금 수령 여부
+    newRegulatedArea = false,    // 신규 조정대상지역(유예 기간 6개월 적용 대상)
+    landPermitTarget = false,    // 토지거래허가 대상
+    landPermitApplyDate = '',    // 토지거래허가 신청일
+    // ── 증여재산 이월과세 (소득세법 제97조의2) ──
+    giftedFromRelative = false,  // 배우자·직계존비속으로부터 증여받은 부동산인가
+    giftReceivedDate = '',       // 증여받은 날
+    donorBuyPrice = 0,           // 증여자의 취득가액(이월 적용 대상)
   } = input;
   if (!sellPrice || sellPrice <= 0) return null;
 
-  const rawGain = Math.max(0, sellPrice - buyPrice - cost);
   const isHousing = assetType !== 'nonhouse';
+
+  // ── 증여재산 이월과세 ──
+  //  배우자·직계존비속에게서 증여받은 부동산을 10년 이내 양도하면 취득가액에
+  //  '증여자의 취득가액'이 이월 적용된다(수증자의 증여받은 가액이 아님).
+  //  취득가액이 낮아져 양도차익이 커지므로 세액이 크게 달라진다.
+  const TR = (typeof window !== 'undefined' && window.TOPDA_RATES && window.TOPDA_RATES.transferTax) || {};
+  const carryoverYears = (TR.carryoverBasis && TR.carryoverBasis.withinYears) || 10;
+  let carryoverApplied = false;
+  let effectiveBuyPrice = buyPrice;
+  if (giftedFromRelative && donorBuyPrice > 0) {
+    // 증여일~양도일이 10년 이내면 이월과세. 날짜가 없으면 사용자의 선택을 그대로 신뢰한다.
+    let withinWindow = true;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(giftReceivedDate) && /^\d{4}-\d{2}-\d{2}$/.test(sellDate || '')) {
+      const g = new Date(giftReceivedDate), s = new Date(sellDate);
+      withinWindow = (s - g) / (365.2425 * 24 * 3600 * 1000) < carryoverYears;
+    }
+    if (withinWindow) {
+      carryoverApplied = true;
+      effectiveBuyPrice = donorBuyPrice;
+    }
+  }
+
+  const rawGain = Math.max(0, sellPrice - effectiveBuyPrice - cost);
 
   // 1세대 1주택 비과세 / 안분
   let exempted = false;
@@ -766,13 +1070,54 @@ function calcTransferTax(input) {
   if (holdYears < 1) shortTermRate = isHousing ? 0.70 : 0.50;
   else if (holdYears < 2) shortTermRate = isHousing ? 0.60 : 0.40;
 
-  // 다주택 중과 한시 유예 자동 판단:
-  //  보유 2년+ & 양도일 ≤ 2026-05-09 이면 조정지역·다주택이어도 중과 미적용.
-  const W = (typeof window !== 'undefined' && window.TOPDA_RATES && window.TOPDA_RATES.transferTax) || {};
+  // ── 다주택 중과 한시 유예 판단 ──
+  //  ① 원칙: 보유 2년+ & 양도일 ≤ 유예 종료일이면 조정지역·다주택이어도 중과 미적용.
+  //  ② 경과규정: 유예 종료일까지 매매계약 + 계약금 수령을 마쳤다면, 계약일부터
+  //     4개월(신규 조정대상지역 6개월) 이내 양도까지 유예가 이어진다.
+  //     토지거래허가 대상은 종료일까지 허가를 신청했다면 6개월 이내 양도까지 인정된다.
+  //  → 잔금일이 종료일 다음 날이라고 무조건 중과되는 것이 아니다.
+  const W = TR;
   const waiverUntil = W.multiHomeSurchargeWaiverUntil || '2026-05-09';
   const waiverMinHold = W.multiHomeSurchargeWaiverMinHoldYears || 2;
-  const sd = (sellDate && /^\d{4}-\d{2}-\d{2}$/.test(sellDate)) ? sellDate : '';
-  const surchargeWaived = Boolean(isHousing && regulated && homes >= 2 && sd && sd <= waiverUntil && holdYears >= waiverMinHold);
+  const G = W.multiHomeSurchargeGrace || {};
+  const graceContractBy = G.contractBy || waiverUntil;
+  const graceMonths = G.transferWithinMonths || 4;
+  const graceMonthsNew = G.newRegulatedWithinMonths || 6;
+  const gracePermitBy = G.landPermitApplyBy || waiverUntil;
+  const graceMonthsPermit = G.landPermitWithinMonths || 6;
+
+  const isDate = (s) => Boolean(s) && /^\d{4}-\d{2}-\d{2}$/.test(s);
+  const sd = isDate(sellDate) ? sellDate : '';
+  const monthsBetween = (from, to) => {
+    const a = new Date(from), b = new Date(to);
+    return (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth())
+      + (b.getDate() >= a.getDate() ? 0 : -1);
+  };
+
+  const holdOk = holdYears >= waiverMinHold;
+  const inWaiverWindow = Boolean(sd && sd <= waiverUntil);
+
+  // 경과규정 판정 (양도일이 유예 종료일 이후일 때만 의미가 있다)
+  let graceApplied = false;
+  let graceReason = '';
+  if (sd && !inWaiverWindow && holdOk) {
+    const limitMonths = newRegulatedArea ? graceMonthsNew : graceMonths;
+    if (isDate(contractDate) && downPaymentReceived && contractDate <= graceContractBy
+        && monthsBetween(contractDate, sd) < limitMonths) {
+      graceApplied = true;
+      graceReason = graceContractBy + '까지 매매계약·계약금 수령 완료 + 계약일부터 '
+        + limitMonths + '개월 이내 양도';
+    } else if (landPermitTarget && isDate(landPermitApplyDate)
+        && landPermitApplyDate <= gracePermitBy
+        && monthsBetween(landPermitApplyDate, sd) < graceMonthsPermit) {
+      graceApplied = true;
+      graceReason = '토지거래허가 대상 — ' + gracePermitBy + '까지 허가 신청 + 신청일부터 '
+        + graceMonthsPermit + '개월 이내 양도';
+    }
+  }
+
+  const waiverBase = inWaiverWindow || graceApplied;
+  const surchargeWaived = Boolean(isHousing && regulated && homes >= 2 && sd && waiverBase && holdOk);
 
   // 다주택 중과 대상 판정 (조정대상지역 + 2주택 이상 + 장기보유 + 한시유예/중과배제 미해당).
   //  조정지역 다주택 양도는 세율 가산과 함께 장기보유특별공제가 배제된다 (소득세법 제95조 제2항).
@@ -783,10 +1128,19 @@ function calcTransferTax(input) {
   if (!shortTermRate && !heavyTax && holdYears >= 3) {
     if (isOneHome && sellPrice > 1200000000 && liveYears >= 2) {
       // 표2(1세대1주택·거주 2년 이상): 보유 연 4%(최대 40%) + 거주 연 4%(최대 40%), 합산 최대 80%
+      //  ⚠ 거주기간 공제는 2년 이상 3년 미만 구간 8%가 별도로 존재한다.
+      //    3년부터 시작하면 거주 2년대 고가 1주택자의 세액이 과다 계산된다.
+      const LD = (W.ltDeductResidence) || {};
+      const under3y = LD.under3yRate != null ? LD.under3yRate : 0.08;
+      const from3y = LD.from3yBaseRate != null ? LD.from3yBaseRate : 0.12;
+      const perYear = LD.perYearRate != null ? LD.perYearRate : 0.04;
+      const maxRate = LD.maxRate != null ? LD.maxRate : 0.40;
       const holdY = Math.min(holdYears, 10);
       const liveY = Math.min(liveYears, 10);
-      const holdRate = holdY >= 3 ? Math.min(0.40, 0.12 + (holdY - 3) * 0.04) : 0;
-      const liveRate = liveY >= 3 ? Math.min(0.40, 0.12 + (liveY - 3) * 0.04) : 0;
+      const holdRate = holdY >= 3 ? Math.min(maxRate, from3y + (Math.floor(holdY) - 3) * perYear) : 0;
+      const liveRate = liveY >= 3
+        ? Math.min(maxRate, from3y + (Math.floor(liveY) - 3) * perYear)
+        : under3y; // 거주 2년 이상 3년 미만
       ltDeductRate = Math.min(0.80, holdRate + liveRate);
     } else {
       // 표1(일반): 보유 연 2%, 3년 6% ~ 15년 30%
@@ -821,7 +1175,9 @@ function calcTransferTax(input) {
     rate += surchargeRate;
     appliedRateLabel += ' + ' + (surchargeRate * 100) + '%p 중과';
   } else if (surchargeWaived && regulated && homes >= 2) {
-    appliedRateLabel += ' (중과 한시유예 적용 — ' + waiverUntil + '까지)';
+    appliedRateLabel += graceApplied
+      ? ' (중과 유예 경과규정 적용)'
+      : ' (중과 한시유예 적용 — ' + waiverUntil + '까지)';
   }
 
   // 산출세액 = 과세표준 × 세율 − 누진공제.
@@ -872,6 +1228,10 @@ function calcTransferTax(input) {
     ltDeductRate, ltDeduct, incomeAmount, basicDeduct, taxBase,
     rate, appliedRateLabel, incomeTax, localTax, total, effective,
     surchargeWaived, jointOwners: owners,
+    // 중과 유예 경과규정 · 증여 이월과세 판정 결과 (결과 화면에서 근거로 노출)
+    graceApplied, graceReason, inWaiverWindow,
+    carryoverApplied, effectiveBuyPrice,
+    carryoverExtraGain: carryoverApplied ? Math.max(0, buyPrice - donorBuyPrice) : 0,
     jointBasicDeduct, jointTaxBase, jointMarginalRatePct, jointAppliedRateLabel,
     jointIncomeTax, jointLocalTax, jointTotal, jointSavings: savings,
     // 비-한국어 표시용 구조화 필드(계산 로직은 위와 동일, 라벨 조립만 언어별로 분기)
@@ -917,10 +1277,31 @@ function calcProgressiveTax(base) {
     const surchargeExempt = root.querySelector('[name="surchargeExempt"]')?.checked || false;
     const sellDate = root.querySelector('[name="sellDate"]')?.value || '';
     const jointOwners = Number(root.querySelector('[name="jointOwners"]')?.value || 1);
+    const contractDate = root.querySelector('[name="contractDate"]')?.value || '';
+    const downPaymentReceived = root.querySelector('[name="downPaymentReceived"]')?.checked || false;
+    const newRegulatedArea = root.querySelector('[name="newRegulatedArea"]')?.checked || false;
+    const landPermitTarget = root.querySelector('[name="landPermitTarget"]')?.checked || false;
+    const landPermitApplyDate = root.querySelector('[name="landPermitApplyDate"]')?.value || '';
+    const giftedFromRelative = root.querySelector('[name="giftedFromRelative"]')?.checked || false;
+    const giftReceivedDate = root.querySelector('[name="giftReceivedDate"]')?.value || '';
+    const donorBuyPrice = fmt.parseWon(root.querySelector('[name="donorBuyPrice"]')?.value || '0');
+    // 경과규정·이월과세 입력은 해당 사실을 선택했을 때만 노출한다.
+    root.querySelectorAll('[data-tt-show="grace"]').forEach((el) => {
+      el.style.display = (regulated && homes >= 2) ? '' : 'none';
+    });
+    root.querySelectorAll('[data-tt-show="permit"]').forEach((el) => {
+      el.style.display = (regulated && homes >= 2 && landPermitTarget) ? '' : 'none';
+    });
+    root.querySelectorAll('[data-tt-show="carryover"]').forEach((el) => {
+      el.style.display = giftedFromRelative ? '' : 'none';
+    });
     const r = calcTransferTax({
       sellPrice, buyPrice, cost, holdYears, liveYears,
       homes, onlyHome, regulated, surchargeExempt,
       sellDate, jointOwners,
+      contractDate, downPaymentReceived, newRegulatedArea,
+      landPermitTarget, landPermitApplyDate,
+      giftedFromRelative, giftReceivedDate, donorBuyPrice,
     });
     const exemptBox = root.querySelector('[data-out="exemptBox"]');
     const jointBox = root.querySelector('[data-out="jointBox"]');
@@ -943,6 +1324,21 @@ function calcProgressiveTax(base) {
     setText('localTax', fmt.won(r.localTax));
     setText('total', fmt.won(r.total));
     setText('effective', effectiveRateText(r, ttLang));
+    // 증여재산 이월과세가 적용되면 취득가액이 바뀌어 세액이 크게 달라진다 — 반드시 알린다.
+    const carryBox = root.querySelector('[data-out="carryoverBox"]');
+    if (carryBox) {
+      if (r.carryoverApplied) {
+        carryBox.style.display = '';
+        const msg = root.querySelector('[data-out="carryoverMsg"]');
+        if (msg) {
+          msg.innerHTML = isEn
+            ? '<strong>Carry-over basis applied</strong>The property was gifted by a spouse or lineal relative and is being sold within 10 years, so the <em>donor’s</em> acquisition price (' + fmt.won(r.effectiveBuyPrice) + ') replaces your acquisition price. Taxable gain increases by ' + fmt.won(r.carryoverExtraGain) + '.'
+            : '<strong>증여재산 이월과세 적용</strong>배우자·직계존비속에게 증여받은 부동산을 10년 이내 양도하므로 취득가액에 <em>증여자의 취득가액</em>(' + fmt.won(r.effectiveBuyPrice) + ')이 이월 적용됩니다. 그만큼 양도차익이 ' + fmt.won(r.carryoverExtraGain) + ' 늘어납니다. (소득세법 제97조의2)';
+        }
+      } else {
+        carryBox.style.display = 'none';
+      }
+    }
     if (exemptBox) {
       const html = exemptBoxHtml(r, ttLang, regulated, homes);
       if (html) {
@@ -1040,6 +1436,21 @@ function calcBalanceSettlement(input) {
 })();
 
 // ===== Jeonse ↔ Monthly Rent Conversion =====
+// 법정 전월세전환율 상한 = min(연 10%, 한국은행 기준금리 + 2%p)
+//  ⚠ 이 상한은 '기존 계약의 전세 → 월세 전환'에 적용되는 법정 한도(주임법 제7조의2)이며,
+//    신규 계약에서 흔히 쓰이는 시장 전환율과는 다르다. 화면에서 두 값을 분리해 보여준다.
+function legalConversionCapPct() {
+  const C = (typeof window !== 'undefined' && window.TOPDA_RATES && window.TOPDA_RATES.jeonseConversion) || {};
+  const base = C.baseRatePct != null ? C.baseRatePct : 2.75;
+  const add = C.addPct != null ? C.addPct : 2.0;
+  const hard = C.hardCapPct != null ? C.hardCapPct : 10.0;
+  return {
+    cap: Math.min(hard, base + add),
+    baseRatePct: base, addPct: add, hardCapPct: hard,
+    baseRateAsOf: C.baseRateAsOf || '',
+  };
+}
+
 function calcJeonseMonthly(input) {
   const { mode, deposit, monthly, baseDeposit, rate } = input;
   // 전환율(연 %): 보증금 × rate / 12 = 월세 (원)
@@ -1060,7 +1471,10 @@ function calcJeonseMonthly(input) {
 (function () {
   const root = document.querySelector('[data-calc="jeonse-monthly"]');
   if (!root) return;
-  const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
+  // 전환 방향(toMonthly/toJeonse) 두 블록에 같은 data-out이 있으므로 전부 갱신한다.
+  const setText = (sel, txt) => {
+    root.querySelectorAll('[data-out="' + sel + '"]').forEach((el) => { el.textContent = txt; });
+  };
   const recalc = () => {
     const mode = root.querySelector('[name="mode"]:checked')?.value || 'toMonthly';
     const deposit = fmt.parseWon(root.querySelector('[name="deposit"]').value);
@@ -1084,13 +1498,42 @@ function calcJeonseMonthly(input) {
       setText('outAddedDeposit', fmt.won(r.convertibleDeposit));
     }
     setText('outRate', rate.toFixed(2) + '% (연)');
+
+    // 법정 상한과 시장 전환율을 분리해 표시한다.
+    const cap = legalConversionCapPct();
+    setText('legalCap', cap.cap.toFixed(2) + '%');
+    setText('legalCapBasis', isEn
+      ? 'min(10%, BOK base rate ' + cap.baseRatePct.toFixed(2) + '% + ' + cap.addPct.toFixed(2) + '%p)'
+        + (cap.baseRateAsOf ? ' · as of ' + cap.baseRateAsOf : '')
+      : 'min(연 10%, 한국은행 기준금리 ' + cap.baseRatePct.toFixed(2) + '% + ' + cap.addPct.toFixed(2) + '%p)'
+        + (cap.baseRateAsOf ? ' · ' + cap.baseRateAsOf + ' 기준' : ''));
+    const capWarn = root.querySelector('[data-out="capWarn"]');
+    if (capWarn) {
+      const over = rate > cap.cap + 1e-9;
+      capWarn.style.display = over ? '' : 'none';
+      capWarn.textContent = over
+        ? (isEn
+          ? 'The rate you entered (' + rate.toFixed(2) + '%) exceeds the statutory cap of ' + cap.cap.toFixed(2) + '%. The cap binds when converting an existing jeonse contract to monthly rent; a new contract is set by the market.'
+          : '입력한 전환율 ' + rate.toFixed(2) + '%는 법정 상한 ' + cap.cap.toFixed(2) + '%를 초과합니다. 법정 상한은 기존 계약의 전세 → 월세 전환에 적용되며, 신규 계약은 시장에서 정해집니다 — 비교용으로만 사용하세요.')
+        : '';
+    }
+    // 법정 상한으로 계산했을 때의 월세도 함께 보여준다(협상 기준선).
+    if (mode === 'toMonthly') {
+      const legal = calcJeonseMonthly({ mode, deposit, monthly, baseDeposit, rate: cap.cap });
+      setText('outMonthlyLegal', fmt.won(legal.calcMonthly));
+    }
   };
   root.querySelectorAll('input').forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
   recalc();
 })();
 
 // ===== Housing Subscription Score (청약가점) =====
-function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
+function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAccountYears = 0 }) {
+  const S = (typeof window !== 'undefined' && window.TOPDA_RATES && window.TOPDA_RATES.subscription) || {};
+  const accountMax = S.accountMax || 17;
+  const spouseRatio = S.spouseAccountRatio != null ? S.spouseAccountRatio : 0.5;
+  const spouseMaxPts = S.spouseAccountMaxPoints != null ? S.spouseAccountMaxPoints : 3;
+
   // 무주택기간 (32점): 만30세 미만이거나 미혼이면 0점. 1년 미만 2점, 1년부터 매년 +2점, 15년 32점
   let s1;
   if (noHomeYears < 1) s1 = 2;
@@ -1101,12 +1544,19 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
   let s2 = Math.min(35, 5 + dependents * 5);
 
   // 청약통장 가입기간 (17점): 6개월 미만 1점, 6개월~1년 2점, 1년부터 매년 +1점, 15년 이상 17점
-  let s3;
-  if (accountYears < 0.5) s3 = 1;
-  else if (accountYears < 1) s3 = 2;
-  else s3 = Math.min(17, 2 + Math.floor(accountYears));
+  const bandScore = (y) => {
+    if (y < 0.5) return 1;
+    if (y < 1) return 2;
+    return Math.min(accountMax, 2 + Math.floor(y));
+  };
+  const ownAccount = bandScore(accountYears);
+  // 배우자 청약통장 가입기간은 그 점수의 50%를 최대 3점까지 합산한다.
+  //  합산 후에도 통장 항목 전체 상한은 17점이다.
+  const spouseRaw = spouseAccountYears > 0 ? bandScore(spouseAccountYears) : 0;
+  const spouseAccount = Math.min(spouseMaxPts, Math.floor(spouseRaw * spouseRatio));
+  const s3 = Math.min(accountMax, ownAccount + spouseAccount);
 
-  return { s1, s2, s3, total: s1 + s2 + s3 };
+  return { s1, s2, s3, ownAccount, spouseAccount, accountMax, total: s1 + s2 + s3 };
 }
 
 (function () {
@@ -1117,10 +1567,13 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
     const noHomeYears = Number(root.querySelector('[name="noHomeYears"]').value || 0);
     const dependents = Number(root.querySelector('[name="dependents"]').value || 0);
     const accountYears = Number(root.querySelector('[name="accountYears"]').value || 0);
-    const r = calcSubscriptionScore({ noHomeYears, dependents, accountYears });
+    const spouseAccountYears = Number(root.querySelector('[name="spouseAccountYears"]')?.value || 0);
+    const r = calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAccountYears });
     setText('s1', r.s1 + '점');
     setText('s2', r.s2 + '점');
     setText('s3', r.s3 + '점');
+    setText('s3Own', r.ownAccount + '점');
+    setText('s3Spouse', r.spouseAccount ? '+' + r.spouseAccount + '점' : '해당 없음');
     setText('total', r.total + '점');
     setText('totalLabel', '/ 84점 만점');
   };
@@ -1291,6 +1744,69 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       return 0;
     }
 
+    // ── 배우자 상속공제 (상증법 제19조) ──
+    //  ⚠ '순재산 × 30%'는 법령 어디에도 없는 근사식이다. 실제 공제액은
+    //     min(배우자가 실제 상속받은 금액, 법정상속분 한도, 30억) 이며 최소 5억이 보장된다.
+    //  법정상속분: 배우자 1.5 : 자녀 각 1 → 배우자 지분 = 1.5 / (1.5 + 자녀수)
+    //  실제 분할 방식·신고기한 내 분할·등기 여부에 따라 결과가 크게 달라지므로
+    //  단일 값이 아니라 최소~최대 범위로 제시한다.
+    function spouseInheritDeduction(netAssets, children, actualSpouseShare) {
+      const IG = (RATES.inheritGift) || {};
+      const minD = IG.spouseMinDeduct || 500000000;
+      const maxD = IG.spouseMaxDeduct || 3000000000;
+      const statutoryRatio = 1.5 / (1.5 + Math.max(0, children));
+      const statutoryLimit = Math.min(maxD, Math.max(0, netAssets) * statutoryRatio);
+      // 최소: 배우자가 거의 상속받지 않는 경우 → 최소 공제 5억만 인정
+      const low = minD;
+      // 최대: 배우자가 법정상속분(또는 그 이상)을 실제로 상속받는 경우
+      const high = Math.max(minD, statutoryLimit);
+      // 실제 상속액을 입력했다면 그 값으로 확정 계산
+      const exact = actualSpouseShare > 0
+        ? Math.max(minD, Math.min(actualSpouseShare, statutoryLimit))
+        : null;
+      return { low, high, exact, statutoryRatio, statutoryLimit };
+    }
+
+    // ── 증여세 10년 합산 과세 (상증법 제47조·제58조) ──
+    //  동일인(직계존속은 그 배우자 포함)으로부터 10년 내 받은 증여재산을 현재 증여재산과
+    //  합산해 누진세율을 적용한 뒤, 이미 납부한 증여세를 세액공제한다.
+    //  ⚠ 과거 증여액을 '남은 공제액' 계산에만 쓰면 누진구간이 낮게 적용돼 과소 계산된다.
+    function giftTaxAggregated(opts) {
+      const {
+        currentValue, priorValue = 0, priorTaxPaid = 0,
+        relationDeduct = 0, marriageBirthDeduct = 0,
+        surchargeRate = 0, // 세대생략 할증 (0.30 / 0.40)
+      } = opts;
+      const IG = (RATES.inheritGift) || {};
+      const mbMax = (IG.marriageBirthDeduct && IG.marriageBirthDeduct.max) || 100000000;
+
+      // 10년 합산 과세가액
+      const aggregatedValue = Math.max(0, currentValue) + Math.max(0, priorValue);
+      // 증여재산공제는 10년 합산 기준 한도 — 합산 과세가액에서 한 번만 차감
+      const mb = Math.min(mbMax, Math.max(0, marriageBirthDeduct));
+      const totalDeduct = Math.min(aggregatedValue, relationDeduct + mb);
+      const aggregatedBase = Math.max(0, aggregatedValue - totalDeduct);
+
+      // 합산 과세표준에 누진세율 적용 → 산출세액
+      const grossTax = inheritGiftTax(aggregatedBase);
+      // 세대생략 할증
+      const surcharge = grossTax * surchargeRate;
+      const taxBeforeCredit = grossTax + surcharge;
+      // 기납부 증여세액공제 (산출세액을 초과해 환급되지는 않는다)
+      const priorCredit = Math.min(taxBeforeCredit, Math.max(0, priorTaxPaid));
+      const tax = Math.max(0, taxBeforeCredit - priorCredit);
+
+      // 비교용: 합산하지 않고 이번 증여만 계산했을 때(구버전 방식)
+      const naiveBase = Math.max(0, currentValue - Math.max(0, relationDeduct + mb - priorValue));
+      const naiveTax = inheritGiftTax(naiveBase);
+
+      return {
+        aggregatedValue, relationDeduct, marriageBirthDeduct: mb, totalDeduct,
+        aggregatedBase, grossTax, surcharge, surchargeRate, priorCredit, tax,
+        naiveTax, aggregationEffect: tax - naiveTax,
+      };
+    }
+
     function renderChart(items) {
       if (!canvas) return;
       const data = items.filter(x => x.value > 0);
@@ -1355,7 +1871,8 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
           row.style.borderTop = '1px dashed var(--border)';
           row.style.paddingTop = '8px';
           row.style.marginTop = '6px';
-          row.innerHTML = `<span class="key" style="font-weight:700;">${it.label}</span><span class="val" style="font-weight:700;">${fmt.won(it.value)}</span>`;
+          const dv = typeof it.value === 'string' ? it.value : fmt.won(it.value);
+          row.innerHTML = `<span class="key" style="font-weight:700;">${it.label}</span><span class="val" style="font-weight:700;">${dv}</span>`;
           detailBox.appendChild(row);
           return;
         }
@@ -1514,12 +2031,20 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       setEligible('tempTwoHome', homes === 2);
       setEligible('firstHome', homes === 1 && price <= 1200000000);
       setEligible('unsold2026', !areaOver85 && price <= 600000000);
+      // 조례 추가 감면 선택은 미분양 감면을 켰을 때만 유효하다.
+      const localSel = root.querySelector('[name="unsold2026LocalExtra"]');
+      if (localSel) {
+        const on = !areaOver85 && price <= 600000000 && getCheck('unsold2026');
+        localSel.disabled = !on;
+        const f = localSel.closest('.field');
+        if (f) f.classList.toggle('is-disabled', !on);
+      }
       const status = root.querySelector('[data-dashboard-acq-status]');
       if (status) {
         const excluded = [];
         if (homes !== 2) excluded.push(L('일시적 2주택', 'temporary 2-home relief'));
         if (homes !== 1 || price > 1200000000) excluded.push(L('생애최초 감면', 'first-home relief'));
-        if (areaOver85 || price > 600000000) excluded.push(L('2026 미분양 감면', '2026 unsold-unit relief'));
+        if (areaOver85 || price > 600000000) excluded.push(L('지방 미분양 감면', 'unsold-unit relief'));
         status.textContent = excluded.length
           ? L('현재 입력값으로 자동 제외: ', 'Automatically unavailable: ') + excluded.join(L(' · ', ', '))
           : L('가격·주택 수·면적으로 감면 적용 가능 여부를 자동 확인합니다.', 'Relief eligibility is checked automatically from price, home count, and floor area.');
@@ -1593,11 +2118,16 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         const base = price * 0.04, rural = price * 0.002, edu = price * 0.004;
         acq = { total: base + rural + edu, acquisition: base, ruralTax: rural, localEduTax: edu, firstHomeDeduct: 0, baseRate: 0.04 };
       } else {
+        const localRaw = root.querySelector('[name="unsold2026LocalExtra"]')?.value;
         acq = acquisitionTotal(price, {
           homes, regulated, areaOver85, firstHome, tempTwoHome, unsold2026,
+          unsold2026LocalExtra: (localRaw === '' || localRaw == null || localRaw === 'unknown') ? null : Number(localRaw),
+          childbirth: getCheck('childbirth'),
+          firstHomeSmallHouse: getCheck('firstHomeSmallHouse'),
           acqType: 'purchase',
         });
       }
+      renderAcqNotes(root, acq);
       const broker = nonhouse ? Math.round(price * 0.009 * 1.1) : brokerFee(price, 'sale');
       const regStd = getN('regStd');
       const regDiscount = (getNum('regDiscount') || 0) / 100;
@@ -1701,10 +2231,31 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const surchargeExempt = getCheck('surchargeExempt');
       const sellDate = root.querySelector('[name="sellDate"]')?.value || '';
       const jointOwners = getNum('jointOwners') || 1;
+      // 중과 유예 경과규정 · 증여재산 이월과세 (매도 탭 추가 입력)
+      const contractDate = root.querySelector('[name="contractDate"]')?.value || '';
+      const landPermitApplyDate = root.querySelector('[name="landPermitApplyDate"]')?.value || '';
+      const giftReceivedDate = root.querySelector('[name="giftReceivedDate"]')?.value || '';
+      root.querySelectorAll('[data-tt-show="grace"]').forEach((el) => {
+        el.style.display = (regulated && homes >= 2) ? '' : 'none';
+      });
+      root.querySelectorAll('[data-tt-show="permit"]').forEach((el) => {
+        el.style.display = (regulated && homes >= 2 && getCheck('landPermitTarget')) ? '' : 'none';
+      });
+      root.querySelectorAll('[data-tt-show="carryover"]').forEach((el) => {
+        el.style.display = getCheck('giftedFromRelative') ? '' : 'none';
+      });
       const r = calcTransferTax({
         sellPrice, buyPrice, cost, holdYears, liveYears,
         homes, onlyHome, regulated, assetType,
         surchargeExempt, sellDate, jointOwners,
+        contractDate,
+        downPaymentReceived: getCheck('downPaymentReceived'),
+        newRegulatedArea: getCheck('newRegulatedArea'),
+        landPermitTarget: getCheck('landPermitTarget'),
+        landPermitApplyDate,
+        giftedFromRelative: getCheck('giftedFromRelative'),
+        giftReceivedDate,
+        donorBuyPrice: getN('donorBuyPrice'),
       });
 
       if (!r) {
@@ -1749,14 +2300,24 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       ]);
       renderDetail([
         { label: L('양도가액', 'Sale price'), value: sellPrice, sub: true },
-        { label: L('취득가액 + 필요경비', 'Purchase price + costs'), value: buyPrice + cost, sub: true },
+        { label: L('취득가액 + 필요경비', 'Purchase price + costs'), value: r.effectiveBuyPrice + cost, sub: true },
+        ...(r.carryoverApplied ? [{
+          label: L('└ 증여재산 이월과세 — 증여자 취득가액 적용', '└ Carry-over basis — donor’s acquisition price applied'),
+          value: L('양도차익 +' + fmt.won(r.carryoverExtraGain), 'gain +' + fmt.won(r.carryoverExtraGain)), sub: true,
+        }] : []),
         { label: L('양도차익', 'Capital gain'), value: r.rawGain, color: '#1e3a8a' },
         ...(r.taxableGainRatio < 1 && r.taxableGainRatio > 0 ? [{ label: L('과세 비율 (12억 초과)', 'Taxable ratio (over KRW 1.2B)'), value: (r.taxableGainRatio*100).toFixed(1)+'%', sub: true }] : []),
         { label: L('장기보유특별공제 (' + (r.ltDeductRate*100).toFixed(0) + '%)', 'Long-term holding deduction (' + (r.ltDeductRate*100).toFixed(0) + '%)'), value: '−' + fmt.won(r.ltDeduct), sub: true },
         { label: L('기본공제', 'Basic deduction'), value: '−' + fmt.won(basicDeduct), sub: true },
         { label: L('과세표준', 'Tax base'), value: taxBase },
         { label: L('적용 세율', 'Applied rate'), value: rateLabelText(rateResult, isEn ? 'en' : 'ko'), sub: true },
-        ...(r.surchargeWaived && regulated && homes >= 2 ? [{ label: L('다주택 중과', 'Multi-home surcharge'), value: L(r.waiverUntil + '까지 한시 유예', 'Waived through ' + r.waiverUntil), sub: true }] : []),
+        ...(r.surchargeWaived && regulated && homes >= 2 ? [{
+          label: L('다주택 중과', 'Multi-home surcharge'),
+          value: r.graceApplied
+            ? L('경과규정 적용 — ' + r.graceReason, 'Transitional rule applied — ' + r.graceReason)
+            : L(r.waiverUntil + '까지 한시 유예', 'Waived through ' + r.waiverUntil),
+          sub: true,
+        }] : []),
         ...(hasJointEstimate ? [
           { label: L('단독명의 예상세액', 'Sole-owner estimate'), value: r.total, sub: true },
           { label: L(r.jointOwners + '인 공동명의 절세액', r.jointOwners + '-owner estimated savings'), value: '−' + fmt.won(r.jointSavings), sub: true },
@@ -1813,26 +2374,59 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const personalDeduct = children * 50000000;
       const totalBasic = basicDeduct + personalDeduct;
       const publicDeduct = Math.max(500000000, totalBasic);
-      let spouseDeduct = 0;
-      if (hasSpouse) spouseDeduct = Math.min(3000000000, Math.max(500000000, netAssets * 0.3));
-      const totalDeduct = publicDeduct + spouseDeduct;
-      const taxBase = Math.max(0, netAssets - totalDeduct);
-      const tax = inheritGiftTax(taxBase);
+
+      // 배우자 상속공제는 실제 분할 방식에 따라 5억 ~ 법정상속분 한도(최대 30억)로 크게 달라진다.
+      // 실제 상속액을 입력하면 확정 계산하고, 비우면 최소~최대 범위를 함께 제시한다.
+      const spouseActual = getN('spouseActualShare');
+      const sd = hasSpouse
+        ? spouseInheritDeduction(netAssets, children, spouseActual)
+        : { low: 0, high: 0, exact: 0, statutoryRatio: 0, statutoryLimit: 0 };
+      const spouseExact = hasSpouse ? sd.exact : 0;
+      const isRange = hasSpouse && spouseExact == null;
+
+      const taxFor = (spouseDeduct) => {
+        const td = publicDeduct + spouseDeduct;
+        const base = Math.max(0, netAssets - td);
+        return { totalDeduct: td, taxBase: base, tax: inheritGiftTax(base) };
+      };
+      // 공제가 클수록 세금이 작다 → high 공제 = 낮은 세액
+      const lowTax = taxFor(isRange ? sd.high : (spouseExact || 0));  // 세액 하한
+      const highTax = taxFor(isRange ? sd.low : (spouseExact || 0));  // 세액 상한
+      const spouseDeduct = isRange ? sd.high : (spouseExact || 0);
+      const { totalDeduct, taxBase } = taxFor(spouseDeduct);
+      const tax = lowTax.tax;
+
       const acq = acquisitionTotal(propValue, {
         acqType: 'inherit',
         inheritNoHome,
         areaOver85: inheritAreaOver85,
       });
       const totalBurden = tax + acq.total;
+      const totalBurdenHigh = highTax.tax + acq.total;
 
-      if (resultTitle) resultTitle.textContent = L('예상 총 부담 (상속세 + 취득세)', 'Estimated total (inheritance + acquisition tax)');
-      setText('primaryTotal', fmt.won(totalBurden));
+      const rangeText = (lo, hi) => fmt.won(lo) + ' ~ ' + fmt.won(hi);
+
+      if (resultTitle) resultTitle.textContent = isRange
+        ? L('예상 총 부담 범위 (상속세 + 취득세)', 'Estimated total range (inheritance + acquisition tax)')
+        : L('예상 총 부담 (상속세 + 취득세)', 'Estimated total (inheritance + acquisition tax)');
+      setText('primaryTotal', isRange ? rangeText(totalBurden, totalBurdenHigh) : fmt.won(totalBurden));
       setLabel('data-quick-label1', L('상속세', 'Inheritance tax'));
-      setText('quick1', fmt.won(tax));
+      setText('quick1', isRange ? rangeText(lowTax.tax, highTax.tax) : fmt.won(tax));
       setLabel('data-quick-label2', L('부동산 취득세', 'Property acquisition tax'));
       setText('quick2', fmt.won(acq.total));
       setLabel('data-quick-label3', L('과세표준', 'Tax base'));
-      setText('quick3', fmt.won(taxBase));
+      setText('quick3', isRange ? rangeText(lowTax.taxBase, highTax.taxBase) : fmt.won(taxBase));
+
+      // 범위 추정임을 결과 화면에 분명히 밝힌다(간편 추정 · 베타).
+      const estBox = root.querySelector('[data-estimate-note]');
+      if (estBox) {
+        estBox.hidden = false;
+        estBox.innerHTML = isRange
+          ? L('<strong>간편 추정 · 범위 표시</strong> 배우자 상속공제는 배우자가 <em>실제로 상속받는 금액</em>과 민법상 법정상속분 한도(최대 30억원)에 따라 결정됩니다. 실제 상속액을 입력하지 않아 최소 5억원 공제(세액 상한)와 법정상속분 한도 공제(세액 하한)의 범위로 표시했습니다. 신고기한 내 분할·등기를 마쳐야 공제가 인정되며, 사전증여재산·배우자 사전증여 과세표준에 따라 결과가 달라집니다.',
+              '<strong>Simplified estimate · shown as a range</strong> The spousal deduction depends on the amount the spouse <em>actually</em> inherits and the statutory-share ceiling (max KRW 3B). Since no actual spousal share was entered, the result is shown as a range between the KRW 500M minimum deduction and the statutory-share ceiling.')
+          : L('<strong>간편 추정</strong> 배우자 상속공제는 min(실제 상속액, 법정상속분 한도, 30억원)이며 최소 5억원이 보장됩니다. 신고기한 내 분할·등기 완료가 요건이고, 사전증여재산이 있으면 결과가 달라집니다. 실제 신고는 세무사와 확인하세요.',
+              '<strong>Simplified estimate</strong> The spousal deduction is min(actual inherited amount, statutory-share ceiling, KRW 3B), with a KRW 500M floor. Division and registration must be completed by the filing deadline.');
+      }
 
       renderChart([
         { label: L('순 상속재산', 'Net estate'), value: netAssets, color: '#1e3a8a' },
@@ -1847,12 +2441,20 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         { label: L('순 상속재산', 'Net estate'), value: netAssets },
         { label: L('기초공제 + 인적공제', 'Basic + personal deduction'), value: '−' + fmt.won(totalBasic), sub: true },
         { label: L('일괄공제 5억 (max 적용)', 'Lump-sum deduction KRW 500M (max applied)'), value: '−' + fmt.won(publicDeduct), sub: true },
-        ...(hasSpouse ? [{ label: L('배우자 공제 (추정)', 'Spousal deduction (estimated)'), value: '−' + fmt.won(spouseDeduct), sub: true }] : []),
-        { label: L('과세표준', 'Tax base'), value: taxBase },
-        { label: L('예상 상속세', 'Estimated inheritance tax'), value: tax, color: '#ef4444' },
+        ...(hasSpouse ? [
+          { label: L('배우자 법정상속분', 'Spouse statutory share'),
+            value: (sd.statutoryRatio * 100).toFixed(1) + '% (' + L('배우자 1.5 : 자녀 각 1', 'spouse 1.5 : each child 1') + ')', sub: true },
+          { label: L('배우자 법정상속분 한도', 'Statutory-share ceiling'), value: sd.statutoryLimit, sub: true },
+          { label: L('배우자 상속공제', 'Spousal deduction'),
+            value: isRange ? '−' + rangeText(sd.low, sd.high) : '−' + fmt.won(spouseDeduct), sub: true },
+        ] : []),
+        { label: L('과세표준', 'Tax base'), value: isRange ? rangeText(lowTax.taxBase, highTax.taxBase) : fmt.won(taxBase) },
+        { label: L('예상 상속세', 'Estimated inheritance tax'),
+          value: isRange ? rangeText(lowTax.tax, highTax.tax) : fmt.won(tax), color: '#ef4444' },
         { label: L('상속 취득세', 'Inheritance acquisition tax'), value: acq.total, color: '#f59e0b' },
         { label: L('취득세 자동 판정', 'Acquisition-tax rule'), value: scenarioText(acq, isEn ? 'en' : 'ko'), sub: true },
-        { divider: true, label: L('예상 총 부담', 'Estimated total burden'), value: totalBurden },
+        { divider: true, label: L('예상 총 부담', 'Estimated total burden'),
+          value: isRange ? rangeText(totalBurden, totalBurdenHigh) : fmt.won(totalBurden) },
       ]);
     }
 
@@ -1860,46 +2462,302 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
       const value = getN('giftValue');
       const donee = getRadio('donee') || 'adult';
       const prev = getN('prevGift');
-      const deductMap = { spouse: 600000000, adult: 50000000, minor: 20000000, other: 10000000 };
-      const baseDeduct = deductMap[donee] || 0;
-      const remainingDeduct = Math.max(0, baseDeduct - prev);
-      const taxBase = Math.max(0, value - remainingDeduct);
-      const tax = inheritGiftTax(taxBase);
+      const prevTaxPaid = getN('prevGiftTax');
+      const marriageBirth = getN('marriageBirthDeduct');
+      const generationSkip = getCheck('generationSkip');
+      const doneeMinor = donee === 'minor';
+
+      const IG = (RATES.inheritGift) || {};
+      const deductMap = IG.giftDeduct || { spouse: 600000000, adult: 50000000, minor: 20000000, other: 10000000 };
+      // ⚠ 기타친족 1천만원 공제는 6촌 이내 혈족·4촌 이내 인척에게만 적용된다.
+      //   완전한 비친족(타인) 증여는 증여재산공제가 없다.
+      const relationDeduct = donee === 'stranger' ? 0 : (deductMap[donee] || 0);
+      // 혼인·출산 증여재산공제는 직계존속으로부터 받는 경우에만 적용된다.
+      const mbEligible = donee === 'adult' || donee === 'minor';
+      // 세대생략 할증: 손자녀 등 30%, 미성년자가 20억 초과를 받으면 40%
+      const gs = IG.generationSkipSurcharge || { base: 0.30, minorHighValue: 0.40, minorHighValueOver: 2000000000 };
+      let surchargeRate = 0;
+      if (generationSkip) {
+        surchargeRate = (doneeMinor && (value + prev) > (gs.minorHighValueOver || 2000000000))
+          ? (gs.minorHighValue || 0.40)
+          : (gs.base || 0.30);
+      }
+
+      const g = giftTaxAggregated({
+        currentValue: value,
+        priorValue: prev,
+        priorTaxPaid: prevTaxPaid,
+        relationDeduct,
+        marriageBirthDeduct: mbEligible ? marriageBirth : 0,
+        surchargeRate,
+      });
+      const tax = g.tax;
+
       const acq = acquisitionTotal(value, {
         acqType: 'gift',
         regulated: getCheck('giftRegulated'),
         giftDonorMultiHome: getCheck('giftDonorMultiHome'),
         areaOver85: getCheck('giftAreaOver85'),
+        giftAssumedDebt: getN('giftAssumedDebt'),
       });
       const totalBurden = tax + acq.total;
       const giftStatus = root.querySelector('[data-gift-acq-status]');
       if (giftStatus) giftStatus.textContent = L('자동 판정: ', 'Automatically selected: ') + scenarioText(acq, isEn ? 'en' : 'ko');
 
+      // 혼인·출산 공제 입력란은 직계존속 증여일 때만 노출
+      const mbField = root.querySelector('[data-gift-mb-field]');
+      if (mbField) mbField.style.display = mbEligible ? '' : 'none';
+
+      const estBox = root.querySelector('[data-estimate-note]');
+      if (estBox) {
+        estBox.hidden = false;
+        const parts = [];
+        parts.push(L('<strong>간편 추정</strong> 동일인(직계존속은 그 배우자 포함)으로부터 10년 내 받은 증여재산을 합산해 누진세율을 적용하고, 이미 낸 증여세를 세액공제했습니다.',
+          '<strong>Simplified estimate</strong> Gifts received from the same donor within 10 years are aggregated before the progressive rate is applied, and previously paid gift tax is credited.'));
+        if (donee === 'stranger') {
+          parts.push(L(' 비친족(타인) 증여에는 증여재산공제가 적용되지 않습니다.',
+            ' No relationship deduction applies to gifts between unrelated parties.'));
+        }
+        if (surchargeRate > 0) {
+          parts.push(L(' 세대생략 할증 ' + Math.round(surchargeRate * 100) + '%를 가산했습니다(상증법 제57조).',
+            ' A ' + Math.round(surchargeRate * 100) + '% generation-skipping surcharge was added.'));
+        }
+        parts.push(L(' 부담부증여·비상장주식·저가양수 등은 별도 규정이 적용되니 세무사와 확인하세요.',
+          ' Gifts with assumed debt, unlisted shares, or below-market transfers follow separate rules.'));
+        estBox.innerHTML = parts.join('');
+      }
+
       if (resultTitle) resultTitle.textContent = L('예상 총 부담 (증여세 + 취득세)', 'Estimated total (gift + acquisition tax)');
       setText('primaryTotal', fmt.won(totalBurden));
-      setLabel('data-quick-label1', L('공제 한도 (10년)', 'Deduction limit (10-yr)'));
-      setText('quick1', fmt.won(baseDeduct));
-      setLabel('data-quick-label2', L('잔여 공제', 'Remaining deduction'));
-      setText('quick2', fmt.won(remainingDeduct));
-      setLabel('data-quick-label3', L('과세표준', 'Tax base'));
-      setText('quick3', fmt.won(taxBase));
+      setLabel('data-quick-label1', L('10년 합산 증여가액', 'Aggregated gift value (10-yr)'));
+      setText('quick1', fmt.won(g.aggregatedValue));
+      setLabel('data-quick-label2', L('증여재산공제 합계', 'Total gift deduction'));
+      setText('quick2', fmt.won(g.totalDeduct));
+      setLabel('data-quick-label3', L('합산 과세표준', 'Aggregated tax base'));
+      setText('quick3', fmt.won(g.aggregatedBase));
 
       renderChart([
-        { label: L('증여 평가액', 'Gift value'), value: value, color: '#1e3a8a' },
-        { label: L('공제 한도', 'Deduction limit'), value: remainingDeduct, color: '#047857' },
+        { label: L('이번 증여 평가액', 'Current gift value'), value: value, color: '#1e3a8a' },
+        { label: L('과거 10년 증여액', 'Prior gifts (10-yr)'), value: prev, color: '#60a5fa' },
+        { label: L('증여재산공제', 'Gift deduction'), value: g.totalDeduct, color: '#047857' },
         { label: L('증여세', 'Gift tax'), value: tax, color: '#ef4444' },
         { label: L('취득세 (부동산)', 'Acquisition tax (property)'), value: acq.total, color: '#f59e0b' },
       ]);
       renderDetail([
-        { label: L('증여 평가액', 'Gift value'), value: value, sub: true },
-        { label: L('과거 10년 증여액', 'Prior gifts (10-yr)'), value: prev, sub: true },
-        { label: L('잔여 공제', 'Remaining deduction'), value: '−' + fmt.won(remainingDeduct), sub: true },
-        { label: L('과세표준', 'Tax base'), value: taxBase },
-        { label: L('증여세 (누진)', 'Gift tax (progressive)'), value: tax, color: '#ef4444' },
+        { label: L('이번 증여 평가액', 'Current gift value'), value: value, sub: true },
+        { label: L('과거 10년 증여액 (동일인)', 'Prior gifts from same donor (10-yr)'), value: prev, sub: true },
+        { label: L('10년 합산 증여가액', 'Aggregated gift value'), value: g.aggregatedValue },
+        { label: L('증여재산공제 (관계별)', 'Relationship deduction'), value: '−' + fmt.won(relationDeduct), sub: true },
+        ...(g.marriageBirthDeduct > 0 ? [{ label: L('혼인·출산 증여재산공제', 'Marriage/childbirth deduction'), value: '−' + fmt.won(g.marriageBirthDeduct), sub: true }] : []),
+        { label: L('합산 과세표준', 'Aggregated tax base'), value: g.aggregatedBase },
+        { label: L('산출세액 (합산 누진)', 'Calculated tax (aggregated, progressive)'), value: g.grossTax, sub: true },
+        ...(g.surcharge > 0 ? [{ label: L('세대생략 할증 (' + Math.round(surchargeRate * 100) + '%)', 'Generation-skipping surcharge (' + Math.round(surchargeRate * 100) + '%)'), value: '+' + fmt.won(g.surcharge), sub: true }] : []),
+        ...(g.priorCredit > 0 ? [{ label: L('기납부 증여세액공제', 'Credit for gift tax already paid'), value: '−' + fmt.won(g.priorCredit), sub: true }] : []),
+        { label: L('증여세', 'Gift tax'), value: tax, color: '#ef4444' },
+        ...(g.aggregationEffect > 0 ? [{ label: L('└ 10년 합산으로 늘어난 세액', '└ Increase from 10-yr aggregation'), value: '+' + fmt.won(g.aggregationEffect), sub: true }] : []),
         { label: L('부동산 취득세', 'Property acquisition tax'), value: acq.total, color: '#f59e0b' },
         { label: L('취득세 자동 판정', 'Acquisition-tax rule'), value: scenarioText(acq, isEn ? 'en' : 'ko'), sub: true },
         { divider: true, label: L('예상 총 부담 (증여세 + 취득세)', 'Estimated total (gift tax + acquisition tax)'), value: totalBurden },
       ]);
+    }
+
+    // ── 보유비용 추정: 재산세 (지방세법 제110·111조) ──
+    //  과세표준 = 공시가격 × 공정시장가액비율. 1주택 특례세율(공시 9억 이하)은 별도 구간.
+    //  도시지역분(과표 × 0.14%)과 지방교육세(재산세 × 20%)를 합산한다.
+    function propertyTaxEstimate(officialPrice, isOneHome) {
+      if (!officialPrice || officialPrice <= 0) return { total: 0, base: 0, main: 0, urban: 0, edu: 0, fairRatio: 0 };
+      // 공정시장가액비율: 1주택 특례 43~45% 적용 사례가 있으나 보수적으로 표준 60%,
+      // 1주택은 특례 45%를 적용한다(연도별 고시로 변동 — 추정치).
+      const fairRatio = isOneHome ? 0.45 : 0.60;
+      const base = officialPrice * fairRatio;
+      let main;
+      if (isOneHome && officialPrice <= 900000000) {
+        // 1주택 특례세율 (공시가격 9억 이하)
+        if (base <= 60000000) main = base * 0.0005;
+        else if (base <= 150000000) main = 30000 + (base - 60000000) * 0.001;
+        else if (base <= 300000000) main = 120000 + (base - 150000000) * 0.002;
+        else main = 420000 + (base - 300000000) * 0.0035;
+      } else {
+        if (base <= 60000000) main = base * 0.001;
+        else if (base <= 150000000) main = 60000 + (base - 60000000) * 0.0015;
+        else if (base <= 300000000) main = 195000 + (base - 150000000) * 0.0025;
+        else main = 570000 + (base - 300000000) * 0.004;
+      }
+      const urban = base * 0.0014;      // 도시지역분 재산세
+      const edu = main * 0.20;          // 지방교육세
+      return { total: main + urban + edu, base, main, urban, edu, fairRatio };
+    }
+
+    // ── 보유비용 추정: 종합부동산세 (종부세법) ──
+    //  공제: 1세대1주택 12억, 그 외 9억. 과세표준 = (공시가격 − 공제) × 공정시장가액비율 60%.
+    //  ⚠ 재산세 중복분 공제·세부담 상한·연령/보유 세액공제는 반영하지 않은 개략 추정치.
+    function comprehensiveTaxEstimate(officialPrice, homes, regulated) {
+      const threshold = homes === 1 ? 1200000000 : 900000000;
+      const over = Math.max(0, (officialPrice || 0) - threshold);
+      if (over <= 0) return { total: 0, base: 0, threshold, applies: false };
+      const base = over * 0.60;
+      // 다주택 중과 대상(3주택 이상 또는 조정지역 2주택)은 상위 구간 세율이 높다.
+      const heavy = homes >= 3 || (homes >= 2 && regulated);
+      const brackets = heavy
+        ? [[300000000, 0.005, 0], [600000000, 0.007, 600000], [1200000000, 0.010, 2400000],
+           [2500000000, 0.020, 14400000], [5000000000, 0.030, 39400000],
+           [9400000000, 0.040, 89400000], [Infinity, 0.050, 183400000]]
+        : [[300000000, 0.005, 0], [600000000, 0.007, 600000], [1200000000, 0.010, 2400000],
+           [2500000000, 0.013, 6000000], [5000000000, 0.015, 11000000],
+           [9400000000, 0.020, 36000000], [Infinity, 0.027, 101800000]];
+      let main = 0;
+      for (const [upTo, rate, ded] of brackets) {
+        if (base <= upTo) { main = Math.max(0, base * rate - ded); break; }
+      }
+      const rural = main * 0.20; // 농어촌특별세 (종부세의 20%)
+      return { total: main + rural, base, main, rural, threshold, applies: true, heavy };
+    }
+
+    // ===== 자금계획 탭 =====
+    //  매수 탭의 거래 조건(매매가·대출·등기 입력)을 그대로 재사용하고,
+    //  섞여 있던 세 레이어를 네 블록으로 분리해 보여준다.
+    //   A. 계약 단계별 필요 현금   B. 총 취득원가   C. 자금조달   D. 연간 보유비용
+    //  ※ 자체 세율식을 두지 않고 calcAcquisitionTax·calcBrokerageFee·registrationCost만 호출한다.
+    function calcPlan() {
+      const price = getN('price');
+      const homes = Number(getRadio('homes') || 1);
+      const regulated = getCheck('regulated');
+      const areaOver85 = getCheck('areaOver85');
+      const nonhouse = (getRadio('assetType') || 'house') === 'nonhouse';
+
+      // ── 공통 엔진 재사용 ──
+      let acq;
+      if (nonhouse) {
+        const base = price * 0.04;
+        acq = { total: price * 0.046, acquisition: base, ruralTax: price * 0.002, localEduTax: price * 0.004, firstHomeDeduct: 0, unsoldDeduct: 0 };
+      } else {
+        acq = acquisitionTotal(price, {
+          homes, regulated, areaOver85,
+          firstHome: getCheck('firstHome'),
+          tempTwoHome: getCheck('tempTwoHome'),
+          unsold2026: getCheck('unsold2026'),
+          acqType: 'purchase',
+        });
+      }
+      const broker = nonhouse ? Math.round(price * 0.009 * 1.1) : brokerFee(price, 'sale');
+      const reg = registrationCost(price, getN('regStd'), (getNum('regDiscount') || 0) / 100,
+        getCheck('selfReg'), nonhouse ? 'land' : 'house');
+
+      // ── 자금조달 ──
+      const loan = getN('loan');
+      const rate = getNum('rate');
+      const term = getNum('term');
+      const creditLoan = getN('planCreditLoan');
+      const creditRate = getNum('planCreditRate');
+      const assumedDeposit = getN('planAssumedDeposit'); // 임차보증금 승계
+      const ownEquity = getN('planEquity');              // 준비된 자기자본
+
+      // ── 계약 단계별 현금 ──
+      const downPct = getNum('planDownPct') || 10;
+      const midPct = getNum('planMidPct') || 0;
+      const downPayment = price * (downPct / 100);
+      const midPayment = price * (midPct / 100);
+      const interior = getN('planInterior');
+      const moving = getN('planMoving');
+      const prepaid = getN('planPrepaid');   // 대출 실행 전 선납비용(감정료·인지대 등)
+
+      // 잔금일에 필요한 현금 = 잔금 − 대출 − 승계보증금 + 취득세·등기·중개보수 등
+      const balanceDue = Math.max(0, price - downPayment - midPayment);
+      const balanceDayCash = Math.max(0,
+        balanceDue - loan - creditLoan - assumedDeposit
+        + acq.total + reg.total + broker + moving + prepaid);
+
+      // ── B. 총 취득원가 (경제적 취득가액) ──
+      const capex = interior; // 자본적 지출로 인정될 수 있는 인테리어(샷시·확장 등)
+      const totalAcquisitionCost = price + acq.total + broker + reg.total + capex;
+
+      // ── C. 자금조달 ──
+      const fundingNeed = price + acq.total + broker + reg.total + interior + moving + prepaid;
+      const funded = ownEquity + loan + creditLoan + assumedDeposit;
+      const shortfall = fundingNeed - funded;
+
+      // ── D. 연간 보유비용 ──
+      const mortgageMonthly = monthlyPayment(loan, rate, term);
+      const creditMonthly = creditLoan > 0 ? creditLoan * (creditRate / 100) / 12 : 0;
+      const officialPrice = getN('regStd') || Math.round(price * 0.7);
+      const ptax = nonhouse ? { total: 0 } : propertyTaxEstimate(officialPrice, homes === 1);
+      const ctax = nonhouse ? { total: 0, applies: false } : comprehensiveTaxEstimate(officialPrice, homes, regulated);
+      const mgmtMonthly = getN('planMgmt');
+      const insuranceYear = getN('planInsurance');
+      const repairYear = getN('planRepair');
+      const annualHolding = (mortgageMonthly + creditMonthly + mgmtMonthly) * 12
+        + ptax.total + ctax.total + insuranceYear + repairYear;
+
+      if (resultTitle) resultTitle.textContent = L('잔금일에 필요한 현금', 'Cash needed on closing day');
+      setText('primaryTotal', fmt.won(balanceDayCash));
+      setLabel('data-quick-label1', L('총 취득원가', 'Total acquisition cost'));
+      setText('quick1', fmt.won(totalAcquisitionCost));
+      setLabel('data-quick-label2', shortfall > 0 ? L('부족자금', 'Funding shortfall') : L('자금 여유', 'Surplus'));
+      setText('quick2', fmt.won(Math.abs(shortfall)));
+      setLabel('data-quick-label3', L('연간 보유비용', 'Annual holding cost'));
+      setText('quick3', fmt.won(annualHolding));
+
+      const estBox = root.querySelector('[data-estimate-note]');
+      if (estBox) {
+        estBox.hidden = false;
+        estBox.innerHTML = shortfall > 0
+          ? L('<strong>부족자금 ' + fmt.won(shortfall) + '</strong> 준비된 자기자본·대출·승계보증금으로 총 소요자금을 충당하지 못합니다. 자기자본을 늘리거나 대출 한도(매수 탭의 DSR·LTV 점검)를 다시 확인하세요. 재산세·종합부동산세는 공시가격 기준 <em>추정치</em>이며, 재산세 중복분 공제·세부담 상한·연령/보유 세액공제는 반영하지 않았습니다.',
+              '<strong>Shortfall of ' + fmt.won(shortfall) + '</strong> Equity, loans, and the assumed deposit do not cover total funding needs. Property and comprehensive real-estate taxes are <em>estimates</em> based on the official assessed price.')
+          : L('<strong>자금 계획 충족</strong> 준비된 자금이 총 소요자금을 ' + fmt.won(-shortfall) + ' 초과합니다. 재산세·종합부동산세는 공시가격 기준 <em>추정치</em>이며, 재산세 중복분 공제·세부담 상한·연령/보유 세액공제는 반영하지 않았습니다.',
+              '<strong>Plan is funded</strong> Available funds exceed the requirement by ' + fmt.won(-shortfall) + '. Property and comprehensive real-estate taxes are <em>estimates</em>.');
+      }
+
+      renderChart([
+        { label: L('자기자본', 'Equity'), value: Math.max(0, ownEquity), color: '#1e3a8a' },
+        { label: L('주택담보대출', 'Mortgage'), value: loan, color: '#3b82f6' },
+        { label: L('신용대출', 'Credit loan'), value: creditLoan, color: '#60a5fa' },
+        { label: L('임차보증금 승계', 'Assumed lease deposit'), value: assumedDeposit, color: '#93c5fd' },
+        { label: L('부족자금', 'Shortfall'), value: Math.max(0, shortfall), color: '#ef4444' },
+      ]);
+
+      renderDetail([
+        { label: 'A. ' + L('계약 단계별 필요 현금', 'Cash by contract stage'), value: '' },
+        { label: L('계약금 (' + downPct + '%)', 'Down payment (' + downPct + '%)'), value: downPayment, sub: true },
+        ...(midPayment > 0 ? [{ label: L('중도금 (' + midPct + '%)', 'Interim payment (' + midPct + '%)'), value: midPayment, sub: true }] : []),
+        { label: L('잔금', 'Balance'), value: balanceDue, sub: true },
+        { label: L('취득세·등기비용', 'Acquisition tax & registration'), value: acq.total + reg.total, sub: true },
+        { label: L('중개보수(VAT 포함)', 'Brokerage fee (incl. VAT)'), value: broker, sub: true },
+        { label: L('인테리어·이사비', 'Interior & moving'), value: interior + moving, sub: true },
+        { label: L('대출 실행 전 선납비용', 'Pre-disbursement costs'), value: prepaid, sub: true },
+        { divider: true, label: L('잔금일에 필요한 현금', 'Cash needed on closing day'), value: balanceDayCash },
+
+        { label: 'B. ' + L('총 취득원가 (양도세 취득가액 기초)', 'Total acquisition cost'), value: '' },
+        { label: L('매매대금', 'Purchase price'), value: price, sub: true },
+        { label: L('취득세 합계', 'Acquisition tax total'), value: acq.total, sub: true },
+        { label: L('중개보수', 'Brokerage fee'), value: broker, sub: true },
+        { label: L('법무·등기비용', 'Registration & scrivener'), value: reg.total, sub: true },
+        { label: L('자본적 지출(인테리어)', 'Capital expenditure (interior)'), value: capex, sub: true },
+        { divider: true, label: L('총 취득원가', 'Total acquisition cost'), value: totalAcquisitionCost },
+
+        { label: 'C. ' + L('자금조달', 'Funding'), value: '' },
+        { label: L('자기자본', 'Equity'), value: ownEquity, sub: true },
+        { label: L('주택담보대출', 'Mortgage'), value: loan, sub: true },
+        { label: L('신용대출', 'Credit loan'), value: creditLoan, sub: true },
+        { label: L('임차보증금 승계', 'Assumed lease deposit'), value: assumedDeposit, sub: true },
+        { label: L('총 소요자금', 'Total funding need'), value: fundingNeed, sub: true },
+        { divider: true, label: shortfall > 0 ? L('부족자금', 'Shortfall') : L('자금 여유', 'Surplus'), value: Math.abs(shortfall) },
+
+        { label: 'D. ' + L('연간 보유비용', 'Annual holding cost'), value: '' },
+        { label: L('주담대 원리금 (연)', 'Mortgage payments (yr)'), value: mortgageMonthly * 12, sub: true },
+        ...(creditMonthly > 0 ? [{ label: L('신용대출 이자 (연)', 'Credit loan interest (yr)'), value: creditMonthly * 12, sub: true }] : []),
+        { label: L('재산세 추정 (도시지역분·지방교육세 포함)', 'Property tax est.'), value: ptax.total, sub: true },
+        { label: L('종합부동산세 추정', 'Comprehensive real-estate tax est.'),
+          value: ctax.applies ? fmt.won(ctax.total) : L('해당 없음 (공시가격 ' + fmt.won(ctax.threshold) + ' 이하)', 'N/A'), sub: true },
+        { label: L('관리비 (연)', 'Maintenance fee (yr)'), value: mgmtMonthly * 12, sub: true },
+        { label: L('보험료 (연)', 'Insurance (yr)'), value: insuranceYear, sub: true },
+        { label: L('예상 수선비 (연)', 'Expected repairs (yr)'), value: repairYear, sub: true },
+        { divider: true, label: L('연간 보유비용 합계', 'Total annual holding cost'), value: annualHolding },
+      ]);
+
+      // 자금계획 탭에서는 DSR·RTI·대출한도 박스를 매수 탭과 동일하게 유지한다.
+      if (rtiBox) rtiBox.hidden = true;
+      if (dsrBox) dsrBox.hidden = false;
+      renderDSR(mortgageMonthly * 12, getN('creditDebt') / 5 + otherLoansTotal());
     }
 
     function switchScn(name) {
@@ -1914,9 +2772,12 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
         const arr = el.dataset.showOn.split(',').map(s => s.trim());
         el.style.display = arr.includes(name) ? '' : 'none';
       });
-      if (dsrBox) dsrBox.hidden = (name !== 'sale');
+      if (dsrBox) dsrBox.hidden = !(name === 'sale' || name === 'plan');
       if (rtiBox) rtiBox.hidden = true; // 매수 시나리오에서 calcSale이 비주택 임대일 때만 노출
       if (mortgageLimitBox) mortgageLimitBox.hidden = (name !== 'sale');
+      // 간편 추정 안내는 범위·추정이 포함된 시나리오에서만 노출
+      const estBox = root.querySelector('[data-estimate-note]');
+      if (estBox) estBox.hidden = !['inherit', 'gift', 'plan'].includes(name);
       recalc();
     }
     document.querySelectorAll('[data-scn]').forEach((t) => t.addEventListener('click', () => switchScn(t.dataset.scn)));
@@ -1942,6 +2803,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
     function recalc() {
       applyAssetType();
       if (currentScn === 'sale') calcSale();
+      else if (currentScn === 'plan') calcPlan();
       else if (currentScn === 'transfer') calcTransfer();
       else if (currentScn === 'lease') calcLease();
       else if (currentScn === 'inherit') calcInherit();
@@ -2294,25 +3156,19 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
   if (!root) return;
   const setText = (sel, txt) => { const el = root.querySelector('[data-out="'+sel+'"]'); if (el) el.textContent = txt; };
 
-  function acquisitionRate(price, homes, regulated) {
-    const eok = price / 100000000;
-    if (homes === 1) {
-      if (eok <= 6) return 0.01;
-      if (eok <= 9) return ((eok * 2 / 3) - 3) / 100;
-      return 0.03;
-    }
-    if (homes === 2) {
-      return regulated ? 0.08 : (eok <= 6 ? 0.01 : eok <= 9 ? ((eok * 2 / 3) - 3) / 100 : 0.03);
-    }
-    return regulated ? 0.12 : 0.08;
-  }
-
+  // 취득세는 자체 산식을 두지 않고 공통 엔진 calcAcquisitionTax()를 그대로 재사용한다.
+  //  (구버전은 '본세 × 1.10'으로 지방교육세·농특세를 단순 가산해, 85㎡ 이하 농특세 면제·
+  //   8·12% 중과 시 0.4% 고정 교육세·각종 감면을 모두 틀리게 계산했다.)
   const recalc = () => {
     const bid = fmt.parseWon(root.querySelector('[name="bid"]').value);
     const market = fmt.parseWon(root.querySelector('[name="market"]').value);
     const deposit = fmt.parseWon(root.querySelector('[name="deposit"]').value);
     const homes = Number(root.querySelector('[name="homes"]:checked')?.value || 1);
     const regulated = root.querySelector('[name="regulated"]')?.checked || false;
+    const areaOver85 = root.querySelector('[name="areaOver85"]')?.checked || false;
+    const firstHome = root.querySelector('[name="firstHome"]')?.checked || false;
+    const tempTwoHome = root.querySelector('[name="tempTwoHome"]')?.checked || false;
+    const assetType = root.querySelector('[name="assetType"]:checked')?.value || 'house';
     const evict = fmt.parseWon(root.querySelector('[name="evict"]').value);
     const unpaid = fmt.parseWon(root.querySelector('[name="unpaid"]').value);
     const misc = fmt.parseWon(root.querySelector('[name="misc"]').value);
@@ -2320,18 +3176,37 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears }) {
     if (!bid) {
       ['total','bid','depositOut','taxOut','evictOut','unpaidOut','miscOut','marketOut'].forEach(k => setText(k, '0원'));
       setText('margin', '—'); setText('verdict', '—');
+      renderAcqNotes(root, null);
       return;
     }
 
-    const rate = acquisitionRate(bid, homes, regulated);
-    const acqTax = bid * rate;
-    const taxBundle = acqTax * 1.10; // 지방교육세·농특세 단순 가산
+    let acq, rate;
+    if (assetType === 'nonhouse') {
+      // 비주택(상가·업무용 오피스텔·토지): 취득세 4.0% + 농특세 0.2% + 지방교육세 0.4% = 4.6%
+      const base = bid * 0.04;
+      acq = { acquisition: base, ruralTax: bid * 0.002, localEduTax: bid * 0.004,
+        total: bid * 0.046, baseRate: 0.04, isHeavy: false, notes: [],
+        scenario: '비주택 취득(4.6% — 취득세 4.0% + 농특세 0.2% + 지방교육세 0.4%)' };
+      rate = 0.04;
+    } else {
+      acq = calcAcquisitionTax({
+        price: bid, homes, regulated, areaOver85, firstHome, tempTwoHome,
+        acqType: 'purchase',
+      });
+      rate = acq.baseRate;
+    }
+    const taxBundle = acq.total; // 취득세 + 농특세 + 지방교육세 (공통 엔진 산정)
     const total = bid + deposit + taxBundle + evict + unpaid + misc;
     const margin = market > 0 ? (market - total) / market * 100 : 0;
 
     setText('bid', fmt.won(bid));
     setText('depositOut', fmt.won(deposit));
     setText('taxOut', fmt.won(taxBundle) + ' (' + (rate * 100).toFixed(2) + '%)');
+    setText('taxScenario', acq.scenario || '—');
+    setText('taxAcquisition', fmt.won(acq.acquisition));
+    setText('taxRural', acq.ruralTax ? fmt.won(acq.ruralTax) : (isEn ? 'Exempt' : '면제'));
+    setText('taxEdu', fmt.won(acq.localEduTax));
+    renderAcqNotes(root, acq);
     setText('evictOut', fmt.won(evict));
     setText('unpaidOut', fmt.won(unpaid));
     setText('miscOut', fmt.won(misc));

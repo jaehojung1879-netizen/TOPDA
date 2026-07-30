@@ -29,7 +29,7 @@
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260730" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -149,14 +149,15 @@
         <div class="field">
           <label for="t-live">거주 기간 (년)</label>
           <input id="t-live" name="liveYears" type="number" min="0" max="30" step="1" value="5" />
-          <span class="hint">1세대1주택 고가 장특공제용.</span>
+          <span class="hint">1세대1주택 고가 장특공제용. <strong>거주 2년</strong>부터 8%, 3년 12%, 이후 연 +4%p(최대 40%).</span>
         </div>
       </div>
 
       <div class="field-row">
         <div class="field">
-          <label for="t-selldate">양도일(예정일)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="다주택 중과 한시 유예(2026.5.9까지) 자동 판단용. 2년 이상 보유 + 이 날짜 이전 양도면 자동 면제.">?</span></label>
+          <label for="t-selldate">양도일(예정일)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="다주택 중과 한시 유예 판단용. 잔금청산일과 등기접수일 중 빠른 날이 양도일입니다. 2년 이상 보유 + 2026.5.9 이전 양도면 자동 면제되고, 그 이후라도 아래 경과규정을 충족하면 유예가 이어집니다.">?</span></label>
           <input id="t-selldate" name="sellDate" type="date" value="" />
+          <span class="hint">잔금청산일과 등기접수일 중 <strong>빠른 날</strong>.</span>
           
         </div>
         <div class="field">
@@ -207,6 +208,78 @@
         </label>
       </div>
 
+      <!-- ===== 다주택 중과 유예 경과규정 (조정대상지역 다주택일 때만 노출) ===== -->
+      <div data-tt-show="grace" style="display:none;">
+        <h3 class="scn-section-title" style="margin-top:24px;">중과 유예 경과규정</h3>
+        <p class="scn-note">양도일이 <strong>2026.5.9 이후</strong>라도 그 날까지 <strong>매매계약 + 계약금 수령</strong>을 마쳤다면
+          계약일부터 4개월(신규 조정대상지역 6개월) 이내 양도까지 중과 유예가 이어집니다.
+          잔금일이 5월 10일 이후라고 무조건 중과되는 것이 아닙니다.</p>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="t-contractdate">매매계약일</label>
+            <input id="t-contractdate" name="contractDate" type="date" value="" />
+            <span class="hint">계약서상 체결일.</span>
+          </div>
+          <div class="field">
+            <label for="t-permitdate">토지거래허가 신청일</label>
+            <input id="t-permitdate" name="landPermitApplyDate" type="date" value="" data-tt-show="permit" style="display:none;" />
+            <span class="hint" data-tt-show="permit" style="display:none;">허가 신청일부터 6개월 이내 양도까지 인정됩니다.</span>
+            <span class="hint" data-tt-show="grace">토지거래허가 대상을 선택하면 입력할 수 있습니다.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="downPaymentReceived"/>
+            <span class="text">계약금을 수령했다
+              <span class="note">경과규정은 계약 체결만으로는 부족하고 계약금 수령까지 마쳐야 합니다. 입금 내역을 보관하세요.</span>
+            </span>
+          </label>
+        </div>
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="newRegulatedArea"/>
+            <span class="text">신규 조정대상지역 (유예 6개월 적용)
+              <span class="note">최근 신규 지정된 조정대상지역은 계약일부터 6개월 이내 양도까지 인정됩니다.</span>
+            </span>
+          </label>
+        </div>
+        <div class="field">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="landPermitTarget"/>
+            <span class="text">토지거래허가 대상 물건
+              <span class="note">허가구역 내 물건이면 체크하고 허가 신청일을 입력하세요.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- ===== 증여재산 이월과세 (소득세법 제97조의2) ===== -->
+      <h3 class="scn-section-title" style="margin-top:24px;">증여받은 부동산</h3>
+      <div class="field">
+        <label class="check-item" style="padding: 0; cursor: pointer;">
+          <input type="checkbox" name="giftedFromRelative"/>
+          <span class="text">배우자·직계존비속에게 증여받은 부동산이다
+            <span class="note">증여받은 부동산을 10년 이내 양도하면 취득가액에 <strong>증여자의 취득가액</strong>이 이월 적용됩니다(소득세법 제97조의2). 취득가액이 낮아져 양도차익과 세액이 크게 늘어납니다.</span>
+          </span>
+        </label>
+      </div>
+      <div class="field-row" data-tt-show="carryover" style="display:none;">
+        <div class="field">
+          <label for="t-giftdate">증여받은 날</label>
+          <input id="t-giftdate" name="giftReceivedDate" type="date" value="" />
+          <span class="hint">양도일까지 10년 이내면 이월과세.</span>
+        </div>
+        <div class="field">
+          <label for="t-donorbuy">증여자의 취득가액</label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="t-donorbuy" name="donorBuyPrice" type="text" inputmode="numeric" data-format="won" value="" />
+          </div>
+          <span class="hint">증여자가 그 부동산을 처음 취득할 때의 가액.</span>
+        </div>
+      </div>
+
     </div>
 
     <div class="calc-result">
@@ -223,6 +296,11 @@
         <div class="row sub"><span class="key">적용 세율</span><span class="val" data-out="rate">—</span></div>
         <div class="row"><span class="key">산출 양도소득세</span><span class="val" data-out="incomeTax">0원</span></div>
         <div class="row sub"><span class="key">지방소득세 (10%)</span><span class="val" data-out="localTax">0원</span></div>
+      </div>
+
+      <div class="callout callout-warn" data-out="carryoverBox" style="display: none; margin-top: 20px; margin-bottom: 0;">
+        <div class="icon">!</div>
+        <div class="body" data-out="carryoverMsg"><strong>증여재산 이월과세</strong></div>
       </div>
 
       <div class="callout callout-success" data-out="exemptBox" style="display: none; margin-top: 20px; margin-bottom: 0;">
@@ -474,7 +552,7 @@
     <p class="disclaimer">© 톺다.</p>
   </div>
 </footer>
-<script src="../assets/rates.js?v=20260629"></script>
-<script src="../assets/app.js?v=20260723"></script>
+<script src="../assets/rates.js?v=20260730"></script>
+<script src="../assets/app.js?v=20260730"></script>
 </body>
 </html>

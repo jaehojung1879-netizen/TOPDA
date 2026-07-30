@@ -31,7 +31,7 @@
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/acquisition-tax.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260725" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260730" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -111,7 +111,7 @@
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../calculators/index.html">계산기</a> / 취득세</div>
     <h1>취득세 계산기</h1>
     <div class="meta">
-      <span>주택 매매·상속·증여·신축 · 2025년 세율 반영 · 일시적 2주택 지원</span>
+      <span>매매·분양·신축·조합원·상속·증여 · 2026년 세율 반영 · 생애최초·출산·미분양 감면</span>
     </div>
   </div>
 
@@ -127,17 +127,23 @@
       </div>
 
       <div class="field">
-        <label>취득 원인</label>
+        <label>취득 원인<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="분양받은 신축 아파트는 「원시취득(2.8%)」이 아니라 유상거래 주택 취득(1~3% 또는 중과)입니다. 원시취득은 건축주가 직접 신축·증축한 경우에만 해당합니다. 잘못 선택하면 세액이 크게 달라집니다.">?</span></label>
         <div class="radio-group">
-          <label><input type="radio" name="acqType" value="purchase" checked/><span>매매</span></label>
+          <label><input type="radio" name="acqType" value="purchase" checked/><span>매매 (기존 주택)</span></label>
+          <label><input type="radio" name="acqType" value="presale"/><span>분양받은 신축주택</span></label>
+          <label><input type="radio" name="acqType" value="original"/><span>직접 신축·증축</span></label>
+          <label><input type="radio" name="acqType" value="redevelop"/><span>재개발·재건축 조합원</span></label>
           <label><input type="radio" name="acqType" value="inherit"/><span>상속</span></label>
           <label><input type="radio" name="acqType" value="gift"/><span>증여</span></label>
-          <label><input type="radio" name="acqType" value="original"/><span>신축</span></label>
         </div>
-        <span class="hint">취득 원인에 따라 세율 체계가 달라집니다.</span>
+        <span class="hint">
+          <strong>매매·분양받은 신축주택</strong>은 유상거래 세율(1~3%, 다주택은 중과),
+          <strong>직접 신축·증축</strong>은 원시취득 2.8%,
+          <strong>조합원 취득</strong>은 종전지분·추가분담금을 나누어 판정합니다(개략 추정).
+        </span>
       </div>
 
-      <div class="field" data-show="purchase">
+      <div class="field" data-show="purchase presale">
         <label>주택 수 (본 거래 포함)</label>
         <div class="radio-group">
           <label><input type="radio" name="homes" value="1" checked/><span>1주택</span></label>
@@ -149,24 +155,38 @@
       </div>
 
       <div class="calc-check-grid">
-        <div class="field" data-show="purchase gift">
+        <div class="field" data-show="purchase presale gift">
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="regulated"/>
             <span class="text">조정대상지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="정부 지정 지역 여부는 주소만으로 이 계산기에서 확정할 수 없어 직접 선택해야 합니다. 매매는 다주택 중과, 증여는 시가표준액 3억원 이상·다주택 증여자 조건과 함께 12% 중과 판정에 사용합니다.">?</span></span>
           </label>
         </div>
 
-        <div class="field" data-show="purchase">
+        <div class="field" data-show="purchase presale">
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="tempTwoHome"/>
             <span class="text">일시적 2주택<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="신규 주택 취득 후 종전 주택을 법정 기한 내 처분할 예정이면 선택하세요. 주택 수가 2채일 때만 선택할 수 있으며, 조건 충족 시 1주택 표준세율을 적용합니다. 처분 요건을 지키지 못하면 중과세가 추징될 수 있습니다.">?</span></span>
           </label>
         </div>
 
-        <div class="field" data-show="purchase">
+        <div class="field" data-show="purchase presale">
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="firstHome"/>
-            <span class="text">생애최초 구입<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="세대원 모두 과거 주택을 소유한 적이 없는 경우 선택하세요. 1주택·취득가액 12억원 이하일 때만 선택할 수 있고 취득세를 최대 200만원 감면합니다.">?</span></span>
+            <span class="text">생애최초 구입<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="세대원 모두 과거 주택을 소유한 적이 없는 경우 선택하세요. 1주택·취득가액 12억원 이하일 때만 선택할 수 있고 취득세를 최대 200만원(소형 비아파트·인구감소지역은 300만원) 감면합니다.">?</span></span>
+          </label>
+        </div>
+
+        <div class="field" data-show="purchase presale">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="firstHomeSmallHouse"/>
+            <span class="text">└ 소형 비아파트·인구감소지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="도시형생활주택·다가구·연립 등 아파트가 아닌 소형주택(전용 60㎡ 이하, 수도권 3억·비수도권 2억 이하)이거나 인구감소지역 주택이면 생애최초 감면 한도가 300만원으로 올라갑니다. 실제 요건은 주택 유형·전용면적·소재지에 따라 달라지니 관할 지자체에서 확인하세요.">?</span></span>
+          </label>
+        </div>
+
+        <div class="field" data-show="purchase presale">
+          <label class="check-item" style="padding: 0; cursor: pointer;">
+            <input type="checkbox" name="childbirth"/>
+            <span class="text">출산·양육 가구<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="자녀 출산일 전후 법정 기간 내에 12억원 이하 주택을 취득하는 1가구 1주택이면 취득세를 최대 500만원 감면받을 수 있습니다(2028년 말까지). 생애최초 감면과 중복되지 않으며, 유리한 감면 하나만 적용됩니다.">?</span></span>
           </label>
         </div>
 
@@ -191,14 +211,25 @@
           </label>
         </div>
 
-        <div class="field" data-show="purchase">
+        <div class="field" data-show="purchase presale">
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="unsold2026"/>
-            <span class="text">지방 준공 후 미분양<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="2026년 한시 감면 대상인 지방 준공 후 미분양 아파트라면 선택하세요. 취득가 6억원 이하·전용 85㎡ 이하인지는 자동 확인하며, 충족 시 취득세 50% 감면과 다주택 중과 제외를 적용합니다.">?</span></span>
+            <span class="text">지방 준공 후 미분양<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="사업주체로부터 최초로 유상취득하는 수도권 밖 준공 후 미분양 주택(실제 입주 사실 없음)이면 선택하세요. 취득가 6억원 이하·전용 85㎡ 이하인지는 자동 확인합니다. 감면율은 전국 일률 50%가 아니라 법정 25%이며, 지자체 조례로 최대 25%p가 추가됩니다. 법인·단체 취득은 대상이 아닙니다.">?</span></span>
           </label>
         </div>
 
         <p class="acq-auto-status" data-acq-auto-status>가격·주택 수·면적에 따른 적용 가능 여부를 자동으로 확인합니다.</p>
+      </div>
+
+      <div class="field" data-show="purchase presale">
+        <label for="unsold-local">지자체 조례 추가 감면<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="지방 준공 후 미분양 주택 감면은 법률로 25%가 정해져 있고, 취득 예정지 시·군·구 조례에 따라 최대 25%p가 추가됩니다. 조례를 확인하지 못했다면 「확인 못함」을 두세요 — 법정 25%만 반영하고 추가 가능성을 결과에 표시합니다.">?</span></label>
+        <select id="unsold-local" name="unsold2026LocalExtra">
+          <option value="unknown" selected>조례 확인 못함 — 법정 25%만 반영</option>
+          <option value="0">추가 감면 없음 (총 25%)</option>
+          <option value="0.10">조례 10%p 추가 (총 35%)</option>
+          <option value="0.25">조례 25%p 추가 (총 50%)</option>
+        </select>
+        <span class="hint">최종 감면율 = 법정 25% + 조례 추가 0~25%. <strong>전국 일률 50%가 아닙니다.</strong> 취득 예정 시·군·구 조례를 확인하세요.</span>
       </div>
     </div>
 
@@ -217,11 +248,11 @@
           <span class="val" data-out="acquisition">0원</span>
         </div>
         <div class="row sub">
-          <span class="key">생애최초 감면</span>
+          <span class="key" data-out-label="firstHomeDeduct">생애최초 감면</span>
           <span class="val" data-out="firstHomeDeduct">해당 없음</span>
         </div>
         <div class="row sub">
-          <span class="key">2026 미분양 감면</span>
+          <span class="key">지방 미분양 감면</span>
           <span class="val" data-out="unsoldDeduct">해당 없음</span>
         </div>
         <div class="row sub">
@@ -234,12 +265,15 @@
         </div>
       </div>
 
+      <!-- 감면 적용·미적용 이유를 그대로 노출 -->
+      <ul class="acq-notes" data-acq-notes hidden></ul>
+
       <div class="callout callout-info" style="margin-top: 24px; margin-bottom: 0;">
         <div class="icon">i</div>
         <div class="body">
           <strong>취득 원인·면적·주택수·중과 여부에 따라 세액이 달라집니다.</strong>
           농어촌특별세는 85㎡ 초과 시 0.2~1.0%, 지방교육세는 중과 시 매매가의 0.4%로 별도 산정됩니다.
-          신혼·출산 감면, 분양권·조합원입주권의 취득시기, 오피스텔·법인 명의는 별도 규정이 적용되니 관할 세무서·세무사와 확인하세요.
+          분양권·조합원입주권의 취득시기, 주거용 오피스텔, 법인 명의 취득은 별도 규정이 적용되니 관할 세무서·세무사와 확인하세요.
         </div>
       </div>
     </div>
@@ -350,7 +384,7 @@
     </details>
     <details class="explain">
       <summary>생애최초로 집을 사면 취득세 감면을 받을 수 있나요?</summary>
-      <div class="explain-body"><p>무주택 세대가 취득가액 12억원 이하 주택을 1주택 표준세율로 취득하면 취득세 최대 200만원을 감면합니다(지방세특례제한법 제36조의3).</p></div>
+      <div class="explain-body"><p>무주택 세대가 취득가액 12억원 이하 주택을 1주택 표준세율로 취득하면 취득세 최대 <strong>200만원</strong>을 감면합니다(지방세특례제한법 제36조의3). 다만 도시형생활주택·다가구 등 <strong>소형 비아파트</strong>이거나 <strong>인구감소지역</strong> 주택이면 한도가 <strong>300만원</strong>으로 올라갑니다. 중과세율 대상이면 감면되지 않습니다.</p></div>
     </details>
     <details class="explain">
       <summary>일시적 2주택도 중과세가 적용되나요?</summary>
@@ -359,6 +393,18 @@
     <details class="explain">
       <summary>85㎡ 이하 주택도 농어촌특별세를 내나요?</summary>
       <div class="explain-body"><p>국민주택규모(전용 85㎡) 이하는 농어촌특별세가 면제됩니다. 85㎡ 초과 시에만 부과되며, 표준세율은 0.2%, 중과 시 0.6~1.0%입니다.</p></div>
+    </details>
+    <details class="explain">
+      <summary>분양받은 새 아파트도 원시취득 2.8%인가요?</summary>
+      <div class="explain-body"><p>아닙니다. <strong>원시취득 2.8%</strong>는 건축주가 직접 신축·증축해 소유권을 처음 취득하는 경우입니다. 시행사·건설사로부터 <strong>분양받아</strong> 소유권을 취득하면 유상거래 주택 취득이므로 <strong>1~3%(다주택은 중과세율)</strong>가 적용됩니다. 재개발·재건축 조합원 취득은 종전 토지·건물 지분과 추가분담금의 과세표준을 나누어 판정해야 하므로 별도 확인이 필요합니다.</p></div>
+    </details>
+    <details class="explain">
+      <summary>지방 준공 후 미분양 주택은 취득세가 50% 감면되나요?</summary>
+      <div class="explain-body"><p>50%는 <strong>가능한 최대치</strong>이지 전국 공통 적용률이 아닙니다. 법률에 따른 기본 감면은 <strong>25%</strong>이고, 취득 예정지 지방자치단체 <strong>조례</strong>로 최대 25%p가 추가되어 최종 <strong>25~50%</strong>가 됩니다. 요건은 ① 사업주체로부터 최초 유상취득 ② 수도권 밖 ③ 준공 후 미분양(실제 입주 사실 없음) ④ 전용 85㎡ 이하 ⑤ 취득가액 6억원 이하 ⑥ 개인 취득(법인·단체 제외)입니다. 이 계산기는 조례를 확인하지 못한 경우 법정 25%만 반영하고 그 사실을 결과에 표시합니다.</p></div>
+    </details>
+    <details class="explain">
+      <summary>출산·양육 감면과 생애최초 감면을 함께 받을 수 있나요?</summary>
+      <div class="explain-body"><p>중복 적용되지 않습니다. 출산·양육 감면은 12억원 이하 1가구 1주택에 대해 최대 <strong>500만원</strong>(지방세특례제한법 제36조의5, 2028년 말까지), 생애최초 감면은 최대 200만원(소형 비아파트·인구감소지역 300만원)입니다. 두 요건을 모두 충족하면 <strong>유리한 감면 하나</strong>가 적용됩니다.</p></div>
     </details>
   </section>
   <script type="application/ld+json">
@@ -379,7 +425,7 @@
       "name": "생애최초로 집을 사면 취득세 감면을 받을 수 있나요?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "무주택 세대가 취득가액 12억원 이하 주택을 1주택 표준세율로 취득하면 취득세 최대 200만원을 감면합니다(지방세특례제한법 제36조의3)."
+        "text": "무주택 세대가 취득가액 12억원 이하 주택을 1주택 표준세율로 취득하면 취득세 최대 200만원을 감면합니다(지방세특례제한법 제36조의3). 도시형생활주택·다가구 등 소형 비아파트이거나 인구감소지역 주택이면 한도가 300만원으로 올라갑니다."
       }
     },
     {
@@ -410,7 +456,9 @@
       <li>지방세법 제11조 (부동산 취득세율) · 제13조의2 (주택 유상거래 중과세율)</li>
       <li>지방세법 제151조 (지방교육세)</li>
       <li>지방세법 시행령 제28조의2~5 (일시적 2주택·1세대 1주택의 범위)</li>
-      <li>지방세특례제한법 제36조의3 (생애최초 주택 취득 감면)</li>
+      <li>지방세특례제한법 제36조의3 (생애최초 주택 취득 감면 — 한도 200만원, 소형 비아파트·인구감소지역 300만원)</li>
+      <li>지방세특례제한법 제36조의5 (출산·양육을 위한 주택 취득 감면 — 한도 500만원, 2028년 말까지)</li>
+      <li>지방세특례제한법 (지방 준공 후 미분양 주택 한시 감면 — 법정 25% + 조례 최대 25%p)</li>
       <li>농어촌특별세법 제5조 (세율)</li>
     </ul>
   </div>
@@ -457,8 +505,8 @@
     <p class="disclaimer">© 톺다.</p>
   </div>
 </footer>
-<script src="../assets/rates.js?v=20260629"></script>
-<script src="../assets/app.js?v=20260725-2"></script>
+<script src="../assets/rates.js?v=20260730"></script>
+<script src="../assets/app.js?v=20260730"></script>
 <script src="../assets/official_price.js?v=20260728"></script>
 <script>
 (function () {
