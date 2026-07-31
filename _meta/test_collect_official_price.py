@@ -5,6 +5,7 @@
 엉뚱한 지번의 가격이 붙으므로, 키가 온전할 때만 부른다.
 """
 import datetime as dt
+import math
 import unittest
 from unittest import mock
 
@@ -44,17 +45,46 @@ class LookupKeyTests(unittest.TestCase):
 
 class SummarizeTests(unittest.TestCase):
     def test_median_is_the_representative_value(self):
-        got = C.summarize([100, 300, 200, 400], "20260101", dt.date(2026, 7, 28))
+        got = C.summarize({"20260101": [100, 300, 200, 400]}, dt.date(2026, 7, 28))
         self.assertEqual(got, {"min": 100, "med": 250, "max": 400, "n": 4,
-                               "std_day": "20260101", "fetched": "2026-07-28"})
+                               "std_day": "20260101", "v": C.REC_VERSION,
+                               "fetched": "2026-07-28"})
+
+    def test_only_the_latest_standard_day_is_summarized(self):
+        """항목은 '호 × 공시연도'다. 연도를 섞으면 옛 가격이 중앙값을 끌어내린다."""
+        got = C.summarize({"20130101": [100, 100, 100], "20260101": [500, 700]},
+                          dt.date(2026, 7, 28))
+        self.assertEqual((got["min"], got["med"], got["max"], got["n"], got["std_day"]),
+                         (500, 600, 700, 2, "20260101"))
+
+    def test_barely_entered_year_is_skipped(self):
+        """공시 발표기에는 새 기준일이 몇 호에만 먼저 기재된다 — 그걸로 대표값을 내면 안 된다."""
+        got = C.summarize({"20250101": [300] * 60, "20260101": [999, 999]},
+                          dt.date(2026, 7, 28))
+        self.assertEqual((got["med"], got["n"], got["std_day"]), (300, 60, "20250101"))
+
+    def test_year_with_a_comparable_sample_is_used(self):
+        """표본이 앞 해와 비슷하면 새 기준일을 쓴다 — 그게 정상적인 갱신이다."""
+        got = C.summarize({"20250101": [300] * 60, "20260101": [999] * 55},
+                          dt.date(2026, 7, 28))
+        self.assertEqual((got["med"], got["std_day"]), (999, "20260101"))
+
+    def test_dated_prices_win_over_undated_ones(self):
+        """기준일이 빈 항목은 연도를 알 수 없어 최신으로 볼 수 없다."""
+        got = C.summarize({"": [100], "20250101": [900]}, dt.date(2026, 7, 28))
+        self.assertEqual((got["med"], got["std_day"]), (900, "20250101"))
 
     def test_single_unit_complex(self):
-        got = C.summarize([500], "20260101", dt.date(2026, 7, 28))
+        got = C.summarize({"20260101": [500]}, dt.date(2026, 7, 28))
         self.assertEqual((got["min"], got["med"], got["max"], got["n"]), (500, 500, 500, 1))
+
+    def test_no_prices_yields_no_record(self):
+        self.assertIsNone(C.summarize({}, dt.date(2026, 7, 28)))
+        self.assertIsNone(C.summarize({"20260101": []}, dt.date(2026, 7, 28)))
 
     def test_fetch_date_is_recorded(self):
         """재조회 간격을 재려면 마지막 조회일이 있어야 한다."""
-        self.assertEqual(C.summarize([1], "", dt.date(2026, 7, 28))["fetched"], "2026-07-28")
+        self.assertEqual(C.summarize({"": [1]}, dt.date(2026, 7, 28))["fetched"], "2026-07-28")
 
 
 class RefreshPolicyTests(unittest.TestCase):
@@ -66,79 +96,124 @@ class RefreshPolicyTests(unittest.TestCase):
     """
     TODAY = dt.date(2026, 7, 28)
 
+    V = C.REC_VERSION
+
     def test_current_year_is_skipped(self):
-        self.assertFalse(C.needs_refresh({"std_day": "20260101"}, 2026, self.TODAY))
+        self.assertFalse(C.needs_refresh({"std_day": "20260101", "v": self.V},
+                                         2026, self.TODAY))
 
     def test_stale_record_is_not_refetched_before_the_interval(self):
         """대장이 몇 해 전 값만 들고 있어도 재조회 간격 전에는 부르지 않는다."""
-        rec = {"std_day": "20200101", "fetched": "2026-07-20"}   # 8일 전
+        rec = {"std_day": "20200101", "fetched": "2026-07-20", "v": self.V}   # 8일 전
         self.assertFalse(C.needs_refresh(rec, 2026, self.TODAY))
 
     def test_stale_record_is_refetched_after_the_interval(self):
-        rec = {"std_day": "20200101", "fetched": "2026-05-01"}   # 88일 전
+        rec = {"std_day": "20200101", "fetched": "2026-05-01", "v": self.V}   # 88일 전
         self.assertTrue(C.needs_refresh(rec, 2026, self.TODAY))
 
     def test_record_without_fetch_date_is_checked_once(self):
         """조회일 기록 전 데이터는 한 번은 다시 본다."""
-        self.assertTrue(C.needs_refresh({"std_day": "20250101"}, 2026, self.TODAY))
+        self.assertTrue(C.needs_refresh({"std_day": "20250101", "v": self.V},
+                                        2026, self.TODAY))
 
     def test_missing_or_malformed_record_is_refetched(self):
         self.assertTrue(C.needs_refresh(None, 2026, self.TODAY))
         self.assertTrue(C.needs_refresh({}, 2026, self.TODAY))
-        self.assertTrue(C.needs_refresh({"std_day": ""}, 2026, self.TODAY))
-        self.assertTrue(C.needs_refresh({"std_day": "20200101", "fetched": "엉망"},
-                                        2026, self.TODAY))
+        self.assertTrue(C.needs_refresh({"std_day": "", "v": self.V}, 2026, self.TODAY))
+        self.assertTrue(C.needs_refresh({"std_day": "20200101", "fetched": "엉망",
+                                         "v": self.V}, 2026, self.TODAY))
 
     def test_current_year_wins_over_fetch_interval(self):
         """올해 기준일을 확보했으면 조회일이 아무리 오래됐어도 부르지 않는다."""
-        rec = {"std_day": "20260101", "fetched": "2026-01-02"}
+        rec = {"std_day": "20260101", "fetched": "2026-01-02", "v": self.V}
         self.assertFalse(C.needs_refresh(rec, 2026, self.TODAY))
+
+    def test_old_format_record_is_refetched_even_for_this_year(self):
+        """판이 낮은 레코드는 공시연도를 섞어 요약한 값이라 기준연도와 무관하게 다시 부른다."""
+        self.assertTrue(C.needs_refresh({"std_day": "20260101", "fetched": "2026-07-28"},
+                                        2026, self.TODAY))
+
+
+class SamplePagesTests(unittest.TestCase):
+    """페이지 표본. 앞에서부터 몇 장만 읽으면 동·호 순서 탓에 저층 편향이 생긴다."""
+
+    def test_small_complex_is_read_in_full(self):
+        self.assertEqual(C.sample_pages(250, rows=100, want=6), [1, 2, 3])
+
+    def test_single_page(self):
+        self.assertEqual(C.sample_pages(40, rows=100, want=6), [1])
+
+    def test_empty_still_asks_for_the_first_page(self):
+        self.assertEqual(C.sample_pages(0, rows=100, want=6), [1])
+
+    def test_large_complex_is_sampled_across_the_whole_range(self):
+        pages = C.sample_pages(10000, rows=100, want=6)   # 100페이지
+        self.assertEqual(len(pages), 6)
+        self.assertEqual((pages[0], pages[-1]), (1, 100))
+        self.assertEqual(pages, sorted(set(pages)))
+
+    def test_sample_never_exceeds_the_page_count(self):
+        for total in (1, 99, 100, 101, 599, 601, 12345):
+            pages = C.sample_pages(total, rows=100, want=6)
+            self.assertLessEqual(max(pages), math.ceil(total / 100) or 1, total)
+            self.assertGreaterEqual(min(pages), 1, total)
 
 
 class FetchPricesTests(unittest.TestCase):
     KEYS = {"sgg": "11680", "umd": "10300", "bun": "0012", "ji": "0000"}
 
-    @mock.patch("collect_official_price.L.get_items")
-    def test_pages_until_short_page(self, get_items):
-        """전유부를 끝까지 읽는다. 첫 페이지만 보면 동·호 순서 탓에 저층 편향이 생긴다."""
-        get_items.side_effect = [
-            [{"hsprc": "100", "stdDay": "20260101"}] * C.ROWS,
-            [{"hsprc": "900", "stdDay": "20260101"}] * 3,
-        ]
-        prices, std = C.fetch_prices(self.KEYS, "key")
-        self.assertEqual(len(prices), C.ROWS + 3)
-        self.assertEqual((min(prices), max(prices), std), (100, 900, "20260101"))
-        self.assertEqual(get_items.call_count, 2)
+    @mock.patch("collect_official_price.L.get_items_total")
+    def test_prices_are_grouped_by_standard_day(self, get_items_total):
+        """항목 하나는 '호 × 공시연도'다 — 연도별로 나눠 담아야 최신만 골라 쓸 수 있다."""
+        get_items_total.return_value = ([{"hsprc": "100", "stdDay": "20130101"},
+                                         {"hsprc": "900", "stdDay": "20260101"},
+                                         {"hsprc": "700", "stdDay": "20260101"}], 3)
+        self.assertEqual(C.fetch_prices(self.KEYS, "key"),
+                         {"20130101": [100], "20260101": [900, 700]})
 
-    @mock.patch("collect_official_price.L.get_items")
-    def test_zero_and_missing_prices_are_dropped(self, get_items):
-        get_items.return_value = [{"hsprc": "0"}, {"hsprc": ""}, {}, {"hsprc": "500",
-                                                                     "stdDay": "20260101"}]
-        prices, std = C.fetch_prices(self.KEYS, "key")
-        self.assertEqual((prices, std), ([500], "20260101"))
+    @mock.patch("collect_official_price.L.get_items_total")
+    def test_total_count_bounds_the_page_reads(self, get_items_total):
+        """전량 페이징은 단지당 60회였다 — totalCount로 표본 페이지만 읽는다."""
+        get_items_total.return_value = ([{"hsprc": "100", "stdDay": "20260101"}] * C.ROWS,
+                                        1000000)   # 10,000페이지
+        C.fetch_prices(self.KEYS, "key")
+        self.assertEqual(get_items_total.call_count, C.SAMPLE_PAGES)
 
-    @mock.patch("collect_official_price.L.get_items")
-    def test_empty_response_yields_nothing(self, get_items):
-        get_items.return_value = []
-        self.assertEqual(C.fetch_prices(self.KEYS, "key"), ([], ""))
+    @mock.patch("collect_official_price.L.get_items_total")
+    def test_short_first_page_needs_no_more_calls(self, get_items_total):
+        get_items_total.return_value = ([{"hsprc": "100", "stdDay": "20260101"}] * 7, 7)
+        C.fetch_prices(self.KEYS, "key")
+        self.assertEqual(get_items_total.call_count, 1)
 
-    @mock.patch("collect_official_price.L.get_items")
-    def test_request_carries_the_lookup_keys(self, get_items):
-        get_items.return_value = []
+    @mock.patch("collect_official_price.L.get_items_total")
+    def test_zero_and_missing_prices_are_dropped(self, get_items_total):
+        get_items_total.return_value = ([{"hsprc": "0"}, {"hsprc": ""}, {},
+                                         {"hsprc": "500", "stdDay": "20260101"}], 4)
+        self.assertEqual(C.fetch_prices(self.KEYS, "key"), {"20260101": [500]})
+
+    @mock.patch("collect_official_price.L.get_items_total")
+    def test_empty_response_yields_nothing(self, get_items_total):
+        get_items_total.return_value = ([], 0)
+        self.assertEqual(C.fetch_prices(self.KEYS, "key"), {})
+        self.assertEqual(get_items_total.call_count, 1)
+
+    @mock.patch("collect_official_price.L.get_items_total")
+    def test_request_carries_the_lookup_keys(self, get_items_total):
+        get_items_total.return_value = ([], 0)
         C.fetch_prices(self.KEYS, "SVCKEY")
-        params = get_items.call_args.args[1]
+        params = get_items_total.call_args.args[1]
         self.assertEqual(params["sigunguCd"], "11680")
         self.assertEqual(params["bjdongCd"], "10300")
         self.assertEqual(params["bun"], "0012")
         self.assertEqual(params["ji"], "0000")
         self.assertEqual(params["serviceKey"], "SVCKEY")
 
-    @mock.patch("collect_official_price.L.get_items")
-    def test_page_loop_is_bounded(self, get_items):
-        """응답이 계속 가득 차도 무한 루프에 빠지지 않아야 한다."""
-        get_items.return_value = [{"hsprc": "100"}] * C.ROWS
+    @mock.patch("collect_official_price.L.get_items_total")
+    def test_page_loop_is_bounded_without_total_count(self, get_items_total):
+        """totalCount를 안 주는 응답이 계속 가득 차도 무한 루프에 빠지지 않아야 한다."""
+        get_items_total.return_value = ([{"hsprc": "100"}] * C.ROWS, None)
         C.fetch_prices(self.KEYS, "key")
-        self.assertEqual(get_items.call_count, C.MAX_PAGES)
+        self.assertEqual(get_items_total.call_count, C.MAX_PAGES)
 
 
 if __name__ == "__main__":

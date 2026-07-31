@@ -10,12 +10,11 @@
 | Secret 이름 | 용도 | 발급처 |
 |---|---|---|
 | `DATA_GO_KR_KEY` | 국토부 실거래·K-apt·학교알리미 | 공공데이터포털(data.go.kr) — **일반 인증키(Decoding)** |
+| `DATA_GO_APT_PRICE` | 실거래 상세 + 건축HUB 건축물대장(세대수·공시가격) | 위와 같은 data.go.kr 계정 키. 건축HUB는 **별도 활용신청·승인 필요** |
 | `KAKAO_REST_API_KEY` | 주소→좌표, 지하철·초등학교 거리 | Kakao Developers → 앱 → REST API 키 |
 | `REB_RONE_KEY` | 매매·전세 가격지수, 전세가율 | 한국부동산원 R-ONE(reb.or.kr/r-one) |
 | `NAVER_MAP_CLIENT_ID` / `_SECRET` | (선택) Kakao 대체 지도 | 네이버클라우드 Maps |
 | `JUSO_API_KEY` | (선택) 주소→좌표 대체 | juso.go.kr |
-| `VWORLD_KEY` | 공동주택 공시가격(시가표준액) 조회 | V-World(vworld.kr) 오픈API 신청 → **공동주택가격 속성정보(getApartHousingPriceAttr)** |
-| `VWORLD_DOMAIN` | (선택) 위 키 발급 시 등록한 도메인 | V-World는 요청의 `domain` 파라미터가 키 발급 시 등록한 도메인과 달라도 응답이 실패(502 추정)할 수 있음. 키를 `topda.kr`로 등록했다면 생략 가능(기본값). 다른 도메인(예: 개인 블로그 URL)으로 등록했다면 그 값을 넣어야 함 |
 | `SUPABASE_URL` / `SUPABASE_ANON_KEY` | 게시판 공개글 공유(모든 방문자에게 노출) | Supabase 프로젝트 — 설정은 `_meta/SUPABASE_SETUP.md` 참고 |
 
 ## 2) 실행
@@ -33,42 +32,50 @@
 | `collect_market.py` | R-ONE | `market.json`(지역별 매매·전세 지수·전세가율) |
 | `collect_news.py` | 구글 뉴스 RSS(키 불필요) | `news.json`(홈 "이번 주 핵심 이슈" + "섹터별 부동산 뉴스") |
 | `collect_bond_rate.py` | 주택도시기금 포털 페이지 파싱(키 불필요·**공식 API 아님**) | `bond_rate.json`(제1종국민주택채권 당일 고객부담률) — 등기비용·종합계산기 할인율 입력란 자동 채움 |
-| `collect_official_price.py` | Kakao(주소→PNU) + V-World(PNU→공시가격) | `official_price.json`(단지·평형별 공동주택가격/시가표준액) — 종합계산기 시가표준액 검색 위젯에서 실거래가보다 우선 표시. **연 1회 로컬 수동 실행**(아래 6번 참고), GitHub Actions 자동 실행은 지원 안 함 |
+| `collect_official_price.py` | 건축HUB 건축물대장 주택가격(`getBrHsprcInfo`) + `complex_addr.json` 조회키 | `official_price.json`(단지별 공동주택가격 = 아파트의 시가표준액) — 종합계산기·취득세 계산기의 '단지 검색으로 공시가격 넣기' 위젯. 매일 자동 실행(`refresh-official-price.yml`), 거래가 많은 단지부터 채운다(아래 6번) |
 | `lib_pdata.py` | 공용 유틸 | — |
 
-## 6) 공동주택 공시가격 — 왜 로컬에서만 돌리나
+## 6) 공동주택 공시가격 (시가표준액 검색)
 
-2026-07-18 확인: V-World(`api.vworld.kr`) 호출이 **GitHub Actions의 클라우드 IP에서는 항상
-502/연결끊김으로 실패**한다. 브라우저·가정용 네트워크에서는 동일 키·`domain` 파라미터로
-정상 응답하는 것을 확인했으므로 키·코드 문제가 아니라 **V-World가 클라우드 IP 대역을
-차단**하는 것으로 판단된다. data.go.kr에도 같은 데이터(`국토교통부_공동주택가격정보`)가
-등록돼 있지만 API 유형이 `LINK`라 실제로는 vworld.kr로 리다이렉트되는 카탈로그 항목일
-뿐이라 우회가 안 된다.
+**출처**: 국토교통부 건축HUB 건축물대장정보 서비스 `getBrHsprcInfo`(apis.data.go.kr).
+`DATA_GO_APT_PRICE` 키로 부르되, data.go.kr에서 **'국토교통부_건축HUB_건축물대장정보 서비스'를
+활용신청·승인**해야 한다(미승인이면 수집기가 권한 오류를 남기고 중단한다).
 
-공동주택 공시가격은 애초에 **연 1회**(매년 1월 1일 기준, 보통 4~5월 발표)만 갱신되므로
-자동화 실익도 적다. 그래서 `refresh-official-price.yml`은 자동 스케줄 없이
-`workflow_dispatch`(수동 실행)만 남겨뒀고, 정기 갱신은 사람이 다음과 같이 로컬에서
-전량 수집 후 커밋·푸시하면 된다:
+V-World 경로(Kakao 주소→PNU→`getApartHousingPriceAttr`)는 2026-07-27에 걷어냈다.
+`api.vworld.kr`이 GitHub Actions의 클라우드 IP를 차단해 한 건도 못 모았고(브라우저·가정용
+네트워크에서는 같은 키로 정상 응답), data.go.kr의 같은 데이터는 API 유형이 `LINK`라
+vworld.kr로 리다이렉트될 뿐이어서 우회가 안 됐다. `VWORLD_*` 시크릿은 더 이상 쓰이지 않는다.
+
+### 응답 항목은 '호 × 공시연도'다 — 섞으면 안 된다
+
+이 API가 돌려주는 항목 하나는 전유부(호) 하나가 아니라 **호 하나의 공시연도 하나**다.
+1,000세대 단지에 10년치 이력이 있으면 10,000건이 나온다. 2026-08-01 이전 구현은 이걸 모르고
+전량을 한 통에 담아 요약해, 2013년 가격과 2026년 가격이 섞인 중앙값을 시가표준액으로 내보냈다
+(수집된 28개 중 18개가 페이지 상한 6,000건에 걸려 잘리기까지 했다). 지금은 `stdDay`별로
+나눠 담고 **가장 최근 공시기준일의 가격만** 요약한다. 레코드의 `v`가 형식 판이고,
+판이 낮은 레코드는 기준연도와 무관하게 다시 부른다.
+
+### 페이지 표본
+
+첫 페이지의 `totalCount`로 전체 페이지 수를 구한 뒤 그 범위에 고르게 흩어 `SAMPLE_PAGES`(6)개만
+읽는다. 항목이 동·호 순서라 앞쪽만 읽으면 저층 편향이 생기지만, 고르게 흩으면 그 편향이 없다 —
+중앙값을 내는 데 전수가 필요하지는 않다. 단지당 호출이 최대 60회에서 6회로 줄었다.
+
+### 처리 순서
+
+`finder_index.json`의 유효거래수 내림차순으로 채운다. 전국 16,000여 개를 다 채우는 데 며칠이
+걸리는데, 그동안 검색되는 단지가 사람들이 실제로 찾는 단지여야 위젯이 쓸모 있다.
+아직 안 채워진 단지는 위젯이 "아직 수록되지 않은 단지입니다"와 함께 부동산공시가격알리미
+링크를 보여준다.
+
+로컬에서 한 번에 다 채우려면(`TIME_BUDGET_MIN=0`이 무제한):
 
 ```bash
 cd _meta
-KAKAO_REST_API_KEY=... VWORLD_KEY=... VWORLD_DOMAIN=topda.kr \
-  TIME_BUDGET_MIN=0 python collect_official_price.py
+DATA_GO_APT_PRICE=... TIME_BUDGET_MIN=0 python collect_official_price.py
 ```
 
-`TIME_BUDGET_MIN=0`은 "무제한"을 뜻한다(CI에서만 쓰는 18분 제한을 로컬에서는 끔) —
-이미 처리된 단지는 건너뛰므로 재실행해도 안전하다. 완료되면:
-
-```bash
-cd ..
-git add site/assets/official_price.json
-git commit -m "공동주택 공시가격 연간 갱신 ($(date +%Y-%m-%d))"
-git push
-```
-
-`VWORLD_DOMAIN`은 V-World 키 발급 시 등록한 도메인과 정확히 일치해야 한다(다르면
-`INCORRECT_KEY` 에러). 등록한 도메인을 모르면 V-World 마이페이지 → 인증키 관리에서
-확인하거나, 위 API레퍼런스 페이지의 "API결과 미리보기"로 먼저 테스트해볼 것.
+이미 올해 기준일로 채운 단지는 건너뛰므로 재실행해도 안전하다.
 
 ## 4) R-ONE (지역 시세 대시보드)
 `collect_market.py`는 통계표를 **STATBL_ID로 호출하고 지역코드는 지정하지 않아**,

@@ -91,11 +91,8 @@ def get_xml(base, params, headers=None, timeout=20):
     return ET.fromstring(_request(url, headers=headers, timeout=timeout))
 
 
-def get_items(base, params, headers=None, timeout=20):
-    """data.go.kr 응답(XML 또는 JSON 무관)에서 item들을 dict 목록으로 정규화해 반환.
-    버전·포맷이 바뀌어도(예: V4 기본 JSON) 동일하게 동작. AuthError/404는 그대로 전파."""
-    url = base + ("&" if "?" in base else "?") + urllib.parse.urlencode(params)
-    text = _request(url, headers=headers, timeout=timeout).strip()
+def _parse_items(text):
+    """data.go.kr 응답 본문 → (item 목록, totalCount 또는 None). XML·JSON 모두 처리."""
     if text[:1] in ("{", "["):
         body = ((json.loads(text).get("response") or {}).get("body")) or {}
         items = body.get("items")
@@ -105,11 +102,40 @@ def get_items(base, params, headers=None, timeout=20):
             item = items
         else:
             item = body.get("item")
+        total = body.get("totalCount")
         if item is None:
-            return []
-        return item if isinstance(item, list) else [item]
+            item = []
+        elif not isinstance(item, list):
+            item = [item]
+        # 결과가 없을 때 items를 빈 문자열로 주는 엔드포인트가 있다("items": ""). 그대로
+        # 넘기면 호출부의 it.get(...)이 AttributeError로 터지므로 dict만 남긴다.
+        return [it for it in item if isinstance(it, dict)], _as_int(total)
     root = ET.fromstring(text)
-    return [{c.tag: (c.text or "").strip() for c in it} for it in root.iter("item")]
+    total = root.find(".//totalCount")
+    return ([{c.tag: (c.text or "").strip() for c in it} for it in root.iter("item")],
+            _as_int(total.text if total is not None else None))
+
+
+def _as_int(v):
+    try:
+        return int(str(v).strip())
+    except (TypeError, ValueError):
+        return None
+
+
+def get_items(base, params, headers=None, timeout=20):
+    """data.go.kr 응답(XML 또는 JSON 무관)에서 item들을 dict 목록으로 정규화해 반환.
+    버전·포맷이 바뀌어도(예: V4 기본 JSON) 동일하게 동작. AuthError/404는 그대로 전파."""
+    return get_items_total(base, params, headers=headers, timeout=timeout)[0]
+
+
+def get_items_total(base, params, headers=None, timeout=20):
+    """get_items 와 같되 응답의 totalCount(전체 건수)를 함께 돌려준다 → (items, total).
+
+    페이지 수를 미리 알아야 하는 수집기용이다. totalCount를 안 주는 엔드포인트도 있어
+    그때는 None을 돌려주므로, 호출부는 '짧은 페이지에서 멈추기'로 폴백해야 한다."""
+    url = base + ("&" if "?" in base else "?") + urllib.parse.urlencode(params)
+    return _parse_items(_request(url, headers=headers, timeout=timeout).strip())
 
 
 KAKAO_KEYS = ["KAKAO_REST_API_KEY", "KAKAO_REST_KEY", "KAKAO_API_KEY"]
