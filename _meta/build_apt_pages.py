@@ -183,7 +183,10 @@ def page_head(title, desc, canonical):
 def footer_html(as_of):
     return (
         '<footer>\n'
-        f'<p>기준: 국토교통부 아파트 매매 실거래가 OpenAPI · 세대수/준공: K-apt 공동주택 기본정보 · {esc(as_of)} 자동 갱신</p>\n'
+        # 지역 페이지는 한 표에 여러 단지가 섞여 출처가 단지마다 다르다 — 둘 다 적는다.
+        # (K-apt는 의무관리대상만 수록해 나머지는 건축물대장으로 채운다.)
+        f'<p>기준: 국토교통부 아파트 매매 실거래가 OpenAPI · 세대수/준공: K-apt 공동주택 기본정보'
+        f'·국토교통부 건축HUB 건축물대장정보 · {esc(as_of)} 자동 갱신</p>\n'
         '<p>본 페이지는 일반 정보 제공용입니다. 실거래가는 신고 기준이며 정정·취소로 달라질 수 있습니다. '
         '거래 판단의 근거로 사용하기 전 원자료를 확인하세요.</p>\n'
         '<p><a href="/index.html">톺다 홈</a> · <a href="/calculators/search.html">맞춤 단지 검색</a> · '

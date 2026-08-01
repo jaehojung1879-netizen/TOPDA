@@ -33,15 +33,33 @@
 조회키는 실거래 원장이 주는 값이라 단지명을 한 글자도 대조하지 않는다. 그 키는
 collect_transactions.py가 complex_addr.json에 적어 둔다.
 
-■ 수집 단위
+■ 수집 단위 — 항목 하나는 '호 × 공시기준일'이다 (2026-08-01 수정)
 
-응답은 전유부(호) 하나가 항목 하나다. 단지 하나를 끝까지 페이징해 최저·중앙·최고가를
-저장한다. 첫 페이지만 보면 동·호 순서 탓에 저층 편향이 생겨 공시가격을 낮게 보이게 한다.
+응답의 항목 하나는 전유부(호) 하나가 아니라 **호 하나의 공시연도 하나**다. 1,000세대
+단지에 10년치 이력이 있으면 10,000건이 나온다. 초기 구현은 이걸 모르고 전량을 한 통에
+담아 min·med·max를 냈다 — 2013년 가격과 2026년 가격이 섞여 중앙값이 실제 시가표준액보다
+한참 낮게 나왔고(수집된 28개 중 18개가 페이지 상한 6,000건에 걸려 잘렸다), std_day도
+'마지막으로 본 항목의 기준일'이라 값과 연도가 서로 맞지 않았다.
+
+그래서 지금은 기준일(stdDay)별로 나눠 담고 **가장 최근 기준일의 가격만** 요약한다.
+
+■ 페이지 수 (같은 수정)
+
+전량 페이징은 단지당 최대 60회 호출이라 18분 예산에 16개밖에 못 채웠다(전국 16,141개
+→ 1,000일). 이제 첫 페이지의 totalCount로 전체 페이지 수를 알아낸 뒤, 그 범위에 고르게
+흩어 SAMPLE_PAGES개만 읽는다. 동·호 순서로 정렬돼 있어 앞쪽만 읽으면 저층 편향이 생기지만
+고르게 흩으면 그 편향이 없다 — 중앙값을 내는 데는 전수가 필요하지 않다.
+
+■ 처리 순서
+
+거래가 많은 단지부터 채운다(finder_index.json의 유효거래수). 전수를 채우는 데는 며칠이
+걸리는데, 그동안 검색되는 단지가 사람들이 실제로 찾는 단지여야 계산기가 쓸모 있다.
 
 공시가격은 연 1회(1월 1일 기준, 4~5월 발표) 갱신이라 급할 게 없다. 시간 예산 안에서
 처리한 만큼만 저장하고 다음 실행이 이어받는다. 이미 올해 기준일로 채운 단지는 건너뛴다.
 """
 import datetime as dt
+import math
 import os
 import statistics
 import sys
@@ -50,14 +68,19 @@ import lib_pdata as L
 
 HSPRC_URL = "https://apis.data.go.kr/1613000/BldRgstHubService/getBrHsprcInfo"
 COMPLEX_ADDR_JSON = os.path.join(L.SITE_ASSETS, "complex_addr.json")
+FINDER_INDEX_JSON = os.path.join(L.SITE_ASSETS, "finder_index.json")
 OUT_JSON = os.path.join(L.SITE_ASSETS, "official_price.json")
 
 ROWS = 100          # 명세상 페이지당 최대 100건
-MAX_PAGES = 60      # 6,000세대 초과 단지는 없다(안전 상한 — 무한 루프 방지)
+SAMPLE_PAGES = 6    # 단지당 읽을 페이지 수(전체 범위에 고르게 흩는다) — 위 '페이지 수' 참고
+MAX_PAGES = 60      # totalCount를 못 받았을 때만 쓰는 안전 상한(무한 루프 방지)
 SAVE_EVERY = 50     # 체크포인트 주기(단지 수)
 # 기준연도가 올해가 아닌 단지를 다시 볼 간격(일). 대장의 주택가격은 공시가격을 전재한
 # 값이라 갱신이 늦을 수 있어, 매 실행 재조회하면 헛돈다. 공시는 4~5월에 발표된다.
 RECHECK_DAYS = 30
+# 레코드 형식 판(版). 2026-08-01 이전 레코드는 공시연도를 섞어 요약한 값이라 기준연도가
+# 올해여도 믿을 수 없다 — 판이 낮으면 다시 부른다.
+REC_VERSION = 2
 
 
 def _to_int(v):
@@ -88,13 +111,35 @@ def lookup_keys(entry):
     return {"sgg": sgg, "umd": umd, "bun": bun, "ji": pad(entry.get("ji")) or "0000"}
 
 
-def summarize(prices, std_day, today=None):
-    """가격 목록 → 저장 레코드. 단지 하나를 대표하는 값은 중앙값으로 둔다.
+def summarize(by_day, today=None):
+    """{공시기준일: [가격, ...]} → 저장 레코드. 없으면 None.
 
-    fetched는 마지막 조회일 — 대장 기재가 늦은 단지를 재조회할 간격을 재는 데 쓴다."""
+    ■ 가장 최근 기준일의 가격만 쓴다
+      응답은 호 하나당 공시연도마다 한 건이라 전부 한 통에 담으면 2013년 가격과 2026년
+      가격이 섞인다. 그 중앙값은 어느 해의 시가표준액도 아니다.
+
+    단지 하나를 대표하는 값은 중앙값으로 둔다. fetched는 마지막 조회일 — 대장 기재가
+    늦은 단지를 재조회할 간격을 재는 데 쓴다."""
+    days = [d for d in by_day if by_day[d]]
+    if not days:
+        return None
+    # 기준일 문자열(YYYYMMDD)은 사전순 = 시간순이다. 기준일이 빈 항목("")은 연도를 알 수
+    # 없어 최신으로 볼 수 없으니, 연도가 붙은 기준일이 하나라도 있으면 그쪽을 쓴다.
+    dated = [d for d in days if d]
+    if dated:
+        # 해마다 호 수가 비슷하게 나오는 게 정상인데, 공시 발표기(4~5월)에는 새 기준일이
+        # 몇 호에만 먼저 기재돼 있을 수 있다. 그 몇 호로 중앙값을 내면 단지를 대표하지
+        # 못하므로, 표본이 가장 큰 해의 1/3에 못 미치는 기준일은 건너뛰고 그 앞 해를 쓴다
+        # (std_day를 함께 저장하니 화면에는 '몇 년도 기준'인지 그대로 드러난다).
+        big = max(len(by_day[d]) for d in dated)
+        enough = [d for d in dated if len(by_day[d]) * 3 >= big]
+        std_day = max(enough or dated)
+    else:
+        std_day = ""
+    prices = by_day[std_day]
     return {
         "min": min(prices), "med": int(statistics.median(prices)), "max": max(prices),
-        "n": len(prices), "std_day": std_day,
+        "n": len(prices), "std_day": std_day, "v": REC_VERSION,
         "fetched": (today or dt.date.today()).strftime("%Y-%m-%d"),
     }
 
@@ -106,8 +151,12 @@ def needs_refresh(rec, this_year, today=None, min_days=RECHECK_DAYS):
     문제는 건축물대장의 주택가격이 공시가격을 '전재'한 값이라 갱신이 늦을 수 있다는 것이다
     (활용가이드 샘플의 stdDay가 20200101이다). 기준연도만 보고 판단하면 대장이 몇 해 전
     값만 들고 있는 단지를 매 실행 다시 부르게 된다 — 16,000개 단지면 영원히 헛돈다.
-    그래서 마지막 조회일로 재조회 간격을 둔다."""
+    그래서 마지막 조회일로 재조회 간격을 둔다.
+
+    단, 옛 판(공시연도를 섞어 요약한 값)은 기준연도와 무관하게 다시 부른다."""
     if not rec:
+        return True
+    if int(rec.get("v") or 1) < REC_VERSION:
         return True
     std = str(rec.get("std_day") or "")
     if len(std) >= 4 and std[:4] == str(this_year):
@@ -122,24 +171,70 @@ def needs_refresh(rec, this_year, today=None, min_days=RECHECK_DAYS):
     return gap >= min_days
 
 
+def sample_pages(total, rows=ROWS, want=SAMPLE_PAGES):
+    """전체 건수 → 읽을 페이지 번호 목록(1부터). 전체 범위에 고르게 흩는다.
+
+    항목은 동·호 순서라 앞에서부터 want쪽만 읽으면 저층·앞동 편향이 생긴다. 페이지가
+    want개 이하면 전부 읽는다(그게 전수다)."""
+    pages = max(1, math.ceil(max(0, total) / rows))
+    if pages <= want:
+        return list(range(1, pages + 1))
+    step = (pages - 1) / (want - 1)
+    return sorted({1 + round(i * step) for i in range(want)})
+
+
+def _page(keys, service_key, page):
+    return L.get_items_total(HSPRC_URL, {
+        "serviceKey": service_key,
+        "sigunguCd": keys["sgg"], "bjdongCd": keys["umd"],
+        "platGbCd": "0", "bun": keys["bun"], "ji": keys["ji"],
+        "numOfRows": ROWS, "pageNo": page, "_type": "json",
+    })
+
+
 def fetch_prices(keys, service_key):
-    """지번 하나의 전유부 주택가격 전량 → ([가격, ...], 기준일)."""
-    prices, std_day = [], ""
-    for page in range(1, MAX_PAGES + 1):
-        items = L.get_items(HSPRC_URL, {
-            "serviceKey": service_key,
-            "sigunguCd": keys["sgg"], "bjdongCd": keys["umd"],
-            "platGbCd": "0", "bun": keys["bun"], "ji": keys["ji"],
-            "numOfRows": ROWS, "pageNo": page, "_type": "json",
-        })
+    """지번 하나의 주택가격 표본 → {공시기준일: [가격, ...]}.
+
+    항목 하나는 '호 × 공시기준일'이라 연도가 섞여 온다. 기준일별로 나눠 담아야 호출부가
+    최신 연도만 골라 쓸 수 있다(전부 한 통에 담으면 2013년 가격이 2026년 중앙값을 끌어내린다).
+    """
+    by_day = {}
+
+    def take(items):
         for it in items:
             p = _to_int(it.get("hsprc"))
             if p > 0:
-                prices.append(p)
-                std_day = str(it.get("stdDay") or "").strip() or std_day
-        if len(items) < ROWS:
-            break
-    return prices, std_day
+                by_day.setdefault(str(it.get("stdDay") or "").strip(), []).append(p)
+
+    items, total = _page(keys, service_key, 1)
+    take(items)
+    if not items:
+        return by_day
+    if total is None:
+        # totalCount를 안 주는 응답 — 옛 방식대로 짧은 페이지가 나올 때까지 순차로 읽는다.
+        if len(items) >= ROWS:
+            for page in range(2, MAX_PAGES + 1):
+                items, _ = _page(keys, service_key, page)
+                take(items)
+                if len(items) < ROWS:
+                    break
+        return by_day
+    for page in sample_pages(total)[1:]:
+        take(_page(keys, service_key, page)[0])
+    return by_day
+
+
+def trade_counts():
+    """'지역키|단지명' → 유효거래수. 없으면 빈 dict.
+
+    전수를 채우는 데 며칠이 걸리므로 처리 순서가 곧 '오늘 검색되는 단지'다. 거래가 많은
+    단지가 사람들이 계산기에 넣어 보는 단지라 그 순서로 채운다."""
+    idx = L.load_json(FINDER_INDEX_JSON, default=None) or {}
+    out = {}
+    for c in idx.get("complexes") or []:
+        key = f"{c.get('rk')}|{c.get('n')}"
+        out[key] = max(out.get(key, 0), _to_int(c.get("c")))
+    return out
 
 
 def main():
@@ -164,8 +259,11 @@ def main():
             no_keys += 1
         elif needs_refresh(out.get(name), this_year):
             todo.append((name, keys))
+    rank = trade_counts()
+    todo.sort(key=lambda t: -rank.get(t[0], 0))
     print(f"[공시가격] 조회키 보유 {len(addr) - no_keys:,}/{len(addr):,}개 단지 · "
-          f"이번 대상 {len(todo):,}개 (키 없음 {no_keys:,})")
+          f"이번 대상 {len(todo):,}개 (키 없음 {no_keys:,}) · "
+          f"거래 많은 순 {'적용' if rank else '미적용(finder_index 없음)'}")
     if no_keys and not todo:
         print("‼ 조회키가 없어 한 건도 부를 수 없다 — complex_addr.json의 "
               "_meta.resolved_fields로 행정코드 항목명을 확인하라", file=sys.stderr)
@@ -180,7 +278,7 @@ def main():
                   f"남은 단지는 다음 실행에서 이어서 수집")
             break
         try:
-            prices, std_day = fetch_prices(keys, service_key)
+            by_day = fetch_prices(keys, service_key)
         except L.AuthError as e:
             print(f"‼ 권한 오류 — data.go.kr에서 '국토교통부_건축HUB_건축물대장정보 서비스'를 "
                   f"활용신청·승인했는지 확인하라 ({e})", file=sys.stderr)
@@ -190,12 +288,13 @@ def main():
             if stat["fail"] <= 3:
                 print(f"  ! {name} 실패: {e}", file=sys.stderr)
             continue
-        if not prices:
+        rec = summarize(by_day)
+        if not rec:
             stat["empty"] += 1
             continue
-        out[name] = summarize(prices, std_day)
+        out[name] = rec
         stat["ok"] += 1
-        stat["units"] += len(prices)
+        stat["units"] += rec["n"]
         since_save += 1
         if since_save >= SAVE_EVERY:
             data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
@@ -204,15 +303,17 @@ def main():
 
     data["_meta"] = {
         "source": "국토교통부 건축HUB 건축물대장정보 서비스(getBrHsprcInfo)",
-        "note": "'지역키|단지명' → {min, med, max, n, std_day, fetched}. 단지의 전유부(호)별 "
-                "주택가격을 전량 조회해 요약한 값(원). 이 값은 '공동주택가격'이며, "
-                "아파트에 한해 지방세법상 시가표준액과 같다(오피스텔·상가는 다르다). "
-                "std_day는 공시기준일 — 대장 기재가 늦을 수 있어 표시할 때 함께 보여줄 것. "
-                "fetched는 마지막 조회일(재조회 간격 계산용).",
+        "note": "'지역키|단지명' → {min, med, max, n, std_day, v, fetched}. 대장의 호별 "
+                "주택가격 중 **가장 최근 공시기준일** 것만 요약한 값(원). 응답 항목은 "
+                "'호 × 공시연도'라 연도를 섞으면 중앙값이 실제보다 낮아진다. "
+                "이 값은 '공동주택가격'이며, 아파트에 한해 지방세법상 시가표준액과 같다"
+                "(오피스텔·상가는 다르다). std_day는 공시기준일 — 대장 기재가 늦을 수 "
+                "있어 표시할 때 함께 보여줄 것. n은 요약에 쓴 호 수(전수가 아니라 표본일 "
+                "수 있다). v는 레코드 형식 판. fetched는 마지막 조회일(재조회 간격 계산용).",
         "unit": "원",
     }
     data["as_of"] = dt.date.today().strftime("%Y-%m-%d")
-    print(f"[공시가격] 이번 실행 {stat['ok']:,}개 단지(전유부 {stat['units']:,}건) · "
+    print(f"[공시가격] 이번 실행 {stat['ok']:,}개 단지(요약에 쓴 호 {stat['units']:,}건) · "
           f"응답없음 {stat['empty']:,} · 실패 {stat['fail']:,} · 누적 {len(out):,}개")
     if stat["ok"]:
         L.save_json_safe(OUT_JSON, data)

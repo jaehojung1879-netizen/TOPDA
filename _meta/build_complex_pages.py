@@ -148,6 +148,7 @@ def aggregate(deals, hh_map, since):
             "deals": valid, "canceled": canceled,
             "n": len(valid),
             "households": info.get("households"),
+            "hh_src": info.get("hh_src"),
             "built_year": info.get("built_year") or last.get("build_year"),
             "last": last,
             "areas": sorted({round(d["area_m2"], 1) for d in valid}),
@@ -496,8 +497,18 @@ def links_block(c, hub_url, siblings):
             '</ul>\n')
 
 
+def hh_source_name(hh_src):
+    """세대수 출처 표기. hh_src가 없는 항목은 K-apt 경로로 붙은 값이다(대장 수집기만 기록)."""
+    return ("국토교통부 건축HUB 건축물대장정보"
+            if str(hh_src or "").startswith(("recap.", "title."))
+            else "공동주택관리정보시스템(K-apt) 공동주택 기본정보")
+
+
 def source_block(c, as_of_date, window_from, indexable=True, region_slug=""):
-    kapt = ('<p>세대수·준공연도는 공동주택관리정보시스템(K-apt) 공동주택 기본정보를 사용했습니다.</p>'
+    # 세대수 출처는 단지마다 다르다. K-apt는 의무관리대상 공동주택만 수록해 수록률이 71%가
+    # 천장이라, 나머지는 건축물대장(집합표제부·표제부)으로 채운다 — 지금 절반 가까이가
+    # 대장 출처다. 전부 K-apt라고 적으면 출처 표기가 사실과 다르다.
+    kapt = (f'<p>세대수·준공연도는 {esc(hh_source_name(c.get("hh_src")))}를 사용했습니다.</p>'
             if (c["households"] or c["built_year"]) else "")
     # 표본이 얇은 단지에는 그 사실을 알린다.
     # ⚠ 여기에 '검색 색인에서 제외했다'고 쓰지 않는다. 색인 여부는 사이트 운영 사정이고

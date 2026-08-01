@@ -26,10 +26,13 @@ concurrency:
   group: refresh-official-price
   cancel-in-progress: false
 
+# 예산: 단지당 호출이 최대 60회에서 6회로 줄어(2026-08-01) 같은 시간에 훨씬 많이 채운다.
+# 그래도 16,000개 단지라 며칠이 걸리므로, 다른 워크플로와 겹치지 않는 시간대인 만큼
+# 예산을 18분 → 50분으로 늘려 초기 적재를 앞당긴다. 다 채우면 대상이 0이라 즉시 끝난다.
 jobs:
   official-price:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -38,9 +41,9 @@ jobs:
 
       - name: Collect official price (건축HUB 건축물대장 주택가격)
         working-directory: _meta
-        timeout-minutes: 20
+        timeout-minutes: 55
         env:
-          TIME_BUDGET_MIN: "18"
+          TIME_BUDGET_MIN: "50"
           # 건축HUB는 data.go.kr 계정 인증키를 쓴다 — '건축HUB 건축물대장정보 서비스'를
           # 같은 계정으로 활용신청·승인해야 한다(미승인 시 수집기가 권한 오류를 남기고 중단).
           DATA_GO_APT_PRICE: ${{ secrets.DATA_GO_APT_PRICE }}

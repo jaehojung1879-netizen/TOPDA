@@ -53,17 +53,25 @@ window.TopdaOfficialPrice = (function () {
     return loading;
   }
 
+  // 단지명으로 시작하는 항목을 앞에 둔다. 앞에서부터 8개를 그냥 끊으면 '자이'를 쳤을 때
+  // 이름이 '○○자이'인 단지가 지역명에 걸린 엉뚱한 단지에 밀린다.
   function search(map, q) {
     q = String(q || '').trim().replace(/\s+/g, '');
     if (q.length < 2) return [];
-    var out = [];
+    var hits = [];
     for (var key in map) {
-      if (key.replace(/\s+/g, '').indexOf(q) < 0) continue;
+      var flat = key.replace(/\s+/g, '');
+      if (flat.indexOf(q) < 0) continue;
       var parts = key.split('|');
-      out.push({ key: key, region: parts[0], name: parts[1] || '', rec: map[key] });
-      if (out.length >= MAX_RESULTS) break;
+      var name = parts[1] || '';
+      var at = name.replace(/\s+/g, '').indexOf(q);
+      hits.push({
+        key: key, region: parts[0], name: name, rec: map[key],
+        rank: at === 0 ? 0 : (at > 0 ? 1 : 2),   // 이름 앞부분 > 이름 안 > 지역명만
+      });
     }
-    return out;
+    hits.sort(function (a, b) { return a.rank - b.rank; });
+    return hits.slice(0, MAX_RESULTS);
   }
 
   function attach(opts) {
@@ -88,6 +96,17 @@ window.TopdaOfficialPrice = (function () {
 
     function note(html) { list.innerHTML = '<p class="op-note">' + html + '</p>'; }
 
+    // 수록 단지가 전국의 일부라 '검색이 고장났다'로 읽히기 쉽다 — 수록 규모를 밝히고
+    // 못 찾았을 때 갈 곳(정본)을 늘 함께 준다.
+    var OFFICIAL_LINK = '<a href="https://www.realtyprice.kr/notice/main/main.do" ' +
+      'target="_blank" rel="noopener">부동산공시가격알리미 ↗</a>';
+
+    function coverageNote(d) {
+      return '수록 단지 ' + Object.keys(d.map).length.toLocaleString() + '개' +
+             (d.as_of ? ' · ' + d.as_of + ' 기준' : '') +
+             ' — 거래가 많은 단지부터 채우는 중입니다. 없으면 ' + OFFICIAL_LINK + '에서 확인하세요.';
+    }
+
     toggle.addEventListener('click', function () {
       if (!panel.hidden) { panel.hidden = true; return; }
       panel.hidden = false;
@@ -96,13 +115,11 @@ window.TopdaOfficialPrice = (function () {
       load().then(function (d) {
         if (!Object.keys(d.map).length) {
           // 아직 수집 전 — 검색 흉내를 내지 않고 정본 링크로 보낸다.
-          note('공시가격 데이터를 준비 중입니다. ' +
-               '<a href="https://www.realtyprice.kr/notice/main/main.do" target="_blank" ' +
-               'rel="noopener">부동산공시가격알리미 ↗</a>에서 직접 확인해 주세요.');
+          note('공시가격 데이터를 준비 중입니다. ' + OFFICIAL_LINK + '에서 직접 확인해 주세요.');
           q.disabled = true;
           return;
         }
-        note('단지명을 2글자 이상 입력하세요.');
+        note('단지명을 2글자 이상 입력하세요.<br>' + coverageNote(d));
       });
     });
 
@@ -111,15 +128,19 @@ window.TopdaOfficialPrice = (function () {
         if (!Object.keys(d.map).length) return;
         var hits = search(d.map, q.value);
         if (!hits.length) {
-          note(q.value.trim().length < 2 ? '단지명을 2글자 이상 입력하세요.'
-                                         : '검색 결과가 없습니다.');
+          note(q.value.trim().length < 2
+               ? '단지명을 2글자 이상 입력하세요.<br>' + coverageNote(d)
+               : '아직 수록되지 않은 단지입니다.<br>' + coverageNote(d));
           return;
         }
+        // 기준일을 결과 줄에도 적는다 — 고르기 전에 몇 년도 공시가격인지 보여야 한다.
         list.innerHTML = hits.map(function (h, i) {
           var r = h.rec;
+          var std = stdDayText(r.std_day);
           return '<button type="button" class="op-hit" data-i="' + i + '">' +
                  '<span class="op-name">' + h.name + '</span>' +
-                 '<span class="op-region">' + h.region + '</span>' +
+                 '<span class="op-region">' + h.region +
+                 (std ? ' · ' + std + ' 기준' : '') + '</span>' +
                  '<span class="op-price">' + won(r.med) + '</span>' +
                  '</button>';
         }).join('');
