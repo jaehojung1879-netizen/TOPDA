@@ -51,5 +51,8 @@ jobs:
         run: python collect_official_price.py
         continue-on-error: true
 
+      # data/official_price_misses.json 도 함께 커밋한다 — 대장에 주택가격이 없거나 서버가
+      # 계속 500을 뱉는 지번의 조회일 기록이다. 이게 푸시되지 않으면 다음 실행이 그 지번을
+      # 처음부터 다시 부른다(2026-08-01 실행은 41건 시도 중 15건이 실패였다).
       - name: Commit official_price.json
-        run: bash _meta/git_commit_push.sh "공동주택 공시가격 자동 보강 ($(date -u +%Y-%m-%d))" site/assets/official_price.json
+        run: bash _meta/git_commit_push.sh "공동주택 공시가격 자동 보강 ($(date -u +%Y-%m-%d))" site/assets/official_price.json data/official_price_misses.json

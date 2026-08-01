@@ -10,6 +10,7 @@ import unittest
 from unittest import mock
 
 import collect_official_price as C
+import lib_pdata as L
 
 
 class LookupKeyTests(unittest.TestCase):
@@ -214,6 +215,95 @@ class FetchPricesTests(unittest.TestCase):
         get_items_total.return_value = ([{"hsprc": "100"}] * C.ROWS, None)
         C.fetch_prices(self.KEYS, "key")
         self.assertEqual(get_items_total.call_count, C.MAX_PAGES)
+
+
+class MissTests(unittest.TestCase):
+    """응답 없음·실패 지번을 기록해 두지 않으면 매 실행 다시 부른다(2026-08-01 CI: 37% 실패)."""
+
+    TODAY = dt.date(2026, 8, 2)
+
+    def test_recent_miss_is_skipped(self):
+        self.assertTrue(C.miss_is_fresh("2026-07-20", self.TODAY))
+
+    def test_old_miss_is_retried(self):
+        self.assertFalse(C.miss_is_fresh("2026-05-01", self.TODAY))   # 93일 전
+
+    def test_unknown_or_malformed_miss_is_retried(self):
+        for v in (None, "", "엉망", "2026-13-45"):
+            self.assertFalse(C.miss_is_fresh(v, self.TODAY), v)
+
+    def test_future_dated_miss_is_retried(self):
+        """시계가 어긋난 기록이 단지를 영구히 묻어 버리면 안 된다."""
+        self.assertFalse(C.miss_is_fresh("2027-01-01", self.TODAY))
+
+
+class BuildTodoTests(unittest.TestCase):
+    TODAY = dt.date(2026, 8, 2)
+    KEYS = {"sgg": "11680", "umd": "10300", "bun": "0012", "ji": "0000"}
+
+    def addr(self, *names):
+        return {n: dict(self.KEYS) for n in names}
+
+    @mock.patch("collect_official_price.trade_counts", return_value={})
+    def test_filled_and_missed_complexes_are_skipped(self, _tc):
+        out = {"가|A": {"std_day": "20260101", "v": C.REC_VERSION}}
+        misses = {"가|B": "2026-07-30"}
+        todo, skipped, _ = C.build_todo(
+            self.addr("가|A", "가|B", "가|C"), out, misses, 2026, self.TODAY)
+        self.assertEqual([n for n, _ in todo], ["가|C"])
+        self.assertEqual((skipped["filled"], skipped["miss"]), (1, 1))
+
+    @mock.patch("collect_official_price.trade_counts", return_value={})
+    def test_complexes_without_lookup_keys_are_counted_not_called(self, _tc):
+        addr = {"가|A": {"sgg": "11680"}}       # 본번·법정동 없음
+        todo, skipped, _ = C.build_todo(addr, {}, {}, 2026, self.TODAY)
+        self.assertEqual(todo, [])
+        self.assertEqual(skipped["no_keys"], 1)
+
+    @mock.patch("collect_official_price.trade_counts")
+    def test_busy_complexes_come_first(self, trade_counts):
+        """전수를 채우는 데 시간이 걸리므로 처리 순서가 곧 '오늘 검색되는 단지'다."""
+        trade_counts.return_value = {"가|B": 500, "가|C": 20}
+        todo, _, ranked = C.build_todo(
+            self.addr("가|A", "가|B", "가|C"), {}, {}, 2026, self.TODAY)
+        self.assertEqual([n for n, _ in todo], ["가|B", "가|C", "가|A"])
+        self.assertTrue(ranked)
+
+
+class ApiErrorEnvelopeTests(unittest.TestCase):
+    """data.go.kr은 한도 초과·키 오류도 HTTP 200 + <item> 없는 봉투로 준다.
+
+    거르지 않으면 '데이터 없는 정상 응답'으로 보여서, 만 건짜리 배치가 조용히 전부 공치고
+    남은 단지를 전부 '응답없음'으로 기록해 버린다."""
+
+    def envelope(self, code, msg):
+        return ('<OpenAPI_ServiceResponse><cmmMsgHeader>'
+                f'<returnAuthMsg>{msg}</returnAuthMsg>'
+                f'<returnReasonCode>{code}</returnReasonCode>'
+                '</cmmMsgHeader></OpenAPI_ServiceResponse>')
+
+    def test_traffic_limit_raises_a_stop_signal(self):
+        text = self.envelope("22", "LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR")
+        with self.assertRaises(L.TrafficExceeded):
+            L._parse_items(text)
+
+    def test_traffic_limit_is_also_an_auth_error(self):
+        """기존 수집기들이 `except L.AuthError`로 이미 즉시 중단을 처리한다."""
+        self.assertTrue(issubclass(L.TrafficExceeded, L.AuthError))
+
+    def test_unregistered_key_raises(self):
+        with self.assertRaises(L.AuthError):
+            L._parse_items(self.envelope("30", "SERVICE_KEY_IS_NOT_REGISTERED_ERROR"))
+
+    def test_normal_empty_response_is_not_an_error(self):
+        """데이터가 없는 정상 응답까지 예외로 만들면 멀쩡한 지번이 실패로 잡힌다."""
+        self.assertEqual(L._parse_items('{"response":{"body":{"items":"","totalCount":0}}}'),
+                         ([], 0))
+
+    def test_normal_payload_still_parses(self):
+        items, total = L._parse_items(
+            '{"response":{"body":{"items":{"item":[{"hsprc":"1"}]},"totalCount":1}}}')
+        self.assertEqual((items, total), ([{"hsprc": "1"}], 1))
 
 
 if __name__ == "__main__":

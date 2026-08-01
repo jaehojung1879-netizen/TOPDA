@@ -61,6 +61,44 @@ class AuthError(RuntimeError):
     """서비스키 미승인·권한 오류(401/403). 재시도해도 동일하므로 즉시 중단 신호로 쓴다."""
 
 
+class TrafficExceeded(AuthError):
+    """일일 요청 한도 초과(data.go.kr returnReasonCode 22).
+
+    AuthError를 물려받는다 — 기존 수집기들이 `except L.AuthError`로 '즉시 중단'을 이미
+    처리하고 있어, 새 예외를 그 밑에 두면 손대지 않아도 옳게 멈춘다. 오늘 더 불러 봐야
+    같은 응답이므로 재시도·계속 진행 모두 무의미하다."""
+
+
+# data.go.kr 공통 오류 봉투(OpenAPI_ServiceResponse)의 returnReasonCode 중, 재시도해도
+# 결과가 같아 즉시 멈춰야 하는 것들. 이 응답은 HTTP 200으로 오고 <item>이 없어서, 걸러내지
+# 않으면 '데이터 없는 정상 응답'으로 보인다 — 16,000건짜리 배치가 조용히 전부 공치게 된다.
+_FATAL_REASONS = {
+    "22": "일일 요청 한도 초과 — 내일 다시 실행하거나 활용신청으로 한도를 늘려야 한다",
+    "30": "등록되지 않은 서비스키",
+    "31": "활용기간 만료",
+    "32": "등록되지 않은 IP",
+    "20": "서비스 접근 거부",
+}
+
+
+def _raise_if_api_error(text):
+    """data.go.kr 오류 봉투면 예외를 올린다. 정상 응답이면 아무 일도 하지 않는다."""
+    if "returnReasonCode" not in text:
+        return
+    try:
+        root = ET.fromstring(text)
+    except ET.ParseError:
+        return
+    node = root.find(".//returnReasonCode")
+    code = (node.text or "").strip() if node is not None else ""
+    if code not in _FATAL_REASONS:
+        return
+    msg_node = root.find(".//returnAuthMsg")
+    msg = (msg_node.text or "").strip() if msg_node is not None else ""
+    detail = f"{_FATAL_REASONS[code]} (코드 {code}{' ' + msg if msg else ''})"
+    raise (TrafficExceeded if code == "22" else AuthError)(detail)
+
+
 def _request(url, headers=None, timeout=20, retries=3):
     last = None
     for i in range(retries):
@@ -92,7 +130,8 @@ def get_xml(base, params, headers=None, timeout=20):
 
 
 def _parse_items(text):
-    """data.go.kr 응답 본문 → (item 목록, totalCount 또는 None). XML·JSON 모두 처리."""
+    """data.go.kr 응답 본문 → (item 목록, totalCount 또는 None). XML·JSON 무관."""
+    _raise_if_api_error(text)
     if text[:1] in ("{", "["):
         body = ((json.loads(text).get("response") or {}).get("body")) or {}
         items = body.get("items")
@@ -123,19 +162,24 @@ def _as_int(v):
         return None
 
 
-def get_items(base, params, headers=None, timeout=20):
+def get_items(base, params, headers=None, timeout=20, retries=3):
     """data.go.kr 응답(XML 또는 JSON 무관)에서 item들을 dict 목록으로 정규화해 반환.
     버전·포맷이 바뀌어도(예: V4 기본 JSON) 동일하게 동작. AuthError/404는 그대로 전파."""
-    return get_items_total(base, params, headers=headers, timeout=timeout)[0]
+    return get_items_total(base, params, headers=headers, timeout=timeout,
+                           retries=retries)[0]
 
 
-def get_items_total(base, params, headers=None, timeout=20):
+def get_items_total(base, params, headers=None, timeout=20, retries=3):
     """get_items 와 같되 응답의 totalCount(전체 건수)를 함께 돌려준다 → (items, total).
 
     페이지 수를 미리 알아야 하는 수집기용이다. totalCount를 안 주는 엔드포인트도 있어
-    그때는 None을 돌려주므로, 호출부는 '짧은 페이지에서 멈추기'로 폴백해야 한다."""
+    그때는 None을 돌려주므로, 호출부는 '짧은 페이지에서 멈추기'로 폴백해야 한다.
+
+    retries는 만 건 단위 배치에서 낮춰 잡으라고 열어 둔다 — 기본값 3은 백오프까지 더하면
+    죽은 지번 하나에 1분 가까이 쓴다."""
     url = base + ("&" if "?" in base else "?") + urllib.parse.urlencode(params)
-    return _parse_items(_request(url, headers=headers, timeout=timeout).strip())
+    return _parse_items(_request(url, headers=headers, timeout=timeout,
+                                 retries=retries).strip())
 
 
 KAKAO_KEYS = ["KAKAO_REST_API_KEY", "KAKAO_REST_KEY", "KAKAO_API_KEY"]
