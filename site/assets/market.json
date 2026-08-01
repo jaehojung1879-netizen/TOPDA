@@ -3,10 +3,11 @@
     "source": "한국부동산원 R-ONE 전국주택가격동향(월간, 아파트)",
     "note": "매매가격지수 A_2024_00045 · 전세가격지수 A_2024_00050",
     "auto_discovered": {
+      "jeonse_index": "A_2024_00050",
       "jeonse_ratio": "A_2024_00072"
     }
   },
-  "as_of": "2026-07",
+  "as_of": "2026-08",
   "regions": [
     {
       "key": "5대광역시",
@@ -5625,9 +5626,9 @@
       "series": [
         {
           "month": "2025-06",
-          "sale_index": 100.826065968911,
-          "jeonse_index": 98.9224389394507,
-          "jeonse_ratio": 69.1
+          "sale_index": 99.0788611414781,
+          "jeonse_index": 97.1944271960153,
+          "jeonse_ratio": 76.1
         },
         {
           "month": "2025-07",
@@ -5637,9 +5638,9 @@
         },
         {
           "month": "2025-08",
-          "sale_index": 100.434008265267,
-          "jeonse_index": 98.9788233435481,
-          "jeonse_ratio": 69.4
+          "sale_index": 98.3422784997024,
+          "jeonse_index": 97.5776178622851,
+          "jeonse_ratio": 76.9
         },
         {
           "month": "2025-09",
@@ -5655,14 +5656,14 @@
         },
         {
           "month": "2025-11",
-          "sale_index": 100.013684529072,
-          "jeonse_index": 99.4297281243502,
+          "sale_index": 98.7547565914865,
+          "jeonse_index": 98.5921308148132,
           "jeonse_ratio": 69.8
         },
         {
           "month": "2025-12",
-          "sale_index": 99.4719028880369,
-          "jeonse_index": 99.281683807482,
+          "sale_index": 99.9744871800442,
+          "jeonse_index": 99.7132700950618,
           "jeonse_ratio": 70.0
         },
         {
@@ -15276,19 +15277,19 @@
           "month": "2025-06",
           "sale_index": 93.2087871932336,
           "jeonse_index": 98.1045485766192,
-          "jeonse_ratio": 70.1
+          "jeonse_ratio": 61.1
         },
         {
           "month": "2025-07",
-          "sale_index": 100.757246537472,
-          "jeonse_index": 99.6562472842813,
+          "sale_index": 93.8746436868859,
+          "jeonse_index": 98.2741617370712,
           "jeonse_ratio": 70.0
         },
         {
           "month": "2025-08",
           "sale_index": 94.1755294412297,
           "jeonse_index": 98.3474296008651,
-          "jeonse_ratio": 60.7
+          "jeonse_ratio": 70.0
         },
         {
           "month": "2025-09",
@@ -15298,9 +15299,9 @@
         },
         {
           "month": "2025-10",
-          "sale_index": 100.270962559994,
-          "jeonse_index": 99.5253133179812,
-          "jeonse_ratio": 70.3
+          "sale_index": 96.9128268506042,
+          "jeonse_index": 98.7821994426188,
+          "jeonse_ratio": 59.5
         },
         {
           "month": "2025-11",
