@@ -26,6 +26,11 @@ window.TopdaOfficialPrice = (function () {
   var cache = null;      // {map, as_of} — 한 번만 받는다
   var loading = null;
 
+  // 수록 단지가 전국의 일부라 '검색이 고장났다'로 읽히기 쉽다 — 못 찾았을 때 갈 곳(정본)을
+  // 늘 함께 준다. 평형별 추정값 안내에서도 같은 링크를 쓴다.
+  var OFFICIAL_LINK = '<a href="https://www.realtyprice.kr/notice/main/main.do" ' +
+    'target="_blank" rel="noopener">부동산공시가격알리미 ↗</a>';
+
   function won(n) {
     if (!(n > 0)) return '-';
     var eok = Math.floor(n / 100000000);
@@ -74,6 +79,37 @@ window.TopdaOfficialPrice = (function () {
     return hits.slice(0, MAX_RESULTS);
   }
 
+  /* ── 평형별 추정 시가표준액 ─────────────────────────────────────────────
+   *
+   * 저장값 med 는 단지 전체 호의 중앙값이라, 39㎡~111㎡ 가 섞인 단지에서 34평
+   * 소유자에게 주면 크게 어긋난다(그 값으로 계산하는 국민주택채권 매입액과 증여
+   * 취득세 3억 중과 판정까지 함께 틀어진다). 사용자가 직접 지적한 문제다.
+   *
+   * 레코드의 u 는 [[전용㎡, 평, 추정 공시가격(원)], ...] 이고 _meta/build_official_price_units.py
+   * 가 만든다 — 단지 자신의 (공시 중앙값 ÷ 실거래 중앙값) 비율을 평형별 실거래
+   * 중앙값에 다시 곱한 값이다. 실측이 아니라 **추정**이므로 화면에서 반드시 그렇게
+   * 부르고 산식과 정본 링크를 함께 준다. 정확한 값은 본인 호의 공시가격이다.
+   */
+  function units(rec) {
+    var u = rec && rec.u;
+    return (Object.prototype.toString.call(u) === '[object Array]') ? u : [];
+  }
+
+  // 목록 중 중앙값(med)에 가장 가까운 평형 — '지금 칸에 들어 있는 값'이 어느 평형인지
+  // 표시해 주기 위한 것이다. 사용자가 아무것도 고르지 않아도 기준점이 보여야 한다.
+  function nearestUnit(list, value) {
+    var best = -1, gap = Infinity;
+    for (var i = 0; i < list.length; i++) {
+      var g = Math.abs(list[i][2] - value);
+      if (g < gap) { gap = g; best = i; }
+    }
+    return best;
+  }
+
+  function unitLabel(u) {
+    return u[0] + '㎡(' + u[1] + '평)';
+  }
+
   function attach(opts) {
     var input = opts && opts.input;
     if (!input || input.dataset.opAttached) return;
@@ -95,11 +131,6 @@ window.TopdaOfficialPrice = (function () {
     var list = wrap.querySelector('.op-list');
 
     function note(html) { list.innerHTML = '<p class="op-note">' + html + '</p>'; }
-
-    // 수록 단지가 전국의 일부라 '검색이 고장났다'로 읽히기 쉽다 — 수록 규모를 밝히고
-    // 못 찾았을 때 갈 곳(정본)을 늘 함께 준다.
-    var OFFICIAL_LINK = '<a href="https://www.realtyprice.kr/notice/main/main.do" ' +
-      'target="_blank" rel="noopener">부동산공시가격알리미 ↗</a>';
 
     function coverageNote(d) {
       return '수록 단지 ' + Object.keys(d.map).length.toLocaleString() + '개' +
@@ -157,32 +188,92 @@ window.TopdaOfficialPrice = (function () {
       });
     });
 
-    list.addEventListener('click', function (e) {
-      var btn = e.target.closest ? e.target.closest('.op-hit') : null;
-      if (!btn || !list._hits) return;
-      var h = list._hits[+btn.dataset.i];
-      if (!h) return;
-      input.value = h.rec.med;
-      input.dispatchEvent(new Event('input', { bubbles: true }));
-      panel.hidden = true;
-      // 값만 넣고 끝내면 어느 단지의 언제 기준 가격인지 알 수 없다 — 반드시 함께 남긴다.
-      var std = stdDayText(h.rec.std_day);
-      toggle.innerHTML = '🔎 다시 검색 <span class="op-filled">' + h.name + ' · ' +
-        won(h.rec.med) + (std ? ' · ' + std + ' 기준' : '') + '</span>';
-      // 채운 값이 '단지 중앙값'임을 입력칸 옆에 남긴다. 평형이 중앙값과 다르면
-      // 채권 매입액이 그만큼 어긋나므로, 정확한 값은 본인 호의 공시가격으로 확인해야 한다.
+    // 고른 단지의 평형 목록. 단지를 고를 때마다 다시 그린다.
+    var unitRow = null;
+
+    function warnBox() {
       var warn = wrap.querySelector('.op-picked-warn');
       if (!warn) {
         warn = document.createElement('span');
         warn.className = 'op-picked-warn data-stale';
         wrap.appendChild(warn);
       }
-      warn.innerHTML = '이 값은 <strong>단지 전체 호의 중앙값</strong>입니다 — 공시가격은 '
-        + '평형마다 다릅니다'
-        + (h.rec.min && h.rec.max && h.rec.max > h.rec.min
-          ? ' (이 단지는 ' + won(h.rec.min) + '~' + won(h.rec.max) + ' 분포)' : '')
-        + '. 본인 호의 정확한 공시가격은 ' + OFFICIAL_LINK + '에서 확인해 직접 입력하세요.';
-      if (opts.onPick) opts.onPick(h);
+      return warn;
+    }
+
+    function spreadText(rec) {
+      return (rec.min && rec.max && rec.max > rec.min)
+        ? ' (이 단지는 ' + won(rec.min) + '~' + won(rec.max) + ' 분포)' : '';
+    }
+
+    // 값을 채우고, 그 값이 무엇인지(중앙값인가 평형별 추정인가) 함께 남긴다.
+    // 숫자만 바꾸고 설명을 안 바꾸면 사용자는 여전히 중앙값을 보고 있다고 믿는다.
+    function fill(h, unitIdx) {
+      var rec = h.rec, list2 = units(rec);
+      var u = (unitIdx >= 0 && list2[unitIdx]) || null;
+      var value = u ? u[2] : rec.med;
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+
+      var std = stdDayText(rec.std_day);
+      toggle.innerHTML = '🔎 다시 검색 <span class="op-filled">' + h.name +
+        (u ? ' ' + unitLabel(u) : '') + ' · ' + won(value) +
+        (std ? ' · ' + std + ' 기준' : '') + '</span>';
+
+      warnBox().innerHTML = u
+        ? '이 값은 <strong>' + unitLabel(u) + ' 추정치</strong>입니다 — 단지 공시가격 '
+          + '중앙값에 이 평형의 실거래 비율을 적용해 계산했습니다(실측값이 아닙니다). '
+          + '정확한 값은 본인 호의 공시가격이며 ' + OFFICIAL_LINK + '에서 확인할 수 있습니다.'
+        : '이 값은 <strong>단지 전체 호의 중앙값</strong>입니다 — 공시가격은 평형마다 '
+          + '다릅니다' + spreadText(rec) + '. 본인 호의 정확한 공시가격은 '
+          + OFFICIAL_LINK + '에서 확인해 직접 입력하세요.';
+
+      if (unitRow) {
+        var btns = unitRow.querySelectorAll('.op-unit');
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].setAttribute('aria-pressed', String(+btns[i].dataset.u === unitIdx));
+        }
+      }
+      if (opts.onPick) opts.onPick(h, u);
+    }
+
+    // 평형 선택줄. 평형별 추정이 없는 단지(거래 표본이 얕은 곳)에서는 아예 만들지
+    // 않는다 — 고를 게 없는 빈 줄은 고장으로 보인다.
+    function renderUnits(h) {
+      if (unitRow) { unitRow.remove(); unitRow = null; }
+      var list2 = units(h.rec);
+      if (!list2.length) return;
+      unitRow = document.createElement('div');
+      unitRow.className = 'op-units';
+      unitRow.innerHTML = '<span class="op-units-label">평형 선택</span>' +
+        list2.map(function (u, i) {
+          return '<button type="button" class="op-unit" data-u="' + i + '" ' +
+                 'aria-pressed="false">' + unitLabel(u) +
+                 '<small>' + won(u[2]) + '</small></button>';
+        }).join('');
+      unitRow.addEventListener('click', function (e) {
+        var b = e.target.closest ? e.target.closest('.op-unit') : null;
+        if (b) fill(h, +b.dataset.u);
+      });
+      wrap.appendChild(unitRow);
+    }
+
+    list.addEventListener('click', function (e) {
+      var btn = e.target.closest ? e.target.closest('.op-hit') : null;
+      if (!btn || !list._hits) return;
+      var h = list._hits[+btn.dataset.i];
+      if (!h) return;
+      panel.hidden = true;
+      renderUnits(h);
+      // 처음에는 중앙값을 그대로 채운다(평형을 고르기 전 동작을 바꾸지 않는다).
+      // 다만 그 값이 어느 평형쯤인지는 눌러서 보여 준다 — 기준점이 없으면 어느
+      // 버튼을 눌러야 할지 알 수 없다.
+      fill(h, -1);
+      if (unitRow) {
+        var near = nearestUnit(units(h.rec), h.rec.med);
+        var btns = unitRow.querySelectorAll('.op-unit');
+        if (near >= 0 && btns[near]) btns[near].classList.add('op-unit-median');
+      }
     });
 
     return {
@@ -191,5 +282,8 @@ window.TopdaOfficialPrice = (function () {
     };
   }
 
-  return { attach: attach, load: load, search: search, won: won };
+  return {
+    attach: attach, load: load, search: search, won: won,
+    units: units, nearestUnit: nearestUnit, unitLabel: unitLabel,
+  };
 })();

@@ -7,7 +7,7 @@
 <title>등기·법무사 비용 계산기 — 톺다</title>
 <meta name="description" content="소유권 이전 등기 시 드는 취득세·지방교육세·농어촌특별세·인지세·국민주택채권 할인부담·등기신청 수수료·법무사 보수를 항목별로 합산해 총 등기비용을 계산합니다." />
 <!-- seo:meta -->
-<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo-32.png" type="image/png" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="canonical" href="https://topda.kr/calculators/registration-cost.html" />
 <link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://topda.kr/feed.xml" />
@@ -24,7 +24,7 @@
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=d5420f8c7a" />
+<link rel="stylesheet" href="../assets/styles.css?v=b54e7c9b22" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -518,7 +518,9 @@
         '국민주택채권 매입액 <span>매입률 ' + (r.bondRate * 100).toFixed(1) + '%</span>',
       ].concat(inclAcq ? ['취득세·지방교육세·농어촌특별세 <span>지방세법 제11·15·151조</span>'] : []),
       userInput: [
-        '거래금액', '시가표준액', '채권 할인율(고객부담률)', '등기신청 방식', '위임할 부대업무',
+        // 등기신청 방식은 선택칸을 없애고 방문(18,000원)으로 고정했으므로 더 이상
+        // 사용자 입력이 아니다 — 여기 남겨두면 고르지도 않은 항목을 골랐다고 표시한다.
+        '거래금액', '시가표준액', '채권 할인율(고객부담률)', '위임할 부대업무',
       ].concat(r.scrivenerBaseIsQuote ? ['법무사 견적 기본보수'] : []),
       estimated: []
         .concat(r.stdValueEstimated ? ['추정 시가표준액 <span>매매가 × 70% — 법정값 아님</span>'] : [])

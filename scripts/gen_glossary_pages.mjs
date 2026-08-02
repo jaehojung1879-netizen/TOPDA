@@ -59,7 +59,7 @@ ${alts}
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/en/glossary.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=d5420f8c7a" />
+<link rel="stylesheet" href="../assets/styles.css?v=b54e7c9b22" />
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"${u.home}","item":"https://topda.kr/${lang}/index.html"},{"@type":"ListItem","position":2,"name":"${u.title}","item":"${canon}"}]}
 </script>

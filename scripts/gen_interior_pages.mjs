@@ -360,7 +360,7 @@ function head(lang, t) {
 ${alts}
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=d5420f8c7a" />
+<link rel="stylesheet" href="../../assets/styles.css?v=b54e7c9b22" />
 </head>
 <body>`;
 }

@@ -17,6 +17,10 @@ SITE_NAME_KO = "톺다"
 SITE_NAME_EN = "TOPDA"
 LOGO = BASE + "/assets/images/brand/logo.png"
 OG_IMAGE = LOGO
+# 파비콘은 16~32px 자리다. 688KB 원본(773×826)을 물리면 모든 페이지가 그 크기를
+# 헛으로 받는다 — 2026-08-02 실측에서 계산기 3개 화면 모두 이 파일이 가장 느린
+# 리소스였다(app.js 333KB 의 6~9배). 파생본은 _meta/build_logo_sizes.py 가 만든다.
+FAVICON = BASE + "/assets/images/brand/logo-32.png"
 ANALYTICS = BASE + "/assets/analytics.js"
 
 # KR <-> EN 1:1 대응이 명확한 페이지만 hreflang 부여
@@ -179,7 +183,7 @@ def process(rel, full):
 
     # ----- 메타 블록 -----
     lines = ["<!-- seo:meta -->"]
-    lines.append('<link rel="icon" href="%s" type="image/png" />' % LOGO)
+    lines.append('<link rel="icon" href="%s" type="image/png" />' % FAVICON)
     lines.append('<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />')
     lines.append('<link rel="canonical" href="%s" />' % canonical)
     lines.append('<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="%s/feed.xml" />' % BASE)
