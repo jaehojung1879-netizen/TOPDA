@@ -2346,8 +2346,12 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
         case 'mortgageBullet': return [function (a, t) { return a / t; }, L('주택담보대출(만기일시·거치) → 원금(대출액÷대출기간 N년) + 이자', 'Mortgage (bullet/grace) → principal (loan ÷ N-year term) + interest'), true];
         case 'nonhouse': return [function (a) { return a / 8; }, L('비주택담보대출 → 원금(대출액÷8년) + 이자 (금감원 산정만기 8년)', 'Non-housing mortgage → principal (loan ÷ 8 years) + interest (FSS assumed 8-year term)'), false];
         case 'jeonse': return [function () { return 0; }, L('전세자금대출 → 이자만 반영 (보증부는 DSR 산정 제외 가능)', 'Jeonse loan → interest only (guarantee-backed loans may be excluded from DSR)'), false];
-        case 'deposit': return [function () { return 0; }, L('예적금·보험약관 담보대출 → 이자만 반영 (원금 제외)', 'Deposit/insurance-secured loan → interest only (principal excluded)'), false];
-        case 'stock': return [function (a) { return a / 8; }, L('유가증권·기타담보대출 → 원금(대출액÷8년) + 이자 (산정만기 8년)', 'Securities/other secured loan → principal (loan ÷ 8 years) + interest (assumed 8-year term)'), false];
+        // ⚠ 예·적금담보대출·보험계약(약관)대출·유가증권(주식)담보대출은 담보가치가 확실해
+        //   **DSR 원리금 상환금액에서 통째로 제외**된다(이자도 산입하지 않는다).
+        //   과거 이 계산기는 주식담보대출을 '원금 ÷ 8년 + 이자'로 산입해 DSR을 부풀렸고,
+        //   그만큼 주담대 한도가 실제보다 적게 나왔다.
+        case 'deposit': return [function () { return 0; }, L('예적금·보험약관 담보대출 → <strong>DSR 산정 제외</strong> (원리금 모두 미산입)', 'Deposit/insurance-secured loan → <strong>excluded from DSR</strong>'), false, true];
+        case 'stock': return [function () { return 0; }, L('유가증권(주식)담보대출 → <strong>DSR 산정 제외</strong> (담보가치가 확실한 대출은 원리금 상환금액에서 제외)', 'Securities-secured loan → <strong>excluded from DSR</strong> (loans with certain collateral value are excluded from the repayment total)'), false, true];
         case 'card': return [function (a, t) { return a / t; }, L('카드론·현금서비스 → 원금(잔액÷약정 N년) + 이자', 'Card loan/cash advance → principal (balance ÷ N-year term) + interest'), true];
         case 'auto': return [function (a, t) { return a / t; }, L('자동차 할부·리스 → 원금(잔액÷약정 N년) + 이자', 'Auto loan/lease → principal (balance ÷ N-year term) + interest'), true];
         case 'minus': return [function (a) { return a / 5; }, L('마이너스통장(한도대출) → 원금(한도÷5년) + 이자', 'Overdraft line → principal (limit ÷ 5 years) + interest'), false];
@@ -2367,11 +2371,19 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       var note = row.querySelector('[data-row-note]');
       if (!show) { note.style.display = 'none'; return 0; }
       // 종류를 고르는 즉시 설명 노출(금액 0이어도)
-      var principal = spec[0](amount, term), interest = amount * rate;
-      var annual = principal + interest;
+      // spec[3] === true 이면 DSR 산정 제외 대출 — 이자도 산입하지 않는다.
+      var dsrExempt = spec[3] === true;
+      var principal = spec[0](amount, term), interest = dsrExempt ? 0 : amount * rate;
+      var annual = dsrExempt ? 0 : principal + interest;
       note.style.display = '';
       note.innerHTML = spec[1].replace('N', term)
-        + (amount > 0 ? L('<br/>이 대출의 DSR 반영액 ≈ <strong>' + fmt.won(Math.round(annual)) + ' / 년</strong>', '<br/>This loan’s DSR impact ≈ <strong>' + fmt.won(Math.round(annual)) + ' / yr</strong>') : '');
+        + (amount > 0
+          ? (dsrExempt
+            ? L('<br/>이 대출의 DSR 반영액 = <strong>0원</strong> — 잔액이 있어도 한도를 줄이지 않습니다.',
+              '<br/>DSR impact = <strong>KRW 0</strong> — this balance does not reduce your limit.')
+            : L('<br/>이 대출의 DSR 반영액 ≈ <strong>' + fmt.won(Math.round(annual)) + ' / 년</strong>',
+              '<br/>This loan’s DSR impact ≈ <strong>' + fmt.won(Math.round(annual)) + ' / yr</strong>'))
+          : '');
       return annual;
     }
 
@@ -2493,7 +2505,9 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       }
     }
 
-    function renderMortgageLimit(price, homes, regulated, firstHome, tempTwoHome, rate, term, repay, existingAnnualDebt, loan) {
+    // price 인자는 **담보 평가액(대출 신청일 기준 시가)** 이다. 매매가가 아니다.
+    // usedPurchasePrice=true 이면 시가를 입력받지 못해 매매가로 대신 판정했다는 뜻이라 경고한다.
+    function renderMortgageLimit(price, homes, regulated, firstHome, tempTwoHome, rate, term, repay, existingAnnualDebt, loan, usedPurchasePrice) {
       const box = root.querySelector('[data-mortgage-limit-box]');
       if (!box) return null;
       const income = getN('annualIncome');
@@ -2527,9 +2541,17 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
         + ` → ${L('적용 금리', 'applied rate')} ${r.stressedRate.toFixed(2)}%`
         + (r.priceCapApplies ? '' : L(' · 가격대별 한도 미적용', ' · no price cap')));
       const over = loan > r.limit;
-      setText('mortgageVerdict', over
+      let verdict = over
         ? L(`입력 대출이 추정 한도를 ${fmt.won(loan - r.limit)} 초과합니다.`, `Entered loan exceeds the estimate by ${fmt.won(loan - r.limit)}.`)
-        : L(`입력 대출은 추정 한도보다 ${fmt.won(r.limit - loan)} 낮습니다.`, `Entered loan is ${fmt.won(r.limit - loan)} below the estimate.`));
+        : L(`입력 대출은 추정 한도보다 ${fmt.won(r.limit - loan)} 낮습니다.`, `Entered loan is ${fmt.won(r.limit - loan)} below the estimate.`);
+      // 담보 평가액을 입력받지 못하면 매매가로 대신 판정한다 — 구간이 한 칸 올라가
+      // 한도가 실제보다 적게 나올 수 있으므로 반드시 알린다.
+      if (usedPurchasePrice) {
+        verdict += L(
+          ` ⚠ KB시세를 입력하지 않아 매매가(${fmt.won(price)})로 판정했습니다. 한도는 대출 신청일 기준 시가로 정해지므로, 시세가 매매가보다 낮으면 실제 한도는 이보다 큽니다.`,
+          ` ⚠ No KB market price entered, so the purchase price (${fmt.won(price)}) was used. The limit is set on the market value as of the loan application date — if that is lower, your actual limit is higher.`);
+      }
+      setText('mortgageVerdict', verdict);
       return r;
     }
 
@@ -2599,7 +2621,12 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       const existingAnnualDebt = getN('creditDebt') / 5 + otherLoansTotal();
       const mortgageBox = root.querySelector('[data-mortgage-limit-box]');
       if (!nonhouse && !isLeaseBiz) {
-        renderMortgageLimit(price, homes, regulated, firstHome, tempTwoHome, rate, term, repay, existingAnnualDebt, loan);
+        // ⚠ LTV·가격대별 한도는 매매가가 아니라 '대출 신청일 기준 시가'(KB시세 일반평균가 등)로
+        //   판정한다. 매매가를 그대로 넘기면 15.65억에 산 집(신청일 KB시세 15억)이 15~25억
+        //   구간으로 잘못 걸려 한도가 6억 → 4억으로 2억 깎여 나온다. 실제 사례로 확인된 오류다.
+        const kbPrice = getN('kbPrice');
+        renderMortgageLimit(kbPrice > 0 ? kbPrice : price, homes, regulated, firstHome, tempTwoHome,
+          rate, term, repay, existingAnnualDebt, loan, kbPrice <= 0);
       } else if (mortgageBox) {
         mortgageBox.hidden = true;
       }
@@ -5047,6 +5074,24 @@ function calcMortgageLimit(input) {
   const actualAnnualPmt = limit * realFactorAnnual;
   const actualDsrPct = income > 0 ? (actualAnnualPmt + (existingAnnualDebt || 0)) / income * 100 : 0;
 
+  // ── 스트레스 DSR이 이 결과에 실제로 영향을 줬는가 ──
+  //  DSR이 결정 요인이 아니면(LTV·가격대별 한도가 더 작으면) 스트레스 가산은 한도를
+  //  한 푼도 바꾸지 않는다. "스트레스 3.0%p 적용"만 써 두면 사용자는 자기 한도가
+  //  그것 때문에 깎였다고 오해한다 — 실제로 얼마나 줄였는지 계산해 함께 보여준다.
+  let limitWithoutStress = limit;
+  if ((stressAdd || 0) > 0 && n > 0) {
+    const i0 = (rate || 0) / 100 / 12;
+    let f0;
+    if (repayType === 'principal') f0 = 12 / n + i0 * (12 - 66 / n);
+    else {
+      const m0 = i0 > 0 ? i0 * Math.pow(1 + i0, n) / (Math.pow(1 + i0, n) - 1) : 1 / n;
+      f0 = m0 * 12;
+    }
+    const dsrNoStress = f0 > 0 ? availAnnual / f0 : 0;
+    limitWithoutStress = Math.max(0, Math.min(ltvLimit, priceCap, dsrNoStress));
+  }
+  const stressImpact = Math.max(0, limitWithoutStress - limit);
+
   // ── 결과의 성격 구분 (법정·확정 / 사용자 입력 / 추정) ──
   //  세 값이 한 화면에 섞여 있으면 사용자가 "은행에서 확인해야 할 것"을 알 수 없다.
   const ltvMeta = suggestLtvPercent(region.key, ownership);
@@ -5082,6 +5127,7 @@ function calcMortgageLimit(input) {
 
   return {
     ltvLimit, priceCap, dsrLimit, limit, binding, stressedRate, availAnnual, actualDsrPct,
+    limitWithoutStress, stressImpact, stressAffectsLimit: stressImpact > 0,
     region, priceCapApplies, ownership: ltvMeta.ownership,
     ltvMeta, stressMeta, classification,
     grandfather, grandfatherActive, grandfatherOption,
@@ -5251,6 +5297,19 @@ function calcJeonseLoanByAgency(deposit, opts) {
     const noteBox = root.querySelector('[data-out="mRuleNotes"]');
     if (noteBox) {
       const notes = [];
+      // 스트레스 DSR이 실제로 한도를 깎았는지 — 결정 요인이 DSR이 아니면 영향은 0이다.
+      //  "스트레스 3.00%p 적용"만 써 두면 그것 때문에 한도가 줄었다고 오해한다.
+      if (stressMeta.value > 0) {
+        notes.push(r.stressAffectsLimit
+          ? { kind: 'warn', text: '스트레스 가산 ' + stressMeta.value.toFixed(2) + '%p가 한도를 '
+              + fmt.won(r.stressImpact) + ' 줄였습니다 (가산이 없다면 ' + fmt.won(r.limitWithoutStress) + ').' }
+          : { kind: 'info', text: '스트레스 DSR은 이 결과에 영향이 없습니다 — '
+              + (r.binding ? r.binding.label : '다른 한도') + '이(가) 더 작아 한도를 결정했습니다. '
+              + '가산금리를 0으로 두어도 한도는 같습니다.' });
+      }
+      // 판정 기준값이 매매가가 아니라는 점은 사용자가 가장 자주 틀리는 부분이다.
+      notes.push({ kind: 'warn', text: (R.valuationBasis && R.valuationBasis.note)
+        || 'LTV와 가격대별 한도는 매매가가 아니라 대출 신청일 기준 시가로 판정합니다.' });
       notes.push({ kind: 'info', text: ltvMeta.region.note || R.regionNote || '' });
       if (ltvMeta.confidence !== 'verified') {
         notes.push({ kind: 'warn', text: '이 지역·보유유형의 LTV는 법령·고시로 확정된 값이 아니라 은행 관행에 가까운 추정치입니다. 실제 적용 비율을 은행에 확인하고 직접 입력하세요.' });
