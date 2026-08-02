@@ -110,7 +110,7 @@ html, body { overflow-x: hidden; }
   .site-header .row { min-height: 64px; }
 }
 .brand {
-  font-weight: 800; font-size: 1.2rem; letter-spacing: -0.03em;
+  font-weight: 700; font-size: 1.2rem; letter-spacing: -0.03em;
   display: inline-flex; align-items: center; gap: 8px; color: var(--text);
   flex-shrink: 0;
 }
@@ -173,8 +173,7 @@ html, body { overflow-x: hidden; }
 }
 .nav-cta:hover { background: var(--accent); }
 
-/* 상단 안내 링크는 햄버거 메뉴 안에서만 노출한다. */
-.nav a[href$="about.html"] { display: none; }
+/* 상단 안내 링크 숨김 규칙은 파일 끝 편집 시스템 섹션에 모아 두었다. */
 .nav-toggle {
   display: inline-flex !important; align-items: center; justify-content: center;
   flex: 0 0 auto; padding: 4px; margin-left: 0;
@@ -216,7 +215,7 @@ html, body { overflow-x: hidden; }
 @media (min-width: 768px) { .hero { padding: 120px 0 96px; } }
 .hero .eyebrow { color: var(--accent); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.85rem; }
 .hero h1 {
-  font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em;
+  font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;
   margin: 12px 0 20px; max-width: 720px;
 }
 @media (min-width: 768px) { .hero h1 { font-size: 3.2rem; } }
@@ -245,7 +244,7 @@ html, body { overflow-x: hidden; }
 }
 @media (min-width: 640px) { .hero-stats { grid-template-columns: repeat(4, 1fr); } }
 .hero-stats .stat { border-left: 2px solid var(--border-strong); padding-left: 16px; }
-.hero-stats .num { font-size: 1.5rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+.hero-stats .num { font-size: 1.5rem; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
 .hero-stats .label { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
 
 /* ===== Cards ===== */
@@ -261,7 +260,7 @@ html, body { overflow-x: hidden; }
   border-radius: var(--radius); padding: 24px; transition: all 0.18s;
   display: flex; flex-direction: column; height: 100%;
 }
-.card:hover { border-color: var(--border-strong); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.card:hover { border-color: var(--border-strong); }
 .card .badge { align-self: flex-start; margin-bottom: 12px; }
 .card h3 { font-size: 1.1rem; margin-bottom: 8px; }
 .card p { color: var(--text-muted); font-size: 0.95rem; flex: 1; }
@@ -272,11 +271,11 @@ html, body { overflow-x: hidden; }
   border-radius: var(--radius); padding: 28px 24px; transition: all 0.18s;
   display: flex; flex-direction: column; gap: 8px; min-height: 160px;
 }
-.cat-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.cat-card:hover { border-color: var(--border-strong); }
 .cat-card .icon {
   width: 36px; height: 36px; border-radius: 8px; background: var(--accent-soft);
   color: var(--accent); display: inline-flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 0.85rem; margin-bottom: 8px;
+  font-weight: 700; font-size: 0.85rem; margin-bottom: 8px;
 }
 .cat-card h3 { font-size: 1.1rem; }
 .cat-card .desc { color: var(--text-muted); font-size: 0.92rem; flex: 1; }
@@ -571,7 +570,7 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 }
 /* 2단일 때도 sticky를 두지 않는다 — 스크롤 시 좌·우 top이 어긋나 보이는 문제 해결 */
 .calc-result h3 { font-size: 0.92rem; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; letter-spacing: -0.01em; }
-.calc-result .total { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 24px; color: var(--accent); font-variant-numeric: tabular-nums; }
+.calc-result .total { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 24px; color: var(--accent); font-variant-numeric: tabular-nums; }
 .calc-result .breakdown { border-top: 1px solid var(--border); padding-top: 20px; }
 .calc-result .row { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; font-size: 0.95rem; }
 .calc-result .row .key { color: var(--text-muted); }
@@ -655,7 +654,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   padding: 24px; background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); transition: all 0.18s;
 }
-.calc-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.calc-card:hover { border-color: var(--accent); }
 .calc-card .icon { font-size: 1.4rem; }
 .calc-card h3 { font-size: 1.1rem; }
 .calc-card .desc { color: var(--text-muted); font-size: 0.92rem; }
@@ -668,7 +667,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
 .about-grid { display: grid; gap: 24px; grid-template-columns: 1fr; margin-top: 32px; }
 @media (min-width: 768px) { .about-grid { grid-template-columns: repeat(3, 1fr); } }
 .principle { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
-.principle .num { color: var(--accent); font-weight: 800; font-size: 1.6rem; letter-spacing: -0.02em; }
+.principle .num { color: var(--accent); font-weight: 700; font-size: 1.6rem; letter-spacing: -0.02em; }
 .principle h3 { margin: 8px 0; }
 .principle p { color: var(--text-muted); font-size: 0.95rem; }
 
@@ -684,7 +683,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   position: absolute; left: -22px; top: 16px;
   width: 42px; height: 42px; border-radius: 50%;
   background: var(--surface); border: 2px solid var(--accent);
-  color: var(--accent); font-weight: 800; font-size: 0.95rem;
+  color: var(--accent); font-weight: 700; font-size: 0.95rem;
   display: flex; align-items: center; justify-content: center;
   font-variant-numeric: tabular-nums;
 }
@@ -705,7 +704,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   border-radius: var(--radius); padding: 24px; height: 100%;
   display: flex; flex-direction: column; gap: 8px;
 }
-.spec-card .price { font-size: 1.3rem; font-weight: 800; color: var(--text); margin: 4px 0 12px; }
+.spec-card .price { font-size: 1.3rem; font-weight: 700; color: var(--text); margin: 4px 0 12px; }
 .spec-card .price small { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; margin-left: 4px; }
 .spec-card .meta-row { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--border); font-size: 0.9rem; }
 .spec-card .meta-row:first-of-type { border-top: 0; }
@@ -760,7 +759,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   position: absolute; inset: 0; display: flex; flex-direction: column;
   align-items: center; justify-content: center; text-align: center;
 }
-.cl-ring .pct { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.cl-ring .pct { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .cl-ring .total { font-size: 0.82rem; color: var(--text-muted); }
 .cl-header-info h2 { font-size: 1.3rem; margin-bottom: 6px; }
 .cl-header-info .desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px; }
@@ -844,7 +843,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
 
 /* ===== Contract Reference Card ===== */
 .contract-card {
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  background: var(--accent);
   border-radius: var(--radius-lg); padding: 28px; color: #fff;
   margin: 32px 0;
 }
@@ -890,12 +889,12 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   display: flex; flex-direction: column; gap: 12px;
   transition: all 0.18s;
 }
-.hub-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.hub-card:hover { border-color: var(--accent); }
 .hub-card .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .hub-card h3 { font-size: 1.05rem; }
 .hub-card .desc { color: var(--text-muted); font-size: 0.9rem; flex: 1; }
 .hub-card .pct {
-  font-size: 1.4rem; font-weight: 800; color: var(--accent);
+  font-size: 1.4rem; font-weight: 700; color: var(--accent);
   font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
 }
 .hub-card .bar-track {
@@ -912,22 +911,25 @@ details.explain .explain-body > :first-child { margin-top: 0; }
    surface variants of accent-soft (#eff6ff) used as tints throughout
 */
 
-/* Hero: compact tagline */
+/* Hero — 파란 방사형 그라데이션 배경을 걷어내고 흰 바탕 + 아래 구분선만 남긴다.
+   장식이 사라진 자리를 여백과 제목 크기로 채운다. */
 .home-intro {
-  padding: 40px 0 24px;
-  background:
-    radial-gradient(70% 60% at 12% 0%, rgba(30, 58, 138, 0.07), transparent 60%),
-    radial-gradient(60% 50% at 96% 8%, rgba(37, 99, 235, 0.06), transparent 60%),
-    var(--bg);
+  padding: 36px 0 28px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
-@media (min-width: 768px) { .home-intro { padding: 72px 0 40px; } }
+@media (min-width: 768px) { .home-intro { padding: 60px 0 44px; } }
 .home-tagline {
-  font-size: 1.9rem; font-weight: 800; letter-spacing: -0.035em;
-  line-height: 1.2; color: var(--text); margin: 0;
+  font-size: 1.65rem; font-weight: 700; letter-spacing: -0.03em;
+  line-height: 1.25; color: var(--text); margin: 0;
+  word-break: keep-all;
 }
 @media (min-width: 768px) {
-  .home-tagline { font-size: 2.8rem; max-width: 720px; }
+  .home-tagline { font-size: 2.3rem; max-width: 720px; }
 }
+/* 히어로 안에서 1차 행동과 검색의 간격 */
+.home-intro .primary-action { margin-top: 26px; max-width: 620px; }
+.home-intro .home-search { margin-top: 18px; }
 
 /* ===== Strip head (section header + side link) ===== */
 .strip-head {
@@ -961,7 +963,6 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   position: relative; overflow: hidden;
 }
 .cat-tile:hover {
-  transform: translateY(-3px);
   border-color: var(--accent);
   box-shadow: 0 12px 32px -16px rgba(30, 58, 138, 0.25);
 }
@@ -984,7 +985,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
 }
 .cat-tile-icon svg { width: 16px; height: 16px; }
 .cat-tile:hover .cat-tile-icon {
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  background: var(--accent);
   color: #fff;
 }
 @media (min-width: 1024px) {
@@ -1026,7 +1027,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
 }
 .home-search button {
   flex-shrink: 0; border: 0; cursor: pointer;
-  background: var(--accent, #2563eb); color: #fff; font-weight: 700; font-size: 0.9rem;
+  background: var(--accent, #2563eb); color: #fff; font-weight: 600; font-size: 0.9rem;
   padding: 9px 16px; border-radius: 9px; font-family: inherit;
 }
 .home-search button:hover { background: #1e40af; }
@@ -1049,7 +1050,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
 .headline-rank {
   flex-shrink: 0; width: 24px; height: 24px; margin-top: 1px;
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 0.8rem; font-weight: 800; color: var(--accent, #1e3a8a);
+  font-size: 0.8rem; font-weight: 700; color: var(--accent, #1e3a8a);
   background: var(--accent-soft, #eff6ff); border-radius: 6px;
   font-variant-numeric: tabular-nums;
 }
@@ -1119,7 +1120,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   .news-row { grid-template-columns: 132px 1fr; align-items: stretch; gap: 16px; }
 }
 .news-row-label {
-  font-size: 0.9rem; font-weight: 800; color: var(--accent, #2563eb);
+  font-size: 0.9rem; font-weight: 700; color: var(--accent, #2563eb);
   word-break: keep-all; align-self: center;
 }
 .news-row-items {
@@ -1134,7 +1135,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   background: var(--surface-2, #f8fafc); border-left: 3px solid var(--accent, #2563eb);
   transition: border-color .15s, transform .15s;
 }
-.news-card:hover { border-left-color: var(--accent, #2563eb); transform: translateY(-1px); box-shadow: var(--shadow, 0 1px 3px rgba(0,0,0,.06)); }
+.news-card:hover { border-left-color: var(--accent, #2563eb); }
 .news-card .news-title {
   display: block; font-size: 0.9rem; line-height: 1.4; font-weight: 600;
   word-break: keep-all;
@@ -1171,19 +1172,19 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   position: relative;
 }
 .hub-tool:hover {
-  transform: translateY(-2px); border-color: var(--accent);
+  border-color: var(--accent);
   box-shadow: 0 12px 28px -16px rgba(30, 58, 138, 0.25);
 }
 /* 종합 계산기 — 풀폭 강조 배너 CTA (가장 눈에 띄게) */
 .hub-tool-hl {
   grid-column: 1 / -1;
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  background: var(--accent);
   border-color: transparent; color: #fff;
   padding: 26px; align-items: center;
   box-shadow: 0 16px 40px -22px rgba(30, 58, 138, 0.6);
 }
 .hub-tool-hl:hover {
-  border-color: transparent; transform: translateY(-2px);
+  border-color: transparent;
   box-shadow: 0 22px 50px -22px rgba(30, 58, 138, 0.7);
 }
 .hub-tool-hl .hub-tool-icon { background: rgba(255,255,255,0.18); color: #fff; width: 48px; height: 48px; }
@@ -1231,7 +1232,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   position: relative;
 }
 .tip-card:hover {
-  transform: translateY(-2px); border-color: var(--accent);
+  border-color: var(--accent);
   box-shadow: 0 8px 24px -14px rgba(30, 58, 138, 0.25);
 }
 .tip-card-num {
@@ -1263,11 +1264,11 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   min-height: 180px;
 }
 .topic-card:hover {
-  transform: translateY(-2px); border-color: var(--accent);
+  border-color: var(--accent);
   box-shadow: 0 12px 28px -16px rgba(30, 58, 138, 0.25);
 }
 .topic-card-hl {
-  background: linear-gradient(180deg, #f8faff 0%, #fff 60%);
+  background: var(--surface);
   border-color: #c7d2fe;
 }
 .topic-tag {
@@ -1329,7 +1330,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   border: 1px solid var(--border); border-radius: 12px;
   transition: border-color 0.18s, transform 0.18s;
 }
-.source-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.source-card:hover { border-color: var(--accent); }
 .source-icon {
   width: 32px; height: 32px; border-radius: 8px;
   background: var(--accent-soft); color: var(--accent);
@@ -1359,7 +1360,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
 .tip-row:last-child { border-bottom: 0; }
 .tip-row:hover { background: var(--surface-2); }
 .tip-row-num {
-  font-size: 1.1rem; font-weight: 800; color: var(--accent);
+  font-size: 1.1rem; font-weight: 700; color: var(--accent);
   letter-spacing: -0.02em;
 }
 .tip-row-body h3 {
@@ -1389,7 +1390,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   transition: color 0.15s, transform 0.15s; flex-shrink: 0;
 }
 .tool-card:hover {
-  transform: translateY(-2px); border-color: var(--accent);
+  border-color: var(--accent);
   background: var(--accent-soft);
   box-shadow: 0 10px 24px -12px rgba(30, 58, 138, 0.38);
 }
@@ -1400,7 +1401,7 @@ details.explain .explain-body > :first-child { margin-top: 0; }
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0; transition: background 0.18s, color 0.18s;
 }
-.tool-card:hover .tool-card-icon { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color: #fff; }
+.tool-card:hover .tool-card-icon { background: var(--accent-soft); color: var(--accent); }
 .tool-card-icon svg { width: 14px; height: 14px; }
 .tool-card-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
 .tool-card-body strong {
@@ -1424,18 +1425,18 @@ details.explain .explain-body > :first-child { margin-top: 0; }
 .big-banner {
   display: flex; align-items: stretch; justify-content: space-between;
   gap: 16px; padding: 24px 20px; border-radius: 18px;
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  background: var(--accent);
   color: #fff; overflow: hidden; position: relative;
   transition: transform 0.18s, box-shadow 0.18s;
 }
-.big-banner:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.big-banner:hover { border-color: var(--border-strong); }
 .big-banner-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; justify-content: center; }
 .big-banner-eyebrow {
   font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
   text-transform: uppercase; opacity: 0.85;
 }
 .big-banner-title {
-  font-size: 1.15rem; font-weight: 800; line-height: 1.35;
+  font-size: 1.15rem; font-weight: 700; line-height: 1.35;
   letter-spacing: -0.02em; color: #fff;
 }
 .big-banner-cta {
@@ -1573,7 +1574,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
 }
 .material-card:hover {
-  transform: translateY(-2px); border-color: var(--accent);
+  border-color: var(--accent);
   box-shadow: 0 12px 32px -16px rgba(30, 58, 138, 0.22);
 }
 .material-art {
@@ -1601,10 +1602,10 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 .dsr-fill {
   position: absolute; top: 0; bottom: 0; left: 0;
-  background: linear-gradient(90deg, #2563eb 0%, #1e3a8a 100%);
+  background: var(--accent);
   border-radius: 999px; transition: width 0.3s;
 }
-.dsr-fill.warn { background: linear-gradient(90deg, #b45309 0%, #b91c1c 100%); }
+.dsr-fill.warn { background: var(--danger); }
 .dsr-marks {
   position: relative; height: 18px; margin-top: 4px;
   font-size: 0.72rem; color: var(--text-muted);
@@ -1635,7 +1636,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 .compare-bar-row .bar-interest {
   position: absolute; top: 0; bottom: 0;
-  background: linear-gradient(90deg, rgba(30,58,138,0.55), rgba(30,58,138,0.35));
+  background: rgba(30,58,138,0.45);
 }
 .compare-bar-row .amount {
   text-align: right; font-weight: 700; font-variant-numeric: tabular-nums;
@@ -1690,7 +1691,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 .scn-tab:hover { color: var(--text); }
 .scn-tab.active { background: var(--accent); color: #fff; }
 .scn-section-title {
-  font-size: 0.82rem; font-weight: 800; letter-spacing: 0.04em;
+  font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em;
   text-transform: uppercase; color: var(--text-muted);
   margin: 24px 0 12px; padding-bottom: 6px;
   border-bottom: 1px solid var(--border);
@@ -1729,7 +1730,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   border-radius: var(--radius);
   transition: border-color 0.15s, transform 0.15s;
 }
-.news-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.news-card:hover { border-color: var(--accent); }
 .news-tag {
   display: inline-block;
   font-size: 0.72rem; font-weight: 700;
@@ -1769,7 +1770,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   margin-bottom: 4px;
   transition: background 0.15s, transform 0.15s;
 }
-.fb-write-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.fb-write-btn:hover { background: var(--accent-hover); }
 .fb-write-btn svg { color: #fff; }
 
 /* 기존 FAB는 페이지에서 제거됨 (스타일은 유지하되 사용 안 함) */
@@ -1814,7 +1815,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   text-decoration: none;
 }
 .sector-card:hover {
-  transform: translateY(-2px); border-color: var(--accent);
+  border-color: var(--accent);
   background: var(--accent-soft);
   box-shadow: 0 10px 20px -10px rgba(30,58,138,0.32);
 }
@@ -1838,18 +1839,18 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 .hero-calc-card {
   display: flex; gap: 14px;
   padding: 18px; margin-bottom: 0;
-  background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
+  background: var(--accent);
   color: #fff; border-radius: 16px;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 12px 24px -12px rgba(30,58,138,0.45);
   align-items: center;
 }
 .hero-calc-card-alt {
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  background: var(--accent-hover);
   box-shadow: 0 12px 24px -12px rgba(30,64,175,0.45);
 }
-.hero-calc-card-alt:hover { box-shadow: 0 18px 30px -14px rgba(30,64,175,0.55); }
-.hero-calc-card:hover { transform: translateY(-2px); box-shadow: 0 18px 30px -14px rgba(30,58,138,0.55); }
+.hero-calc-card-alt:hover { border-color: var(--accent); }
+.hero-calc-card:hover { border-color: var(--accent); }
 .hero-calc-icon {
   width: 56px; height: 56px; border-radius: 16px;
   display: inline-flex; align-items: center; justify-content: center;
@@ -1867,7 +1868,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 .hero-calc-body h3 {
   font-size: 1.25rem; color: #fff; line-height: 1.3;
-  margin-bottom: 4px; font-weight: 800; letter-spacing: -0.02em;
+  margin-bottom: 4px; font-weight: 700; letter-spacing: -0.02em;
 }
 .hero-calc-body p {
   font-size: 0.88rem; color: rgba(255,255,255,0.92);
@@ -1894,7 +1895,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   margin-bottom: 8px;
 }
 .dsr-box-head strong { font-size: 0.92rem; color: var(--text); word-break: keep-all; }
-.dsr-pct { font-size: 1.4rem; font-weight: 800; color: var(--text); white-space: nowrap; }
+.dsr-pct { font-size: 1.4rem; font-weight: 700; color: var(--text); white-space: nowrap; }
 .dsr-bar {
   height: 8px; background: var(--border); border-radius: 999px; overflow: hidden;
 }
@@ -1931,7 +1932,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   overflow: hidden; background: var(--surface);
   transition: border-color 0.15s, transform 0.15s;
 }
-.material-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.material-card:hover { border-color: var(--accent); }
 .material-card img {
   width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
   background: var(--surface-2);
@@ -1967,7 +1968,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 .rating-row label { font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
 .rating-row label .rating-val {
-  font-size: 0.95rem; color: var(--accent); font-weight: 800;
+  font-size: 0.95rem; color: var(--accent); font-weight: 700;
 }
 .rating-row input[type="range"] {
   width: 100%; accent-color: var(--accent);
@@ -2160,7 +2161,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   display: flex; flex-direction: column; gap: 2px;
 }
 .dt-dday {
-  font-weight: 800; font-size: 0.95rem; color: var(--accent);
+  font-weight: 700; font-size: 0.95rem; color: var(--accent);
   letter-spacing: -0.02em;
 }
 .dt-past .dt-dday { color: var(--text-subtle); }
@@ -2415,7 +2416,7 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
 }
 .lang-item .lang-name { flex: 1; min-width: 0; }
 .lang-item.is-current { font-weight: 700; }
-.lang-item .lang-check { color: var(--accent); font-weight: 800; }
+.lang-item .lang-check { color: var(--accent); font-weight: 700; }
 .lang-backdrop { display: none; }
 
 /* 모바일: 하단 시트 형태 */
@@ -2639,7 +2640,7 @@ body.lang-open { overflow: hidden; }
   padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px;
   background: var(--bg); transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
 }
-.next-action:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 20px -14px rgba(30,58,138,0.3); }
+.next-action:hover { border-color: var(--accent); }
 .next-action .na-step {
   font-size: 0.72rem; font-weight: 700; color: var(--text-subtle);
   font-variant-numeric: tabular-nums;
@@ -2665,7 +2666,7 @@ body.lang-open { overflow: hidden; }
   display: inline-flex; align-items: center; justify-content: center;
   width: 16px; height: 16px; margin-left: 5px; vertical-align: middle;
   border-radius: 50%; background: var(--surface-2); color: var(--text-muted);
-  font-size: 0.7rem; font-weight: 800; cursor: help; position: relative;
+  font-size: 0.7rem; font-weight: 700; cursor: help; position: relative;
   border: 1px solid var(--border-strong); user-select: none; flex-shrink: 0;
 }
 .tip:hover, .tip:focus, .tip.open {
@@ -2780,10 +2781,10 @@ body.lang-open { overflow: hidden; }
   display: flex; justify-content: space-between; align-items: baseline;
   border-bottom: 2px solid #1e3a8a; padding-bottom: 5px; margin-bottom: 7px;
 }
-#print-report .pr-brand { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; color: #1e3a8a; font-size: 10.5pt; }
+#print-report .pr-brand { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #1e3a8a; font-size: 10.5pt; }
 #print-report .pr-logo { width: 16pt; height: 16pt; object-fit: contain; }
 #print-report .pr-date { color: #555; font-size: 9pt; }
-#print-report .pr-title { font-size: 14pt; font-weight: 800; margin: 0 0 9px; }
+#print-report .pr-title { font-size: 14pt; font-weight: 700; margin: 0 0 9px; }
 #print-report .pr-cols { display: flex; gap: 16px; align-items: flex-start; }
 #print-report .pr-block { flex: 1 1 0; min-width: 0; }
 #print-report .pr-block h2 {
@@ -3109,7 +3110,7 @@ table.data.cmp th:first-child, table.data.cmp td:first-child { min-width: 116px;
   display: block; border: 1px solid var(--border); border-radius: var(--radius);
   background: var(--surface); padding: 16px 18px; transition: border-color 0.15s, transform 0.15s;
 }
-.g-related-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.g-related-card:hover { border-color: var(--accent); }
 .g-related-card .r-cat { font-size: 0.76rem; font-weight: 700; color: var(--accent); }
 .g-related-card h3 { font-size: 1rem; margin: 6px 0 4px; }
 .g-related-card p { font-size: 0.86rem; color: var(--text-muted); margin: 0; }
@@ -3123,7 +3124,7 @@ table.data.cmp th:first-child, table.data.cmp td:first-child { min-width: 116px;
   border: 1px solid var(--border); border-radius: var(--radius);
   background: var(--surface); transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
 }
-.mat-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.mat-card:hover { border-color: var(--accent); }
 .mat-card-media { width: 100%; aspect-ratio: 16 / 10; background: var(--surface-2); overflow: hidden; }
 .mat-card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .mat-card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1; }
@@ -3441,7 +3442,7 @@ th.bl-num { text-align: center; }
   border: 1px solid transparent; border-radius: 4px; background: transparent; line-height: 1.2;
 }
 .ed-tool:hover { background: #fff; border-color: var(--border-strong); color: var(--accent); }
-.ed-tool.is-bold { font-weight: 800; color: var(--text); }
+.ed-tool.is-bold { font-weight: 700; color: var(--text); }
 .ed-tool.is-italic { font-style: italic; }
 .ed-foot {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
@@ -3683,7 +3684,7 @@ ol.rt-list { list-style: decimal; }
   border: 1px solid transparent; border-radius: 4px; background: transparent;
 }
 .ce-tool:hover { background: var(--surface-2); border-color: var(--border-strong); color: var(--accent); }
-.ce-tool.is-bold { font-weight: 800; color: var(--text); }
+.ce-tool.is-bold { font-weight: 700; color: var(--text); }
 .ce-tool.is-italic { font-style: italic; }
 .ce-field {
   padding: 16px; min-height: 72px; line-height: 1.8; font-size: .96rem;
@@ -3717,3 +3718,231 @@ ol.rt-list { list-style: decimal; }
   .ce-page { padding-top: 24px; }
   .ce-block-head, .ce-toolbar, .ce-field, .ce-block-foot { padding-left: 12px; padding-right: 12px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   편집 시스템 (2026-08 개편)
+
+   왜 새 섹션을 두는가
+     이 파일에는 거의 같은 일을 하는 카드 클래스가 9종(.card .cat-card .topic-card
+     .tool-card .hub-tool .sector-card .cat-tile .hero-calc-card .mat-card) 있었다.
+     전부 지우면 169개 페이지의 마크업을 동시에 갈아야 해 위험이 크므로, 기존 클래스는
+     남겨 두고 내부 스타일만 통합했다(호버 리프트·그라데이션·그림자 제거).
+     새로 쓰는 화면은 아래 컴포넌트만 쓴다.
+
+   원칙
+     · 목록이 기본이고 카드가 예외다. 카드를 쓰기 전에 목록으로 충분한지 본다.
+     · 파란색은 행동·링크·현재 상태에만. 배경 장식으로 쓰지 않는다.
+     · 그림자보다 여백·타이포그래피·얇은 구분선.
+     · 한 페이지에서 카드 유형은 최대 2종류.
+     · 중요한 도구(primary-action)와 일반 링크(link-list)는 시각 강도를 분리한다.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 페이지 리듬 ─────────────────────────────────────────────────────────── */
+/* HTML 안의 style="margin-top:40px" 반복을 대체한다. */
+.block        { margin: 40px 0 0; }
+.block-tight  { margin: 24px 0 0; }
+.block-lead   { margin: 0 0 28px; color: var(--text-muted); }
+
+/* 섹션 제목 — eyebrow 없이 제목과 부연 한 줄. */
+.block-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+  margin: 0 0 14px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.block-head h2 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; margin: 0; }
+.block-head p  { color: var(--text-muted); font-size: 0.9rem; margin: 0; }
+.block-head a  { color: var(--text-muted); font-size: 0.88rem; font-weight: 500; white-space: nowrap; }
+.block-head a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── 1차 행동 ────────────────────────────────────────────────────────────
+   그 페이지에서 가장 중요한 도구 하나. 그라데이션 배너 대신 굵은 테두리와 여백으로
+   강도를 만든다. 페이지당 하나만 쓴다. */
+.primary-action {
+  display: block; padding: 22px 24px;
+  border: 1px solid var(--text); border-radius: var(--radius);
+  background: var(--surface); color: var(--text);
+}
+.primary-action:hover { background: var(--surface-2); }
+.primary-action .pa-kicker {
+  display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px;
+}
+.primary-action .pa-title {
+  display: block; font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px;
+}
+.primary-action .pa-desc { display: block; color: var(--text-muted); font-size: 0.95rem; line-height: 1.65; }
+.primary-action .pa-go {
+  display: inline-block; margin-top: 14px;
+  padding: 9px 18px; border-radius: var(--radius-sm);
+  background: var(--text); color: #fff; font-size: 0.92rem; font-weight: 600;
+}
+.primary-action:hover .pa-go { background: var(--accent); }
+@media (min-width: 768px) {
+  .primary-action { padding: 28px 32px; }
+  .primary-action .pa-title { font-size: 1.5rem; }
+}
+
+/* ── 2차 행동 ─────────────────────────────────────────────────────────── */
+.secondary-action {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.92rem; font-weight: 600; color: var(--accent);
+}
+.secondary-action:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── 편집형 링크 목록 ────────────────────────────────────────────────────
+   사이트 기본 링크 표현. 제목이 곧 행동을 설명하므로 별도 CTA 문구를 붙이지 않는다.
+   카드가 아니라 목록이라 배경·그림자·호버 리프트가 없다. */
+.link-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
+.link-list > li { border-bottom: 1px solid var(--border); }
+.link-list > li > a {
+  display: block; padding: 13px 2px; color: var(--text);
+}
+.link-list > li > a:hover { background: var(--surface-2); }
+.link-list .ll-title { display: block; font-weight: 600; font-size: 1rem; line-height: 1.5; }
+.link-list .ll-desc  { display: block; color: var(--text-muted); font-size: 0.88rem; margin-top: 3px; line-height: 1.55; }
+.link-list .ll-meta  { display: block; color: var(--text-subtle); font-size: 0.8rem; margin-top: 4px; }
+/* 2열 — 항목이 6개를 넘는 허브에서만. */
+@media (min-width: 768px) {
+  .link-list-2col { display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; border-top: 0; }
+  .link-list-2col > li:nth-child(-n+2) { border-top: 1px solid var(--border); }
+}
+
+/* ── 상황별 진입점 (홈 두 번째 영역) ────────────────────────────────────
+   아이콘 카드 6개 그리드를 대체한다. 사용자가 자기 상황을 문장에서 찾고,
+   그 줄이 곧 링크다. */
+.entry-list { list-style: none; margin: 0; padding: 0; }
+.entry-list > li { border-bottom: 1px solid var(--border); }
+.entry-list > li:first-child { border-top: 1px solid var(--border); }
+.entry-list > li > a {
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  padding: 15px 2px; color: var(--text);
+}
+.entry-list > li > a:hover { background: var(--surface-2); }
+.entry-list .el-when { flex: 0 0 auto; font-weight: 650; font-size: 1rem; letter-spacing: -0.01em; }
+.entry-list .el-then { color: var(--text-muted); font-size: 0.9rem; }
+@media (min-width: 768px) {
+  .entry-list .el-when { flex: 0 0 268px; }
+  .entry-list .el-then { flex: 1; }
+}
+
+/* ── 도구 목록 ───────────────────────────────────────────────────────────
+   계산기·체크리스트처럼 '열면 바로 쓰는' 링크. 편집형 링크보다 조금 더 강하게
+   구분되지만 카드는 아니다. */
+.tool-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.tool-list > li { background: var(--surface); }
+.tool-list > li > a { display: block; padding: 14px 16px; color: var(--text); }
+.tool-list > li > a:hover { background: var(--accent-soft); }
+.tool-list .tl-name { display: block; font-weight: 600; font-size: 0.98rem; }
+.tool-list .tl-desc { display: block; color: var(--text-muted); font-size: 0.86rem; margin-top: 3px; line-height: 1.55; }
+@media (min-width: 768px) { .tool-list { grid-template-columns: 1fr 1fr; } }
+
+/* ── 거래 단계 목록 (가이드 허브) ───────────────────────────────────────
+   '1단계 기본기 / 2단계 실전 / 3단계 전문가' 를 대체한다. 학습 난이도가 아니라
+   사용자가 지금 서 있는 거래 단계로 나눈다. */
+.stage { margin: 0 0 34px; }
+.stage-head {
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  margin: 0 0 10px; padding-bottom: 8px; border-bottom: 2px solid var(--text);
+}
+.stage-head h2 { font-size: 1.1rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+.stage-head .stage-when { color: var(--text-muted); font-size: 0.86rem; }
+
+/* ── 데이터 패널 ─────────────────────────────────────────────────────────
+   숫자·기준일·표본 수를 담는다. 카드처럼 떠오르지 않고, 기준일을 항상 함께 적는다. */
+.data-panel {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); padding: 18px 20px;
+}
+.data-panel .dp-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.data-panel .dp-head h3 { font-size: 1rem; font-weight: 650; margin: 0; }
+.data-panel .dp-asof { color: var(--text-subtle); font-size: 0.8rem; }
+.data-panel .dp-rows { display: grid; gap: 0; }
+.data-panel .dp-row {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 9px 0; border-top: 1px solid var(--border); font-size: 0.92rem;
+}
+.data-panel .dp-row:first-child { border-top: 0; }
+.data-panel .dp-row .k { color: var(--text-muted); }
+.data-panel .dp-row .v { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ── 안내 / 주의 ─────────────────────────────────────────────────────────
+   .callout 과 같은 역할이지만 아이콘 칸이 없다. 기준일·적용 조건 안내에 쓴다. */
+.notice {
+  border-left: 3px solid var(--border-strong); background: var(--surface-2);
+  padding: 13px 16px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.91rem; line-height: 1.7; color: var(--text);
+}
+.notice + .notice { margin-top: 10px; }
+.notice strong { font-weight: 650; }
+.notice-accent { border-left-color: var(--accent); }
+.notice-warn   { border-left-color: var(--warning); }
+
+/* ── 글 하단 출처 ────────────────────────────────────────────────────────
+   상단에 기관 링크를 나열하던 방식을 대체한다. 실제로 인용한 것만 여기에 둔다. */
+.article-source {
+  margin: 44px 0 0; padding: 18px 0 0; border-top: 1px solid var(--border);
+  font-size: 0.9rem; color: var(--text-muted);
+}
+.article-source h2 { font-size: 0.95rem; font-weight: 650; color: var(--text); margin: 0 0 10px; border: 0; padding: 0; }
+.article-source ul { list-style: none; margin: 0; padding: 0; }
+.article-source li { padding: 5px 0 5px 13px; position: relative; line-height: 1.65; }
+.article-source li::before { content: "—"; position: absolute; left: 0; color: var(--text-subtle); }
+.article-source a { color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
+.article-source a:hover { color: var(--accent); }
+.article-source .as-reviewed { margin-top: 12px; font-size: 0.84rem; color: var(--text-subtle); }
+
+/* ── 글 하단 관련 도구 ───────────────────────────────────────────────────
+   '관련 계산기 카드 3개' 고정 패턴을 대체한다. 가장 직접 연결되는 도구 1~2개만. */
+.tool-callout {
+  margin: 36px 0 0; padding: 18px 20px;
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  background: var(--surface);
+}
+.tool-callout h2 { font-size: 0.95rem; font-weight: 650; margin: 0 0 10px; border: 0; padding: 0; }
+.tool-callout ul { list-style: none; margin: 0; padding: 0; }
+.tool-callout li { padding: 6px 0; }
+.tool-callout li a { font-weight: 600; color: var(--text); }
+.tool-callout li a:hover { color: var(--accent); }
+.tool-callout li span { display: block; color: var(--text-muted); font-size: 0.87rem; margin-top: 2px; }
+
+/* ── 글 하단 관련 글 ─────────────────────────────────────────────────────
+   카드 3개 그리드를 텍스트 목록으로. */
+.related-reading { margin: 28px 0 0; }
+.related-reading > h2 { font-size: 0.95rem; font-weight: 650; margin: 0 0 8px; border: 0; padding: 0; }
+.related-reading ul { list-style: none; margin: 0; padding: 0; }
+.related-reading li { padding: 6px 0; border-bottom: 1px solid var(--border); }
+.related-reading li:last-child { border-bottom: 0; }
+.related-reading li a { color: var(--text); }
+.related-reading li a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.related-reading li span { color: var(--text-muted); font-size: 0.87rem; }
+
+/* ── 기존 컴포넌트 강도 낮추기 ───────────────────────────────────────────
+   클래스는 남기되(마크업 전면 교체 위험 회피) 시각적 소음을 줄인다. */
+.hub-section-tag,
+.g-eyebrow,
+.big-banner-eyebrow { text-transform: none; letter-spacing: 0; }
+.section-head .eyebrow,
+.hero .eyebrow { text-transform: none; letter-spacing: 0; }
+/* 일반 콘텐츠 카드는 떠오르지 않는다 — 그림자를 없애고 테두리로만 구분. */
+.card, .topic-card, .hub-tool, .mat-card, .g-related-card { box-shadow: none; }
+.tool-card { box-shadow: none; }
+.tool-card:hover { box-shadow: none; }
+.tool-card:hover::after { transform: none; }
+/* 데스크톱 내비에는 안내를 넣지 않는다(모바일 메뉴·푸터에만). 규칙을 한곳에 남긴다. */
+.nav a[href$="about.html"] { display: none; }
+
+/* ── 본문 폭 ─────────────────────────────────────────────────────────────
+   글은 680~760px, 정보 허브는 그보다 넓게. 허브에 좁은 폭을 쓰면 목록이
+   한 줄에 한 항목씩 늘어져 오히려 읽기 어렵다. */
+.container-hub { width: 100%; max-width: 920px; margin: 0 auto; padding: 0 20px; }
+
+/* 카테고리 허브의 출처 목록 — .article-source 와 같은 표기를 쓰되 섹션 안에서 쓴다. */
+.src-list { list-style: none; margin: 0; padding: 0; font-size: 0.92rem; color: var(--text-muted); }
+.src-list li { padding: 7px 0 7px 13px; position: relative; line-height: 1.65; border-bottom: 1px solid var(--border); }
+.src-list li:last-child { border-bottom: 0; }
+.src-list li::before { content: "—"; position: absolute; left: 0; color: var(--text-subtle); }
+.src-list a { color: var(--text); font-weight: 500; text-decoration: underline; text-underline-offset: 2px; }
+.src-list a:hover { color: var(--accent); }

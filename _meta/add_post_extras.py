@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""글 페이지(26편)에 두 가지를 자동 보강하는 1회성 스크립트.
+"""글 페이지에 읽는 시간과 '관련 도구'를 보강한다.
 
-  1) 헤더에 'X분 읽기' 자동 표시 — 본문 텍스트 분량으로 계산(한글 400자/분).
-     이미 .meta 안에 '분 읽기'가 있으면 건드리지 않는다.
+  1) 헤더에 'X분 읽기' — 본문 텍스트 분량으로 계산(한글 400자/분).
+     추정이 아니라 실제 글자 수에서 나온 값이다.
 
-  2) 본문 끝(related-posts 섹션 직전)에 '이 글과 관련된 계산기' 카드 삽입.
-     카테고리별로 매핑된 계산기를 카드 그리드로 노출. 마커 주석으로 중복 실행 방지.
+  2) 본문 끝(related-posts 직전)에 '이 글에 이어서 쓰는 계산기' 삽입.
 
-기존 카드 스타일(.cards-grid/.card/.badge)을 재사용 — 새 시각 언어 없음.
+2026-08 개편
+  · 계산기 **카드 3개 그리드 → 도구 1~2개 목록**(.tool-callout).
+    34편 전부에 카드 3개가 같은 모양으로 붙어 있어서, 정작 그 글과 가장 직접
+    연결되는 도구가 나머지 둘에 묻혔다. 카테고리별 첫 두 개만 남긴다.
+  · 반복 실행하면 기존 블록을 갈아끼운다(멱등).
 """
 import os
 import re
@@ -102,41 +105,42 @@ def inject_read_time(html, minutes):
     return html.replace(m.group(0), new_meta, 1), True
 
 
+# 가장 직접 연결되는 도구만 남긴다(최대 2개).
+MAX_TOOLS = 2
+
+EXISTING_TOOLS_RE = re.compile(r"\n*" + re.escape(RELATED_TOOLS_MARKER) + r".*?</section>\n", re.S)
+
+
 def build_tools_section(cat, tools):
-    cards = "".join(
-        f'    <a class="card" href="{href}">\n'
-        f'      <span class="badge badge-accent">관련 계산기</span>\n'
-        f'      <h3>{name}</h3>\n'
-        f'      <p>{sub}</p>\n'
-        f'    </a>\n'
+    items = "".join(
+        f'    <li><a href="{href}">{name}</a><span>{sub}</span></li>\n'
         for name, href, sub in tools
     )
     return (
         f"\n{RELATED_TOOLS_MARKER}\n"
-        f'<section class="hub-section" style="margin-top: 40px;">\n'
-        f'  <div class="hub-section-head">\n'
-        f'    <span class="hub-section-tag">{cat}</span>\n'
-        f"    <h2>이 글과 관련된 계산기</h2>\n"
-        f"  </div>\n"
-        f'  <div class="cards-grid">\n{cards}  </div>\n'
+        f'<section class="tool-callout">\n'
+        f"  <h2>이 글에 이어서 쓰는 계산기</h2>\n"
+        f"  <ul>\n{items}  </ul>\n"
         f"</section>\n"
     )
 
 
 def inject_tools_section(html, cat):
-    if RELATED_TOOLS_MARKER in html:
-        return html, False
-    tools = TOOLS.get(cat) or []
+    tools = (TOOLS.get(cat) or [])[:MAX_TOOLS]
     if not tools:
-        return html, False
+        # 매핑이 없으면 남아 있던 옛 블록만 걷어낸다.
+        stripped = EXISTING_TOOLS_RE.sub("\n", html)
+        return stripped, stripped != html
+    before = html
+    html = EXISTING_TOOLS_RE.sub("\n", html)
     section = build_tools_section(cat, tools)
-    # related-posts 섹션 직전(있으면)에 삽입, 없으면 </main> 직전
     idx = html.find(RELATED_POSTS_MARKER)
     if idx < 0:
         idx = html.rfind("</main>")
     if idx < 0:
-        return html, False
-    return html[:idx] + section + html[idx:], True
+        return before, False
+    out = html[:idx].rstrip("\n") + "\n" + section + html[idx:]
+    return out, out != before
 
 
 def main():

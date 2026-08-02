@@ -192,7 +192,7 @@ const guides = [
     summary: 'Advance management deposits, long-term repair reserves, and prorated monthly fees can easily change the closing balance by hundreds of thousands of won. Confirm every amount with the management office before closing.',
     readTime: '9 min read',
     sections: [
-      ['Closing adjustment at a glance', table(
+      ['What gets adjusted at closing', table(
         ['Item', 'Usual direction', 'Basis'],
         [
           ['Advance management deposit', 'Buyer pays seller', 'Exact balance confirmed by the management office'],

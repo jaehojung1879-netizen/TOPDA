@@ -101,11 +101,14 @@ def render(issues):
             f' · 검토일 {esc(it["reviewed"])}</p>\n'
             '      </article>\n')
     return (
-        '<section class="section home-issue">\n'
+        # 홈의 다른 섹션과 같은 .block-head 를 쓴다(2026-08 편집 개편).
+        # 제목을 '핵심 이슈'에서 '최근 확인이 필요한 제도 변경'으로 바꿨다 —
+        # 무엇을 담는 칸인지 제목만 보고 알 수 있어야 한다.
+        '<section class="section home-issue" style="padding-top: 0;">\n'
         '  <div class="container">\n'
-        '    <div class="strip-head">\n'
-        '      <h2>핵심 이슈</h2>\n'
-        '      <span class="strip-sub">운영자가 공식 원문을 확인해 직접 정리한 변경 사항입니다</span>\n'
+        '    <div class="block-head">\n'
+        '      <h2>최근 확인이 필요한 제도 변경</h2>\n'
+        '      <p>운영자가 공식 원문을 확인해 직접 정리한 변경 사항입니다</p>\n'
         '    </div>\n'
         '    <div class="issue-grid">\n'
         + "".join(cards) +

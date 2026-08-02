@@ -298,7 +298,6 @@
   <div class="def-list"><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.</span></div><div class="row"><span class="k">2026-06-14</span><span class="v">국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).</span></div><div class="row"><span class="k">2026-06-13</span><span class="v">국민주택채권 매입금액 만원 단위 절상 적용 + 지역(특별시·광역시/그 밖의 지역) 매입률 구분. 양도세 장기보유특별공제 표1 정정(연 2%·3년 6%~15년 30%).</span></div><div class="row"><span class="k">2026-06-04</span><span class="v">대출 한도 규정 블록 신설(LTV·가격대별 한도·스트레스 DSR·전세 보증기관 HF/HUG/SGI).</span></div></div>
   </div>
 </details>
-  <p class="note">계산 결과는 입력하신 조건에 따른 <strong>추정값</strong>입니다. 실제 고지·부과·승인 금액과 다를 수 있으며, 개별 사안에 대한 법률·세무·금융 자문이 아닙니다.</p>
 </section>
 <!-- calc:meta:end -->
 
@@ -312,25 +311,34 @@
     <div class="row">
       <div>
         <div class="brand"><span class="brand-mark"></span>톺다</div>
-        <p>부동산, 하나하나 톺아보자.</p>
+        <p>부동산 거래에 필요한 도구와 가이드를 공식 자료 기반으로 정리합니다.</p>
       </div>
       <div>
-        <h4>탐색</h4>
+        <h4>도구</h4>
         <ul>
-          <li><a href="../index.html#categories">카테고리</a></li>
           <li><a href="../calculators/index.html">계산기</a></li>
+          <li><a href="../market.html">시세정보</a></li>
+          <li><a href="../apt/">지역별 아파트 실거래</a></li>
           <li><a href="../checklists/index.html">체크리스트</a></li>
         </ul>
       </div>
       <div>
-        <h4>사이트 정보</h4>
+        <h4>사이트</h4>
         <ul>
-          <li><a href="../about.html">소개·운영원칙</a></li>
-          <li><a href="../about.html#disclaimer">면책고지</a></li>
+          <li><a href="../guides.html">가이드</a></li>
+          <li><a href="../board.html">게시판</a></li>
+          <li><a href="../about.html">안내</a></li>
+          <li><a href="../privacy.html">개인정보 처리방침</a></li>
+          <li><a href="../en/index.html">English</a></li>
         </ul>
       </div>
     </div>
-    <p class="disclaimer">© 톺다.</p>
+    <p class="disclaimer">
+      본 사이트의 콘텐츠는 일반적인 정보 제공을 목적으로 하며, 개별 사안에 대한 법률·세무·금융 자문이 아닙니다.
+      구체적인 결정은 변호사·세무사·공인중개사·자격 있는 금융기관과 상의하시기 바랍니다.
+      게재 시점 기준이며 이후 법령·정책 변경으로 달라질 수 있습니다.
+      <br/>© 톺다.
+    </p>
   </div>
 </footer>
 <script src="../assets/rates.js?v=20260730"></script>
