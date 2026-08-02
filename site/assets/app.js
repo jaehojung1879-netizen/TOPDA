@@ -762,11 +762,15 @@ function renderAcqNotes(scope, r) {
     const firstHomeOn = root.querySelector('[name="firstHome"]')?.checked || false;
     const unsoldOn = root.querySelector('[name="unsold2026"]')?.checked || false;
     setEligible('firstHomeSmallHouse', paid && firstHomeOn);
+    // 조례 추가 감면은 '지방 준공 후 미분양'을 실제로 체크한 사람에게만 의미가 있다.
+    //  비활성 상태로 늘 띄워 두면 대부분의 사용자에게는 읽을 필요 없는 칸이 하나 더
+    //  늘어날 뿐이라, 아예 숨긴다.
     const localSel = root.querySelector('[name="unsold2026LocalExtra"]');
     if (localSel) {
-      localSel.disabled = !(paid && unsoldOn);
+      const on = paid && unsoldOn;
+      localSel.disabled = !on;
       const f = localSel.closest('.field');
-      if (f) f.classList.toggle('is-disabled', localSel.disabled);
+      if (f) { f.classList.toggle('is-disabled', !on); f.style.display = on ? '' : 'none'; }
     }
 
     const status = root.querySelector('[data-acq-auto-status]');
@@ -1344,13 +1348,22 @@ function applyBondDiscountRate(json, opts) {
   }
   const isStale = !isSeed && (collectedAt == null || (ageDays != null && ageDays > staleDays));
 
+  // 자동 수집이 며칠째 실패 중이면 그 사실도 함께 밝힌다 — "오늘도 안 됐다"를
+  // 사용자가 알아야 직접 입력하러 간다.
+  const fails = Number((json && json.consecutive_failures) || 0);
+  const lastAttempt = json && json.last_attempt_at;
+  const failNote = fails >= 3
+    ? ' 자동 수집이 ' + fails + '회 연속 실패했습니다'
+      + (lastAttempt ? ' (마지막 시도 ' + lastAttempt + ')' : '') + '.'
+    : '';
+
   if (isSeed) {
     return {
-      state: 'example', rate: example, asOf, collectedAt, ageDays,
+      state: 'example', rate: example, asOf, collectedAt, ageDays, fails,
       shouldFill: false,
       message: '실시간 조회 실패 — 예시값(' + example + '%) 사용 중. 고객부담률은 시장금리에 따라 매일 바뀌므로, '
         + '잔금일 당일 값을 은행 국민주택채권 포털에서 확인해 직접 입력하세요.'
-        + (asOf ? ' (마지막 표시 기준일 ' + asOf + ')' : ''),
+        + (asOf ? ' (마지막 표시 기준일 ' + asOf + ')' : '') + failNote,
     };
   }
   if (isStale) {
@@ -2491,7 +2504,8 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
         const on = !areaOver85 && price <= 600000000 && getCheck('unsold2026');
         localSel.disabled = !on;
         const f = localSel.closest('.field');
-        if (f) f.classList.toggle('is-disabled', !on);
+        // 해당하지 않는 사람에게는 아예 숨긴다 — 비활성 칸은 화면만 어지럽힌다.
+        if (f) { f.classList.toggle('is-disabled', !on); f.style.display = on ? '' : 'none'; }
       }
       const status = root.querySelector('[data-dashboard-acq-status]');
       if (status) {

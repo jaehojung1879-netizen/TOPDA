@@ -136,9 +136,9 @@ function head(lang, page, title, desc, extraStyle, alts) {
 <meta name="twitter:description" content="${desc}" />
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 ${alts}
-<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
+<script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260722" />${extraStyle || ''}
+<link rel="stylesheet" href="../assets/styles.css?v=d5420f8c7a" />${extraStyle || ''}
 </head>
 <body>`;
 }
@@ -275,7 +275,7 @@ ${g.ref.map(cardHtml).join('\n')}
 
 ${footer(c)}
 
-<script src="../assets/app.js?v=20260722"></script>
+<script src="../assets/app.js?v=a6d9173f4d"></script>
 </body>
 </html>
 `;
@@ -454,7 +454,7 @@ ${m.tools.map(toolHtml).join('\n')}
 
 ${footer(c)}
 
-<script src="../assets/app.js?v=20260722"></script>
+<script src="../assets/app.js?v=a6d9173f4d"></script>
 <script>
 (function () {
   Promise.all([

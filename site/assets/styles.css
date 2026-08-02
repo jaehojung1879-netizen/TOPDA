@@ -555,6 +555,14 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
   font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); word-break: keep-all;
 }
 
+/* 라벨 옆 역할 배지 — 이 입력이 어디에 쓰이는지 한눈에 보이게 */
+.field-badge {
+  display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px;
+  font-size: 0.68rem; font-weight: 700; vertical-align: middle; white-space: nowrap;
+  background: color-mix(in srgb, var(--accent, #2563eb) 12%, transparent);
+  color: var(--accent, #2563eb);
+}
+
 /* 라벨 옆의 작은 되돌리기·전환 버튼 */
 button.linkish {
   background: none; border: 0; padding: 0 0 0 6px; margin: 0;
@@ -3984,3 +3992,8 @@ ol.rt-list { list-style: decimal; }
 .src-list li::before { content: "—"; position: absolute; left: 0; color: var(--text-subtle); }
 .src-list a { color: var(--text); font-weight: 500; text-decoration: underline; text-underline-offset: 2px; }
 .src-list a:hover { color: var(--accent); }
+
+/* 단지 검색 결과 — 중앙값과 평형별 분포를 함께 보여준다 */
+.op-hit .op-range { display: block; grid-column: 1 / -1; margin-top: 2px; font-size: 0.74rem; color: var(--text-muted); }
+.op-hit .op-price small { font-weight: 500; opacity: 0.7; }
+.op-picked-warn { display: block; margin-top: 8px; }

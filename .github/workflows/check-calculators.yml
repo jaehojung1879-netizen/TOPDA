@@ -43,6 +43,12 @@ jobs:
 
       # 각 스크립트는 의존성 없이 node:vm 으로 app.js·rates.js 를 그대로 로드한다.
       # npm install 이 필요 없으므로 설치 단계도 없다.
+      # 계산 로직을 아무리 고쳐도 ?v= 를 안 올리면 방문자는 캐시된 예전 app.js 를 쓴다.
+      # 실제로 그 일이 있었다(새 입력칸은 보이는데 그 값을 읽는 코드가 없어 한도가 옛값으로
+      # 계산됨). 자산 해시와 어긋난 페이지가 하나라도 있으면 여기서 막는다.
+      - name: 정적 자산 캐시 버전 일치
+        run: node scripts/bump_asset_version.mjs --check
+
       - name: 세무 정확성 회귀 테스트
         run: node scripts/check_tax_rules.mjs
 

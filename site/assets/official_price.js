@@ -134,14 +134,23 @@ window.TopdaOfficialPrice = (function () {
           return;
         }
         // 기준일을 결과 줄에도 적는다 — 고르기 전에 몇 년도 공시가격인지 보여야 한다.
+        // ⚠ 저장된 값은 단지 전체 호의 **중앙값**이다. 공시가격은 평형마다 다르므로
+        //   이 값이 곧 그 사람의 시가표준액은 아니다. 범위(min~max)를 함께 보여주고
+        //   "평형별로 다르다"를 분명히 해야, 중앙값을 자기 값으로 오해하지 않는다.
+        //   (평형별 값을 주려면 수집기가 호별 가격을 전유부 면적과 조인해야 한다 — 미구현.)
         list.innerHTML = hits.map(function (h, i) {
           var r = h.rec;
           var std = stdDayText(r.std_day);
+          var spread = (r.min && r.max && r.max > r.min)
+            ? '<span class="op-range">평형별 ' + won(r.min) + '~' + won(r.max) +
+              (r.n ? ' · ' + r.n + '호' : '') + '</span>'
+            : '';
           return '<button type="button" class="op-hit" data-i="' + i + '">' +
                  '<span class="op-name">' + h.name + '</span>' +
                  '<span class="op-region">' + h.region +
                  (std ? ' · ' + std + ' 기준' : '') + '</span>' +
-                 '<span class="op-price">' + won(r.med) + '</span>' +
+                 '<span class="op-price">' + won(r.med) + ' <small>중앙값</small></span>' +
+                 spread +
                  '</button>';
         }).join('');
         list._hits = hits;
@@ -160,6 +169,19 @@ window.TopdaOfficialPrice = (function () {
       var std = stdDayText(h.rec.std_day);
       toggle.innerHTML = '🔎 다시 검색 <span class="op-filled">' + h.name + ' · ' +
         won(h.rec.med) + (std ? ' · ' + std + ' 기준' : '') + '</span>';
+      // 채운 값이 '단지 중앙값'임을 입력칸 옆에 남긴다. 평형이 중앙값과 다르면
+      // 채권 매입액이 그만큼 어긋나므로, 정확한 값은 본인 호의 공시가격으로 확인해야 한다.
+      var warn = wrap.querySelector('.op-picked-warn');
+      if (!warn) {
+        warn = document.createElement('span');
+        warn.className = 'op-picked-warn data-stale';
+        wrap.appendChild(warn);
+      }
+      warn.innerHTML = '이 값은 <strong>단지 전체 호의 중앙값</strong>입니다 — 공시가격은 '
+        + '평형마다 다릅니다'
+        + (h.rec.min && h.rec.max && h.rec.max > h.rec.min
+          ? ' (이 단지는 ' + won(h.rec.min) + '~' + won(h.rec.max) + ' 분포)' : '')
+        + '. 본인 호의 정확한 공시가격은 ' + OFFICIAL_LINK + '에서 확인해 직접 입력하세요.';
       if (opts.onPick) opts.onPick(h);
     });
 
