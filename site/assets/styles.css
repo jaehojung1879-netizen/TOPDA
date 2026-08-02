@@ -913,10 +913,11 @@ details.explain .explain-body > :first-child { margin-top: 0; }
 
 /* Hero — 파란 방사형 그라데이션 배경을 걷어내고 흰 바탕 + 아래 구분선만 남긴다.
    장식이 사라진 자리를 여백과 제목 크기로 채운다. */
+/* 히어로에는 배경색도 구분선도 두지 않는다. 흰 히어로 + 회색 본문이면 그 경계가
+   가로줄로 보이는데, 홈에서 첫 화면과 카테고리는 끊어 읽을 구간이 아니다. */
 .home-intro {
   padding: 36px 0 28px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  background: transparent;
 }
 @media (min-width: 768px) { .home-intro { padding: 60px 0 44px; } }
 .home-tagline {
