@@ -1,0 +1,320 @@
+/*
+ * 대출 한도 회귀 테스트
+ * -----------------------------------------------------------------------
+ * 목적은 두 가지다.
+ *
+ *  1) 현행 규제값이 계산기에 실제로 반영돼 있는지 확인한다.
+ *     — 규제지역 일반 LTV 40%(10·15 대책), 생애최초 전국 70%(6·27 대책),
+ *       수도권·규제지역 스트레스 3.0%p, 지방 비규제 0.75%p,
+ *       가격대별 한도는 수도권·규제지역에만 적용.
+ *
+ *  2) **한도가 과대 산출되지 않는지** 회귀로 막는다.
+ *     이전 모델(규제 LTV 50% / 스트레스 1.5%p / 비규제 생애최초 80% /
+ *     비규제는 가격대별 한도 없음)로 계산한 값과 비교해, 어떤 시나리오에서도
+ *     새 결과가 더 크지 않아야 한다. 규제가 풀린 게 아니라 강화됐기 때문에,
+ *     새 값이 더 크게 나온다면 그건 규제 반영 실수다.
+ *
+ * 실행: node scripts/check_loan_limit_rules.mjs
+ */
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+
+const appSource = fs.readFileSync(new URL('../site/assets/app.js', import.meta.url), 'utf8');
+function functionBlock(startNeedle, endNeedle) {
+  const start = appSource.indexOf(startNeedle);
+  const end = appSource.indexOf(endNeedle, start);
+  assert.ok(start >= 0 && end > start, `${startNeedle} 블록을 찾을 수 없습니다.`);
+  return appSource.slice(start, end);
+}
+
+const ratesSource = fs.readFileSync(new URL('../site/assets/rates.js', import.meta.url), 'utf8');
+const ratesContext = vm.createContext({ window: {} });
+vm.runInContext(ratesSource, ratesContext);
+const RATES = ratesContext.window.TOPDA_RATES;
+
+const context = vm.createContext({ window: { TOPDA_RATES: RATES } });
+vm.runInContext(
+  [
+    functionBlock('function loanRatesCfg()', '\n// 전세대출'),
+    'globalThis.cores = { calcMortgageLimit, loanRegionConfig, suggestLtvPercent, suggestStressAdd };',
+  ].join('\n'),
+  context,
+);
+const { calcMortgageLimit, loanRegionConfig, suggestLtvPercent, suggestStressAdd } = context.cores;
+
+let passed = 0;
+const check = (name, fn) => { fn(); passed += 1; console.log('  ✓ ' + name); };
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 P0-①] 규제지역 일반 LTV — 50%가 아니라 40%');
+// ─────────────────────────────────────────────────────────────────────
+
+check('규제지역 무주택·처분조건부 1주택 LTV는 40%다', () => {
+  // 10·15 대책(2025.10.16 시행)으로 규제지역 일반 LTV가 70%→40%로 내려갔다.
+  assert.equal(suggestLtvPercent('regulated', 'none').value, 40);
+  assert.equal(suggestLtvPercent('regulated', 'replace').value, 40);
+});
+
+check('규제지역 생애최초는 LTV 하향에서 제외돼 70%를 유지한다', () => {
+  assert.equal(suggestLtvPercent('regulated', 'first').value, 70);
+});
+
+check('생애최초 LTV는 전 지역 70%다 (6·27 대책으로 80%→70%)', () => {
+  for (const region of ['metroNonRegulated', 'regulated', 'provincialNonRegulated']) {
+    assert.equal(suggestLtvPercent(region, 'first').value, 70, region);
+  }
+});
+
+check('수도권·규제지역의 다주택·미처분 1주택은 주택구입 주담대 금지(LTV 0%)', () => {
+  for (const region of ['metroNonRegulated', 'regulated']) {
+    assert.equal(suggestLtvPercent(region, 'multi').value, 0, region);
+    assert.equal(suggestLtvPercent(region, 'keep1').value, 0, region);
+  }
+});
+
+check('지방 비규제 다주택 LTV는 확정값이 아니라 추정값으로 표시된다', () => {
+  const r = suggestLtvPercent('provincialNonRegulated', 'multi');
+  assert.equal(r.value, 60);
+  assert.equal(r.confidence, 'estimate', '관행값은 verified로 단정하면 안 됩니다.');
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 P0-②] 스트레스 가산금리 — 수도권·규제 3.0%p');
+// ─────────────────────────────────────────────────────────────────────
+
+check('수도권 비규제·규제지역 변동금리 스트레스 가산은 3.00%p다', () => {
+  // 스트레스 금리 3.0% × 3단계 기본 적용비율 100% = 3.00%p (2025.10.16~)
+  assert.equal(suggestStressAdd('metroNonRegulated', 'variable').value, 3);
+  assert.equal(suggestStressAdd('regulated', 'variable').value, 3);
+});
+
+check('지방 비규제는 2단계 한시 유예로 0.75%p다', () => {
+  // 스트레스 금리 1.5% × 2단계 적용비율 50% = 0.75%p
+  const r = suggestStressAdd('provincialNonRegulated', 'variable');
+  assert.equal(r.value, 0.75);
+  assert.ok(r.validUntil, '한시 유예에는 종료일이 표시돼야 합니다.');
+});
+
+check('1.5%p가 수도권·규제지역 기본값으로 남아 있지 않다', () => {
+  for (const region of ['metroNonRegulated', 'regulated']) {
+    assert.notEqual(suggestStressAdd(region, 'variable').value, 1.5, region);
+  }
+});
+
+check('금리유형이 고정에 가까울수록 가산이 줄어든다', () => {
+  const v = suggestStressAdd('regulated', 'variable').value;
+  const m = suggestStressAdd('regulated', 'mixed').value;
+  const p = suggestStressAdd('regulated', 'periodic').value;
+  const f = suggestStressAdd('regulated', 'fixed').value;
+  assert.ok(v > m && m > p && p > f, `${v} > ${m} > ${p} > ${f}`);
+  assert.equal(f, 0, '만기까지 순수 고정은 스트레스 가산이 없습니다.');
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 P0-③] 지역 3분류 — 가격대별 한도 적용 범위');
+// ─────────────────────────────────────────────────────────────────────
+
+check('지역이 「수도권 비규제 / 규제지역 / 지방 비규제」 3개로 나뉜다', () => {
+  // vm 컨텍스트에서 온 배열이라 deepEqual은 realm 차이로 실패한다 — 문자열로 비교한다.
+  const keys = Array.from(RATES.loan.regions).map((r) => r.key).join(',');
+  assert.equal(keys, 'metroNonRegulated,regulated,provincialNonRegulated');
+});
+
+check('가격대별 한도는 수도권 비규제·규제지역에만 적용된다', () => {
+  const base = { price: 2_000_000_000, income: 300_000_000, rate: 4, termYears: 30, dsrLimitPercent: 40 };
+  const metro = calcMortgageLimit({ ...base, region: 'metroNonRegulated', ltvPercent: 70, stressAdd: 3 });
+  const reg = calcMortgageLimit({ ...base, region: 'regulated', ltvPercent: 40, stressAdd: 3 });
+  const prov = calcMortgageLimit({ ...base, region: 'provincialNonRegulated', ltvPercent: 70, stressAdd: 0.75 });
+  assert.equal(metro.priceCapApplies, true);
+  assert.equal(reg.priceCapApplies, true);
+  assert.equal(prov.priceCapApplies, false);
+  // 20억 주택 → 15~25억 구간이라 4억
+  assert.equal(metro.priceCap, 400_000_000);
+  assert.equal(prov.priceCap, Infinity);
+});
+
+check('수도권 비규제지역은 LTV 70%지만 가격대별 한도에 걸린다', () => {
+  // 12억 주택 · LTV 70% = 8.4억이지만 15억 이하 구간 상한 6억으로 잘린다.
+  const r = calcMortgageLimit({
+    price: 1_200_000_000, region: 'metroNonRegulated', ltvPercent: 70, ownership: 'none',
+    income: 400_000_000, rate: 4, stressAdd: 3, termYears: 40, dsrLimitPercent: 40,
+  });
+  assert.equal(r.binding.key, 'priceCap');
+  assert.equal(r.limit, 600_000_000);
+});
+
+check('레거시 호출부(regulatedMetro boolean)도 계속 동작한다', () => {
+  const a = calcMortgageLimit({
+    price: 800_000_000, ltvPercent: 40, regulatedMetro: true,
+    income: 60_000_000, rate: 4.5, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
+  });
+  assert.equal(a.region.key, 'regulated');
+  const b = calcMortgageLimit({
+    price: 800_000_000, ltvPercent: 70, regulatedMetro: false,
+    income: 60_000_000, rate: 4.5, stressAdd: 0.75, termYears: 30, dsrLimitPercent: 40,
+  });
+  assert.equal(b.region.key, 'provincialNonRegulated');
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 회귀] 새 규제값이 이전보다 한도를 크게 만들지 않는다');
+// ─────────────────────────────────────────────────────────────────────
+
+// 이전(잘못된) 모델을 그대로 재현한 참조 구현.
+//  규제지역: LTV 50%(생애최초 70%·다주택 0%) · 스트레스 1.5%p · 가격대별 한도 적용
+//  비규제:   LTV 70%(생애최초 80%·다주택 60%) · 스트레스 0.75%p · 가격대별 한도 없음
+function legacyLimit({ price, regulated, ownership, income, existingAnnualDebt = 0, rate, termYears, dsrLimitPercent, repayType = 'equal' }) {
+  const ltvPercent = regulated
+    ? (ownership === 'first' ? 70 : (ownership === 'multi' ? 0 : 50))
+    : (ownership === 'first' ? 80 : (ownership === 'multi' ? 60 : 70));
+  const stressAdd = regulated ? 1.5 : 0.75;
+  const ltvLimit = price * (ltvPercent / 100);
+  let priceCap = Infinity;
+  if (regulated) {
+    const eok = price / 1e8;
+    priceCap = eok <= 15 ? 600000000 : eok <= 25 ? 400000000 : 200000000;
+  }
+  const availAnnual = Math.max(0, income * (dsrLimitPercent / 100) - existingAnnualDebt);
+  const i = (rate + stressAdd) / 100 / 12;
+  const n = termYears * 12;
+  const m = i > 0 ? i * Math.pow(1 + i, n) / (Math.pow(1 + i, n) - 1) : 1 / n;
+  const factor = repayType === 'principal' ? 12 / n + i * (12 - 66 / n) : m * 12;
+  const dsrLimit = availAnnual / factor;
+  return Math.max(0, Math.min(ltvLimit, priceCap, dsrLimit));
+}
+
+// 지역 3분류를 이전 2분류에 대응시킨다.
+//  수도권 비규제 → 이전에는 '비규제'로 취급됐다(가격대별 한도도, 3.0%p 스트레스도 없었다).
+const REGION_TO_LEGACY_REGULATED = {
+  metroNonRegulated: false,
+  regulated: true,
+  provincialNonRegulated: false,
+};
+
+check('모든 지역×보유×가격 조합에서 새 한도 ≤ 이전 한도', () => {
+  const prices = [300_000_000, 800_000_000, 1_200_000_000, 1_800_000_000, 2_600_000_000];
+  const incomes = [40_000_000, 80_000_000, 200_000_000, 500_000_000];
+  const regions = ['metroNonRegulated', 'regulated', 'provincialNonRegulated'];
+  const ownerships = ['none', 'first', 'replace', 'keep1', 'multi'];
+  const repayTypes = ['equal', 'principal'];
+  let compared = 0;
+  for (const price of prices) {
+    for (const income of incomes) {
+      for (const region of regions) {
+        for (const ownership of ownerships) {
+          for (const repayType of repayTypes) {
+            const ltv = suggestLtvPercent(region, ownership);
+            const stress = suggestStressAdd(region, 'variable');
+            const now = calcMortgageLimit({
+              price, region, ownership, ltvPercent: ltv.value, stressAdd: stress.value,
+              income, existingAnnualDebt: 0, rate: 4.5, termYears: 30,
+              dsrLimitPercent: 40, repayType,
+            });
+            // keep1은 이전 모델에 없던 구분이라 '다주택'과 같게 본다(가장 관대한 쪽으로 비교).
+            const legacyOwnership = ownership === 'keep1' ? 'multi' : ownership;
+            const before = legacyLimit({
+              price, regulated: REGION_TO_LEGACY_REGULATED[region], ownership: legacyOwnership,
+              income, rate: 4.5, termYears: 30, dsrLimitPercent: 40, repayType,
+            });
+            assert.ok(
+              now.limit <= before + 1, // 1원 오차 허용(부동소수점)
+              `과대 산출: ${region}/${ownership}/${repayType} 가격 ${price} 소득 ${income} — 신 ${Math.round(now.limit)} > 구 ${Math.round(before)}`,
+            );
+            compared += 1;
+          }
+        }
+      }
+    }
+  }
+  assert.ok(compared >= 500, `비교 케이스가 ${compared}개뿐입니다.`);
+});
+
+check('대표 시나리오 — 규제지역 10억 주택 무주택자 한도가 줄었다', () => {
+  const args = {
+    price: 1_000_000_000, income: 200_000_000, rate: 4.5,
+    termYears: 30, dsrLimitPercent: 40, repayType: 'equal',
+  };
+  const now = calcMortgageLimit({ ...args, region: 'regulated', ownership: 'none', ltvPercent: 40, stressAdd: 3 });
+  const before = legacyLimit({ ...args, regulated: true, ownership: 'none' });
+  assert.ok(now.limit < before, `줄어들지 않았습니다: ${now.limit} vs ${before}`);
+  // LTV 40% = 4억이 결정 요인이어야 한다(이전에는 50% = 5억).
+  assert.equal(now.binding.key, 'ltv');
+  assert.equal(Math.round(now.ltvLimit), 400_000_000);
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출] 결과 항목 구분 · 경과규정');
+// ─────────────────────────────────────────────────────────────────────
+
+check('결과를 법정·확정 / 사용자 입력 / 추정으로 구분한다', () => {
+  const r = calcMortgageLimit({
+    price: 800_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
+    income: 80_000_000, rate: 4.5, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
+  });
+  const c = r.classification;
+  assert.ok(c.statutory.length > 0 && c.userInput.length > 0);
+  assert.ok(c.statutory.some((i) => i.key === 'ltv'), '기준값 그대로면 LTV는 법정 항목이어야 합니다.');
+  // 직접 입력하면 추정 항목으로 옮겨간다.
+  const custom = calcMortgageLimit({
+    price: 800_000_000, region: 'regulated', ownership: 'none', ltvPercent: 55,
+    income: 80_000_000, rate: 4.5, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
+  });
+  assert.ok(custom.classification.estimated.some((i) => i.key === 'ltv'));
+});
+
+check('경과규정·대환은 자동 판정하지 않고 사용자 선택을 그대로 표시한다', () => {
+  const r = calcMortgageLimit({
+    price: 800_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
+    income: 80_000_000, rate: 4.5, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
+    grandfather: 'preContract',
+  });
+  assert.equal(r.grandfatherActive, true);
+  assert.ok(r.grandfatherOption && r.grandfatherOption.label.includes('2025.10.15'));
+  // 선택했다고 한도를 바꾸지는 않는다(은행이 증빙으로 판정하는 사항).
+  const plain = calcMortgageLimit({
+    price: 800_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
+    income: 80_000_000, rate: 4.5, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
+  });
+  assert.equal(r.limit, plain.limit);
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출] 페이지·공통엔진 일관성');
+// ─────────────────────────────────────────────────────────────────────
+
+check('대출 한도 페이지에 3분류 지역·금리유형·경과규정 입력이 있다', () => {
+  const html = fs.readFileSync(new URL('../site/calculators/loan-limit.html', import.meta.url), 'utf8');
+  for (const needle of [
+    'value="metroNonRegulated"', 'value="regulated"', 'value="provincialNonRegulated"',
+    'name="rateType"', 'name="grandfather"', 'value="keep1"',
+    'data-out="mAppliedRule"', 'data-out="mRuleNotes"', 'data-out="mClassify"',
+  ]) {
+    assert.ok(html.includes(needle), `대출 한도 페이지에 ${needle}이(가) 없습니다.`);
+  }
+});
+
+check('종합계산기가 자체 LTV·스트레스 분기를 두지 않고 공통 함수를 쓴다', () => {
+  const start = appSource.indexOf('function renderMortgageLimit(');
+  const end = appSource.indexOf('\n    function calcSale()', start);
+  const block = appSource.slice(start, end);
+  assert.match(block, /suggestLtvPercent\(/);
+  assert.match(block, /suggestStressAdd\(/);
+  assert.doesNotMatch(block, /ltv\.regulatedFirst|stress\.metro|nonRegulatedFirst/,
+    '종합계산기에 자체 LTV·스트레스 분기가 남아 있습니다.');
+});
+
+check('rates.js에 구 키(ltv.regulated 50 / stress.metro 1.5)가 남아 있지 않다', () => {
+  assert.equal(RATES.loan.ltv, undefined, 'loan.ltv 구 구조가 남아 있습니다.');
+  assert.equal(RATES.loan.stress.metro, undefined, 'stress.metro 구 키가 남아 있습니다.');
+  assert.ok(RATES.loan.ltvByRegion && RATES.loan.stress.byRegion);
+});
+
+check('대출 규정 블록에 근거·검토일·시행일 메타데이터가 있다', () => {
+  for (const field of ['effectiveFrom', 'reviewedAt', 'jurisdiction', 'confidence', 'source']) {
+    assert.ok(RATES.loan[field], `loan.${field}가 없습니다.`);
+  }
+  assert.equal(RATES.loan.effectiveFrom, '2025-10-16', '10·15 대책 시행일이 반영돼야 합니다.');
+});
+
+console.log(`\n대출 한도 회귀 테스트 ${passed}개 통과\n`);

@@ -385,10 +385,31 @@ function calcAcquisitionTax(input) {
     firstHomeSmallHouse = false, // 소형 비아파트(도시형생활주택·다가구 등) 또는 인구감소지역 주택
     // 출산·양육 감면 (지방세특례제한법 제36조의5)
     childbirth = false,
+    // ── 증여(무상취득) 전용 입력 ──
+    //  ⚠ 하나의 price로 세액과 12% 중과 여부를 함께 판단하면 안 된다. 둘은 다른 값이다.
+    //    giftMarketValue  시가인정액 = 증여 취득세 **과세표준** (지방세법 제10조의2)
+    //    giftStdValue     시가표준액 = 조정대상지역 3억원 이상 **중과 판정 기준** (제13조의2 ②)
+    //    시가인정액이 3억을 넘고 시가표준액은 3억 미만인 경우가 흔해, 하나로 겸하면 중과가 잘못 걸린다.
+    giftMarketValue = null,
+    giftStdValue = null,
     // 부담부증여 채무액 — 증여 취득세 과세표준에서 제외(그 부분은 유상취득으로 별도 과세)
     giftAssumedDebt = 0,
   } = input;
   if (!price || price <= 0) return null;
+
+  // 증여는 시가인정액이 과세표준. 미입력이면 price를 시가인정액으로 본다(기존 호출부 호환).
+  const isGift = acqType === 'gift';
+  const giftMarket = isGift
+    ? (giftMarketValue != null && giftMarketValue !== '' && Number(giftMarketValue) > 0
+      ? Number(giftMarketValue) : price)
+    : 0;
+  const assumedDebt = isGift ? Math.max(0, Math.min(Number(giftAssumedDebt) || 0, giftMarket)) : 0;
+  // 무상취득 부분(= 시가인정액 − 승계채무액)이 실제 증여 취득세 과세표준이다.
+  const giftFreeBase = isGift ? Math.max(0, giftMarket - assumedDebt) : 0;
+
+  // 과세표준: 증여는 무상취득 부분, 그 외는 취득가액
+  const taxBase = isGift ? giftFreeBase : price;
+
   const eok = price / 100000000;
   // 유상취득 6~9억 누진식: 세율 = (취득가액×2/3억 − 3) / 100
   const progRate = eok <= 6 ? 0.01 : eok <= 9 ? ((eok * 2 / 3) - 3) / 100 : 0.03;
@@ -425,16 +446,27 @@ function calcAcquisitionTax(input) {
     scenario = inheritNoHome ? '상속 · 무주택 1가구1주택 특례(0.8%)' : '상속 취득(2.8%)';
     scenarioKey = inheritNoHome ? 'inherit-nohome' : 'inherit-other';
   } else if (acqType === 'gift') {
-    // 무상취득(증여): 표준 3.5%. 조정대상지역 + 시가표준 3억 이상 다주택자 증여 → 12% 중과
+    // 무상취득(증여): 표준 3.5%. 조정대상지역 + **시가표준액** 3억 이상 다주택자 증여 → 12% 중과
+    //  ⚠ 중과 판정은 반드시 시가표준액으로 한다. 세액은 시가인정액(− 승계채무)으로 계산한다.
+    const gCfg = R.giftAcquisition || {};
+    const heavyThreshold = gCfg.heavyStdValueThreshold || 300000000;
+    const stdKnown = giftStdValue != null && giftStdValue !== '' && Number(giftStdValue) > 0;
+    const heavyJudgeBase = stdKnown ? Number(giftStdValue) : giftMarket;
     // 기존 호출부가 giftHeavy를 명시하면 그 값을 존중하고, 새 UI에서는 객관 조건으로 자동 판정한다.
     const giftHeavyApplied = giftHeavy == null
-      ? regulated && giftDonorMultiHome && price >= 300000000
+      ? regulated && giftDonorMultiHome && heavyJudgeBase >= heavyThreshold
       : Boolean(giftHeavy);
-    if (giftHeavyApplied) { baseRate = 0.12; isHeavy = true; scenario = '증여 · 조정대상 3억↑ 중과(12%)'; scenarioKey = 'gift-heavy'; }
-    else { baseRate = 0.035; scenario = '증여 취득(3.5%)'; scenarioKey = 'gift-standard'; }
-    notes.push({ kind: 'info', text: '증여 취득세 과세표준은 「시가인정액」(매매사례가·감정가·경매가 등)이며, 중과 판정 기준인 「시가표준액」(공시가격)과는 다른 개념입니다. 두 값을 각각 확인해 입력하세요.', en: 'The tax base for a gift is the “recognised market value” (comparable sales, appraisal, auction price). The “standard market value” (officially assessed price) used to test the heavy rate is a different figure — check and enter both.' });
-    if (giftAssumedDebt > 0) {
-      notes.push({ kind: 'warn', text: '부담부증여로 승계한 채무 ' + Math.round(giftAssumedDebt).toLocaleString('ko-KR') + '원은 증여가 아니라 유상취득으로 봅니다. 채무 부분은 유상거래 취득세율(1~3% 또는 중과)로 따로 계산해야 하며, 증여자에게는 그 부분에 대한 양도소득세가 발생합니다. 이 계산기는 무상취득 부분만 산정합니다.', en: 'The KRW ' + Math.round(giftAssumedDebt).toLocaleString('en-US') + ' of debt assumed is treated as a paid transfer, not a gift. That portion is taxed at the paid-transfer rate (1–3% or the heavy rate) and triggers capital gains tax for the donor. This calculator covers only the gift portion.' });
+    if (giftHeavyApplied) { baseRate = gCfg.heavyRate || 0.12; isHeavy = true; scenario = '증여 · 조정대상 시가표준액 3억↑ 중과(12%)'; scenarioKey = 'gift-heavy'; }
+    else { baseRate = gCfg.standardRate || 0.035; scenario = '증여 취득(3.5%)'; scenarioKey = 'gift-standard'; }
+    notes.push({ kind: 'info', text: '세액은 「시가인정액」(매매사례가·감정가·경매가 등)을 과세표준으로, 12% 중과 여부는 「시가표준액」(공시가격)으로 판단합니다 — 서로 다른 값입니다.', en: 'The tax is computed on the “recognised market value” (comparable sales, appraisal, auction price), while the 12% heavy rate is tested against the “standard market value” (officially assessed price) — two different figures.' });
+    if (!stdKnown) {
+      notes.push({ kind: 'warn', text: '시가표준액을 입력하지 않아 중과 판정에 시가인정액을 대신 사용했습니다. 시가인정액이 3억을 넘어도 시가표준액이 3억 미만이면 중과 대상이 아닙니다 — 공시가격을 확인해 입력하세요.', en: 'No standard market value was entered, so the recognised market value was used to test the heavy rate. A property can exceed KRW 300M in market value while its standard value stays below the threshold — enter the officially assessed price.' });
+    }
+    if (giftHeavyApplied) {
+      notes.push({ kind: 'info', text: '1세대 1주택자가 소유한 주택을 배우자·직계존비속에게 증여하는 경우 등은 중과에서 제외됩니다. 증여자의 주택 수 요건을 확인하세요.', en: 'Gifts of a sole home from a one-home household to a spouse or lineal relative are excluded from the heavy rate — check the donor’s home count.' });
+    }
+    if (assumedDebt > 0) {
+      notes.push({ kind: 'warn', text: '부담부증여 — 승계 채무 ' + Math.round(assumedDebt).toLocaleString('ko-KR') + '원은 증여가 아니라 유상취득입니다. 위 세액은 무상취득 부분(시가인정액 − 채무 = ' + Math.round(giftFreeBase).toLocaleString('ko-KR') + '원)만 계산한 것이고, 채무 부분의 유상취득 취득세는 아래에 따로 표시했습니다. 증여자에게는 그 부분에 대한 양도소득세가 별도로 발생합니다.', en: 'Burdened gift — the KRW ' + Math.round(assumedDebt).toLocaleString('en-US') + ' of debt assumed is a paid transfer, not a gift. The figure above covers only the gift portion (market value − debt = KRW ' + Math.round(giftFreeBase).toLocaleString('en-US') + '); the paid-transfer tax on the debt portion is shown separately below. The donor also owes capital gains tax on that portion.' });
     }
   } else if (acqType === 'original') {
     // 원시취득: 건축주가 직접 신축·증축한 건축물 (분양받은 신축주택은 여기 해당하지 않음)
@@ -473,7 +505,8 @@ function calcAcquisitionTax(input) {
   }
   baseRate = Math.max(baseRate, 0.008);
 
-  let acquisition = price * baseRate;
+  // 과세표준 × 세율. 증여는 taxBase가 (시가인정액 − 승계채무액)이다.
+  let acquisition = taxBase * baseRate;
 
   // ── 생애최초 / 출산·양육 감면 ──
   //  두 감면은 단순 합산하지 않는다. 각각의 한도를 계산해 납세자에게 유리한 쪽 하나만 적용한다.
@@ -548,26 +581,46 @@ function calcAcquisitionTax(input) {
   // 농어촌특별세: 전용 85㎡ 초과만 과세 (85㎡ 이하 면제)
   let ruralTax = 0;
   if (areaOver85) {
-    if (isHeavy && baseRate >= 0.12) ruralTax = price * 0.010;
-    else if (isHeavy && baseRate >= 0.08) ruralTax = price * 0.006;
-    else ruralTax = price * 0.002;
+    if (isHeavy && baseRate >= 0.12) ruralTax = taxBase * 0.010;
+    else if (isHeavy && baseRate >= 0.08) ruralTax = taxBase * 0.006;
+    else ruralTax = taxBase * 0.002;
   }
 
   // 지방교육세 (지방세법 제151조)
   let localEduTax;
   if (isHeavy) {
-    localEduTax = price * 0.004; // 중과(8·12%)는 0.4% 고정
+    localEduTax = taxBase * 0.004; // 중과(8·12%)는 0.4% 고정
   } else if (isPaidTransfer) {
-    localEduTax = (price * baseRate) * 0.10; // 주택 유상거래(매매·분양): 표준세율의 1/10
+    localEduTax = (taxBase * baseRate) * 0.10; // 주택 유상거래(매매·분양): 표준세율의 1/10
   } else {
     // 상속·증여·원시취득: (표준세율 − 2%) × 20%  예) 2.8%→0.16%, 3.5%→0.3%
-    localEduTax = price * Math.max(0, (baseRate - 0.02)) * 0.20;
+    localEduTax = taxBase * Math.max(0, (baseRate - 0.02)) * 0.20;
   }
 
   const total = acquisition + ruralTax + localEduTax;
 
+  // ── 부담부증여의 유상취득 부분 ──
+  //  승계 채무액은 유상거래 취득세율(1~3% 또는 중과)로 따로 과세된다. 무상취득 부분과
+  //  섞으면 둘 다 틀리므로, 같은 공통 엔진을 유상취득 조건으로 다시 호출해 별도로 낸다.
+  let burdenedPaidPart = null;
+  if (isGift && assumedDebt > 0) {
+    burdenedPaidPart = calcAcquisitionTax({
+      price: assumedDebt, homes, regulated, areaOver85,
+      firstHome: false, acqType: 'purchase', tempTwoHome,
+    });
+  }
+
   return {
     baseRate, isHeavy, scenario, scenarioKey, acqType, isPaidTransfer,
+    taxBase,
+    // 증여 상세 — 화면이 "무엇을 과세표준으로, 무엇으로 중과를 판정했는지" 그대로 보여준다.
+    giftMarketValue: isGift ? giftMarket : null,
+    giftStdValue: isGift && giftStdValue ? Number(giftStdValue) : null,
+    giftAssumedDebt: assumedDebt,
+    giftFreeBase: isGift ? giftFreeBase : null,
+    burdenedPaidPart,
+    // 무상취득 + 유상취득 합계 (부담부증여일 때만 의미가 있다)
+    combinedTotal: total + (burdenedPaidPart ? burdenedPaidPart.total : 0),
     acquisition, firstHomeDeduct, unsoldDeduct, unsoldEligible,
     // 감면 상세 — 어떤 감면이 왜 적용/미적용됐는지 UI가 그대로 보여준다.
     appliedReliefKey, firstHomeCap, childbirthCap,
@@ -719,12 +772,21 @@ function renderAcqNotes(scope, r) {
     const status = root.querySelector('[data-acq-auto-status]');
     if (!status) return;
     if (acqType === 'gift') {
+      // ⚠ 중과 판정은 시가표준액으로 한다. 미입력이면 시가인정액으로 대신 판정하고 그 사실을 밝힌다.
       const regulated = root.querySelector('[name="regulated"]')?.checked || false;
       const donorMulti = root.querySelector('[name="giftDonorMultiHome"]')?.checked || false;
-      const heavy = price >= 300000000 && regulated && donorMulti;
+      const stdRaw = fmt.parseWon(root.querySelector('[name="giftStdValue"]')?.value || '0');
+      const marketRaw = fmt.parseWon(root.querySelector('[name="giftMarketValue"]')?.value || '0') || price;
+      const judgeBase = stdRaw > 0 ? stdRaw : marketRaw;
+      const heavy = judgeBase >= 300000000 && regulated && donorMulti;
+      const basis = stdRaw > 0
+        ? (isEn ? 'standard market value' : '시가표준액')
+        : (isEn ? 'recognised market value (standard value not entered)' : '시가인정액(시가표준액 미입력)');
       status.textContent = isEn
-        ? (heavy ? 'Automatically applied: 12% gift acquisition-tax rate.' : 'Automatically applied: standard 3.5% gift acquisition-tax rate.')
-        : (heavy ? '자동 판정: 증여 취득세 12% 중과가 적용됩니다.' : '자동 판정: 증여 취득세 표준세율 3.5%가 적용됩니다.');
+        ? (heavy ? 'Automatically applied: 12% gift rate, judged on ' + basis + '.'
+          : 'Automatically applied: standard 3.5% gift rate, judged on ' + basis + '.')
+        : (heavy ? '자동 판정: ' + basis + ' 기준으로 증여 취득세 12% 중과가 적용됩니다.'
+          : '자동 판정: ' + basis + ' 기준으로 증여 취득세 표준세율 3.5%가 적용됩니다.');
       return;
     }
     if (acqType === 'purchase' || acqType === 'presale') {
@@ -783,10 +845,20 @@ function renderAcqNotes(scope, r) {
     const unsold2026LocalExtra = (localRaw === '' || localRaw === 'unknown') ? null : Number(localRaw);
     const firstHomeSmallHouse = root.querySelector('[name="firstHomeSmallHouse"]')?.checked || false;
     const childbirth = root.querySelector('[name="childbirth"]')?.checked || false;
+    // 증여: 과세표준(시가인정액)·중과 판정(시가표준액)·승계채무액은 서로 다른 입력이다.
+    const giftNum = (name) => {
+      const el = root.querySelector('[name="' + name + '"]');
+      if (!el) return null;
+      const v = fmt.parseWon(el.value);
+      return v > 0 ? v : null;
+    };
     const r = calcAcquisitionTax({
       price, homes, regulated, areaOver85, firstHome, acqType,
       tempTwoHome, inheritNoHome, giftDonorMultiHome, unsold2026,
       unsold2026LocalExtra, firstHomeSmallHouse, childbirth,
+      giftMarketValue: giftNum('giftMarketValue'),
+      giftStdValue: giftNum('giftStdValue'),
+      giftAssumedDebt: giftNum('giftAssumedDebt') || 0,
       ...(legacyGiftHeavy ? { giftHeavy: legacyGiftHeavy.checked } : {}),
     });
     if (!r) {
@@ -813,6 +885,26 @@ function renderAcqNotes(scope, r) {
       ? '−' + fmt.won(r.unsoldDeduct) + ' (' + Math.round(r.unsoldRatio * 100) + '%)'
       : (isEn ? 'N/A' : '해당 없음'));
     setText('total', fmt.won(r.total));
+
+    // ── 증여: 과세표준과 부담부증여 유상취득 부분을 분리해 표시 ──
+    const giftRows = root.querySelectorAll('[data-gift-row]');
+    const showGiftBase = acqType === 'gift' && r.giftFreeBase != null;
+    giftRows.forEach((el) => { el.hidden = !showGiftBase; });
+    if (showGiftBase) setText('giftFreeBase', fmt.won(r.giftFreeBase));
+
+    const burdenedBox = root.querySelector('[data-burdened-box]');
+    if (burdenedBox) {
+      const bp = r.burdenedPaidPart;
+      burdenedBox.hidden = !bp;
+      if (bp) {
+        setText('burdenedRate', '(' + (bp.baseRate * 100).toFixed(2) + '%)');
+        setText('burdenedAcq', fmt.won(bp.acquisition));
+        setText('burdenedRural', bp.ruralTax ? fmt.won(bp.ruralTax) : (isEn ? 'Exempt' : '면제'));
+        setText('burdenedEdu', fmt.won(bp.localEduTax));
+        setText('combinedTotal', fmt.won(r.combinedTotal));
+      }
+    }
+
     highlightRateRow(r, homes, regulated, price / 100000000);
     renderAcqNotes(root, r);
   };
@@ -839,6 +931,9 @@ function calcBrokerageFee(opts) {
     negotiatedRate = null,  // 협의 요율(%) 직접 입력. 상한을 넘으면 경고와 함께 상한으로 제한
     includeVat = true,      // 부가세 포함 여부
     vatRate = null,         // 간이과세자 등 다른 요율을 쓸 때
+    // 주택 상한요율은 시·도 조례로 정한다. 아래 요율표는 서울특별시 조례 기준이며,
+    // 다른 시·도는 같은 요율표로 계산하되 '조례 미대조' 경고를 함께 낸다.
+    region = null,
   } = opts || {};
 
   const R = (typeof window !== 'undefined' && window.TOPDA_RATES && window.TOPDA_RATES.brokerage) || {};
@@ -909,9 +1004,21 @@ function calcBrokerageFee(opts) {
   if (max != null && fee > max) { fee = max; capApplied = true; }
 
   const vat = includeVat ? fee * vRate : 0;
+
+  // ── 시·도 조례 ──
+  //  주택(매매·전세·월세) 상한요율만 조례 사항이다. 오피스텔·상가·토지는 법령 상한이라
+  //  시·도와 무관하므로 경고를 붙이지 않는다.
+  const regionList = R.regions || [];
+  const regionKey = region || R.defaultRegion || 'KR-11';
+  const regionInfo = regionList.find((x) => x.key === regionKey) || regionList[0] || null;
+  const regionApplies = (R.regionAppliesTo || ['sale', 'jeonse', 'monthly']).indexOf(type) >= 0;
+  const regionUnverified = Boolean(regionApplies && regionInfo && !regionInfo.verified);
+
   return {
     amount, category, conversionNote,
     rate, capRate, max, capApplied, negotiatedExceeded,
+    region: regionInfo, regionApplies, regionUnverified,
+    regionWarn: regionUnverified ? (R.regionUnverifiedWarn || '') : '',
     fee, vat, vatRate: includeVat ? vRate : 0, includeVat,
     total: fee + vat,
     // 매도인·매수인(임대인·임차인) 각각 부담 → 거래 전체에서 중개업자가 받는 총액
@@ -949,14 +1056,28 @@ function calcRti({ monthlyRent, deposit = 0, loan, annualRate, depositRate = 0.0
     const negotiatedRate = (negRaw === '' || negRaw == null) ? null : negRaw;
     const vatEl = root.querySelector('[name="includeVat"]');
     const includeVat = vatEl ? vatEl.checked : true;
-    const r = calcBrokerageFee({ price, type, deposit, monthlyRent, negotiatedRate, includeVat });
+    const region = root.querySelector('[name="bfRegion"]')?.value || null;
+    const r = calcBrokerageFee({ price, type, deposit, monthlyRent, negotiatedRate, includeVat, region });
     if (!r) {
       ['rate','cap','category','amount'].forEach(k => setText('[data-out="'+k+'"]', '—'));
       ['fee','vat','total','bothParties'].forEach(k => setText('[data-out="'+k+'"]', fmt.won(0)));
       const w = root.querySelector('[data-out="bfWarn"]'); if (w) w.style.display = 'none';
       return;
     }
-    setText('[data-out="category"]', r.category);
+    setText('[data-out="category"]', r.category
+      + (r.regionApplies && r.region ? ' · ' + r.region.name + ' 조례 기준' : ''));
+    const regionBox = root.querySelector('[data-out="bfRegionNote"]');
+    if (regionBox) {
+      if (r.regionApplies && r.region) {
+        regionBox.hidden = false;
+        regionBox.className = r.regionUnverified ? 'data-stale' : 'data-fresh';
+        regionBox.textContent = r.regionUnverified
+          ? r.regionWarn + ' (' + r.region.ordinance + ')'
+          : r.region.ordinance + ' 요율표로 계산했습니다.';
+      } else {
+        regionBox.hidden = true;
+      }
+    }
     setText('[data-out="amount"]', fmt.won(r.amount) + (r.conversionNote ? ' (' + r.conversionNote + ')' : ''));
     setText('[data-out="rate"]', (r.rate * 100).toFixed(2) + '%'
       + (r.rate < r.capRate ? (isEn ? ' (negotiated)' : ' (협의)') : ''));
@@ -991,6 +1112,266 @@ function calcRti({ monthlyRent, deposit = 0, loan, annualRate, depositRate = 0.0
   recalc();
 })();
 
+// ===== 등기 부대비용 공통 엔진 (등기·법무사 계산기 / 종합계산기 공용) =====
+//  ⚠ 과거엔 registration-cost.html 인라인 스크립트와 종합계산기가 인지세·채권매입률·
+//    법무사 보수 산식을 각각 복붙해 갖고 있었다. 한쪽만 고치면 두 화면의 값이 갈린다.
+//    아래 함수가 단일 기준이고, 두 화면은 이것만 호출한다.
+//
+//  ⚠ 법무사 "기본보수"와 "대행수수료·실비"는 다른 항목이다. 협회 보수표는 기본보수의
+//    **상한** 산정방법만 정한 것이고, 실제 청구서에는 위임한 부대업무의 대행수수료와
+//    일당·교통비·부가세가 따로 붙는다. 그래서 결과도 항목별로 분리해 돌려준다.
+
+// 인지세 (인지세법 제3조) — 계약금액 구간별 정액
+function calcStampDuty(price) {
+  const table = (typeof window !== 'undefined' && window.TOPDA_RATES && window.TOPDA_RATES.stampDuty) || [
+    { upTo: 10000000, amount: 0 }, { upTo: 30000000, amount: 20000 },
+    { upTo: 50000000, amount: 40000 }, { upTo: 100000000, amount: 70000 },
+    { upTo: 1000000000, amount: 150000 }, { upTo: Infinity, amount: 350000 },
+  ];
+  for (const b of table) if (price <= b.upTo) return b.amount;
+  return 0;
+}
+
+// 국민주택채권 매입률 (주택도시기금법 시행령 별표, 시가표준액 구간별)
+//  region: 'metro'(특별시·광역시) | 'other'(그 밖의 지역) — 상위 구간 요율이 다름
+function calcBondPurchaseRate(std, asset, region) {
+  const eok = std / 100000000;
+  const metro = region !== 'other';
+  if (asset === 'land') {
+    if (std < 5000000) return 0;
+    if (eok < 0.5) return metro ? 0.025 : 0.020;
+    if (eok < 1) return metro ? 0.040 : 0.035;
+    return metro ? 0.050 : 0.045;
+  }
+  if (std < 20000000) return 0;
+  if (eok < 0.5) return 0.013;
+  if (eok < 1) return 0.019;
+  if (eok < 1.6) return metro ? 0.021 : 0.018;
+  if (eok < 2.6) return metro ? 0.023 : 0.021;
+  if (eok < 6) return metro ? 0.026 : 0.024;
+  return metro ? 0.031 : 0.026;
+}
+
+// 채권 매입금액은 만원 단위로 절상(5천원 미만 절사·5천원 이상 절상)
+function roundBondAmount(amount) {
+  const unit = ((typeof window !== 'undefined' && window.TOPDA_RATES
+    && window.TOPDA_RATES.bond && window.TOPDA_RATES.bond.roundUnit) || 10000);
+  return Math.round(amount / unit) * unit;
+}
+
+// 법무사 **기본보수 상한** (대한법무사협회 보수표 2024.9.12 시행)
+//  ⚠ 10억 초과 금액에 계속 0.05%를 적용하면 20억·200억 초과 구간이 통째로 빠져
+//    고가 부동산에서 보수가 과다 산정된다. 구간표를 rates.js에서 읽어 그대로 적용한다.
+function calcScrivenerBaseFee(price, opts) {
+  opts = opts || {};
+  if (!price || price <= 0) return { fee: 0, bracket: null, unverified: false, extraProperties: 0 };
+  const cfg = (typeof window !== 'undefined' && window.TOPDA_RATES
+    && window.TOPDA_RATES.registration && window.TOPDA_RATES.registration.scrivenerBaseFee) || {};
+  const brackets = cfg.brackets || [
+    { upTo: 50000000, base: 210000, rate: 0, from: 0 },
+    { upTo: 100000000, base: 210000, rate: 0.0010, from: 50000000 },
+    { upTo: 300000000, base: 260000, rate: 0.0009, from: 100000000 },
+    { upTo: 500000000, base: 440000, rate: 0.0008, from: 300000000 },
+    { upTo: 1000000000, base: 600000, rate: 0.0007, from: 500000000 },
+    { upTo: 2000000000, base: 950000, rate: 0.0005, from: 1000000000 },
+    { upTo: 20000000000, base: 1450000, rate: 0.0003, from: 2000000000 },
+    { upTo: Infinity, base: 6850000, rate: 0.0001, from: 20000000000 },
+  ];
+  const b = brackets.find((x) => price <= x.upTo) || brackets[brackets.length - 1];
+  let fee = b.base + Math.max(0, price - b.from) * b.rate;
+  // 1건의 신청서로 여러 부동산 → 초과 1개마다 가산
+  const extra = Math.max(0, Math.round(Number(opts.propertyCount || 1)) - 1);
+  const extraAdd = extra * (cfg.extraPropertyAdd || 0);
+  fee += extraAdd;
+  const unit = cfg.roundUnit || 1000;
+  return {
+    fee: Math.round(fee / unit) * unit,
+    bracket: b,
+    unverified: b.confidence === 'needs-verification',
+    unverifiedNote: cfg.unverifiedNote || '',
+    extraProperties: extra, extraPropertyAdd: extraAdd,
+  };
+}
+
+// 등기 총비용 (취득세 제외 — 취득세는 calcAcquisitionTax가 담당)
+function calcRegistrationCost(input) {
+  const {
+    price, stdValue = 0, asset = 'house', region = 'metro',
+    discountPct = null,       // 채권 고객부담률(%). null이면 예시값을 쓴다.
+    self = false,             // 셀프 등기 → 법무사 보수·대행료·부가세 0
+    filingMethod = 'visit',
+    propertyCount = 1,
+    agencyTasks = [],         // 실제로 위임한 부대업무 키 배열
+    fieldwork = 'none',       // 'none' | 'under4h' | 'over4h'
+    scrivenerQuote = null,    // 실제 견적 기본보수(원). 있으면 상한 대신 이 값을 쓴다.
+    extraExpense = 0,         // 기타 실비·출장 교통비(사용자 입력)
+  } = input;
+
+  const REG = (typeof window !== 'undefined' && window.TOPDA_RATES
+    && window.TOPDA_RATES.registration) || {};
+  const notes = [];
+  const empty = {
+    total: 0, totalMin: 0, totalMax: 0, stamp: 0, filingFee: 0,
+    bondBuy: 0, bondSelfPay: 0, bondRate: 0, scrivenerBase: 0,
+    agencyFeeMin: 0, agencyFeeMax: 0, fieldworkFee: 0, vatMin: 0, vatMax: 0,
+    stdValue: 0, stdValueEstimated: false, agencyFeeItems: [], notes,
+  };
+  if (!price || price <= 0) return empty;
+
+  // ── 시가표준액: 미입력 시 매매가 × 70% 추정. 법정값이 아니다. ──
+  const estimateRatio = REG.stdValueEstimateRatio != null ? REG.stdValueEstimateRatio : 0.7;
+  const stdValueEstimated = !stdValue || stdValue <= 0;
+  const std = stdValueEstimated ? Math.round(price * estimateRatio) : stdValue;
+  if (stdValueEstimated) {
+    notes.push({ kind: 'warn', key: 'stdEstimate',
+      text: REG.stdValueEstimateNote
+        || '시가표준액을 입력하지 않아 「매매가 × 70%」로 추정했습니다. 법정 비율이 아니라 단순 추정치입니다.' });
+  }
+
+  // ── 인지세 (법정 확정) ──
+  const stamp = calcStampDuty(price);
+
+  // ── 등기신청 수수료 (신청 방식별) ──
+  const fCfg = REG.filingFee || {};
+  const methods = fCfg.methods || [{ key: 'visit', label: '방문(서면) 신청', amount: 18000 }];
+  const method = methods.find((m) => m.key === filingMethod) || methods[0];
+  const count = Math.max(1, Math.round(Number(propertyCount) || 1));
+  const filingFee = method.amount * count;
+  if (method.confidence === 'needs-verification' && method.note) {
+    notes.push({ kind: 'warn', key: 'filingFee', text: method.note });
+  }
+
+  // ── 국민주택채권 (법정 매입률 × 시가표준액 / 본인부담은 시세) ──
+  const bondCfg = (typeof window !== 'undefined' && window.TOPDA_RATES
+    && window.TOPDA_RATES.bond) || {};
+  const usedDiscountPct = discountPct != null && discountPct !== ''
+    ? Number(discountPct)
+    : (bondCfg.exampleDiscountPct != null ? bondCfg.exampleDiscountPct : 15);
+  const bondRate = calcBondPurchaseRate(std, asset, region);
+  const bondBuy = roundBondAmount(std * bondRate);
+  const bondSelfPay = Math.round(bondBuy * (usedDiscountPct / 100));
+
+  // ── 법무사 보수: 기본보수 상한 / 대행수수료 / 실비 / 부가세를 분리 ──
+  const baseRes = calcScrivenerBaseFee(price, { propertyCount: count });
+  let scrivenerBase = self ? 0 : baseRes.fee;
+  let scrivenerBaseIsQuote = false;
+  if (!self && scrivenerQuote != null && scrivenerQuote !== '' && Number(scrivenerQuote) > 0) {
+    scrivenerBase = Math.round(Number(scrivenerQuote));
+    scrivenerBaseIsQuote = true;
+  }
+  if (!self && !scrivenerBaseIsQuote && baseRes.unverified && baseRes.unverifiedNote) {
+    notes.push({ kind: 'warn', key: 'scrivenerBracket', text: baseRes.unverifiedNote });
+  }
+
+  const agencyDefs = REG.agencyFees || [];
+  const agencyFeeItems = self ? [] : agencyDefs
+    .filter((a) => agencyTasks.indexOf(a.key) >= 0)
+    .map((a) => ({
+      key: a.key, label: a.label,
+      min: a.amount != null ? a.amount : (a.amountMin || 0),
+      max: a.amount != null ? a.amount : (a.amountMax || a.amountMin || 0),
+      isRange: a.amount == null,
+      confidence: a.confidence || 'estimate', note: a.note || '',
+    }));
+  agencyFeeItems.forEach((a) => { if (a.isRange && a.note) notes.push({ kind: 'warn', key: a.key, text: a.note }); });
+  const agencyFeeMin = agencyFeeItems.reduce((s, a) => s + a.min, 0);
+  const agencyFeeMax = agencyFeeItems.reduce((s, a) => s + a.max, 0);
+
+  const fw = REG.fieldwork || {};
+  const fieldworkFee = self ? 0
+    : (fieldwork === 'under4h' ? (fw.dayAllowanceUnder4h || 0)
+      : fieldwork === 'over4h' ? (fw.dayAllowanceOver4h || 0) : 0);
+
+  const extra = self ? 0 : Math.max(0, Number(extraExpense) || 0);
+
+  // 부가세는 법무사 보수(기본보수 + 대행수수료 + 일당·실비)에만 붙는다.
+  //  인지세·등기신청수수료·채권 본인부담금은 세금·실비라 부가세 대상이 아니다.
+  const vatRate = REG.vatRate != null ? REG.vatRate : 0.10;
+  const scrivenerSubtotalMin = scrivenerBase + agencyFeeMin + fieldworkFee + extra;
+  const scrivenerSubtotalMax = scrivenerBase + agencyFeeMax + fieldworkFee + extra;
+  const vatMin = Math.round(scrivenerSubtotalMin * vatRate);
+  const vatMax = Math.round(scrivenerSubtotalMax * vatRate);
+  const scrivenerTotalMin = scrivenerSubtotalMin + vatMin;
+  const scrivenerTotalMax = scrivenerSubtotalMax + vatMax;
+
+  const fixed = stamp + filingFee + bondSelfPay;
+  const totalMin = fixed + scrivenerTotalMin;
+  const totalMax = fixed + scrivenerTotalMax;
+
+  if (!self && !scrivenerBaseIsQuote) {
+    notes.push({ kind: 'info', key: 'baseIsCap',
+      text: '법무사 기본보수는 협회 보수표가 정한 **상한**입니다. 사무소별 할인이 흔하고, 반대로 난이도·복잡도에 따라 협의로 가산될 수도 있습니다. 실제 금액은 견적서로 확인하세요.' });
+  }
+
+  return {
+    price, stdValue: std, stdValueEstimated, estimateRatio,
+    stamp,
+    filingFee, filingMethod: method, propertyCount: count,
+    bondRate, bondBuy, bondSelfPay, discountPct: usedDiscountPct,
+    scrivenerBase, scrivenerBaseIsQuote, scrivenerBracket: baseRes.bracket,
+    scrivenerBaseUnverified: baseRes.unverified,
+    extraPropertyAdd: baseRes.extraPropertyAdd,
+    agencyFeeItems, agencyFeeMin, agencyFeeMax,
+    fieldworkFee, extraExpense: extra,
+    vatRate, vatMin, vatMax,
+    scrivenerSubtotalMin, scrivenerSubtotalMax, scrivenerTotalMin, scrivenerTotalMax,
+    isRange: totalMax > totalMin,
+    total: totalMin, totalMin, totalMax,
+    self,
+    notes,
+  };
+}
+
+// bond_rate.json 적용 — seed·수집실패 값을 '실시간 조회값'처럼 보여주지 않는다.
+//  성공: 값을 채우고 as_of·수집일을 초록 배지로 표시
+//  seed/실패/오래된 값: 값을 강제로 바꾸지 않고 "실시간 조회 실패 — 예시값 사용 중" 경고
+function applyBondDiscountRate(json, opts) {
+  opts = opts || {};
+  const bondCfg = (typeof window !== 'undefined' && window.TOPDA_RATES
+    && window.TOPDA_RATES.bond) || {};
+  const staleDays = bondCfg.stalenessWarnDays || 7;
+  const example = bondCfg.exampleDiscountPct != null ? bondCfg.exampleDiscountPct : 15;
+
+  const rate = json && Number(json.customer_burden_rate_pct);
+  const isSeed = !json || json.seed === true || !rate || !(rate > 0);
+  const collectedAt = json && (json.collected_at || json.last_success_at || null);
+  const asOf = json && json.as_of ? json.as_of : null;
+
+  let ageDays = null;
+  if (collectedAt) {
+    const t = Date.parse(collectedAt);
+    if (!isNaN(t)) ageDays = Math.floor((Date.now() - t) / 86400000);
+  }
+  const isStale = !isSeed && (collectedAt == null || (ageDays != null && ageDays > staleDays));
+
+  if (isSeed) {
+    return {
+      state: 'example', rate: example, asOf, collectedAt, ageDays,
+      shouldFill: false,
+      message: '실시간 조회 실패 — 예시값(' + example + '%) 사용 중. 고객부담률은 시장금리에 따라 매일 바뀌므로, '
+        + '잔금일 당일 값을 은행 국민주택채권 포털에서 확인해 직접 입력하세요.'
+        + (asOf ? ' (마지막 표시 기준일 ' + asOf + ')' : ''),
+    };
+  }
+  if (isStale) {
+    return {
+      state: 'stale', rate, asOf, collectedAt, ageDays,
+      shouldFill: true,
+      message: '마지막 정상 수집이 ' + (collectedAt || '확인 불가')
+        + (ageDays != null ? ' (' + ageDays + '일 전)' : '')
+        + '입니다. 고객부담률은 매일 바뀌므로 당일 고객부담률을 직접 입력하세요.'
+        + (asOf ? ' 적용 기준일 ' + asOf + '.' : ''),
+    };
+  }
+  return {
+    state: 'fresh', rate, asOf, collectedAt, ageDays,
+    shouldFill: true,
+    message: '실시간 조회값 ' + rate + '%'
+      + (asOf ? ' · 적용 기준일 ' + asOf : '')
+      + (collectedAt ? ' · 마지막 정상 수집 ' + collectedAt : ''),
+  };
+}
+
 // ===== Transfer Tax (양도소득세) Calculator =====
 // 단순화 모델 (일반 주거용 주택 · 2025~2026년 기준)
 // - 1세대1주택 비과세: 양도가 12억 이하면 전액 면세. 초과 시 (양도차익 × (양도가-12억)/양도가) 만큼만 과세
@@ -1007,12 +1388,20 @@ function calcRti({ monthlyRent, deposit = 0, loan, annualRate, depositRate = 0.0
 // - 지방소득세 = 양도소득세 × 10%
 function calcTransferTax(input) {
   const {
-    sellPrice, buyPrice, cost, holdYears, liveYears,
+    sellPrice, buyPrice, cost,
+    holdYears: holdYearsInput, liveYears: liveYearsInput,
     homes, onlyHome, regulated,
     assetType = 'house', // 종합계산기의 비주택(상가·업무용 오피스텔·토지) 단기세율 분기용
     surchargeExempt = false, // 조정지역 다주택이라도 중과 제외 요건(장기임대·상속 등) 해당 시 true
     sellDate,        // 'YYYY-MM-DD' — 다주택 중과 한시 유예 자동 판단용
-    jointOwners = 1, // 공동명의 인원(1=단독, 2=부부 공동 등). 양도차익을 균등 분할 후 세액 합산
+    // ── 보유·거주기간을 날짜로 계산 (정수 연수 입력보다 정확) ──
+    //  취득일·양도일이 모두 있으면 holdYears를, 거주 시작·종료일이 있으면 liveYears를
+    //  실제 경과일수로 덮어쓴다. 2년 비과세 요건과 장특공 구간이 하루 차이로 갈리기 때문.
+    acquireDate = '',
+    residenceStartDate = '',
+    residenceEndDate = '',
+    jointOwners = 1, // 공동명의 인원(1=단독, 2=부부 공동 등). ownerShares가 없으면 균등 분할
+    ownerShares = null, // 소유자별 지분율(%) 배열 예: [60, 40]. 합이 100이 아니면 정규화한다.
     // ── 중과 유예 경과규정 판정용 (2026-05-09 이후 양도) ──
     contractDate = '',           // 매매계약일
     downPaymentReceived = false, // 계약금 수령 여부
@@ -1027,6 +1416,25 @@ function calcTransferTax(input) {
   if (!sellPrice || sellPrice <= 0) return null;
 
   const isHousing = assetType !== 'nonhouse';
+
+  // ── 보유·거주기간: 날짜가 있으면 실제 경과일수로 계산한다 ──
+  const isDateStr = (s) => Boolean(s) && /^\d{4}-\d{2}-\d{2}$/.test(s);
+  const yearsBetween = (from, to) => {
+    const a = Date.parse(from), b = Date.parse(to);
+    if (isNaN(a) || isNaN(b) || b <= a) return 0;
+    return (b - a) / (365.2425 * 24 * 3600 * 1000);
+  };
+  let holdYears = Number(holdYearsInput) || 0;
+  let liveYears = Number(liveYearsInput) || 0;
+  let holdFromDates = false, liveFromDates = false;
+  if (isDateStr(acquireDate) && isDateStr(sellDate)) {
+    holdYears = yearsBetween(acquireDate, sellDate);
+    holdFromDates = true;
+  }
+  if (isDateStr(residenceStartDate) && isDateStr(residenceEndDate)) {
+    liveYears = yearsBetween(residenceStartDate, residenceEndDate);
+    liveFromDates = true;
+  }
 
   // ── 증여재산 이월과세 ──
   //  배우자·직계존비속에게서 증여받은 부동산을 10년 이내 양도하면 취득가액에
@@ -1184,38 +1592,62 @@ function calcTransferTax(input) {
   //  중과 시에도 기본세율 구간의 누진공제는 유지된다(가산분만 정률). 단기보유는 누진공제 0.
   const incomeTax = Math.max(0, taxBase * rate - deduction);
 
-  // 공동명의 안분: 양도차익을 인원수로 균등 분할 후 각자 누진세율로 산출 → 합산.
-  //  단순 분할로 누진세율 구간이 낮아져 절세 효과가 발생한다.
-  //  단기보유·다주택 중과는 인원과 무관하므로 위와 동일 세율 적용.
-  const owners = Math.max(1, Math.min(4, Math.round(Number(jointOwners) || 1)));
+  // 공동명의 안분: 각 소유자의 **지분율**만큼 양도차익을 나눠 각자 누진세율로 산출 → 합산.
+  //  ⚠ 인원수 균등분할로 고정하면 6:4·7:3 같은 실제 지분 구성에서 세액이 틀린다.
+  //    ownerShares(지분율 배열)가 있으면 그대로 쓰고, 없으면 인원수 균등분할로 되돌린다.
+  //  기본공제 250만원은 **각 소유자마다** 적용된다(공동명의의 실제 절세 요인 중 하나).
+  //  단기보유·다주택 중과 세율은 지분과 무관하므로 동일하게 적용한다.
+  let shares = null;
+  if (Array.isArray(ownerShares) && ownerShares.length > 1) {
+    const nums = ownerShares.map((s) => Math.max(0, Number(s) || 0)).filter((s) => s > 0);
+    const sum = nums.reduce((a, b) => a + b, 0);
+    if (nums.length > 1 && sum > 0) shares = nums.map((s) => s / sum);
+  }
+  const owners = shares ? shares.length : Math.max(1, Math.min(4, Math.round(Number(jointOwners) || 1)));
+  if (!shares && owners > 1) shares = new Array(owners).fill(1 / owners);
+  const sharesEqual = !shares || shares.every((s) => Math.abs(s - shares[0]) < 1e-9);
+
   let jointBasicDeduct = null, jointTaxBase = null;
   let jointMarginalRatePct = null, jointAppliedRateLabel = null;
   let jointIncomeTax = null, jointLocalTax = null, jointTotal = null, savings = 0;
-  if (owners > 1 && !exempted) {
-    const perGain = taxableGain / owners;
-    const perLtDeduct = perGain * ltDeductRate;
-    const perIncome = Math.max(0, perGain - perLtDeduct);
-    const perBasic = Math.min(2500000, perIncome);
-    const perBase = Math.max(0, perIncome - perBasic);
-    jointBasicDeduct = perBasic * owners;
-    jointTaxBase = perBase * owners;
-    let perTax;
-    if (shortTermRate) {
-      perTax = perBase * shortTermRate;
-      jointMarginalRatePct = shortTermRate * 100;
-      jointAppliedRateLabel = (shortTermRate * 100) + '% (단기보유 중과)';
-    } else {
-      // 분할된 과세표준으로 각자 누진세율 재산정 후 중과 가산분(있으면) 적용
-      const t = calcProgressiveTax(perBase);
-      perTax = Math.max(0, perBase * (t.marginalRate + surchargeRate) - t.deduction);
-      jointMarginalRatePct = Math.round(t.marginalRate * 100);
-      jointAppliedRateLabel = jointMarginalRatePct + '% (누진)';
-      if (surchargeRate > 0) jointAppliedRateLabel += ' + ' + (surchargeRate * 100) + '%p 중과';
-      else if (surchargeWaived) jointAppliedRateLabel += ' (중과 한시유예 적용 — ' + waiverUntil + '까지)';
-    }
-    jointIncomeTax = perTax * owners;
+  let jointPerOwner = null;
+  if (owners > 1 && shares && !exempted) {
+    jointPerOwner = shares.map((share) => {
+      const perGain = taxableGain * share;
+      const perLtDeduct = perGain * ltDeductRate;
+      const perIncome = Math.max(0, perGain - perLtDeduct);
+      const perBasic = Math.min(2500000, perIncome);
+      const perBase = Math.max(0, perIncome - perBasic);
+      let perTax, ratePct, rateLabel;
+      if (shortTermRate) {
+        perTax = perBase * shortTermRate;
+        ratePct = shortTermRate * 100;
+        rateLabel = (shortTermRate * 100) + '% (단기보유 중과)';
+      } else {
+        const t = calcProgressiveTax(perBase);
+        perTax = Math.max(0, perBase * (t.marginalRate + surchargeRate) - t.deduction);
+        ratePct = Math.round(t.marginalRate * 100);
+        rateLabel = ratePct + '% (누진)';
+        if (surchargeRate > 0) rateLabel += ' + ' + (surchargeRate * 100) + '%p 중과';
+        else if (surchargeWaived) rateLabel += ' (중과 한시유예 적용 — ' + waiverUntil + '까지)';
+      }
+      const perLocal = perTax * 0.10;
+      return {
+        sharePct: share * 100, gain: perGain, ltDeduct: perLtDeduct,
+        basicDeduct: perBasic, taxBase: perBase,
+        marginalRatePct: ratePct, appliedRateLabel: rateLabel,
+        incomeTax: perTax, localTax: perLocal, total: perTax + perLocal,
+      };
+    });
+    jointBasicDeduct = jointPerOwner.reduce((s, o) => s + o.basicDeduct, 0);
+    jointTaxBase = jointPerOwner.reduce((s, o) => s + o.taxBase, 0);
+    jointIncomeTax = jointPerOwner.reduce((s, o) => s + o.incomeTax, 0);
     jointLocalTax = jointIncomeTax * 0.10;
     jointTotal = jointIncomeTax + jointLocalTax;
+    // 대표 표기는 지분이 가장 큰 소유자 기준(지분이 다르면 소유자별 세율이 다를 수 있다).
+    const lead = jointPerOwner.reduce((m, o) => (o.sharePct > m.sharePct ? o : m), jointPerOwner[0]);
+    jointMarginalRatePct = lead.marginalRatePct;
+    jointAppliedRateLabel = lead.appliedRateLabel + (sharesEqual ? '' : ' (지분 최대 소유자 기준)');
     savings = Math.max(0, (incomeTax + incomeTax * 0.10) - jointTotal);
   }
 
@@ -1234,6 +1666,9 @@ function calcTransferTax(input) {
     carryoverExtraGain: carryoverApplied ? Math.max(0, buyPrice - donorBuyPrice) : 0,
     jointBasicDeduct, jointTaxBase, jointMarginalRatePct, jointAppliedRateLabel,
     jointIncomeTax, jointLocalTax, jointTotal, jointSavings: savings,
+    jointPerOwner, ownerSharePcts: shares ? shares.map((s) => s * 100) : null, sharesEqual,
+    // 보유·거주기간을 날짜로 계산했는지 (화면에서 근거로 노출)
+    holdYears, liveYears, holdFromDates, liveFromDates,
     // 비-한국어 표시용 구조화 필드(계산 로직은 위와 동일, 라벨 조립만 언어별로 분기)
     isShortTerm: !!shortTermRate, shortTermRatePct: shortTermRate ? shortTermRate * 100 : 0,
     marginalRatePct: !shortTermRate ? Math.round((rate - surchargeRate) * 100) : 0,
@@ -1276,7 +1711,33 @@ function calcProgressiveTax(base) {
     const regulated = root.querySelector('[name="regulated"]')?.checked || false;
     const surchargeExempt = root.querySelector('[name="surchargeExempt"]')?.checked || false;
     const sellDate = root.querySelector('[name="sellDate"]')?.value || '';
+    const acquireDate = root.querySelector('[name="acquireDate"]')?.value || '';
+    const residenceStartDate = root.querySelector('[name="residenceStartDate"]')?.value || '';
+    const residenceEndDate = root.querySelector('[name="residenceEndDate"]')?.value || '';
     const jointOwners = Number(root.querySelector('[name="jointOwners"]')?.value || 1);
+    // 공동명의 지분율 — 인원 수만큼만 읽는다. 합이 100이 아니어도 비율대로 정규화된다.
+    root.querySelectorAll('[data-tt-show="shares"]').forEach((el) => {
+      el.style.display = jointOwners > 1 ? '' : 'none';
+    });
+    root.querySelectorAll('[data-tt-show="shares34"]').forEach((el) => {
+      el.style.display = jointOwners > 2 ? '' : 'none';
+    });
+    let ownerShares = null;
+    if (jointOwners > 1) {
+      const raw = [];
+      for (let i = 1; i <= jointOwners; i += 1) {
+        const el = root.querySelector('[name="ownerShare' + i + '"]');
+        raw.push(el ? Math.max(0, Number(el.value) || 0) : 0);
+      }
+      const sum = raw.reduce((a, b) => a + b, 0);
+      if (sum > 0 && raw.filter((s) => s > 0).length > 1) ownerShares = raw;
+      const sumEl = root.querySelector('[data-out="shareSum"]');
+      if (sumEl) {
+        sumEl.textContent = isEn
+          ? 'Total ' + sum + '%' + (Math.abs(sum - 100) > 0.01 ? ' — normalised to the entered ratio' : '')
+          : '합계 ' + sum + '%' + (Math.abs(sum - 100) > 0.01 ? ' — 입력한 비율대로 정규화해 계산합니다' : '');
+      }
+    }
     const contractDate = root.querySelector('[name="contractDate"]')?.value || '';
     const downPaymentReceived = root.querySelector('[name="downPaymentReceived"]')?.checked || false;
     const newRegulatedArea = root.querySelector('[name="newRegulatedArea"]')?.checked || false;
@@ -1298,7 +1759,8 @@ function calcProgressiveTax(base) {
     const r = calcTransferTax({
       sellPrice, buyPrice, cost, holdYears, liveYears,
       homes, onlyHome, regulated, surchargeExempt,
-      sellDate, jointOwners,
+      sellDate, jointOwners, ownerShares,
+      acquireDate, residenceStartDate, residenceEndDate,
       contractDate, downPaymentReceived, newRegulatedArea,
       landPermitTarget, landPermitApplyDate,
       giftedFromRelative, giftReceivedDate, donorBuyPrice,
@@ -1366,9 +1828,32 @@ function calcProgressiveTax(base) {
         setText('jointOwnersOut', J.owners(r.jointOwners));
         setText('jointTotalOut', fmt.won(r.jointTotal));
         setText('jointSavings', '−' + fmt.won(r.jointSavings) + J.saved);
+        // 지분이 균등하지 않으면 소유자별 세액을 그대로 보여준다(합계만 보면 검증이 안 된다).
+        const perBox = root.querySelector('[data-out="jointPerOwner"]');
+        if (perBox) {
+          if (r.jointPerOwner && !r.sharesEqual) {
+            perBox.hidden = false;
+            perBox.innerHTML = r.jointPerOwner.map((o, i) =>
+              '<div class="row sub"><span class="key">소유자 ' + (i + 1) + ' (지분 '
+              + o.sharePct.toFixed(1) + '%) · ' + o.appliedRateLabel
+              + '</span><span class="val">' + fmt.won(o.total) + '</span></div>').join('');
+          } else {
+            perBox.hidden = true;
+            perBox.innerHTML = '';
+          }
+        }
       } else {
         jointBox.style.display = 'none';
       }
+    }
+    // 보유·거주기간을 날짜로 계산했으면 그 사실과 계산된 연수를 밝힌다.
+    const periodNote = root.querySelector('[data-out="periodNote"]');
+    if (periodNote) {
+      const parts = [];
+      if (r.holdFromDates) parts.push((isEn ? 'Holding period from dates: ' : '날짜 기준 보유 ') + r.holdYears.toFixed(2) + (isEn ? ' yrs' : '년'));
+      if (r.liveFromDates) parts.push((isEn ? 'Residency from dates: ' : '날짜 기준 거주 ') + r.liveYears.toFixed(2) + (isEn ? ' yrs' : '년'));
+      periodNote.hidden = !parts.length;
+      periodNote.textContent = parts.join(' · ');
     }
   };
   inputs.forEach((el) => { el.addEventListener('input', recalc); el.addEventListener('change', recalc); });
@@ -1666,70 +2151,27 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       return principal * i * (n + 1) / 2;
     }
 
-    // 인지세(부동산 소유권 이전, 인지세법 제3조 구간별 정액)
-    function stampDuty(price) {
-      if (price <= 10000000) return 0;
-      if (price <= 30000000) return 20000;
-      if (price <= 50000000) return 40000;
-      if (price <= 100000000) return 70000;
-      if (price <= 1000000000) return 150000;
-      return 350000;
-    }
-
-    // 국민주택채권 매입률 (주택도시기금법 시행령 별표, 시가표준액 구간별)
-    //  region: 'metro'(특별시·광역시) | 'other'(그 밖의 지역) — 상위 구간 요율이 다름
-    function bondRate(std, asset, region) {
-      const eok = std / 100000000;
-      const metro = region !== 'other';
-      if (asset === 'land') {
-        if (std < 5000000) return 0;
-        if (eok < 0.5) return metro ? 0.025 : 0.020;
-        if (eok < 1) return metro ? 0.040 : 0.035;
-        return metro ? 0.050 : 0.045;
-      }
-      // 주택
-      if (std < 20000000) return 0;
-      if (eok < 0.5) return 0.013;
-      if (eok < 1) return 0.019;
-      if (eok < 1.6) return metro ? 0.021 : 0.018;
-      if (eok < 2.6) return metro ? 0.023 : 0.021;
-      if (eok < 6) return metro ? 0.026 : 0.024;
-      return metro ? 0.031 : 0.026;
-    }
-
-    // 채권 매입금액은 만원 단위로 절상(5천원 미만 절사·5천원 이상 절상) — 주택도시기금법 시행령
-    function roundBond(amount) {
-      return Math.round(amount / 10000) * 10000;
-    }
-
-    // 법무사 기본보수(부동산 소유권이전 등기) — 대한법무사협회 보수표 2024.9.12 시행 상한 기준
-    //  5천만↓ 21만 정액 / 5천만~1억 +0.10% / 1억~3억 +0.09% / 3억~5억 +0.08% / 5억~10억 +0.07% / 10억↑ +0.05%
-    //  ※ 협회 표는 '기본보수 상한'이며 실제는 사무소별 할인·가산(난이도)·교통비가 더해집니다.
-    function scrivenerFee(price) {
-      if (price <= 0) return 0;
-      let f;
-      if (price <= 50000000) f = 210000;
-      else if (price <= 100000000) f = 210000 + (price - 50000000) * 0.0010;
-      else if (price <= 300000000) f = 260000 + (price - 100000000) * 0.0009;
-      else if (price <= 500000000) f = 440000 + (price - 300000000) * 0.0008;
-      else if (price <= 1000000000) f = 600000 + (price - 500000000) * 0.0007;
-      else f = 950000 + (price - 1000000000) * 0.0005;
-      return Math.round(f / 1000) * 1000;
-    }
-
-    // 법무사·등기 부대비용 (등록면허세·취득세는 별도 본세로 이미 반영)
-    //  인지세 + 등기신청 수수료 + 국민주택채권 즉시매도 할인부담 + 법무사 보수(+부가세)
+    // 법무사·등기 부대비용 — 자체 산식을 두지 않고 공통 엔진 calcRegistrationCost()를 호출한다.
+    //  (과거엔 인지세·채권매입률·법무사 보수 산식이 여기 복붙돼 있어 등기 계산기와 값이 갈렸다.)
+    //  종합계산기는 부대업무 위임 여부를 따로 묻지 않으므로, 등기 계산기의 기본 선택
+    //  (취득세 신고 대행 + 채권 매입 대행)과 같은 조건으로 계산해 두 화면의 값을 맞춘다.
+    const DASHBOARD_AGENCY_TASKS = ['acqTaxFiling', 'bondAgency'];
     function registrationCost(price, std, discount, self, asset, region) {
-      if (!price || price <= 0) return { total: 0, stamp: 0, regFee: 0, bond: 0, bondBuy: 0, rate: 0, scrivener: 0, vat: 0, std: 0 };
-      if (!std || std <= 0) std = Math.round(price * 0.7);
-      const stamp = stampDuty(price);
-      const regFee = 15000;
-      const rate = bondRate(std, asset || 'house', region);
-      const bondBuy = roundBond(std * rate);
-      const bond = Math.round(bondBuy * (discount || 0));
-      const scrivener = self ? 0 : scrivenerFee(price);
-      const vat = Math.round(scrivener * 0.1);
-      return { total: stamp + regFee + bond + scrivener + vat, stamp, regFee, bond, bondBuy, rate, scrivener, vat, std };
+      const r = calcRegistrationCost({
+        price, stdValue: std, asset: asset || 'house', region,
+        discountPct: discount != null ? discount * 100 : null,
+        self, filingMethod: getRadio('regFilingMethod') || 'visit',
+        agencyTasks: self ? [] : DASHBOARD_AGENCY_TASKS,
+      });
+      // 종합계산기 화면이 쓰는 축약 필드명으로 맞춰 돌려준다(기존 표시 코드 유지).
+      return {
+        total: r.totalMin, stamp: r.stamp, regFee: r.filingFee,
+        bond: r.bondSelfPay, bondBuy: r.bondBuy, rate: r.bondRate,
+        scrivener: r.scrivenerBase + r.agencyFeeMin + r.fieldworkFee,
+        scrivenerBase: r.scrivenerBase, agencyFee: r.agencyFeeMin,
+        vat: r.vatMin, std: r.stdValue, stdEstimated: r.stdValueEstimated,
+        detail: r,
+      };
     }
 
     function inheritGiftTax(base) {
@@ -2055,16 +2497,19 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       const box = root.querySelector('[data-mortgage-limit-box]');
       if (!box) return null;
       const income = getN('annualIncome');
-      const loanCfg = (RATES.loan || {});
-      const ltv = loanCfg.ltv || {};
+      // 지역·보유유형 판정과 LTV·스트레스 산정은 대출 한도 계산기와 같은 공통 함수를 쓴다.
+      //  (과거엔 여기 자체 분기를 둬서 규제지역 LTV 50%가 이 화면에만 남아 있었다.)
       const isMulti = homes >= 2 && !tempTwoHome;
-      const ltvPercent = regulated
-        ? (firstHome ? (ltv.regulatedFirst ?? 70) : (isMulti ? 0 : (ltv.regulated ?? 50)))
-        : (firstHome ? (ltv.nonRegulatedFirst ?? 80) : (isMulti ? (ltv.nonRegulatedMulti ?? 60) : (ltv.nonRegulated ?? 70)));
-      const stress = loanCfg.stress || {};
-      const stressAdd = regulated ? (stress.metro ?? 1.5) : (stress.nonMetro ?? 0.75);
+      const regionKey = getRadio('loanRegion')
+        || (regulated ? 'regulated' : 'provincialNonRegulated');
+      const ownership = firstHome ? 'first' : (isMulti ? 'multi' : 'none');
+      const rateType = getRadio('loanRateType') || 'variable';
+      const ltvMeta = suggestLtvPercent(regionKey, ownership);
+      const stressMeta = suggestStressAdd(regionKey, rateType);
+      const ltvPercent = ltvMeta.value;
+      const stressAdd = stressMeta.value;
       const r = calcMortgageLimit({
-        price, ltvPercent, regulatedMetro: regulated,
+        price, ltvPercent, region: regionKey, ownership, rateType,
         income, existingAnnualDebt, rate, stressAdd, termYears: term,
         dsrLimitPercent: DSR_T1, repayType: repay === 'principal' ? 'principal' : 'equal',
       });
@@ -2077,7 +2522,10 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       };
       setText('mortgageLimit', fmt.won(r.limit));
       setText('mortgageBinding', L('결정 요인: ', 'Binding constraint: ') + (bindingLabels[r.binding?.key] || '—'));
-      setText('mortgageInputs', `LTV ${ltvPercent}% · ${L('스트레스 금리', 'stress rate')} ${r.stressedRate.toFixed(2)}%`);
+      setText('mortgageInputs',
+        `${r.region.label} · LTV ${ltvPercent}% · ${L('스트레스 가산', 'stress add')} ${stressAdd.toFixed(2)}%p`
+        + ` → ${L('적용 금리', 'applied rate')} ${r.stressedRate.toFixed(2)}%`
+        + (r.priceCapApplies ? '' : L(' · 가격대별 한도 미적용', ' · no price cap')));
       const over = loan > r.limit;
       setText('mortgageVerdict', over
         ? L(`입력 대출이 추정 한도를 ${fmt.won(loan - r.limit)} 초과합니다.`, `Entered loan exceeds the estimate by ${fmt.won(loan - r.limit)}.`)
@@ -2195,7 +2643,12 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
         { label: L('국민주택채권 할인부담 (매입률 ' + (reg.rate * 100).toFixed(1) + '% · 할인 ' + (regDiscount * 100).toFixed(1) + '%)', 'National Housing Bond discount cost (purchase rate ' + (reg.rate * 100).toFixed(1) + '% · discount ' + (regDiscount * 100).toFixed(1) + '%)'), value: reg.bond, sub: true },
         ...(selfReg
           ? [{ label: L('법무사 보수', 'Scrivener fee'), value: L('셀프 등기 (0원)', 'Self-filed (KRW 0)'), sub: true }]
-          : [{ label: L('법무사 보수', 'Scrivener fee'), value: reg.scrivener, sub: true }, { label: L('└ 부가세 (10%)', '└ VAT (10%)'), value: reg.vat, sub: true }]),
+          : [
+            { label: L('법무사 기본보수 상한', 'Scrivener base fee (cap)'), value: reg.scrivenerBase, sub: true },
+            { label: L('└ 대행료 (취득세 신고·채권 매입)', '└ Agency fees (tax filing, bond purchase)'), value: reg.agencyFee, sub: true },
+            { label: L('└ 부가세 (10%)', '└ VAT (10%)'), value: reg.vat, sub: true },
+          ]),
+        ...(reg.stdEstimated ? [{ label: L('⚠ 추정 시가표준액 사용 (매매가 × 70%)', '⚠ Estimated standard value used (price × 70%)'), value: fmt.won(reg.std), sub: true }] : []),
         { divider: true, label: L('총 매수 비용 (대출 포함)', 'Total purchase cost (incl. loan)'), value: grandTotal },
       ]);
 
@@ -4159,6 +4612,21 @@ function calcInteriorEstimate({ area, grade, items }) {
           fields.forEach((el) => { const n = nameOf(el); if (n in saved) { applyValue(el, saved[n]); touched.add(el); } });
         }
       }
+      // 라디오 선택지 값이 바뀐 뒤(예: 지역 구분 세분화) 저장된 옛 값은 어느 라디오와도
+      // 맞지 않아 그룹 전체가 선택 해제된 채 남는다. 그러면 화면상 아무것도 안 골라진
+      // 상태가 되고 계산은 코드 기본값으로 조용히 넘어간다. 매칭이 하나도 없으면
+      // 페이지가 정한 기본값(checked 속성)으로 되돌린다.
+      const radioGroups = new Set();
+      touched.forEach((el) => { if (el.type === 'radio' && el.name) radioGroups.add(el.name); });
+      radioGroups.forEach((name) => {
+        const group = Array.from(form.querySelectorAll('input[type="radio"][name="' + esc(name) + '"]'));
+        if (group.length && !group.some((el) => el.checked)) {
+          const fallback = group.find((el) => el.defaultChecked) || group[0];
+          fallback.checked = true;
+          touched.add(fallback);
+        }
+      });
+
       touched.forEach(fire);
 
       // 저장 (디바운스)
@@ -4441,23 +4909,93 @@ function calcInteriorEstimate({ area, grade, items }) {
 // ===== 대출 한도 시뮬레이터 (주택담보대출 / 전세대출) =====
 // 주담대 한도 = min( LTV한도, 수도권·규제지역 가격대별 한도, DSR한도 )
 //  - LTV한도 = 주택가격 × LTV%
-//  - 가격대별 한도(6.27/10월 대책, 수도권·규제지역 구입자금): 15억↓ 6억 / 15~25억 4억 / 25억↑ 2억
+//  - 가격대별 한도(6.27/10.15 대책, 수도권·규제지역 구입자금): 15억↓ 6억 / 15~25억 4억 / 25억↑ 2억
 //  - DSR한도 = (연소득×DSR% − 기존 연원리금)을 스트레스 금리·만기로 역산한 대출원금
-// 출처: 금융위 가계부채 관리방안(6.27)·스트레스 DSR 3단계. 값은 rates.js에서 갱신.
+//
+// ⚠ 지역은 3분류다(2026-08-02 정정). 「규제지역·수도권 / 비규제」 2분류로 묶으면
+//    수도권 비규제지역이 규제지역과 같은 LTV 40%를 쓰거나(과소), 반대로 지방 비규제지역에
+//    가격대별 한도·스트레스 3.0%p가 붙는(과대) 오류가 난다.
+//      metroNonRegulated      수도권 비규제: LTV 70% · 가격대별 한도 O · 스트레스 3.0%p
+//      regulated              규제지역:     LTV 40% · 가격대별 한도 O · 스트레스 3.0%p
+//      provincialNonRegulated 지방 비규제:  LTV 70% · 가격대별 한도 X · 스트레스 0.75%p
+// 출처: 금융위 가계부채 관리 강화 방안(2025.6.27)·대출수요 관리 방안(2025.10.15)·스트레스 DSR 3단계.
+//       값은 rates.js에서 갱신.
+
+function loanRatesCfg() {
+  return (typeof window !== 'undefined' && window.TOPDA_RATES && window.TOPDA_RATES.loan) || {};
+}
+
+// 지역 키 정규화 — 구 값('regulated'/'non')과 boolean regulatedMetro도 받아준다.
+//  ⚠ 매핑 표를 파일 상단 스코프의 const로 두면 안 된다. 종합계산기 IIFE가 이 파일 중간에서
+//    즉시 실행되며 이 함수를 호출하는데, 그 시점에 아래쪽 const는 아직 TDZ라 예외가 난다
+//    (함수 선언만 호이스팅되고 const는 안 된다). 함수 안에 두면 호출 시점에 만들어져 안전하다.
+function loanRegionConfig(regionKey) {
+  const LEGACY = { regulated: 'regulated', non: 'provincialNonRegulated' };
+  const cfg = loanRatesCfg();
+  const list = cfg.regions || [];
+  const key = LEGACY[regionKey] === undefined ? regionKey : LEGACY[regionKey];
+  return list.find((r) => r.key === key)
+    || list.find((r) => r.key === 'regulated')
+    || { key: 'regulated', label: '규제지역', metro: true, regulated: true };
+}
+
+// 지역 × 보유유형 → 권장 LTV(%). confidence로 '법정 확정값'과 '관행 추정값'을 구분한다.
+function suggestLtvPercent(regionKey, ownership) {
+  const cfg = loanRatesCfg();
+  const region = loanRegionConfig(regionKey);
+  const table = (cfg.ltvByRegion || {})[region.key] || {};
+  const own = table[ownership] != null ? ownership : 'none';
+  const value = table[own] != null ? table[own] : 70;
+  const confidence = (cfg.ltvConfidence || {})[region.key + '.' + own] || 'estimate';
+  return { value, confidence, ownership: own, region };
+}
+
+// 지역 × 금리유형 → 스트레스 가산금리(%p).
+//  가산금리 = 스트레스 금리 × 기본 적용비율 × 금리유형별 적용비율
+function suggestStressAdd(regionKey, rateType) {
+  const cfg = loanRatesCfg();
+  const region = loanRegionConfig(regionKey);
+  const st = cfg.stress || {};
+  const byRegion = (st.byRegion || {})[region.key]
+    || { stressRate: 3.0, applyRatio: 1.0, add: 3.0, stage: '3단계' };
+  const ratios = st.rateTypeRatio || { variable: 1, mixed: 0.8, periodic: 0.4, fixed: 0 };
+  const rt = ratios[rateType] != null ? rateType : 'variable';
+  const baseAdd = byRegion.add != null ? byRegion.add : (byRegion.stressRate * byRegion.applyRatio);
+  const value = Math.round(baseAdd * ratios[rt] * 100) / 100;
+  return {
+    value, baseAdd, rateType: rt, rateTypeRatio: ratios[rt],
+    stressRate: byRegion.stressRate, applyRatio: byRegion.applyRatio,
+    stage: byRegion.stage, region,
+    validUntil: byRegion.validUntil || null, note: byRegion.note || '',
+  };
+}
+
 function calcMortgageLimit(input) {
   const {
     price, ltvPercent, regulatedMetro,
+    region: regionInput,
+    ownership = 'none',
+    rateType = 'variable',
+    grandfather = 'new',
     income, existingAnnualDebt = 0,
     rate, stressAdd = 0, termYears, dsrLimitPercent, repayType = 'equal',
   } = input;
   if (!price || price <= 0) return null;
 
+  // 지역: 명시 키 우선, 없으면 레거시 boolean(regulatedMetro)에서 유추한다.
+  const region = loanRegionConfig(
+    regionInput != null ? regionInput : (regulatedMetro === false ? 'provincialNonRegulated' : 'regulated')
+  );
+  const cfg = loanRatesCfg();
+
   const ltvLimit = price * (ltvPercent / 100);
 
-  // 수도권·규제지역 주택구입 가격대별 한도
+  // 가격대별 한도는 수도권·규제지역 주택구입 목적 주담대에만 적용된다(지방 비규제 제외).
+  const capRegions = cfg.priceCapAppliesTo || ['metroNonRegulated', 'regulated'];
+  const priceCapApplies = capRegions.indexOf(region.key) >= 0;
   let priceCap = Infinity;
-  if (regulatedMetro) {
-    const caps = (window.TOPDA_RATES && window.TOPDA_RATES.loan && window.TOPDA_RATES.loan.metroPriceCaps) || [
+  if (priceCapApplies) {
+    const caps = cfg.metroPriceCaps || [
       { upToEok: 15, cap: 600000000 }, { upToEok: 25, cap: 400000000 }, { upToEok: Infinity, cap: 200000000 },
     ];
     const eok = price / 1e8;
@@ -4504,7 +5042,45 @@ function calcMortgageLimit(input) {
   const actualAnnualPmt = limit * realFactorAnnual;
   const actualDsrPct = income > 0 ? (actualAnnualPmt + (existingAnnualDebt || 0)) / income * 100 : 0;
 
-  return { ltvLimit, priceCap, dsrLimit, limit, binding, stressedRate, availAnnual, actualDsrPct };
+  // ── 결과의 성격 구분 (법정·확정 / 사용자 입력 / 추정) ──
+  //  세 값이 한 화면에 섞여 있으면 사용자가 "은행에서 확인해야 할 것"을 알 수 없다.
+  const ltvMeta = suggestLtvPercent(region.key, ownership);
+  const stressMeta = suggestStressAdd(region.key, rateType);
+  const ltvIsSuggested = Math.abs(ltvPercent - ltvMeta.value) < 1e-9;
+  const stressIsSuggested = Math.abs((stressAdd || 0) - stressMeta.value) < 1e-9;
+  const classification = {
+    statutory: [
+      { key: 'priceCap', label: '지역 가격대별 한도',
+        detail: priceCapApplies ? '수도권·규제지역 주택구입 목적 주담대에 적용' : '지방 비규제지역 — 적용 없음' },
+      { key: 'dsrLimitPct', label: 'DSR 한도율', detail: dsrLimitPercent + '%' },
+    ],
+    userInput: [
+      { key: 'income', label: '연소득' },
+      { key: 'existingDebt', label: '기존 대출 연 원리금' },
+      { key: 'rate', label: '대출금리' },
+      { key: 'termYears', label: '만기' },
+      { key: 'grandfather', label: '경과규정·대환 해당 여부' },
+    ],
+    estimated: [],
+  };
+  (ltvIsSuggested && ltvMeta.confidence === 'verified' ? classification.statutory : classification.estimated)
+    .push({ key: 'ltv', label: '적용 LTV', detail: ltvPercent + '%'
+      + (ltvIsSuggested ? '' : ' (직접 입력)') });
+  (stressIsSuggested && stressMeta.rateType === 'variable' ? classification.statutory : classification.estimated)
+    .push({ key: 'stress', label: '스트레스 가산금리', detail: (stressAdd || 0).toFixed(2) + '%p'
+      + (stressIsSuggested ? '' : ' (직접 입력)') });
+
+  // 경과규정·대환은 은행이 증빙으로 판정한다 — 계산기는 사용자 선택을 그대로 반영만 한다.
+  const grandfatherCfg = cfg.grandfather || {};
+  const grandfatherOption = (grandfatherCfg.options || []).find((o) => o.key === grandfather) || null;
+  const grandfatherActive = grandfather && grandfather !== 'new';
+
+  return {
+    ltvLimit, priceCap, dsrLimit, limit, binding, stressedRate, availAnnual, actualDsrPct,
+    region, priceCapApplies, ownership: ltvMeta.ownership,
+    ltvMeta, stressMeta, classification,
+    grandfather, grandfatherActive, grandfatherOption,
+  };
 }
 
 // 전세대출 한도: 보증기관별 비교.
@@ -4559,7 +5135,6 @@ function calcJeonseLoanByAgency(deposit, opts) {
   const root = document.querySelector('[data-calc="loan-limit"]');
   if (!root) return;
   const R = (window.TOPDA_RATES && window.TOPDA_RATES.loan) || {};
-  const ltvCfg = R.ltv || { nonRegulated: 70, nonRegulatedFirst: 80, regulated: 50, regulatedFirst: 70, regulatedStrong: 40 };
   const setText = (sel, txt) => { const el = root.querySelector('[data-out="' + sel + '"]'); if (el) el.textContent = txt; };
   const show = (el, on) => { if (el) el.style.display = on ? '' : 'none'; };
 
@@ -4576,38 +5151,47 @@ function calcJeonseLoanByAgency(deposit, opts) {
     panels.jeonse.forEach((el) => show(el, t === 'jeonse'));
   }
 
-  // LTV 자동 채움 (지역×보유) — 사용자가 직접 수정 가능
+  // LTV 자동 채움 (지역×보유) — 사용자가 직접 수정 가능.
+  //  지역·보유유형을 바꾸면 "직접 입력한 값"을 유지할지가 애매해지므로,
+  //  사용자가 손대기 전까지만 자동 채우고, 손댄 뒤에는 되돌리기 버튼으로 복귀시킨다.
   const ltvInput = root.querySelector('[name="ltvPercent"]');
   let ltvTouched = false;
   if (ltvInput) ltvInput.addEventListener('input', () => { ltvTouched = true; });
-  function suggestLtv() {
-    if (ltvTouched) return;
-    const region = root.querySelector('[name="region"]:checked')?.value || 'regulated';
-    const own = root.querySelector('[name="ownership"]:checked')?.value || 'none';
-    let v;
-    if (region === 'regulated') {
-      v = own === 'first' ? ltvCfg.regulatedFirst : (own === 'multi' ? 0 : ltvCfg.regulated);
-    } else {
-      v = own === 'first' ? ltvCfg.nonRegulatedFirst : (own === 'multi' ? 60 : ltvCfg.nonRegulated);
-    }
-    if (ltvInput) ltvInput.value = v;
-  }
-
   const stressInput = root.querySelector('[name="stressAdd"]');
   let stressTouched = false;
   if (stressInput) stressInput.addEventListener('input', () => { stressTouched = true; });
-  function suggestStress() {
-    if (stressTouched) return;
-    const region = root.querySelector('[name="region"]:checked')?.value || 'regulated';
-    const st = R.stress || { metro: 1.5, nonMetro: 0.75 };
-    if (stressInput) stressInput.value = region === 'regulated' ? st.metro : st.nonMetro;
+
+  const regionKey = () => root.querySelector('[name="region"]:checked')?.value || 'regulated';
+  const ownershipKey = () => root.querySelector('[name="ownership"]:checked')?.value || 'none';
+  const rateTypeKey = () => root.querySelector('[name="rateType"]')?.value || 'variable';
+  const grandfatherKey = () => root.querySelector('[name="grandfather"]')?.value || 'new';
+
+  function applySuggestions() {
+    const ltvMeta = suggestLtvPercent(regionKey(), ownershipKey());
+    const stressMeta = suggestStressAdd(regionKey(), rateTypeKey());
+    if (ltvInput && !ltvTouched) ltvInput.value = ltvMeta.value;
+    if (stressInput && !stressTouched) stressInput.value = stressMeta.value;
+    return { ltvMeta, stressMeta };
   }
+
+  // '기준값으로 되돌리기' — 직접 입력한 뒤에도 현행 규제값으로 언제든 복귀할 수 있게 한다.
+  root.querySelectorAll('[data-reset-suggestion]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = btn.getAttribute('data-reset-suggestion');
+      if (target === 'ltv') ltvTouched = false;
+      if (target === 'stress') stressTouched = false;
+      recalcMortgage();
+    });
+  });
 
   function recalcMortgage() {
     const price = fmt.parseWon(root.querySelector('[name="price"]').value);
-    const region = root.querySelector('[name="region"]:checked')?.value || 'regulated';
-    const own = root.querySelector('[name="ownership"]:checked')?.value || 'none';
-    suggestLtv(); suggestStress();
+    const region = regionKey();
+    const own = ownershipKey();
+    const rateType = rateTypeKey();
+    const grandfather = grandfatherKey();
+    const { ltvMeta, stressMeta } = applySuggestions();
     const ltvPercent = Number(ltvInput?.value || 0);
     const income = fmt.parseWon(root.querySelector('[name="income"]').value);
     const existingMonthly = fmt.parseWon(root.querySelector('[name="existingMonthly"]').value);
@@ -4617,11 +5201,18 @@ function calcJeonseLoanByAgency(deposit, opts) {
     const dsrLimitPercent = Number(root.querySelector('[name="dsrLimit"]:checked')?.value || 40);
     const repayType = root.querySelector('[name="repayType"]:checked')?.value || 'equal';
 
-    const multiWarn = root.querySelector('[data-out="multiWarn"]');
-    show(multiWarn, region === 'regulated' && own === 'multi');
+    const zeroLtvWarn = root.querySelector('[data-out="multiWarn"]');
+    show(zeroLtvWarn, ltvMeta.value === 0);
+    const zeroLtvBody = root.querySelector('[data-out="multiWarnBody"]');
+    if (zeroLtvBody && ltvMeta.value === 0) {
+      zeroLtvBody.innerHTML = '<strong>' + ltvMeta.region.label + '에서 '
+        + ((R.ownershipLabels || {})[own] || own)
+        + '는 주택구입 목적 주담대가 원칙적으로 금지</strong>됩니다(LTV 0%). '
+        + '기존 주택을 6개월 이내 처분하는 조건이면 「처분조건부 1주택」을 선택하세요.';
+    }
 
     const r = calcMortgageLimit({
-      price, ltvPercent, regulatedMetro: region === 'regulated',
+      price, ltvPercent, region, ownership: own, rateType, grandfather,
       income, existingAnnualDebt: existingMonthly * 12,
       rate, stressAdd, termYears, dsrLimitPercent, repayType,
     });
@@ -4629,7 +5220,9 @@ function calcJeonseLoanByAgency(deposit, opts) {
     setText('mLimit', fmt.won(r.limit));
     setText('mBinding', r.binding ? r.binding.label + ' 기준' : '—');
     setText('mLtv', fmt.won(r.ltvLimit));
-    setText('mPriceCap', isFinite(r.priceCap) ? fmt.won(r.priceCap) : (isEn ? 'N/A' : '미적용'));
+    setText('mPriceCap', isFinite(r.priceCap)
+      ? fmt.won(r.priceCap)
+      : (isEn ? 'N/A' : '미적용 (지방 비규제지역)'));
     setText('mDsr', fmt.won(r.dsrLimit));
     setText('mStressed', r.stressedRate.toFixed(2) + '%');
     setText('mOwn', fmt.won(Math.max(0, price - r.limit)));
@@ -4637,6 +5230,59 @@ function calcJeonseLoanByAgency(deposit, opts) {
     setText('mActualDsrNote', r.binding && r.binding.key === 'dsr'
       ? 'DSR이 결정 요인 — 한도 산정 기준(스트레스 포함)과 거의 동일'
       : (r.binding ? r.binding.label + '이 결정 요인 — DSR 한도보다 여유 있게 대출' : '—'));
+
+    // ── 적용 규제 요약 ──
+    //  같은 주택가격이라도 지역·보유 수·금리유형·신청 시점에 따라 적용 규제가 달라진다.
+    //  결과만 보여주면 "왜 이 값인지"를 알 수 없으므로 적용 근거를 함께 노출한다.
+    setText('mRegionLabel', ltvMeta.region.label);
+    setText('mAppliedRule',
+      ltvMeta.region.label + ' · ' + ((R.ownershipLabels || {})[own] || own)
+      + ' → LTV ' + ltvMeta.value + '%'
+      + (r.priceCapApplies ? ' · 가격대별 한도 적용' : ' · 가격대별 한도 없음')
+      + ' · 스트레스 ' + stressMeta.value.toFixed(2) + '%p('
+      + ((R.stress && R.stress.rateTypeLabels && R.stress.rateTypeLabels[rateType]) || rateType)
+      + ' · ' + stressMeta.stage + ')');
+
+    const noteBox = root.querySelector('[data-out="mRuleNotes"]');
+    if (noteBox) {
+      const notes = [];
+      notes.push({ kind: 'info', text: ltvMeta.region.note || R.regionNote || '' });
+      if (ltvMeta.confidence !== 'verified') {
+        notes.push({ kind: 'warn', text: '이 지역·보유유형의 LTV는 법령·고시로 확정된 값이 아니라 은행 관행에 가까운 추정치입니다. 실제 적용 비율을 은행에 확인하고 직접 입력하세요.' });
+      }
+      if (stressMeta.validUntil) {
+        notes.push({ kind: 'warn', text: '이 지역의 스트레스 DSR 완화(' + stressMeta.stage + ')는 ' + stressMeta.validUntil + '까지 적용 예정입니다. 대출 실행일이 그 이후면 가산금리가 올라 한도가 줄어듭니다.' });
+      }
+      if (rateType !== 'variable') {
+        notes.push({ kind: 'warn', text: (R.stress && R.stress.rateTypeNote) || '' });
+      }
+      if (r.grandfatherActive && r.grandfatherOption) {
+        notes.push({ kind: 'warn', text: '「' + r.grandfatherOption.label + '」을 선택했습니다. 이 경우 종전 규제가 적용될 수 있어 위 한도보다 많이 받을 수도 있습니다 — ' + ((R.grandfather && R.grandfather.note) || '은행이 증빙으로 판정합니다.') });
+      }
+      notes.push({ kind: 'info', text: '대출 규제는 신청·실행 시점의 기준으로 판정됩니다. 이 계산기는 ' + (R.effectiveFrom || '') + ' 시행 기준이며, 이후 대책이 나오면 달라집니다.' });
+      const icon = { warn: '⚠', info: 'ℹ' };
+      const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const rows = notes.filter((n) => n.text);
+      noteBox.hidden = !rows.length;
+      noteBox.innerHTML = rows.map((n) =>
+        '<li class="acq-note acq-note-' + n.kind + '"><span class="acq-note-icon" aria-hidden="true">'
+        + icon[n.kind] + '</span><span>' + esc(n.text) + '</span></li>').join('');
+    }
+
+    // 법정·확정 / 사용자 입력 / 추정 항목 구분
+    const classBox = root.querySelector('[data-out="mClassify"]');
+    if (classBox) {
+      const c = r.classification;
+      const group = (title, items) => items.length
+        ? '<div class="calc-classify-group"><h4>' + title + '</h4><ul>'
+          + items.map((i) => '<li>' + i.label + (i.detail ? ' <span>' + i.detail + '</span>' : '') + '</li>').join('')
+          + '</ul></div>'
+        : '';
+      classBox.innerHTML =
+        group('법정·확정 항목', c.statutory)
+        + group('사용자 입력 항목', c.userInput)
+        + group('추정 항목 (확인 필요)', c.estimated);
+    }
   }
 
   function recalcJeonse() {

@@ -140,15 +140,32 @@
 
       <div class="field-row">
         <div class="field">
-          <label for="t-hold">보유 기간 (년)</label>
-          <input id="t-hold" name="holdYears" type="number" min="0" max="30" step="1" value="8" />
-          <span class="hint">취득일~양도일 만년수.</span>
+          <label for="t-acqdate">취득일<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="취득일과 양도일을 모두 입력하면 보유 기간을 실제 경과일수로 계산합니다. 2년 비과세 요건과 장기보유특별공제 구간이 하루 차이로 갈리기 때문에, 연수를 어림잡는 것보다 정확합니다.">?</span></label>
+          <input id="t-acqdate" name="acquireDate" type="date" value="" />
+          <span class="hint">잔금청산일과 등기접수일 중 <strong>빠른 날</strong>. 입력하면 아래 보유 기간 대신 실제 일수로 계산합니다.</span>
         </div>
         <div class="field">
-          <label for="t-live">거주 기간 (년)</label>
-          <input id="t-live" name="liveYears" type="number" min="0" max="30" step="1" value="5" />
-          <span class="hint">1세대1주택 고가 장특공제용. <strong>거주 2년</strong>부터 8%, 3년 12%, 이후 연 +4%p(최대 40%).</span>
+          <label for="t-hold">보유 기간 (년)</label>
+          <input id="t-hold" name="holdYears" type="number" min="0" max="30" step="1" value="8" />
+          <span class="hint">취득일·양도일을 모두 입력하면 이 값은 무시됩니다.</span>
         </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="t-livefrom">거주 시작일</label>
+          <input id="t-livefrom" name="residenceStartDate" type="date" value="" />
+        </div>
+        <div class="field">
+          <label for="t-liveto">거주 종료일</label>
+          <input id="t-liveto" name="residenceEndDate" type="date" value="" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="t-live">거주 기간 (년)</label>
+        <input id="t-live" name="liveYears" type="number" min="0" max="30" step="1" value="5" />
+        <span class="hint">1세대1주택 고가 장특공제용. <strong>거주 2년</strong>부터 8%, 3년 12%, 이후 연 +4%p(최대 40%). 위 거주 시작·종료일을 모두 입력하면 이 값 대신 실제 일수로 계산합니다.</span>
       </div>
 
       <div class="field-row">
@@ -166,8 +183,21 @@
             <option value="3">3인 공동</option>
             <option value="4">4인 공동</option>
           </select>
-          <span class="hint">양도차익을 인원수로 균등 분할 → 누진 구간 낮아져 절세. 결과 패널에 비교 표시.</span>
+          <span class="hint">양도차익을 <strong>지분율</strong>만큼 나눠 각자 누진세율로 계산합니다. 결과 패널에 단독 명의와 비교 표시.</span>
         </div>
+      </div>
+
+      <div class="field" data-tt-show="shares" style="display:none;">
+        <label>소유자별 지분율 (%)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="지분이 균등하지 않으면(6:4, 7:3 등) 각자의 과세표준이 달라져 적용 누진세율도 달라집니다. 합이 100이 아니어도 비율대로 자동 정규화합니다. 비워두면 인원수 균등분할로 계산합니다.">?</span></label>
+        <div class="field-row">
+          <div class="field"><label for="t-share1">소유자 1</label><input id="t-share1" name="ownerShare1" type="number" min="0" max="100" step="1" value="50" /></div>
+          <div class="field"><label for="t-share2">소유자 2</label><input id="t-share2" name="ownerShare2" type="number" min="0" max="100" step="1" value="50" /></div>
+        </div>
+        <div class="field-row" data-tt-show="shares34" style="display:none;">
+          <div class="field"><label for="t-share3">소유자 3</label><input id="t-share3" name="ownerShare3" type="number" min="0" max="100" step="1" value="0" /></div>
+          <div class="field"><label for="t-share4">소유자 4</label><input id="t-share4" name="ownerShare4" type="number" min="0" max="100" step="1" value="0" /></div>
+        </div>
+        <span class="hint" data-out="shareSum">합계 100%</span>
       </div>
 
       <div class="field">
@@ -294,7 +324,10 @@
         <div class="row sub"><span class="key">적용 세율</span><span class="val" data-out="rate">—</span></div>
         <div class="row"><span class="key">산출 양도소득세</span><span class="val" data-out="incomeTax">0원</span></div>
         <div class="row sub"><span class="key">지방소득세 (10%)</span><span class="val" data-out="localTax">0원</span></div>
+        <div data-out="jointPerOwner" hidden></div>
       </div>
+
+      <p class="applied-rule" data-out="periodNote" hidden></p>
 
       <div class="callout callout-warn" data-out="carryoverBox" style="display: none; margin-top: 20px; margin-bottom: 0;">
         <div class="icon">!</div>
@@ -533,12 +566,12 @@
   <h3>함께 보기</h3>
 <ul><li><a href="../posts/transfer-tax-guide.html">양도세 가이드</a></li><li><a href="../posts/tax-roadmap.html">세금 로드맵</a></li><li><a href="acquisition-tax.html">취득세 계산기</a></li></ul>
   <h3>근거와 기준일</h3>
-<div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">소득세법 제55·95·97조의2·제104조 (양도소득세)</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-07-30 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
+<div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">소득세법 제55·95·97조의2·제104조 (양도소득세)</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-08-02 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
   <details class="explain">
   <summary>계산 방식 변경 이력 (최근 6건)</summary>
   <div class="explain-body">
   <p class="note">계산 결과가 달라지는 변경만 기록합니다. 표기·문구만 다듬은 수정은 남기지 않습니다.</p>
-  <div class="def-list"><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.</span></div><div class="row"><span class="k">2026-06-14</span><span class="v">국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).</span></div><div class="row"><span class="k">2026-06-13</span><span class="v">국민주택채권 매입금액 만원 단위 절상 적용 + 지역(특별시·광역시/그 밖의 지역) 매입률 구분. 양도세 장기보유특별공제 표1 정정(연 2%·3년 6%~15년 30%).</span></div><div class="row"><span class="k">2026-06-04</span><span class="v">대출 한도 규정 블록 신설(LTV·가격대별 한도·스트레스 DSR·전세 보증기관 HF/HUG/SGI).</span></div></div>
+  <div class="def-list"><div class="row"><span class="k">2026-08-02</span><span class="v">대출·등기·증여 정확성 정비. ① 규제지역 일반 LTV 50%→40%(10·15 대책), 생애최초 전국 70%(6·27 대책, 비규제 80% 표기 정정), 수도권 1주택 미처분·다주택 0%. ② 스트레스 가산금리 수도권·규제지역 1.5%p→3.0%p, 지방 비규제 0.75%p로 분리하고 금리유형별 적용비율 추가. ③ 지역 구분을 「수도권 비규제 / 규제지역 / 지방 비규제」 3분류로 세분화 — 가격대별 한도는 수도권·규제지역만 적용. ④ 경과규정(2025.10.15 이전 계약·신청접수)·대환을 사용자 입력으로 분리. ⑤ 법무사 기본보수에 20억·200억 초과 구간 추가(10억 초과 0.05% 고정 오류 수정)하고 대행수수료·실비·부가세를 별도 항목으로 분리. ⑥ 등기신청 수수료를 신청 방식별(방문 18,000 / e-Form 15,000 / 전자)로 구분(2025.8.1 인상 반영). ⑦ 국민주택채권 할인율의 seed·수집실패 값을 실시간 값으로 표시하지 않도록 예시값으로 분리. ⑧ 증여 취득세를 시가인정액(과세표준)·시가표준액(중과 판정)·승계채무액(부담부증여)으로 분리. ⑨ 양도세 공동명의 지분율 입력, 보유·거주기간 날짜 기준 계산. ⑩ 중개보수 시·도 선택 구조 추가.</span></div><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.</span></div><div class="row"><span class="k">2026-06-14</span><span class="v">국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).</span></div><div class="row"><span class="k">2026-06-13</span><span class="v">국민주택채권 매입금액 만원 단위 절상 적용 + 지역(특별시·광역시/그 밖의 지역) 매입률 구분. 양도세 장기보유특별공제 표1 정정(연 2%·3년 6%~15년 30%).</span></div></div>
   </div>
 </details>
 </section>

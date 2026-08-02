@@ -104,7 +104,7 @@
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">계산기</a> / 등기·법무사 비용</div>
     <h1>등기·법무사 비용 계산기</h1>
     <div class="meta">
-      <span>소유권 이전 총 등기비용 — 취득세 · 지방교육세 · 농특세 · 인지세 · 국민주택채권 · 등기수수료 · 법무사 보수</span>
+      <span>소유권 이전 총 등기비용 — 취득세 · 지방교육세 · 농특세 · 인지세 · 국민주택채권 · 등기수수료 · 법무사 기본보수 · 대행료 · 부가세</span>
       <span class="dot">·</span>
       <span>취득세 정밀 조건은 취득세 계산기 참고</span>
     </div>
@@ -134,9 +134,10 @@
         <div class="radio-group">
           <label><input type="radio" name="homes" value="1" checked/><span>1주택</span></label>
           <label><input type="radio" name="homes" value="2"/><span>2주택</span></label>
-          <label><input type="radio" name="homes" value="3"/><span>3주택+</span></label>
+          <label><input type="radio" name="homes" value="3"/><span>3주택</span></label>
+          <label><input type="radio" name="homes" value="4"/><span>4주택 이상</span></label>
         </div>
-        <span class="hint">다주택·조정대상지역이면 취득세 중과(8~12%)가 적용됩니다.</span>
+        <span class="hint">비조정지역은 <strong>3주택 8% · 4주택 이상 12%</strong>로 갈립니다. 과거 「3주택+」로 묶여 있어 비조정 4주택 이상이 8%로 계산되던 오류를 바로잡았습니다.</span>
       </div>
 
       <div class="field rc-house-acq">
@@ -182,22 +183,74 @@
         <div class="input-suffix" data-suffix="원">
           <input id="rc-std" name="std" type="text" inputmode="numeric" data-format="won" value=""/>
         </div>
-        <span class="hint">모르면 비워두세요 → 거래금액 × 70%로 추정. 정확한 값은 <a href="https://www.realtyprice.kr/notice/main/main.do" target="_blank" rel="noopener">부동산공시가격알리미</a> · <a href="https://www.wetax.go.kr" target="_blank" rel="noopener">위택스</a>에서 확인하세요.</span>
+        <span class="hint"><strong>모르면 비워두세요 → 거래금액 × 70%로 추정합니다. 이 70%는 법정 비율이 아니라 단순 추정치</strong>입니다. 정확한 값은 <a href="https://www.realtyprice.kr/notice/main/main.do" target="_blank" rel="noopener">부동산공시가격알리미</a> · <a href="https://www.wetax.go.kr" target="_blank" rel="noopener">위택스</a>에서 확인하세요.</span>
       </div>
 
       <div class="field">
-        <label for="rc-discount">국민주택채권 할인율 (고객부담률)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="대부분 채권을 즉시 매도(할인)하고 그 손실만 부담합니다. 고객부담률은 시장금리에 따라 매일 바뀌며 최근 15% 안팎입니다. 당일 정확한 값은 은행 국민주택채권 포털(우리·국민·신한 등)에서 확인하세요.">?</span></label>
+        <label for="rc-discount">국민주택채권 할인율 (고객부담률)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="대부분 채권을 즉시 매도(할인)하고 그 손실만 부담합니다. 고객부담률은 법정 요율이 아니라 시장금리에 따라 매일 바뀌는 시세입니다. 잔금일 당일 값을 은행 국민주택채권 포털(우리·국민·신한 등)에서 확인해 직접 입력하세요.">?</span></label>
         <div class="input-suffix" data-suffix="%">
           <input id="rc-discount" name="discount" type="number" min="0" max="30" step="0.1" value="15"/>
         </div>
-        <span class="hint" id="rc-discount-note" hidden></span>
+        <span id="rc-discount-note" class="data-stale" hidden></span>
+      </div>
+
+      <div class="field">
+        <label for="rc-filing">등기신청 방식<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="등기신청 수수료는 신청 방식에 따라 다릅니다(등기사항증명서 등 수수료규칙 제5조의2, 2025.8.1 인상). 부동산 1개마다 부과됩니다.">?</span></label>
+        <select id="rc-filing" name="filingMethod">
+          <option value="visit" selected>방문(서면) 신청 — 18,000원</option>
+          <option value="eform">전자표준양식(e-Form) — 15,000원</option>
+          <option value="online">전자신청 — 12,000원 (확인 필요)</option>
+        </select>
+        <span class="hint" id="rc-filing-note" hidden></span>
       </div>
 
       <div class="field">
         <label class="check-item" style="padding:0; cursor:pointer;">
           <input type="checkbox" id="rc-self" name="self"/>
-          <span class="text">셀프 등기 (법무사 보수 제외)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="법무사 없이 직접 등기하면 보수·부가세가 들지 않습니다. 인지세·채권·등기수수료는 동일하게 발생합니다.">?</span></span>
+          <span class="text">셀프 등기 (법무사 보수·대행료 제외)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="법무사 없이 직접 등기하면 보수·대행료·부가세가 들지 않습니다. 인지세·채권·등기수수료는 동일하게 발생합니다.">?</span></span>
         </label>
+      </div>
+
+      <fieldset class="field rc-scrivener" style="border:0;padding:0;margin:0;">
+        <legend style="font-size:0.95rem; margin:22px 0 8px; color:var(--text-muted); padding:0;">법무사에게 위임할 업무</legend>
+        <span class="hint" style="margin-bottom:8px;display:block;">협회 보수표의 <strong>기본보수</strong>는 등기신청 대리 자체의 보수입니다. 아래 부대업무는 위임할 때만 <strong>대행수수료</strong>가 따로 붙습니다 — 실제로 맡기는 업무만 체크하세요.</span>
+        <label class="check-item" style="padding:0; cursor:pointer;">
+          <input type="checkbox" name="agencyTask" value="acqTaxFiling" checked/>
+          <span class="text">취득세·등록면허세 신고·납부 대행 <span class="note">1건 50,000원</span></span>
+        </label>
+        <label class="check-item" style="padding:0; cursor:pointer;">
+          <input type="checkbox" name="agencyTask" value="bondAgency" checked/>
+          <span class="text">국민주택채권 매입·즉시매도 대행 <span class="note">1건 40,000원</span></span>
+        </label>
+        <label class="check-item" style="padding:0; cursor:pointer;">
+          <input type="checkbox" name="agencyTask" value="tradeReport"/>
+          <span class="text">부동산 거래신고 대행 <span class="note">사무소별 30,000~100,000원 (정액 미확인)</span></span>
+        </label>
+      </fieldset>
+
+      <div class="field rc-scrivener">
+        <label for="rc-fieldwork">출장 여부 (일당)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="법무사보수기준상 일당은 소요시간 4시간 이내 80,000원, 4시간 초과 160,000원입니다. 잔금 현장에 법무사가 오는 경우 청구될 수 있습니다.">?</span></label>
+        <select id="rc-fieldwork" name="fieldwork">
+          <option value="none" selected>출장 없음</option>
+          <option value="under4h">출장 4시간 이내 — 80,000원</option>
+          <option value="over4h">출장 4시간 초과 — 160,000원</option>
+        </select>
+      </div>
+
+      <div class="field rc-scrivener">
+        <label for="rc-extra">기타 실비·교통비 (알고 있으면 입력)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="rc-extra" name="extraExpense" type="text" inputmode="numeric" data-format="won" value=""/>
+        </div>
+        <span class="hint">교통비는 1등급 여객운임 실비(현지교통비는 8만원까지). 견적서에 적힌 실비가 있으면 입력하세요.</span>
+      </div>
+
+      <div class="field rc-scrivener">
+        <label for="rc-quote">법무사 견적 기본보수 (받았으면 입력)</label>
+        <div class="input-suffix" data-suffix="원">
+          <input id="rc-quote" name="scrivenerQuote" type="text" inputmode="numeric" data-format="won" value=""/>
+        </div>
+        <span class="hint">비워두면 협회 보수표의 <strong>상한</strong>으로 계산합니다. 실제 견적을 넣으면 그 값으로 대체합니다.</span>
       </div>
     </form>
 
@@ -211,13 +264,24 @@
         <div class="row sub rc-acq-row"><span class="key">└ 지방교육세</span><span class="val" id="rc-edu">—</span></div>
         <div class="row sub rc-acq-row"><span class="key">└ 농어촌특별세</span><span class="val" id="rc-rural">—</span></div>
         <div class="row"><span class="key">인지세</span><span class="val" id="rc-stamp">—</span></div>
-        <div class="row"><span class="key">등기신청 수수료</span><span class="val" id="rc-fee">—</span></div>
+        <div class="row"><span class="key">등기신청 수수료 <span style="color:var(--text-subtle)" id="rc-fee-note"></span></span><span class="val" id="rc-fee">—</span></div>
         <div class="row"><span class="key">국민주택채권 본인부담<span style="color:var(--text-subtle)"> (할인)</span></span><span class="val" id="rc-bond">—</span></div>
         <div class="row sub"><span class="key">└ 채권 매입액</span><span class="val" id="rc-bond-buy">—</span></div>
         <div class="row sub"><span class="key">└ 적용 매입률</span><span class="val" id="rc-bond-rate">—</span></div>
-        <div class="row"><span class="key">법무사 보수 (추정)</span><span class="val" id="rc-fee-scrivener">—</span></div>
-        <div class="row sub"><span class="key">└ 부가세 (10%)</span><span class="val" id="rc-vat">—</span></div>
+
+        <div class="row" style="border-top:1px solid var(--border);margin-top:8px;padding-top:14px;font-weight:700;"><span class="key">예상 총 법무사 비용</span><span class="val" id="rc-scrivener-total">—</span></div>
+        <div class="row sub"><span class="key">└ 법무사 기본보수 상한 <span style="color:var(--text-subtle)" id="rc-base-note"></span></span><span class="val" id="rc-fee-scrivener">—</span></div>
+        <div class="row sub" id="rc-row-tradeReport" hidden><span class="key">└ 거래신고 대행료</span><span class="val" id="rc-agency-tradeReport">—</span></div>
+        <div class="row sub" id="rc-row-acqTaxFiling" hidden><span class="key">└ 취득세 신고·납부 대행료</span><span class="val" id="rc-agency-acqTaxFiling">—</span></div>
+        <div class="row sub" id="rc-row-bondAgency" hidden><span class="key">└ 국민주택채권 매입·매도 대행료</span><span class="val" id="rc-agency-bondAgency">—</span></div>
+        <div class="row sub"><span class="key">└ 기타 실비·출장비</span><span class="val" id="rc-extra-fee">—</span></div>
+        <div class="row sub"><span class="key">└ 부가가치세 (10%)</span><span class="val" id="rc-vat">—</span></div>
       </div>
+
+      <ul class="acq-notes" id="rc-notes" hidden></ul>
+
+      <h4 style="font-size:0.9rem; margin:22px 0 6px; color:var(--text-muted);">이 결과를 이루는 값</h4>
+      <div class="calc-classify" id="rc-classify"></div>
     </div>
   </div>
 
@@ -228,12 +292,19 @@
     <div class="def-list">
       <div class="row"><span class="k">취득세·교육세·농특세</span><span class="v">등기 신청 전 신고·납부합니다. 주택은 6억↓ 1%·6~9억 누진·9억↑ 3%(다주택·조정 중과 8~12%), 토지·비주택은 4.6%. 지방교육세·농어촌특별세(85㎡ 초과)가 더해집니다. (지방세법 제11·15조) 정밀 조건은 <a href="acquisition-tax.html">취득세 계산기</a>.</span></div>
       <div class="row"><span class="k">인지세</span><span class="v">매매계약서에 붙이는 정액 세금. 거래금액 1천만 이하 비과세 ~ 10억 초과 35만 원. (인지세법 제3조)</span></div>
-      <div class="row"><span class="k">등기신청 수수료</span><span class="v">부동산 1건 기준 방문 15,000원 / 전자 13,000원. (대법원 등기 수수료)</span></div>
-      <div class="row"><span class="k">국민주택채권</span><span class="v">소유권 이전 시 의무 매입. 시가표준액 × 매입률만큼 사고, 대부분 즉시 매도하므로 그 할인손실만 실제 부담합니다. (주택도시기금)</span></div>
-      <div class="row"><span class="k">법무사 보수</span><span class="v">대한법무사협회 보수표(2024.9.12 시행) 기본보수 누진 상한 + 부가세 10%. 5천만 이하 21만 원, 5천만~1억 +0.1%, 1억~3억 +0.09%, 3억~5억 +0.08%, 5억~10억 +0.07%. 실제는 사무소 할인·교통비·난이도 가산으로 달라지며, 셀프 등기 시 0원.</span></div>
+      <div class="row"><span class="k">등기신청 수수료</span><span class="v">부동산 <strong>1개마다</strong> 신청 방식별로 다릅니다 — 방문(서면) 18,000원 / 전자표준양식(e-Form) 15,000원 / 전자신청. 2025.8.1 인상. (등기사항증명서 등 수수료규칙 제5조의2)</span></div>
+      <div class="row"><span class="k">국민주택채권</span><span class="v">소유권 이전 시 의무 매입. 시가표준액 × 매입률만큼 사고, 대부분 즉시 매도하므로 그 할인손실만 실제 부담합니다. 매입률은 법정이지만 <strong>고객부담률(할인율)은 법정 요율이 아니라 매일 바뀌는 시세</strong>입니다. (주택도시기금)</span></div>
+      <div class="row"><span class="k">법무사 <strong>기본보수 상한</strong></span><span class="v">대한법무사협회 보수표(2024.9.12 시행)가 정한 <strong>상한액 산정방법</strong>입니다. 5천만 이하 21만 원, 5천만~1억 +0.10%, 1억~3억 +0.09%, 3억~5억 +0.08%, 5억~10억 +0.07%, 10억~20억 +0.05%, 20억~200억 +0.03%, 200억 초과 +0.01%. 1건의 신청서로 여러 부동산을 등기하면 초과 1개마다 2만 원이 가산됩니다. 사무소별 할인이 흔하고, 난이도에 따라 협의로 가산될 수도 있습니다.</span></div>
+      <div class="row"><span class="k">대행수수료</span><span class="v">기본보수와 <strong>별개</strong>로, 실제로 위임한 부대업무에만 붙습니다. 취득세·등록면허세 신고·납부 대행 1건 50,000원, 국민주택채권 매입·즉시매도 대행 1건 40,000원. (대한법무사협회 법무사보수기준 — 기타 보수)</span></div>
+      <div class="row"><span class="k">일당·교통비</span><span class="v">출장이 있을 때만 발생합니다. 소요시간 4시간 이내 80,000원, 4시간 초과 160,000원. 교통비는 1등급 여객운임 실비(현지교통비는 8만원까지).</span></div>
+      <div class="row"><span class="k">부가가치세</span><span class="v">법무사 보수(기본보수 + 대행수수료 + 일당·실비) 합계에 10%가 붙습니다. 인지세·등기신청수수료·채권 본인부담금은 세금·실비라 부가세 대상이 아닙니다.</span></div>
       <div class="row"><span class="k">등록면허세</span><span class="v">매매(소유권 이전)는 2011년부터 취득세에 통합되어 별도로 들지 않습니다. (전세권·근저당 설정 등기는 별도)</span></div>
     </div>
-    <p style="color:var(--text-muted); font-size:0.85rem; margin-top:10px;">※ 국민주택채권 매입률·할인율과 법무사 보수는 지역·시점·사무소에 따라 달라지는 추정치입니다. 정확한 금액은 <a href="https://xn--989a00af8jnslv3dba.com/%EB%93%B1%EA%B8%B0%EB%B9%84%EC%9A%A9" target="_blank" rel="noopener">부동산계산기 등기비용</a> 및 은행·법무사 견적으로 확인하세요.</p>
+    <div class="callout callout-warn" style="margin-top:14px;">
+      <div class="icon">⚠</div>
+      <div class="body"><strong>확인이 필요한 값</strong> ① 법무사 기본보수의 <strong>20억원 초과 구간 요율</strong>은 협회 보수표 원문을 아직 대조하지 못한 잠정값입니다. ② <strong>부동산 거래신고 대행료</strong>는 정액을 1차 출처로 확인하지 못해 사무소별 범위(3~10만 원)로 표시합니다. ③ <strong>전자신청 등기수수료</strong>는 2025.8.1 인상 후 금액을 재확인하지 못했습니다. 세 항목 모두 견적서·대법원 인터넷등기소로 확인하세요.</div>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.85rem; margin-top:10px;">※ 국민주택채권 할인율과 법무사 보수는 지역·시점·사무소에 따라 달라집니다. 정확한 금액은 은행 국민주택채권 포털 및 법무사 견적으로 확인하세요.</p>
   </div>
   </details>
 </section>
@@ -247,22 +318,22 @@
 <section class="calc-meta" aria-labelledby="calc-meta-h">
   <h2 id="calc-meta-h">이 계산기 정보</h2>
   <h3>어떤 경우에 쓰는 계산기인가</h3>
-<p>소유권이전등기에 드는 실제 비용(국민주택채권 매입·할인, 법무사 보수, 인지세)을 확인하려는 매수자. 셀프 등기를 검토하는 경우 절감액도 함께 볼 수 있습니다.</p>
+<p>소유권이전등기에 드는 실제 비용(취득세·인지세·등기신청 수수료·국민주택채권 매입·할인, 법무사 기본보수와 대행수수료)을 확인하려는 매수자. 셀프 등기를 검토하는 경우 절감액도 함께 볼 수 있습니다.</p>
   <h3>미리 준비할 값</h3>
-<ul><li>거래금액과 시가표준액 — 채권 매입 기준은 시가표준액입니다(공시가격 조회 링크 제공)</li><li>소재지 — 특별시·광역시와 그 밖의 지역의 채권 매입률이 다릅니다</li><li>국민주택채권 할인율(고객부담률) — 매일 바뀌므로 확인 후 입력</li><li>셀프 등기 여부</li><li>취득세까지 포함해 계산할 경우 주택 수·조정대상지역·전용면적·감면 요건</li></ul>
+<ul><li>거래금액과 시가표준액 — 채권 매입 기준은 시가표준액입니다(비워두면 매매가 × 70%로 추정하며, 이는 법정 비율이 아닙니다)</li><li>소재지 — 특별시·광역시와 그 밖의 지역의 채권 매입률이 다릅니다</li><li>국민주택채권 할인율(고객부담률) — 법정 요율이 아니라 매일 바뀌는 시세이므로 잔금일 당일 값 확인 후 입력</li><li>등기신청 방식 — 방문(서면) / 전자표준양식(e-Form) / 전자신청</li><li>법무사에게 실제로 위임할 부대업무 — 취득세 신고·납부 대행, 국민주택채권 매입·매도 대행, 거래신고 대행</li><li>출장(일당) 여부와 기타 실비, 받은 견적이 있으면 견적 기본보수</li><li>셀프 등기 여부</li><li>취득세까지 포함해 계산할 경우 주택 수(1·2·3·4주택 이상)·조정대상지역·전용면적·감면 요건</li></ul>
   <h3>적용 공식과 가정</h3>
-<ul><li>국민주택채권 매입액 = 시가표준액 × 지역별 매입률, 만원 단위 절상.</li><li>실제 부담액 = 매입액 × 할인율(고객부담률). 채권을 즉시 매도할 때 생기는 손실분입니다.</li><li>법무사 보수는 대한법무사협회 보수표의 구간별 누진 방식으로 계산합니다.</li><li>인지세는 인지세법의 계약금액 구간별 정액입니다.</li><li>가정: 등록면허세·증지대 등 소액 항목과 법무사별 실비 차이는 반영하지 않습니다.</li></ul>
+<ul><li>국민주택채권 매입액 = 시가표준액 × 지역별 매입률, 만원 단위 절상. 실제 부담액 = 매입액 × 고객부담률(즉시 매도 시 손실분).</li><li>법무사 기본보수 상한 = 협회 보수표 구간별 누진. 5천만 이하 21만원, 이후 0.10%→0.09%→0.08%→0.07%→0.05%(10~20억)→0.03%(20~200억)→0.01%(200억 초과). 여러 부동산이면 초과 1개마다 2만원 가산.</li><li>대행수수료는 기본보수와 별개로, 실제 위임한 업무만 더합니다 — 취득세 신고·납부 5만원, 채권 매입·매도 4만원, 거래신고는 사무소별 범위.</li><li>부가가치세 10%는 법무사 보수(기본보수 + 대행수수료 + 일당·실비)에만 붙습니다. 인지세·등기신청수수료·채권 본인부담금은 부가세 대상이 아닙니다.</li><li>등기신청 수수료는 부동산 1개마다 신청 방식별로 부과됩니다(2025.8.1 인상).</li><li>인지세는 인지세법의 계약금액 구간별 정액입니다.</li></ul>
   <h3>결과가 달라질 수 있는 조건</h3>
-<ul><li>채권 할인율은 시장 금리에 따라 매일 바뀝니다 — 잔금일 당일 값으로 다시 계산해야 정확합니다.</li><li>법무사 보수는 보수표가 상한이 아니라 기준이며, 사무소마다 실비·부가세 처리가 다릅니다.</li><li>시가표준액과 매매가가 크게 다르면 채권 매입액이 예상과 달라집니다.</li></ul>
+<ul><li>채권 할인율은 시장 금리에 따라 매일 바뀝니다 — 잔금일 당일 값으로 다시 계산해야 정확합니다. 자동 수집이 실패하면 예시값임을 결과에 표시합니다.</li><li>법무사 기본보수는 보수표가 정한 &#x27;상한&#x27;입니다. 사무소별 할인이 흔하고, 난이도에 따라 협의로 가산될 수도 있습니다.</li><li>법무사 기본보수의 20억원 초과 구간 요율과 부동산 거래신고 대행료, 전자신청 등기수수료는 1차 출처로 확정하지 못한 값이라 잠정값·범위로 표시합니다.</li><li>시가표준액을 입력하지 않으면 매매가 × 70% 추정을 쓰며, 실제 공시가격과 다르면 채권 매입액이 달라집니다.</li></ul>
   <h3>함께 보기</h3>
 <ul><li><a href="acquisition-tax.html">취득세 계산기</a></li><li><a href="total-cost-dashboard.html">총비용 대시보드</a></li><li><a href="../posts/registry-reading.html">등기부등본 보는 법</a></li></ul>
   <h3>근거와 기준일</h3>
-<div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">인지세법 제3조, 주택도시기금 국민주택채권, 대한법무사협회 보수표(2024.9.12 시행)</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-07-30 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
+<div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">인지세법 제3조, 등기사항증명서 등 수수료규칙 제5조의2, 주택도시기금 국민주택채권, 대한법무사협회 보수표·보수기준(2024.9.12 시행)</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-08-02 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
   <details class="explain">
   <summary>계산 방식 변경 이력 (최근 6건)</summary>
   <div class="explain-body">
   <p class="note">계산 결과가 달라지는 변경만 기록합니다. 표기·문구만 다듬은 수정은 남기지 않습니다.</p>
-  <div class="def-list"><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.</span></div><div class="row"><span class="k">2026-06-14</span><span class="v">국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).</span></div><div class="row"><span class="k">2026-06-13</span><span class="v">국민주택채권 매입금액 만원 단위 절상 적용 + 지역(특별시·광역시/그 밖의 지역) 매입률 구분. 양도세 장기보유특별공제 표1 정정(연 2%·3년 6%~15년 30%).</span></div><div class="row"><span class="k">2026-06-04</span><span class="v">대출 한도 규정 블록 신설(LTV·가격대별 한도·스트레스 DSR·전세 보증기관 HF/HUG/SGI).</span></div></div>
+  <div class="def-list"><div class="row"><span class="k">2026-08-02</span><span class="v">대출·등기·증여 정확성 정비. ① 규제지역 일반 LTV 50%→40%(10·15 대책), 생애최초 전국 70%(6·27 대책, 비규제 80% 표기 정정), 수도권 1주택 미처분·다주택 0%. ② 스트레스 가산금리 수도권·규제지역 1.5%p→3.0%p, 지방 비규제 0.75%p로 분리하고 금리유형별 적용비율 추가. ③ 지역 구분을 「수도권 비규제 / 규제지역 / 지방 비규제」 3분류로 세분화 — 가격대별 한도는 수도권·규제지역만 적용. ④ 경과규정(2025.10.15 이전 계약·신청접수)·대환을 사용자 입력으로 분리. ⑤ 법무사 기본보수에 20억·200억 초과 구간 추가(10억 초과 0.05% 고정 오류 수정)하고 대행수수료·실비·부가세를 별도 항목으로 분리. ⑥ 등기신청 수수료를 신청 방식별(방문 18,000 / e-Form 15,000 / 전자)로 구분(2025.8.1 인상 반영). ⑦ 국민주택채권 할인율의 seed·수집실패 값을 실시간 값으로 표시하지 않도록 예시값으로 분리. ⑧ 증여 취득세를 시가인정액(과세표준)·시가표준액(중과 판정)·승계채무액(부담부증여)으로 분리. ⑨ 양도세 공동명의 지분율 입력, 보유·거주기간 날짜 기준 계산. ⑩ 중개보수 시·도 선택 구조 추가.</span></div><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.</span></div><div class="row"><span class="k">2026-06-14</span><span class="v">국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).</span></div><div class="row"><span class="k">2026-06-13</span><span class="v">국민주택채권 매입금액 만원 단위 절상 적용 + 지역(특별시·광역시/그 밖의 지역) 매입률 구분. 양도세 장기보유특별공제 표1 정정(연 2%·3년 6%~15년 30%).</span></div></div>
   </div>
 </details>
 </section>
@@ -315,51 +386,10 @@
   const won = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
   const $ = (id) => document.getElementById(id);
   const parseWon = (v) => Number(String(v).replace(/[^0-9]/g, '')) || 0;
+  const wonText = (n) => won.format(Math.round(n)) + '원';
 
-  // 인지세 (인지세법 제3조)
-  function stampDuty(price) {
-    if (price <= 10000000) return 0;
-    if (price <= 30000000) return 20000;
-    if (price <= 50000000) return 40000;
-    if (price <= 100000000) return 70000;
-    if (price <= 1000000000) return 150000;
-    return 350000;
-  }
-  // 국민주택채권 매입률 (주택도시기금법 시행령 별표, 시가표준액 구간별)
-  //  region: 'metro'(특별시·광역시) | 'other'(그 밖의 지역)
-  function bondRate(std, asset, region) {
-    const eok = std / 100000000;
-    const metro = region !== 'other';
-    if (asset === 'land') {
-      if (std < 5000000) return 0;
-      if (eok < 0.5) return metro ? 0.025 : 0.020;
-      if (eok < 1) return metro ? 0.040 : 0.035;
-      return metro ? 0.050 : 0.045;
-    }
-    // 주택
-    if (std < 20000000) return 0;
-    if (eok < 0.5) return 0.013;
-    if (eok < 1) return 0.019;
-    if (eok < 1.6) return metro ? 0.021 : 0.018;
-    if (eok < 2.6) return metro ? 0.023 : 0.021;
-    if (eok < 6) return metro ? 0.026 : 0.024;
-    return metro ? 0.031 : 0.026;
-  }
-  // 채권 매입금액은 만원 단위로 절상(5천원 미만 절사·5천원 이상 절상)
-  const roundBond = (amount) => Math.round(amount / 10000) * 10000;
-  // 법무사 기본보수(부동산 소유권이전 등기) — 대한법무사협회 보수표 2024.9.12 시행 상한 기준
-  //  5천만↓ 21만 정액 / 5천만~1억 +0.10% / 1억~3억 +0.09% / 3억~5억 +0.08% / 5억~10억 +0.07% / 10억↑ +0.05%
-  function scrivenerFee(price) {
-    if (price <= 0) return 0;
-    let f;
-    if (price <= 50000000) f = 210000;
-    else if (price <= 100000000) f = 210000 + (price - 50000000) * 0.0010;
-    else if (price <= 300000000) f = 260000 + (price - 100000000) * 0.0009;
-    else if (price <= 500000000) f = 440000 + (price - 300000000) * 0.0008;
-    else if (price <= 1000000000) f = 600000 + (price - 500000000) * 0.0007;
-    else f = 950000 + (price - 1000000000) * 0.0005;
-    return Math.round(f / 1000) * 1000;
-  }
+  // ⚠ 인지세·채권매입률·법무사 보수 산식을 이 파일에 복붙하지 않는다.
+  //   app.js의 공통 엔진(calcRegistrationCost)만 호출해 종합계산기와 결과를 일치시킨다.
 
   // 취득세(+지방교육세·농어촌특별세) 산정 — 주택은 app.js의 전역 calcAcquisitionTax 재사용,
   //  토지·비주택은 유상취득 4.6%(취득 4% + 농특 0.2% + 교육 0.4%).
@@ -379,72 +409,161 @@
     return { acquisition, localEduTax, ruralTax, total: acquisition + ruralTax + localEduTax, note: '(4.6%)' };
   }
 
+  function renderNotes(notes) {
+    const box = $('rc-notes');
+    const rows = (notes || []).filter((n) => n && n.text);
+    box.hidden = !rows.length;
+    const icon = { warn: '⚠', info: 'ℹ', skip: '✕' };
+    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    box.innerHTML = rows.map((n) =>
+      '<li class="acq-note acq-note-' + n.kind + '"><span class="acq-note-icon" aria-hidden="true">'
+      + (icon[n.kind] || 'ℹ') + '</span><span>' + esc(n.text) + '</span></li>').join('');
+  }
+
+  function renderClassify(groups) {
+    const g = (title, items) => items.length
+      ? '<div class="calc-classify-group"><h4>' + title + '</h4><ul>'
+        + items.map((i) => '<li>' + i + '</li>').join('') + '</ul></div>'
+      : '';
+    $('rc-classify').innerHTML =
+      g('법정·확정 항목', groups.statutory)
+      + g('사용자 입력 항목', groups.userInput)
+      + g('추정 항목 (확인 필요)', groups.estimated);
+  }
+
   function recalc() {
     const price = parseWon($('rc-price').value);
-    let std = parseWon($('rc-std').value);
-    if (!std) std = Math.round(price * 0.7);
+    const stdInput = parseWon($('rc-std').value);
     const asset = document.querySelector('input[name="asset"]:checked').value;
     const region = document.querySelector('input[name="region"]:checked').value;
-    const discount = (+$('rc-discount').value || 0) / 100;
+    const discountPct = +$('rc-discount').value || 0;
     const self = $('rc-self').checked;
     const inclAcq = $('rc-incl-acq').checked;
+    const filingMethod = $('rc-filing').value;
+    const fieldwork = $('rc-fieldwork').value;
+    const extraExpense = parseWon($('rc-extra').value);
+    const scrivenerQuote = parseWon($('rc-quote').value);
+    const agencyTasks = Array.from(document.querySelectorAll('input[name="agencyTask"]:checked'))
+      .map((el) => el.value);
 
     // 주택 전용 취득세 입력은 주택 + 취득세 포함일 때만 노출
     document.querySelectorAll('.rc-house-acq').forEach((el) => {
       el.style.display = (asset === 'house' && inclAcq) ? '' : 'none';
     });
     document.querySelectorAll('.rc-acq-row').forEach((el) => { el.style.display = inclAcq ? '' : 'none'; });
+    // 셀프 등기면 법무사 관련 입력은 의미가 없다.
+    document.querySelectorAll('.rc-scrivener').forEach((el) => { el.style.display = self ? 'none' : ''; });
 
     const acq = inclAcq ? acquisitionTaxes(price, asset) : { acquisition: 0, localEduTax: 0, ruralTax: 0, total: 0, note: '' };
-    const stamp = stampDuty(price);
-    const fee = 15000;
-    const rate = bondRate(std, asset, region);
-    const bondBuy = roundBond(std * rate);
-    const bond = Math.round(bondBuy * discount);
-    const scrivener = self ? 0 : scrivenerFee(price);
-    const vat = Math.round(scrivener * 0.1);
-    const total = acq.total + stamp + fee + bond + scrivener + vat;
+    const r = calcRegistrationCost({
+      price, stdValue: stdInput, asset, region, discountPct, self,
+      filingMethod, agencyTasks, fieldwork, extraExpense,
+      scrivenerQuote: scrivenerQuote || null,
+    });
+
+    const totalMin = acq.total + r.totalMin;
+    const totalMax = acq.total + r.totalMax;
 
     $('rc-title').textContent = inclAcq ? '예상 총 등기비용 (취득세 포함)' : '예상 등기 부대비용 (취득세 제외)';
     $('rc-sub').textContent = inclAcq
-      ? '취득세·지방교육세·농특세 + 인지세·채권·법무사 보수까지 합산했습니다.'
+      ? '취득세·지방교육세·농특세 + 인지세·등기수수료·채권 + 법무사 기본보수·대행료·실비·부가세를 항목별로 합산했습니다.'
       : '취득세는 제외했습니다. 등기 신고 시 취득세를 먼저 납부해야 합니다.';
-    $('rc-total').textContent = won.format(total) + '원';
-    $('rc-acq').textContent = won.format(Math.round(acq.acquisition)) + '원';
+    $('rc-total').textContent = r.isRange
+      ? wonText(totalMin) + ' ~ ' + wonText(totalMax)
+      : wonText(totalMin);
+
+    $('rc-acq').textContent = wonText(acq.acquisition);
     $('rc-acq-note').textContent = acq.note;
-    $('rc-edu').textContent = won.format(Math.round(acq.localEduTax)) + '원';
-    $('rc-rural').textContent = acq.ruralTax > 0 ? won.format(Math.round(acq.ruralTax)) + '원' : '면제 (85㎡↓)';
-    $('rc-stamp').textContent = won.format(stamp) + '원';
-    $('rc-fee').textContent = won.format(fee) + '원';
-    $('rc-bond').textContent = won.format(bond) + '원';
-    $('rc-bond-buy').textContent = won.format(bondBuy) + '원';
-    $('rc-bond-rate').textContent = (rate * 100).toFixed(1) + '% (시가표준액 ' + won.format(std) + '원 기준)';
-    $('rc-fee-scrivener').textContent = self ? '셀프 등기 (0원)' : won.format(scrivener) + '원';
-    $('rc-vat').textContent = won.format(vat) + '원';
+    $('rc-edu').textContent = wonText(acq.localEduTax);
+    $('rc-rural').textContent = acq.ruralTax > 0 ? wonText(acq.ruralTax) : '면제 (85㎡↓)';
+    $('rc-stamp').textContent = wonText(r.stamp);
+    $('rc-fee').textContent = wonText(r.filingFee);
+    $('rc-fee-note').textContent = '(' + r.filingMethod.label + ')';
+    const filingNote = $('rc-filing-note');
+    filingNote.hidden = !r.filingMethod.note;
+    filingNote.textContent = r.filingMethod.note || '';
+    $('rc-bond').textContent = wonText(r.bondSelfPay);
+    $('rc-bond-buy').textContent = wonText(r.bondBuy);
+    $('rc-bond-rate').textContent = (r.bondRate * 100).toFixed(1) + '% (시가표준액 '
+      + won.format(r.stdValue) + '원' + (r.stdValueEstimated ? ' · 추정' : '') + ' 기준)';
+
+    // ── 법무사 비용: 기본보수 / 대행료 / 실비 / 부가세 분리 ──
+    if (self) {
+      $('rc-scrivener-total').textContent = '셀프 등기 (0원)';
+      $('rc-fee-scrivener').textContent = '0원';
+      $('rc-base-note').textContent = '';
+      ['tradeReport', 'acqTaxFiling', 'bondAgency'].forEach((k) => { $('rc-row-' + k).hidden = true; });
+      $('rc-extra-fee').textContent = '0원';
+      $('rc-vat').textContent = '0원';
+    } else {
+      $('rc-scrivener-total').textContent = r.scrivenerTotalMax > r.scrivenerTotalMin
+        ? wonText(r.scrivenerTotalMin) + ' ~ ' + wonText(r.scrivenerTotalMax)
+        : wonText(r.scrivenerTotalMin);
+      $('rc-fee-scrivener').textContent = wonText(r.scrivenerBase);
+      $('rc-base-note').textContent = r.scrivenerBaseIsQuote ? '(입력한 견적)' : '(보수표 상한)';
+      ['tradeReport', 'acqTaxFiling', 'bondAgency'].forEach((k) => {
+        const item = r.agencyFeeItems.find((a) => a.key === k);
+        const row = $('rc-row-' + k);
+        row.hidden = !item;
+        if (item) {
+          $('rc-agency-' + k).textContent = item.isRange
+            ? wonText(item.min) + ' ~ ' + wonText(item.max)
+            : wonText(item.min);
+        }
+      });
+      const fieldAndExtra = r.fieldworkFee + r.extraExpense;
+      $('rc-extra-fee').textContent = fieldAndExtra > 0 ? wonText(fieldAndExtra) : '없음';
+      $('rc-vat').textContent = r.vatMax > r.vatMin
+        ? wonText(r.vatMin) + ' ~ ' + wonText(r.vatMax)
+        : wonText(r.vatMin);
+    }
+
+    renderNotes(r.notes);
+    renderClassify({
+      statutory: [
+        '인지세 <span>인지세법 제3조</span>',
+        '등기신청 수수료 <span>' + r.filingMethod.label + '</span>',
+        '국민주택채권 매입액 <span>매입률 ' + (r.bondRate * 100).toFixed(1) + '%</span>',
+      ].concat(inclAcq ? ['취득세·지방교육세·농어촌특별세 <span>지방세법 제11·15·151조</span>'] : []),
+      userInput: [
+        '거래금액', '시가표준액', '채권 할인율(고객부담률)', '등기신청 방식', '위임할 부대업무',
+      ].concat(r.scrivenerBaseIsQuote ? ['법무사 견적 기본보수'] : []),
+      estimated: []
+        .concat(r.stdValueEstimated ? ['추정 시가표준액 <span>매매가 × 70% — 법정값 아님</span>'] : [])
+        .concat(self || r.scrivenerBaseIsQuote ? [] : ['법무사 기본보수 <span>보수표 상한 — 실제는 할인·가산으로 달라짐</span>'])
+        .concat(r.agencyFeeItems.some((a) => a.isRange) ? ['거래신고 대행료 <span>사무소별 범위</span>'] : [])
+        .concat(['국민주택채권 본인부담 <span>고객부담률은 매일 변동하는 시세</span>']),
+    });
   }
 
   $('rc-form').addEventListener('input', recalc);
   $('rc-form').addEventListener('change', recalc);
   recalc();
 
-  // 국민주택채권 당일 할인율 자동 반영 — 수집 실패/미설정(seed) 시 기존 기본값(15%) 유지.
-  // 성공 시 입력란 아래에 반영 날짜를 표시해 자동 갱신이 실제로 됐음을 눈에 보이게 한다.
+  // ── 국민주택채권 당일 할인율 ──
+  //  ⚠ seed·수집실패 값을 '오늘 자동 반영됨'으로 보여주면 안 된다. 사용자가 확인해야 할
+  //    것을 확인하지 않고 지나간다. 상태별로 초록(실시간)/주황(예시·오래됨)을 구분한다.
   var discountTouched = false;
   $('rc-discount').addEventListener('input', function () { discountTouched = true; });
+  function showBondState(res) {
+    var note = $('rc-discount-note');
+    if (!note) return;
+    note.className = res.state === 'fresh' ? 'data-fresh' : 'data-stale';
+    note.textContent = res.message;
+    note.hidden = false;
+  }
   fetch('../assets/bond_rate.json?t=' + Date.now(), { cache: 'no-store' })
     .then(function (r) { return r.ok ? r.json() : null; })
+    .catch(function () { return null; })
     .then(function (j) {
-      if (!j || j.seed || discountTouched || !j.customer_burden_rate_pct) return;
-      $('rc-discount').value = j.customer_burden_rate_pct;
-      recalc();
-      var note = $('rc-discount-note');
-      if (note) {
-        note.textContent = '오늘 자동 반영됨: ' + j.customer_burden_rate_pct + '%' +
-          (j.as_of ? ' (' + j.as_of + ' 기준)' : '');
-        note.hidden = false;
+      var res = applyBondDiscountRate(j);
+      showBondState(res);
+      if (res.shouldFill && !discountTouched) {
+        $('rc-discount').value = res.rate;
+        recalc();
       }
-    })
-    .catch(function () {});
+    });
 })();
 </script>
 </body>

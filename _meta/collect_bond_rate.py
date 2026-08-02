@@ -259,11 +259,18 @@ def main():
     # 표에 찍힌 실제 기준일(예: 조회월의 마지막 영업일)을 as_of로 쓴다 — 수집 시각의
     # '오늘'은 은행이 아직 그날 값을 안 올렸을 수 있어 부정확할 수 있음.
     as_of = diag.get("matched_date") or dt.date.today().isoformat()
+    # collected_at: 마지막 '정상 수집'이 언제였는지. 수집이 실패하면 파일을 건드리지 않으므로
+    # 이 값이 그대로 남고, 화면은 그 날짜로 값이 얼마나 오래됐는지 판단한다.
+    # (as_of는 은행 표에 찍힌 '적용 기준일'이라 의미가 다르다 — 둘 다 노출한다.)
     data = {
         "_meta": {"source": f"{used} 조회 페이지 파싱 — 제1종국민주택채권 고객부담률(할인율)",
-                  "note": "공식 오픈API가 없어 조회 페이지를 파싱함. 실패 시 기존 값 유지."},
+                  "note": "공식 오픈API가 없어 조회 페이지를 파싱함. 실패 시 기존 값 유지. "
+                          "seed=true 또는 collected_at 없음 = 예시값(자동 수집 전/실패) — "
+                          "화면에서 실시간 값으로 표시하지 않는다."},
         "as_of": as_of,
+        "collected_at": dt.date.today().isoformat(),
         "customer_burden_rate_pct": rate,
+        "seed": False,
     }
     save_json_safe(OUT, data)
     print(f"[bond_rate] 고객부담률 {rate}% ({used}, {data['as_of']})")
