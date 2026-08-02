@@ -384,4 +384,120 @@ check('대출 한도 페이지가 적용 대상 요건을 화면에 밝힌다', 
   }
 });
 
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 P0-④] 판정 기준값은 매매가가 아니라 「시가」');
+// ─────────────────────────────────────────────────────────────────────
+
+check('시가 기준임이 기준정보에 명시돼 있다', () => {
+  const v = RATES.loan.valuationBasis;
+  assert.ok(v, 'loan.valuationBasis 블록이 없습니다.');
+  assert.equal(v.isPurchasePrice, false);
+  assert.match(Array.from(v.sources).join(' '), /KB/);
+  assert.ok(v.fallbackNote, '매매가로 대체했을 때의 경고 문구가 없습니다.');
+  assert.ok(v.source, '근거가 없습니다.');
+});
+
+check('실제 사례 — 매매가 15.65억, 신청일 시가 15억이면 6억 구간이다', () => {
+  // 사용자 제보로 확인된 오류: 매매가로 판정하면 15~25억 구간(4억)에 잘못 걸려
+  // 한도가 2억 깎였다. 판정은 대출 신청일 기준 시가로 해야 한다.
+  const args = {
+    region: 'regulated', ownership: 'none', ltvPercent: 40, income: 119_000_000,
+    existingAnnualDebt: 0, rate: 3.83, stressAdd: 3, termYears: 30,
+    dsrLimitPercent: 40, repayType: 'principal',
+  };
+  const byPurchasePrice = calcMortgageLimit({ ...args, price: 1_565_000_000 });
+  const byMarketValue = calcMortgageLimit({ ...args, price: 1_500_000_000 });
+  assert.equal(byPurchasePrice.priceCap, 400_000_000, '매매가 기준이면 4억 구간');
+  assert.equal(byMarketValue.priceCap, 600_000_000, '시가 15억이면 6억 구간이어야 합니다.');
+  assert.ok(byMarketValue.limit > byPurchasePrice.limit,
+    '시가로 판정하면 한도가 더 커야 합니다.');
+});
+
+check('종합계산기가 매매가가 아니라 KB시세로 한도를 판정한다', () => {
+  const start = appSource.indexOf('const mortgageBox = root.querySelector(\'[data-mortgage-limit-box]\')');
+  const block = appSource.slice(start, start + 900);
+  assert.match(block, /getN\('kbPrice'\)/, '종합계산기가 KB시세 입력을 읽지 않습니다.');
+  assert.match(block, /kbPrice > 0 \? kbPrice : price/, '시가 우선 판정이 아닙니다.');
+  const html = fs.readFileSync(new URL('../site/calculators/total-cost-dashboard.html', import.meta.url), 'utf8');
+  assert.ok(html.includes('name="kbPrice"'), '종합계산기에 KB시세 입력이 없습니다.');
+});
+
+check('대출 한도 페이지가 매매가를 넣지 말라고 안내한다', () => {
+  const html = fs.readFileSync(new URL('../site/calculators/loan-limit.html', import.meta.url), 'utf8');
+  assert.ok(html.includes('매매가를 넣지 마세요'), '매매가 오입력 경고가 없습니다.');
+  assert.ok(html.includes('대출 신청일 기준 시가'), '판정 기준 안내가 없습니다.');
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 P0-⑤] 스트레스 DSR이 결과에 영향을 줬는지 표시');
+// ─────────────────────────────────────────────────────────────────────
+
+check('가격대별 한도가 결정 요인이면 스트레스 영향은 0이다', () => {
+  const r = calcMortgageLimit({
+    price: 1_565_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
+    income: 119_000_000, existingAnnualDebt: 0, rate: 3.83, stressAdd: 3,
+    termYears: 30, dsrLimitPercent: 40, repayType: 'principal',
+  });
+  assert.equal(r.binding.key, 'priceCap');
+  assert.equal(r.stressAffectsLimit, false, '스트레스가 한도를 바꾸지 않았는데 영향 있다고 표시됩니다.');
+  assert.equal(r.stressImpact, 0);
+  assert.equal(r.limitWithoutStress, r.limit);
+});
+
+check('DSR이 결정 요인이면 스트레스가 깎은 금액을 알려준다', () => {
+  const r = calcMortgageLimit({
+    price: 1_500_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
+    income: 119_000_000, existingAnnualDebt: 0, rate: 3.83, stressAdd: 3,
+    termYears: 30, dsrLimitPercent: 40, repayType: 'principal',
+  });
+  assert.equal(r.binding.key, 'dsr');
+  assert.equal(r.stressAffectsLimit, true);
+  assert.ok(r.stressImpact > 0);
+  assert.ok(r.limitWithoutStress > r.limit);
+});
+
+check('순수 고정금리는 스트레스 가산이 0이라 한도가 줄지 않는다', () => {
+  const args = {
+    price: 1_500_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
+    income: 119_000_000, existingAnnualDebt: 0, rate: 3.83, termYears: 30,
+    dsrLimitPercent: 40, repayType: 'principal',
+  };
+  const fixedStress = suggestStressAdd('regulated', 'fixed').value;
+  assert.equal(fixedStress, 0);
+  const fixed = calcMortgageLimit({ ...args, rateType: 'fixed', stressAdd: fixedStress });
+  const variable = calcMortgageLimit({ ...args, rateType: 'variable', stressAdd: 3 });
+  assert.equal(fixed.stressAffectsLimit, false);
+  assert.ok(fixed.limit > variable.limit, '고정금리 한도가 변동금리보다 커야 합니다.');
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 P0-⑥] DSR 산정 제외 대출 — 유가증권담보대출');
+// ─────────────────────────────────────────────────────────────────────
+
+check('유가증권(주식)담보대출이 DSR 산정 제외 목록에 있다', () => {
+  const list = Array.from(RATES.dsr.applicability.excludedFromDsr).join(' ');
+  assert.match(list, /유가증권/);
+  assert.match(list, /주식/);
+});
+
+check('종합계산기가 주식·예적금 담보대출을 DSR에 산입하지 않는다', () => {
+  const start = appSource.indexOf('function otherLoanSpec(type)');
+  const end = appSource.indexOf('function updateOtherLoanRow(', start);
+  const block = appSource.slice(start, end);
+  // 과거엔 'stock'을 a/8 + 이자로 산입해 DSR을 부풀렸다.
+  assert.doesNotMatch(block, /case 'stock': return \[function \(a\) \{ return a \/ 8; \}/,
+    '주식담보대출이 여전히 DSR에 산입됩니다.');
+  for (const key of ["case 'deposit'", "case 'stock'"]) {
+    const i = block.indexOf(key);
+    assert.ok(i >= 0, `${key}가 없습니다.`);
+    const line = block.slice(i, block.indexOf('\n', i));
+    assert.match(line, /return 0;/, `${key}의 원금 산입이 0이 아닙니다.`);
+    assert.match(line, /false, true\]/, `${key}에 DSR 제외 플래그가 없습니다.`);
+  }
+  // 제외 플래그가 켜지면 이자도 산입하지 않아야 한다.
+  const rowStart = appSource.indexOf('function updateOtherLoanRow(');
+  const rowBlock = appSource.slice(rowStart, appSource.indexOf('function otherLoansTotal(', rowStart));
+  assert.match(rowBlock, /dsrExempt \? 0 : amount \* rate/, '제외 대출의 이자가 여전히 산입됩니다.');
+});
+
 console.log(`\n대출 한도 회귀 테스트 ${passed}개 통과\n`);
