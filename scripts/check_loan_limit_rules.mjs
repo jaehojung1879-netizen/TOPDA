@@ -317,4 +317,71 @@ check('대출 규정 블록에 근거·검토일·시행일 메타데이터가 �
   assert.equal(RATES.loan.effectiveFrom, '2025-10-16', '10·15 대책 시행일이 반영돼야 합니다.');
 });
 
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출] 적용 대상 요건 — 어떤 대출에 붙는 규제인지');
+// ─────────────────────────────────────────────────────────────────────
+
+check('차주단위 DSR 적용 문턱(총 대출 1억원 초과)이 기준정보에 있다', () => {
+  const app = RATES.dsr.applicability;
+  assert.ok(app, 'dsr.applicability 블록이 없습니다.');
+  assert.equal(app.totalDebtThreshold, 100_000_000);
+  // 계산은 보수적으로 항상 적용한다 — 요건 미해당 시 실제 한도가 더 높은 쪽이라 안전하다.
+  assert.equal(app.alwaysAppliedInCalculator, true);
+  assert.ok(Array.from(app.excludedFromDsr).length >= 3, 'DSR 산정 제외 대출 목록이 없습니다.');
+  for (const field of ['effectiveFrom', 'reviewedAt', 'jurisdiction', 'confidence', 'source']) {
+    assert.ok(app[field], `dsr.applicability.${field}가 없습니다.`);
+  }
+});
+
+check('전세대출·중도금대출이 DSR 산정 제외 목록에 있다', () => {
+  const list = Array.from(RATES.dsr.applicability.excludedFromDsr).join(' ');
+  assert.match(list, /전세자금대출/);
+  assert.match(list, /중도금/);
+});
+
+check('스트레스 DSR 적용 대상·제외 범위가 명시돼 있다', () => {
+  const scope = RATES.loan.stress.scope;
+  assert.ok(scope, 'stress.scope 블록이 없습니다.');
+  const applies = Array.from(scope.appliesTo).join(' ');
+  assert.match(applies, /주택담보대출/);
+  assert.match(applies, /신용대출/);
+  // 신용대출 스트레스는 잔액 1억원 초과분에만 붙는다.
+  assert.equal(scope.creditLoanStressThreshold, 100_000_000);
+  const excluded = Array.from(scope.excluded).join(' ');
+  assert.match(excluded, /전세자금대출/);
+  assert.match(excluded, /정책대출/);
+});
+
+check('가격대별 한도·LTV 하향이 주택구입 목적에만 적용됨을 밝힌다', () => {
+  const scope = RATES.loan.purposeScope;
+  assert.ok(scope, 'loan.purposeScope 블록이 없습니다.');
+  assert.match(scope.covered, /주택구입 목적/);
+  const excluded = Array.from(scope.excluded).join(' ');
+  for (const needle of ['생활안정자금', '이주비', '중도금', '전세자금대출', '정책대출']) {
+    assert.ok(excluded.includes(needle), `${needle}가 적용 제외 목록에 없습니다.`);
+  }
+  assert.ok(scope.source, '근거가 없습니다.');
+});
+
+check('DSR 적용을 임의로 끄지 않는다 (보수적 유지)', () => {
+  // 요건 미해당을 자동 판정해 DSR을 빼면 한도가 커진다 — 그 방향은 사용자 손해로 이어진다.
+  // 계산기는 항상 세 한도의 최소값을 쓰고, 요건은 안내로만 밝힌다.
+  const r = calcMortgageLimit({
+    price: 300_000_000, region: 'provincialNonRegulated', ownership: 'none', ltvPercent: 70,
+    income: 30_000_000, rate: 4.5, stressAdd: 0.75, termYears: 30, dsrLimitPercent: 40,
+  });
+  assert.equal(r.binding.key, 'dsr', '소액·저소득에서도 DSR이 계산에 살아 있어야 합니다.');
+  assert.ok(r.limit < r.ltvLimit);
+});
+
+check('대출 한도 페이지가 적용 대상 요건을 화면에 밝힌다', () => {
+  const html = fs.readFileSync(new URL('../site/calculators/loan-limit.html', import.meta.url), 'utf8');
+  for (const needle of [
+    '어떤 대출에 적용되는 규제인가', '생활안정자금', '이주비대출', '중도금대출',
+    '총 대출액이 1억원을 넘을 때', '잔액 1억원을 넘는 경우에만',
+  ]) {
+    assert.ok(html.includes(needle), `대출 한도 페이지에 「${needle}」 안내가 없습니다.`);
+  }
+});
+
 console.log(`\n대출 한도 회귀 테스트 ${passed}개 통과\n`);

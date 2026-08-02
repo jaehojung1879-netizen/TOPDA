@@ -4925,6 +4925,11 @@ function loanRatesCfg() {
   return (typeof window !== 'undefined' && window.TOPDA_RATES && window.TOPDA_RATES.loan) || {};
 }
 
+// DSR 규정 블록 (적용 대상 요건 포함)
+function RATES_DSR() {
+  return (typeof window !== 'undefined' && window.TOPDA_RATES && window.TOPDA_RATES.dsr) || {};
+}
+
 // 지역 키 정규화 — 구 값('regulated'/'non')과 boolean regulatedMetro도 받아준다.
 //  ⚠ 매핑 표를 파일 상단 스코프의 const로 두면 안 된다. 종합계산기 IIFE가 이 파일 중간에서
 //    즉시 실행되며 이 함수를 호출하는데, 그 시점에 아래쪽 const는 아직 TDZ라 예외가 난다
@@ -5258,6 +5263,20 @@ function calcJeonseLoanByAgency(deposit, opts) {
       }
       if (r.grandfatherActive && r.grandfatherOption) {
         notes.push({ kind: 'warn', text: '「' + r.grandfatherOption.label + '」을 선택했습니다. 이 경우 종전 규제가 적용될 수 있어 위 한도보다 많이 받을 수도 있습니다 — ' + ((R.grandfather && R.grandfather.note) || '은행이 증빙으로 판정합니다.') });
+      }
+      // ── 적용 대상 요건 ──
+      //  "얼마"만 보여주고 "이 규제가 당신 대출에 붙는지"를 안 밝히면, 대상이 아닌
+      //  대출(생활안정자금·중도금·전세)까지 깎인 한도로 오해한다.
+      const scope = R.purposeScope || {};
+      if (scope.covered) {
+        notes.push({ kind: 'info', text: '이 결과는 「' + scope.covered + '」 기준입니다. '
+          + (scope.excluded || []).slice(0, 3).join(' / ') + ' 등은 규제가 달라 이 값을 쓰면 안 됩니다.' });
+      }
+      const dsrApp = (RATES_DSR() || {}).applicability;
+      if (dsrApp && r.binding && r.binding.key === 'dsr') {
+        notes.push({ kind: 'info', text: 'DSR이 한도를 결정했습니다. 차주단위 DSR은 전 금융권 총 대출액이 '
+          + Math.round((dsrApp.totalDebtThreshold || 100000000) / 100000000) + '억원을 넘을 때 적용됩니다 — '
+          + '이 계산기는 보수적으로 항상 적용하므로, 요건에 해당하지 않으면 실제 한도는 더 높을 수 있습니다.' });
       }
       notes.push({ kind: 'info', text: '대출 규제는 신청·실행 시점의 기준으로 판정됩니다. 이 계산기는 ' + (R.effectiveFrom || '') + ' 시행 기준이며, 이후 대책이 나오면 달라집니다.' });
       const icon = { warn: '⚠', info: 'ℹ' };
