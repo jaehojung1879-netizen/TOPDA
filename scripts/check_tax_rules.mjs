@@ -552,4 +552,219 @@ check('경매·중개보수·청약·전월세 페이지에 새 입력이 있다
   assert.ok(read('../site/calculators/jeonse-monthly.html').includes('data-out="legalCap"'));
 });
 
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[개선] 증여 취득세 — 시가인정액·시가표준액·승계채무 분리');
+// ─────────────────────────────────────────────────────────────────────
+
+check('세액은 시가인정액으로, 중과 판정은 시가표준액으로 한다', () => {
+  // 시가인정액 5억(3억 초과)이지만 시가표준액 2.5억(3억 미만) → 중과 아님.
+  //  하나의 price로 둘을 겸하면 여기서 12%가 잘못 걸린다.
+  const r = calcAcquisitionTax({
+    price: 500_000_000, homes: 2, regulated: true, areaOver85: false,
+    acqType: 'gift', giftDonorMultiHome: true,
+    giftMarketValue: 500_000_000, giftStdValue: 250_000_000,
+  });
+  assert.equal(r.baseRate, 0.035, '시가표준액이 3억 미만이면 중과 대상이 아닙니다.');
+  closeTo(r.acquisition, 500_000_000 * 0.035, '세액은 시가인정액 기준');
+});
+
+check('시가표준액이 3억 이상이면 조정대상·다주택 증여는 12% 중과', () => {
+  const r = calcAcquisitionTax({
+    price: 500_000_000, homes: 2, regulated: true, areaOver85: false,
+    acqType: 'gift', giftDonorMultiHome: true,
+    giftMarketValue: 500_000_000, giftStdValue: 320_000_000,
+  });
+  assert.equal(r.baseRate, 0.12);
+  closeTo(r.acquisition, 500_000_000 * 0.12, '중과 세액도 시가인정액 기준');
+});
+
+check('시가표준액 미입력이면 시가인정액으로 대신 판정하고 경고한다', () => {
+  const r = calcAcquisitionTax({
+    price: 500_000_000, homes: 2, regulated: true,
+    acqType: 'gift', giftDonorMultiHome: true, giftMarketValue: 500_000_000,
+  });
+  assert.equal(r.baseRate, 0.12, '판정 근거가 없으면 보수적으로 시가인정액을 씁니다.');
+  assert.ok(r.notes.some((n) => n.kind === 'warn' && /시가표준액/.test(n.text)),
+    '시가표준액 미입력 경고가 없습니다.');
+});
+
+check('부담부증여는 무상취득 부분과 유상취득 부분을 나눠 계산한다', () => {
+  // 시가인정액 6억, 승계 채무 2억 → 무상 4억(3.5%) + 유상 2억(1주택 표준세율 1%)
+  const r = calcAcquisitionTax({
+    price: 600_000_000, homes: 1, regulated: false, areaOver85: false,
+    acqType: 'gift', giftMarketValue: 600_000_000, giftStdValue: 400_000_000,
+    giftAssumedDebt: 200_000_000,
+  });
+  closeTo(r.giftFreeBase, 400_000_000, '무상취득 과세표준 = 시가인정액 − 채무');
+  closeTo(r.acquisition, 400_000_000 * 0.035, '무상취득 세액');
+  assert.ok(r.burdenedPaidPart, '유상취득 부분이 별도로 계산돼야 합니다.');
+  closeTo(r.burdenedPaidPart.acquisition, 200_000_000 * 0.01, '유상취득 세액(2억 → 1%)');
+  closeTo(r.combinedTotal, r.total + r.burdenedPaidPart.total, '무상 + 유상 합계');
+  assert.ok(r.notes.some((n) => /부담부증여/.test(n.text)));
+});
+
+check('승계채무가 없으면 유상취득 부분을 만들지 않는다', () => {
+  const r = calcAcquisitionTax({
+    price: 600_000_000, homes: 1, acqType: 'gift', giftMarketValue: 600_000_000,
+  });
+  assert.equal(r.burdenedPaidPart, null);
+  closeTo(r.combinedTotal, r.total, '채무가 없으면 합계 = 무상취득 세액');
+});
+
+check('증여 지방교육세·농특세도 무상취득 과세표준 기준으로 계산된다', () => {
+  const r = calcAcquisitionTax({
+    price: 600_000_000, homes: 1, areaOver85: true,
+    acqType: 'gift', giftMarketValue: 600_000_000, giftAssumedDebt: 200_000_000,
+  });
+  // 과세표준 4억 × 0.2% = 80만원 (6억 기준이면 120만원이 나와 과다 계산된다)
+  closeTo(r.ruralTax, 400_000_000 * 0.002, '농특세 과세표준');
+  closeTo(r.localEduTax, 400_000_000 * (0.035 - 0.02) * 0.20, '지방교육세 과세표준');
+});
+
+check('기존 호출부(price만 전달)도 동작이 유지된다', () => {
+  const r = calcAcquisitionTax({ price: 500_000_000, homes: 1, acqType: 'gift' });
+  closeTo(r.acquisition, 500_000_000 * 0.035, '시가인정액 미입력 시 price를 그대로 사용');
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[개선] 양도세 — 지분율 안분 · 날짜 기준 보유·거주기간');
+// ─────────────────────────────────────────────────────────────────────
+
+const jointBase = {
+  sellPrice: 1_500_000_000, buyPrice: 700_000_000, cost: 30_000_000,
+  holdYears: 8, liveYears: 0, homes: 2, onlyHome: false, regulated: false,
+};
+
+check('지분율을 주면 균등분할이 아니라 지분대로 안분한다', () => {
+  const equal = calcTransferTax({ ...jointBase, jointOwners: 2 });
+  const skewed = calcTransferTax({ ...jointBase, jointOwners: 2, ownerShares: [80, 20] });
+  assert.equal(equal.jointOwners, 2);
+  assert.equal(skewed.jointOwners, 2);
+  assert.ok(skewed.jointTotal !== equal.jointTotal,
+    '지분이 8:2인데 5:5와 세액이 같으면 지분율이 반영되지 않은 것입니다.');
+  // 지분이 쏠릴수록 누진 분산 효과가 줄어 세액이 커진다.
+  assert.ok(skewed.jointTotal > equal.jointTotal);
+  closeTo(skewed.jointPerOwner[0].sharePct, 80, '소유자 1 지분율');
+  closeTo(skewed.jointPerOwner[1].sharePct, 20, '소유자 2 지분율');
+});
+
+check('지분 합이 100이 아니어도 비율대로 정규화한다', () => {
+  const a = calcTransferTax({ ...jointBase, jointOwners: 2, ownerShares: [80, 20] });
+  const b = calcTransferTax({ ...jointBase, jointOwners: 2, ownerShares: [8, 2] });
+  closeTo(a.jointTotal, b.jointTotal, '80:20과 8:2는 같은 비율');
+});
+
+check('지분율을 안 주면 기존 인원수 균등분할과 같다', () => {
+  const before = calcTransferTax({ ...jointBase, jointOwners: 3 });
+  const after = calcTransferTax({ ...jointBase, jointOwners: 3, ownerShares: null });
+  closeTo(before.jointTotal, after.jointTotal, '균등분할 회귀');
+  assert.equal(before.sharesEqual, true);
+});
+
+check('기본공제 250만원은 소유자마다 적용된다', () => {
+  const r = calcTransferTax({ ...jointBase, jointOwners: 2, ownerShares: [50, 50] });
+  closeTo(r.jointBasicDeduct, 5_000_000, '2인 공동 → 기본공제 500만원');
+});
+
+check('취득일·양도일을 주면 보유기간을 실제 일수로 계산한다', () => {
+  // 정수 연수로는 2년이라 비과세인데, 실제로는 1년 11개월이라 단기 중과 대상인 경우.
+  const r = calcTransferTax({
+    sellPrice: 1_000_000_000, buyPrice: 700_000_000, cost: 0,
+    holdYears: 2, liveYears: 0, homes: 1, onlyHome: true, regulated: false,
+    acquireDate: '2024-03-01', sellDate: '2026-02-01',
+  });
+  assert.equal(r.holdFromDates, true);
+  assert.ok(r.holdYears < 2, `실제 보유 ${r.holdYears}년`);
+  assert.equal(r.exempted, false, '2년 미만이면 1세대1주택 비과세 대상이 아닙니다.');
+  assert.equal(r.isShortTerm, true, '2년 미만은 단기보유 중과');
+});
+
+check('보유 2년을 하루라도 넘기면 비과세 요건을 충족한다', () => {
+  const r = calcTransferTax({
+    sellPrice: 1_000_000_000, buyPrice: 700_000_000, cost: 0,
+    holdYears: 0, liveYears: 0, homes: 1, onlyHome: true, regulated: false,
+    acquireDate: '2024-03-01', sellDate: '2026-03-05',
+  });
+  assert.equal(r.exempted, true);
+});
+
+check('거주 시작·종료일을 주면 거주기간을 실제 일수로 계산한다', () => {
+  const r = calcTransferTax({
+    sellPrice: 2_000_000_000, buyPrice: 1_000_000_000, cost: 0,
+    holdYears: 10, liveYears: 0, homes: 1, onlyHome: true, regulated: false,
+    residenceStartDate: '2016-01-01', residenceEndDate: '2026-01-01',
+  });
+  assert.equal(r.liveFromDates, true);
+  closeTo(r.liveYears, 10, '거주 10년', 0.05);
+  // 보유 10년(40%) + 거주 10년(40%) = 80%
+  closeTo(r.ltDeductRate, 0.80, '장특공 표2 최대');
+});
+
+check('날짜를 주지 않으면 기존 정수 연수 입력을 그대로 쓴다 (회귀)', () => {
+  const r = calcTransferTax({
+    sellPrice: 2_000_000_000, buyPrice: 1_000_000_000, cost: 0,
+    holdYears: 10, liveYears: 10, homes: 1, onlyHome: true, regulated: false,
+  });
+  assert.equal(r.holdFromDates, false);
+  assert.equal(r.liveFromDates, false);
+  closeTo(r.ltDeductRate, 0.80, '장특공 표2 최대');
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[개선] 중개보수 — 시·도 조례 구분');
+// ─────────────────────────────────────────────────────────────────────
+
+check('서울은 조례 대조 완료로, 다른 시·도는 경고와 함께 표시된다', () => {
+  const seoul = calcBrokerageFee({ price: 800_000_000, type: 'sale', region: 'KR-11' });
+  assert.equal(seoul.regionUnverified, false);
+  assert.equal(seoul.region.name, '서울특별시');
+  const gyeonggi = calcBrokerageFee({ price: 800_000_000, type: 'sale', region: 'KR-41' });
+  assert.equal(gyeonggi.regionUnverified, true);
+  assert.ok(gyeonggi.regionWarn, '조례 미대조 경고 문구가 없습니다.');
+  // 요율표 자체는 같으므로 금액은 동일해야 한다(경고만 다르다).
+  closeTo(gyeonggi.fee, seoul.fee, '요율표는 동일');
+});
+
+check('오피스텔·상가·토지는 법령 상한이라 시·도 경고가 붙지 않는다', () => {
+  for (const type of ['officetel-sale', 'other']) {
+    const r = calcBrokerageFee({ price: 800_000_000, type, region: 'KR-41' });
+    assert.equal(r.regionApplies, false, type);
+    assert.equal(r.regionUnverified, false, type);
+  }
+});
+
+check('시·도를 주지 않으면 기존처럼 서울 기준으로 계산한다 (회귀)', () => {
+  const before = calcBrokerageFee({ price: 800_000_000, type: 'sale' });
+  const seoul = calcBrokerageFee({ price: 800_000_000, type: 'sale', region: 'KR-11' });
+  closeTo(before.fee, seoul.fee, '기본값 = 서울');
+  closeTo(before.total, seoul.total, '기본값 = 서울(부가세 포함)');
+});
+
+check('중개보수 FAQ가 부가세 포함을 단정하지 않는다', () => {
+  const html = fs.readFileSync(new URL('../site/calculators/brokerage-fee.html', import.meta.url), 'utf8');
+  assert.ok(!html.includes('계산 결과는 부가가치세(10%)가 포함된 금액입니다.'),
+    '부가세 체크를 해제할 수 있는데 FAQ가 포함을 단정하고 있습니다.');
+  assert.ok(html.includes('name="bfRegion"'), '시·도 선택이 없습니다.');
+  assert.ok(html.includes('data-out="bfRegionNote"'), '시·도 조례 안내 영역이 없습니다.');
+});
+
+check('양도세 페이지에 지분율·취득일·거주일 입력이 있다', () => {
+  const html = fs.readFileSync(new URL('../site/calculators/transfer-tax.html', import.meta.url), 'utf8');
+  for (const n of [
+    'name="ownerShare1"', 'name="ownerShare2"', 'name="acquireDate"',
+    'name="residenceStartDate"', 'name="residenceEndDate"', 'data-out="periodNote"',
+  ]) {
+    assert.ok(html.includes(n), `양도세 페이지에 ${n}이(가) 없습니다.`);
+  }
+});
+
+check('취득세 페이지(한국어·영어)에 증여 3분리 입력이 있다', () => {
+  for (const p of ['../site/calculators/acquisition-tax.html', '../site/en/calculators/acquisition-tax.html']) {
+    const html = fs.readFileSync(new URL(p, import.meta.url), 'utf8');
+    for (const n of ['name="giftMarketValue"', 'name="giftStdValue"', 'name="giftAssumedDebt"', 'data-burdened-box']) {
+      assert.ok(html.includes(n), `${p}에 ${n}이(가) 없습니다.`);
+    }
+  }
+});
+
 console.log(`\n세무 정확성 회귀 테스트 ${passed}개 통과\n`);

@@ -24,8 +24,11 @@ vm.runInContext(
   [
     functionBlock('function calcAcquisitionTax(input)', '\n// scenarioKey'),
     functionBlock('function calcBrokerageFee(opts)', '\n(function () {'),
-    functionBlock('function calcMortgageLimit(input)', '\n// 전세대출'),
-    'globalThis.cores = { calcAcquisitionTax, calcBrokerageFee, calcRti, calcMortgageLimit };',
+    // calcMortgageLimit은 지역·LTV·스트레스 헬퍼(loanRegionConfig 등)에 의존하므로
+    // 그 앞의 loanRatesCfg()부터 통째로 가져온다.
+    functionBlock('function loanRatesCfg()', '\n// 전세대출'),
+    'globalThis.cores = { calcAcquisitionTax, calcBrokerageFee, calcRti, calcMortgageLimit,'
+      + ' loanRegionConfig, suggestLtvPercent, suggestStressAdd };',
   ].join('\n'),
   context,
 );

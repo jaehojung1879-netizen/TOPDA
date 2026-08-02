@@ -127,7 +127,8 @@
         <div class="radio-group">
           <label><input type="radio" name="homes" value="1" checked/><span>1주택</span></label>
           <label><input type="radio" name="homes" value="2"/><span>2주택</span></label>
-          <label><input type="radio" name="homes" value="3"/><span>3주택+</span></label>
+          <label><input type="radio" name="homes" value="3"/><span>3주택</span></label>
+          <label><input type="radio" name="homes" value="4"/><span>4주택 이상</span></label>
         </div>
       </div>
 
@@ -221,6 +222,26 @@
         </div>
 
         <div class="field">
+          <label>대출 규제 지역<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="대출 규제는 세 지역으로 갈립니다. 수도권 비규제지역은 LTV 70%지만 가격대별 한도(15억↓ 6억 등)와 스트레스 3.0%p가 그대로 붙고, 지방 비규제지역만 가격대별 한도가 없고 스트레스가 0.75%p입니다. 취득세의 '조정대상지역'과는 별개 항목입니다.">?</span></label>
+          <div class="radio-group">
+            <label><input type="radio" name="loanRegion" value="metroNonRegulated"/><span>수도권 비규제</span></label>
+            <label><input type="radio" name="loanRegion" value="regulated" checked/><span>규제지역</span></label>
+            <label><input type="radio" name="loanRegion" value="provincialNonRegulated"/><span>지방 비규제</span></label>
+          </div>
+          <span class="hint">아래 ‘받을 수 있는 한도’ 추정에 쓰입니다. 자세한 조건은 <a href="loan-limit.html">대출 한도 시뮬레이터</a>에서 확인하세요.</span>
+        </div>
+
+        <div class="field">
+          <label>금리 유형<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="스트레스 DSR 가산금리는 금리유형에 따라 달라집니다. 고정 기간이 길수록 가산이 줄어 한도가 늘어납니다.">?</span></label>
+          <div class="radio-group">
+            <label><input type="radio" name="loanRateType" value="variable" checked/><span>변동</span></label>
+            <label><input type="radio" name="loanRateType" value="mixed"/><span>혼합형</span></label>
+            <label><input type="radio" name="loanRateType" value="periodic"/><span>주기형</span></label>
+            <label><input type="radio" name="loanRateType" value="fixed"/><span>순수 고정</span></label>
+          </div>
+        </div>
+
+        <div class="field">
           <label>상환 방식<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="원리금균등은 매월 갚는 금액이 같습니다. 원금균등은 원금을 매월 똑같이 나눠 갚고 이자는 잔액에 붙어, 초기 상환액이 가장 크고 점점 줄어듭니다. DSR은 상환 부담이 가장 큰 첫해를 기준으로 심사하므로, 같은 조건이라도 원금균등이 DSR이 더 높게 나옵니다.">?</span></label>
           <div class="radio-group">
             <label><input type="radio" name="repay" value="amortize" checked/><span>원리금균등</span></label>
@@ -265,21 +286,30 @@
           <div class="input-suffix" data-suffix="원">
             <input id="td-regStd" name="regStd" type="text" inputmode="numeric" data-format="won" value="" />
           </div>
-          <span class="hint">모르면 비워두세요 → 매매가 × 70%로 추정. 정확한 공시가격은 위 아이콘으로 확인하세요.</span>
+          <span class="hint"><strong>모르면 비워두세요 → 매매가 × 70%로 추정합니다. 이 70%는 법정 비율이 아니라 단순 추정치</strong>이며, 추정을 쓰면 결과 항목에 경고가 함께 표시됩니다. 정확한 공시가격은 위 아이콘으로 확인하세요.</span>
         </div>
         <div class="field">
-          <label for="td-regDiscount">국민주택채권 할인율<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="채권을 즉시 매도(할인)할 때 본인이 부담하는 손실률(고객부담률)입니다. 시장금리에 따라 매일 바뀌며 최근 15% 안팎입니다. 당일 정확한 값은 은행 국민주택채권 포털에서 확인하세요.">?</span></label>
+          <label for="td-regDiscount">국민주택채권 할인율<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="채권을 즉시 매도(할인)할 때 본인이 부담하는 손실률(고객부담률)입니다. 법정 요율이 아니라 시장금리에 따라 매일 바뀌는 시세입니다. 잔금일 당일 값을 은행 국민주택채권 포털에서 확인해 직접 입력하세요.">?</span></label>
           <div class="input-suffix" data-suffix="%">
             <input id="td-regDiscount" name="regDiscount" type="number" min="0" max="30" step="0.1" value="15" />
           </div>
-          <span class="hint" id="td-regDiscount-note" hidden></span>
+          <span id="td-regDiscount-note" class="data-stale" hidden></span>
+        </div>
+        <div class="field">
+          <label>등기신청 방식<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="등기신청 수수료는 신청 방식에 따라 다릅니다(등기사항증명서 등 수수료규칙 제5조의2, 2025.8.1 인상).">?</span></label>
+          <div class="radio-group">
+            <label><input type="radio" name="regFilingMethod" value="visit" checked/><span>방문 18,000원</span></label>
+            <label><input type="radio" name="regFilingMethod" value="eform"/><span>e-Form 15,000원</span></label>
+            <label><input type="radio" name="regFilingMethod" value="online"/><span>전자신청</span></label>
+          </div>
         </div>
         <div class="field">
           <label class="check-item" style="padding: 0; cursor: pointer;">
             <input type="checkbox" name="selfReg"/>
-            <span class="text">셀프 등기 (법무사 보수 제외)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="법무사 없이 직접 등기하면 보수·부가세가 들지 않습니다. 인지세·채권·등기수수료는 동일하게 발생합니다.">?</span></span>
+            <span class="text">셀프 등기 (법무사 보수·대행료 제외)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="법무사 없이 직접 등기하면 보수·대행료·부가세가 들지 않습니다. 인지세·채권·등기수수료는 동일하게 발생합니다.">?</span></span>
           </label>
         </div>
+        <p class="scn-note">법무사 비용은 <strong>기본보수 상한 + 대행수수료(취득세 신고·채권 매입) + 부가세</strong>로 계산합니다. 위임 업무를 하나씩 고르고 실비까지 반영하려면 <a href="registration-cost.html">등기·법무사 비용 계산기</a>를 쓰세요.</p>
       </div>
 
       <!-- ===== 자금계획 ===== -->
@@ -868,12 +898,12 @@
   <h3>함께 보기</h3>
 <ul><li><a href="acquisition-tax.html">취득세 계산기</a></li><li><a href="loan-limit.html">대출 한도 계산기</a></li><li><a href="balance-settlement.html">잔금일 정산 계산기</a></li><li><a href="../checklists/sale-balance-day.html">매매 잔금일 체크리스트</a></li></ul>
   <h3>근거와 기준일</h3>
-<div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">지방세법·소득세법·상속세및증여세법, 금융위 DSR·RTI 가이드</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-07-30 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
+<div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">지방세법·소득세법·상속세및증여세법, 금융위 DSR·RTI 가이드</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-08-02 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
   <details class="explain">
   <summary>계산 방식 변경 이력 (최근 6건)</summary>
   <div class="explain-body">
   <p class="note">계산 결과가 달라지는 변경만 기록합니다. 표기·문구만 다듬은 수정은 남기지 않습니다.</p>
-  <div class="def-list"><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.</span></div><div class="row"><span class="k">2026-06-14</span><span class="v">국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).</span></div><div class="row"><span class="k">2026-06-13</span><span class="v">국민주택채권 매입금액 만원 단위 절상 적용 + 지역(특별시·광역시/그 밖의 지역) 매입률 구분. 양도세 장기보유특별공제 표1 정정(연 2%·3년 6%~15년 30%).</span></div><div class="row"><span class="k">2026-06-04</span><span class="v">대출 한도 규정 블록 신설(LTV·가격대별 한도·스트레스 DSR·전세 보증기관 HF/HUG/SGI).</span></div></div>
+  <div class="def-list"><div class="row"><span class="k">2026-08-02</span><span class="v">대출·등기·증여 정확성 정비. ① 규제지역 일반 LTV 50%→40%(10·15 대책), 생애최초 전국 70%(6·27 대책, 비규제 80% 표기 정정), 수도권 1주택 미처분·다주택 0%. ② 스트레스 가산금리 수도권·규제지역 1.5%p→3.0%p, 지방 비규제 0.75%p로 분리하고 금리유형별 적용비율 추가. ③ 지역 구분을 「수도권 비규제 / 규제지역 / 지방 비규제」 3분류로 세분화 — 가격대별 한도는 수도권·규제지역만 적용. ④ 경과규정(2025.10.15 이전 계약·신청접수)·대환을 사용자 입력으로 분리. ⑤ 법무사 기본보수에 20억·200억 초과 구간 추가(10억 초과 0.05% 고정 오류 수정)하고 대행수수료·실비·부가세를 별도 항목으로 분리. ⑥ 등기신청 수수료를 신청 방식별(방문 18,000 / e-Form 15,000 / 전자)로 구분(2025.8.1 인상 반영). ⑦ 국민주택채권 할인율의 seed·수집실패 값을 실시간 값으로 표시하지 않도록 예시값으로 분리. ⑧ 증여 취득세를 시가인정액(과세표준)·시가표준액(중과 판정)·승계채무액(부담부증여)으로 분리. ⑨ 양도세 공동명의 지분율 입력, 보유·거주기간 날짜 기준 계산. ⑩ 중개보수 시·도 선택 구조 추가.</span></div><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">법무사 기본보수를 대한법무사협회 보수표 2024.9.12 시행 기준으로 갱신(5천만↓ 21만 정액·구간별 누진 0.10→0.05%, 임의 상한 1.5백만 제거). 등기·종합 계산기 공통 적용.</span></div><div class="row"><span class="k">2026-06-14</span><span class="v">국민주택채권 고객부담률 기본값 8.7%→15%로 갱신(최근 시장 수준 반영, 매일 변동·수정 가능). 전세대출 한도 계산기에 보증기관(HF/HUG/SGI) 선택 기능 추가(전체 비교 기본).</span></div><div class="row"><span class="k">2026-06-13</span><span class="v">국민주택채권 매입금액 만원 단위 절상 적용 + 지역(특별시·광역시/그 밖의 지역) 매입률 구분. 양도세 장기보유특별공제 표1 정정(연 2%·3년 6%~15년 30%).</span></div></div>
   </div>
 </details>
 </section>
@@ -958,9 +988,10 @@
     }
   } catch (e) {}
 
-  // 국민주택채권 당일 할인율 자동 반영 — 수집 실패/미설정(seed) 시 기존 기본값(15%) 유지.
-  // 자동 반영이 성공하면 입력란 아래에 반영 날짜를 표시해 '값이 실제로 갱신됐음'을 눈에 보이게 한다
-  //  (표시가 없으면 자동 반영이 됐는지 사용자가 알 수 없어 "안 되는 것 같다"는 오해가 생김).
+  // ── 국민주택채권 당일 할인율 ──
+  //  ⚠ seed·수집실패 값을 '오늘 자동 반영됨'으로 표시하면 안 된다. 고객부담률은 법정
+  //    요율이 아니라 매일 바뀌는 시세라, 예시값을 실시간 값처럼 보여주면 사용자가
+  //    확인해야 할 것을 확인하지 않고 지나간다. 상태 판정은 공통 함수가 담당한다.
   var discountInput = document.getElementById('td-regDiscount');
   var discountNote = document.getElementById('td-regDiscount-note');
   var discountTouched = false;
@@ -968,17 +999,19 @@
     discountInput.addEventListener('input', function () { discountTouched = true; });
     fetch('../assets/bond_rate.json?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
+      .catch(function () { return null; })
       .then(function (j) {
-        if (!j || j.seed || discountTouched || !j.customer_burden_rate_pct) return;
-        discountInput.value = j.customer_burden_rate_pct;
-        discountInput.dispatchEvent(new Event('input', { bubbles: true }));
+        var res = applyBondDiscountRate(j);
         if (discountNote) {
-          discountNote.textContent = '오늘 자동 반영됨: ' + j.customer_burden_rate_pct + '%' +
-            (j.as_of ? ' (' + j.as_of + ' 기준)' : '');
+          discountNote.className = res.state === 'fresh' ? 'data-fresh' : 'data-stale';
+          discountNote.textContent = res.message;
           discountNote.hidden = false;
         }
-      })
-      .catch(function () {});
+        if (res.shouldFill && !discountTouched) {
+          discountInput.value = res.rate;
+          discountInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
   }
 })();
 </script>

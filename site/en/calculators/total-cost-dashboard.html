@@ -120,7 +120,8 @@
         <div class="radio-group">
           <label><input type="radio" name="homes" value="1" checked/><span>1 home</span></label>
           <label><input type="radio" name="homes" value="2"/><span>2 homes</span></label>
-          <label><input type="radio" name="homes" value="3"/><span>3+ homes</span></label>
+          <label><input type="radio" name="homes" value="3"/><span>3 homes</span></label>
+          <label><input type="radio" name="homes" value="4"/><span>4+ homes</span></label>
         </div>
       </div>
 
@@ -823,26 +824,39 @@
     }
   } catch (e) {}
 
-  // Auto-fill today's National Housing Bond discount rate — keeps the existing
-  // default (15%) if the fetch fails or the data source is unset.
+  // National Housing Bond discount rate.
+  //  ⚠ Never present a seed / failed-fetch value as a live rate. The customer burden
+  //    rate is a daily market rate, not a statutory one — showing an example value as
+  //    "auto-updated today" makes users skip the check they actually need to make.
   var discountInput = document.getElementById('td-regDiscount');
   var discountNote = document.getElementById('td-regDiscount-note');
   var discountTouched = false;
+  var BOND_MSG_EN = {
+    example: 'Live lookup failed — showing an example value. This rate changes daily; check the bank’s National Housing Bond portal on your closing date and enter it manually.',
+    stale: 'The last successful lookup is out of date. This rate changes daily — enter today’s customer burden rate manually.',
+    fresh: 'Live value',
+  };
   if (discountInput) {
     discountInput.addEventListener('input', function () { discountTouched = true; });
     fetch('../../assets/bond_rate.json?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
+      .catch(function () { return null; })
       .then(function (j) {
-        if (!j || j.seed || discountTouched || !j.customer_burden_rate_pct) return;
-        discountInput.value = j.customer_burden_rate_pct;
-        discountInput.dispatchEvent(new Event('input', { bubbles: true }));
+        var res = applyBondDiscountRate(j);
         if (discountNote) {
-          discountNote.textContent = 'Auto-updated today: ' + j.customer_burden_rate_pct + '%' +
-            (j.as_of ? ' (as of ' + j.as_of + ')' : '');
+          discountNote.className = res.state === 'fresh' ? 'data-fresh' : 'data-stale';
+          discountNote.textContent = BOND_MSG_EN[res.state]
+            + ' (' + res.rate + '%'
+            + (res.asOf ? ' · as of ' + res.asOf : '')
+            + (res.collectedAt ? ' · last successful lookup ' + res.collectedAt : '')
+            + ')';
           discountNote.hidden = false;
         }
-      })
-      .catch(function () {});
+        if (res.shouldFill && !discountTouched) {
+          discountInput.value = res.rate;
+          discountInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
   }
 })();
 </script>

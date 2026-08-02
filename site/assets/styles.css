@@ -538,6 +538,43 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .acq-note-skip { border-left-color: var(--border-strong); opacity: 0.9; }
 .acq-note-info { border-left-color: #3b82f6; }
 
+/* 결과 항목의 성격 구분: 법정·확정 / 사용자 입력 / 추정 */
+.calc-classify { display: grid; gap: 10px; }
+.calc-classify-group { border: 1px solid var(--border, #e5e7eb); border-radius: var(--radius-sm); padding: 9px 11px; }
+.calc-classify-group h4 { margin: 0 0 5px; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); }
+.calc-classify-group ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+.calc-classify-group li { font-size: 0.8rem; line-height: 1.5; word-break: keep-all; }
+.calc-classify-group li span { color: var(--text-muted); }
+.calc-classify-group:nth-child(1) { border-left: 3px solid #059669; }
+.calc-classify-group:nth-child(2) { border-left: 3px solid #3b82f6; }
+.calc-classify-group:nth-child(3) { border-left: 3px solid #f59e0b; }
+
+.applied-rule {
+  margin: 0; padding: 9px 11px; border-radius: var(--radius-sm);
+  background: var(--bg-subtle, rgba(0, 0, 0, 0.03));
+  font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); word-break: keep-all;
+}
+
+/* 라벨 옆의 작은 되돌리기·전환 버튼 */
+button.linkish {
+  background: none; border: 0; padding: 0 0 0 6px; margin: 0;
+  font: inherit; font-size: 0.74rem; font-weight: 600;
+  color: var(--accent, #2563eb); cursor: pointer; text-decoration: underline;
+}
+button.linkish:hover { opacity: 0.8; }
+
+/* 예시값·수집실패 경고 (실시간 값과 구분) */
+.data-stale {
+  display: block; margin-top: 6px; padding: 7px 10px; border-radius: var(--radius-sm);
+  font-size: 0.78rem; line-height: 1.5; word-break: keep-all;
+  background: rgba(245, 158, 11, 0.10); border-left: 3px solid #f59e0b; color: var(--text-muted);
+}
+.data-fresh {
+  display: block; margin-top: 6px; padding: 7px 10px; border-radius: var(--radius-sm);
+  font-size: 0.78rem; line-height: 1.5; word-break: keep-all;
+  background: rgba(5, 150, 105, 0.10); border-left: 3px solid #059669; color: var(--text-muted);
+}
+
 .result-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: -16px; margin-bottom: 22px; }
 .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
 .radio-group label {
