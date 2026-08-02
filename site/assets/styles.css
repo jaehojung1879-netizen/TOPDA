@@ -920,14 +920,14 @@ details.explain .explain-body > :first-child { margin-top: 0; }
 }
 @media (min-width: 768px) { .home-intro { padding: 60px 0 44px; } }
 .home-tagline {
-  font-size: 1.65rem; font-weight: 700; letter-spacing: -0.03em;
-  line-height: 1.25; color: var(--text); margin: 0;
+  font-size: 1.9rem; font-weight: 700; letter-spacing: -0.035em;
+  line-height: 1.2; color: var(--text); margin: 0;
   word-break: keep-all;
 }
 @media (min-width: 768px) {
-  .home-tagline { font-size: 2.3rem; max-width: 720px; }
+  .home-tagline { font-size: 2.8rem; max-width: 720px; }
 }
-/* 히어로 안에서 1차 행동과 검색의 간격 */
+/* 히어로 안에서 1차 행동과 검색의 간격 (다른 화면에서 .primary-action 을 쓸 때 대비) */
 .home-intro .primary-action { margin-top: 26px; max-width: 620px; }
 .home-intro .home-search { margin-top: 18px; }
 

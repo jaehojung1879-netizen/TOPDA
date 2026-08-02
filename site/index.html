@@ -4,8 +4,8 @@
 <meta charset="utf-8" />
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6725359021570843" crossorigin="anonymous"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>톺다 — 집을 거래할 때 필요한 비용과 절차</title>
-<meta name="description" content="매매·전월세 비용을 계산하고, 계약부터 잔금일까지 확인할 항목을 단계별로 살펴보세요. 국토교통부·한국부동산원 공공데이터를 그대로 씁니다." />
+<title>톺다 — 부동산, 하나하나 톺아보자</title>
+<meta name="description" content="매매·전세·대출·인테리어·이사. 부동산 거래의 모든 단계를 가이드와 도구로 정리합니다." />
 <!-- seo:meta -->
 <link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
 <link rel="canonical" href="https://topda.kr/" />
@@ -15,14 +15,14 @@
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="톺다" />
-<meta property="og:title" content="톺다 — 집을 거래할 때 필요한 비용과 절차" />
-<meta property="og:description" content="매매·전월세 비용을 계산하고, 계약부터 잔금일까지 확인할 항목을 단계별로 살펴보세요. 국토교통부·한국부동산원 공공데이터를 그대로 씁니다." />
+<meta property="og:title" content="톺다 — 부동산, 하나하나 톺아보자" />
+<meta property="og:description" content="매매·전세·대출·인테리어·이사. 부동산 거래의 모든 단계를 가이드와 도구로 정리합니다." />
 <meta property="og:url" content="https://topda.kr/" />
 <meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <meta property="og:locale" content="ko_KR" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="톺다 — 집을 거래할 때 필요한 비용과 절차" />
-<meta name="twitter:description" content="매매·전월세 비용을 계산하고, 계약부터 잔금일까지 확인할 항목을 단계별로 살펴보세요. 국토교통부·한국부동산원 공공데이터를 그대로 씁니다." />
+<meta name="twitter:title" content="톺다 — 부동산, 하나하나 톺아보자" />
+<meta name="twitter:description" content="매매·전세·대출·인테리어·이사. 부동산 거래의 모든 단계를 가이드와 도구로 정리합니다." />
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <!-- 소유확인 메타 태그는 넣지 않는다.
      네이버는 site/naverad49c771a0767deb237476d745c1ee22.html 파일 방식으로 이미 확인돼 있고,
@@ -92,193 +92,264 @@
 
 <main>
 
-<!-- ═══ 첫 화면 ═══════════════════════════════════════════════════════════
-     기본 행동은 '종합 비용 계산기' 하나다. 아이콘 카드 6개를 늘어놓지 않는다 —
-     사용자가 무엇을 먼저 해야 하는지 사이트가 정해 주는 것이 이 화면의 목적이다.
-     검색은 이미 찾을 것을 아는 사람을 위한 보조 행동이라 아래에 둔다. -->
+<!-- ===== Hero: compact tagline ===== -->
 <section class="home-intro">
   <div class="container">
-    <h1 class="home-tagline">집을 거래할 때 필요한 비용과 절차</h1>
+    <h1 class="home-tagline">부동산,<br/>하나하나 톺아보다</h1>
     <p class="home-subtagline">매매·전월세 비용을 계산하고, 계약부터 잔금일까지 확인할 항목을 단계별로 살펴보세요.</p>
-
-    <a class="primary-action" href="calculators/total-cost-dashboard.html">
-      <span class="pa-kicker">비용부터 확인하기</span>
-      <span class="pa-title">종합 비용 계산기</span>
-      <span class="pa-desc">매매가 또는 보증금과 대출 조건을 넣으면 취득세·중개보수·등기비용·월 상환액을 함께 계산합니다. 입력한 값은 브라우저 안에만 남습니다.</span>
-      <span class="pa-go">비용 계산하기</span>
-    </a>
-
     <form class="home-search" action="find.html" method="get" role="search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-      <input name="q" type="search" placeholder="취득세, 전세 보증금, DSR, 단지 이름" aria-label="사이트 통합 검색" />
+      <input name="q" type="search" placeholder="취득세, 전세 보증금, DSR, 단지 검색…" aria-label="통합 검색" />
       <button type="submit">검색</button>
     </form>
   </div>
 </section>
 
-<!-- ═══ 상황별 진입점 ══════════════════════════════════════════════════════
-     아이콘 카드 그리드 대신 문장 목록이다. 사용자는 아이콘이 아니라 자기 상황을
-     문장에서 찾는다. -->
-<section class="section" id="categories" style="padding-top: 8px;">
+<!-- ===== Categories: primary, no section title ===== -->
+<section class="home-cats-primary" id="categories">
   <div class="container">
-    <div class="block-head">
-      <h2>지금 어떤 상황인가요</h2>
+    <div class="cat-tile-grid">
+
+      <a href="categories/sale.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 14L16 4l12 10v13a1 1 0 01-1 1H5a1 1 0 01-1-1z"/>
+            <path d="M12 28v-8h8v8"/>
+          </svg>
+        </div>
+        <h3>매매</h3>
+        <p>취득세 · 잔금일 정산 · 계약서</p>
+      </a>
+
+      <a href="categories/lease.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 14L16 5l11 9v13a1 1 0 01-1 1H6a1 1 0 01-1-1z"/>
+            <circle cx="13" cy="20" r="2"/>
+            <path d="M14.4 21.4l4 4M17.5 24.5l1.5-1.5M19.5 22.5l1.5-1.5"/>
+          </svg>
+        </div>
+        <h3>전세·월세</h3>
+        <p>대항력 · 우선변제권 · 보증보험</p>
+      </a>
+
+      <a href="categories/loan.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 13L16 5l12 8"/>
+            <path d="M4 13h24"/>
+            <path d="M7 13v12M12 13v12M20 13v12M25 13v12"/>
+            <path d="M4 25h24"/>
+            <path d="M3 28h26"/>
+          </svg>
+        </div>
+        <h3>대출·금융</h3>
+        <p>DSR · LTV · 정책상품</p>
+      </a>
+
+      <a href="interior/index.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6" y="5" width="20" height="7" rx="1.5"/>
+            <path d="M22 12v3a1 1 0 01-1 1H11a1 1 0 01-1-1v-3"/>
+            <path d="M16 16v5"/>
+            <rect x="12" y="21" width="8" height="6" rx="1"/>
+          </svg>
+        </div>
+        <h3>인테리어</h3>
+        <p>자재 단가 · 견적 · 하자보수</p>
+      </a>
+
+      <a href="categories/moving.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="15" height="12" rx="1.5"/>
+            <path d="M18 14h6l4 4v5h-10z"/>
+            <circle cx="9" cy="24.5" r="2.5"/>
+            <circle cx="23" cy="24.5" r="2.5"/>
+          </svg>
+        </div>
+        <h3>이사·입주</h3>
+        <p>업체 선정 · 표준약관 · 행정처리</p>
+      </a>
+
+      <a href="categories/auction.html" class="cat-tile">
+        <div class="cat-tile-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 28h24"/>
+            <path d="M6 28V7a1 1 0 011-1h9a1 1 0 011 1v21"/>
+            <path d="M17 28V13h8a1 1 0 011 1v14"/>
+            <path d="M9.5 10h3M9.5 14h3M9.5 18h3M20 17h3M20 21h3"/>
+          </svg>
+        </div>
+        <h3>경매·공매</h3>
+        <p>권리분석 · 입찰 · 명도</p>
+      </a>
+
     </div>
-    <ul class="entry-list">
-      <li><a href="categories/sale.html">
-        <span class="el-when">집을 사려고 합니다</span>
-        <span class="el-then">매수 총비용을 계산하고 계약·잔금·등기 순서를 확인합니다</span>
-      </a></li>
-      <li><a href="categories/lease.html">
-        <span class="el-when">전세·월세 계약을 앞두고 있습니다</span>
-        <span class="el-then">보증금 보호 요건과 계약서에서 정할 조항을 확인합니다</span>
-      </a></li>
-      <li><a href="categories/loan.html">
-        <span class="el-when">대출 가능 금액을 확인하려고 합니다</span>
-        <span class="el-then">DSR·LTV 한도와 정책 대출 자격을 계산합니다</span>
-      </a></li>
-      <li><a href="interior/index.html">
-        <span class="el-when">인테리어 견적을 검토하고 있습니다</span>
-        <span class="el-then">자재별 선택 기준과 견적서에서 확인할 항목을 봅니다</span>
-      </a></li>
-      <li><a href="categories/moving.html">
-        <span class="el-when">이사와 잔금 일정을 준비하고 있습니다</span>
-        <span class="el-then">계약일에서 역산한 일정과 당일 확인 항목을 만듭니다</span>
-      </a></li>
-      <li><a href="categories/auction.html">
-        <span class="el-when">경매 물건을 검토하고 있습니다</span>
-        <span class="el-then">권리분석 순서를 확인하고 입찰가 범위를 계산합니다</span>
-      </a></li>
-    </ul>
   </div>
 </section>
 
-<!-- ═══ 자주 쓰는 계산기 ═══════════════════════════════════════════════════ -->
-<section class="section" style="padding-top: 0;">
+<!-- ===== Tools: calculators ===== -->
+<section class="home-tools" style="padding-top: 28px;">
   <div class="container">
-    <div class="block-head">
-      <h2>자주 쓰는 계산기</h2>
-      <a href="calculators/index.html">계산기 전체</a>
+    <div class="strip-head">
+      <h2>계산기</h2>
+      <a href="calculators/index.html" class="strip-link">전체 계산기 →</a>
     </div>
-    <ul class="tool-list">
-      <li><a href="calculators/acquisition-tax.html">
-        <span class="tl-name">취득세</span>
-        <span class="tl-desc">주택 수·조정대상지역·면적을 반영해 농어촌특별세·지방교육세까지 계산</span>
-      </a></li>
-      <li><a href="calculators/loan-limit.html">
-        <span class="tl-name">대출 한도</span>
-        <span class="tl-desc">소득과 기존 대출로 DSR·LTV 한도와 월 상환액을 계산</span>
-      </a></li>
-      <li><a href="calculators/balance-settlement.html">
-        <span class="tl-name">잔금일 정산</span>
-        <span class="tl-desc">관리비 일할·선수관리비·장기수선충당금을 날짜로 안분</span>
-      </a></li>
-      <li><a href="calculators/brokerage-fee.html">
-        <span class="tl-name">중개수수료</span>
-        <span class="tl-desc">거래금액 구간별 상한요율과 부가세를 포함한 총액</span>
-      </a></li>
-      <li><a href="calculators/transfer-tax.html">
-        <span class="tl-name">양도소득세</span>
-        <span class="tl-desc">1세대 1주택 비과세·장기보유특별공제·다주택 중과 반영</span>
-      </a></li>
-      <li><a href="calculators/jeonse-monthly.html">
-        <span class="tl-name">전월세 전환</span>
-        <span class="tl-desc">전환율을 적용해 보증금과 월세를 서로 환산</span>
-      </a></li>
-    </ul>
+    <div class="hero-calc-grid hero-calc-single">
+      <a href="calculators/total-cost-dashboard.html" class="hero-calc-card">
+        <div class="hero-calc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 3v9l6 3"/>
+          </svg>
+        </div>
+        <div class="hero-calc-body">
+          <h3>종합 계산기</h3>
+          <p>매매·전세 등 상황별로 세금·대출·부대비용을 함께 계산</p>
+          <span class="hero-calc-cta">열기 →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sector-row">
+      <a href="calculators/acquisition-tax.html" class="sector-card">
+        <span class="sector-label">매매·세금</span>
+        <span class="sector-name">취득세</span>
+      </a>
+      <a href="calculators/loan-limit.html" class="sector-card">
+        <span class="sector-label">대출·금융</span>
+        <span class="sector-name">대출 한도</span>
+      </a>
+      <a href="calculators/balance-settlement.html" class="sector-card">
+        <span class="sector-label">매매·정산</span>
+        <span class="sector-name">잔금일 정산</span>
+      </a>
+      <a href="calculators/interior-estimate.html" class="sector-card">
+        <span class="sector-label">인테리어</span>
+        <span class="sector-name">인테리어 견적</span>
+      </a>
+      <a href="calculators/auction-bid.html" class="sector-card">
+        <span class="sector-label">경매·공매</span>
+        <span class="sector-name">경매 입찰가</span>
+      </a>
+    </div>
   </div>
 </section>
 
-<!-- ═══ 최근 확인이 필요한 제도 변경 ══════════════════════════════════════
+<!-- ===== Market info section — 맞춤찾기를 메인 hero 로 ===== -->
+<section class="home-tools" style="padding-top: 28px;">
+  <div class="container">
+    <div class="strip-head">
+      <h2>시세정보</h2>
+      <a href="market.html" class="strip-link">시세정보 전체 →</a>
+    </div>
+    <div class="hero-calc-grid hero-calc-single">
+      <a href="calculators/search.html" class="hero-calc-card hero-calc-card-alt">
+        <div class="hero-calc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+          </svg>
+        </div>
+        <div class="hero-calc-body">
+          <h3>맞춤 내집 찾기</h3>
+          <p>예산·지역·역까지 거리·세대수 조건에 맞는 단지 추리기</p>
+          <span class="hero-calc-cta">조건 입력하고 찾기 →</span>
+        </div>
+      </a>
+    </div>
+    <div class="tool-row tool-row-4" style="margin-top: 12px;">
+      <a href="calculators/transactions.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>
+          </svg>
+        </div>
+        <div class="tool-card-body"><strong>실거래가 조회</strong></div>
+      </a>
+      <a href="calculators/market-trends.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/>
+          </svg>
+        </div>
+        <div class="tool-card-body"><strong>지역 시세 대시보드</strong></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Tools: checklists ===== -->
+<section class="home-tools" style="padding-top: 28px;">
+  <div class="container">
+    <div class="strip-head">
+      <h2>체크리스트</h2>
+      <a href="checklists/index.html" class="strip-link">전체 체크리스트 →</a>
+    </div>
+    <div class="tool-row tool-row-4">
+      <a href="checklists/sale-balance-day.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="5" width="16" height="16" rx="2"/>
+            <path d="M4 10h16M9 3v4M15 3v4"/>
+            <path d="M9 15l2 2 4-4"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>매매 잔금일</strong>
+          <span>잔금·등기·관리비 정산</span>
+        </div>
+      </a>
+      <a href="checklists/lease-contract.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="5" y="3" width="14" height="18" rx="2"/>
+            <path d="M9 8h6M9 12h6M9 16h4"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>전세계약</strong>
+          <span>대항력·확정일자·보증보험</span>
+        </div>
+      </a>
+      <a href="checklists/moving-day.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="8" width="11" height="9" rx="1"/>
+            <path d="M14 11h5l3 3v3h-8z"/>
+            <circle cx="7" cy="18" r="1.8"/>
+            <circle cx="17" cy="18" r="1.8"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>이사 당일</strong>
+          <span>전입·관리비·인수</span>
+        </div>
+      </a>
+      <a href="checklists/interior-contract.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="4" width="6" height="6" rx="1"/>
+            <path d="M14 5h6M14 9h6M4 14h16M4 18h11"/>
+          </svg>
+        </div>
+        <div class="tool-card-body">
+          <strong>인테리어 계약</strong>
+          <span>견적·표준계약·하자</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 핵심 이슈 (운영자 직접 작성) =====
      이 구간은 _meta/build_home_issues.py 가 _meta/home_issues.json 을 읽어 생성한다.
      운영자가 분석을 쓰지 않은 주에는 섹션 자체가 만들어지지 않는다(빈 껍데기를 남기지 않는다).
      기사 제목만 자동 수집한 목록은 여기에 넣지 않는다 — 무엇이 바뀌었고 누가 영향을 받으며
      톺다 도구에 어떻게 반영했는지를 운영자가 직접 쓴 항목만 노출한다. -->
 <!-- home:issues:start -->
 <!-- home:issues:end -->
-
-<!-- ═══ 공식 실거래 데이터 ═════════════════════════════════════════════════ -->
-<section class="section" style="padding-top: 0;">
-  <div class="container">
-    <div class="block-head">
-      <h2>공식 실거래 데이터</h2>
-      <a href="market.html">시세정보 전체</a>
-    </div>
-    <ul class="link-list link-list-2col">
-      <li><a href="calculators/transactions.html">
-        <span class="ll-title">실거래가 조회</span>
-        <span class="ll-desc">지역·단지·기간으로 신고된 매매 거래를 그대로 확인합니다</span>
-      </a></li>
-      <li><a href="apt/">
-        <span class="ll-title">지역별 아파트 실거래</span>
-        <span class="ll-desc">단지별 최근 거래가·세대수·㎡당 추이를 지역 단위로 모아 봅니다</span>
-      </a></li>
-      <li><a href="calculators/market-trends.html">
-        <span class="ll-title">지역 시세·전세가율</span>
-        <span class="ll-desc">한국부동산원 매매·전세 가격지수와 전세가율 추이</span>
-      </a></li>
-      <li><a href="calculators/search.html">
-        <span class="ll-title">조건으로 단지 찾기</span>
-        <span class="ll-desc">예산·지역·역까지 거리·세대수 조건에 맞는 단지를 추립니다</span>
-      </a></li>
-    </ul>
-    <p class="notice" style="margin-top:16px;">국토교통부 실거래가 공개시스템에 <strong>신고된 거래를 그대로</strong> 씁니다. 해제 신고된 거래는 집계에서 빼고, 없는 기간은 추정해 채우지 않습니다. 거래가 적은 단지에는 표본 수를 함께 적습니다.</p>
-  </div>
-</section>
-
-<!-- ═══ 거래 단계별 체크리스트 ════════════════════════════════════════════ -->
-<section class="section" style="padding-top: 0;">
-  <div class="container">
-    <div class="block-head">
-      <h2>거래 단계별 체크리스트</h2>
-      <a href="checklists/index.html">체크리스트 전체</a>
-    </div>
-    <ul class="link-list link-list-2col">
-      <li><a href="checklists/lease-contract.html">
-        <span class="ll-title">전세 계약</span>
-        <span class="ll-desc">계약 전 권리관계 확인부터 전입신고·확정일자까지</span>
-      </a></li>
-      <li><a href="checklists/sale-balance-day.html">
-        <span class="ll-title">매매 잔금일</span>
-        <span class="ll-desc">잔금 지급·등기 신청·관리비 정산 항목</span>
-      </a></li>
-      <li><a href="checklists/moving-day.html">
-        <span class="ll-title">이사 당일</span>
-        <span class="ll-desc">인수인계·공과금 정산·전입 처리</span>
-      </a></li>
-      <li><a href="checklists/dday-scheduler.html">
-        <span class="ll-title">거래 일정 만들기</span>
-        <span class="ll-desc">계약일과 잔금일을 넣으면 신고·대출·이사 일정을 역산합니다</span>
-      </a></li>
-    </ul>
-    <p class="notice" style="margin-top:16px;">체크 상태는 <strong>사용하는 브라우저에만</strong> 저장됩니다. 서버로 보내지 않습니다.</p>
-  </div>
-</section>
-
-<!-- ═══ 가이드 ════════════════════════════════════════════════════════════
-     글은 계산 결과를 읽는 방법을 설명하는 역할이라 마지막에 둔다. -->
-<section class="section" style="padding-top: 0; padding-bottom: 56px;">
-  <div class="container">
-    <div class="block-head">
-      <h2>계산 결과를 어떻게 읽나</h2>
-      <a href="guides.html">가이드 전체</a>
-    </div>
-    <ul class="link-list">
-      <li><a href="posts/registry-reading.html">
-        <span class="ll-title">등기부등본에서 먼저 확인할 항목</span>
-        <span class="ll-desc">갑구·을구와 말소기준권리를 읽는 순서</span>
-      </a></li>
-      <li><a href="posts/dsr-explain.html">
-        <span class="ll-title">DSR 계산 구조</span>
-        <span class="ll-desc">한도 계산기가 보여 준 숫자가 어떻게 나오는지</span>
-      </a></li>
-      <li><a href="posts/balance-day-settlement.html">
-        <span class="ll-title">매매 잔금일 정산 항목</span>
-        <span class="ll-desc">선수관리비·장기수선충당금·관리비 일할 계산</span>
-      </a></li>
-    </ul>
-  </div>
-</section>
 
 </main>
 
