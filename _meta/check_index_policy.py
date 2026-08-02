@@ -277,8 +277,10 @@ def run(rep):
             rep.fail("9 Article", f"{p} 화면에 작성자 표시가 없습니다")
         if not re.search(r"게시\s*\d{4}-\d{2}-\d{2}", text):
             rep.fail("9 Article", f"{p} 화면에 게시일(YYYY-MM-DD)이 없습니다")
-        if not re.search(r"(최근 수정|최근 검토)\s*\d{4}-\d{2}-\d{2}", text):
-            rep.fail("9 Article", f"{p} 화면에 최근 수정일이 없습니다")
+        # '내용 검토'(사람이 본문을 확인한 날)와 '파일 최종 수정'(git 커밋 날짜)을 구별해
+        # 표기한다 — _meta/add_bylines.py 참고. 둘 중 하나는 반드시 화면에 있어야 한다.
+        if not re.search(r"(내용 검토|파일 최종 수정|최근 수정|최근 검토)\s*\d{4}-\d{2}-\d{2}", text):
+            rep.fail("9 Article", f"{p} 화면에 내용 검토일 또는 파일 최종 수정일이 없습니다")
         if re.search(r"최근 갱신\s*(?![\d])", text):
             rep.fail("9 Article", f"{p} 에 날짜 없는 '최근 갱신' 표기가 남아 있습니다")
     for u in sorted(author_urls):

@@ -6,25 +6,25 @@
 <!-- i18n:review lang=en — machine-assisted draft, needs native review -->
 <title>Market Data — TOPDA</title>
 <meta name="robots" content="noindex,follow" />
-<meta name="description" content="Find your home, real transaction prices, and regional market data in one place." />
+<meta name="description" content="Reported transaction prices, regional price indices, and a filter for finding complexes that fit your budget." />
 <link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="canonical" href="https://topda.kr/en/market.html" />
-<link rel="alternate" type="application/rss+xml" title="TOPDA RSS" href="https://topda.kr/feed.xml" />
+<link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://topda.kr/feed.xml" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="TOPDA" />
 <meta property="og:title" content="Market Data — TOPDA" />
-<meta property="og:description" content="Find your home, real transaction prices, and regional market data in one place." />
+<meta property="og:description" content="Reported transaction prices, regional price indices, and a filter for finding complexes that fit your budget." />
 <meta property="og:url" content="https://topda.kr/en/market.html" />
 <meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Market Data — TOPDA" />
-<meta name="twitter:description" content="Find your home, real transaction prices, and regional market data in one place." />
+<meta name="twitter:description" content="Reported transaction prices, regional price indices, and a filter for finding complexes that fit your budget." />
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260730" />
+<link rel="stylesheet" href="../assets/styles.css?v=20260722" />
 <style>
   .market-hero { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 8px 0 28px; }
   .market-hero-card {
@@ -60,8 +60,6 @@
       <a href="guides.html" data-nav>Guides</a>
       <a href="calculators/index.html" data-nav>Calculators</a>
       <a href="market.html" data-nav class="active">Market Data</a>
-      <a href="../checklists/index.html" data-nav>Checklists (KO)</a>
-      <a href="../board.html" data-nav>Board (KO)</a>
     </nav>
     <button class="nav-toggle" data-nav-toggle aria-label="Menu">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
@@ -71,10 +69,10 @@
     <a href="guides.html">Guides</a>
     <a href="calculators/index.html">Calculators</a>
     <a href="market.html" class="active">Market Data</a>
-    <a href="../checklists/index.html">Checklists (KO)</a>
-    <a href="../board.html">Board (KO)</a>
+    <a href="../checklists/index.html">Checklists (Korean)</a>
+    <a href="../board.html">Board (Korean)</a>
     <a href="../about.html">About (KO)</a>
-    <a href="../index.html">Korean</a>
+    <a href="../index.html">한국어 (KO)</a>
   </div>
 </header>
 
@@ -82,7 +80,7 @@
   <div class="article-header" style="margin-bottom: 4px;">
     <div class="breadcrumb"><a href="index.html">Home</a> / Market Data</div>
     <h1 style="margin-bottom: 4px;">Market Data</h1>
-    <div class="meta"><span>Regional prices · complex-level transactions · tailored picks in one place</span></div>
+    <div class="meta"><span>Regional price indices · complex-level transactions · budget filter</span></div>
     <p class="market-asof" id="marketAsof">Checking data date…</p>
   </div>
 
@@ -143,15 +141,38 @@
 <footer class="site-footer">
   <div class="container">
     <div class="row">
-      <div><div class="brand"><span class="brand-mark"></span>TOPDA</div><p>Korea real estate, examined in detail.</p></div>
-      <div><h4>Tools</h4><ul><li><a href="calculators/index.html">Calculators</a></li><li><a href="market.html">Market Data</a></li><li><a href="../checklists/index.html">Checklists</a></li></ul></div>
-      <div><h4>Site</h4><ul><li><a href="../about.html">About</a></li><li><a href="../about.html#disclaimer">Disclaimer</a></li><li><a href="../index.html">Korean</a></li></ul></div>
+      <div>
+        <div class="brand"><span class="brand-mark"></span>TOPDA</div>
+        <p>Calculators and guides for Korean property transactions, based on official sources.</p>
+      </div>
+      <div>
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="calculators/index.html">Calculators</a></li>
+          <li><a href="market.html">Market Data</a></li>
+          <li><a href="../checklists/index.html">Checklists (Korean)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Site</h4>
+        <ul>
+          <li><a href="guides.html">Guides</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="../board.html">Board (Korean)</a></li>
+          <li><a href="../index.html">한국어</a></li>
+        </ul>
+      </div>
     </div>
-    <p class="disclaimer">All content is general information only, not legal, tax, or financial advice. Laws and rates change; consult a licensed professional before any transaction. © TOPDA.</p>
+    <p class="disclaimer">
+      General information only — not legal, tax, or financial advice. Rules and rates change;
+      confirm with a licensed professional before acting.
+      <br/>&copy; TOPDA.
+    </p>
   </div>
 </footer>
 
-<script src="../assets/app.js?v=20260730"></script>
+<script src="../assets/app.js?v=20260722"></script>
 <script>
 (function () {
   Promise.all([

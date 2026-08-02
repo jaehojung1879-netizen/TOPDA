@@ -224,18 +224,17 @@ def summary_html(rk, ms):
         f'<div class="stat"><div class="k">전세가율</div><div class="v">{ratio}{scope}</div></div>'
         '</div>'
     )
-    parts = []
+    # 카드에 이미 세 숫자가 다 있다. 바로 아래 문장에서 같은 수치를 다시 읽어 주면
+    # 화면이 두 번 같은 말을 한다(감사 8번). 문장은 방향과 출처·기준월, 그리고
+    # 지수의 한계만 말하고 숫자 반복은 하지 않는다.
+    trend = ""
     if ms["sale_yoy"] is not None:
-        d = "상승" if ms["sale_yoy"] > 0.05 else ("하락" if ms["sale_yoy"] < -0.05 else "보합")
-        parts.append(f'매매가격지수는 최근 {ms["n_months"]}개월간 {ms["sale_yoy"]:+.1f}% {d}')
-    if ms["jeonse_yoy"] is not None:
-        parts.append(f'전세가격지수는 {ms["jeonse_yoy"]:+.1f}% 변동')
-    if ms.get("jeonse_ratio"):
-        parts.append(f'전세가율은 {ms["jeonse_ratio"]:.1f}%')
-    prose = ""
-    if parts:
-        prose = (f'<p class="lead">{esc(rk)} 아파트 ' + ", ".join(parts)
-                 + f'입니다 <span class="muted">(한국부동산원 R-ONE, {esc(ms["month"] or "")} 기준)</span>.</p>\n')
+        trend = ("올랐습니다" if ms["sale_yoy"] > 0.05
+                 else ("내렸습니다" if ms["sale_yoy"] < -0.05 else "거의 움직이지 않았습니다"))
+        trend = f'최근 {ms["n_months"]}개월간 {esc(rk)} 아파트 매매가격지수는 {trend}. '
+    prose = (f'<p class="lead">{trend}'
+             f'위 지수는 한국부동산원 R-ONE 자료(<span class="muted">{esc(ms["month"] or "")} 기준</span>)이며 '
+             f'지역 평균이라, 아래 표의 개별 단지 실거래가와는 다르게 움직일 수 있습니다.</p>\n')
     return cards + prose
 
 

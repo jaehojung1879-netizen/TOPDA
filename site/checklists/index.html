@@ -80,7 +80,7 @@
 
   <section class="hub-section">
     <div class="hub-section-head">
-      <span class="hub-section-tag">대시보드 ✨ NEW</span>
+      <span class="hub-section-tag">일정 도구</span>
       <h2>D-Day 거래 스케줄러</h2>
       <p>계약·중도금·잔금 일정과 금액을 입력하면 달력 위에 자금 흐름이 시각화됩니다. ICS 파일로 캘린더에 바로 등록할 수 있습니다.</p>
     </div>
@@ -103,7 +103,7 @@
     <div class="hub-section-head">
       <span class="hub-section-tag">매매</span>
       <h2>매매 거래</h2>
-      <p>아파트·주택을 살 때 잔금일에 빠뜨리면 손해 보는 항목을 단계별로 점검합니다.</p>
+      <p>아파트·주택을 살 때 잔금일에 정산·확인할 항목을 단계별로 점검합니다.</p>
     </div>
     <div class="hub-grid">
       <a class="hub-card hub-card-tall" href="sale-balance-day.html" data-cl-hub-card="sale-balance-day">
@@ -124,7 +124,7 @@
     <div class="hub-section-head">
       <span class="hub-section-tag">전세 · 월세</span>
       <h2>임대차 계약</h2>
-      <p>보증금을 지키려면 ‘대항력 + 우선변제권 + 보증보험’ 3중 방어. 잔금일에 한 번에 갖춰야 안전합니다.</p>
+      <p>대항력·우선변제권·보증보험은 각각 발생 시점이 다릅니다. 잔금일까지 세 가지를 함께 갖추는 순서를 점검합니다.</p>
     </div>
     <div class="hub-grid">
       <a class="hub-card hub-card-tall" href="lease-contract.html" data-cl-hub-card="lease-contract">
@@ -173,10 +173,10 @@
     </div>
   </section>
 
-  <!-- ===== 여정 로드맵 — 다른 체크리스트와 같은 비중의 항목 하나로 (인테리어 가이드의 .timeline/.tip 재사용) ===== -->
+  <!-- ===== 거래 단계 — 다른 체크리스트와 같은 비중의 항목 하나로 (인테리어 가이드의 .timeline/.tip 재사용) ===== -->
   <section class="hub-section" id="journey">
     <div class="hub-section-head">
-      <span class="hub-section-tag">여정 로드맵</span>
+      <span class="hub-section-tag">거래 단계</span>
       <h2>지금 내 단계는?</h2>
       <p>계약부터 잔금·등기·입주 후까지 전 과정을 단계별로 펼쳐, 그 시점에 자주 놓치는 것을 ⚠ 아이콘으로 보여줍니다.</p>
     </div>
@@ -198,7 +198,7 @@
       <li data-stage="sale-2" id="stage-sale-2">
         <span class="t-when">계약 전</span>
         <span class="t-what">매물 확인 · 권리 점검 — 등기부·건축물대장 직접 발급<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="등기부는 한 번 보고 끝이 아닙니다 — 계약 직전·잔금 직전에 다시 확인해야 합니다.">⚠</span></span>
-        <span class="t-tool"><a href="../posts/registry-reading.html">등기부등본 읽는 법</a> · <a href="../calculators/transactions.html">실거래가 조회</a></span>
+        <span class="t-tool"><a href="../posts/registry-reading.html">등기부등본에서 먼저 확인할 항목</a> · <a href="../calculators/transactions.html">실거래가 조회</a></span>
       </li>
       <li data-stage="sale-3" id="stage-sale-3">
         <span class="t-when">계약일</span>
@@ -241,7 +241,7 @@
       <li data-stage="lease-2" id="stage-lease-2">
         <span class="t-when">계약 전</span>
         <span class="t-what">매물 · 권리 확인 — 근저당·가압류 등기부 확인<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="(근저당+내 보증금)이 시세의 70~80%를 넘으면 계약을 재고하세요.">⚠</span></span>
-        <span class="t-tool"><a href="../posts/jeonse-scam.html">전세사기 예방 가이드</a> · <a href="../posts/registry-reading.html">등기부등본 읽는 법</a></span>
+        <span class="t-tool"><a href="../posts/jeonse-scam.html">전세사기 예방 가이드</a> · <a href="../posts/registry-reading.html">등기부등본에서 먼저 확인할 항목</a></span>
       </li>
       <li data-stage="lease-3" id="stage-lease-3">
         <span class="t-when">계약일</span>
@@ -255,7 +255,7 @@
       </li>
       <li data-stage="lease-5" id="stage-lease-5">
         <span class="t-when">잔금일 (D-Day)</span>
-        <span class="t-what">보증금 방어 3종 세트 — 전입신고+확정일자+보증보험<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="전입신고와 확정일자 중 하나만 하면 우선변제권이 없습니다 — 반드시 둘 다 해야 합니다.">⚠</span></span>
+        <span class="t-what">보증금 보호 요건 — 전입신고 + 확정일자 + 보증보험<span class="tip" tabindex="0" role="button" aria-label="자주 놓치는 것" data-tip="전입신고와 확정일자 중 하나만 하면 우선변제권이 없습니다 — 반드시 둘 다 해야 합니다.">⚠</span></span>
         <span class="t-tool"><a href="lease-contract.html">전세계약 체크리스트</a></span>
       </li>
       <li data-stage="lease-6" id="stage-lease-6">
@@ -285,11 +285,36 @@
 <footer class="site-footer">
   <div class="container">
     <div class="row">
-      <div><div class="brand"><span class="brand-mark"></span>톺다</div><p>부동산, 하나하나 톺아보자</p></div>
-      <div><h4>탐색</h4><ul><li><a href="../index.html#categories">카테고리</a></li><li><a href="../calculators/index.html">계산기</a></li><li><a href="../checklists/index.html">체크리스트</a></li></ul></div>
-      <div><h4>사이트 정보</h4><ul><li><a href="../about.html">소개</a></li><li><a href="../about.html#disclaimer">면책고지</a></li></ul></div>
+      <div>
+        <div class="brand"><span class="brand-mark"></span>톺다</div>
+        <p>부동산 거래에 필요한 도구와 가이드를 공식 자료 기반으로 정리합니다.</p>
+      </div>
+      <div>
+        <h4>도구</h4>
+        <ul>
+          <li><a href="../calculators/index.html">계산기</a></li>
+          <li><a href="../market.html">시세정보</a></li>
+          <li><a href="../apt/">지역별 아파트 실거래</a></li>
+          <li><a href="../checklists/index.html">체크리스트</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>사이트</h4>
+        <ul>
+          <li><a href="../guides.html">가이드</a></li>
+          <li><a href="../board.html">게시판</a></li>
+          <li><a href="../about.html">안내</a></li>
+          <li><a href="../privacy.html">개인정보 처리방침</a></li>
+          <li><a href="../en/index.html">English</a></li>
+        </ul>
+      </div>
     </div>
-    <p class="disclaimer">© 톺다.</p>
+    <p class="disclaimer">
+      본 사이트의 콘텐츠는 일반적인 정보 제공을 목적으로 하며, 개별 사안에 대한 법률·세무·금융 자문이 아닙니다.
+      구체적인 결정은 변호사·세무사·공인중개사·자격 있는 금융기관과 상의하시기 바랍니다.
+      게재 시점 기준이며 이후 법령·정책 변경으로 달라질 수 있습니다.
+      <br/>© 톺다.
+    </p>
   </div>
 </footer>
 

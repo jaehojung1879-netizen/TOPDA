@@ -16,9 +16,19 @@ index.html 밖에서는 해석되지 않는다. 즉 화면에도 구조화 데�
 
 하지 않는 것
   · 날짜를 추정하거나 만들어 내지 않는다. git 에서 못 찾으면 표시하지 않고 보고서에 남긴다.
-  · "검토일"이라고 쓰지 않는다. 실제로 재검토한 기록이 없으므로 '수정일'로만 쓴다.
   · 출처를 새로 붙이지 않는다. 페이지에 없는 출처를 만들어 넣지 않는다.
   · reviewedBy 를 넣지 않는다 — 외부 전문가 감수 절차가 없다.
+
+2026-08 개편 — 두 가지를 바꿨다
+  1) **상단 '주요 공식 출처' 나열을 없앴다.** 페이지에 걸린 공공기관 링크를 최대 5개까지
+     제목 바로 아래에 늘어놓았는데, 그 목록은 개별 주장을 검증한 것이 아니면서 검증한 것처럼
+     보이게 했다. 거의 모든 글에 하단 '관련 자료' 절이 이미 있으므로(48개 중 43개), 출처는
+     본문에서 실제로 쓴 자리와 하단에만 둔다.
+  2) **'최근 수정'과 '내용 검토'를 분리했다.** git 의 마지막 커밋 날짜는 레이아웃·헤더만
+     바뀌어도 움직인다 — 그 날짜를 '이 글은 언제 기준인가'로 읽으면 틀린다. 그래서
+     내용 검토일은 `_meta/content_reviewed.json` 에서 읽는다(운영자가 실제로 내용을
+     확인한 날). 값이 없으면 git 수정일로 물러서되, 화면에는 '파일 최종 수정'이라고
+     적어 내용 기준일과 구별한다.
 
 사용법
   python add_bylines.py             # 적용
@@ -102,6 +112,20 @@ def esc(s):
 
 # ────────────────────────────────────────────────── git 날짜
 
+def is_shallow():
+    """얕은 클론이면 True.
+
+    왜 확인하나: CI·에이전트 환경은 대개 `--depth` 로 클론한다. 그 상태에서
+    `git log --diff-filter=A` 는 '파일이 처음 추가된 날'이 아니라 '클론 경계 커밋의 날'을
+    돌려준다. 그대로 쓰면 모든 글의 게시일이 클론한 날로 덮여 버린다 — 실제로
+    2026-08-01 작업 중 게시일 49건이 2026-07-30 으로 밀리는 일이 있었다.
+    없는 정보를 만들어 내느니 화면에 이미 있는 값을 지킨다."""
+    return os.path.exists(os.path.join(ROOT, ".git", "shallow"))
+
+
+EXISTING_PUBLISHED_RE = re.compile(r'게시 <time datetime="(\d{4}-\d{2}-\d{2})"')
+
+
 def git_dates(relpath):
     """(최초 게시일, 최근 수정일). 못 찾으면 (None, None)."""
     def run(args):
@@ -149,28 +173,41 @@ def official_sources(raw):
 
 # ────────────────────────────────────────────────── 화면 표시
 
-def byline_html(published, modified, sources):
+REVIEWED_PATH = os.path.join(HERE, "content_reviewed.json")
+
+
+def load_reviewed():
+    """페이지별 '내용 검토일'. 운영자가 실제로 본문을 확인한 날짜만 들어간다.
+
+    git 의 마지막 커밋 날짜와 일부러 분리한다 — 헤더·CSS 만 바뀐 커밋이 '이 글은 언제
+    기준인가'를 밀어 올리면 안 되기 때문이다."""
+    try:
+        with open(REVIEWED_PATH, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return {k: v for k, v in data.items() if not k.startswith("_")}
+
+
+def byline_html(published, modified, reviewed):
+    """상단에는 작성 주체와 날짜만. 출처 나열은 하단(본문 '관련 자료')이 맡는다."""
     parts = [f'<a href="/about.html" rel="author">{esc(AUTHOR_NAME)}</a> 작성']
     if published:
         parts.append(f'게시 <time datetime="{published}">{published}</time>')
-    if modified:
-        parts.append(f'최근 수정 <time datetime="{modified}">{modified}</time>')
+    if reviewed:
+        parts.append(f'내용 검토 <time datetime="{reviewed}">{reviewed}</time>')
+    elif modified:
+        # 내용 검토 기록이 없으면 그렇게 적는다. '검토했다'고 바꿔 부르지 않는다.
+        parts.append(f'파일 최종 수정 <time datetime="{modified}">{modified}</time>')
     line = '<span class="dot">·</span>'.join(f"<span>{p}</span>" for p in parts)
 
-    src = ""
-    if sources:
-        items = " · ".join(
-            f'<a href="{esc(u)}" target="_blank" rel="noopener">{esc(n)}</a>'
-            for n, u in sources[:5])
-        src = f'<p class="byline-src">주요 공식 출처: {items}</p>'
+    basis_date = reviewed or modified
     basis = ""
-    if modified:
-        basis = (f'<p class="byline-basis">이 글의 내용은 <strong>{modified}</strong> 기준으로 '
-                 f'작성·수정되었습니다. 이후 법령·세율·정책이 바뀌면 달라질 수 있으니 '
-                 f'위 공식 출처의 현행 내용을 함께 확인하세요.</p>' if sources else
-                 f'<p class="byline-basis">이 글의 내용은 <strong>{modified}</strong> 기준으로 '
-                 f'작성·수정되었습니다. 이후 법령·세율·정책이 바뀌면 달라질 수 있습니다.</p>')
-    return f'<div class="byline" {BYLINE_MARK}>{line}{src}{basis}</div>'
+    if basis_date:
+        basis = (f'<p class="byline-basis">{basis_date} 기준입니다. 이후 법령·세율·정책이 '
+                 f'바뀌면 달라질 수 있으니, 본문에 링크한 공식 원문의 현행 내용을 함께 '
+                 f'확인하세요.</p>')
+    return f'<div class="byline" {BYLINE_MARK}>{line}{basis}</div>'
 
 
 READ_TIME_RE = re.compile(r"<span>\s*(\d+분 읽기)\s*</span>")
@@ -270,19 +307,30 @@ def main():
     ap.add_argument("--report", action="store_true", help="누락 항목만 출력")
     args = ap.parse_args()
 
-    changed, no_date, no_source, no_h1 = 0, [], [], []
+    reviewed_map = load_reviewed()
+    shallow = is_shallow()
+    if shallow:
+        print('[warn] 얕은 클론(.git/shallow)입니다 — 게시일은 페이지에 적힌 값을 유지합니다.')
+    changed, no_date, no_reviewed, no_h1 = 0, [], [], []
     for fp in targets():
         rel = os.path.relpath(fp, ROOT)
-        url = BASE + "/" + os.path.relpath(fp, SITE).replace(os.sep, "/")
+        site_rel = os.path.relpath(fp, SITE).replace(os.sep, "/")
+        url = BASE + "/" + site_rel
         with open(fp, encoding="utf-8") as f:
             raw = f.read()
 
         published, modified = git_dates(rel)
+        if shallow:
+            # 얕은 클론에서는 add-date 를 신뢰할 수 없다. 페이지에 이미 적혀 있는
+            # 게시일이 있으면 그것을 유지한다(덮어쓰지 않는다).
+            m_pub = EXISTING_PUBLISHED_RE.search(raw)
+            if m_pub:
+                published = m_pub.group(1)
         if not (published and modified):
             no_date.append(rel)
-        sources = official_sources(raw)
-        if not sources:
-            no_source.append(rel)
+        reviewed = reviewed_map.get(site_rel)
+        if not reviewed:
+            no_reviewed.append(rel)
 
         title = (re.search(r"<title>(.*?)</title>", raw, re.S) or [None, ""])[1]
         title = html.unescape(re.sub(r"\s*[—|]\s*톺다\s*$", "", title.strip()))
@@ -290,12 +338,13 @@ def main():
             (re.search(r'<meta name="description" content="([^"]*)"', raw) or [None, ""])[1])
         rt = READ_TIME_RE.search(raw)
 
-        block = byline_html(published, modified, sources)
+        block = byline_html(published, modified, reviewed)
         new = insert_byline(raw, block, rt.group(1) if rt else None)
         if new is None:
             no_h1.append(rel)
             continue
-        new = patch_jsonld(new, url, title, desc, published, modified)
+        # dateModified 는 '내용이 언제 기준인가'를 뜻하므로 검토일을 우선한다.
+        new = patch_jsonld(new, url, title, desc, published, reviewed or modified)
 
         if new != raw:
             changed += 1
@@ -308,8 +357,9 @@ def main():
     print(f"git 에서 날짜를 확정하지 못한 페이지: {len(no_date)}개")
     for r in no_date:
         print("   ·", r)
-    print(f"페이지에 공식 출처 링크가 없어 출처를 표기하지 못한 페이지: {len(no_source)}개")
-    for r in no_source:
+    print(f"_meta/content_reviewed.json 에 내용 검토일이 없는 페이지: {len(no_reviewed)}개"
+          " (git 수정일을 '파일 최종 수정'으로 표기)")
+    for r in no_reviewed:
         print("   ·", r)
     if no_h1:
         print(f"<h1> 을 찾지 못해 건너뛴 페이지: {len(no_h1)}개")

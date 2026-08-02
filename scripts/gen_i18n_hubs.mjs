@@ -316,8 +316,8 @@ const ICON = {
 
 const MARKET = {
   en: {
-    title: 'Market Data', desc: 'Find your home, real transaction prices, and regional market data in one place.',
-    crumb: 'Market Data', sub: 'Regional prices · complex-level transactions · tailored picks in one place',
+    title: 'Market Data', desc: 'Reported transaction prices, regional price indices, and a filter for finding complexes that fit your budget.',
+    crumb: 'Market Data', sub: 'Regional price indices · complex-level transactions · budget filter',
     asofLoading: 'Checking data date…',
     heroTitle: 'Find your home', heroDesc: 'Enter budget, area, subway access, and school district — get scored complex recommendations.', heroCta: 'Set conditions and search →',
     toolsTag: 'Data tools', toolsH: 'More transactions & prices',
