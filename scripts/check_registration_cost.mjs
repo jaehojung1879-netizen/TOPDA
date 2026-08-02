@@ -157,11 +157,21 @@ console.log('\n[등기 P0-③] 등기신청 수수료 — 신청 방식별');
 check('15,000원 고정이 아니라 신청 방식별로 다르다', () => {
   const visit = calcRegistrationCost({ ...base, filingMethod: 'visit' }).filingFee;
   const eform = calcRegistrationCost({ ...base, filingMethod: 'eform' }).filingFee;
-  const online = calcRegistrationCost({ ...base, filingMethod: 'online' }).filingFee;
   assert.equal(visit, 18_000);   // 2025.8.1 인상 (수수료규칙 제5조의2)
   assert.equal(eform, 15_000);
-  assert.ok(online < eform);
-  assert.ok(new Set([visit, eform, online]).size === 3, '세 방식이 모두 달라야 합니다.');
+  assert.notEqual(visit, eform);
+});
+
+check('금액을 확인하지 못한 전자신청은 선택지에 넣지 않는다', () => {
+  // 확인 안 된 값(12,000원 추정)을 띄워봐야 e-Form과 3,000원 차이라 총액에 거의 영향이
+  // 없는데, "확인 못 한 값"을 화면에 남기는 비용만 든다. 보수적으로 뺀다.
+  const keys = Array.from(RATES.registration.filingFee.methods).map((m) => m.key).join(',');
+  assert.equal(keys, 'visit,eform');
+  assert.ok(RATES.registration.filingFee.omittedNote, '제외 사유 안내가 없습니다.');
+  // 알 수 없는 방식을 넘기면 가장 보수적인(가장 비싼) 기본값으로 떨어져야 한다.
+  const unknown = calcRegistrationCost({ ...base, filingMethod: 'online' });
+  assert.equal(unknown.filingFee, 18_000);
+  assert.equal(unknown.filingMethod.key, 'visit');
 });
 
 check('부동산 개수만큼 곱해진다', () => {
@@ -169,9 +179,11 @@ check('부동산 개수만큼 곱해진다', () => {
   assert.equal(r.filingFee, 54_000);
 });
 
-check('금액을 재확인하지 못한 방식은 경고를 함께 낸다', () => {
-  const r = calcRegistrationCost({ ...base, filingMethod: 'online' });
-  assert.ok(r.notes.some((n) => n.key === 'filingFee' && n.kind === 'warn'));
+check('남은 두 방식은 모두 검증된 값이라 경고가 붙지 않는다', () => {
+  for (const m of ['visit', 'eform']) {
+    const r = calcRegistrationCost({ ...base, filingMethod: m });
+    assert.ok(!r.notes.some((n) => n.key === 'filingFee'), `${m}에 불필요한 경고가 있습니다.`);
+  }
 });
 
 // ─────────────────────────────────────────────────────────────────────
@@ -316,6 +328,7 @@ check('등기 페이지에 방식별 수수료·위임 업무·추정 경고 UI�
   const html = fs.readFileSync(new URL('../site/calculators/registration-cost.html', import.meta.url), 'utf8');
   for (const needle of [
     'name="filingMethod"', 'name="agencyTask"', 'name="fieldwork"',
+    'value="visit"', 'value="eform"',
     'name="scrivenerQuote"', 'name="extraExpense"',
     'id="rc-scrivener-total"', 'id="rc-notes"', 'id="rc-classify"',
     '법무사 기본보수 상한', 'value="4"',
@@ -323,6 +336,7 @@ check('등기 페이지에 방식별 수수료·위임 업무·추정 경고 UI�
     assert.ok(html.includes(needle), `등기 페이지에 ${needle}이(가) 없습니다.`);
   }
   assert.ok(!html.includes('법무사 보수 (추정)'), '“법무사 보수 추정” 표기가 남아 있습니다.');
+  assert.ok(!html.includes('value="online"'), '확인 못 한 전자신청 선택지가 남아 있습니다.');
 });
 
 check('취득세를 쓰는 페이지의 주택 수가 4주택 이상까지 분리돼 있다', () => {
