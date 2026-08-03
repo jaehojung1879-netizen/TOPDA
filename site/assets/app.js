@@ -4998,7 +4998,16 @@ function suggestLtvPercent(regionKey, ownership) {
 
 // 지역 × 금리유형 → 스트레스 가산금리(%p).
 //  가산금리 = 스트레스 금리 × 기본 적용비율 × 금리유형별 적용비율
-function suggestStressAdd(regionKey, rateType) {
+// 경과규정(2025.10.15까지 계약+계약금 납부 등)이 걸리는 선택지인지.
+// rates.js 의 grandfather.priorRules.appliesToKeys 가 단일 기준이다 — 대환은
+// 종전 조건 승계가 은행마다 갈려 여기에 넣지 않는다(경고만 남긴다).
+function loanPriorRules(grandfather) {
+  const pr = (loanRatesCfg().grandfather || {}).priorRules;
+  if (!pr || !grandfather || grandfather === 'new') return null;
+  return (pr.appliesToKeys || []).indexOf(grandfather) >= 0 ? pr : null;
+}
+
+function suggestStressAdd(regionKey, rateType, grandfather) {
   const cfg = loanRatesCfg();
   const region = loanRegionConfig(regionKey);
   const st = cfg.stress || {};
@@ -5006,12 +5015,24 @@ function suggestStressAdd(regionKey, rateType) {
     || { stressRate: 3.0, applyRatio: 1.0, add: 3.0, stage: '3단계' };
   const ratios = st.rateTypeRatio || { variable: 1, mixed: 0.8, periodic: 0.4, fixed: 0 };
   const rt = ratios[rateType] != null ? rateType : 'variable';
-  const baseAdd = byRegion.add != null ? byRegion.add : (byRegion.stressRate * byRegion.applyRatio);
+  let baseAdd = byRegion.add != null ? byRegion.add : (byRegion.stressRate * byRegion.applyRatio);
+
+  // 경과규정 대상이면 10·15 이전의 스트레스 금리(전국 하한 1.5%)로 돌아간다.
+  // 종전 값보다 높아질 일은 없으므로 min 으로 눌러 안전하게 둔다 — 지방(0.75%p)처럼
+  // 이미 1.5%보다 낮은 지역이 경과규정 때문에 되레 올라가면 안 된다.
+  const prior = loanPriorRules(grandfather);
+  let priorApplied = false;
+  if (prior && prior.stressRate != null) {
+    const priorAdd = prior.stressRate * (byRegion.applyRatio != null ? byRegion.applyRatio : 1);
+    if (priorAdd < baseAdd) { baseAdd = priorAdd; priorApplied = true; }
+  }
+
   const value = Math.round(baseAdd * ratios[rt] * 100) / 100;
   return {
     value, baseAdd, rateType: rt, rateTypeRatio: ratios[rt],
-    stressRate: byRegion.stressRate, applyRatio: byRegion.applyRatio,
-    stage: byRegion.stage, region,
+    stressRate: priorApplied ? prior.stressRate : byRegion.stressRate,
+    applyRatio: byRegion.applyRatio,
+    stage: byRegion.stage, region, priorApplied,
     validUntil: byRegion.validUntil || null, note: byRegion.note || '',
   };
 }
@@ -5039,14 +5060,22 @@ function calcMortgageLimit(input) {
   // 가격대별 한도는 수도권·규제지역 주택구입 목적 주담대에만 적용된다(지방 비규제 제외).
   const capRegions = cfg.priceCapAppliesTo || ['metroNonRegulated', 'regulated'];
   const priceCapApplies = capRegions.indexOf(region.key) >= 0;
+  // 경과규정 대상이면 10·15가 새로 만든 15억↑ 4억 / 25억↑ 2억 구간이 적용되지 않고,
+  // 6·27 대책의 **시가 무관 단일 6억**으로 돌아간다. 이 갈래가 없던 동안 경과규정
+  // 대상자는 자기 대출을 계산기로 재현할 수 없었다(실사용자 사례).
+  const priorRules = loanPriorRules(grandfather);
   let priceCap = Infinity;
   if (priceCapApplies) {
-    const caps = cfg.metroPriceCaps || [
-      { upToEok: 15, cap: 600000000 }, { upToEok: 25, cap: 400000000 }, { upToEok: Infinity, cap: 200000000 },
-    ];
-    const eok = price / 1e8;
-    const tier = caps.find((c) => eok <= c.upToEok) || caps[caps.length - 1];
-    priceCap = tier.cap;
+    if (priorRules && priorRules.priceCapSingle != null) {
+      priceCap = priorRules.priceCapSingle;
+    } else {
+      const caps = cfg.metroPriceCaps || [
+        { upToEok: 15, cap: 600000000 }, { upToEok: 25, cap: 400000000 }, { upToEok: Infinity, cap: 200000000 },
+      ];
+      const eok = price / 1e8;
+      const tier = caps.find((c) => eok <= c.upToEok) || caps[caps.length - 1];
+      priceCap = tier.cap;
+    }
   }
 
   // DSR 한도 (스트레스 금리·만기 역산)
@@ -5109,7 +5138,7 @@ function calcMortgageLimit(input) {
   // ── 결과의 성격 구분 (법정·확정 / 사용자 입력 / 추정) ──
   //  세 값이 한 화면에 섞여 있으면 사용자가 "은행에서 확인해야 할 것"을 알 수 없다.
   const ltvMeta = suggestLtvPercent(region.key, ownership);
-  const stressMeta = suggestStressAdd(region.key, rateType);
+  const stressMeta = suggestStressAdd(region.key, rateType, grandfather);
   const ltvIsSuggested = Math.abs(ltvPercent - ltvMeta.value) < 1e-9;
   const stressIsSuggested = Math.abs((stressAdd || 0) - stressMeta.value) < 1e-9;
   const classification = {
@@ -5145,6 +5174,7 @@ function calcMortgageLimit(input) {
     region, priceCapApplies, ownership: ltvMeta.ownership,
     ltvMeta, stressMeta, classification,
     grandfather, grandfatherActive, grandfatherOption,
+    priorRulesApplied: !!priorRules, priorRules: priorRules || null,
   };
 }
 
@@ -5233,7 +5263,9 @@ function calcJeonseLoanByAgency(deposit, opts) {
 
   function applySuggestions() {
     const ltvMeta = suggestLtvPercent(regionKey(), ownershipKey());
-    const stressMeta = suggestStressAdd(regionKey(), rateTypeKey());
+    // 경과규정을 고르면 스트레스 가산도 종전(1.5%) 기준으로 다시 제안된다 —
+    // 한도 계산만 바꾸고 제안값을 그대로 두면 화면의 두 숫자가 서로 어긋난다.
+    const stressMeta = suggestStressAdd(regionKey(), rateTypeKey(), grandfatherKey());
     if (ltvInput && !ltvTouched) ltvInput.value = ltvMeta.value;
     if (stressInput && !stressTouched) stressInput.value = stressMeta.value;
     return { ltvMeta, stressMeta };
@@ -5335,7 +5367,22 @@ function calcJeonseLoanByAgency(deposit, opts) {
         notes.push({ kind: 'warn', text: (R.stress && R.stress.rateTypeNote) || '' });
       }
       if (r.grandfatherActive && r.grandfatherOption) {
-        notes.push({ kind: 'warn', text: '「' + r.grandfatherOption.label + '」을 선택했습니다. 이 경우 종전 규제가 적용될 수 있어 위 한도보다 많이 받을 수도 있습니다 — ' + ((R.grandfather && R.grandfather.note) || '은행이 증빙으로 판정합니다.') });
+        const gf = R.grandfather || {};
+        // ⚠ 이 notes 배열은 HTML을 이스케이프해서 그린다(renderNotes). 태그를 넣으면
+        //   글자 그대로 나오므로 평문으로만 쓴다.
+        if (r.priorRulesApplied) {
+          // 종전 규정으로 계산했다면 '무엇을 되돌렸고 무엇은 안 되돌렸는지'까지 말해야
+          // 한다. 되돌리지 않은 LTV 를 밝히지 않으면 이 한도를 그대로 믿는다.
+          notes.push({ kind: 'warn', text: '「' + r.grandfatherOption.label + '」을 선택해 '
+            + '종전 규정으로 계산했습니다 — 가격대별 한도 6억원 단일(시가 무관), 스트레스 금리 1.5%. '
+            + 'LTV는 되돌리지 않았습니다: '
+            + ((gf.priorRules && gf.priorRules.ltvNote) || '은행에 확인한 종전 LTV를 직접 입력하세요.')
+            + ' ' + (gf.note || '경과규정 해당 여부는 은행이 증빙으로 판정합니다.') });
+        } else {
+          notes.push({ kind: 'warn', text: '「' + r.grandfatherOption.label + '」을 선택했지만 '
+            + '현행 규정으로 계산했습니다 — '
+            + (gf.refinanceNote || '종전 조건 승계 여부가 은행·상품마다 달라 자동으로 되돌리지 않습니다.') });
+        }
       }
       // ── 적용 대상 요건 ──
       //  "얼마"만 보여주고 "이 규제가 당신 대출에 붙는지"를 안 밝히면, 대상이 아닌

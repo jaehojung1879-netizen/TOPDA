@@ -263,7 +263,7 @@ check('결과를 법정·확정 / 사용자 입력 / 추정으로 구분한다',
   assert.ok(custom.classification.estimated.some((i) => i.key === 'ltv'));
 });
 
-check('경과규정·대환은 자동 판정하지 않고 사용자 선택을 그대로 표시한다', () => {
+check('경과규정 해당 여부는 자동 판정하지 않고 사용자 선택을 그대로 표시한다', () => {
   const r = calcMortgageLimit({
     price: 800_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
     income: 80_000_000, rate: 4.5, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
@@ -271,12 +271,71 @@ check('경과규정·대환은 자동 판정하지 않고 사용자 선택을 �
   });
   assert.equal(r.grandfatherActive, true);
   assert.ok(r.grandfatherOption && r.grandfatherOption.label.includes('2025.10.15'));
-  // 선택했다고 한도를 바꾸지는 않는다(은행이 증빙으로 판정하는 사항).
-  const plain = calcMortgageLimit({
-    price: 800_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
-    income: 80_000_000, rate: 4.5, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
-  });
-  assert.equal(r.limit, plain.limit);
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 P0-⑦] 경과규정을 고르면 종전 규정으로 계산한다');
+// ─────────────────────────────────────────────────────────────────────
+// 2026-08-03 이전에는 이 선택이 경고 문구만 띄우고 계산에는 반영되지 않았다.
+// 그래서 경과규정 대상자(2025.10.15까지 계약+계약금)는 자기 대출을 계산기로
+// 재현할 수 없었다 — 실사용자가 2026년 4월 실행분으로 확인해 준 문제다.
+
+check('경과규정이면 가격대별 한도가 시가 무관 6억 단일로 돌아간다', () => {
+  // 시가 20억: 현행은 4억 구간, 종전은 6·27 대책의 6억 단일.
+  const base = {
+    price: 2_000_000_000, region: 'regulated', ownership: 'none', ltvPercent: 70,
+    income: 300_000_000, rate: 4.0, stressAdd: 1.5, termYears: 30, dsrLimitPercent: 40,
+  };
+  assert.equal(calcMortgageLimit(base).priceCap, 400_000_000);
+  assert.equal(calcMortgageLimit({ ...base, grandfather: 'preContract' }).priceCap, 600_000_000);
+  assert.equal(calcMortgageLimit({ ...base, grandfather: 'preApplied' }).priceCap, 600_000_000);
+});
+
+check('경과규정이면 스트레스 가산이 종전 1.5%로 돌아간다', () => {
+  assert.equal(suggestStressAdd('regulated', 'variable').value, 3.0);
+  assert.equal(suggestStressAdd('regulated', 'variable', 'preContract').value, 1.5);
+  assert.equal(suggestStressAdd('metroNonRegulated', 'variable', 'preApplied').value, 1.5);
+});
+
+check('경과규정이 지방(0.75%p)의 가산을 되레 올리지 않는다', () => {
+  // 지방은 2단계 유예로 이미 1.5%보다 낮다. 종전 값으로 '되돌린다'며 올리면 손해다.
+  assert.equal(suggestStressAdd('provincialNonRegulated', 'variable').value, 0.75);
+  assert.equal(suggestStressAdd('provincialNonRegulated', 'variable', 'preContract').value, 0.75);
+});
+
+check('대환은 종전 규정으로 되돌리지 않는다', () => {
+  // 종전 조건 승계 여부가 은행·상품마다 갈려 한 가지로 정할 수 없다 — 보수적으로 현행.
+  const base = {
+    price: 2_000_000_000, region: 'regulated', ownership: 'none', ltvPercent: 70,
+    income: 300_000_000, rate: 4.0, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
+  };
+  const r = calcMortgageLimit({ ...base, grandfather: 'refinance' });
+  assert.equal(r.priceCap, 400_000_000);
+  assert.equal(r.priorRulesApplied, false);
+  assert.equal(suggestStressAdd('regulated', 'variable', 'refinance').value, 3.0);
+});
+
+check('경과규정을 고르지 않으면 종전 규정이 새어 들어오지 않는다', () => {
+  // 기본 경로(grandfather 미지정·new)가 느슨해지면 전 사용자의 한도가 과대 산출된다.
+  for (const gf of [undefined, 'new']) {
+    const r = calcMortgageLimit({
+      price: 2_000_000_000, region: 'regulated', ownership: 'none', ltvPercent: 70,
+      income: 300_000_000, rate: 4.0, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
+      grandfather: gf,
+    });
+    assert.equal(r.priceCap, 400_000_000, String(gf));
+    assert.equal(r.priorRulesApplied, false, String(gf));
+  }
+  assert.equal(suggestStressAdd('regulated', 'variable', 'new').value, 3.0);
+});
+
+check('종전 규정 값이 rates.js에 근거와 함께 있다', () => {
+  const pr = RATES.loan.grandfather.priorRules;
+  assert.equal(pr.priceCapSingle, 600_000_000);
+  assert.equal(pr.stressRate, 1.5);
+  assert.equal(pr.confidence, 'verified');
+  assert.ok(/2025\.10\.15|10\.15/.test(pr.source), '근거에 대책 시행일이 없습니다.');
+  assert.equal(pr.ltvReverted, false, 'LTV는 갈래가 많아 자동 복원 대상이 아닙니다.');
 });
 
 // ─────────────────────────────────────────────────────────────────────

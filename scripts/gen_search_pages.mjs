@@ -676,7 +676,7 @@ ${main(lang, t)}
 <script src="../../assets/score.js?v=20260722"></script>
 <script src="../../assets/region.js?v=20260629"></script>
 <script src="../../assets/kmap.js?v=20260722"></script>
-<script src="../../assets/app.js?v=a6d9173f4d"></script>
+<script src="../../assets/app.js?v=61e054e88c"></script>
 <script>
 var T = ${JSON.stringify(t)};
 var HUB_DISPLAY = ${hubDisplayJson};

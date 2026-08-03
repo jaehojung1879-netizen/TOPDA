@@ -275,7 +275,7 @@ ${g.ref.map(cardHtml).join('\n')}
 
 ${footer(c)}
 
-<script src="../assets/app.js?v=a6d9173f4d"></script>
+<script src="../assets/app.js?v=61e054e88c"></script>
 </body>
 </html>
 `;
@@ -454,7 +454,7 @@ ${m.tools.map(toolHtml).join('\n')}
 
 ${footer(c)}
 
-<script src="../assets/app.js?v=a6d9173f4d"></script>
+<script src="../assets/app.js?v=61e054e88c"></script>
 <script>
 (function () {
   Promise.all([
