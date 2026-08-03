@@ -192802,7 +192802,10 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 159
-      }
+      },
+      "households": 49,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2004
     },
     "경기 구리시|포스필아파트(101동)": {
       "addr": "경기 구리시 인창동 605-36",
@@ -193923,22 +193926,6 @@
       "hh_src": "recap.hhldCnt",
       "built_year": 1994
     },
-    "서울 강서구|청솔샤르망1001동": {
-      "addr": "서울 강서구 내발산동 676-23",
-      "lat": 37.552905,
-      "lng": 126.838734,
-      "subway": {
-        "station": "우장산역 5호선",
-        "distance_m": 501
-      },
-      "elementary": {
-        "name": "서울내발산초등학교",
-        "distance_m": 159
-      },
-      "households": 49,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
-    },
     "경기 성남시 수정구|낙원스카이뷰": {
       "addr": "경기 성남시 수정구 수진동 2934",
       "lat": 37.440319,
@@ -194494,7 +194481,46 @@
       "households": 805,
       "hh_src": "recap.hhldCnt",
       "built_year": 1996
+    },
+    "서울 강서구|청솔샤르망1001동": {
+      "addr": "서울 강서구 내발산동 676-23",
+      "lat": 37.552905,
+      "lng": 126.838734,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 501
+      },
+      "elementary": {
+        "name": "서울내발산초등학교",
+        "distance_m": 159
+      }
+    },
+    "서울 은평구|한성산장": {
+      "addr": "서울 은평구 구산동 169-1",
+      "lat": 37.609117,
+      "lng": 126.906698,
+      "subway": {
+        "station": "구산역 6호선",
+        "distance_m": 962
+      },
+      "elementary": {
+        "name": "서울구현초등학교",
+        "distance_m": 125
+      }
+    },
+    "서울 서초구|서초파크빌": {
+      "addr": "서울 서초구 양재동 312-3",
+      "lat": 37.471673,
+      "lng": 127.040704,
+      "subway": {
+        "station": "양재시민의숲역 신분당선",
+        "distance_m": 261
+      },
+      "elementary": {
+        "name": "서울매헌초등학교",
+        "distance_m": 121
+      }
     }
   },
-  "as_of": "2026-08-02"
+  "as_of": "2026-08-03"
 }
