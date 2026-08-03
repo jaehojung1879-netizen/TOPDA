@@ -1,7 +1,7 @@
 {
   "_meta": {
     "counts": {
-      "complexes": 6731,
+      "complexes": 7093,
       "regions": 79
     },
     "hubs": [
@@ -87,7 +87,7 @@
     ],
     "note": "한글 지역·단지명 → URL 슬러그 매핑. 한 번 발급한 슬러그는 바꾸지 않는다. 복합 키는 '지역|법정동|단지명'.",
     "romanization": "국어의 로마자 표기법(음절 단위, 자음동화 미적용)",
-    "updated": "2026-08-02"
+    "updated": "2026-08-03"
   },
   "complexes": {
     "경기 고양시 덕양구|고양동|고양동우방유쉘아파트": {
@@ -162,6 +162,14 @@
       "slug": "pureunmaeul7danji",
       "umd": "고양동"
     },
+    "경기 고양시 덕양구|고양동|현대1": {
+      "history": [],
+      "name": "현대1",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "hyeondae1",
+      "umd": "고양동"
+    },
     "경기 고양시 덕양구|관산동|더퍼스트프라임": {
       "history": [],
       "name": "더퍼스트프라임",
@@ -176,6 +184,14 @@
       "region_slug": "gyeonggi-goyang-deokyang",
       "since": "2026-07-26",
       "slug": "saeseoul",
+      "umd": "관산동"
+    },
+    "경기 고양시 덕양구|관산동|신성": {
+      "history": [],
+      "name": "신성",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "sinseong",
       "umd": "관산동"
     },
     "경기 고양시 덕양구|관산동|주공그린빌": {
@@ -330,6 +346,22 @@
       "slug": "sinwondang-taeyeong2",
       "umd": "성사동"
     },
+    "경기 고양시 덕양구|성사동|신원당(태영6)": {
+      "history": [],
+      "name": "신원당(태영6)",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "sinwondang-taeyeong6",
+      "umd": "성사동"
+    },
+    "경기 고양시 덕양구|성사동|신원당(태영9)": {
+      "history": [],
+      "name": "신원당(태영9)",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "sinwondang-taeyeong9",
+      "umd": "성사동"
+    },
     "경기 고양시 덕양구|성사동|원당대림e-편한세상": {
       "history": [],
       "name": "원당대림e-편한세상",
@@ -376,6 +408,14 @@
       "region_slug": "gyeonggi-goyang-deokyang",
       "since": "2026-07-30",
       "slug": "sinwonmaeul1danjiunampeoseuteubil",
+      "umd": "신원동"
+    },
+    "경기 고양시 덕양구|신원동|신원마을5단지우림필유아파트": {
+      "history": [],
+      "name": "신원마을5단지우림필유아파트",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "sinwonmaeul5danjiurimpilyuapateu",
       "umd": "신원동"
     },
     "경기 고양시 덕양구|신원동|신원마을고양삼송아이파크": {
@@ -434,6 +474,14 @@
       "slug": "byeoksan",
       "umd": "주교동"
     },
+    "경기 고양시 덕양구|주교동|우인아크리움빌": {
+      "history": [],
+      "name": "우인아크리움빌",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "uinakeuriumbil",
+      "umd": "주교동"
+    },
     "경기 고양시 덕양구|토당동|내안애양우": {
       "history": [],
       "name": "내안애양우",
@@ -456,6 +504,14 @@
       "region_slug": "gyeonggi-goyang-deokyang",
       "since": "2026-07-30",
       "slug": "neunggokhyeondaehomtaun1",
+      "umd": "토당동"
+    },
+    "경기 고양시 덕양구|토당동|능곡현대홈타운2": {
+      "history": [],
+      "name": "능곡현대홈타운2",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "neunggokhyeondaehomtaun2",
       "umd": "토당동"
     },
     "경기 고양시 덕양구|토당동|대곡역두산위브1단지": {
@@ -554,6 +610,14 @@
       "slug": "muwonmaeul-sinan-8",
       "umd": "행신동"
     },
+    "경기 고양시 덕양구|행신동|무원마을(쌍용)5": {
+      "history": [],
+      "name": "무원마을(쌍용)5",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "muwonmaeul-ssangyong-5",
+      "umd": "행신동"
+    },
     "경기 고양시 덕양구|행신동|무원마을1단지": {
       "history": [],
       "name": "무원마을1단지",
@@ -608,6 +672,14 @@
       "region_slug": "gyeonggi-goyang-deokyang",
       "since": "2026-08-02",
       "slug": "somanmaeul-dongseong",
+      "umd": "행신동"
+    },
+    "경기 고양시 덕양구|행신동|소만마을(삼신)": {
+      "history": [],
+      "name": "소만마을(삼신)",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "somanmaeul-samsin",
       "umd": "행신동"
     },
     "경기 고양시 덕양구|행신동|소만마을(성원)6": {
@@ -680,6 +752,14 @@
       "region_slug": "gyeonggi-goyang-deokyang",
       "since": "2026-08-02",
       "slug": "haetbitmaeul",
+      "umd": "행신동"
+    },
+    "경기 고양시 덕양구|행신동|햇빛마을19": {
+      "history": [],
+      "name": "햇빛마을19",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "haetbitmaeul19",
       "umd": "행신동"
     },
     "경기 고양시 덕양구|행신동|햇빛마을21단지": {
@@ -882,6 +962,14 @@
       "slug": "byeolbitmaeul9danji-907dongeseo912dong",
       "umd": "화정동"
     },
+    "경기 고양시 덕양구|화정동|별빛마을9단지(913동에서918동)": {
+      "history": [],
+      "name": "별빛마을9단지(913동에서918동)",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "byeolbitmaeul9danji-913dongeseo918dong",
+      "umd": "화정동"
+    },
     "경기 고양시 덕양구|화정동|별빛마을9단지(기산)": {
       "history": [],
       "name": "별빛마을9단지(기산)",
@@ -938,6 +1026,14 @@
       "slug": "okbitmaeul14danji",
       "umd": "화정동"
     },
+    "경기 고양시 덕양구|화정동|은빛마을(LG)5": {
+      "history": [],
+      "name": "은빛마을(LG)5",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-03",
+      "slug": "eunbitmaeul-lg-5",
+      "umd": "화정동"
+    },
     "경기 고양시 덕양구|화정동|은빛마을6단지": {
       "history": [],
       "name": "은빛마을6단지",
@@ -970,6 +1066,14 @@
       "slug": "gangchonmaeul-raipeu",
       "umd": "마두동"
     },
+    "경기 고양시 일산동구|마두동|강촌마을(우방)": {
+      "history": [],
+      "name": "강촌마을(우방)",
+      "region_slug": "gyeonggi-goyang-ilsandong",
+      "since": "2026-08-03",
+      "slug": "gangchonmaeul-ubang",
+      "umd": "마두동"
+    },
     "경기 고양시 일산동구|마두동|강촌마을(한신)": {
       "history": [],
       "name": "강촌마을(한신)",
@@ -992,6 +1096,14 @@
       "region_slug": "gyeonggi-goyang-ilsandong",
       "since": "2026-07-30",
       "slug": "baekmamaeul-geumho",
+      "umd": "마두동"
+    },
+    "경기 고양시 일산동구|마두동|백마마을(삼환)": {
+      "history": [],
+      "name": "백마마을(삼환)",
+      "region_slug": "gyeonggi-goyang-ilsandong",
+      "since": "2026-08-03",
+      "slug": "baekmamaeul-samhwan",
       "umd": "마두동"
     },
     "경기 고양시 일산동구|마두동|백마마을(쌍용)": {
@@ -1034,6 +1146,14 @@
       "slug": "baeksongmaeul-dusan",
       "umd": "백석동"
     },
+    "경기 고양시 일산동구|백석동|백송마을(삼부)": {
+      "history": [],
+      "name": "백송마을(삼부)",
+      "region_slug": "gyeonggi-goyang-ilsandong",
+      "since": "2026-08-03",
+      "slug": "baeksongmaeul-sambu",
+      "umd": "백석동"
+    },
     "경기 고양시 일산동구|백석동|백송마을(임광)": {
       "history": [],
       "name": "백송마을(임광)",
@@ -1066,6 +1186,22 @@
       "slug": "huindolmaeul-gukje",
       "umd": "백석동"
     },
+    "경기 고양시 일산동구|백석동|흰돌마을(금호)": {
+      "history": [],
+      "name": "흰돌마을(금호)",
+      "region_slug": "gyeonggi-goyang-ilsandong",
+      "since": "2026-08-03",
+      "slug": "huindolmaeul-geumho",
+      "umd": "백석동"
+    },
+    "경기 고양시 일산동구|백석동|흰돌마을(서안)": {
+      "history": [],
+      "name": "흰돌마을(서안)",
+      "region_slug": "gyeonggi-goyang-ilsandong",
+      "since": "2026-08-03",
+      "slug": "huindolmaeul-seoan",
+      "umd": "백석동"
+    },
     "경기 고양시 일산동구|백석동|흰돌마을(청구)": {
       "history": [],
       "name": "흰돌마을(청구)",
@@ -1081,6 +1217,14 @@
       "since": "2026-07-30",
       "slug": "huindolmaeul-hanjin",
       "umd": "백석동"
+    },
+    "경기 고양시 일산동구|사리현동|사리현동문디이스트2단지": {
+      "history": [],
+      "name": "사리현동문디이스트2단지",
+      "region_slug": "gyeonggi-goyang-ilsandong",
+      "since": "2026-08-03",
+      "slug": "sarihyeondongmundiiseuteu2danji",
+      "umd": "사리현동"
     },
     "경기 고양시 일산동구|사리현동|현대그린": {
       "history": [],
@@ -1144,6 +1288,30 @@
       "region_slug": "gyeonggi-goyang-ilsandong",
       "since": "2026-07-26",
       "slug": "kintekseuwonsiti1beulreok",
+      "umd": "장항동"
+    },
+    "경기 고양시 일산동구|장항동|호수마을(대우)": {
+      "history": [],
+      "name": "호수마을(대우)",
+      "region_slug": "gyeonggi-goyang-ilsandong",
+      "since": "2026-08-03",
+      "slug": "hosumaeul-daeu",
+      "umd": "장항동"
+    },
+    "경기 고양시 일산동구|장항동|호수마을(삼환)": {
+      "history": [],
+      "name": "호수마을(삼환)",
+      "region_slug": "gyeonggi-goyang-ilsandong",
+      "since": "2026-08-03",
+      "slug": "hosumaeul-samhwan",
+      "umd": "장항동"
+    },
+    "경기 고양시 일산동구|장항동|호수마을(유원)": {
+      "history": [],
+      "name": "호수마을(유원)",
+      "region_slug": "gyeonggi-goyang-ilsandong",
+      "since": "2026-08-03",
+      "slug": "hosumaeul-yuwon",
       "umd": "장항동"
     },
     "경기 고양시 일산동구|장항동|호수마을(청구)": {
@@ -1322,6 +1490,14 @@
       "slug": "supsokmaeul9danji-seongwon",
       "umd": "풍동"
     },
+    "경기 고양시 일산동구|풍동|일산풍동에이스": {
+      "history": [],
+      "name": "일산풍동에이스",
+      "region_slug": "gyeonggi-goyang-ilsandong",
+      "since": "2026-08-03",
+      "slug": "ilsanpungdongeiseu",
+      "umd": "풍동"
+    },
     "경기 고양시 일산서구|가좌동|가좌마을1단지양우": {
       "history": [],
       "name": "가좌마을1단지양우",
@@ -1336,6 +1512,22 @@
       "region_slug": "gyeonggi-goyang-ilsanseo",
       "since": "2026-07-30",
       "slug": "gajwamaeul2danjidaeu",
+      "umd": "가좌동"
+    },
+    "경기 고양시 일산서구|가좌동|가좌마을3단지청원벽산블루밍": {
+      "history": [],
+      "name": "가좌마을3단지청원벽산블루밍",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "gajwamaeul3danjicheongwonbyeoksanbeulruming",
+      "umd": "가좌동"
+    },
+    "경기 고양시 일산서구|가좌동|가좌마을6단지벽산": {
+      "history": [],
+      "name": "가좌마을6단지벽산",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "gajwamaeul6danjibyeoksan",
       "umd": "가좌동"
     },
     "경기 고양시 일산서구|가좌동|가좌마을7단지꿈에그린": {
@@ -1360,6 +1552,14 @@
       "region_slug": "gyeonggi-goyang-ilsanseo",
       "since": "2026-07-30",
       "slug": "seongjeomaeul-pungrim",
+      "umd": "대화동"
+    },
+    "경기 고양시 일산서구|대화동|세경": {
+      "history": [],
+      "name": "세경",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "segyeong",
       "umd": "대화동"
     },
     "경기 고양시 일산서구|대화동|장성마을(건영3)": {
@@ -1440,6 +1640,14 @@
       "region_slug": "gyeonggi-goyang-ilsanseo",
       "since": "2026-07-30",
       "slug": "junganghaicheubil",
+      "umd": "덕이동"
+    },
+    "경기 고양시 일산서구|덕이동|철산": {
+      "history": [],
+      "name": "철산",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "cheolsan",
       "umd": "덕이동"
     },
     "경기 고양시 일산서구|덕이동|태영": {
@@ -1538,6 +1746,14 @@
       "slug": "eiseu11cha",
       "umd": "일산동"
     },
+    "경기 고양시 일산서구|일산동|월드메르디앙일산주상복합": {
+      "history": [],
+      "name": "월드메르디앙일산주상복합",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "woldeumereudiangilsanjusangbokhap",
+      "umd": "일산동"
+    },
     "경기 고양시 일산서구|일산동|유진스웰2단지": {
       "history": [],
       "name": "유진스웰2단지",
@@ -1618,6 +1834,22 @@
       "slug": "ilsin-samikapateu",
       "umd": "일산동"
     },
+    "경기 고양시 일산서구|일산동|일신건영2차": {
+      "history": [],
+      "name": "일신건영2차",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "ilsingeonyeong2cha",
+      "umd": "일산동"
+    },
+    "경기 고양시 일산서구|일산동|일신휴먼빌(1655)": {
+      "history": [],
+      "name": "일신휴먼빌(1655)",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "ilsinhyumeonbil-1655",
+      "umd": "일산동"
+    },
     "경기 고양시 일산서구|일산동|주은1": {
       "history": [],
       "name": "주은1",
@@ -1650,6 +1882,14 @@
       "slug": "hugokmaeul-geonyeong15",
       "umd": "일산동"
     },
+    "경기 고양시 일산서구|일산동|후곡마을(건영6)": {
+      "history": [],
+      "name": "후곡마을(건영6)",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "hugokmaeul-geonyeong6",
+      "umd": "일산동"
+    },
     "경기 고양시 일산서구|일산동|후곡마을(금호)": {
       "history": [],
       "name": "후곡마을(금호)",
@@ -1680,6 +1920,14 @@
       "region_slug": "gyeonggi-goyang-ilsanseo",
       "since": "2026-07-30",
       "slug": "hugokmaeul-dongseong",
+      "umd": "일산동"
+    },
+    "경기 고양시 일산서구|일산동|후곡마을(동신)": {
+      "history": [],
+      "name": "후곡마을(동신)",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "hugokmaeul-dongsin",
       "umd": "일산동"
     },
     "경기 고양시 일산서구|일산동|후곡마을(동아10)": {
@@ -1752,6 +2000,14 @@
       "region_slug": "gyeonggi-goyang-ilsanseo",
       "since": "2026-08-02",
       "slug": "hugokmaeul-taeyeong13",
+      "umd": "일산동"
+    },
+    "경기 고양시 일산서구|일산동|후곡마을(한양)": {
+      "history": [],
+      "name": "후곡마을(한양)",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "hugokmaeul-hanyang",
       "umd": "일산동"
     },
     "경기 고양시 일산서구|일산동|후곡마을(현대18)": {
@@ -1978,6 +2234,14 @@
       "slug": "tanhyeonmaeul-gyeongnam",
       "umd": "탄현동"
     },
+    "경기 고양시 일산서구|탄현동|탄현마을(동문)": {
+      "history": [],
+      "name": "탄현마을(동문)",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "tanhyeonmaeul-dongmun",
+      "umd": "탄현동"
+    },
     "경기 고양시 일산서구|탄현동|탄현마을(동성)": {
       "history": [],
       "name": "탄현마을(동성)",
@@ -2056,6 +2320,14 @@
       "region_slug": "gyeonggi-goyang-ilsanseo",
       "since": "2026-07-30",
       "slug": "tanhyeonmaeulpungrim",
+      "umd": "탄현동"
+    },
+    "경기 고양시 일산서구|탄현동|탄현마을효성": {
+      "history": [],
+      "name": "탄현마을효성",
+      "region_slug": "gyeonggi-goyang-ilsanseo",
+      "since": "2026-08-03",
+      "slug": "tanhyeonmaeulhyoseong",
       "umd": "탄현동"
     },
     "경기 과천시|갈현동|과천르센토데시앙": {
@@ -2362,6 +2634,14 @@
       "slug": "ssangmahansin",
       "umd": "철산동"
     },
+    "경기 광명시|철산동|우성": {
+      "history": [],
+      "name": "우성",
+      "region_slug": "gyeonggi-gwangmyeong",
+      "since": "2026-08-03",
+      "slug": "useong",
+      "umd": "철산동"
+    },
     "경기 광명시|철산동|철산리버빌주공": {
       "history": [],
       "name": "철산리버빌주공",
@@ -2504,6 +2784,14 @@
       "region_slug": "gyeonggi-gwangju",
       "since": "2026-07-26",
       "slug": "gyeonggigwangjuyeokgeumhorichensia",
+      "umd": "경안동"
+    },
+    "경기 광주시|경안동|두진": {
+      "history": [],
+      "name": "두진",
+      "region_slug": "gyeonggi-gwangju",
+      "since": "2026-08-03",
+      "slug": "dujin",
       "umd": "경안동"
     },
     "경기 광주시|경안동|푸르지오": {
@@ -2970,6 +3258,14 @@
       "slug": "gwangjuyeokubangaiyuswel1danji",
       "umd": "양벌동"
     },
+    "경기 광주시|양벌동|대주(2차)": {
+      "history": [],
+      "name": "대주(2차)",
+      "region_slug": "gyeonggi-gwangju",
+      "since": "2026-08-03",
+      "slug": "daeju-2cha",
+      "umd": "양벌동"
+    },
     "경기 광주시|양벌동|대주파크빌1차A블럭": {
       "history": [],
       "name": "대주파크빌1차A블럭",
@@ -3234,6 +3530,22 @@
       "slug": "seongwon3",
       "umd": "태전동"
     },
+    "경기 광주시|태전동|성원5": {
+      "history": [],
+      "name": "성원5",
+      "region_slug": "gyeonggi-gwangju",
+      "since": "2026-08-03",
+      "slug": "seongwon5",
+      "umd": "태전동"
+    },
+    "경기 광주시|태전동|쌍용스윗닷홈2": {
+      "history": [],
+      "name": "쌍용스윗닷홈2",
+      "region_slug": "gyeonggi-gwangju",
+      "since": "2026-08-03",
+      "slug": "ssangyongseuwitdathom2",
+      "umd": "태전동"
+    },
     "경기 광주시|태전동|쌍용스윗닷홈3": {
       "history": [],
       "name": "쌍용스윗닷홈3",
@@ -3248,6 +3560,14 @@
       "region_slug": "gyeonggi-gwangju",
       "since": "2026-07-30",
       "slug": "ipyeonhansesangtaejeon2cha-101-106dong",
+      "umd": "태전동"
+    },
+    "경기 광주시|태전동|이편한세상태전2차(201~205동)": {
+      "history": [],
+      "name": "이편한세상태전2차(201~205동)",
+      "region_slug": "gyeonggi-gwangju",
+      "since": "2026-08-03",
+      "slug": "ipyeonhansesangtaejeon2cha-201-205dong",
       "umd": "태전동"
     },
     "경기 광주시|태전동|이편한세상태전2차(301~306동)": {
@@ -3298,6 +3618,14 @@
       "slug": "hilseuteiteutaejeon-c5-1507-1514dong",
       "umd": "태전동"
     },
+    "경기 광주시|태전동|힐스테이트태전(C6,1515~1520동)": {
+      "history": [],
+      "name": "힐스테이트태전(C6,1515~1520동)",
+      "region_slug": "gyeonggi-gwangju",
+      "since": "2026-08-03",
+      "slug": "hilseuteiteutaejeon-c6-1515-1520dong",
+      "umd": "태전동"
+    },
     "경기 광주시|태전동|힐스테이트태전2차에듀포레C10BL": {
       "history": [],
       "name": "힐스테이트태전2차에듀포레C10BL",
@@ -3320,6 +3648,14 @@
       "region_slug": "gyeonggi-gwangju",
       "since": "2026-07-31",
       "slug": "hilseuteiteutaejeon6-1609-1614dong",
+      "umd": "태전동"
+    },
+    "경기 광주시|태전동|힐스테이트태전6(1615동~1620동)": {
+      "history": [],
+      "name": "힐스테이트태전6(1615동~1620동)",
+      "region_slug": "gyeonggi-gwangju",
+      "since": "2026-08-03",
+      "slug": "hilseuteiteutaejeon6-1615dong-1620dong",
       "umd": "태전동"
     },
     "경기 광주시|태전동|힐스테이트태전6지구(1601동~1608동)": {
@@ -3386,6 +3722,22 @@
       "slug": "gyomundonggeumhoeoulrim",
       "umd": "교문동"
     },
+    "경기 구리시|교문동|구리(한양)": {
+      "history": [],
+      "name": "구리(한양)",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "guri-hanyang",
+      "umd": "교문동"
+    },
+    "경기 구리시|교문동|덕현": {
+      "history": [],
+      "name": "덕현",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "deokhyeon",
+      "umd": "교문동"
+    },
     "경기 구리시|교문동|동방": {
       "history": [],
       "name": "동방",
@@ -3400,6 +3752,14 @@
       "region_slug": "gyeonggi-guri",
       "since": "2026-07-26",
       "slug": "achasaneoulrimapateu",
+      "umd": "교문동"
+    },
+    "경기 구리시|교문동|일성": {
+      "history": [],
+      "name": "일성",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "ilseong",
       "umd": "교문동"
     },
     "경기 구리시|교문동|장자마을금호1-1": {
@@ -3426,6 +3786,22 @@
       "slug": "jangjamaeuldongyang",
       "umd": "교문동"
     },
+    "경기 구리시|교문동|하나(유원)아파트": {
+      "history": [],
+      "name": "하나(유원)아파트",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "hana-yuwon-apateu",
+      "umd": "교문동"
+    },
+    "경기 구리시|교문동|하나(한성)아파트": {
+      "history": [],
+      "name": "하나(한성)아파트",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "hana-hanseong-apateu",
+      "umd": "교문동"
+    },
     "경기 구리시|교문동|한가람아파트": {
       "history": [],
       "name": "한가람아파트",
@@ -3440,6 +3816,14 @@
       "region_slug": "gyeonggi-guri",
       "since": "2026-07-26",
       "slug": "epyeonhansesangsutaeksenteureolpakeu",
+      "umd": "수택동"
+    },
+    "경기 구리시|수택동|구리역한양수자인리버시티": {
+      "history": [],
+      "name": "구리역한양수자인리버시티",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "guriyeokhanyangsujainribeositi",
       "umd": "수택동"
     },
     "경기 구리시|수택동|구리태영데시앙": {
@@ -3480,6 +3864,14 @@
       "region_slug": "gyeonggi-guri",
       "since": "2026-07-26",
       "slug": "sutaekdonggeumhoeoulrim",
+      "umd": "수택동"
+    },
+    "경기 구리시|수택동|쌍용": {
+      "history": [],
+      "name": "쌍용",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "ssangyong",
       "umd": "수택동"
     },
     "경기 구리시|수택동|영풍마드레빌1차": {
@@ -3530,6 +3922,22 @@
       "slug": "hilseuteiteuguriyeok",
       "umd": "수택동"
     },
+    "경기 구리시|인창동|e편한세상인창어반포레": {
+      "history": [],
+      "name": "e편한세상인창어반포레",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "epyeonhansesanginchangeobanpore",
+      "umd": "인창동"
+    },
+    "경기 구리시|인창동|건영": {
+      "history": [],
+      "name": "건영",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "geonyeong",
+      "umd": "인창동"
+    },
     "경기 구리시|인창동|구리인창2차동문굿모닝힐": {
       "history": [],
       "name": "구리인창2차동문굿모닝힐",
@@ -3570,12 +3978,52 @@
       "slug": "dongmungutmoninghil",
       "umd": "인창동"
     },
+    "경기 구리시|인창동|동양주택조합": {
+      "history": [],
+      "name": "동양주택조합",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "dongyangjutaekjohap",
+      "umd": "인창동"
+    },
     "경기 구리시|인창동|동원베네스트": {
       "history": [],
       "name": "동원베네스트",
       "region_slug": "gyeonggi-guri",
       "since": "2026-07-26",
       "slug": "dongwonbeneseuteu",
+      "umd": "인창동"
+    },
+    "경기 구리시|인창동|삼보": {
+      "history": [],
+      "name": "삼보",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "sambo",
+      "umd": "인창동"
+    },
+    "경기 구리시|인창동|삼호": {
+      "history": [],
+      "name": "삼호",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "samho",
+      "umd": "인창동"
+    },
+    "경기 구리시|인창동|성원": {
+      "history": [],
+      "name": "성원",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "seongwon",
+      "umd": "인창동"
+    },
+    "경기 구리시|인창동|신일": {
+      "history": [],
+      "name": "신일",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "sinil",
       "umd": "인창동"
     },
     "경기 구리시|인창동|아름마을삼성": {
@@ -3634,6 +4082,22 @@
       "slug": "wonilgadaeragok",
       "umd": "인창동"
     },
+    "경기 구리시|인창동|원일아름": {
+      "history": [],
+      "name": "원일아름",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "wonilareum",
+      "umd": "인창동"
+    },
+    "경기 구리시|인창동|인창2차e-편한세상": {
+      "history": [],
+      "name": "인창2차e-편한세상",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "inchang2chae-pyeonhansesang",
+      "umd": "인창동"
+    },
     "경기 구리시|인창동|인창칸타빌더헤리티지": {
       "history": [],
       "name": "인창칸타빌더헤리티지",
@@ -3681,6 +4145,30 @@
       "since": "2026-07-26",
       "slug": "hyeondaehomtaun",
       "umd": "인창동"
+    },
+    "경기 구리시|토평동|삼성": {
+      "history": [],
+      "name": "삼성",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "samseong",
+      "umd": "토평동"
+    },
+    "경기 구리시|토평동|에스케이신일": {
+      "history": [],
+      "name": "에스케이신일",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "eseukeisinil",
+      "umd": "토평동"
+    },
+    "경기 구리시|토평동|우남": {
+      "history": [],
+      "name": "우남",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-03",
+      "slug": "unam",
+      "umd": "토평동"
     },
     "경기 구리시|토평동|토평마을 e편한세상": {
       "history": [],
@@ -3826,6 +4314,14 @@
       "slug": "samseongmaeulsitipeuradium-3danji",
       "umd": "당동"
     },
+    "경기 군포시|당동|쌍용(873)": {
+      "history": [],
+      "name": "쌍용(873)",
+      "region_slug": "gyeonggi-gunpo",
+      "since": "2026-08-03",
+      "slug": "ssangyong-873",
+      "umd": "당동"
+    },
     "경기 군포시|당동|용호마을e-편한세상": {
       "history": [],
       "name": "용호마을e-편한세상",
@@ -3848,6 +4344,14 @@
       "region_slug": "gyeonggi-gunpo",
       "since": "2026-07-30",
       "slug": "jugong2danji-874",
+      "umd": "당동"
+    },
+    "경기 군포시|당동|주공3(886)": {
+      "history": [],
+      "name": "주공3(886)",
+      "region_slug": "gyeonggi-gunpo",
+      "since": "2026-08-03",
+      "slug": "jugong3-886",
       "umd": "당동"
     },
     "경기 군포시|당동|주공4(885)": {
@@ -4490,12 +4994,28 @@
       "slug": "epyeonhansesanghangangsindosi2cha",
       "umd": "마산동"
     },
+    "경기 김포시|마산동|은여울마을경남아너스빌": {
+      "history": [],
+      "name": "은여울마을경남아너스빌",
+      "region_slug": "gyeonggi-gimpo",
+      "since": "2026-08-03",
+      "slug": "eunyeoulmaeulgyeongnamaneoseubil",
+      "umd": "마산동"
+    },
     "경기 김포시|마산동|한강 힐스테이트": {
       "history": [],
       "name": "한강 힐스테이트",
       "region_slug": "gyeonggi-gimpo",
       "since": "2026-07-26",
       "slug": "hangang-hilseuteiteu",
+      "umd": "마산동"
+    },
+    "경기 김포시|마산동|한강동일스위트TheParkView1단지": {
+      "history": [],
+      "name": "한강동일스위트TheParkView1단지",
+      "region_slug": "gyeonggi-gimpo",
+      "since": "2026-08-03",
+      "slug": "hangangdongilseuwiteutheparkview1danji",
       "umd": "마산동"
     },
     "경기 김포시|마산동|한강동일스위트TheParkView2단지": {
@@ -4626,6 +5146,14 @@
       "slug": "pungnyeonmaeul-seogwang",
       "umd": "북변동"
     },
+    "경기 김포시|북변동|풍년마을(신안)": {
+      "history": [],
+      "name": "풍년마을(신안)",
+      "region_slug": "gyeonggi-gimpo",
+      "since": "2026-08-03",
+      "slug": "pungnyeonmaeul-sinan",
+      "umd": "북변동"
+    },
     "경기 김포시|북변동|풍년마을(신일)": {
       "history": [],
       "name": "풍년마을(신일)",
@@ -4706,6 +5234,14 @@
       "slug": "pungnyeonmaeul-daeu",
       "umd": "사우동"
     },
+    "경기 김포시|사우동|풍년마을(동양)": {
+      "history": [],
+      "name": "풍년마을(동양)",
+      "region_slug": "gyeonggi-gimpo",
+      "since": "2026-08-03",
+      "slug": "pungnyeonmaeul-dongyang",
+      "umd": "사우동"
+    },
     "경기 김포시|사우동|풍년마을(삼보)": {
       "history": [],
       "name": "풍년마을(삼보)",
@@ -4776,6 +5312,14 @@
       "region_slug": "gyeonggi-gimpo",
       "since": "2026-07-26",
       "slug": "gochonsenteureoljai",
+      "umd": "신곡리"
+    },
+    "경기 김포시|신곡리|고촌역양우내안애": {
+      "history": [],
+      "name": "고촌역양우내안애",
+      "region_slug": "gyeonggi-gimpo",
+      "since": "2026-08-03",
+      "slug": "gochonyeokyangunaeanae",
       "umd": "신곡리"
     },
     "경기 김포시|신곡리|고촌행정타운 한양수자인": {
@@ -4938,6 +5482,14 @@
       "slug": "hangangsindosiribeoeilrinuitteul",
       "umd": "운양동"
     },
+    "경기 김포시|운양동|한강신도시반도유보라6차": {
+      "history": [],
+      "name": "한강신도시반도유보라6차",
+      "region_slug": "gyeonggi-gimpo",
+      "since": "2026-08-03",
+      "slug": "hangangsindosibandoyubora6cha",
+      "umd": "운양동"
+    },
     "경기 김포시|운양동|한강신도시푸르지오": {
       "history": [],
       "name": "한강신도시푸르지오",
@@ -5016,6 +5568,14 @@
       "region_slug": "gyeonggi-gimpo",
       "since": "2026-08-02",
       "slug": "cheongsongmaeul-hyeondae2",
+      "umd": "장기동"
+    },
+    "경기 김포시|장기동|청송마을(현대3)": {
+      "history": [],
+      "name": "청송마을(현대3)",
+      "region_slug": "gyeonggi-gimpo",
+      "since": "2026-08-03",
+      "slug": "cheongsongmaeul-hyeondae3",
       "umd": "장기동"
     },
     "경기 김포시|장기동|청송마을중흥에스-클래스": {
@@ -5328,6 +5888,14 @@
       "region_slug": "gyeonggi-namyangju",
       "since": "2026-07-26",
       "slug": "wonildaegwolteo",
+      "umd": "내각리"
+    },
+    "경기 남양주시|내각리|한신": {
+      "history": [],
+      "name": "한신",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "hansin",
       "umd": "내각리"
     },
     "경기 남양주시|녹촌리|남양주녹촌두산위브": {
@@ -5866,6 +6434,14 @@
       "slug": "maseokgeuraendeuhil",
       "umd": "마석우리"
     },
+    "경기 남양주시|마석우리|마석역신도브래뉴": {
+      "history": [],
+      "name": "마석역신도브래뉴",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "maseokyeoksindobeuraenyu",
+      "umd": "마석우리"
+    },
     "경기 남양주시|마석우리|마석힐즈파크푸르지오": {
       "history": [],
       "name": "마석힐즈파크푸르지오",
@@ -6008,6 +6584,14 @@
       "region_slug": "gyeonggi-namyangju",
       "since": "2026-07-26",
       "slug": "daewonkantabil",
+      "umd": "별내동"
+    },
+    "경기 남양주시|별내동|동익미라벨(1058)": {
+      "history": [],
+      "name": "동익미라벨(1058)",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "dongikmirabel-1058",
       "umd": "별내동"
     },
     "경기 남양주시|별내동|동익미라벨(1060)": {
@@ -6194,6 +6778,14 @@
       "slug": "daerimepyeonhansesang2danji",
       "umd": "양지리"
     },
+    "경기 남양주시|양지리|성호": {
+      "history": [],
+      "name": "성호",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "seongho",
+      "umd": "양지리"
+    },
     "경기 남양주시|양지리|양지": {
       "history": [],
       "name": "양지",
@@ -6233,6 +6825,14 @@
       "since": "2026-07-30",
       "slug": "onamssangyongseuwitdathomjiti1danji",
       "umd": "양지리"
+    },
+    "경기 남양주시|연평리|원일궁의문": {
+      "history": [],
+      "name": "원일궁의문",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "wonilgunguimun",
+      "umd": "연평리"
     },
     "경기 남양주시|오남리|금호어울림": {
       "history": [],
@@ -6280,6 +6880,14 @@
       "region_slug": "gyeonggi-namyangju",
       "since": "2026-07-31",
       "slug": "dusan2",
+      "umd": "오남리"
+    },
+    "경기 남양주시|오남리|두산위브": {
+      "history": [],
+      "name": "두산위브",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "dusanwibeu",
       "umd": "오남리"
     },
     "경기 남양주시|오남리|성도": {
@@ -6338,12 +6946,28 @@
       "slug": "yuho",
       "umd": "오남리"
     },
+    "경기 남양주시|오남리|진주(4차)": {
+      "history": [],
+      "name": "진주(4차)",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "jinju-4cha",
+      "umd": "오남리"
+    },
     "경기 남양주시|오남리|진주(6차)": {
       "history": [],
       "name": "진주(6차)",
       "region_slug": "gyeonggi-namyangju",
       "since": "2026-07-30",
       "slug": "jinju-6cha",
+      "umd": "오남리"
+    },
+    "경기 남양주시|오남리|진주(8차)": {
+      "history": [],
+      "name": "진주(8차)",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "jinju-8cha",
       "umd": "오남리"
     },
     "경기 남양주시|오남리|파라다이스빌": {
@@ -6442,6 +7066,14 @@
       "slug": "hansingeurin4cha",
       "umd": "용정리"
     },
+    "경기 남양주시|용정리|한신조합": {
+      "history": [],
+      "name": "한신조합",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "hansinjohap",
+      "umd": "용정리"
+    },
     "경기 남양주시|용정리|현대": {
       "history": [],
       "name": "현대",
@@ -6474,6 +7106,14 @@
       "slug": "geumgangpenteorium",
       "umd": "장현리"
     },
+    "경기 남양주시|장현리|길훈": {
+      "history": [],
+      "name": "길훈",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "gilhun",
+      "umd": "장현리"
+    },
     "경기 남양주시|장현리|남양주진접롯데캐슬": {
       "history": [],
       "name": "남양주진접롯데캐슬",
@@ -6488,6 +7128,22 @@
       "region_slug": "gyeonggi-namyangju",
       "since": "2026-07-31",
       "slug": "daemyeong-2",
+      "umd": "장현리"
+    },
+    "경기 남양주시|장현리|신동아": {
+      "history": [],
+      "name": "신동아",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "sindonga",
+      "umd": "장현리"
+    },
+    "경기 남양주시|장현리|신우": {
+      "history": [],
+      "name": "신우",
+      "region_slug": "gyeonggi-namyangju",
+      "since": "2026-08-03",
+      "slug": "sinu",
       "umd": "장현리"
     },
     "경기 남양주시|장현리|원일에이플러스": {
@@ -7034,6 +7690,14 @@
       "slug": "deokrimhyeondae",
       "umd": "괴안동"
     },
+    "경기 부천시 소사구|괴안동|복지": {
+      "history": [],
+      "name": "복지",
+      "region_slug": "gyeonggi-bucheon-sosa",
+      "since": "2026-08-03",
+      "slug": "bokji",
+      "umd": "괴안동"
+    },
     "경기 부천시 소사구|괴안동|삼익세라믹": {
       "history": [],
       "name": "삼익세라믹",
@@ -7290,6 +7954,14 @@
       "slug": "useong",
       "umd": "송내동"
     },
+    "경기 부천시 소사구|송내동|청실": {
+      "history": [],
+      "name": "청실",
+      "region_slug": "gyeonggi-bucheon-sosa",
+      "since": "2026-08-03",
+      "slug": "cheongsil",
+      "umd": "송내동"
+    },
     "경기 부천시 소사구|송내동|푸르지오": {
       "history": [],
       "name": "푸르지오",
@@ -7522,6 +8194,14 @@
       "slug": "baeksongmaeul-sangroklg",
       "umd": "상동"
     },
+    "경기 부천시 원미구|상동|백송마을(엘지에스케이)": {
+      "history": [],
+      "name": "백송마을(엘지에스케이)",
+      "region_slug": "gyeonggi-bucheon-wonmi",
+      "since": "2026-08-03",
+      "slug": "baeksongmaeul-eljieseukei",
+      "umd": "상동"
+    },
     "경기 부천시 원미구|상동|백송마을(풍림아이원)": {
       "history": [],
       "name": "백송마을(풍림아이원)",
@@ -7578,6 +8258,14 @@
       "slug": "jindalraemaeul-daerim",
       "umd": "상동"
     },
+    "경기 부천시 원미구|상동|진달래마을(대우)": {
+      "history": [],
+      "name": "진달래마을(대우)",
+      "region_slug": "gyeonggi-bucheon-wonmi",
+      "since": "2026-08-03",
+      "slug": "jindalraemaeul-daeu",
+      "umd": "상동"
+    },
     "경기 부천시 원미구|상동|진달래마을(신동아)": {
       "history": [],
       "name": "진달래마을(신동아)",
@@ -7624,6 +8312,14 @@
       "region_slug": "gyeonggi-bucheon-wonmi",
       "since": "2026-07-26",
       "slug": "pureunmaeul-hanra",
+      "umd": "상동"
+    },
+    "경기 부천시 원미구|상동|하얀마을아이파크": {
+      "history": [],
+      "name": "하얀마을아이파크",
+      "region_slug": "gyeonggi-bucheon-wonmi",
+      "since": "2026-08-03",
+      "slug": "hayanmaeulaipakeu",
       "umd": "상동"
     },
     "경기 부천시 원미구|상동|한아름마을(동원)": {
@@ -7818,6 +8514,14 @@
       "slug": "bucheonwonmidongmundiiseuteu",
       "umd": "원미동"
     },
+    "경기 부천시 원미구|원미동|원미동풍림": {
+      "history": [],
+      "name": "원미동풍림",
+      "region_slug": "gyeonggi-bucheon-wonmi",
+      "since": "2026-08-03",
+      "slug": "wonmidongpungrim",
+      "umd": "원미동"
+    },
     "경기 부천시 원미구|원미동|이안더부천": {
       "history": [],
       "name": "이안더부천",
@@ -7864,6 +8568,14 @@
       "region_slug": "gyeonggi-bucheon-wonmi",
       "since": "2026-07-26",
       "slug": "geurintaun-hansin",
+      "umd": "중동"
+    },
+    "경기 부천시 원미구|중동|그린타운(한양)": {
+      "history": [],
+      "name": "그린타운(한양)",
+      "region_slug": "gyeonggi-bucheon-wonmi",
+      "since": "2026-08-03",
+      "slug": "geurintaun-hanyang",
       "umd": "중동"
     },
     "경기 부천시 원미구|중동|꿈마을(건영)": {
@@ -7962,6 +8674,14 @@
       "slug": "mujigaemaeul-dongsin",
       "umd": "중동"
     },
+    "경기 부천시 원미구|중동|미리내마을(금호)": {
+      "history": [],
+      "name": "미리내마을(금호)",
+      "region_slug": "gyeonggi-bucheon-wonmi",
+      "since": "2026-08-03",
+      "slug": "mirinaemaeul-geumho",
+      "umd": "중동"
+    },
     "경기 부천시 원미구|중동|미리내마을(롯데1)": {
       "history": [],
       "name": "미리내마을(롯데1)",
@@ -8058,12 +8778,28 @@
       "slug": "yeonhwamaeul-ssangyong",
       "umd": "중동"
     },
+    "경기 부천시 원미구|중동|은하마을(대우)": {
+      "history": [],
+      "name": "은하마을(대우)",
+      "region_slug": "gyeonggi-bucheon-wonmi",
+      "since": "2026-08-03",
+      "slug": "eunhamaeul-daeu",
+      "umd": "중동"
+    },
     "경기 부천시 원미구|중동|은하마을(동부)": {
       "history": [],
       "name": "은하마을(동부)",
       "region_slug": "gyeonggi-bucheon-wonmi",
       "since": "2026-07-26",
       "slug": "eunhamaeul-dongbu",
+      "umd": "중동"
+    },
+    "경기 부천시 원미구|중동|은하마을(쌍용)": {
+      "history": [],
+      "name": "은하마을(쌍용)",
+      "region_slug": "gyeonggi-bucheon-wonmi",
+      "since": "2026-08-03",
+      "slug": "eunhamaeul-ssangyong",
       "umd": "중동"
     },
     "경기 부천시 원미구|중동|은하마을(주공2)": {
@@ -8194,6 +8930,14 @@
       "slug": "kkachimaeul-4danji-rotde",
       "umd": "구미동"
     },
+    "경기 성남시 분당구|구미동|무지개(10단지)(건영)": {
+      "history": [],
+      "name": "무지개(10단지)(건영)",
+      "region_slug": "gyeonggi-seongnam-bundang",
+      "since": "2026-08-03",
+      "slug": "mujigae-10danji-geonyeong",
+      "umd": "구미동"
+    },
     "경기 성남시 분당구|구미동|무지개(1단지)(대림)": {
       "history": [],
       "name": "무지개(1단지)(대림)",
@@ -8232,6 +8976,22 @@
       "region_slug": "gyeonggi-seongnam-bundang",
       "since": "2026-08-01",
       "slug": "mujigae-5danji-cheonggu",
+      "umd": "구미동"
+    },
+    "경기 성남시 분당구|구미동|무지개(6단지)(건영)": {
+      "history": [],
+      "name": "무지개(6단지)(건영)",
+      "region_slug": "gyeonggi-seongnam-bundang",
+      "since": "2026-08-03",
+      "slug": "mujigae-6danji-geonyeong",
+      "umd": "구미동"
+    },
+    "경기 성남시 분당구|구미동|무지개(7단지)(라이프)": {
+      "history": [],
+      "name": "무지개(7단지)(라이프)",
+      "region_slug": "gyeonggi-seongnam-bundang",
+      "since": "2026-08-03",
+      "slug": "mujigae-7danji-raipeu",
       "umd": "구미동"
     },
     "경기 성남시 분당구|구미동|하얀마을(5단지)(주공)": {
@@ -8778,12 +9538,36 @@
       "slug": "tapmaeul-seongyeong-1",
       "umd": "야탑동"
     },
+    "경기 성남시 분당구|야탑동|탑마을(주공)": {
+      "history": [],
+      "name": "탑마을(주공)",
+      "region_slug": "gyeonggi-seongnam-bundang",
+      "since": "2026-08-03",
+      "slug": "tapmaeul-jugong",
+      "umd": "야탑동"
+    },
+    "경기 성남시 분당구|운중동|산운마을10단지(대광로제비앙)": {
+      "history": [],
+      "name": "산운마을10단지(대광로제비앙)",
+      "region_slug": "gyeonggi-seongnam-bundang",
+      "since": "2026-08-03",
+      "slug": "sanunmaeul10danji-daegwangrojebiang",
+      "umd": "운중동"
+    },
     "경기 성남시 분당구|운중동|산운마을11단지(판교포레라움)": {
       "history": [],
       "name": "산운마을11단지(판교포레라움)",
       "region_slug": "gyeonggi-seongnam-bundang",
       "since": "2026-07-26",
       "slug": "sanunmaeul11danji-pangyoporeraum",
+      "umd": "운중동"
+    },
+    "경기 성남시 분당구|운중동|산운마을12단지판교센트럴포레와이시티": {
+      "history": [],
+      "name": "산운마을12단지판교센트럴포레와이시티",
+      "region_slug": "gyeonggi-seongnam-bundang",
+      "since": "2026-08-03",
+      "slug": "sanunmaeul12danjipangyosenteureolporewaisiti",
       "umd": "운중동"
     },
     "경기 성남시 분당구|운중동|산운마을13단지(태영)": {
@@ -9002,6 +9786,14 @@
       "slug": "samseongadenaruche",
       "umd": "정자동"
     },
+    "경기 성남시 분당구|정자동|상록마을(라이프2차)": {
+      "history": [],
+      "name": "상록마을(라이프2차)",
+      "region_slug": "gyeonggi-seongnam-bundang",
+      "since": "2026-08-03",
+      "slug": "sangrokmaeul-raipeu2cha",
+      "umd": "정자동"
+    },
     "경기 성남시 분당구|정자동|상록마을(보성)": {
       "history": [],
       "name": "상록마을(보성)",
@@ -9056,6 +9848,14 @@
       "region_slug": "gyeonggi-seongnam-bundang",
       "since": "2026-08-02",
       "slug": "jeongdeunmaeul-6danji-useong",
+      "umd": "정자동"
+    },
+    "경기 성남시 분당구|정자동|정든마을(7단지)(한진)": {
+      "history": [],
+      "name": "정든마을(7단지)(한진)",
+      "region_slug": "gyeonggi-seongnam-bundang",
+      "since": "2026-08-03",
+      "slug": "jeongdeunmaeul-7danji-hanjin",
       "umd": "정자동"
     },
     "경기 성남시 분당구|정자동|정든마을(8단지)(한진)": {
@@ -9314,6 +10114,14 @@
       "slug": "wiryesenteureolpureujio",
       "umd": "창곡동"
     },
+    "경기 성남시 수정구|창곡동|위례역푸르지오5단지": {
+      "history": [],
+      "name": "위례역푸르지오5단지",
+      "region_slug": "gyeonggi-seongnam-sujeong",
+      "since": "2026-08-03",
+      "slug": "wiryeyeokpureujio5danji",
+      "umd": "창곡동"
+    },
     "경기 성남시 수정구|창곡동|위례자이": {
       "history": [],
       "name": "위례자이",
@@ -9329,6 +10137,14 @@
       "since": "2026-07-26",
       "slug": "hilseuteiteuwirye",
       "umd": "창곡동"
+    },
+    "경기 성남시 수정구|태평동|가천대역동부센트레빌2단지": {
+      "history": [],
+      "name": "가천대역동부센트레빌2단지",
+      "region_slug": "gyeonggi-seongnam-sujeong",
+      "since": "2026-08-03",
+      "slug": "gacheondaeyeokdongbusenteurebil2danji",
+      "umd": "태평동"
     },
     "경기 성남시 수정구|태평동|신세계쉐덴": {
       "history": [],
@@ -9352,6 +10168,14 @@
       "region_slug": "gyeonggi-seongnam-jungwon",
       "since": "2026-08-01",
       "slug": "epyeonhansesanggeumbitgeurangmejong2danji",
+      "umd": "금광동"
+    },
+    "경기 성남시 중원구|금광동|단남": {
+      "history": [],
+      "name": "단남",
+      "region_slug": "gyeonggi-seongnam-jungwon",
+      "since": "2026-08-03",
+      "slug": "dannam",
       "umd": "금광동"
     },
     "경기 성남시 중원구|금광동|삼익금광1차": {
@@ -9752,6 +10576,14 @@
       "region_slug": "gyeonggi-suwon-gwonseon",
       "since": "2026-07-30",
       "slug": "samcheonri2cha",
+      "umd": "권선동"
+    },
+    "경기 수원시 권선구|권선동|삼호벽산": {
+      "history": [],
+      "name": "삼호벽산",
+      "region_slug": "gyeonggi-suwon-gwonseon",
+      "since": "2026-08-03",
+      "slug": "samhobyeoksan",
       "umd": "권선동"
     },
     "경기 수원시 권선구|권선동|상록3단지": {
@@ -10210,6 +11042,14 @@
       "slug": "cheonggu2",
       "umd": "오목천동"
     },
+    "경기 수원시 권선구|오목천동|태산": {
+      "history": [],
+      "name": "태산",
+      "region_slug": "gyeonggi-suwon-gwonseon",
+      "since": "2026-08-03",
+      "slug": "taesan",
+      "umd": "오목천동"
+    },
     "경기 수원시 권선구|입북동|서수원레이크푸르지오1단지": {
       "history": [],
       "name": "서수원레이크푸르지오1단지",
@@ -10537,6 +11377,14 @@
       "since": "2026-07-26",
       "slug": "hanyangsujain",
       "umd": "망포동"
+    },
+    "경기 수원시 영통구|매탄동|e-편한세상": {
+      "history": [],
+      "name": "e-편한세상",
+      "region_slug": "gyeonggi-suwon-yeongtong",
+      "since": "2026-08-03",
+      "slug": "e-pyeonhansesang",
+      "umd": "매탄동"
     },
     "경기 수원시 영통구|매탄동|금성5": {
       "history": [],
@@ -10898,6 +11746,14 @@
       "slug": "cheongmyeongmaeuldaeu",
       "umd": "영통동"
     },
+    "경기 수원시 영통구|영통동|청명마을삼성": {
+      "history": [],
+      "name": "청명마을삼성",
+      "region_slug": "gyeonggi-suwon-yeongtong",
+      "since": "2026-08-03",
+      "slug": "cheongmyeongmaeulsamseong",
+      "umd": "영통동"
+    },
     "경기 수원시 영통구|영통동|청명센트레빌": {
       "history": [],
       "name": "청명센트레빌",
@@ -11114,6 +11970,14 @@
       "slug": "jayeonaenjai1danji",
       "umd": "이의동"
     },
+    "경기 수원시 영통구|이의동|자연앤자이2단지": {
+      "history": [],
+      "name": "자연앤자이2단지",
+      "region_slug": "gyeonggi-suwon-yeongtong",
+      "since": "2026-08-03",
+      "slug": "jayeonaenjai2danji",
+      "umd": "이의동"
+    },
     "경기 수원시 영통구|이의동|자연앤자이3단지": {
       "history": [],
       "name": "자연앤자이3단지",
@@ -11202,6 +12066,14 @@
       "slug": "suwonaneoseubilwijeu",
       "umd": "송죽동"
     },
+    "경기 수원시 장안구|송죽동|희훈루체팰리스(총4동)": {
+      "history": [],
+      "name": "희훈루체팰리스(총4동)",
+      "region_slug": "gyeonggi-suwon-jangan",
+      "since": "2026-08-03",
+      "slug": "huihunruchepaelriseu-chong4dong",
+      "umd": "송죽동"
+    },
     "경기 수원시 장안구|연무동|신미주": {
       "history": [],
       "name": "신미주",
@@ -11280,6 +12152,14 @@
       "region_slug": "gyeonggi-suwon-jangan",
       "since": "2026-07-30",
       "slug": "sinil",
+      "umd": "율전동"
+    },
+    "경기 수원시 장안구|율전동|장미6": {
+      "history": [],
+      "name": "장미6",
+      "region_slug": "gyeonggi-suwon-jangan",
+      "since": "2026-08-03",
+      "slug": "jangmi6",
       "umd": "율전동"
     },
     "경기 수원시 장안구|율전동|천록": {
@@ -11698,6 +12578,30 @@
       "slug": "pungrim",
       "umd": "우만동"
     },
+    "경기 수원시 팔달구|우만동|현대": {
+      "history": [],
+      "name": "현대",
+      "region_slug": "gyeonggi-suwon-paldal",
+      "since": "2026-08-03",
+      "slug": "hyeondae",
+      "umd": "우만동"
+    },
+    "경기 수원시 팔달구|인계동|CJ아파트101동": {
+      "history": [],
+      "name": "CJ아파트101동",
+      "region_slug": "gyeonggi-suwon-paldal",
+      "since": "2026-08-03",
+      "slug": "cjapateu101dong",
+      "umd": "인계동"
+    },
+    "경기 수원시 팔달구|인계동|래미안노블클래스2단지": {
+      "history": [],
+      "name": "래미안노블클래스2단지",
+      "region_slug": "gyeonggi-suwon-paldal",
+      "since": "2026-08-03",
+      "slug": "raemiannobeulkeulraeseu2danji",
+      "umd": "인계동"
+    },
     "경기 수원시 팔달구|인계동|선경1": {
       "history": [],
       "name": "선경1",
@@ -11770,6 +12674,14 @@
       "slug": "hanhwakkumegeurinpakeu",
       "umd": "인계동"
     },
+    "경기 수원시 팔달구|화서동|꽃뫼마을코오롱": {
+      "history": [],
+      "name": "꽃뫼마을코오롱",
+      "region_slug": "gyeonggi-suwon-paldal",
+      "since": "2026-08-03",
+      "slug": "kkotmoemaeulkoorong",
+      "umd": "화서동"
+    },
     "경기 수원시 팔달구|화서동|꽃뫼마을풍림": {
       "history": [],
       "name": "꽃뫼마을풍림",
@@ -11832,6 +12744,14 @@
       "region_slug": "gyeonggi-suwon-paldal",
       "since": "2026-07-26",
       "slug": "hanjinhyeondaeapateu",
+      "umd": "화서동"
+    },
+    "경기 수원시 팔달구|화서동|화서주공3단지": {
+      "history": [],
+      "name": "화서주공3단지",
+      "region_slug": "gyeonggi-suwon-paldal",
+      "since": "2026-08-03",
+      "slug": "hwaseojugong3danji",
       "umd": "화서동"
     },
     "경기 수원시 팔달구|화서동|화서주공5단지": {
@@ -12386,6 +13306,14 @@
       "slug": "wolgot4chapungrimaiwon",
       "umd": "월곶동"
     },
+    "경기 시흥시|월곶동|월곶동유호NPLUSVILLE": {
+      "history": [],
+      "name": "월곶동유호NPLUSVILLE",
+      "region_slug": "gyeonggi-siheung",
+      "since": "2026-08-03",
+      "slug": "wolgotdongyuhonplusville",
+      "umd": "월곶동"
+    },
     "경기 시흥시|월곶동|풍림아이원1차": {
       "history": [],
       "name": "풍림아이원1차",
@@ -12522,6 +13450,14 @@
       "slug": "eungyebeurijeuhil",
       "umd": "은행동"
     },
+    "경기 시흥시|은행동|은행마을녹원": {
+      "history": [],
+      "name": "은행마을녹원",
+      "region_slug": "gyeonggi-siheung",
+      "since": "2026-08-03",
+      "slug": "eunhaengmaeulnokwon",
+      "umd": "은행동"
+    },
     "경기 시흥시|은행동|제일풍경채더숲": {
       "history": [],
       "name": "제일풍경채더숲",
@@ -12632,6 +13568,22 @@
       "region_slug": "gyeonggi-siheung",
       "since": "2026-07-26",
       "slug": "eleichiteuripeulsenteom",
+      "umd": "장현동"
+    },
+    "경기 시흥시|장현동|장현II엔플러스빌": {
+      "history": [],
+      "name": "장현II엔플러스빌",
+      "region_slug": "gyeonggi-siheung",
+      "since": "2026-08-03",
+      "slug": "janghyeoniienpeulreoseubil",
+      "umd": "장현동"
+    },
+    "경기 시흥시|장현동|장현I엔플러스빌": {
+      "history": [],
+      "name": "장현I엔플러스빌",
+      "region_slug": "gyeonggi-siheung",
+      "since": "2026-08-03",
+      "slug": "janghyeonienpeulreoseubil",
       "umd": "장현동"
     },
     "경기 시흥시|장현동|제일풍경채에듀": {
@@ -12784,6 +13736,14 @@
       "region_slug": "gyeonggi-siheung",
       "since": "2026-07-26",
       "slug": "dongwon",
+      "umd": "정왕동"
+    },
+    "경기 시흥시|정왕동|무진": {
+      "history": [],
+      "name": "무진",
+      "region_slug": "gyeonggi-siheung",
+      "since": "2026-08-03",
+      "slug": "mujin",
       "umd": "정왕동"
     },
     "경기 시흥시|정왕동|문영센스빌": {
@@ -13162,6 +14122,14 @@
       "slug": "siheung6chapureujio2danji",
       "umd": "죽율동"
     },
+    "경기 시흥시|포동|태산아파트": {
+      "history": [],
+      "name": "태산아파트",
+      "region_slug": "gyeonggi-siheung",
+      "since": "2026-08-03",
+      "slug": "taesanapateu",
+      "umd": "포동"
+    },
     "경기 시흥시|포동|태헌3차아파트": {
       "history": [],
       "name": "태헌3차아파트",
@@ -13344,6 +14312,14 @@
       "region_slug": "gyeonggi-ansan-danwon",
       "since": "2026-07-30",
       "slug": "pureujio3cha",
+      "umd": "고잔동"
+    },
+    "경기 안산시 단원구|고잔동|푸르지오4차": {
+      "history": [],
+      "name": "푸르지오4차",
+      "region_slug": "gyeonggi-ansan-danwon",
+      "since": "2026-08-03",
+      "slug": "pureujio4cha",
       "umd": "고잔동"
     },
     "경기 안산시 단원구|선부동|e편한세상선부파크플레이스1차": {
@@ -14146,6 +15122,14 @@
       "slug": "donggwang",
       "umd": "중리동"
     },
+    "경기 안성시|진사리|우림": {
+      "history": [],
+      "name": "우림",
+      "region_slug": "gyeonggi-anseong",
+      "since": "2026-08-03",
+      "slug": "urim",
+      "umd": "진사리"
+    },
     "경기 안성시|진사리|우림루미아트": {
       "history": [],
       "name": "우림루미아트",
@@ -14314,6 +15298,14 @@
       "slug": "saetbyeolhanyang4-2",
       "umd": "비산동"
     },
+    "경기 안양시 동안구|비산동|샛별한양4-3": {
+      "history": [],
+      "name": "샛별한양4-3",
+      "region_slug": "gyeonggi-anyang-dongan",
+      "since": "2026-08-03",
+      "slug": "saetbyeolhanyang4-3",
+      "umd": "비산동"
+    },
     "경기 안양시 동안구|비산동|샛별한양6(고층1109)": {
       "history": [],
       "name": "샛별한양6(고층1109)",
@@ -14336,6 +15328,14 @@
       "region_slug": "gyeonggi-anyang-dongan",
       "since": "2026-08-02",
       "slug": "saetbyeolhanyang6-gocheung1109-6",
+      "umd": "비산동"
+    },
+    "경기 안양시 동안구|비산동|성원": {
+      "history": [],
+      "name": "성원",
+      "region_slug": "gyeonggi-anyang-dongan",
+      "since": "2026-08-03",
+      "slug": "seongwon",
       "umd": "비산동"
     },
     "경기 안양시 동안구|비산동|안양임곡휴먼시아": {
@@ -14490,6 +15490,14 @@
       "slug": "raemianindeokwondeopointeu",
       "umd": "평촌동"
     },
+    "경기 안양시 동안구|평촌동|영풍": {
+      "history": [],
+      "name": "영풍",
+      "region_slug": "gyeonggi-anyang-dongan",
+      "since": "2026-08-03",
+      "slug": "yeongpung",
+      "umd": "평촌동"
+    },
     "경기 안양시 동안구|평촌동|인덕원대림1차": {
       "history": [],
       "name": "인덕원대림1차",
@@ -14570,6 +15578,14 @@
       "slug": "hyangchonrotde",
       "umd": "평촌동"
     },
+    "경기 안양시 동안구|평촌동|향촌마을현대4차": {
+      "history": [],
+      "name": "향촌마을현대4차",
+      "region_slug": "gyeonggi-anyang-dongan",
+      "since": "2026-08-03",
+      "slug": "hyangchonmaeulhyeondae4cha",
+      "umd": "평촌동"
+    },
     "경기 안양시 동안구|호계동|HHI브라운빌3차": {
       "history": [],
       "name": "HHI브라운빌3차",
@@ -14608,6 +15624,14 @@
       "region_slug": "gyeonggi-anyang-dongan",
       "since": "2026-07-31",
       "slug": "mokryeonmaeul2danjidaeuseongyeong",
+      "umd": "호계동"
+    },
+    "경기 안양시 동안구|호계동|목련선경": {
+      "history": [],
+      "name": "목련선경",
+      "region_slug": "gyeonggi-anyang-dongan",
+      "since": "2026-08-03",
+      "slug": "mokryeonseongyeong",
       "umd": "호계동"
     },
     "경기 안양시 동안구|호계동|목련우성": {
@@ -14834,6 +15858,14 @@
       "slug": "hogye1chahyeondaehomtaun",
       "umd": "호계동"
     },
+    "경기 안양시 동안구|호계동|호계동현대": {
+      "history": [],
+      "name": "호계동현대",
+      "region_slug": "gyeonggi-anyang-dongan",
+      "since": "2026-08-03",
+      "slug": "hogyedonghyeondae",
+      "umd": "호계동"
+    },
     "경기 안양시 동안구|호계동|호계럭키": {
       "history": [],
       "name": "호계럭키",
@@ -14968,6 +16000,14 @@
       "region_slug": "gyeonggi-anyang-manan",
       "since": "2026-07-26",
       "slug": "hanyangsujainedyupakeu",
+      "umd": "박달동"
+    },
+    "경기 안양시 만안구|박달동|한일유앤아이": {
+      "history": [],
+      "name": "한일유앤아이",
+      "region_slug": "gyeonggi-anyang-manan",
+      "since": "2026-08-03",
+      "slug": "hanilyuaenai",
       "umd": "박달동"
     },
     "경기 안양시 만안구|석수동|경일": {
@@ -15370,6 +16410,14 @@
       "slug": "seacheongsol3cha",
       "umd": "가업리"
     },
+    "경기 양주시|고암동|덕정중흥에스클래스": {
+      "history": [],
+      "name": "덕정중흥에스클래스",
+      "region_slug": "gyeonggi-yangju",
+      "since": "2026-08-03",
+      "slug": "deokjeongjungheungeseukeulraeseu",
+      "umd": "고암동"
+    },
     "경기 양주시|고암동|동안마을(주공3단지)": {
       "history": [],
       "name": "동안마을(주공3단지)",
@@ -15418,6 +16466,14 @@
       "slug": "sannaedeulmaeulhanyangsujain",
       "umd": "고읍동"
     },
+    "경기 양주시|고읍동|현대": {
+      "history": [],
+      "name": "현대",
+      "region_slug": "gyeonggi-yangju",
+      "since": "2026-08-03",
+      "slug": "hyeondae-2",
+      "umd": "고읍동"
+    },
     "경기 양주시|광사동|대방노블랜드": {
       "history": [],
       "name": "대방노블랜드",
@@ -15449,6 +16505,14 @@
       "since": "2026-07-26",
       "slug": "huimang",
       "umd": "광석리"
+    },
+    "경기 양주시|덕계동|금용": {
+      "history": [],
+      "name": "금용",
+      "region_slug": "gyeonggi-yangju",
+      "since": "2026-08-03",
+      "slug": "geumyong",
+      "umd": "덕계동"
     },
     "경기 양주시|덕계동|덕계신도브래뉴": {
       "history": [],
@@ -15490,6 +16554,14 @@
       "slug": "samhuipureunmaeulapateu",
       "umd": "덕계동"
     },
+    "경기 양주시|덕계동|신우": {
+      "history": [],
+      "name": "신우",
+      "region_slug": "gyeonggi-yangju",
+      "since": "2026-08-03",
+      "slug": "sinu",
+      "umd": "덕계동"
+    },
     "경기 양주시|덕계동|양주2차금광포란재": {
       "history": [],
       "name": "양주2차금광포란재",
@@ -15520,6 +16592,14 @@
       "region_slug": "gyeonggi-yangju",
       "since": "2026-07-26",
       "slug": "yangjuhoecheonsindosidieteureusenteureolsiti",
+      "umd": "덕계동"
+    },
+    "경기 양주시|덕계동|현대": {
+      "history": [],
+      "name": "현대",
+      "region_slug": "gyeonggi-yangju",
+      "since": "2026-08-03",
+      "slug": "hyeondae",
       "umd": "덕계동"
     },
     "경기 양주시|덕계동|현진에버빌1단지": {
@@ -15690,6 +16770,14 @@
       "slug": "tspureunsol3chaapateu",
       "umd": "삼숭동"
     },
+    "경기 양주시|삼숭동|나래": {
+      "history": [],
+      "name": "나래",
+      "region_slug": "gyeonggi-yangju",
+      "since": "2026-08-03",
+      "slug": "narae",
+      "umd": "삼숭동"
+    },
     "경기 양주시|삼숭동|성우아파트아침의미소": {
       "history": [],
       "name": "성우아파트아침의미소",
@@ -15753,6 +16841,14 @@
       "since": "2026-07-26",
       "slug": "okjeongyeokrojebiangmeteuropakeu2danji",
       "umd": "삼숭동"
+    },
+    "경기 양주시|오산리|한승리메이드": {
+      "history": [],
+      "name": "한승리메이드",
+      "region_slug": "gyeonggi-yangju",
+      "since": "2026-08-03",
+      "slug": "hanseungrimeideu",
+      "umd": "오산리"
     },
     "경기 양주시|옥정동|e편한세상 옥정어반센트럴": {
       "history": [],
@@ -15824,6 +16920,14 @@
       "region_slug": "gyeonggi-yangju",
       "since": "2026-07-30",
       "slug": "okjeongjungangyeokjungheungs-keulraeseusenteomsiti-1danji",
+      "umd": "옥정동"
+    },
+    "경기 양주시|옥정동|옥정중앙역중흥S-클래스센텀시티(2단지)": {
+      "history": [],
+      "name": "옥정중앙역중흥S-클래스센텀시티(2단지)",
+      "region_slug": "gyeonggi-yangju",
+      "since": "2026-08-03",
+      "slug": "okjeongjungangyeokjungheungs-keulraeseusenteomsiti-2danji",
       "umd": "옥정동"
     },
     "경기 양주시|일영리|푸른옥": {
@@ -16274,6 +17378,22 @@
       "slug": "unamcheonggu-814-2",
       "umd": "원동"
     },
+    "경기 오산시|원동|원동동아": {
+      "history": [],
+      "name": "원동동아",
+      "region_slug": "gyeonggi-osan",
+      "since": "2026-08-03",
+      "slug": "wondongdonga",
+      "umd": "원동"
+    },
+    "경기 오산시|원동|원동두산": {
+      "history": [],
+      "name": "원동두산",
+      "region_slug": "gyeonggi-osan",
+      "since": "2026-08-03",
+      "slug": "wondongdusan",
+      "umd": "원동"
+    },
     "경기 오산시|원동|원동주공": {
       "history": [],
       "name": "원동주공",
@@ -16354,6 +17474,14 @@
       "slug": "giheungsseonibaelri",
       "umd": "고매동"
     },
+    "경기 용인시 기흥구|고매동|동성": {
+      "history": [],
+      "name": "동성",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "dongseong",
+      "umd": "고매동"
+    },
     "경기 용인시 기흥구|고매동|매화마을우남퍼스트빌": {
       "history": [],
       "name": "매화마을우남퍼스트빌",
@@ -16392,6 +17520,14 @@
       "region_slug": "gyeonggi-yongin-giheung",
       "since": "2026-07-26",
       "slug": "bulgokmaeul-byeoksanbeulruming",
+      "umd": "공세동"
+    },
+    "경기 용인시 기흥구|공세동|한보라마을9단지경남아너스빌": {
+      "history": [],
+      "name": "한보라마을9단지경남아너스빌",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "hanboramaeul9danjigyeongnamaneoseubil",
       "umd": "공세동"
     },
     "경기 용인시 기흥구|공세동|호수청구": {
@@ -16434,6 +17570,14 @@
       "slug": "gangnammaeuljayeonaen-6danji",
       "umd": "구갈동"
     },
+    "경기 용인시 기흥구|구갈동|강남마을주공": {
+      "history": [],
+      "name": "강남마을주공",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "gangnammaeuljugong",
+      "umd": "구갈동"
+    },
     "경기 용인시 기흥구|구갈동|기흥역 롯데캐슬 레이시티": {
       "history": [],
       "name": "기흥역 롯데캐슬 레이시티",
@@ -16456,6 +17600,30 @@
       "region_slug": "gyeonggi-yongin-giheung",
       "since": "2026-07-26",
       "slug": "giheungyeokpakeupureujio",
+      "umd": "구갈동"
+    },
+    "경기 용인시 기흥구|구갈동|동부": {
+      "history": [],
+      "name": "동부",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "dongbu",
+      "umd": "구갈동"
+    },
+    "경기 용인시 기흥구|구갈동|우림": {
+      "history": [],
+      "name": "우림",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "urim",
+      "umd": "구갈동"
+    },
+    "경기 용인시 기흥구|구갈동|코오롱하늘채(5단지)": {
+      "history": [],
+      "name": "코오롱하늘채(5단지)",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "kooronghaneulchae-5danji",
       "umd": "구갈동"
     },
     "경기 용인시 기흥구|구갈동|풍림(저층)": {
@@ -16497,6 +17665,14 @@
       "since": "2026-07-26",
       "slug": "hanyangsujain",
       "umd": "구갈동"
+    },
+    "경기 용인시 기흥구|동백동|동문굿모닝힐": {
+      "history": [],
+      "name": "동문굿모닝힐",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "dongmungutmoninghil",
+      "umd": "동백동"
     },
     "경기 용인시 기흥구|동백동|동백호수공원두산위브더제니스": {
       "history": [],
@@ -16594,6 +17770,14 @@
       "slug": "hosumaeulseohaegeurangbeul",
       "umd": "동백동"
     },
+    "경기 용인시 기흥구|동백동|호수마을어울림": {
+      "history": [],
+      "name": "호수마을어울림",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "hosumaeuleoulrim",
+      "umd": "동백동"
+    },
     "경기 용인시 기흥구|동백동|호수마을월드메르디앙": {
       "history": [],
       "name": "호수마을월드메르디앙",
@@ -16634,6 +17818,14 @@
       "slug": "gyodongmaeuldongyangparagon",
       "umd": "마북동"
     },
+    "경기 용인시 기흥구|마북동|교동마을마북2차이편한세상": {
+      "history": [],
+      "name": "교동마을마북2차이편한세상",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "gyodongmaeulmabuk2chaipyeonhansesang",
+      "umd": "마북동"
+    },
     "경기 용인시 기흥구|마북동|교동마을마북이편한세상": {
       "history": [],
       "name": "교동마을마북이편한세상",
@@ -16658,6 +17850,14 @@
       "slug": "gyodongmaeulssangyong",
       "umd": "마북동"
     },
+    "경기 용인시 기흥구|마북동|교동마을엘지": {
+      "history": [],
+      "name": "교동마을엘지",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "gyodongmaeulelji",
+      "umd": "마북동"
+    },
     "경기 용인시 기흥구|마북동|교동마을정광아파트": {
       "history": [],
       "name": "교동마을정광아파트",
@@ -16680,6 +17880,14 @@
       "region_slug": "gyeonggi-yongin-giheung",
       "since": "2026-07-26",
       "slug": "guseongyeokhyoseonghaeringteonpeulreiseu",
+      "umd": "마북동"
+    },
+    "경기 용인시 기흥구|마북동|구성우림필유": {
+      "history": [],
+      "name": "구성우림필유",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "guseongurimpilyu",
       "umd": "마북동"
     },
     "경기 용인시 기흥구|마북동|삼거마을삼성래미안1": {
@@ -16762,6 +17970,14 @@
       "slug": "sinchangmisyeonhil",
       "umd": "보라동"
     },
+    "경기 용인시 기흥구|보라동|쌍용스윗닷홈1": {
+      "history": [],
+      "name": "쌍용스윗닷홈1",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "ssangyongseuwitdathom1",
+      "umd": "보라동"
+    },
     "경기 용인시 기흥구|보라동|용인보라효성해링턴플레이스": {
       "history": [],
       "name": "용인보라효성해링턴플레이스",
@@ -16778,12 +17994,28 @@
       "slug": "hanboradeohil",
       "umd": "보라동"
     },
+    "경기 용인시 기흥구|보라동|한보라마을화성파크": {
+      "history": [],
+      "name": "한보라마을화성파크",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "hanboramaeulhwaseongpakeu",
+      "umd": "보라동"
+    },
     "경기 용인시 기흥구|보라동|한보라에듀포레": {
       "history": [],
       "name": "한보라에듀포레",
       "region_slug": "gyeonggi-yongin-giheung",
       "since": "2026-07-26",
       "slug": "hanboraedyupore",
+      "umd": "보라동"
+    },
+    "경기 용인시 기흥구|보라동|현대모닝사이드": {
+      "history": [],
+      "name": "현대모닝사이드",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "hyeondaemoningsaideu",
       "umd": "보라동"
     },
     "경기 용인시 기흥구|보정동|더샵보정애비뉴1단지": {
@@ -16858,6 +18090,14 @@
       "slug": "yeonwonmaeulsamseongmyeonggataun",
       "umd": "보정동"
     },
+    "경기 용인시 기흥구|보정동|용인보정꿈에그린": {
+      "history": [],
+      "name": "용인보정꿈에그린",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "yonginbojeongkkumegeurin",
+      "umd": "보정동"
+    },
     "경기 용인시 기흥구|보정동|용인보정대림(1차)": {
       "history": [],
       "name": "용인보정대림(1차)",
@@ -16898,12 +18138,44 @@
       "slug": "geumhwamaeul4danjijugonggeurinbil",
       "umd": "상갈동"
     },
+    "경기 용인시 기흥구|상갈동|금화마을5단지주공그린빌": {
+      "history": [],
+      "name": "금화마을5단지주공그린빌",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "geumhwamaeul5danjijugonggeurinbil",
+      "umd": "상갈동"
+    },
+    "경기 용인시 기흥구|상갈동|금화마을주공그린빌6차": {
+      "history": [],
+      "name": "금화마을주공그린빌6차",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "geumhwamaeuljugonggeurinbil6cha",
+      "umd": "상갈동"
+    },
     "경기 용인시 기흥구|상하동|갈천마을신일유토빌": {
       "history": [],
       "name": "갈천마을신일유토빌",
       "region_slug": "gyeonggi-yongin-giheung",
       "since": "2026-07-26",
       "slug": "galcheonmaeulsinilyutobil",
+      "umd": "상하동"
+    },
+    "경기 용인시 기흥구|상하동|강남마을한라비발디": {
+      "history": [],
+      "name": "강남마을한라비발디",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "gangnammaeulhanrabibaldi",
+      "umd": "상하동"
+    },
+    "경기 용인시 기흥구|상하동|대우": {
+      "history": [],
+      "name": "대우",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "daeu",
       "umd": "상하동"
     },
     "경기 용인시 기흥구|상하동|쌍용(3단지)": {
@@ -16922,6 +18194,14 @@
       "slug": "ssangyongseuwitdathom-2danji",
       "umd": "상하동"
     },
+    "경기 용인시 기흥구|상하동|용인상하진흥더루벤스2단지": {
+      "history": [],
+      "name": "용인상하진흥더루벤스2단지",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "yonginsanghajinheungdeorubenseu2danji",
+      "umd": "상하동"
+    },
     "경기 용인시 기흥구|상하동|인정프린스": {
       "history": [],
       "name": "인정프린스",
@@ -16938,12 +18218,36 @@
       "slug": "jiseokmaeulgeudaegakeuredeonseu",
       "umd": "상하동"
     },
+    "경기 용인시 기흥구|상하동|풍림": {
+      "history": [],
+      "name": "풍림",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "pungrim",
+      "umd": "상하동"
+    },
     "경기 용인시 기흥구|서천동|SK": {
       "history": [],
       "name": "SK",
       "region_slug": "gyeonggi-yongin-giheung",
       "since": "2026-08-02",
       "slug": "sk",
+      "umd": "서천동"
+    },
+    "경기 용인시 기흥구|서천동|서천2차IPARK": {
+      "history": [],
+      "name": "서천2차IPARK",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "seocheon2chaipark",
+      "umd": "서천동"
+    },
+    "경기 용인시 기흥구|서천동|서천마을4단지쌍용예가": {
+      "history": [],
+      "name": "서천마을4단지쌍용예가",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "seocheonmaeul4danjissangyongyega",
       "umd": "서천동"
     },
     "경기 용인시 기흥구|서천동|서천아이파크": {
@@ -17010,12 +18314,28 @@
       "slug": "deurimraendeu",
       "umd": "신갈동"
     },
+    "경기 용인시 기흥구|신갈동|삼익": {
+      "history": [],
+      "name": "삼익",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "samik",
+      "umd": "신갈동"
+    },
     "경기 용인시 기흥구|신갈동|새릉골풍림": {
       "history": [],
       "name": "새릉골풍림",
       "region_slug": "gyeonggi-yongin-giheung",
       "since": "2026-07-26",
       "slug": "saereunggolpungrim",
+      "umd": "신갈동"
+    },
+    "경기 용인시 기흥구|신갈동|신갈현대아파트": {
+      "history": [],
+      "name": "신갈현대아파트",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "singalhyeondaeapateu",
       "umd": "신갈동"
     },
     "경기 용인시 기흥구|신갈동|신미주": {
@@ -17034,12 +18354,28 @@
       "slug": "yanghyeonmaeulsinan",
       "umd": "신갈동"
     },
+    "경기 용인시 기흥구|신갈동|양현마을풍림": {
+      "history": [],
+      "name": "양현마을풍림",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "yanghyeonmaeulpungrim",
+      "umd": "신갈동"
+    },
     "경기 용인시 기흥구|신갈동|용인기흥 우방아이유쉘": {
       "history": [],
       "name": "용인기흥 우방아이유쉘",
       "region_slug": "gyeonggi-yongin-giheung",
       "since": "2026-07-26",
       "slug": "yongingiheung-ubangaiyuswel",
+      "umd": "신갈동"
+    },
+    "경기 용인시 기흥구|신갈동|원대마을신갈한신": {
+      "history": [],
+      "name": "원대마을신갈한신",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "wondaemaeulsingalhansin",
       "umd": "신갈동"
     },
     "경기 용인시 기흥구|신갈동|이안두드림기흥역": {
@@ -17064,6 +18400,14 @@
       "region_slug": "gyeonggi-yongin-giheung",
       "since": "2026-07-26",
       "slug": "seupapaelriseuriga",
+      "umd": "언남동"
+    },
+    "경기 용인시 기흥구|언남동|언동마을신일해피트리": {
+      "history": [],
+      "name": "언동마을신일해피트리",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "eondongmaeulsinilhaepiteuri",
       "umd": "언남동"
     },
     "경기 용인시 기흥구|언남동|유원휴하임": {
@@ -17121,6 +18465,14 @@
       "since": "2026-07-26",
       "slug": "hamabimaeuldongilhaibil2",
       "umd": "언남동"
+    },
+    "경기 용인시 기흥구|영덕동|경남아너스빌(11블럭)": {
+      "history": [],
+      "name": "경남아너스빌(11블럭)",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "gyeongnamaneoseubil-11beulreok",
+      "umd": "영덕동"
     },
     "경기 용인시 기흥구|영덕동|광교호수아델리움": {
       "history": [],
@@ -17242,6 +18594,14 @@
       "slug": "hikseuyutawo",
       "umd": "영덕동"
     },
+    "경기 용인시 기흥구|중동|동백광명샤인빌": {
+      "history": [],
+      "name": "동백광명샤인빌",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "dongbaekgwangmyeongsyainbil",
+      "umd": "중동"
+    },
     "경기 용인시 기흥구|중동|동백역한라비발디(어은목마을)": {
       "history": [],
       "name": "동백역한라비발디(어은목마을)",
@@ -17322,12 +18682,28 @@
       "slug": "sindongbaekaipakeu",
       "umd": "중동"
     },
+    "경기 용인시 기흥구|중동|어은목마을경남아너스빌아파트": {
+      "history": [],
+      "name": "어은목마을경남아너스빌아파트",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "eoeunmokmaeulgyeongnamaneoseubilapateu",
+      "umd": "중동"
+    },
     "경기 용인시 기흥구|중동|어은목마을대원칸타빌": {
       "history": [],
       "name": "어은목마을대원칸타빌",
       "region_slug": "gyeonggi-yongin-giheung",
       "since": "2026-07-26",
       "slug": "eoeunmokmaeuldaewonkantabil",
+      "umd": "중동"
+    },
+    "경기 용인시 기흥구|중동|어은목마을벽산블루밍아파트": {
+      "history": [],
+      "name": "어은목마을벽산블루밍아파트",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "eoeunmokmaeulbyeoksanbeulrumingapateu",
       "umd": "중동"
     },
     "경기 용인시 기흥구|중동|초당마을삼부르네상스13단지아파트(코아루)": {
@@ -17418,6 +18794,14 @@
       "slug": "cheongmyeonghosusinaninseubil1danji",
       "umd": "하갈동"
     },
+    "경기 용인시 기흥구|하갈동|청명호수신안인스빌2단지": {
+      "history": [],
+      "name": "청명호수신안인스빌2단지",
+      "region_slug": "gyeonggi-yongin-giheung",
+      "since": "2026-08-03",
+      "slug": "cheongmyeonghosusinaninseubil2danji",
+      "umd": "하갈동"
+    },
     "경기 용인시 수지구|동천동|더샵동천이스트포레": {
       "history": [],
       "name": "더샵동천이스트포레",
@@ -17448,6 +18832,14 @@
       "region_slug": "gyeonggi-yongin-suji",
       "since": "2026-07-26",
       "slug": "dongcheondiiseuteu",
+      "umd": "동천동"
+    },
+    "경기 용인시 수지구|동천동|동천마을동문굿모닝힐6차": {
+      "history": [],
+      "name": "동천마을동문굿모닝힐6차",
+      "region_slug": "gyeonggi-yongin-suji",
+      "since": "2026-08-03",
+      "slug": "dongcheonmaeuldongmungutmoninghil6cha",
       "umd": "동천동"
     },
     "경기 용인시 수지구|동천동|동천마을현대홈타운1차": {
@@ -17608,6 +19000,14 @@
       "region_slug": "gyeonggi-yongin-suji",
       "since": "2026-08-01",
       "slug": "gwanggyomaeul46-1danjigwanggyoseutakeulraeseu",
+      "umd": "상현동"
+    },
+    "경기 용인시 수지구|상현동|광교마을46-2단지광교스타클래스": {
+      "history": [],
+      "name": "광교마을46-2단지광교스타클래스",
+      "region_slug": "gyeonggi-yongin-suji",
+      "since": "2026-08-03",
+      "slug": "gwanggyomaeul46-2danjigwanggyoseutakeulraeseu",
       "umd": "상현동"
     },
     "경기 용인시 수지구|상현동|광교상떼빌파크뷰": {
@@ -18162,6 +19562,14 @@
       "slug": "sinbongmaeuljai3cha",
       "umd": "신봉동"
     },
+    "경기 용인시 수지구|신봉동|한일드림빌": {
+      "history": [],
+      "name": "한일드림빌",
+      "region_slug": "gyeonggi-yongin-suji",
+      "since": "2026-08-03",
+      "slug": "hanildeurimbil",
+      "umd": "신봉동"
+    },
     "경기 용인시 수지구|신봉동|힐스테이트광교산": {
       "history": [],
       "name": "힐스테이트광교산",
@@ -18226,6 +19634,14 @@
       "slug": "kkotmemaeulhilseuteiteu-4cha4danji",
       "umd": "죽전동"
     },
+    "경기 용인시 수지구|죽전동|꽃메마을힐스테이트4차2단지": {
+      "history": [],
+      "name": "꽃메마을힐스테이트4차2단지",
+      "region_slug": "gyeonggi-yongin-suji",
+      "since": "2026-08-03",
+      "slug": "kkotmemaeulhilseuteiteu4cha2danji",
+      "umd": "죽전동"
+    },
     "경기 용인시 수지구|죽전동|내대지마을건영캐스빌": {
       "history": [],
       "name": "내대지마을건영캐스빌",
@@ -18274,6 +19690,14 @@
       "slug": "dodammaeulaipakeu",
       "umd": "죽전동"
     },
+    "경기 용인시 수지구|죽전동|도담마을우미린": {
+      "history": [],
+      "name": "도담마을우미린",
+      "region_slug": "gyeonggi-yongin-suji",
+      "since": "2026-08-03",
+      "slug": "dodammaeulumirin",
+      "umd": "죽전동"
+    },
     "경기 용인시 수지구|죽전동|도담마을죽전파크빌": {
       "history": [],
       "name": "도담마을죽전파크빌",
@@ -18288,6 +19712,14 @@
       "region_slug": "gyeonggi-yongin-suji",
       "since": "2026-07-26",
       "slug": "dodammaeulhanyangsujain",
+      "umd": "죽전동"
+    },
+    "경기 용인시 수지구|죽전동|도담마을힐스테이트4차1단지": {
+      "history": [],
+      "name": "도담마을힐스테이트4차1단지",
+      "region_slug": "gyeonggi-yongin-suji",
+      "since": "2026-08-03",
+      "slug": "dodammaeulhilseuteiteu4cha1danji",
       "umd": "죽전동"
     },
     "경기 용인시 수지구|죽전동|동성1차": {
@@ -18586,6 +20018,14 @@
       "slug": "sinjeong6danji-sangrok-gongmuwon",
       "umd": "풍덕천동"
     },
+    "경기 용인시 수지구|풍덕천동|신정7단지(상록)공무원": {
+      "history": [],
+      "name": "신정7단지(상록)공무원",
+      "region_slug": "gyeonggi-yongin-suji",
+      "since": "2026-08-03",
+      "slug": "sinjeong7danji-sangrok-gongmuwon",
+      "umd": "풍덕천동"
+    },
     "경기 용인시 수지구|풍덕천동|신정마을극동": {
       "history": [],
       "name": "신정마을극동",
@@ -18632,6 +20072,14 @@
       "region_slug": "gyeonggi-yongin-suji",
       "since": "2026-07-26",
       "slug": "sinjeongmaeulhyeondaepeuraim",
+      "umd": "풍덕천동"
+    },
+    "경기 용인시 수지구|풍덕천동|정자뜰마을태영데시앙1차": {
+      "history": [],
+      "name": "정자뜰마을태영데시앙1차",
+      "region_slug": "gyeonggi-yongin-suji",
+      "since": "2026-08-03",
+      "slug": "jeongjatteulmaeultaeyeongdesiang1cha",
       "umd": "풍덕천동"
     },
     "경기 용인시 수지구|풍덕천동|정자뜰마을태영데시앙2차": {
@@ -18810,6 +20258,14 @@
       "slug": "sinu",
       "umd": "김량장동"
     },
+    "경기 용인시 처인구|김량장동|용인웰메이드시티": {
+      "history": [],
+      "name": "용인웰메이드시티",
+      "region_slug": "gyeonggi-yongin-cheoin",
+      "since": "2026-08-03",
+      "slug": "yonginwelmeideusiti",
+      "umd": "김량장동"
+    },
     "경기 용인시 처인구|김량장동|용인유메이드": {
       "history": [],
       "name": "용인유메이드",
@@ -18890,6 +20346,14 @@
       "slug": "yongindubo",
       "umd": "마평동"
     },
+    "경기 용인시 처인구|마평동|우성": {
+      "history": [],
+      "name": "우성",
+      "region_slug": "gyeonggi-yongin-cheoin",
+      "since": "2026-08-03",
+      "slug": "useong",
+      "umd": "마평동"
+    },
     "경기 용인시 처인구|마평동|푸른마을용인자이": {
       "history": [],
       "name": "푸른마을용인자이",
@@ -18953,6 +20417,14 @@
       "since": "2026-08-02",
       "slug": "gyesumaeulsumokwonurimpilyu",
       "umd": "삼계리"
+    },
+    "경기 용인시 처인구|송전리|송전마을세광엔리치타워": {
+      "history": [],
+      "name": "송전마을세광엔리치타워",
+      "region_slug": "gyeonggi-yongin-cheoin",
+      "since": "2026-08-03",
+      "slug": "songjeonmaeulsegwangenrichitawo",
+      "umd": "송전리"
     },
     "경기 용인시 처인구|양지리|양지마을신원아침도시": {
       "history": [],
@@ -19106,6 +20578,14 @@
       "slug": "injeongpeurinseu3",
       "umd": "유방동"
     },
+    "경기 용인시 처인구|일산리|신안인스빌2단지": {
+      "history": [],
+      "name": "신안인스빌2단지",
+      "region_slug": "gyeonggi-yongin-cheoin",
+      "since": "2026-08-03",
+      "slug": "sinaninseubil2danji",
+      "umd": "일산리"
+    },
     "경기 용인시 처인구|천리|동아": {
       "history": [],
       "name": "동아",
@@ -19250,6 +20730,14 @@
       "slug": "hyoseongcheongsol",
       "umd": "삼동"
     },
+    "경기 의왕시|오전동|국화뉴서울": {
+      "history": [],
+      "name": "국화뉴서울",
+      "region_slug": "gyeonggi-uiwang",
+      "since": "2026-08-03",
+      "slug": "gukhwanyuseoul",
+      "umd": "오전동"
+    },
     "경기 의왕시|오전동|대명구름채": {
       "history": [],
       "name": "대명구름채",
@@ -19296,6 +20784,14 @@
       "region_slug": "gyeonggi-uiwang",
       "since": "2026-07-26",
       "slug": "mindeulrebeseupateu",
+      "umd": "오전동"
+    },
+    "경기 의왕시|오전동|백합벽산": {
+      "history": [],
+      "name": "백합벽산",
+      "region_slug": "gyeonggi-uiwang",
+      "since": "2026-08-03",
+      "slug": "baekhapbyeoksan",
       "umd": "오전동"
     },
     "경기 의왕시|오전동|성원1차이화": {
@@ -19521,6 +21017,14 @@
       "since": "2026-07-30",
       "slug": "uiwangbaekun-haeringteon-peulreiseu-5danji",
       "umd": "학의동"
+    },
+    "경기 의정부시|가능동|SKVIEW": {
+      "history": [],
+      "name": "SKVIEW",
+      "region_slug": "gyeonggi-uijeongbu",
+      "since": "2026-08-03",
+      "slug": "skview",
+      "umd": "가능동"
     },
     "경기 의정부시|가능동|e편한세상녹양역": {
       "history": [],
@@ -20082,6 +21586,14 @@
       "slug": "sinmyeong",
       "umd": "신곡동"
     },
+    "경기 의정부시|신곡동|신성": {
+      "history": [],
+      "name": "신성",
+      "region_slug": "gyeonggi-uijeongbu",
+      "since": "2026-08-03",
+      "slug": "sinseong",
+      "umd": "신곡동"
+    },
     "경기 의정부시|신곡동|신성2": {
       "history": [],
       "name": "신성2",
@@ -20448,6 +21960,14 @@
       "region_slug": "gyeonggi-uijeongbu",
       "since": "2026-08-01",
       "slug": "jangam1chapureujio",
+      "umd": "장암동"
+    },
+    "경기 의정부시|장암동|장암2차푸르지오": {
+      "history": [],
+      "name": "장암2차푸르지오",
+      "region_slug": "gyeonggi-uijeongbu",
+      "since": "2026-08-03",
+      "slug": "jangam2chapureujio",
       "umd": "장암동"
     },
     "경기 의정부시|장암동|장암더샵포레스트": {
@@ -20858,6 +22378,14 @@
       "slug": "icheonjaideopakeu",
       "umd": "관고동"
     },
+    "경기 이천시|노탑리|기산": {
+      "history": [],
+      "name": "기산",
+      "region_slug": "gyeonggi-icheon",
+      "since": "2026-08-03",
+      "slug": "gisan",
+      "umd": "노탑리"
+    },
     "경기 이천시|도봉리|대신푸른마을": {
       "history": [],
       "name": "대신푸른마을",
@@ -21161,6 +22689,14 @@
       "since": "2026-07-26",
       "slug": "icheonmajangrijensibilranteu",
       "umd": "오천리"
+    },
+    "경기 이천시|유산리|이천내안애": {
+      "history": [],
+      "name": "이천내안애",
+      "region_slug": "gyeonggi-icheon",
+      "since": "2026-08-03",
+      "slug": "icheonnaeanae",
+      "umd": "유산리"
     },
     "경기 이천시|응암리|이화1차": {
       "history": [],
@@ -21490,6 +23026,14 @@
       "slug": "hugokmaeul4danjitteuranchaejugong",
       "umd": "금촌동"
     },
+    "경기 파주시|금촌동|후곡마을6단지주공": {
+      "history": [],
+      "name": "후곡마을6단지주공",
+      "region_slug": "gyeonggi-paju",
+      "since": "2026-08-03",
+      "slug": "hugokmaeul6danjijugong",
+      "umd": "금촌동"
+    },
     "경기 파주시|다율동|운정신도시한라비발디파크젠해오름마을13단지": {
       "history": [],
       "name": "운정신도시한라비발디파크젠해오름마을13단지",
@@ -21617,6 +23161,14 @@
       "since": "2026-08-02",
       "slug": "hanrabibaldi-992-1",
       "umd": "대원리"
+    },
+    "경기 파주시|동패동|숲속길마을7단지월드메르디앙센트럴파크": {
+      "history": [],
+      "name": "숲속길마을7단지월드메르디앙센트럴파크",
+      "region_slug": "gyeonggi-paju",
+      "since": "2026-08-03",
+      "slug": "supsokgilmaeul7danjiwoldeumereudiangsenteureolpakeu",
+      "umd": "동패동"
     },
     "경기 파주시|동패동|운정자이시그니처": {
       "history": [],
@@ -21826,6 +23378,14 @@
       "slug": "haesolmaeul4danjibyeoksanunamyeonriji-667",
       "umd": "목동동"
     },
+    "경기 파주시|문발동|숲속길마을동문굿모닝힐(560)": {
+      "history": [],
+      "name": "숲속길마을동문굿모닝힐(560)",
+      "region_slug": "gyeonggi-paju",
+      "since": "2026-08-03",
+      "slug": "supsokgilmaeuldongmungutmoninghil-560",
+      "umd": "문발동"
+    },
     "경기 파주시|문산리|문산주공": {
       "history": [],
       "name": "문산주공",
@@ -21848,6 +23408,14 @@
       "region_slug": "gyeonggi-paju",
       "since": "2026-07-26",
       "slug": "sinwonachimdosi",
+      "umd": "문산리"
+    },
+    "경기 파주시|문산리|일신건영휴먼빌": {
+      "history": [],
+      "name": "일신건영휴먼빌",
+      "region_slug": "gyeonggi-paju",
+      "since": "2026-08-03",
+      "slug": "ilsingeonyeonghyumeonbil",
       "umd": "문산리"
     },
     "경기 파주시|문산리|장안8차": {
@@ -22194,6 +23762,14 @@
       "slug": "godeokgukjesindosijeilpunggyeongchae3chasenteom",
       "umd": "고덕동"
     },
+    "경기 평택시|고덕동|고덕국제신도시파라곤": {
+      "history": [],
+      "name": "고덕국제신도시파라곤",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-08-03",
+      "slug": "godeokgukjesindosiparagon",
+      "umd": "고덕동"
+    },
     "경기 평택시|고덕동|고덕국제신도시파라곤에듀포레": {
       "history": [],
       "name": "고덕국제신도시파라곤에듀포레",
@@ -22305,6 +23881,14 @@
       "since": "2026-08-01",
       "slug": "ugyeong",
       "umd": "권관리"
+    },
+    "경기 평택시|금곡리|우림": {
+      "history": [],
+      "name": "우림",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-08-03",
+      "slug": "urim",
+      "umd": "금곡리"
     },
     "경기 평택시|내기리|명지미래힐1단지": {
       "history": [],
@@ -22464,6 +24048,14 @@
       "region_slug": "gyeonggi-pyeongtaek",
       "since": "2026-07-26",
       "slug": "pyeongtaeksenteureoljai2danji",
+      "umd": "동삭동"
+    },
+    "경기 평택시|동삭동|현대": {
+      "history": [],
+      "name": "현대",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-08-03",
+      "slug": "hyeondae",
       "umd": "동삭동"
     },
     "경기 평택시|동삭동|힐스테이트지제역": {
@@ -22762,6 +24354,14 @@
       "slug": "seojeongteuinjariae2cha",
       "umd": "서정동"
     },
+    "경기 평택시|서정동|세경1": {
+      "history": [],
+      "name": "세경1",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-08-03",
+      "slug": "segyeong1",
+      "umd": "서정동"
+    },
     "경기 평택시|서정동|신한헤센스마트서정아트타워": {
       "history": [],
       "name": "신한헤센스마트서정아트타워",
@@ -22920,6 +24520,14 @@
       "region_slug": "gyeonggi-pyeongtaek",
       "since": "2026-08-02",
       "slug": "songhwajiguumiinoseubil",
+      "umd": "송화리"
+    },
+    "경기 평택시|송화리|현대홈타운": {
+      "history": [],
+      "name": "현대홈타운",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-08-03",
+      "slug": "hyeondaehomtaun",
       "umd": "송화리"
     },
     "경기 평택시|신장동|송탄역서희스타힐스": {
@@ -23144,6 +24752,14 @@
       "region_slug": "gyeonggi-pyeongtaek",
       "since": "2026-08-01",
       "slug": "godeoksiti",
+      "umd": "이충동"
+    },
+    "경기 평택시|이충동|고덕코아루더블루시티": {
+      "history": [],
+      "name": "고덕코아루더블루시티",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-08-03",
+      "slug": "godeokkoarudeobeulrusiti",
       "umd": "이충동"
     },
     "경기 평택시|이충동|대진": {
@@ -23450,6 +25066,14 @@
       "slug": "jisankoaru",
       "umd": "지산동"
     },
+    "경기 평택시|지산동|케이씨씨스위첸": {
+      "history": [],
+      "name": "케이씨씨스위첸",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-08-03",
+      "slug": "keississiseuwichen",
+      "umd": "지산동"
+    },
     "경기 평택시|지산동|한양청솔": {
       "history": [],
       "name": "한양청솔",
@@ -23522,6 +25146,14 @@
       "slug": "samseong",
       "umd": "통복동"
     },
+    "경기 평택시|평택동|라페온빌II": {
+      "history": [],
+      "name": "라페온빌II",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-08-03",
+      "slug": "rapeonbilii",
+      "umd": "평택동"
+    },
     "경기 평택시|평택동|롯데인벤스스카이": {
       "history": [],
       "name": "롯데인벤스스카이",
@@ -23592,6 +25224,14 @@
       "region_slug": "gyeonggi-pyeongtaek",
       "since": "2026-07-26",
       "slug": "geonyeongkaeseubil",
+      "umd": "현화리"
+    },
+    "경기 평택시|현화리|동신사랑마을": {
+      "history": [],
+      "name": "동신사랑마을",
+      "region_slug": "gyeonggi-pyeongtaek",
+      "since": "2026-08-03",
+      "slug": "dongsinsarangmaeul",
       "umd": "현화리"
     },
     "경기 평택시|현화리|동신아름마을": {
@@ -24000,6 +25640,14 @@
       "region_slug": "gyeonggi-hanam",
       "since": "2026-08-02",
       "slug": "ekotaun-abeulreok",
+      "umd": "신장동"
+    },
+    "경기 하남시|신장동|에코타운(B블럭)": {
+      "history": [],
+      "name": "에코타운(B블럭)",
+      "region_slug": "gyeonggi-hanam",
+      "since": "2026-08-03",
+      "slug": "ekotaun-bbeulreok",
       "umd": "신장동"
     },
     "경기 하남시|신장동|하남석바대마을동신": {
@@ -24442,6 +26090,14 @@
       "slug": "hilseuteiteubongdampeuraideusiti",
       "umd": "내리"
     },
+    "경기 화성시|능동|능동마을이지더원": {
+      "history": [],
+      "name": "능동마을이지더원",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "neungdongmaeulijideowon",
+      "umd": "능동"
+    },
     "경기 화성시|능동|동탄숲속마을 광명메이루즈": {
       "history": [],
       "name": "동탄숲속마을 광명메이루즈",
@@ -24690,6 +26346,14 @@
       "slug": "geumgwangporanjae",
       "umd": "무송리"
     },
+    "경기 화성시|반송동|METAPOLIS": {
+      "history": [],
+      "name": "METAPOLIS",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "metapolis",
+      "umd": "반송동"
+    },
     "경기 화성시|반송동|나루마을신도브래뉴": {
       "history": [],
       "name": "나루마을신도브래뉴",
@@ -24698,12 +26362,28 @@
       "slug": "narumaeulsindobeuraenyu",
       "umd": "반송동"
     },
+    "경기 화성시|반송동|나루마을월드메르디앙반도유보라": {
+      "history": [],
+      "name": "나루마을월드메르디앙반도유보라",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "narumaeulwoldeumereudiangbandoyubora",
+      "umd": "반송동"
+    },
     "경기 화성시|반송동|나루마을한화꿈에그린": {
       "history": [],
       "name": "나루마을한화꿈에그린",
       "region_slug": "gyeonggi-hwaseong",
       "since": "2026-08-02",
       "slug": "narumaeulhanhwakkumegeurin",
+      "umd": "반송동"
+    },
+    "경기 화성시|반송동|나루마을한화꿈에그린우림필유": {
+      "history": [],
+      "name": "나루마을한화꿈에그린우림필유",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "narumaeulhanhwakkumegeurinurimpilyu",
       "umd": "반송동"
     },
     "경기 화성시|반송동|동탄나루마을동탄역U.BORA여울숲1.0": {
@@ -24720,6 +26400,14 @@
       "region_slug": "gyeonggi-hwaseong",
       "since": "2026-07-26",
       "slug": "dongtansenteureolporeseuteu",
+      "umd": "반송동"
+    },
+    "경기 화성시|반송동|동탄시범다은마을 월드메르디앙 반도유보라": {
+      "history": [],
+      "name": "동탄시범다은마을 월드메르디앙 반도유보라",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "dongtansibeomdaeunmaeul-woldeumereudiang-bandoyubora",
       "umd": "반송동"
     },
     "경기 화성시|반송동|동탄시범다은마을센트럴파크뷰": {
@@ -24794,12 +26482,28 @@
       "slug": "sibeomhanbitmaeulgeumhoeoulrim",
       "umd": "반송동"
     },
+    "경기 화성시|반송동|시범한빛마을동탄아이파크": {
+      "history": [],
+      "name": "시범한빛마을동탄아이파크",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "sibeomhanbitmaeuldongtanaipakeu",
+      "umd": "반송동"
+    },
     "경기 화성시|반송동|시범한빛마을삼부르네상스": {
       "history": [],
       "name": "시범한빛마을삼부르네상스",
       "region_slug": "gyeonggi-hwaseong",
       "since": "2026-07-26",
       "slug": "sibeomhanbitmaeulsambureunesangseu",
+      "umd": "반송동"
+    },
+    "경기 화성시|반송동|시범한빛마을케이씨씨스위첸": {
+      "history": [],
+      "name": "시범한빛마을케이씨씨스위첸",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "sibeomhanbitmaeulkeississiseuwichen",
       "umd": "반송동"
     },
     "경기 화성시|반송동|시범한빛마을한화꿈에그린": {
@@ -25138,6 +26842,30 @@
       "slug": "geurinhil-bandoyubora-aibipakeu-10-1danji",
       "umd": "산척동"
     },
+    "경기 화성시|산척동|더레이크시티부영1단지": {
+      "history": [],
+      "name": "더레이크시티부영1단지",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "deoreikeusitibuyeong1danji",
+      "umd": "산척동"
+    },
+    "경기 화성시|산척동|더레이크시티부영2단지": {
+      "history": [],
+      "name": "더레이크시티부영2단지",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "deoreikeusitibuyeong2danji",
+      "umd": "산척동"
+    },
+    "경기 화성시|산척동|더레이크시티부영5단지": {
+      "history": [],
+      "name": "더레이크시티부영5단지",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "deoreikeusitibuyeong5danji",
+      "umd": "산척동"
+    },
     "경기 화성시|산척동|더레이크시티부영6단지": {
       "history": [],
       "name": "더레이크시티부영6단지",
@@ -25168,6 +26896,22 @@
       "region_slug": "gyeonggi-hwaseong",
       "since": "2026-08-02",
       "slug": "sancheokdong-dongtanhosugongwongeumgangpenteriumsenteureolpakeu",
+      "umd": "산척동"
+    },
+    "경기 화성시|산척동|서희스타힐스엔에이치에프": {
+      "history": [],
+      "name": "서희스타힐스엔에이치에프",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "seohuiseutahilseueneichiepeu",
+      "umd": "산척동"
+    },
+    "경기 화성시|산척동|중흥에스클래스에듀하이": {
+      "history": [],
+      "name": "중흥에스클래스에듀하이",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "jungheungeseukeulraeseuedyuhai",
       "umd": "산척동"
     },
     "경기 화성시|산척동|호수공원역 센트럴시티": {
@@ -25290,6 +27034,14 @@
       "slug": "hanyangsujaindieseutiji",
       "umd": "상신리"
     },
+    "경기 화성시|새솔동|금강펜테리움센트럴파크송산": {
+      "history": [],
+      "name": "금강펜테리움센트럴파크송산",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "geumgangpenteriumsenteureolpakeusongsan",
+      "umd": "새솔동"
+    },
     "경기 화성시|새솔동|더펠리체휴먼빌": {
       "history": [],
       "name": "더펠리체휴먼빌",
@@ -25409,6 +27161,14 @@
       "since": "2026-07-26",
       "slug": "pureujio",
       "umd": "석우동"
+    },
+    "경기 화성시|송동|동탄2엘에이치26단지아파트(에이65블록)": {
+      "history": [],
+      "name": "동탄2엘에이치26단지아파트(에이65블록)",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "dongtan2eleichi26danjiapateu-ei65beulrok",
+      "umd": "송동"
     },
     "경기 화성시|송동|동탄2하우스디더레이크": {
       "history": [],
@@ -25794,6 +27554,22 @@
       "slug": "hwaseongdongtan2senteureolhiljeudongtanapateu",
       "umd": "여울동"
     },
+    "경기 화성시|영천동|동탄2신도시4차동원로얄듀크포레": {
+      "history": [],
+      "name": "동탄2신도시4차동원로얄듀크포레",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "dongtan2sindosi4chadongwonroyaldyukeupore",
+      "umd": "영천동"
+    },
+    "경기 화성시|영천동|동탄역경남아너스빌": {
+      "history": [],
+      "name": "동탄역경남아너스빌",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "dongtanyeokgyeongnamaneoseubil",
+      "umd": "영천동"
+    },
     "경기 화성시|영천동|동탄역대방디엠시티더센텀": {
       "history": [],
       "name": "동탄역대방디엠시티더센텀",
@@ -26010,12 +27786,28 @@
       "slug": "geumhoeoulrimreikeu2cha",
       "umd": "장지동"
     },
+    "경기 화성시|장지동|동탄2신도시호반베르디움33단지": {
+      "history": [],
+      "name": "동탄2신도시호반베르디움33단지",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "dongtan2sindosihobanbereudium33danji",
+      "umd": "장지동"
+    },
     "경기 화성시|장지동|동탄2아이파크1단지": {
       "history": [],
       "name": "동탄2아이파크1단지",
       "region_slug": "gyeonggi-hwaseong",
       "since": "2026-08-02",
       "slug": "dongtan2aipakeu1danji",
+      "umd": "장지동"
+    },
+    "경기 화성시|장지동|동탄2아이파크2단지": {
+      "history": [],
+      "name": "동탄2아이파크2단지",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "dongtan2aipakeu2danji",
       "umd": "장지동"
     },
     "경기 화성시|장지동|동탄레이크자연앤푸르지오": {
@@ -26065,6 +27857,14 @@
       "since": "2026-07-26",
       "slug": "hanhwa-porena-dongtanhosu",
       "umd": "장지동"
+    },
+    "경기 화성시|장짐리|장짐마을신성발안2차미소지움A": {
+      "history": [],
+      "name": "장짐마을신성발안2차미소지움A",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "jangjimmaeulsinseongbalan2chamisojiuma",
+      "umd": "장짐리"
     },
     "경기 화성시|장짐리|장짐마을신성발안미소지움": {
       "history": [],
@@ -26242,6 +28042,14 @@
       "slug": "dongtanyeoksinaninseubilribera1cha",
       "umd": "청계동"
     },
+    "경기 화성시|청계동|동탄역신안인스빌리베라2차": {
+      "history": [],
+      "name": "동탄역신안인스빌리베라2차",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "dongtanyeoksinaninseubilribera2cha",
+      "umd": "청계동"
+    },
     "경기 화성시|청계동|롯데캐슬 알바트로스": {
       "history": [],
       "name": "롯데캐슬 알바트로스",
@@ -26257,6 +28065,14 @@
       "since": "2026-08-02",
       "slug": "sibeombandoyuboraaibipakeu4-0",
       "umd": "청계동"
+    },
+    "경기 화성시|하길리|모아미래도에듀파크서봉마을4단지": {
+      "history": [],
+      "name": "모아미래도에듀파크서봉마을4단지",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-03",
+      "slug": "moamiraedoedyupakeuseobongmaeul4danji",
+      "umd": "하길리"
     },
     "경기 화성시|하길리|서봉마을모아엘가": {
       "history": [],
@@ -26738,6 +28554,14 @@
       "slug": "boseongeunha",
       "umd": "상인동"
     },
+    "대구 달서구|상인동|상인e-편한세상1단지": {
+      "history": [],
+      "name": "상인e-편한세상1단지",
+      "region_slug": "daegu-dalseo",
+      "since": "2026-08-03",
+      "slug": "sangine-pyeonhansesang1danji",
+      "umd": "상인동"
+    },
     "대구 달서구|상인동|상인대성스카이렉스": {
       "history": [],
       "name": "상인대성스카이렉스",
@@ -26840,6 +28664,14 @@
       "region_slug": "daegu-dalseo",
       "since": "2026-07-26",
       "slug": "sanginhwaseonghaicheu",
+      "umd": "상인동"
+    },
+    "대구 달서구|상인동|시영장미3": {
+      "history": [],
+      "name": "시영장미3",
+      "region_slug": "daegu-dalseo",
+      "since": "2026-08-03",
+      "slug": "siyeongjangmi3",
       "umd": "상인동"
     },
     "대구 달서구|상인동|시영장미4": {
@@ -27072,6 +28904,14 @@
       "region_slug": "daegu-dalseo",
       "since": "2026-07-30",
       "slug": "yongsanseohanhwaseong1",
+      "umd": "용산동"
+    },
+    "대구 달서구|용산동|용산세광그린빌": {
+      "history": [],
+      "name": "용산세광그린빌",
+      "region_slug": "daegu-dalseo",
+      "since": "2026-08-03",
+      "slug": "yongsansegwanggeurinbil",
       "umd": "용산동"
     },
     "대구 달서구|용산동|용산영남": {
@@ -28026,6 +29866,14 @@
       "slug": "gadeunhaicheu1",
       "umd": "범어동"
     },
+    "대구 수성구|범어동|가든하이츠3": {
+      "history": [],
+      "name": "가든하이츠3",
+      "region_slug": "daegu-suseong",
+      "since": "2026-08-03",
+      "slug": "gadeunhaicheu3",
+      "umd": "범어동"
+    },
     "대구 수성구|범어동|경남타운": {
       "history": [],
       "name": "경남타운",
@@ -28152,6 +30000,14 @@
       "region_slug": "daegu-suseong",
       "since": "2026-07-26",
       "slug": "beomeoeilrinuitteul",
+      "umd": "범어동"
+    },
+    "대구 수성구|범어동|범어역아이위시": {
+      "history": [],
+      "name": "범어역아이위시",
+      "region_slug": "daegu-suseong",
+      "since": "2026-08-03",
+      "slug": "beomeoyeokaiwisi",
       "umd": "범어동"
     },
     "대구 수성구|범어동|범어역우방유쉘": {
@@ -28506,6 +30362,14 @@
       "slug": "suseongkooronghaneulchae",
       "umd": "수성동3가"
     },
+    "대구 수성구|수성동4가|대림이편한세상": {
+      "history": [],
+      "name": "대림이편한세상",
+      "region_slug": "daegu-suseong",
+      "since": "2026-08-03",
+      "slug": "daerimipyeonhansesang",
+      "umd": "수성동4가"
+    },
     "대구 수성구|수성동4가|수성롯데캐슬": {
       "history": [],
       "name": "수성롯데캐슬",
@@ -28816,6 +30680,14 @@
       "region_slug": "daegu-suseong",
       "since": "2026-07-30",
       "slug": "boguksijiwelrichi",
+      "umd": "욱수동"
+    },
+    "대구 수성구|욱수동|시지5태왕하이츠": {
+      "history": [],
+      "name": "시지5태왕하이츠",
+      "region_slug": "daegu-suseong",
+      "since": "2026-08-03",
+      "slug": "siji5taewanghaicheu",
       "umd": "욱수동"
     },
     "대구 수성구|중동|광명프레지던트": {
@@ -29336,6 +31208,14 @@
       "region_slug": "daejeon-seogu",
       "since": "2026-07-30",
       "slug": "rotde",
+      "umd": "내동"
+    },
+    "대전 서구|내동|서우2단지": {
+      "history": [],
+      "name": "서우2단지",
+      "region_slug": "daejeon-seogu",
+      "since": "2026-08-03",
+      "slug": "seou2danji",
       "umd": "내동"
     },
     "대전 서구|내동|코오롱": {
@@ -29890,6 +31770,14 @@
       "slug": "hanareum",
       "umd": "월평동"
     },
+    "대전 서구|정림동|강변들금성백조": {
+      "history": [],
+      "name": "강변들금성백조",
+      "region_slug": "daejeon-seogu",
+      "since": "2026-08-03",
+      "slug": "gangbyeondeulgeumseongbaekjo",
+      "umd": "정림동"
+    },
     "대전 서구|정림동|강변들보람": {
       "history": [],
       "name": "강변들보람",
@@ -30234,6 +32122,14 @@
       "slug": "daejeondungokumirin",
       "umd": "둔곡동"
     },
+    "대전 유성구|둔곡동|유성둔곡지구A1BL서한이다음": {
+      "history": [],
+      "name": "유성둔곡지구A1BL서한이다음",
+      "region_slug": "daejeon-yuseong",
+      "since": "2026-08-03",
+      "slug": "yuseongdungokjigua1blseohanidaeum",
+      "umd": "둔곡동"
+    },
     "대전 유성구|둔곡동|유성둔곡지구A2BL서한이다음": {
       "history": [],
       "name": "유성둔곡지구A2BL서한이다음",
@@ -30568,6 +32464,14 @@
       "region_slug": "daejeon-yuseong",
       "since": "2026-07-26",
       "slug": "reokkihana",
+      "umd": "신성동"
+    },
+    "대전 유성구|신성동|한울": {
+      "history": [],
+      "name": "한울",
+      "region_slug": "daejeon-yuseong",
+      "since": "2026-08-03",
+      "slug": "hanul",
       "umd": "신성동"
     },
     "대전 유성구|용산동|경남아너스빌1단지": {
@@ -31418,6 +33322,14 @@
       "slug": "epyeonhansesangdongraeasiadeu",
       "umd": "온천동"
     },
+    "부산 동래구|온천동|대동타운": {
+      "history": [],
+      "name": "대동타운",
+      "region_slug": "busan-dongrae",
+      "since": "2026-08-03",
+      "slug": "daedongtaun",
+      "umd": "온천동"
+    },
     "부산 동래구|온천동|대륙코리아나": {
       "history": [],
       "name": "대륙코리아나",
@@ -31762,12 +33674,28 @@
       "slug": "eljisingaegeum-2-2",
       "umd": "개금동"
     },
+    "부산 부산진구|개금동|우성": {
+      "history": [],
+      "name": "우성",
+      "region_slug": "busan-busanjin",
+      "since": "2026-08-03",
+      "slug": "useong",
+      "umd": "개금동"
+    },
     "부산 부산진구|개금동|이진젠시티개금": {
       "history": [],
       "name": "이진젠시티개금",
       "region_slug": "busan-busanjin",
       "since": "2026-07-26",
       "slug": "ijinjensitigaegeum",
+      "umd": "개금동"
+    },
+    "부산 부산진구|개금동|한진": {
+      "history": [],
+      "name": "한진",
+      "region_slug": "busan-busanjin",
+      "since": "2026-08-03",
+      "slug": "hanjin",
       "umd": "개금동"
     },
     "부산 부산진구|개금동|현대": {
@@ -31810,6 +33738,22 @@
       "slug": "dongilseuwiteu",
       "umd": "당감동"
     },
+    "부산 부산진구|당감동|무궁화아파트101동,102동,103동,105동,106동": {
+      "history": [],
+      "name": "무궁화아파트101동,102동,103동,105동,106동",
+      "region_slug": "busan-busanjin",
+      "since": "2026-08-03",
+      "slug": "mugunghwaapateu101dong-102dong-103dong-105dong-106dong",
+      "umd": "당감동"
+    },
+    "부산 부산진구|당감동|백산": {
+      "history": [],
+      "name": "백산",
+      "region_slug": "busan-busanjin",
+      "since": "2026-08-03",
+      "slug": "baeksan",
+      "umd": "당감동"
+    },
     "부산 부산진구|당감동|백양뜨란채,주공아파트(1단지)": {
       "history": [],
       "name": "백양뜨란채,주공아파트(1단지)",
@@ -31824,6 +33768,14 @@
       "region_slug": "busan-busanjin",
       "since": "2026-07-26",
       "slug": "byeoksanbeulruming",
+      "umd": "당감동"
+    },
+    "부산 부산진구|당감동|삼익아파트": {
+      "history": [],
+      "name": "삼익아파트",
+      "region_slug": "busan-busanjin",
+      "since": "2026-08-03",
+      "slug": "samikapateu",
       "umd": "당감동"
     },
     "부산 부산진구|당감동|서면봄여름가을겨울": {
@@ -31968,6 +33920,14 @@
       "region_slug": "busan-busanjin",
       "since": "2026-07-26",
       "slug": "seomyeonyurimnoreuweisup",
+      "umd": "범천동"
+    },
+    "부산 부산진구|범천동|서면이-편한세상": {
+      "history": [],
+      "name": "서면이-편한세상",
+      "region_slug": "busan-busanjin",
+      "since": "2026-08-03",
+      "slug": "seomyeoni-pyeonhansesang",
       "umd": "범천동"
     },
     "부산 부산진구|범천동|허브팰리스": {
@@ -32570,6 +34530,14 @@
       "slug": "suyeongskview1danji",
       "umd": "망미동"
     },
+    "부산 수영구|망미동|이편한세상1차": {
+      "history": [],
+      "name": "이편한세상1차",
+      "region_slug": "busan-suyeong",
+      "since": "2026-08-03",
+      "slug": "ipyeonhansesang1cha",
+      "umd": "망미동"
+    },
     "부산 수영구|망미동|이편한세상2차": {
       "history": [],
       "name": "이편한세상2차",
@@ -32794,6 +34762,14 @@
       "slug": "senteomkccseuwichen",
       "umd": "반여동"
     },
+    "부산 해운대구|반여동|센텀SD": {
+      "history": [],
+      "name": "센텀SD",
+      "region_slug": "busan-haeundae",
+      "since": "2026-08-03",
+      "slug": "senteomsd",
+      "umd": "반여동"
+    },
     "부산 해운대구|반여동|센텀롯데캐슬3차아파트": {
       "history": [],
       "name": "센텀롯데캐슬3차아파트",
@@ -32960,6 +34936,14 @@
       "region_slug": "busan-haeundae",
       "since": "2026-07-26",
       "slug": "daeuteureompeuwoldeusenteom",
+      "umd": "우동"
+    },
+    "부산 해운대구|우동|롯데": {
+      "history": [],
+      "name": "롯데",
+      "region_slug": "busan-haeundae",
+      "since": "2026-08-03",
+      "slug": "rotde",
       "umd": "우동"
     },
     "부산 해운대구|우동|마린시티자이": {
@@ -33296,6 +35280,14 @@
       "region_slug": "busan-haeundae",
       "since": "2026-07-26",
       "slug": "sindonga-2",
+      "umd": "재송동"
+    },
+    "부산 해운대구|재송동|장산동국": {
+      "history": [],
+      "name": "장산동국",
+      "region_slug": "busan-haeundae",
+      "since": "2026-08-03",
+      "slug": "jangsandongguk",
       "umd": "재송동"
     },
     "부산 해운대구|재송동|재송그린": {
@@ -33850,6 +35842,14 @@
       "slug": "akeurohilseunonhyeon",
       "umd": "논현동"
     },
+    "서울 강남구|대치동|개포우성2": {
+      "history": [],
+      "name": "개포우성2",
+      "region_slug": "seoul-gangnam",
+      "since": "2026-08-03",
+      "slug": "gaepouseong2",
+      "umd": "대치동"
+    },
     "서울 강남구|대치동|대치르엘": {
       "history": [],
       "name": "대치르엘",
@@ -33904,6 +35904,14 @@
       "region_slug": "seoul-gangnam",
       "since": "2026-07-26",
       "slug": "dongbusenteurebil",
+      "umd": "대치동"
+    },
+    "서울 강남구|대치동|선경1차(1동-7동)": {
+      "history": [],
+      "name": "선경1차(1동-7동)",
+      "region_slug": "seoul-gangnam",
+      "since": "2026-08-03",
+      "slug": "seongyeong1cha-1dong-7dong",
       "umd": "대치동"
     },
     "서울 강남구|대치동|쌍용대치아파트1동,2동,3동,5동,6동": {
@@ -33962,6 +35970,14 @@
       "slug": "daerimakeurobil",
       "umd": "도곡동"
     },
+    "서울 강남구|도곡동|대우디오빌": {
+      "history": [],
+      "name": "대우디오빌",
+      "region_slug": "seoul-gangnam",
+      "since": "2026-08-03",
+      "slug": "daeudiobil-2",
+      "umd": "도곡동"
+    },
     "서울 강남구|도곡동|도곡쌍용예가": {
       "history": [],
       "name": "도곡쌍용예가",
@@ -34016,6 +36032,14 @@
       "region_slug": "seoul-gangnam",
       "since": "2026-08-02",
       "slug": "tawopaelriseu3",
+      "umd": "도곡동"
+    },
+    "서울 강남구|도곡동|한신(개포)": {
+      "history": [],
+      "name": "한신(개포)",
+      "region_slug": "seoul-gangnam",
+      "since": "2026-08-03",
+      "slug": "hansin-gaepo",
       "umd": "도곡동"
     },
     "서울 강남구|삼성동|LG선릉에클라트(A)": {
@@ -34242,6 +36266,14 @@
       "slug": "daerimyeoksam",
       "umd": "역삼동"
     },
+    "서울 강남구|역삼동|대우디오빌": {
+      "history": [],
+      "name": "대우디오빌",
+      "region_slug": "seoul-gangnam",
+      "since": "2026-08-03",
+      "slug": "daeudiobil",
+      "umd": "역삼동"
+    },
     "서울 강남구|역삼동|대우디오빌플러스": {
       "history": [],
       "name": "대우디오빌플러스",
@@ -34440,6 +36472,14 @@
       "region_slug": "seoul-gangnam",
       "since": "2026-07-26",
       "slug": "samseongcheongdamapateu",
+      "umd": "청담동"
+    },
+    "서울 강남구|청담동|삼환(101동)": {
+      "history": [],
+      "name": "삼환(101동)",
+      "region_slug": "seoul-gangnam",
+      "since": "2026-08-03",
+      "slug": "samhwan-101dong",
       "umd": "청담동"
     },
     "서울 강남구|청담동|청담대림이-편한세상": {
@@ -34770,6 +36810,14 @@
       "slug": "sindonga",
       "umd": "명일동"
     },
+    "서울 강동구|명일동|한양": {
+      "history": [],
+      "name": "한양",
+      "region_slug": "seoul-gangdong",
+      "since": "2026-08-03",
+      "slug": "hanyang",
+      "umd": "명일동"
+    },
     "서울 강동구|명일동|형인허브빌": {
       "history": [],
       "name": "형인허브빌",
@@ -34938,6 +36986,14 @@
       "slug": "gangbyeongeudaegaribeobyu",
       "umd": "천호동"
     },
+    "서울 강동구|천호동|금호아파트": {
+      "history": [],
+      "name": "금호아파트",
+      "region_slug": "seoul-gangdong",
+      "since": "2026-08-03",
+      "slug": "geumhoapateu",
+      "umd": "천호동"
+    },
     "서울 강동구|천호동|대명사이버아파트": {
       "history": [],
       "name": "대명사이버아파트",
@@ -35050,6 +37106,14 @@
       "slug": "pureujiositi",
       "umd": "미아동"
     },
+    "서울 강북구|미아동|현대(190-2)": {
+      "history": [],
+      "name": "현대(190-2)",
+      "region_slug": "seoul-gangbuk",
+      "since": "2026-08-03",
+      "slug": "hyeondae-190-2",
+      "umd": "미아동"
+    },
     "서울 강북구|번동|기산그린": {
       "history": [],
       "name": "기산그린",
@@ -35080,6 +37144,14 @@
       "region_slug": "seoul-gangbuk",
       "since": "2026-07-26",
       "slug": "suyuyeokdusanwibeu1",
+      "umd": "번동"
+    },
+    "서울 강북구|번동|신원": {
+      "history": [],
+      "name": "신원",
+      "region_slug": "seoul-gangbuk",
+      "since": "2026-08-03",
+      "slug": "sinwon",
       "umd": "번동"
     },
     "서울 강북구|번동|오동공원현대": {
@@ -35209,6 +37281,14 @@
       "since": "2026-07-26",
       "slug": "hangangtaun",
       "umd": "가양동"
+    },
+    "서울 강서구|공항동|공항동부센트레빌": {
+      "history": [],
+      "name": "공항동부센트레빌",
+      "region_slug": "seoul-gangseo",
+      "since": "2026-08-03",
+      "slug": "gonghangdongbusenteurebil",
+      "umd": "공항동"
     },
     "서울 강서구|공항동|해태": {
       "history": [],
@@ -35370,6 +37450,14 @@
       "slug": "deungchon7-8danjijugongapateu",
       "umd": "등촌동"
     },
+    "서울 강서구|등촌동|등촌동아이파크": {
+      "history": [],
+      "name": "등촌동아이파크",
+      "region_slug": "seoul-gangseo",
+      "since": "2026-08-03",
+      "slug": "deungchondongaipakeu",
+      "umd": "등촌동"
+    },
     "서울 강서구|등촌동|등촌동현대2차": {
       "history": [],
       "name": "등촌동현대2차",
@@ -35505,6 +37593,14 @@
       "since": "2026-08-01",
       "slug": "hyeondae",
       "umd": "등촌동"
+    },
+    "서울 강서구|마곡동|길훈": {
+      "history": [],
+      "name": "길훈",
+      "region_slug": "seoul-gangseo",
+      "since": "2026-08-03",
+      "slug": "gilhun",
+      "umd": "마곡동"
     },
     "서울 강서구|마곡동|마곡13단지힐스테이트마스터": {
       "history": [],
@@ -35890,6 +37986,14 @@
       "slug": "geukdongsangroksu",
       "umd": "염창동"
     },
+    "서울 강서구|염창동|길훈": {
+      "history": [],
+      "name": "길훈",
+      "region_slug": "seoul-gangseo",
+      "since": "2026-08-03",
+      "slug": "gilhun-2",
+      "umd": "염창동"
+    },
     "서울 강서구|염창동|대림": {
       "history": [],
       "name": "대림",
@@ -36000,6 +38104,14 @@
       "region_slug": "seoul-gangseo",
       "since": "2026-08-02",
       "slug": "yeomchang3useong",
+      "umd": "염창동"
+    },
+    "서울 강서구|염창동|염창동한강우성": {
+      "history": [],
+      "name": "염창동한강우성",
+      "region_slug": "seoul-gangseo",
+      "since": "2026-08-03",
+      "slug": "yeomchangdonghanganguseong",
       "umd": "염창동"
     },
     "서울 강서구|염창동|염창힐스테이트": {
@@ -36152,6 +38264,14 @@
       "region_slug": "seoul-gangseo",
       "since": "2026-07-26",
       "slug": "taeyeongbangsongin",
+      "umd": "화곡동"
+    },
+    "서울 강서구|화곡동|화곡보람": {
+      "history": [],
+      "name": "화곡보람",
+      "region_slug": "seoul-gangseo",
+      "since": "2026-08-03",
+      "slug": "hwagokboram",
       "umd": "화곡동"
     },
     "서울 관악구|남현동|남현동한일유앤아이": {
@@ -36530,6 +38650,14 @@
       "slug": "taeheung",
       "umd": "신림동"
     },
+    "서울 관악구|신림동|현대": {
+      "history": [],
+      "name": "현대",
+      "region_slug": "seoul-gwanak",
+      "since": "2026-08-03",
+      "slug": "hyeondae",
+      "umd": "신림동"
+    },
     "서울 광진구|광장동|광나루현대": {
       "history": [],
       "name": "광나루현대",
@@ -36874,6 +39002,14 @@
       "slug": "eseukei",
       "umd": "중곡동"
     },
+    "서울 광진구|중곡동|중곡1단지": {
+      "history": [],
+      "name": "중곡1단지",
+      "region_slug": "seoul-gwangjin",
+      "since": "2026-08-03",
+      "slug": "junggok1danji",
+      "umd": "중곡동"
+    },
     "서울 광진구|화양동|광진코지웰": {
       "history": [],
       "name": "광진코지웰",
@@ -37064,6 +39200,14 @@
       "region_slug": "seoul-guro",
       "since": "2026-07-26",
       "slug": "gocheokpakeupureujio",
+      "umd": "고척동"
+    },
+    "서울 구로구|고척동|대우": {
+      "history": [],
+      "name": "대우",
+      "region_slug": "seoul-guro",
+      "since": "2026-08-03",
+      "slug": "daeu",
       "umd": "고척동"
     },
     "서울 구로구|고척동|동아한신": {
@@ -37338,6 +39482,22 @@
       "slug": "uminneulpureun",
       "umd": "구로동"
     },
+    "서울 구로구|구로동|우방": {
+      "history": [],
+      "name": "우방",
+      "region_slug": "seoul-guro",
+      "since": "2026-08-03",
+      "slug": "ubang",
+      "umd": "구로동"
+    },
+    "서울 구로구|구로동|우성(23)": {
+      "history": [],
+      "name": "우성(23)",
+      "region_slug": "seoul-guro",
+      "since": "2026-08-03",
+      "slug": "useong-23",
+      "umd": "구로동"
+    },
     "서울 구로구|구로동|월드": {
       "history": [],
       "name": "월드",
@@ -37384,6 +39544,14 @@
       "region_slug": "seoul-guro",
       "since": "2026-07-26",
       "slug": "junganghaicheu",
+      "umd": "구로동"
+    },
+    "서울 구로구|구로동|중앙하이츠(1269)": {
+      "history": [],
+      "name": "중앙하이츠(1269)",
+      "region_slug": "seoul-guro",
+      "since": "2026-08-03",
+      "slug": "junganghaicheu-1269",
       "umd": "구로동"
     },
     "서울 구로구|구로동|한국현대": {
@@ -37898,6 +40066,14 @@
       "slug": "gwanaksansindobeuraenyu",
       "umd": "시흥동"
     },
+    "서울 금천구|시흥동|금강": {
+      "history": [],
+      "name": "금강",
+      "region_slug": "seoul-geumcheon",
+      "since": "2026-08-03",
+      "slug": "geumgang",
+      "umd": "시흥동"
+    },
     "서울 금천구|시흥동|남서울건영아파트": {
       "history": [],
       "name": "남서울건영아파트",
@@ -38024,6 +40200,14 @@
       "region_slug": "seoul-nowon",
       "since": "2026-08-01",
       "slug": "dongbuapateu",
+      "umd": "공릉동"
+    },
+    "서울 노원구|공릉동|동신아파트": {
+      "history": [],
+      "name": "동신아파트",
+      "region_slug": "seoul-nowon",
+      "since": "2026-08-03",
+      "slug": "dongsinapateu",
       "umd": "공릉동"
     },
     "서울 노원구|공릉동|두산힐스빌아파트": {
@@ -38176,6 +40360,14 @@
       "region_slug": "seoul-nowon",
       "since": "2026-07-26",
       "slug": "hanilhyuniseubil",
+      "umd": "공릉동"
+    },
+    "서울 노원구|공릉동|현대(고려)아파트": {
+      "history": [],
+      "name": "현대(고려)아파트",
+      "region_slug": "seoul-nowon",
+      "since": "2026-08-03",
+      "slug": "hyeondae-goryeo-apateu",
       "umd": "공릉동"
     },
     "서울 노원구|공릉동|현대성우아파트": {
@@ -38562,6 +40754,14 @@
       "slug": "junggyesenteureolpakeu",
       "umd": "상계동"
     },
+    "서울 노원구|상계동|중앙하이츠(5지역)": {
+      "history": [],
+      "name": "중앙하이츠(5지역)",
+      "region_slug": "seoul-nowon",
+      "since": "2026-08-03",
+      "slug": "junganghaicheu-5jiyeok",
+      "umd": "상계동"
+    },
     "서울 노원구|상계동|청암2단지": {
       "history": [],
       "name": "청암2단지",
@@ -38664,6 +40864,14 @@
       "region_slug": "seoul-nowon",
       "since": "2026-07-26",
       "slug": "nokcheonyeokdusanwibeuapateu",
+      "umd": "월계동"
+    },
+    "서울 노원구|월계동|대동": {
+      "history": [],
+      "name": "대동",
+      "region_slug": "seoul-nowon",
+      "since": "2026-08-03",
+      "slug": "daedong",
       "umd": "월계동"
     },
     "서울 노원구|월계동|대우": {
@@ -38866,6 +41074,14 @@
       "slug": "geonyeong3",
       "umd": "중계동"
     },
+    "서울 노원구|중계동|경남": {
+      "history": [],
+      "name": "경남",
+      "region_slug": "seoul-nowon",
+      "since": "2026-08-03",
+      "slug": "gyeongnam",
+      "umd": "중계동"
+    },
     "서울 노원구|중계동|경남아너스빌": {
       "history": [],
       "name": "경남아너스빌",
@@ -39010,6 +41226,14 @@
       "slug": "junggyehyeondae2",
       "umd": "중계동"
     },
+    "서울 노원구|중계동|중앙하이츠": {
+      "history": [],
+      "name": "중앙하이츠",
+      "region_slug": "seoul-nowon",
+      "since": "2026-08-03",
+      "slug": "junganghaicheu",
+      "umd": "중계동"
+    },
     "서울 노원구|중계동|중앙하이츠아쿠아": {
       "history": [],
       "name": "중앙하이츠아쿠아",
@@ -39090,6 +41314,14 @@
       "slug": "hyeondaegeurin",
       "umd": "중계동"
     },
+    "서울 노원구|하계동|건영": {
+      "history": [],
+      "name": "건영",
+      "region_slug": "seoul-nowon",
+      "since": "2026-08-03",
+      "slug": "geonyeong",
+      "umd": "하계동"
+    },
     "서울 노원구|하계동|극동": {
       "history": [],
       "name": "극동",
@@ -39120,6 +41352,14 @@
       "region_slug": "seoul-nowon",
       "since": "2026-07-26",
       "slug": "samikseongyeong",
+      "umd": "하계동"
+    },
+    "서울 노원구|하계동|우방": {
+      "history": [],
+      "name": "우방",
+      "region_slug": "seoul-nowon",
+      "since": "2026-08-03",
+      "slug": "ubang",
       "umd": "하계동"
     },
     "서울 노원구|하계동|우성": {
@@ -39504,6 +41744,14 @@
       "region_slug": "seoul-dobong",
       "since": "2026-07-26",
       "slug": "sitipeuradium",
+      "umd": "쌍문동"
+    },
+    "서울 도봉구|쌍문동|신원2": {
+      "history": [],
+      "name": "신원2",
+      "region_slug": "seoul-dobong",
+      "since": "2026-08-03",
+      "slug": "sinwon2",
       "umd": "쌍문동"
     },
     "서울 도봉구|쌍문동|쌍문동삼성래미안": {
@@ -40226,6 +42474,14 @@
       "slug": "hyeondae-3",
       "umd": "청량리동"
     },
+    "서울 동대문구|회기동|민족통일MJ캠퍼스경희대": {
+      "history": [],
+      "name": "민족통일MJ캠퍼스경희대",
+      "region_slug": "seoul-dongdaemun",
+      "since": "2026-08-03",
+      "slug": "minjoktongilmjkaempeoseugyeonghuidae",
+      "umd": "회기동"
+    },
     "서울 동대문구|회기동|베라체캠퍼스": {
       "history": [],
       "name": "베라체캠퍼스",
@@ -40256,6 +42512,14 @@
       "region_slug": "seoul-dongdaemun",
       "since": "2026-07-26",
       "slug": "dongilseuwiteuribeo",
+      "umd": "휘경동"
+    },
+    "서울 동대문구|휘경동|롯데": {
+      "history": [],
+      "name": "롯데",
+      "region_slug": "seoul-dongdaemun",
+      "since": "2026-08-03",
+      "slug": "rotde",
       "umd": "휘경동"
     },
     "서울 동대문구|휘경동|롯데낙천대": {
@@ -40490,6 +42754,14 @@
       "slug": "daerim-169-8",
       "umd": "사당동"
     },
+    "서울 동작구|사당동|대성유니드": {
+      "history": [],
+      "name": "대성유니드",
+      "region_slug": "seoul-dongjak",
+      "since": "2026-08-03",
+      "slug": "daeseongyunideu",
+      "umd": "사당동"
+    },
     "서울 동작구|사당동|두산위브트레지움": {
       "history": [],
       "name": "두산위브트레지움",
@@ -40680,6 +42952,14 @@
       "region_slug": "seoul-dongjak",
       "since": "2026-07-26",
       "slug": "sangdodeosyap2cha",
+      "umd": "상도동"
+    },
+    "서울 동작구|상도동|상도동래미안1차": {
+      "history": [],
+      "name": "상도동래미안1차",
+      "region_slug": "seoul-dongjak",
+      "since": "2026-08-03",
+      "slug": "sangdodongraemian1cha",
       "umd": "상도동"
     },
     "서울 동작구|상도동|상도두산위브": {
@@ -41026,6 +43306,14 @@
       "slug": "useong",
       "umd": "도화동"
     },
+    "서울 마포구|도화동|정우상가맨션": {
+      "history": [],
+      "name": "정우상가맨션",
+      "region_slug": "seoul-mapo",
+      "since": "2026-08-03",
+      "slug": "jeongusanggamaensyeon",
+      "umd": "도화동"
+    },
     "서울 마포구|도화동|현대홈타운": {
       "history": [],
       "name": "현대홈타운",
@@ -41040,6 +43328,14 @@
       "region_slug": "seoul-mapo",
       "since": "2026-07-26",
       "slug": "mapossangyonghwanggeumapateu",
+      "umd": "마포동"
+    },
+    "서울 마포구|마포동|보성": {
+      "history": [],
+      "name": "보성",
+      "region_slug": "seoul-mapo",
+      "since": "2026-08-03",
+      "slug": "boseong",
       "umd": "마포동"
     },
     "서울 마포구|망원동|대림1": {
@@ -41360,6 +43656,14 @@
       "region_slug": "seoul-mapo",
       "since": "2026-07-26",
       "slug": "sinchonsamik",
+      "umd": "신수동"
+    },
+    "서울 마포구|신수동|신촌숲아이파크": {
+      "history": [],
+      "name": "신촌숲아이파크",
+      "region_slug": "seoul-mapo",
+      "since": "2026-08-03",
+      "slug": "sinchonsupaipakeu",
       "umd": "신수동"
     },
     "서울 마포구|신수동|현대": {
@@ -42442,6 +44746,14 @@
       "slug": "anam",
       "umd": "서초동"
     },
+    "서울 서초구|서초동|우성아파트": {
+      "history": [],
+      "name": "우성아파트",
+      "region_slug": "seoul-seocho",
+      "since": "2026-08-03",
+      "slug": "useongapateu",
+      "umd": "서초동"
+    },
     "서울 서초구|서초동|유원서초": {
       "history": [],
       "name": "유원서초",
@@ -42594,6 +44906,14 @@
       "slug": "hobansseomitseochopakeu",
       "umd": "우면동"
     },
+    "서울 서초구|우면동|호반써밋서초파크뷰(토지임대부아파트)": {
+      "history": [],
+      "name": "호반써밋서초파크뷰(토지임대부아파트)",
+      "region_slug": "seoul-seocho",
+      "since": "2026-08-03",
+      "slug": "hobansseomitseochopakeubyu-tojiimdaebuapateu",
+      "umd": "우면동"
+    },
     "서울 서초구|잠원동|강변": {
       "history": [],
       "name": "강변",
@@ -42650,6 +44970,14 @@
       "slug": "sinbanpocheonggu",
       "umd": "잠원동"
     },
+    "서울 서초구|잠원동|신화": {
+      "history": [],
+      "name": "신화",
+      "region_slug": "seoul-seocho",
+      "since": "2026-08-03",
+      "slug": "sinhwa",
+      "umd": "잠원동"
+    },
     "서울 서초구|잠원동|아크로리버뷰신반포": {
       "history": [],
       "name": "아크로리버뷰신반포",
@@ -42688,6 +45016,14 @@
       "region_slug": "seoul-seocho",
       "since": "2026-07-26",
       "slug": "hangang",
+      "umd": "잠원동"
+    },
+    "서울 서초구|잠원동|한신": {
+      "history": [],
+      "name": "한신",
+      "region_slug": "seoul-seocho",
+      "since": "2026-08-03",
+      "slug": "hansin",
       "umd": "잠원동"
     },
     "서울 서초구|잠원동|한신로얄": {
@@ -42930,6 +45266,14 @@
       "slug": "seoulsuphanyanghyeondae",
       "umd": "성수동1가"
     },
+    "서울 성동구|성수동1가|쌍용": {
+      "history": [],
+      "name": "쌍용",
+      "region_slug": "seoul-seongdong",
+      "since": "2026-08-03",
+      "slug": "ssangyong",
+      "umd": "성수동1가"
+    },
     "서울 성동구|성수동1가|중앙하이츠빌": {
       "history": [],
       "name": "중앙하이츠빌",
@@ -43106,6 +45450,14 @@
       "slug": "geukdongmiraju",
       "umd": "하왕십리동"
     },
+    "서울 성동구|하왕십리동|금호베스트빌": {
+      "history": [],
+      "name": "금호베스트빌",
+      "region_slug": "seoul-seongdong",
+      "since": "2026-08-03",
+      "slug": "geumhobeseuteubil",
+      "umd": "하왕십리동"
+    },
     "서울 성동구|하왕십리동|무학현대": {
       "history": [],
       "name": "무학현대",
@@ -43280,6 +45632,14 @@
       "region_slug": "seoul-seongbuk",
       "since": "2026-07-26",
       "slug": "gileumyeokgeumhoeoulrimsenteohil",
+      "umd": "돈암동"
+    },
+    "서울 성북구|돈암동|돈암동 풍림아파트 101~105동": {
+      "history": [],
+      "name": "돈암동 풍림아파트 101~105동",
+      "region_slug": "seoul-seongbuk",
+      "since": "2026-08-03",
+      "slug": "donamdong-pungrimapateu-101-105dong",
       "umd": "돈암동"
     },
     "서울 성북구|돈암동|돈암동삼성": {
@@ -43474,6 +45834,14 @@
       "slug": "koorong",
       "umd": "석관동"
     },
+    "서울 성북구|안암동1가|안암동삼성래미안": {
+      "history": [],
+      "name": "안암동삼성래미안",
+      "region_slug": "seoul-seongbuk",
+      "since": "2026-08-03",
+      "slug": "anamdongsamseongraemian",
+      "umd": "안암동1가"
+    },
     "서울 성북구|안암동3가|해링턴플레이스안암": {
       "history": [],
       "name": "해링턴플레이스안암",
@@ -43496,6 +45864,14 @@
       "region_slug": "seoul-seongbuk",
       "since": "2026-07-26",
       "slug": "kkumuisupkooronghaneulchae",
+      "umd": "장위동"
+    },
+    "서울 성북구|장위동|래미안장위퍼스트하이": {
+      "history": [],
+      "name": "래미안장위퍼스트하이",
+      "region_slug": "seoul-seongbuk",
+      "since": "2026-08-03",
+      "slug": "raemianjangwipeoseuteuhai",
       "umd": "장위동"
     },
     "서울 성북구|장위동|래미안포레카운티": {
@@ -43552,6 +45928,14 @@
       "region_slug": "seoul-seongbuk",
       "since": "2026-08-01",
       "slug": "daeu",
+      "umd": "정릉동"
+    },
+    "서울 성북구|정릉동|라온유": {
+      "history": [],
+      "name": "라온유",
+      "region_slug": "seoul-seongbuk",
+      "since": "2026-08-03",
+      "slug": "raonyu",
       "umd": "정릉동"
     },
     "서울 성북구|정릉동|산장아파트가동,나동": {
@@ -43842,6 +46226,14 @@
       "slug": "garakuseong2",
       "umd": "가락동"
     },
+    "서울 송파구|가락동|대림": {
+      "history": [],
+      "name": "대림",
+      "region_slug": "seoul-songpa",
+      "since": "2026-08-03",
+      "slug": "daerim-2",
+      "umd": "가락동"
+    },
     "서울 송파구|가락동|동부센트레빌": {
       "history": [],
       "name": "동부센트레빌",
@@ -43922,6 +46314,14 @@
       "slug": "hyeondae-6cha",
       "umd": "가락동"
     },
+    "서울 송파구|거여동|e편한세상송파파크센트럴": {
+      "history": [],
+      "name": "e편한세상송파파크센트럴",
+      "region_slug": "seoul-songpa",
+      "since": "2026-08-03",
+      "slug": "epyeonhansesangsongpapakeusenteureol",
+      "umd": "거여동"
+    },
     "서울 송파구|거여동|거여4단지": {
       "history": [],
       "name": "거여4단지",
@@ -43985,6 +46385,14 @@
       "since": "2026-07-26",
       "slug": "hyeondae3cha",
       "umd": "거여동"
+    },
+    "서울 송파구|마천동|마천금호어울림1차아파트": {
+      "history": [],
+      "name": "마천금호어울림1차아파트",
+      "region_slug": "seoul-songpa",
+      "since": "2026-08-03",
+      "slug": "macheongeumhoeoulrim1chaapateu",
+      "umd": "마천동"
     },
     "서울 송파구|마천동|송파건원여미지아파트": {
       "history": [],
@@ -44074,6 +46482,14 @@
       "slug": "hyeondae2",
       "umd": "문정동"
     },
+    "서울 송파구|방이동|대림": {
+      "history": [],
+      "name": "대림",
+      "region_slug": "seoul-songpa",
+      "since": "2026-08-03",
+      "slug": "daerim",
+      "umd": "방이동"
+    },
     "서울 송파구|방이동|방이금호어울림": {
       "history": [],
       "name": "방이금호어울림",
@@ -44145,6 +46561,14 @@
       "since": "2026-07-26",
       "slug": "jamsilhansol",
       "umd": "석촌동"
+    },
+    "서울 송파구|송파동|2차한양아파트": {
+      "history": [],
+      "name": "2차한양아파트",
+      "region_slug": "seoul-songpa",
+      "since": "2026-08-03",
+      "slug": "2chahanyangapateu",
+      "umd": "송파동"
     },
     "서울 송파구|송파동|가락삼익맨숀": {
       "history": [],
@@ -44250,6 +46674,22 @@
       "slug": "jamsilpureujiowoldeumakeu",
       "umd": "신천동"
     },
+    "서울 송파구|신천동|장미2": {
+      "history": [],
+      "name": "장미2",
+      "region_slug": "seoul-songpa",
+      "since": "2026-08-03",
+      "slug": "jangmi2",
+      "umd": "신천동"
+    },
+    "서울 송파구|오금동|대림": {
+      "history": [],
+      "name": "대림",
+      "region_slug": "seoul-songpa",
+      "since": "2026-08-03",
+      "slug": "daerim-3",
+      "umd": "오금동"
+    },
     "서울 송파구|오금동|상아2차아파트": {
       "history": [],
       "name": "상아2차아파트",
@@ -44304,6 +46744,14 @@
       "region_slug": "seoul-songpa",
       "since": "2026-08-01",
       "slug": "uchang",
+      "umd": "오금동"
+    },
+    "서울 송파구|오금동|현대백조": {
+      "history": [],
+      "name": "현대백조",
+      "region_slug": "seoul-songpa",
+      "since": "2026-08-03",
+      "slug": "hyeondaebaekjo",
       "umd": "오금동"
     },
     "서울 송파구|잠실동|갤러리아팰리스": {
@@ -44489,6 +46937,22 @@
       "since": "2026-07-26",
       "slug": "hilseuteiteusongpawirye",
       "umd": "장지동"
+    },
+    "서울 송파구|풍납동|극동": {
+      "history": [],
+      "name": "극동",
+      "region_slug": "seoul-songpa",
+      "since": "2026-08-03",
+      "slug": "geukdong",
+      "umd": "풍납동"
+    },
+    "서울 송파구|풍납동|동아한가람1": {
+      "history": [],
+      "name": "동아한가람1",
+      "region_slug": "seoul-songpa",
+      "since": "2026-08-03",
+      "slug": "dongahangaram1",
+      "umd": "풍납동"
     },
     "서울 송파구|풍납동|미성": {
       "history": [],
@@ -44832,6 +47296,14 @@
       "region_slug": "seoul-yangcheon",
       "since": "2026-07-26",
       "slug": "sumyeongsanrotdekaeseul",
+      "umd": "신월동"
+    },
+    "서울 양천구|신월동|신도브래뉴2차": {
+      "history": [],
+      "name": "신도브래뉴2차",
+      "region_slug": "seoul-yangcheon",
+      "since": "2026-08-03",
+      "slug": "sindobeuraenyu2cha",
       "umd": "신월동"
     },
     "서울 양천구|신월동|신도신월1차": {
@@ -45178,6 +47650,14 @@
       "slug": "jinro",
       "umd": "당산동1가"
     },
+    "서울 영등포구|당산동2가|당산대우": {
+      "history": [],
+      "name": "당산대우",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-03",
+      "slug": "dangsandaeu",
+      "umd": "당산동2가"
+    },
     "서울 영등포구|당산동3가|당산계룡리슈빌1단지": {
       "history": [],
       "name": "당산계룡리슈빌1단지",
@@ -45298,6 +47778,14 @@
       "slug": "hangangapateu",
       "umd": "당산동4가"
     },
+    "서울 영등포구|당산동4가|현대2": {
+      "history": [],
+      "name": "현대2",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-03",
+      "slug": "hyeondae2",
+      "umd": "당산동4가"
+    },
     "서울 영등포구|당산동5가|당산디오빌": {
       "history": [],
       "name": "당산디오빌",
@@ -45345,6 +47833,14 @@
       "since": "2026-07-26",
       "slug": "raemiandangsan1cha",
       "umd": "당산동"
+    },
+    "서울 영등포구|대림동|G밸리소홈": {
+      "history": [],
+      "name": "G밸리소홈",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-03",
+      "slug": "gbaelrisohom",
+      "umd": "대림동"
     },
     "서울 영등포구|대림동|대림동갑을명가아파트": {
       "history": [],
@@ -45458,6 +47954,14 @@
       "slug": "hansinhyu2cha",
       "umd": "대림동"
     },
+    "서울 영등포구|대림동|현대2": {
+      "history": [],
+      "name": "현대2",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-03",
+      "slug": "hyeondae2-2",
+      "umd": "대림동"
+    },
     "서울 영등포구|도림동|도림청구": {
       "history": [],
       "name": "도림청구",
@@ -45481,6 +47985,14 @@
       "since": "2026-07-26",
       "slug": "yeongdeungpoateujai",
       "umd": "도림동"
+    },
+    "서울 영등포구|문래동2가|남성": {
+      "history": [],
+      "name": "남성",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-03",
+      "slug": "namseong",
+      "umd": "문래동2가"
     },
     "서울 영등포구|문래동3가|문래건영": {
       "history": [],
@@ -45594,6 +48106,14 @@
       "slug": "hyeondae6cha",
       "umd": "문래동6가"
     },
+    "서울 영등포구|신길동|건영": {
+      "history": [],
+      "name": "건영",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-03",
+      "slug": "geonyeong",
+      "umd": "신길동"
+    },
     "서울 영등포구|신길동|경남": {
       "history": [],
       "name": "경남",
@@ -45608,6 +48128,14 @@
       "region_slug": "seoul-yeongdeungpo",
       "since": "2026-07-26",
       "slug": "daeseongyunideu",
+      "umd": "신길동"
+    },
+    "서울 영등포구|신길동|래미안영등포프레비뉴": {
+      "history": [],
+      "name": "래미안영등포프레비뉴",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-03",
+      "slug": "raemianyeongdeungpopeurebinyu",
       "umd": "신길동"
     },
     "서울 영등포구|신길동|보라매경남아너스빌": {
@@ -45632,6 +48160,14 @@
       "region_slug": "seoul-yeongdeungpo",
       "since": "2026-08-01",
       "slug": "boramaeeseukeibyu",
+      "umd": "신길동"
+    },
+    "서울 영등포구|신길동|삼성": {
+      "history": [],
+      "name": "삼성",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-03",
+      "slug": "samseong",
       "umd": "신길동"
     },
     "서울 영등포구|신길동|삼환": {
@@ -45728,6 +48264,14 @@
       "region_slug": "seoul-yeongdeungpo",
       "since": "2026-07-26",
       "slug": "porena-singil",
+      "umd": "신길동"
+    },
+    "서울 영등포구|신길동|한성": {
+      "history": [],
+      "name": "한성",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-03",
+      "slug": "hanseong",
       "umd": "신길동"
     },
     "서울 영등포구|양평동1가|삼환": {
@@ -45842,6 +48386,14 @@
       "slug": "daegyo",
       "umd": "여의도동"
     },
+    "서울 영등포구|여의도동|대우트럼프월드Ⅰ": {
+      "history": [],
+      "name": "대우트럼프월드Ⅰ",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-03",
+      "slug": "daeuteureompeuwoldeu",
+      "umd": "여의도동"
+    },
     "서울 영등포구|여의도동|롯데캐슬아이비": {
       "history": [],
       "name": "롯데캐슬아이비",
@@ -45864,6 +48416,14 @@
       "region_slug": "seoul-yeongdeungpo",
       "since": "2026-07-26",
       "slug": "richensia",
+      "umd": "여의도동"
+    },
+    "서울 영등포구|여의도동|목화": {
+      "history": [],
+      "name": "목화",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-03",
+      "slug": "mokhwa",
       "umd": "여의도동"
     },
     "서울 영등포구|여의도동|브라이튼여의도": {
@@ -46136,6 +48696,14 @@
       "region_slug": "seoul-yongsan",
       "since": "2026-07-26",
       "slug": "raemianchelrituseu",
+      "umd": "이촌동"
+    },
+    "서울 용산구|이촌동|반도": {
+      "history": [],
+      "name": "반도",
+      "region_slug": "seoul-yongsan",
+      "since": "2026-08-03",
+      "slug": "bando",
       "umd": "이촌동"
     },
     "서울 용산구|이촌동|이촌코오롱(A)": {
@@ -46634,6 +49202,14 @@
       "slug": "epyeonhansesangbaekryeonsan",
       "umd": "응암동"
     },
+    "서울 은평구|응암동|경남": {
+      "history": [],
+      "name": "경남",
+      "region_slug": "seoul-eunpyeong",
+      "since": "2026-08-03",
+      "slug": "gyeongnam",
+      "umd": "응암동"
+    },
     "서울 은평구|응암동|녹번역센트레빌": {
       "history": [],
       "name": "녹번역센트레빌",
@@ -46786,6 +49362,22 @@
       "slug": "bakseokgogae1danjihilseuteiteu-101-111dong-bl2-12",
       "umd": "진관동"
     },
+    "서울 은평구|진관동|상림마을8단지롯데캐슬(821~830동)BL1-12": {
+      "history": [],
+      "name": "상림마을8단지롯데캐슬(821~830동)BL1-12",
+      "region_slug": "seoul-eunpyeong",
+      "since": "2026-08-03",
+      "slug": "sangrimmaeul8danjirotdekaeseul-821-830dong-bl1-12",
+      "umd": "진관동"
+    },
+    "서울 은평구|진관동|우물골2단지두산위브(209~222동)BL2-8": {
+      "history": [],
+      "name": "우물골2단지두산위브(209~222동)BL2-8",
+      "region_slug": "seoul-eunpyeong",
+      "since": "2026-08-03",
+      "slug": "umulgol2danjidusanwibeu-209-222dong-bl2-8",
+      "umd": "진관동"
+    },
     "서울 은평구|진관동|은평뉴타운 제각말 푸르지오(5-4단지)": {
       "history": [],
       "name": "은평뉴타운 제각말 푸르지오(5-4단지)",
@@ -46850,6 +49442,14 @@
       "slug": "inwangsan2chaaipakeu",
       "umd": "무악동"
     },
+    "서울 종로구|무악동|현대": {
+      "history": [],
+      "name": "현대",
+      "region_slug": "seoul-jongro",
+      "since": "2026-08-03",
+      "slug": "hyeondae",
+      "umd": "무악동"
+    },
     "서울 종로구|숭인동|종로중흥S클래스": {
       "history": [],
       "name": "종로중흥S클래스",
@@ -46896,6 +49496,14 @@
       "region_slug": "seoul-junggu",
       "since": "2026-08-02",
       "slug": "namsantaun",
+      "umd": "신당동"
+    },
+    "서울 중구|신당동|삼성": {
+      "history": [],
+      "name": "삼성",
+      "region_slug": "seoul-junggu",
+      "since": "2026-08-03",
+      "slug": "samseong",
       "umd": "신당동"
     },
     "서울 중구|신당동|신당KCC스위첸": {
@@ -46954,6 +49562,14 @@
       "slug": "namsansenteureoljai",
       "umd": "충무로4가"
     },
+    "서울 중구|충무로5가|충무로엘크루메크로시티2차": {
+      "history": [],
+      "name": "충무로엘크루메크로시티2차",
+      "region_slug": "seoul-junggu",
+      "since": "2026-08-03",
+      "slug": "chungmuroelkeurumekeurositi2cha",
+      "umd": "충무로5가"
+    },
     "서울 중구|황학동|롯데캐슬": {
       "history": [],
       "name": "롯데캐슬",
@@ -46992,6 +49608,14 @@
       "region_slug": "seoul-jungrang",
       "since": "2026-07-26",
       "slug": "gyeongnam",
+      "umd": "망우동"
+    },
+    "서울 중랑구|망우동|금호어울림(580)": {
+      "history": [],
+      "name": "금호어울림(580)",
+      "region_slug": "seoul-jungrang",
+      "since": "2026-08-03",
+      "slug": "geumhoeoulrim-580",
       "umd": "망우동"
     },
     "서울 중랑구|망우동|신내역금강펜테리움센트럴파크": {
@@ -47064,6 +49688,14 @@
       "region_slug": "seoul-jungrang",
       "since": "2026-07-26",
       "slug": "daewonkantabil",
+      "umd": "면목동"
+    },
+    "서울 중랑구|면목동|두산1": {
+      "history": [],
+      "name": "두산1",
+      "region_slug": "seoul-jungrang",
+      "since": "2026-08-03",
+      "slug": "dusan1",
       "umd": "면목동"
     },
     "서울 중랑구|면목동|두산2": {
@@ -47378,6 +50010,14 @@
       "slug": "sangbongbeseuteuwon",
       "umd": "상봉동"
     },
+    "서울 중랑구|상봉동|상봉어반뷰": {
+      "history": [],
+      "name": "상봉어반뷰",
+      "region_slug": "seoul-jungrang",
+      "since": "2026-08-03",
+      "slug": "sangbongeobanbyu",
+      "umd": "상봉동"
+    },
     "서울 중랑구|상봉동|와이센트럴시티상봉": {
       "history": [],
       "name": "와이센트럴시티상봉",
@@ -47432,6 +50072,14 @@
       "region_slug": "seoul-jungrang",
       "since": "2026-07-26",
       "slug": "dongseong7",
+      "umd": "신내동"
+    },
+    "서울 중랑구|신내동|동성아파트": {
+      "history": [],
+      "name": "동성아파트",
+      "region_slug": "seoul-jungrang",
+      "since": "2026-08-03",
+      "slug": "dongseongapateu",
       "umd": "신내동"
     },
     "서울 중랑구|신내동|라이프미성": {
@@ -47505,6 +50153,14 @@
       "since": "2026-07-26",
       "slug": "junganghaicheu",
       "umd": "신내동"
+    },
+    "서울 중랑구|중화동|동양엔파트": {
+      "history": [],
+      "name": "동양엔파트",
+      "region_slug": "seoul-jungrang",
+      "since": "2026-08-03",
+      "slug": "dongyangenpateu",
+      "umd": "중화동"
     },
     "서울 중랑구|중화동|청광플러스원": {
       "history": [],
@@ -47616,6 +50272,14 @@
       "region_slug": "sejong",
       "since": "2026-07-26",
       "slug": "garakmaeul5danji-yuseunghannaedeul",
+      "umd": "고운동"
+    },
+    "세종 세종시|고운동|가락마을7단지(중흥S-클래스프라디움)": {
+      "history": [],
+      "name": "가락마을7단지(중흥S-클래스프라디움)",
+      "region_slug": "sejong",
+      "since": "2026-08-03",
+      "slug": "garakmaeul7danji-jungheungs-keulraeseupeuradium",
       "umd": "고운동"
     },
     "세종 세종시|고운동|가락마을8단지(고운뜰아파트)": {
@@ -47914,6 +50578,14 @@
       "slug": "doraemmaeul-19danji-moamiraedo",
       "umd": "도담동"
     },
+    "세종 세종시|도담동|도램마을10단지 호반 어반시티": {
+      "history": [],
+      "name": "도램마을10단지 호반 어반시티",
+      "region_slug": "sejong",
+      "since": "2026-08-03",
+      "slug": "doraemmaeul10danji-hoban-eobansiti",
+      "umd": "도담동"
+    },
     "세종 세종시|도담동|도램마을11단지(반도유보라)": {
       "history": [],
       "name": "도램마을11단지(반도유보라)",
@@ -47976,6 +50648,14 @@
       "region_slug": "sejong",
       "since": "2026-07-26",
       "slug": "doraemmaeul4danji-ijideowon",
+      "umd": "도담동"
+    },
+    "세종 세종시|도담동|라온프라이빗시티 Ⅰ": {
+      "history": [],
+      "name": "라온프라이빗시티 Ⅰ",
+      "region_slug": "sejong",
+      "since": "2026-08-03",
+      "slug": "raonpeuraibitsiti",
       "umd": "도담동"
     },
     "세종 세종시|도담동|엘가도램마을12단지": {
@@ -48088,6 +50768,14 @@
       "region_slug": "sejong",
       "since": "2026-07-26",
       "slug": "horyeoulmaeul-7danji",
+      "umd": "보람동"
+    },
+    "세종 세종시|보람동|호려울마을1단지(대방노블랜드)": {
+      "history": [],
+      "name": "호려울마을1단지(대방노블랜드)",
+      "region_slug": "sejong",
+      "since": "2026-08-03",
+      "slug": "horyeoulmaeul1danji-daebangnobeulraendeu",
       "umd": "보람동"
     },
     "세종 세종시|보람동|호려울마을3단지": {
@@ -48210,6 +50898,14 @@
       "slug": "saetteummaeul1danji-meijeositi",
       "umd": "새롬동"
     },
+    "세종 세종시|새롬동|새뜸마을2단지(메이저시티)": {
+      "history": [],
+      "name": "새뜸마을2단지(메이저시티)",
+      "region_slug": "sejong",
+      "since": "2026-08-03",
+      "slug": "saetteummaeul2danji-meijeositi",
+      "umd": "새롬동"
+    },
     "세종 세종시|새롬동|새뜸마을3단지(롯데캐슬)": {
       "history": [],
       "name": "새뜸마을3단지(롯데캐슬)",
@@ -48322,6 +51018,14 @@
       "slug": "sinheungdaeupureujio",
       "umd": "신흥리"
     },
+    "세종 세종시|신흥리|조치원신흥e편한세상(아)": {
+      "history": [],
+      "name": "조치원신흥e편한세상(아)",
+      "region_slug": "sejong",
+      "since": "2026-08-03",
+      "slug": "jochiwonsinheungepyeonhansesang-a",
+      "umd": "신흥리"
+    },
     "세종 세종시|아름동|대우푸르지오(10단지)": {
       "history": [],
       "name": "대우푸르지오(10단지)",
@@ -48336,6 +51040,14 @@
       "region_slug": "sejong",
       "since": "2026-07-26",
       "slug": "beomjigimaeul-4danji",
+      "umd": "아름동"
+    },
+    "세종 세종시|아름동|범지기마을11단지(영무예다음)": {
+      "history": [],
+      "name": "범지기마을11단지(영무예다음)",
+      "region_slug": "sejong",
+      "since": "2026-08-03",
+      "slug": "beomjigimaeul11danji-yeongmuyedaeum",
       "umd": "아름동"
     },
     "세종 세종시|아름동|범지기마을12단지(중흥S-에코타운)": {
@@ -48769,6 +51481,14 @@
       "since": "2026-07-26",
       "slug": "hyeondae3cha",
       "umd": "달동"
+    },
+    "울산 남구|두왕동|대공원호반베르디움": {
+      "history": [],
+      "name": "대공원호반베르디움",
+      "region_slug": "ulsan-namgu",
+      "since": "2026-08-03",
+      "slug": "daegongwonhobanbereudium",
+      "umd": "두왕동"
     },
     "울산 남구|두왕동|대공원호반베르디움2차": {
       "history": [],
@@ -49338,6 +52058,22 @@
       "slug": "yangunaeanaepaelriseu",
       "umd": "신정동"
     },
+    "울산 남구|신정동|올림푸스골든(1656-1)": {
+      "history": [],
+      "name": "올림푸스골든(1656-1)",
+      "region_slug": "ulsan-namgu",
+      "since": "2026-08-03",
+      "slug": "olrimpuseugoldeun-1656-1",
+      "umd": "신정동"
+    },
+    "울산 남구|신정동|올림푸스골든(1680)": {
+      "history": [],
+      "name": "올림푸스골든(1680)",
+      "region_slug": "ulsan-namgu",
+      "since": "2026-08-03",
+      "slug": "olrimpuseugoldeun-1680",
+      "umd": "신정동"
+    },
     "울산 남구|신정동|우남팜파스": {
       "history": [],
       "name": "우남팜파스",
@@ -49578,6 +52314,14 @@
       "slug": "hilseuteiteusuam-2danji",
       "umd": "야음동"
     },
+    "울산 남구|옥동|그랜드파크": {
+      "history": [],
+      "name": "그랜드파크",
+      "region_slug": "ulsan-namgu",
+      "since": "2026-08-03",
+      "slug": "geuraendeupakeu",
+      "umd": "옥동"
+    },
     "울산 남구|옥동|금오그린": {
       "history": [],
       "name": "금오그린",
@@ -49760,6 +52504,14 @@
       "region_slug": "incheon-gyeyang",
       "since": "2026-08-02",
       "slug": "seohae2",
+      "umd": "계산동"
+    },
+    "인천 계양구|계산동|서해3": {
+      "history": [],
+      "name": "서해3",
+      "region_slug": "incheon-gyeyang",
+      "since": "2026-08-03",
+      "slug": "seohae3",
       "umd": "계산동"
     },
     "인천 계양구|계산동|신도브래뉴": {
@@ -50042,6 +52794,14 @@
       "slug": "chojeongmaeul-dusan",
       "umd": "용종동"
     },
+    "인천 계양구|용종동|초정마을(쌍용)": {
+      "history": [],
+      "name": "초정마을(쌍용)",
+      "region_slug": "incheon-gyeyang",
+      "since": "2026-08-03",
+      "slug": "chojeongmaeul-ssangyong",
+      "umd": "용종동"
+    },
     "인천 계양구|이화동|신동아파밀리에": {
       "history": [],
       "name": "신동아파밀리에",
@@ -50057,6 +52817,14 @@
       "since": "2026-08-01",
       "slug": "hanguk-2",
       "umd": "임학동"
+    },
+    "인천 계양구|작전동|광명11": {
+      "history": [],
+      "name": "광명11",
+      "region_slug": "incheon-gyeyang",
+      "since": "2026-08-03",
+      "slug": "gwangmyeong11",
+      "umd": "작전동"
     },
     "인천 계양구|작전동|까치마을태화": {
       "history": [],
@@ -50160,6 +52928,14 @@
       "region_slug": "incheon-gyeyang",
       "since": "2026-07-26",
       "slug": "beuraunseutongyeyangseukai",
+      "umd": "작전동"
+    },
+    "인천 계양구|작전동|삼보": {
+      "history": [],
+      "name": "삼보",
+      "region_slug": "incheon-gyeyang",
+      "since": "2026-08-03",
+      "slug": "sambo",
       "umd": "작전동"
     },
     "인천 계양구|작전동|선우": {
@@ -50328,6 +53104,14 @@
       "region_slug": "incheon-gyeyang",
       "since": "2026-08-02",
       "slug": "dusan",
+      "umd": "효성동"
+    },
+    "인천 계양구|효성동|백영": {
+      "history": [],
+      "name": "백영",
+      "region_slug": "incheon-gyeyang",
+      "since": "2026-08-03",
+      "slug": "baekyeong",
       "umd": "효성동"
     },
     "인천 계양구|효성동|신진": {
@@ -50528,6 +53312,14 @@
       "region_slug": "incheon-namdong",
       "since": "2026-07-30",
       "slug": "hanjin",
+      "umd": "간석동"
+    },
+    "인천 남동구|간석동|현광": {
+      "history": [],
+      "name": "현광",
+      "region_slug": "incheon-namdong",
+      "since": "2026-08-03",
+      "slug": "hyeongwang",
       "umd": "간석동"
     },
     "인천 남동구|간석동|현대홈타운(900-153)": {
@@ -50930,6 +53722,14 @@
       "slug": "daedong",
       "umd": "만수동"
     },
+    "인천 남동구|만수동|대동(5-397)": {
+      "history": [],
+      "name": "대동(5-397)",
+      "region_slug": "incheon-namdong",
+      "since": "2026-08-03",
+      "slug": "daedong-5-397",
+      "umd": "만수동"
+    },
     "인천 남동구|만수동|대성유니드별빛마을": {
       "history": [],
       "name": "대성유니드별빛마을",
@@ -51082,6 +53882,14 @@
       "slug": "hyangchonhyumeonsia2danji",
       "umd": "만수동"
     },
+    "인천 남동구|만수동|현대": {
+      "history": [],
+      "name": "현대",
+      "region_slug": "incheon-namdong",
+      "since": "2026-08-03",
+      "slug": "hyeondae",
+      "umd": "만수동"
+    },
     "인천 남동구|만수동|효성상아": {
       "history": [],
       "name": "효성상아",
@@ -51144,6 +53952,14 @@
       "region_slug": "incheon-namdong",
       "since": "2026-07-26",
       "slug": "ekoebinyu",
+      "umd": "서창동"
+    },
+    "인천 남동구|서창동|엘에이치청아안": {
+      "history": [],
+      "name": "엘에이치청아안",
+      "region_slug": "incheon-namdong",
+      "since": "2026-08-03",
+      "slug": "eleichicheongaan",
       "umd": "서창동"
     },
     "인천 남동구|서창동|이편한세상서창": {
@@ -51346,6 +54162,14 @@
       "slug": "daerim",
       "umd": "용현동"
     },
+    "인천 미추홀구|용현동|서해": {
+      "history": [],
+      "name": "서해",
+      "region_slug": "incheon-michuhol",
+      "since": "2026-08-03",
+      "slug": "seohae",
+      "umd": "용현동"
+    },
     "인천 미추홀구|용현동|신창미션힐": {
       "history": [],
       "name": "신창미션힐",
@@ -51514,6 +54338,14 @@
       "slug": "kaeseulaendeosyap",
       "umd": "주안동"
     },
+    "인천 미추홀구|주안동|태평": {
+      "history": [],
+      "name": "태평",
+      "region_slug": "incheon-michuhol",
+      "since": "2026-08-03",
+      "slug": "taepyeong",
+      "umd": "주안동"
+    },
     "인천 미추홀구|주안동|포레나미추홀": {
       "history": [],
       "name": "포레나미추홀",
@@ -51537,6 +54369,14 @@
       "since": "2026-07-31",
       "slug": "hyeondae",
       "umd": "주안동"
+    },
+    "인천 미추홀구|학익동|대동1": {
+      "history": [],
+      "name": "대동1",
+      "region_slug": "incheon-michuhol",
+      "since": "2026-08-03",
+      "slug": "daedong1",
+      "umd": "학익동"
     },
     "인천 미추홀구|학익동|시티오씨엘1단지": {
       "history": [],
@@ -51720,6 +54560,14 @@
       "region_slug": "incheon-bupyeong",
       "since": "2026-07-31",
       "slug": "jeonggwang",
+      "umd": "갈산동"
+    },
+    "인천 부평구|갈산동|하나": {
+      "history": [],
+      "name": "하나",
+      "region_slug": "incheon-bupyeong",
+      "since": "2026-08-03",
+      "slug": "hana",
       "umd": "갈산동"
     },
     "인천 부평구|갈산동|한국": {
@@ -52370,6 +55218,14 @@
       "slug": "jeonggwang-2",
       "umd": "삼산동"
     },
+    "인천 부평구|삼산동|태산": {
+      "history": [],
+      "name": "태산",
+      "region_slug": "incheon-bupyeong",
+      "since": "2026-08-03",
+      "slug": "taesan",
+      "umd": "삼산동"
+    },
     "인천 부평구|십정동|대주파크빌": {
       "history": [],
       "name": "대주파크빌",
@@ -52994,6 +55850,14 @@
       "slug": "dongchunmaeul",
       "umd": "동춘동"
     },
+    "인천 연수구|동춘동|래미안": {
+      "history": [],
+      "name": "래미안",
+      "region_slug": "incheon-yeonsu",
+      "since": "2026-08-03",
+      "slug": "raemian",
+      "umd": "동춘동"
+    },
     "인천 연수구|동춘동|롯데": {
       "history": [],
       "name": "롯데",
@@ -53112,6 +55976,14 @@
       "region_slug": "incheon-yeonsu",
       "since": "2026-07-26",
       "slug": "taepyeong2",
+      "umd": "동춘동"
+    },
+    "인천 연수구|동춘동|풍림3": {
+      "history": [],
+      "name": "풍림3",
+      "region_slug": "incheon-yeonsu",
+      "since": "2026-08-03",
+      "slug": "pungrim3",
       "umd": "동춘동"
     },
     "인천 연수구|동춘동|한양1": {
@@ -53738,6 +56610,14 @@
       "slug": "yucheon",
       "umd": "연수동"
     },
+    "인천 연수구|연수동|인향": {
+      "history": [],
+      "name": "인향",
+      "region_slug": "incheon-yeonsu",
+      "since": "2026-08-03",
+      "slug": "inhyang",
+      "umd": "연수동"
+    },
     "인천 연수구|연수동|태경": {
       "history": [],
       "name": "태경",
@@ -53818,6 +56698,14 @@
       "slug": "ssangyong",
       "umd": "옥련동"
     },
+    "인천 연수구|옥련동|아주1": {
+      "history": [],
+      "name": "아주1",
+      "region_slug": "incheon-yeonsu",
+      "since": "2026-08-03",
+      "slug": "aju1",
+      "umd": "옥련동"
+    },
     "인천 연수구|옥련동|옥련2우성": {
       "history": [],
       "name": "옥련2우성",
@@ -53848,6 +56736,14 @@
       "region_slug": "incheon-yeonsu",
       "since": "2026-07-26",
       "slug": "yunseong-2",
+      "umd": "옥련동"
+    },
+    "인천 연수구|옥련동|풍림": {
+      "history": [],
+      "name": "풍림",
+      "region_slug": "incheon-yeonsu",
+      "since": "2026-08-03",
+      "slug": "pungrim",
       "umd": "옥련동"
     },
     "인천 연수구|옥련동|현대1": {

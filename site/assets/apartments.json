@@ -15280,7 +15280,7 @@
       "price_history": [
         92495,
         92814,
-        95669
+        96062
       ],
       "builder": "대우건설",
       "lat": 37.267737,
@@ -15334,7 +15334,7 @@
         {
           "label": "75㎡(23평)",
           "area_m2": 75,
-          "recent_price": 84500
+          "recent_price": 85700
         },
         {
           "label": "85㎡(26평)",
@@ -15350,7 +15350,7 @@
       "price_history": [
         68711,
         68185,
-        73998
+        73937
       ],
       "builder": "대우건설",
       "lat": 37.268333,
@@ -15520,7 +15520,7 @@
       "price_history": [
         61852,
         64637,
-        64875
+        65838
       ],
       "builder": "벽산",
       "lat": 37.2825,
@@ -29055,7 +29055,7 @@
       "price_history": [
         118959,
         128711,
-        129000
+        123250
       ],
       "builder": "대우건설",
       "lat": 37.606839,
@@ -59500,7 +59500,7 @@
         {
           "label": "60㎡(18평)",
           "area_m2": 60,
-          "recent_price": 162000
+          "recent_price": 165000
         },
         {
           "label": "85㎡(26평)",
@@ -59525,7 +59525,7 @@
       ],
       "price_history": [
         220431,
-        216843
+        241842
       ],
       "builder": "포스코이앤씨",
       "households": 1264,
@@ -81351,6 +81351,11 @@
           "recent_price": 325000
         },
         {
+          "label": "85㎡(26평)",
+          "area_m2": 85,
+          "recent_price": 389000
+        },
+        {
           "label": "100㎡(30평)",
           "area_m2": 100,
           "recent_price": 436000
@@ -81362,8 +81367,9 @@
         }
       ],
       "price_history": [
-        584883,
-        529960
+        446391,
+        404473,
+        457658
       ],
       "builder": "삼성물산",
       "lat": 37.501525,
@@ -96962,6 +96968,64 @@
         35357
       ],
       "builder": "금호건설",
+      "households": null
+    },
+    {
+      "name": "래미안신반포팰리스",
+      "region": "서울 서초구 잠원동",
+      "region_key": "서울 서초구",
+      "sido": "서울",
+      "sigungu": "서초구",
+      "built_year": 2016,
+      "units": [
+        {
+          "label": "84㎡(25평)",
+          "area_m2": 84,
+          "recent_price": 430000
+        },
+        {
+          "label": "104㎡(31평)",
+          "area_m2": 104,
+          "recent_price": 470000
+        },
+        {
+          "label": "133㎡(40평)",
+          "area_m2": 133,
+          "recent_price": 520000
+        }
+      ],
+      "price_history": [
+        467710,
+        450000,
+        499748
+      ],
+      "builder": "삼성물산",
+      "households": null
+    },
+    {
+      "name": "반포미도2차아파트",
+      "region": "서울 서초구 반포동",
+      "region_key": "서울 서초구",
+      "sido": "서울",
+      "sigungu": "서초구",
+      "built_year": 1989,
+      "units": [
+        {
+          "label": "59㎡(18평)",
+          "area_m2": 59,
+          "recent_price": 265000
+        },
+        {
+          "label": "71㎡(21평)",
+          "area_m2": 71,
+          "recent_price": 290000
+        }
+      ],
+      "price_history": [
+        304214,
+        290000
+      ],
+      "builder": "기타",
       "households": null
     }
   ]
