@@ -429,6 +429,62 @@ check('대출 한도 페이지가 매매가를 넣지 말라고 안내한다', (
 });
 
 // ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 검증] 금융위 공표 예시와 대조');
+// ─────────────────────────────────────────────────────────────────────
+// 우리 계산을 우리 가정으로만 검증하면 틀린 가정을 계속 통과시킨다. 규제 당국이
+// 숫자를 직접 공표한 사례가 있으면 그게 가장 강한 기준점이다.
+//
+//   금융위 「대출수요 관리 방안」(2025.10.15) 보도 예시
+//   "연 소득 1억원 차주가 수도권에서 **변동금리**로 주담대를 받는 경우,
+//    한도가 5억 8,700만원 → 5억 100만원 (약 14.7% 감소)"
+//
+// 앞 숫자가 스트레스 1.5%p, 뒤 숫자가 3.0%p 일 때의 한도다. 두 값을 동시에
+// 재현하는 조합을 역산하면 원리금균등 30년 · 금리 4.00% 하나로 좁혀진다
+// (2026-08-03 탐색). 그 전제에서 우리 엔진이 공표값과 일치하는지 고정한다.
+//
+// 이 테스트가 깨지면 둘 중 하나다 — 스트레스 가산값이 틀렸거나, DSR 원리금
+// 산식이 틀렸다. 둘 다 한도를 통째로 어긋나게 하는 것들이다.
+const FSC_EXAMPLE = {
+  price: 5_000_000_000,      // 담보가 아니라 DSR 이 한도를 정하도록 크게 둔다
+  ltvPercent: 100,
+  region: 'regulated', ownership: 'none',
+  income: 100_000_000, existingAnnualDebt: 0,
+  rate: 4.0, termYears: 30, dsrLimitPercent: 40, repayType: 'equal',
+};
+
+check('금융위 예시 — 스트레스 3.0%p 에서 한도 5억 100만원', () => {
+  const r = calcMortgageLimit({ ...FSC_EXAMPLE, stressAdd: 3.0 });
+  const diff = Math.abs(r.dsrLimit - 501_000_000) / 501_000_000;
+  assert.ok(diff < 0.005,
+    `금융위 공표 5억 100만원과 어긋납니다: ${Math.round(r.dsrLimit).toLocaleString()}원`);
+});
+
+check('금융위 예시 — 종전 스트레스 1.5%p 에서 한도 5억 8,700만원', () => {
+  const r = calcMortgageLimit({ ...FSC_EXAMPLE, stressAdd: 1.5 });
+  const diff = Math.abs(r.dsrLimit - 587_000_000) / 587_000_000;
+  assert.ok(diff < 0.005,
+    `금융위 공표 5억 8,700만원과 어긋납니다: ${Math.round(r.dsrLimit).toLocaleString()}원`);
+});
+
+check('금융위 예시 — 감소폭이 공표치(약 14.7%)와 맞는다', () => {
+  const after = calcMortgageLimit({ ...FSC_EXAMPLE, stressAdd: 3.0 }).dsrLimit;
+  const before = calcMortgageLimit({ ...FSC_EXAMPLE, stressAdd: 1.5 }).dsrLimit;
+  const drop = (before - after) / before * 100;
+  assert.ok(Math.abs(drop - 14.7) < 0.5, `감소폭 ${drop.toFixed(1)}% (공표 14.7%)`);
+});
+
+check('상환방식이 DSR 한도를 바꾼다 — 원금균등이 원리금균등보다 낮다', () => {
+  // 원금균등은 첫해 원금상환액이 커서 DSR 이 먼저 찬다. 같은 조건에서 원리금균등보다
+  // 한도가 낮게 나오는 게 정상이며, 이 차이를 모르면 "계산기가 실제보다 적게 준다"로
+  // 읽힌다(실사용자 문의, 2026-08-03). 방향이 뒤집히면 산식이 잘못된 것이다.
+  const base = { ...FSC_EXAMPLE, stressAdd: 3.0 };
+  const equal = calcMortgageLimit({ ...base, repayType: 'equal' }).dsrLimit;
+  const principal = calcMortgageLimit({ ...base, repayType: 'principal' }).dsrLimit;
+  assert.ok(principal < equal,
+    `원금균등(${Math.round(principal).toLocaleString()})이 원리금균등(${Math.round(equal).toLocaleString()})보다 높습니다.`);
+});
+
+// ─────────────────────────────────────────────────────────────────────
 console.log('\n[대출 P0-⑤] 스트레스 DSR이 결과에 영향을 줬는지 표시');
 // ─────────────────────────────────────────────────────────────────────
 
