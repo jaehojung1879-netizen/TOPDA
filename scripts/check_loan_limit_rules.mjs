@@ -179,7 +179,13 @@ function legacyLimit({ price, regulated, ownership, income, existingAnnualDebt =
   const i = (rate + stressAdd) / 100 / 12;
   const n = termYears * 12;
   const m = i > 0 ? i * Math.pow(1 + i, n) / (Math.pow(1 + i, n) - 1) : 1 / n;
-  const factor = repayType === 'principal' ? 12 / n + i * (12 - 66 / n) : m * 12;
+  // ⚠ 이 비교의 목적은 **규제값**(LTV·스트레스·가격대별 한도)이 느슨해지지 않았는지다.
+  //   상환액 산식은 규제값이 아니므로 양쪽에서 같은 것을 써야 한다. 다르게 두면
+  //   산식을 고칠 때마다 규제와 무관한 이유로 이 테스트가 깨진다(2026-08-04에
+  //   원금균등을 첫해→연평균으로 바로잡으면서 실제로 그랬다).
+  const factor = repayType === 'principal'
+    ? (1 + i * (n + 1) / 2) / (n / 12)   // 원금균등: 연평균 원리금 (엔진과 동일)
+    : m * 12;
   const dsrLimit = availAnnual / factor;
   return Math.max(0, Math.min(ltvLimit, priceCap, dsrLimit));
 }
@@ -263,7 +269,7 @@ check('결과를 법정·확정 / 사용자 입력 / 추정으로 구분한다',
   assert.ok(custom.classification.estimated.some((i) => i.key === 'ltv'));
 });
 
-check('경과규정·대환은 자동 판정하지 않고 사용자 선택을 그대로 표시한다', () => {
+check('경과규정 해당 여부는 자동 판정하지 않고 사용자 선택을 그대로 표시한다', () => {
   const r = calcMortgageLimit({
     price: 800_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
     income: 80_000_000, rate: 4.5, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
@@ -271,12 +277,71 @@ check('경과규정·대환은 자동 판정하지 않고 사용자 선택을 �
   });
   assert.equal(r.grandfatherActive, true);
   assert.ok(r.grandfatherOption && r.grandfatherOption.label.includes('2025.10.15'));
-  // 선택했다고 한도를 바꾸지는 않는다(은행이 증빙으로 판정하는 사항).
-  const plain = calcMortgageLimit({
-    price: 800_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
-    income: 80_000_000, rate: 4.5, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
-  });
-  assert.equal(r.limit, plain.limit);
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 P0-⑦] 경과규정을 고르면 종전 규정으로 계산한다');
+// ─────────────────────────────────────────────────────────────────────
+// 2026-08-03 이전에는 이 선택이 경고 문구만 띄우고 계산에는 반영되지 않았다.
+// 그래서 경과규정 대상자(2025.10.15까지 계약+계약금)는 자기 대출을 계산기로
+// 재현할 수 없었다 — 실사용자가 2026년 4월 실행분으로 확인해 준 문제다.
+
+check('경과규정이면 가격대별 한도가 시가 무관 6억 단일로 돌아간다', () => {
+  // 시가 20억: 현행은 4억 구간, 종전은 6·27 대책의 6억 단일.
+  const base = {
+    price: 2_000_000_000, region: 'regulated', ownership: 'none', ltvPercent: 70,
+    income: 300_000_000, rate: 4.0, stressAdd: 1.5, termYears: 30, dsrLimitPercent: 40,
+  };
+  assert.equal(calcMortgageLimit(base).priceCap, 400_000_000);
+  assert.equal(calcMortgageLimit({ ...base, grandfather: 'preContract' }).priceCap, 600_000_000);
+  assert.equal(calcMortgageLimit({ ...base, grandfather: 'preApplied' }).priceCap, 600_000_000);
+});
+
+check('경과규정이면 스트레스 가산이 종전 1.5%로 돌아간다', () => {
+  assert.equal(suggestStressAdd('regulated', 'variable').value, 3.0);
+  assert.equal(suggestStressAdd('regulated', 'variable', 'preContract').value, 1.5);
+  assert.equal(suggestStressAdd('metroNonRegulated', 'variable', 'preApplied').value, 1.5);
+});
+
+check('경과규정이 지방(0.75%p)의 가산을 되레 올리지 않는다', () => {
+  // 지방은 2단계 유예로 이미 1.5%보다 낮다. 종전 값으로 '되돌린다'며 올리면 손해다.
+  assert.equal(suggestStressAdd('provincialNonRegulated', 'variable').value, 0.75);
+  assert.equal(suggestStressAdd('provincialNonRegulated', 'variable', 'preContract').value, 0.75);
+});
+
+check('대환은 종전 규정으로 되돌리지 않는다', () => {
+  // 종전 조건 승계 여부가 은행·상품마다 갈려 한 가지로 정할 수 없다 — 보수적으로 현행.
+  const base = {
+    price: 2_000_000_000, region: 'regulated', ownership: 'none', ltvPercent: 70,
+    income: 300_000_000, rate: 4.0, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
+  };
+  const r = calcMortgageLimit({ ...base, grandfather: 'refinance' });
+  assert.equal(r.priceCap, 400_000_000);
+  assert.equal(r.priorRulesApplied, false);
+  assert.equal(suggestStressAdd('regulated', 'variable', 'refinance').value, 3.0);
+});
+
+check('경과규정을 고르지 않으면 종전 규정이 새어 들어오지 않는다', () => {
+  // 기본 경로(grandfather 미지정·new)가 느슨해지면 전 사용자의 한도가 과대 산출된다.
+  for (const gf of [undefined, 'new']) {
+    const r = calcMortgageLimit({
+      price: 2_000_000_000, region: 'regulated', ownership: 'none', ltvPercent: 70,
+      income: 300_000_000, rate: 4.0, stressAdd: 3, termYears: 30, dsrLimitPercent: 40,
+      grandfather: gf,
+    });
+    assert.equal(r.priceCap, 400_000_000, String(gf));
+    assert.equal(r.priorRulesApplied, false, String(gf));
+  }
+  assert.equal(suggestStressAdd('regulated', 'variable', 'new').value, 3.0);
+});
+
+check('종전 규정 값이 rates.js에 근거와 함께 있다', () => {
+  const pr = RATES.loan.grandfather.priorRules;
+  assert.equal(pr.priceCapSingle, 600_000_000);
+  assert.equal(pr.stressRate, 1.5);
+  assert.equal(pr.confidence, 'verified');
+  assert.ok(/2025\.10\.15|10\.15/.test(pr.source), '근거에 대책 시행일이 없습니다.');
+  assert.equal(pr.ltvReverted, false, 'LTV는 갈래가 많아 자동 복원 대상이 아닙니다.');
 });
 
 // ─────────────────────────────────────────────────────────────────────
@@ -429,6 +494,127 @@ check('대출 한도 페이지가 매매가를 넣지 말라고 안내한다', (
 });
 
 // ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 검증] 금융위 공표 예시와 대조');
+// ─────────────────────────────────────────────────────────────────────
+// 우리 계산을 우리 가정으로만 검증하면 틀린 가정을 계속 통과시킨다. 규제 당국이
+// 숫자를 직접 공표한 사례가 있으면 그게 가장 강한 기준점이다.
+//
+//   금융위 「대출수요 관리 방안」(2025.10.15) 보도 예시
+//   "연 소득 1억원 차주가 수도권에서 **변동금리**로 주담대를 받는 경우,
+//    한도가 5억 8,700만원 → 5억 100만원 (약 14.7% 감소)"
+//
+// 앞 숫자가 스트레스 1.5%p, 뒤 숫자가 3.0%p 일 때의 한도다. 두 값을 동시에
+// 재현하는 조합을 역산하면 원리금균등 30년 · 금리 4.00% 하나로 좁혀진다
+// (2026-08-03 탐색). 그 전제에서 우리 엔진이 공표값과 일치하는지 고정한다.
+//
+// 이 테스트가 깨지면 둘 중 하나다 — 스트레스 가산값이 틀렸거나, DSR 원리금
+// 산식이 틀렸다. 둘 다 한도를 통째로 어긋나게 하는 것들이다.
+const FSC_EXAMPLE = {
+  price: 5_000_000_000,      // 담보가 아니라 DSR 이 한도를 정하도록 크게 둔다
+  ltvPercent: 100,
+  region: 'regulated', ownership: 'none',
+  income: 100_000_000, existingAnnualDebt: 0,
+  rate: 4.0, termYears: 30, dsrLimitPercent: 40, repayType: 'equal',
+};
+
+check('금융위 예시 — 스트레스 3.0%p 에서 한도 5억 100만원', () => {
+  const r = calcMortgageLimit({ ...FSC_EXAMPLE, stressAdd: 3.0 });
+  const diff = Math.abs(r.dsrLimit - 501_000_000) / 501_000_000;
+  assert.ok(diff < 0.005,
+    `금융위 공표 5억 100만원과 어긋납니다: ${Math.round(r.dsrLimit).toLocaleString()}원`);
+});
+
+check('금융위 예시 — 종전 스트레스 1.5%p 에서 한도 5억 8,700만원', () => {
+  const r = calcMortgageLimit({ ...FSC_EXAMPLE, stressAdd: 1.5 });
+  const diff = Math.abs(r.dsrLimit - 587_000_000) / 587_000_000;
+  assert.ok(diff < 0.005,
+    `금융위 공표 5억 8,700만원과 어긋납니다: ${Math.round(r.dsrLimit).toLocaleString()}원`);
+});
+
+check('금융위 예시 — 감소폭이 공표치(약 14.7%)와 맞는다', () => {
+  const after = calcMortgageLimit({ ...FSC_EXAMPLE, stressAdd: 3.0 }).dsrLimit;
+  const before = calcMortgageLimit({ ...FSC_EXAMPLE, stressAdd: 1.5 }).dsrLimit;
+  const drop = (before - after) / before * 100;
+  assert.ok(Math.abs(drop - 14.7) < 0.5, `감소폭 ${drop.toFixed(1)}% (공표 14.7%)`);
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 검증] 실제 은행 DSR 원장과 대조 (2026-04-14 조회)');
+// ─────────────────────────────────────────────────────────────────────
+// 실사용자가 은행 DSR 산출 화면을 제공했다. 규제값이 맞는지와 별개로 **산식이
+// 은행과 같은지**를 확인할 수 있는 유일한 기준점이라 원 단위로 고정한다.
+//
+//   최종 연소득금액        127,685,915원  (원천징수 총급여 119,864,890 + 장래소득)
+//   본건외 원리금           11,125,000원  (신용대출 5,599,000 + 마이너스 659,000
+//                                          + 유가증권담보 4,867,000)
+//   본건 5.86억 · 원금균등 30년 · 스트레스 적용금리 6.86%
+//   → 본건 원리금           39,688,960원
+//   → DSR                        39.80%
+//   → DSR 40% 신청가능금액 589,800,000원
+const BANK = {
+  income: 127_685_915,
+  otherAnnual: 11_125_000,
+  principal: 586_000_000,
+  stressedRate: 6.86,
+  termYears: 30,
+};
+
+check('은행 원장 — 원금균등 본건 원리금이 39,688,960원과 일치한다', () => {
+  // 담보·가격대별이 아니라 DSR 이 한도를 정하도록 크게 잡고, 한도 역산으로 검산한다.
+  const r = calcMortgageLimit({
+    price: 5_000_000_000, ltvPercent: 100, region: 'regulated', ownership: 'none',
+    income: BANK.income, existingAnnualDebt: BANK.otherAnnual,
+    rate: BANK.stressedRate, stressAdd: 0,
+    termYears: BANK.termYears, dsrLimitPercent: 40, repayType: 'principal',
+  });
+  // 한도 1원당 연간 상환액 × 실제 대출액 = 은행이 표시한 본건 원리금
+  const avail = BANK.income * 0.4 - BANK.otherAnnual;
+  const factor = avail / r.dsrLimit;
+  const annual = factor * BANK.principal;
+  assert.ok(Math.abs(annual - 39_688_960) < 1000,
+    `본건 원리금 ${Math.round(annual).toLocaleString()}원 (은행 39,688,960원)`);
+});
+
+check('은행 원장 — DSR 40% 신청가능금액이 5억 8,980만원과 일치한다', () => {
+  const r = calcMortgageLimit({
+    price: 5_000_000_000, ltvPercent: 100, region: 'regulated', ownership: 'none',
+    income: BANK.income, existingAnnualDebt: BANK.otherAnnual,
+    rate: BANK.stressedRate, stressAdd: 0,
+    termYears: BANK.termYears, dsrLimitPercent: 40, repayType: 'principal',
+  });
+  // 은행 화면은 만원 단위 절사(589,844,755 → 589,800,000)라 그 폭까지 허용한다.
+  assert.ok(Math.abs(r.dsrLimit - 589_844_755) < 100_000,
+    `신청가능금액 ${Math.round(r.dsrLimit).toLocaleString()}원 (은행 589,800,000원)`);
+});
+
+check('원금균등 DSR은 첫해가 아니라 연평균 원리금 기준이다', () => {
+  // 첫해 기준(옛 산식)이면 같은 조건에서 한도가 3.97억으로 33% 적게 나온다.
+  // 방식이 되돌아가면 이 테스트가 먼저 깨진다.
+  const r = calcMortgageLimit({
+    price: 5_000_000_000, ltvPercent: 100, region: 'regulated', ownership: 'none',
+    income: BANK.income, existingAnnualDebt: BANK.otherAnnual,
+    rate: BANK.stressedRate, stressAdd: 0,
+    termYears: BANK.termYears, dsrLimitPercent: 40, repayType: 'principal',
+  });
+  const i = BANK.stressedRate / 100 / 12, n = BANK.termYears * 12;
+  const firstYearFactor = 12 / n + i * (12 - 66 / n);
+  const firstYearLimit = (BANK.income * 0.4 - BANK.otherAnnual) / firstYearFactor;
+  assert.ok(r.dsrLimit > firstYearLimit * 1.4,
+    '연평균이 아니라 첫해 기준으로 계산하고 있습니다.');
+});
+
+check('상환방식이 DSR 한도를 바꾼다 — 원금균등이 원리금균등보다 높다', () => {
+  // 연평균 기준에서는 원금균등이 원금을 더 빨리 갚아 **총이자가 적고**, 그만큼 연평균
+  // 원리금도 작아 한도가 더 크게 나온다. (첫해 기준이던 2026-08-03까지는 방향이
+  // 반대였다 — 은행 원장과 대조해 산식을 바로잡으면서 뒤집혔다.)
+  const base = { ...FSC_EXAMPLE, stressAdd: 3.0 };
+  const equal = calcMortgageLimit({ ...base, repayType: 'equal' }).dsrLimit;
+  const principal = calcMortgageLimit({ ...base, repayType: 'principal' }).dsrLimit;
+  assert.ok(principal > equal,
+    `원금균등(${Math.round(principal).toLocaleString()})이 원리금균등(${Math.round(equal).toLocaleString()})보다 낮습니다.`);
+});
+
+// ─────────────────────────────────────────────────────────────────────
 console.log('\n[대출 P0-⑤] 스트레스 DSR이 결과에 영향을 줬는지 표시');
 // ─────────────────────────────────────────────────────────────────────
 
@@ -445,9 +631,11 @@ check('가격대별 한도가 결정 요인이면 스트레스 영향은 0이다
 });
 
 check('DSR이 결정 요인이면 스트레스가 깎은 금액을 알려준다', () => {
+  // 소득을 낮춰 DSR 이 먼저 차게 한다 — 연평균 산식으로 바로잡은 뒤에는 소득 1.19억·
+  // 원금균등 30년이면 DSR(7.0억)보다 LTV(6.0억)가 작아 DSR 이 결정 요인이 아니다.
   const r = calcMortgageLimit({
     price: 1_500_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
-    income: 119_000_000, existingAnnualDebt: 0, rate: 3.83, stressAdd: 3,
+    income: 80_000_000, existingAnnualDebt: 0, rate: 3.83, stressAdd: 3,
     termYears: 30, dsrLimitPercent: 40, repayType: 'principal',
   });
   assert.equal(r.binding.key, 'dsr');
@@ -457,9 +645,11 @@ check('DSR이 결정 요인이면 스트레스가 깎은 금액을 알려준다'
 });
 
 check('순수 고정금리는 스트레스 가산이 0이라 한도가 줄지 않는다', () => {
+  // 소득을 낮춰 두 경우 모두 DSR 이 결정 요인이 되게 한다 — 둘 다 LTV·가격대별 상한에
+  // 걸리면 한도가 같아져 스트레스의 효과를 볼 수 없다.
   const args = {
     price: 1_500_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
-    income: 119_000_000, existingAnnualDebt: 0, rate: 3.83, termYears: 30,
+    income: 80_000_000, existingAnnualDebt: 0, rate: 3.83, termYears: 30,
     dsrLimitPercent: 40, repayType: 'principal',
   };
   const fixedStress = suggestStressAdd('regulated', 'fixed').value;
@@ -471,33 +661,136 @@ check('순수 고정금리는 스트레스 가산이 0이라 한도가 줄지 �
 });
 
 // ─────────────────────────────────────────────────────────────────────
-console.log('\n[대출 P0-⑥] DSR 산정 제외 대출 — 유가증권담보대출');
+console.log('\n[대출 P0-⑥] DSR 산정 제외 대출 — 무엇이 제외이고 무엇이 아닌가');
 // ─────────────────────────────────────────────────────────────────────
+// 2026-08-02에 유가증권(주식)담보대출을 예적금·보험계약대출과 한 묶음으로 보고
+// DSR 제외로 바꿨는데 틀렸다. 실사용자가 준 은행 DSR 원장(2026-04-14)이 반증한다:
+//
+//   한국증권금융 210-유가증권담보대출  잔액 29,934,000  연간원리금 4,867,000
+//     29,934,000 ÷ 8 + 29,934,000 × 3.76% = 4,867,268   ← 사실상 일치
+//
+// 즉 제외가 아니라 **산정만기 8년으로 산입**된다. 되돌렸고, 다시 뒤집히지 않게 막는다.
 
-check('유가증권(주식)담보대출이 DSR 산정 제외 목록에 있다', () => {
+check('유가증권(주식)담보대출은 DSR 제외 목록에 없다', () => {
   const list = Array.from(RATES.dsr.applicability.excludedFromDsr).join(' ');
-  assert.match(list, /유가증권/);
-  assert.match(list, /주식/);
+  assert.doesNotMatch(list, /유가증권/, '유가증권담보대출은 DSR 산정 제외가 아닙니다.');
+  // 예적금·보험계약대출은 진짜 제외다.
+  assert.match(list, /예·적금|예적금/);
+  assert.match(list, /보험계약/);
 });
 
-check('종합계산기가 주식·예적금 담보대출을 DSR에 산입하지 않는다', () => {
+check('유가증권담보대출의 산정만기 8년이 기준정보에 있다', () => {
+  const inc = RATES.dsr.applicability.includedWithAssumedTerm || [];
+  const stock = Array.from(inc).find((x) => /유가증권/.test(x.kind));
+  assert.ok(stock, '유가증권담보대출의 산정만기가 기준정보에 없습니다.');
+  assert.equal(stock.years, 8);
+});
+
+check('종합계산기가 유가증권담보대출을 8년 산정만기로 산입한다', () => {
   const start = appSource.indexOf('function otherLoanSpec(type)');
   const end = appSource.indexOf('function updateOtherLoanRow(', start);
   const block = appSource.slice(start, end);
-  // 과거엔 'stock'을 a/8 + 이자로 산입해 DSR을 부풀렸다.
-  assert.doesNotMatch(block, /case 'stock': return \[function \(a\) \{ return a \/ 8; \}/,
-    '주식담보대출이 여전히 DSR에 산입됩니다.');
-  for (const key of ["case 'deposit'", "case 'stock'"]) {
-    const i = block.indexOf(key);
-    assert.ok(i >= 0, `${key}가 없습니다.`);
-    const line = block.slice(i, block.indexOf('\n', i));
-    assert.match(line, /return 0;/, `${key}의 원금 산입이 0이 아닙니다.`);
-    assert.match(line, /false, true\]/, `${key}에 DSR 제외 플래그가 없습니다.`);
-  }
-  // 제외 플래그가 켜지면 이자도 산입하지 않아야 한다.
+  const i = block.indexOf("case 'stock'");
+  assert.ok(i >= 0, "case 'stock'이 없습니다.");
+  const line = block.slice(i, block.indexOf('\n', i));
+  assert.match(line, /return a \/ 8;/, '유가증권담보대출이 8년 산정만기로 산입되지 않습니다.');
+  assert.doesNotMatch(line, /false, true\]/, '유가증권담보대출에 DSR 제외 플래그가 붙어 있습니다.');
+});
+
+check('은행 원장 대조 — 유가증권담보 29,934,000원의 연간원리금', () => {
+  // 원금 = 잔액 ÷ 8년, 이자 = 잔액 × 금리. 은행 표시 4,867,000원.
+  const amount = 29_934_000, rate = 3.76 / 100;
+  const annual = amount / 8 + amount * rate;
+  assert.ok(Math.abs(annual - 4_867_000) < 1000,
+    `${Math.round(annual).toLocaleString()}원 (은행 4,867,000원)`);
+});
+
+check('DSR 완전제외 플래그가 켜지면 이자도 산입하지 않는다', () => {
+  // 플래그 자체는 남아 있어야 한다 — 주택연금처럼 기존 부채에서까지 빠지는
+  // 대출을 나중에 넣을 자리다. 다만 예적금·보험계약대출에는 붙이지 않는다.
   const rowStart = appSource.indexOf('function updateOtherLoanRow(');
   const rowBlock = appSource.slice(rowStart, appSource.indexOf('function otherLoansTotal(', rowStart));
   assert.match(rowBlock, /dsrExempt \? 0 : amount \* rate/, '제외 대출의 이자가 여전히 산입됩니다.');
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 P0-⑧] 「규제 미적용」 ≠ 「기존 부채 미산입」');
+// ─────────────────────────────────────────────────────────────────────
+// 은행 여신업무기준 FAQ(2025-11) Q7 단서:
+//   "단, 위 항목에 해당하지 않는 대출을 신규 취급하는 경우 위 항목의 대출은 DSR
+//    산출을 위한 기존 부채 금액에 포함됩니다.(주택연금(역모기지론)은 부채금액에서 제외)"
+// 예적금·보험계약대출을 부채에서까지 0으로 두면 기존 부채가 줄어 한도가 과대 산출된다.
+
+check('기존 부채에서까지 빠지는 것은 주택연금뿐이다', () => {
+  const app2 = RATES.dsr.applicability;
+  assert.ok(Array.isArray(app2.exemptAsNewLoan) && app2.exemptAsNewLoan.length >= 10,
+    '신규 취급 시 규제 미적용 목록이 없습니다.');
+  assert.deepEqual(Array.from(app2.exemptFromDebtToo), ['주택연금(역모기지론)']);
+  const asNew = Array.from(app2.exemptAsNewLoan).join(' ');
+  assert.match(asNew, /예·적금 담보대출/);
+  assert.match(asNew, /보험계약대출/);
+  assert.doesNotMatch(asNew, /유가증권/, '유가증권담보대출은 규제 미적용 목록에도 없습니다.');
+});
+
+check('예적금·보험약관 담보대출이 기존 부채로 산입된다', () => {
+  const start = appSource.indexOf('function otherLoanSpec(type)');
+  const block = appSource.slice(start, appSource.indexOf('function updateOtherLoanRow(', start));
+  const i = block.indexOf("case 'deposit'");
+  const line = block.slice(i, block.indexOf('\n', i));
+  // DSR 제외 플래그(4번째 인자 true)가 붙으면 이자까지 0이 된다 — 그건 주택연금뿐이다.
+  assert.doesNotMatch(line, /false, true\]/,
+    '예적금담보대출에 DSR 완전제외 플래그가 남아 있습니다(기존 부채로는 산입돼야 합니다).');
+});
+
+check('주담대 원금일시상환의 산정만기는 최대 10년으로 잘린다', () => {
+  const start = appSource.indexOf('function otherLoanSpec(type)');
+  const block = appSource.slice(start, appSource.indexOf('function updateOtherLoanRow(', start));
+  const i = block.indexOf("case 'mortgageBullet'");
+  const line = block.slice(i, block.indexOf('\n', i));
+  assert.match(line, /Math\.min\(t \|\| 10, 10\)/,
+    '만기 20년을 그대로 나누면 기존 부채가 작아져 한도가 과대 산출됩니다.');
+});
+
+check('중도금·이주비대출은 기존 부채일 때 25년으로 산입된다', () => {
+  const start = appSource.indexOf('var OTHER_TYPES');
+  const block = appSource.slice(start, appSource.indexOf('function updateOtherLoanRow(', start));
+  assert.match(block, /\['progress',/, '중도금·이주비 선택지가 없습니다.');
+  const i = block.indexOf("case 'progress'");
+  assert.ok(i >= 0, "case 'progress'가 없습니다.");
+  assert.match(block.slice(i, block.indexOf('\n', i)), /a \/ 25/);
+});
+
+check('산정만기 표가 기준정보에 있고 화면 산식과 일치한다', () => {
+  const t = RATES.dsr.applicability.assumedTermYears;
+  assert.equal(t.mortgageBullet.years, 10);
+  assert.equal(t.progressPayment.years, 25);
+  assert.equal(t.credit.years, 5);
+  assert.equal(t.nonHouse.years, 8);
+  assert.equal(t.otherSecured.years, 10);
+  assert.equal(t.cardLoan.years, 3);
+});
+
+check('유가증권담보 산정만기의 미확정 상태를 감추지 않는다', () => {
+  // 8년/10년 두 갈래로 읽히고 실사용자 원장으로도 갈리지 않는다. 조용히 하나를
+  // 고르면 나중에 근거 없이 굳는다 — 미확정임을 기준정보에 남긴다.
+  const u = RATES.dsr.applicability.securedLoanTermUnresolved;
+  assert.ok(u, '미확정 표시가 없습니다.');
+  assert.equal(u.confidence, 'needs-verification');
+  assert.equal(Array.from(u.candidates).join(','), '8,10');
+  assert.equal(u.usedYears, 8, '한도를 과대 산출하지 않는 쪽(8년)을 써야 합니다.');
+});
+
+check('장래소득은 계산에 반영하지 않되 화면에 밝힌다', () => {
+  // 은행 내규로 장래소득을 얹으면 연소득이 커져 DSR 한도가 올라간다. 요건·반영 폭이
+  // 은행마다 달라 계산하지 않지만, 실제 사례에서 총급여 119,864,890 → 127,685,915로
+  // 6.5% 상향됐다. 안 밝히면 "계산기가 틀렸다"로 읽힌다.
+  const fi = RATES.dsr.applicability.futureIncome;
+  assert.ok(fi, '장래소득 안내가 기준정보에 없습니다.');
+  assert.equal(fi.appliedInCalculator, false);
+  assert.match(fi.note, /장래소득/);
+  assert.match(fi.note, /은행/);
+  assert.match(appSource, /futureIncome && .*appliedInCalculator === false/,
+    '장래소득 안내가 결과 화면에 연결돼 있지 않습니다.');
 });
 
 console.log(`\n대출 한도 회귀 테스트 ${passed}개 통과\n`);

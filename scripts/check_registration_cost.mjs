@@ -154,12 +154,14 @@ check('실제 견적을 입력하면 보수표 상한 대신 그 값을 쓴다',
 console.log('\n[등기 P0-③] 등기신청 수수료 — 신청 방식별');
 // ─────────────────────────────────────────────────────────────────────
 
-check('15,000원 고정이 아니라 신청 방식별로 다르다', () => {
+check('신청 방식별 금액이 기준정보에 남아 있고 방문이 가장 보수적이다', () => {
+  // 화면에서는 고르게 하지 않지만, 엔진·기준정보에는 방식별 금액을 유지한다
+  // (나중에 다시 노출하거나 다른 계산기가 쓸 수 있어야 하므로).
   const visit = calcRegistrationCost({ ...base, filingMethod: 'visit' }).filingFee;
   const eform = calcRegistrationCost({ ...base, filingMethod: 'eform' }).filingFee;
   assert.equal(visit, 18_000);   // 2025.8.1 인상 (수수료규칙 제5조의2)
   assert.equal(eform, 15_000);
-  assert.notEqual(visit, eform);
+  assert.ok(visit > eform, '기본값(방문)이 가장 비싼 쪽이어야 보수적입니다.');
 });
 
 check('금액을 확인하지 못한 전자신청은 선택지에 넣지 않는다', () => {
@@ -327,8 +329,7 @@ check('인지세·채권 매입률은 종전 값 그대로다 (회귀)', () => {
 check('등기 페이지에 방식별 수수료·위임 업무·추정 경고 UI가 있다', () => {
   const html = fs.readFileSync(new URL('../site/calculators/registration-cost.html', import.meta.url), 'utf8');
   for (const needle of [
-    'name="filingMethod"', 'name="agencyTask"', 'name="fieldwork"',
-    'value="visit"', 'value="eform"',
+    'name="agencyTask"', 'name="fieldwork"',
     'name="scrivenerQuote"', 'name="extraExpense"',
     'id="rc-scrivener-total"', 'id="rc-notes"', 'id="rc-classify"',
     '법무사 기본보수 상한', 'value="4"',
@@ -336,7 +337,12 @@ check('등기 페이지에 방식별 수수료·위임 업무·추정 경고 UI�
     assert.ok(html.includes(needle), `등기 페이지에 ${needle}이(가) 없습니다.`);
   }
   assert.ok(!html.includes('법무사 보수 (추정)'), '“법무사 보수 추정” 표기가 남아 있습니다.');
+  // 등기신청 수수료는 방식별 차이가 3,000원 안팎이라 선택지를 두지 않는다 —
+  // 고르게 해봐야 총액이 거의 안 바뀌는데 화면만 복잡해진다. 방문(18,000원) 고정.
+  assert.ok(!html.includes('name="filingMethod"'), '등기신청 방식 선택지가 남아 있습니다.');
   assert.ok(!html.includes('value="online"'), '확인 못 한 전자신청 선택지가 남아 있습니다.');
+  const dash = fs.readFileSync(new URL('../site/calculators/total-cost-dashboard.html', import.meta.url), 'utf8');
+  assert.ok(!dash.includes('name="regFilingMethod"'), '종합계산기에 등기신청 방식 선택지가 남아 있습니다.');
 });
 
 check('취득세를 쓰는 페이지의 주택 수가 4주택 이상까지 분리돼 있다', () => {

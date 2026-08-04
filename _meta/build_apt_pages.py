@@ -163,13 +163,17 @@ ul.idx a{display:block;padding:8px 10px;border:1px solid var(--line);border-radi
 
 
 def page_head(title, desc, canonical):
+    # 파비콘과 OG 이미지는 쓰임새가 달라 크기도 다르다. 파비콘은 16~32px 자리라
+    # 688KB 원본을 물리면 모든 페이지가 그만큼을 헛으로 받는다(2026-08-02 실측에서
+    # 가장 느린 리소스였다). OG 카드는 크롤러가 받는 큰 그림이라 원본을 그대로 둔다.
+    favicon = BASE + "/assets/images/brand/logo-32.png"
     logo = BASE + "/assets/images/brand/logo.png"
     return (
         '<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="utf-8" />\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1" />\n'
         f'<title>{esc(title)}</title>\n'
         f'<meta name="description" content="{esc(desc)}" />\n'
-        f'<link rel="icon" href="{esc(logo)}" type="image/png" />\n'
+        f'<link rel="icon" href="{esc(favicon)}" type="image/png" />\n'
         f'<link rel="canonical" href="{esc(canonical)}" />\n'
         f'<meta property="og:title" content="{esc(title)}" />\n'
         f'<meta property="og:description" content="{esc(desc)}" />\n'

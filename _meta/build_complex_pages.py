@@ -366,7 +366,7 @@ def head(title, desc, canonical, region=None, complex_name=None, indexable=False
         tags += f'<meta name="topda:region" content="{esc(region)}" />\n'
     if complex_name:
         tags += f'<meta name="topda:complex" content="{esc(complex_name)}" />\n'
-    tags += '<script defer src="/assets/analytics.js?v=20260725"></script>\n'
+    tags += '<script defer src="/assets/analytics.js?v=3e86e8b800"></script>\n'
     return html.replace("</head>", tags + "</head>")
 
 

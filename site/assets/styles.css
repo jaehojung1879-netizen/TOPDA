@@ -117,7 +117,10 @@ html, body { overflow-x: hidden; }
 @media (min-width: 768px) { .brand { font-size: 1.25rem; } }
 .brand-mark {
   display: inline-block; width: 26px; height: 26px;
-  background-image: url("images/brand/logo.png");
+  /* 26~28px 자리다. 원본(773×826 · 688KB)을 물리면 모든 페이지가 그 크기를 받는다 —
+     2026-08-02 실측에서 이 파일 하나가 계산기 화면의 가장 느린 리소스였다.
+     96px 파생본이면 28px @3x 까지 덮는다(1.9KB). 파생본: _meta/build_logo_sizes.py */
+  background-image: url("images/brand/logo-96.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -553,6 +556,14 @@ table.data td.num { font-variant-numeric: tabular-nums; text-align: right; }
   margin: 0; padding: 9px 11px; border-radius: var(--radius-sm);
   background: var(--bg-subtle, rgba(0, 0, 0, 0.03));
   font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); word-break: keep-all;
+}
+
+/* 라벨 옆 역할 배지 — 이 입력이 어디에 쓰이는지 한눈에 보이게 */
+.field-badge {
+  display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px;
+  font-size: 0.68rem; font-weight: 700; vertical-align: middle; white-space: nowrap;
+  background: color-mix(in srgb, var(--accent, #2563eb) 12%, transparent);
+  color: var(--accent, #2563eb);
 }
 
 /* 라벨 옆의 작은 되돌리기·전환 버튼 */
@@ -3984,3 +3995,36 @@ ol.rt-list { list-style: decimal; }
 .src-list li::before { content: "—"; position: absolute; left: 0; color: var(--text-subtle); }
 .src-list a { color: var(--text); font-weight: 500; text-decoration: underline; text-underline-offset: 2px; }
 .src-list a:hover { color: var(--accent); }
+
+/* 단지 검색 결과 — 중앙값과 평형별 분포를 함께 보여준다 */
+.op-hit .op-range { display: block; grid-column: 1 / -1; margin-top: 2px; font-size: 0.74rem; color: var(--text-muted); }
+.op-hit .op-price small { font-weight: 500; opacity: 0.7; }
+.op-picked-warn { display: block; margin-top: 8px; }
+
+/* 평형 선택줄 — 단지 중앙값 대신 내 평형의 추정 공시가격을 고른다.
+   360px 에서도 두 개씩은 들어가야 해서 버튼을 flex-wrap 으로 흘린다. */
+.op-units { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
+.op-units-label {
+  width: 100%; font-size: 0.76rem; font-weight: 600; color: var(--text-muted, #64748b);
+}
+.op-unit {
+  display: inline-flex; flex-direction: column; gap: 1px; padding: 5px 9px;
+  cursor: pointer; text-align: left; font-size: 0.8rem; font-weight: 600;
+  border: 1px solid var(--border, #e5e7eb); border-radius: 8px; background: #fff;
+  color: var(--text, #0f172a);
+}
+.op-unit small {
+  font-size: 0.72rem; font-weight: 500; color: var(--text-muted, #64748b);
+  font-variant-numeric: tabular-nums;
+}
+.op-unit:hover { border-color: var(--accent, #2563eb); }
+.op-unit[aria-pressed="true"] {
+  border-color: var(--accent, #2563eb); background: var(--accent-soft, #eff6ff);
+}
+.op-unit[aria-pressed="true"] small { color: var(--accent, #2563eb); }
+/* 지금 칸에 들어 있는 단지 중앙값이 어느 평형쯤인지 — 기준점이 없으면 어느 버튼을
+   눌러야 할지 감이 안 온다. */
+.op-unit-median::after {
+  content: "단지 중앙값"; font-size: 0.64rem; font-weight: 500;
+  color: var(--text-muted, #94a3b8);
+}

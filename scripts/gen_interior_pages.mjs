@@ -358,9 +358,9 @@ function head(lang, t) {
 <meta property="og:locale" content="${OG[lang]}" />
 <meta name="twitter:card" content="summary_large_image" />
 ${alts}
-<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
+<script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="../../assets/styles.css?v=b54e7c9b22" />
 </head>
 <body>`;
 }
@@ -544,7 +544,7 @@ ${sched}
 
 ${footer(c)}
 
-<script src="../../assets/app.js?v=20260722"></script>
+<script src="../../assets/app.js?v=d3158aa00d"></script>
 </body>
 </html>
 `;

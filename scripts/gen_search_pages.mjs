@@ -355,9 +355,9 @@ function head(lang, t) {
 <meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <meta property="og:locale" content="${OG[lang]}" />
 ${alts}
-<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
+<script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=20260722" />
+<link rel="stylesheet" href="../../assets/styles.css?v=b54e7c9b22" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 ${STYLE}
 </head>
@@ -676,7 +676,7 @@ ${main(lang, t)}
 <script src="../../assets/score.js?v=20260722"></script>
 <script src="../../assets/region.js?v=20260629"></script>
 <script src="../../assets/kmap.js?v=20260722"></script>
-<script src="../../assets/app.js?v=20260722"></script>
+<script src="../../assets/app.js?v=d3158aa00d"></script>
 <script>
 var T = ${JSON.stringify(t)};
 var HUB_DISPLAY = ${hubDisplayJson};

@@ -374,7 +374,12 @@ def main(argv=None):
         if not force and time.monotonic() - last_save[0] < CHECKPOINT_SEC:
             return
         data["as_of"] = today_str
-        L.save_json_safe(OUT_JSON, data)
+        # 들여쓰기 없이 쓴다. 이 파일은 브라우저가 계산기에서 직접 받는 자산이고,
+        # 레코드가 숫자 배열(평형별 추정 u)까지 갖게 되면서 indent=2 로는 값 하나가
+        # 한 줄씩 차지해 크기가 2배 넘게 뛴다(135개 단지에서 30KB→72KB). 전국 16,000개
+        # 단지를 채우면 그대로 사람이 받는 용량이 된다 — 기계가 쓰고 기계가 읽는
+        # 파일이라 diff 가독성보다 전송 크기가 중요하다.
+        L.save_json_safe(OUT_JSON, data, indent=None)
         miss_data["_meta"] = {
             "note": "'지역키|단지명' → 마지막으로 '응답 없음·실패'가 난 날(YYYY-MM-DD). "
                     f"{MISS_RECHECK_DAYS}일 동안 다시 부르지 않는다. 대장에 주택가격이 없는 "

@@ -29,14 +29,19 @@ fetch(UA 지정 + cp949 폴백)를 쓴다.
 "[bond_rate]" 라인만 보면 다음에 표 구조 파서를 어떻게 고쳐야 할지 알 수 있게.
 """
 import datetime as dt
+import json
 import os
 import re
 import sys
+import time
 import urllib.request
 
 from lib_pdata import SITE_ASSETS, save_json_safe  # noqa: E402
 
 OUT = os.path.join(SITE_ASSETS, "bond_rate.json")
+
+# 며칠 연속 실패하면 워크플로 로그에 경고를 띄운다(조용한 실패 방지).
+FAIL_ALERT_AFTER = 3
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
@@ -234,24 +239,78 @@ def excerpt_around_keywords(html, keywords=("부담", "할인"), width=120):
     return " ⧸ ".join(pieces) if pieces else text[:200]
 
 
+def load_existing():
+    """기존 파일 — 연속 실패 횟수를 이어가려면 이전 상태를 알아야 한다."""
+    try:
+        with open(OUT, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+def record_failure(reasons):
+    """수집 실패를 **파일에 남긴다**.
+
+    왜: 예전에는 실패하면 아무것도 안 하고 조용히 끝났다. 워크플로 스텝은 초록불이고,
+    JSON은 몇 주 전 값 그대로였다. 그래서 '수집이 계속 실패 중'이라는 사실을 아무도
+    몰랐다 — 사용자가 화면에서 예시값을 보고서야 알았다.
+    이제 시도 시각·연속 실패 횟수·마지막 오류를 남겨, 화면과 CI 양쪽에서 보이게 한다.
+    (값 자체는 절대 덮어쓰지 않는다 — 틀린 값보다 오래된 값이 낫다는 원칙은 그대로.)
+    """
+    data = load_existing()
+    prev = int(data.get("consecutive_failures") or 0)
+    data["last_attempt_at"] = dt.date.today().isoformat()
+    data["consecutive_failures"] = prev + 1
+    data["last_error"] = " / ".join(reasons)[:500]
+    try:
+        with open(OUT, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+            f.write("\n")
+    except Exception as e:  # noqa: BLE001
+        print(f"[bond_rate] 실패 기록 저장 실패: {e}", file=sys.stderr)
+    return data["consecutive_failures"]
+
+
 def main():
     rate, used, diag = None, None, {}
+    reasons = []
     for label, url in SOURCES:
-        try:
-            html = fetch(url)
-        except Exception as e:  # noqa: BLE001
-            print(f"[bond_rate] {label} 조회 실패: {e}", file=sys.stderr)
+        # 은행 페이지는 콜드 러너에서 첫 연결이 자주 끊긴다 — 한 번 실패했다고 바로
+        # 포기하지 말고 짧게 두 번 더 시도한다(타임아웃도 늘려 잡는다).
+        html = None
+        for attempt, timeout in enumerate((20, 30, 40), start=1):
+            try:
+                html = fetch(url, timeout=timeout)
+                break
+            except Exception as e:  # noqa: BLE001
+                msg = f"{label} 조회 실패(시도 {attempt}/3, timeout={timeout}s): {e}"
+                print(f"[bond_rate] {msg}", file=sys.stderr)
+                if attempt == 3:
+                    reasons.append(f"{label}: {e}")
+                else:
+                    time.sleep(3 * attempt)
+        if html is None:
             continue
         diag = {}
         rate = extract_rate(html, diag=diag)
         if rate is not None:
             used = label
             break
-        print(f"[bond_rate] {label} 파싱 실패 — 키워드 주변: "
-              f"{excerpt_around_keywords(html)!r}", file=sys.stderr)
+        excerpt = excerpt_around_keywords(html)
+        reasons.append(f"{label}: 파싱 실패")
+        print(f"[bond_rate] {label} 파싱 실패 — 키워드 주변: {excerpt!r}", file=sys.stderr)
 
     if rate is None:
-        print("[bond_rate] 모든 소스에서 할인율 파싱 실패 — 기존 값 유지.", file=sys.stderr)
+        n = record_failure(reasons or ["원인 미상"])
+        print(f"[bond_rate] 모든 소스에서 할인율 확보 실패 — 기존 값 유지 "
+              f"(연속 {n}회 실패).", file=sys.stderr)
+        # 조용한 실패를 막는다: 며칠째 계속 실패하면 워크플로에서 눈에 띄게 만든다.
+        if n >= FAIL_ALERT_AFTER:
+            print(f"::warning title=국민주택채권 할인율 수집 실패::"
+                  f"{n}일 연속 실패했습니다. 화면에는 예시값이 표시되고 있습니다. "
+                  f"마지막 오류: {' / '.join(reasons)[:200]}")
+            if os.environ.get("BOND_RATE_STRICT") == "1":
+                sys.exit(1)
         return
     if not (0 < rate < 50):   # 상식적 범위를 벗어나면 오탐 가능성 — 저장하지 않음
         print(f"[bond_rate] 파싱값이 비정상 범위({rate}%) — 저장하지 않음", file=sys.stderr)
@@ -271,6 +330,8 @@ def main():
         "collected_at": dt.date.today().isoformat(),
         "customer_burden_rate_pct": rate,
         "seed": False,
+        "last_attempt_at": dt.date.today().isoformat(),
+        "consecutive_failures": 0,
     }
     save_json_safe(OUT, data)
     print(f"[bond_rate] 고객부담률 {rate}% ({used}, {data['as_of']})")

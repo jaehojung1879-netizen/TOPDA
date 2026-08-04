@@ -7,7 +7,7 @@
 <title>부동산 종합 계산 대시보드 — 톺다</title>
 <meta name="description" content="매수·매도·전세 임차·임대·상속·증여 6가지 시나리오를 한 화면에서. 취득세·양도세·DSR·RTI·중개수수료에 등기·법무사 비용까지 종합 산정." />
 <!-- seo:meta -->
-<link rel="icon" href="https://topda.kr/assets/images/brand/logo.png" type="image/png" />
+<link rel="icon" href="https://topda.kr/assets/images/brand/logo-32.png" type="image/png" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="canonical" href="https://topda.kr/calculators/total-cost-dashboard.html" />
 <link rel="alternate" type="application/rss+xml" title="톺다 RSS" href="https://topda.kr/feed.xml" />
@@ -25,9 +25,9 @@
 <meta name="twitter:title" content="부동산 종합 계산 대시보드 — 톺다" />
 <meta name="twitter:description" content="매수·매도·전세 임차·임대·상속·증여 6가지 시나리오를 한 화면에서. 취득세·양도세·DSR·RTI·중개수수료에 등기·법무사 비용까지 종합 산정." />
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
-<script defer src="https://topda.kr/assets/analytics.js?v=20260629"></script>
+<script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=20260730" />
+<link rel="stylesheet" href="../assets/styles.css?v=b54e7c9b22" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -150,15 +150,7 @@
           <div class="input-suffix" data-suffix="원">
             <input id="td-price" name="price" type="text" inputmode="numeric" data-format="won" value="800,000,000" />
           </div>
-          <span class="hint">취득세·중개보수·등기비용은 이 매매가로 계산합니다.</span>
-        </div>
-
-        <div class="field" data-house-only>
-          <label for="td-kbprice">KB시세 (담보 평가액)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="LTV와 가격대별 한도(15억↓ 6억 / 15~25억 4억 / 25억↑ 2억)는 매매가가 아니라 '대출 신청일 기준 시가'로 판정합니다. KB부동산 시세 일반평균가·한국부동산원 시세·감정평가액이 기준입니다. 15.65억에 샀어도 신청일 KB시세가 15억이면 15억 이하 구간(6억 한도)입니다.">?</span></label>
-          <div class="input-suffix" data-suffix="원">
-            <input id="td-kbprice" name="kbPrice" type="text" inputmode="numeric" data-format="won" value="" placeholder="비워두면 매매가로 대신 판정" />
-          </div>
-          <span class="hint"><strong>대출 한도는 매매가가 아니라 이 값으로 판정합니다.</strong> 매매가가 시세보다 높으면 한도가 실제보다 적게 나오니, <a href="https://kbland.kr" target="_blank" rel="noopener">KB부동산</a> 일반평균가를 확인해 입력하세요.</span>
+          <span class="hint">취득세·중개보수·등기비용은 이 매매가로 계산합니다. 대출 한도는 아래 주담대 항목의 KB시세로 판정합니다.</span>
         </div>
 
         <div class="calc-check-grid" data-house-only>
@@ -213,6 +205,14 @@
         </div>
 
         <h3 class="scn-section-title" data-loan-title>주담대</h3>
+        <div class="field" data-house-only>
+          <label for="td-kbprice">KB시세 (담보 평가액) <span class="field-badge">한도 판정용</span><span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="LTV와 가격대별 한도(15억↓ 6억 / 15~25억 4억 / 25억↑ 2억)는 매매가가 아니라 '대출 신청일 기준 시가'로 판정합니다. KB부동산 일반평균가·한국부동산원 시세·감정평가액이 기준입니다. 15.65억에 샀어도 신청일 KB시세가 15억이면 15억 이하 구간(6억 한도)입니다. 취득세·중개보수·등기비용은 이 값과 무관하게 매매가로 계산합니다.">?</span></label>
+          <div class="input-suffix" data-suffix="원">
+            <input id="td-kbprice" name="kbPrice" type="text" inputmode="numeric" data-format="won" value="" placeholder="비워두면 매매가로 판정" />
+          </div>
+          <span class="hint">아래 <strong>‘받을 수 있는 한도’ 추정에만</strong> 쓰입니다. 비워두면 매매가로 판정하며, 매매가가 시세보다 높으면 한도가 실제보다 적게 나옵니다 — <a href="https://kbland.kr" target="_blank" rel="noopener">KB부동산</a> 일반평균가로 확인하세요.</span>
+        </div>
+
         <div class="field">
           <label for="td-loan">대출 금액</label>
           <div class="input-suffix" data-suffix="원">
@@ -303,13 +303,6 @@
             <input id="td-regDiscount" name="regDiscount" type="number" min="0" max="30" step="0.1" value="15" />
           </div>
           <span id="td-regDiscount-note" class="data-stale" hidden></span>
-        </div>
-        <div class="field">
-          <label>등기신청 방식<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="등기신청 수수료는 신청 방식에 따라 다릅니다(등기사항증명서 등 수수료규칙 제5조의2, 2025.8.1 인상).">?</span></label>
-          <div class="radio-group">
-            <label><input type="radio" name="regFilingMethod" value="visit" checked/><span>방문 18,000원</span></label>
-            <label><input type="radio" name="regFilingMethod" value="eform"/><span>e-Form 15,000원</span></label>
-          </div>
         </div>
         <div class="field">
           <label class="check-item" style="padding: 0; cursor: pointer;">
@@ -959,9 +952,9 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="../assets/rates.js?v=20260730"></script>
-<script src="../assets/app.js?v=20260730"></script>
-<script src="../assets/official_price.js?v=20260801"></script>
+<script src="../assets/rates.js?v=bfc9ebc58b"></script>
+<script src="../assets/app.js?v=d3158aa00d"></script>
+<script src="../assets/official_price.js?v=5c4137828c"></script>
 <script>
 (function () {
   'use strict';

@@ -23,7 +23,13 @@ on:
       - "site/calculators/**"
       - "site/en/calculators/**"
       - "scripts/check_*.mjs"
+      - "site/assets/official_price.js"
+      - "site/assets/official_price.json"
+      - "site/assets/images/brand/**"
+      - "site/assets/styles.css"
       - "_meta/collect_bond_rate.py"
+      - "_meta/build_official_price_units.py"
+      - "_meta/build_logo_sizes.py"
       - ".github/workflows/check-calculators.yml"
   workflow_dispatch:
 
@@ -43,6 +49,12 @@ jobs:
 
       # 각 스크립트는 의존성 없이 node:vm 으로 app.js·rates.js 를 그대로 로드한다.
       # npm install 이 필요 없으므로 설치 단계도 없다.
+      # 계산 로직을 아무리 고쳐도 ?v= 를 안 올리면 방문자는 캐시된 예전 app.js 를 쓴다.
+      # 실제로 그 일이 있었다(새 입력칸은 보이는데 그 값을 읽는 코드가 없어 한도가 옛값으로
+      # 계산됨). 자산 해시와 어긋난 페이지가 하나라도 있으면 여기서 막는다.
+      - name: 정적 자산 캐시 버전 일치
+        run: node scripts/bump_asset_version.mjs --check
+
       - name: 세무 정확성 회귀 테스트
         run: node scripts/check_tax_rules.mjs
 
@@ -57,3 +69,17 @@ jobs:
 
       - name: 종합계산기 parity 테스트
         run: node scripts/check_total_dashboard_parity.mjs
+
+      # 아래 둘은 파이썬이라 별도 스텝으로 둔다. setup-python 없이도 러너에 python3 가 있다.
+      # 평형별 추정 시가표준액은 취득세·국민주택채권 매입액의 입력이 되므로, 수집된
+      # 호별 공시가격 분포를 벗어난 값이 배포되지 않게 막는다.
+      - name: 평형별 추정 시가표준액 테스트
+        working-directory: _meta
+        run: python3 -m unittest test_build_official_price_units -v
+
+      # 로고 원본(688KB)이 바뀌었는데 파생본을 안 만들면 모든 페이지가 다시 원본을
+      # 받게 된다 — 2026-08-02 실측에서 계산기 화면의 가장 느린 리소스였다.
+      - name: 로고 파생본 최신 여부
+        run: |
+          python3 -m pip install --quiet --disable-pip-version-check pillow
+          python3 _meta/build_logo_sizes.py --check

@@ -762,11 +762,15 @@ function renderAcqNotes(scope, r) {
     const firstHomeOn = root.querySelector('[name="firstHome"]')?.checked || false;
     const unsoldOn = root.querySelector('[name="unsold2026"]')?.checked || false;
     setEligible('firstHomeSmallHouse', paid && firstHomeOn);
+    // 조례 추가 감면은 '지방 준공 후 미분양'을 실제로 체크한 사람에게만 의미가 있다.
+    //  비활성 상태로 늘 띄워 두면 대부분의 사용자에게는 읽을 필요 없는 칸이 하나 더
+    //  늘어날 뿐이라, 아예 숨긴다.
     const localSel = root.querySelector('[name="unsold2026LocalExtra"]');
     if (localSel) {
-      localSel.disabled = !(paid && unsoldOn);
+      const on = paid && unsoldOn;
+      localSel.disabled = !on;
       const f = localSel.closest('.field');
-      if (f) f.classList.toggle('is-disabled', localSel.disabled);
+      if (f) { f.classList.toggle('is-disabled', !on); f.style.display = on ? '' : 'none'; }
     }
 
     const status = root.querySelector('[data-acq-auto-status]');
@@ -1344,13 +1348,22 @@ function applyBondDiscountRate(json, opts) {
   }
   const isStale = !isSeed && (collectedAt == null || (ageDays != null && ageDays > staleDays));
 
+  // 자동 수집이 며칠째 실패 중이면 그 사실도 함께 밝힌다 — "오늘도 안 됐다"를
+  // 사용자가 알아야 직접 입력하러 간다.
+  const fails = Number((json && json.consecutive_failures) || 0);
+  const lastAttempt = json && json.last_attempt_at;
+  const failNote = fails >= 3
+    ? ' 자동 수집이 ' + fails + '회 연속 실패했습니다'
+      + (lastAttempt ? ' (마지막 시도 ' + lastAttempt + ')' : '') + '.'
+    : '';
+
   if (isSeed) {
     return {
-      state: 'example', rate: example, asOf, collectedAt, ageDays,
+      state: 'example', rate: example, asOf, collectedAt, ageDays, fails,
       shouldFill: false,
       message: '실시간 조회 실패 — 예시값(' + example + '%) 사용 중. 고객부담률은 시장금리에 따라 매일 바뀌므로, '
         + '잔금일 당일 값을 은행 국민주택채권 포털에서 확인해 직접 입력하세요.'
-        + (asOf ? ' (마지막 표시 기준일 ' + asOf + ')' : ''),
+        + (asOf ? ' (마지막 표시 기준일 ' + asOf + ')' : '') + failNote,
     };
   }
   if (isStale) {
@@ -2333,6 +2346,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       ['mortgageBullet', L('주택담보대출 (만기일시·거치)', 'Mortgage (bullet / grace period)')],
       ['nonhouse', L('비주택담보대출 (상가·오피스텔·토지)', 'Non-housing mortgage (retail/officetel/land)')],
       ['jeonse', L('전세자금대출', 'Jeonse loan')],
+      ['progress', L('중도금·이주비대출', 'Interim payment / relocation loan')],
       ['deposit', L('예적금·보험약관 담보대출', 'Deposit/insurance-secured loan')],
       ['stock', L('유가증권·기타담보대출', 'Securities/other secured loan')],
       ['card', L('카드론·현금서비스', 'Card loan / cash advance')],
@@ -2343,15 +2357,30 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
     function otherLoanSpec(type) {
       switch (type) {
         case 'mortgage': return [function (a, t) { return a / t; }, L('주택담보대출(분할상환) → 원금(잔액÷잔존만기 N년) + 이자', 'Mortgage (amortizing) → principal (balance ÷ N-year remaining term) + interest'), true];
-        case 'mortgageBullet': return [function (a, t) { return a / t; }, L('주택담보대출(만기일시·거치) → 원금(대출액÷대출기간 N년) + 이자', 'Mortgage (bullet/grace) → principal (loan ÷ N-year term) + interest'), true];
-        case 'nonhouse': return [function (a) { return a / 8; }, L('비주택담보대출 → 원금(대출액÷8년) + 이자 (금감원 산정만기 8년)', 'Non-housing mortgage → principal (loan ÷ 8 years) + interest (FSS assumed 8-year term)'), false];
-        case 'jeonse': return [function () { return 0; }, L('전세자금대출 → 이자만 반영 (보증부는 DSR 산정 제외 가능)', 'Jeonse loan → interest only (guarantee-backed loans may be excluded from DSR)'), false];
-        // ⚠ 예·적금담보대출·보험계약(약관)대출·유가증권(주식)담보대출은 담보가치가 확실해
-        //   **DSR 원리금 상환금액에서 통째로 제외**된다(이자도 산입하지 않는다).
-        //   과거 이 계산기는 주식담보대출을 '원금 ÷ 8년 + 이자'로 산입해 DSR을 부풀렸고,
-        //   그만큼 주담대 한도가 실제보다 적게 나왔다.
-        case 'deposit': return [function () { return 0; }, L('예적금·보험약관 담보대출 → <strong>DSR 산정 제외</strong> (원리금 모두 미산입)', 'Deposit/insurance-secured loan → <strong>excluded from DSR</strong>'), false, true];
-        case 'stock': return [function () { return 0; }, L('유가증권(주식)담보대출 → <strong>DSR 산정 제외</strong> (담보가치가 확실한 대출은 원리금 상환금액에서 제외)', 'Securities-secured loan → <strong>excluded from DSR</strong> (loans with certain collateral value are excluded from the repayment total)'), false, true];
+        // 원금일시상환 주담대의 산정만기는 「대출총액 ÷ 대출기간(**최대 10년**)」이다.
+        // 만기를 그대로 나누면 15년·20년짜리에서 연간 원금이 실제 산정보다 작게 잡혀
+        // 기존 부채를 줄이고, 그만큼 주담대 한도가 과대 산출된다.
+        case 'mortgageBullet': return [function (a, t) { return a / Math.min(t || 10, 10); }, L('주택담보대출(만기일시·거치) → 원금(대출액÷대출기간, 최대 10년) + 이자', 'Mortgage (bullet/grace) → principal (loan ÷ term, capped at 10 years) + interest'), true];
+        case 'nonhouse': return [function (a) { return a / 8; }, L('비주택담보대출 → 원금(대출액÷8년) + 이자 (산정만기 8년)', 'Non-housing mortgage → principal (loan ÷ 8 years) + interest (8-year assumed term)'), false];
+        case 'progress': return [function (a) { return a / 25; }, L('중도금·이주비대출 → 원금(대출액÷25년) + 이자 (기존 부채일 때. 이 대출을 새로 신청하는 경우엔 DSR 규제 미적용)', 'Interim/relocation loan → principal (loan ÷ 25 years) + interest (as existing debt)'), false];
+        case 'jeonse': return [function () { return 0; }, L('전세자금대출 → 이자만 반영 (원금 미산입)', 'Jeonse loan → interest only (principal excluded)'), false];
+        // ⚠ 「규제 미적용」과 「기존 부채 미산입」은 다른 말이다.
+        //
+        //   예·적금담보대출과 보험계약(약관)대출은 **그 대출을 새로 신청할 때** 차주단위
+        //   DSR 규제를 적용하지 않을 뿐, 다른 대출(주담대 등)을 신청하면 **기존 부채로
+        //   산입**된다. 은행 여신업무기준 FAQ(2025-11) Q7 단서가 명시한다 —
+        //   기존 부채에서까지 빠지는 건 주택연금(역모기지론) 하나뿐이다.
+        //
+        //   이 칸은 '이미 갖고 있는 대출'을 넣는 자리이므로 산입해야 맞다. 0으로 두면
+        //   기존 부채가 줄어 주담대 한도가 **과대 산출**된다(2026-08-02~04의 오류).
+        //   다만 이 종류의 산정만기는 기준표 해당 행을 아직 확인하지 못해, 원금은 빼고
+        //   이자만 산입하는 보수적 중간값을 쓴다(전세대출과 같은 취급).
+        case 'deposit': return [function () { return 0; }, L('예적금·보험약관 담보대출 → 이자만 반영 <strong>(기존 부채로는 산입 — 이 대출을 새로 신청할 때만 DSR 규제 미적용)</strong>', 'Deposit/insurance-secured loan → interest only (counted as existing debt)'), false];
+        // 유가증권(주식)담보대출은 제외 대상이 아니다. 실사용자 은행 DSR 원장(2026-04-14)이
+        // 이를 확인해 준다 — 잔액 29,934,000 · 연간원리금 4,867,000으로 산입돼 있었다.
+        // 산정만기는 8년/10년 두 갈래로 읽혀 아직 확정하지 못했다(rates.js
+        // securedLoanTermUnresolved 참고). 한도를 과대 산출하지 않는 8년을 쓴다.
+        case 'stock': return [function (a) { return a / 8; }, L('유가증권·기타담보대출 → 원금(대출액÷8년) + 이자 <strong>(DSR 산입 — 제외 대상 아님)</strong>', 'Securities/other secured loan → principal (loan ÷ 8 years) + interest <strong>(included in DSR)</strong>'), false];
         case 'card': return [function (a, t) { return a / t; }, L('카드론·현금서비스 → 원금(잔액÷약정 N년) + 이자', 'Card loan/cash advance → principal (balance ÷ N-year term) + interest'), true];
         case 'auto': return [function (a, t) { return a / t; }, L('자동차 할부·리스 → 원금(잔액÷약정 N년) + 이자', 'Auto loan/lease → principal (balance ÷ N-year term) + interest'), true];
         case 'minus': return [function (a) { return a / 5; }, L('마이너스통장(한도대출) → 원금(한도÷5년) + 이자', 'Overdraft line → principal (limit ÷ 5 years) + interest'), false];
@@ -2491,7 +2520,8 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
         const on = !areaOver85 && price <= 600000000 && getCheck('unsold2026');
         localSel.disabled = !on;
         const f = localSel.closest('.field');
-        if (f) f.classList.toggle('is-disabled', !on);
+        // 해당하지 않는 사람에게는 아예 숨긴다 — 비활성 칸은 화면만 어지럽힌다.
+        if (f) { f.classList.toggle('is-disabled', !on); f.style.display = on ? '' : 'none'; }
       }
       const status = root.querySelector('[data-dashboard-acq-status]');
       if (status) {
@@ -4984,7 +5014,16 @@ function suggestLtvPercent(regionKey, ownership) {
 
 // 지역 × 금리유형 → 스트레스 가산금리(%p).
 //  가산금리 = 스트레스 금리 × 기본 적용비율 × 금리유형별 적용비율
-function suggestStressAdd(regionKey, rateType) {
+// 경과규정(2025.10.15까지 계약+계약금 납부 등)이 걸리는 선택지인지.
+// rates.js 의 grandfather.priorRules.appliesToKeys 가 단일 기준이다 — 대환은
+// 종전 조건 승계가 은행마다 갈려 여기에 넣지 않는다(경고만 남긴다).
+function loanPriorRules(grandfather) {
+  const pr = (loanRatesCfg().grandfather || {}).priorRules;
+  if (!pr || !grandfather || grandfather === 'new') return null;
+  return (pr.appliesToKeys || []).indexOf(grandfather) >= 0 ? pr : null;
+}
+
+function suggestStressAdd(regionKey, rateType, grandfather) {
   const cfg = loanRatesCfg();
   const region = loanRegionConfig(regionKey);
   const st = cfg.stress || {};
@@ -4992,14 +5031,61 @@ function suggestStressAdd(regionKey, rateType) {
     || { stressRate: 3.0, applyRatio: 1.0, add: 3.0, stage: '3단계' };
   const ratios = st.rateTypeRatio || { variable: 1, mixed: 0.8, periodic: 0.4, fixed: 0 };
   const rt = ratios[rateType] != null ? rateType : 'variable';
-  const baseAdd = byRegion.add != null ? byRegion.add : (byRegion.stressRate * byRegion.applyRatio);
+  let baseAdd = byRegion.add != null ? byRegion.add : (byRegion.stressRate * byRegion.applyRatio);
+
+  // 경과규정 대상이면 10·15 이전의 스트레스 금리(전국 하한 1.5%)로 돌아간다.
+  // 종전 값보다 높아질 일은 없으므로 min 으로 눌러 안전하게 둔다 — 지방(0.75%p)처럼
+  // 이미 1.5%보다 낮은 지역이 경과규정 때문에 되레 올라가면 안 된다.
+  const prior = loanPriorRules(grandfather);
+  let priorApplied = false;
+  if (prior && prior.stressRate != null) {
+    const priorAdd = prior.stressRate * (byRegion.applyRatio != null ? byRegion.applyRatio : 1);
+    if (priorAdd < baseAdd) { baseAdd = priorAdd; priorApplied = true; }
+  }
+
   const value = Math.round(baseAdd * ratios[rt] * 100) / 100;
   return {
     value, baseAdd, rateType: rt, rateTypeRatio: ratios[rt],
-    stressRate: byRegion.stressRate, applyRatio: byRegion.applyRatio,
-    stage: byRegion.stage, region,
+    stressRate: priorApplied ? prior.stressRate : byRegion.stressRate,
+    applyRatio: byRegion.applyRatio,
+    stage: byRegion.stage, region, priorApplied,
     validUntil: byRegion.validUntil || null, note: byRegion.note || '',
   };
+}
+
+// DSR 산정용 「대출원금 1원당 연간 원리금상환액」.
+//
+// ⚠ 한 곳에만 둔다. 예전에는 스트레스 적용분과 미적용분이 각자 산식을 들고 있어서,
+//   한쪽만 고치면 "스트레스가 한도를 얼마나 깎았는지"가 조용히 틀어졌다.
+//
+// ■ 원금균등은 **연평균 원리금** = (원금 + 총이자) ÷ 대출연수 로 잡는다
+//
+//   2026-08-04 이전에는 "상환부담이 가장 큰 첫해" 기준(12/n + i*(12-66/n))을 썼다.
+//   보수적으로 보였지만 실제 은행 DSR 산출과 달라 한도를 크게 적게 냈다. 실사용자가
+//   은행 DSR 원장 화면(2026-04-14 조회)을 제공해 대조한 결과:
+//
+//     본건 5.86억 · 원금균등 30년 · 스트레스 적용금리 6.86%
+//       은행 표시 본건 원리금   39,688,960원
+//       연평균 방식             39,688,966원   ← 6원 차이(사실상 일치)
+//       첫해 방식               58,945,700원   ← 48% 과다
+//
+//     은행 표시 「DSR 40% 기준 신청가능금액」 589,800,000원
+//       연평균 방식 역산        589,844,755원  ← 만원 단위 절사하면 일치
+//       첫해 방식               397,151,021원  ← 33% 과소
+//
+//   원리금균등은 매달 같은 금액이라 첫해 = 연평균이다. 원금균등만 첫해로 잡으면 두
+//   방식의 취급이 서로 어긋난다. 연평균으로 통일한다.
+//   (그 결과 원금균등이 원리금균등보다 한도가 **크게** 나온다 — 총이자가 적기 때문이며
+//    정상이다. 첫해 기준이던 때는 방향이 반대였다.)
+function dsrAnnualFactor(annualRatePercent, months, repayType) {
+  if (!(months > 0)) return Infinity;
+  const i = (annualRatePercent || 0) / 100 / 12;
+  if (repayType === 'principal') {
+    const totalInterest = i * (months + 1) / 2;  // 원금 1원당 총이자(잔액 선형 감소)
+    return (1 + totalInterest) / (months / 12);
+  }
+  const m = i > 0 ? i * Math.pow(1 + i, months) / (Math.pow(1 + i, months) - 1) : 1 / months;
+  return m * 12;
 }
 
 function calcMortgageLimit(input) {
@@ -5025,31 +5111,29 @@ function calcMortgageLimit(input) {
   // 가격대별 한도는 수도권·규제지역 주택구입 목적 주담대에만 적용된다(지방 비규제 제외).
   const capRegions = cfg.priceCapAppliesTo || ['metroNonRegulated', 'regulated'];
   const priceCapApplies = capRegions.indexOf(region.key) >= 0;
+  // 경과규정 대상이면 10·15가 새로 만든 15억↑ 4억 / 25억↑ 2억 구간이 적용되지 않고,
+  // 6·27 대책의 **시가 무관 단일 6억**으로 돌아간다. 이 갈래가 없던 동안 경과규정
+  // 대상자는 자기 대출을 계산기로 재현할 수 없었다(실사용자 사례).
+  const priorRules = loanPriorRules(grandfather);
   let priceCap = Infinity;
   if (priceCapApplies) {
-    const caps = cfg.metroPriceCaps || [
-      { upToEok: 15, cap: 600000000 }, { upToEok: 25, cap: 400000000 }, { upToEok: Infinity, cap: 200000000 },
-    ];
-    const eok = price / 1e8;
-    const tier = caps.find((c) => eok <= c.upToEok) || caps[caps.length - 1];
-    priceCap = tier.cap;
+    if (priorRules && priorRules.priceCapSingle != null) {
+      priceCap = priorRules.priceCapSingle;
+    } else {
+      const caps = cfg.metroPriceCaps || [
+        { upToEok: 15, cap: 600000000 }, { upToEok: 25, cap: 400000000 }, { upToEok: Infinity, cap: 200000000 },
+      ];
+      const eok = price / 1e8;
+      const tier = caps.find((c) => eok <= c.upToEok) || caps[caps.length - 1];
+      priceCap = tier.cap;
+    }
   }
 
   // DSR 한도 (스트레스 금리·만기 역산)
   const availAnnual = Math.max(0, (income || 0) * (dsrLimitPercent / 100) - (existingAnnualDebt || 0));
   const stressedRate = (rate || 0) + (stressAdd || 0);
-  const i = stressedRate / 100 / 12;
   const n = (termYears || 0) * 12;
-  let dsrFactorAnnual; // 대출원금 1원당 연간 상환액
-  if (n <= 0) dsrFactorAnnual = Infinity;
-  else if (repayType === 'principal') {
-    // 원금균등: 상환부담이 가장 큰 첫해 12개월 합계 기준
-    dsrFactorAnnual = 12 / n + i * (12 - 66 / n);
-  } else {
-    // 원리금균등
-    const m = i > 0 ? i * Math.pow(1 + i, n) / (Math.pow(1 + i, n) - 1) : 1 / n;
-    dsrFactorAnnual = m * 12;
-  }
+  const dsrFactorAnnual = dsrAnnualFactor(stressedRate, n, repayType);
   const dsrLimit = dsrFactorAnnual > 0 && isFinite(dsrFactorAnnual) ? availAnnual / dsrFactorAnnual : 0;
 
   const candidates = [
@@ -5063,14 +5147,8 @@ function calcMortgageLimit(input) {
   // 최종 한도(LTV·가격대별·DSR 중 최소값)를 실제로 빌렸을 때의 예상 DSR —
   // 한도 산정엔 스트레스 가산 금리를 쓰지만, 실제 상환은 스트레스 없는 실금리 기준이라
   // (binding이 DSR이 아니라 LTV·가격대별인 경우) 실제 DSR은 40/50% 한도보다 낮게 나온다.
-  const realI = (rate || 0) / 100 / 12;
-  let realFactorAnnual;
-  if (n <= 0) realFactorAnnual = 0;
-  else if (repayType === 'principal') realFactorAnnual = 12 / n + realI * (12 - 66 / n);
-  else {
-    const m2 = realI > 0 ? realI * Math.pow(1 + realI, n) / (Math.pow(1 + realI, n) - 1) : 1 / n;
-    realFactorAnnual = m2 * 12;
-  }
+  const realFactorRaw = dsrAnnualFactor(rate || 0, n, repayType);
+  const realFactorAnnual = isFinite(realFactorRaw) ? realFactorRaw : 0;
   const actualAnnualPmt = limit * realFactorAnnual;
   const actualDsrPct = income > 0 ? (actualAnnualPmt + (existingAnnualDebt || 0)) / income * 100 : 0;
 
@@ -5080,14 +5158,8 @@ function calcMortgageLimit(input) {
   //  그것 때문에 깎였다고 오해한다 — 실제로 얼마나 줄였는지 계산해 함께 보여준다.
   let limitWithoutStress = limit;
   if ((stressAdd || 0) > 0 && n > 0) {
-    const i0 = (rate || 0) / 100 / 12;
-    let f0;
-    if (repayType === 'principal') f0 = 12 / n + i0 * (12 - 66 / n);
-    else {
-      const m0 = i0 > 0 ? i0 * Math.pow(1 + i0, n) / (Math.pow(1 + i0, n) - 1) : 1 / n;
-      f0 = m0 * 12;
-    }
-    const dsrNoStress = f0 > 0 ? availAnnual / f0 : 0;
+    const f0 = dsrAnnualFactor(rate || 0, n, repayType);
+    const dsrNoStress = f0 > 0 && isFinite(f0) ? availAnnual / f0 : 0;
     limitWithoutStress = Math.max(0, Math.min(ltvLimit, priceCap, dsrNoStress));
   }
   const stressImpact = Math.max(0, limitWithoutStress - limit);
@@ -5095,7 +5167,7 @@ function calcMortgageLimit(input) {
   // ── 결과의 성격 구분 (법정·확정 / 사용자 입력 / 추정) ──
   //  세 값이 한 화면에 섞여 있으면 사용자가 "은행에서 확인해야 할 것"을 알 수 없다.
   const ltvMeta = suggestLtvPercent(region.key, ownership);
-  const stressMeta = suggestStressAdd(region.key, rateType);
+  const stressMeta = suggestStressAdd(region.key, rateType, grandfather);
   const ltvIsSuggested = Math.abs(ltvPercent - ltvMeta.value) < 1e-9;
   const stressIsSuggested = Math.abs((stressAdd || 0) - stressMeta.value) < 1e-9;
   const classification = {
@@ -5131,6 +5203,7 @@ function calcMortgageLimit(input) {
     region, priceCapApplies, ownership: ltvMeta.ownership,
     ltvMeta, stressMeta, classification,
     grandfather, grandfatherActive, grandfatherOption,
+    priorRulesApplied: !!priorRules, priorRules: priorRules || null,
   };
 }
 
@@ -5219,7 +5292,9 @@ function calcJeonseLoanByAgency(deposit, opts) {
 
   function applySuggestions() {
     const ltvMeta = suggestLtvPercent(regionKey(), ownershipKey());
-    const stressMeta = suggestStressAdd(regionKey(), rateTypeKey());
+    // 경과규정을 고르면 스트레스 가산도 종전(1.5%) 기준으로 다시 제안된다 —
+    // 한도 계산만 바꾸고 제안값을 그대로 두면 화면의 두 숫자가 서로 어긋난다.
+    const stressMeta = suggestStressAdd(regionKey(), rateTypeKey(), grandfatherKey());
     if (ltvInput && !ltvTouched) ltvInput.value = ltvMeta.value;
     if (stressInput && !stressTouched) stressInput.value = stressMeta.value;
     return { ltvMeta, stressMeta };
@@ -5321,7 +5396,22 @@ function calcJeonseLoanByAgency(deposit, opts) {
         notes.push({ kind: 'warn', text: (R.stress && R.stress.rateTypeNote) || '' });
       }
       if (r.grandfatherActive && r.grandfatherOption) {
-        notes.push({ kind: 'warn', text: '「' + r.grandfatherOption.label + '」을 선택했습니다. 이 경우 종전 규제가 적용될 수 있어 위 한도보다 많이 받을 수도 있습니다 — ' + ((R.grandfather && R.grandfather.note) || '은행이 증빙으로 판정합니다.') });
+        const gf = R.grandfather || {};
+        // ⚠ 이 notes 배열은 HTML을 이스케이프해서 그린다(renderNotes). 태그를 넣으면
+        //   글자 그대로 나오므로 평문으로만 쓴다.
+        if (r.priorRulesApplied) {
+          // 종전 규정으로 계산했다면 '무엇을 되돌렸고 무엇은 안 되돌렸는지'까지 말해야
+          // 한다. 되돌리지 않은 LTV 를 밝히지 않으면 이 한도를 그대로 믿는다.
+          notes.push({ kind: 'warn', text: '「' + r.grandfatherOption.label + '」을 선택해 '
+            + '종전 규정으로 계산했습니다 — 가격대별 한도 6억원 단일(시가 무관), 스트레스 금리 1.5%. '
+            + 'LTV는 되돌리지 않았습니다: '
+            + ((gf.priorRules && gf.priorRules.ltvNote) || '은행에 확인한 종전 LTV를 직접 입력하세요.')
+            + ' ' + (gf.note || '경과규정 해당 여부는 은행이 증빙으로 판정합니다.') });
+        } else {
+          notes.push({ kind: 'warn', text: '「' + r.grandfatherOption.label + '」을 선택했지만 '
+            + '현행 규정으로 계산했습니다 — '
+            + (gf.refinanceNote || '종전 조건 승계 여부가 은행·상품마다 달라 자동으로 되돌리지 않습니다.') });
+        }
       }
       // ── 적용 대상 요건 ──
       //  "얼마"만 보여주고 "이 규제가 당신 대출에 붙는지"를 안 밝히면, 대상이 아닌
@@ -5336,6 +5426,11 @@ function calcJeonseLoanByAgency(deposit, opts) {
         notes.push({ kind: 'info', text: 'DSR이 한도를 결정했습니다. 차주단위 DSR은 전 금융권 총 대출액이 '
           + Math.round((dsrApp.totalDebtThreshold || 100000000) / 100000000) + '억원을 넘을 때 적용됩니다 — '
           + '이 계산기는 보수적으로 항상 적용하므로, 요건에 해당하지 않으면 실제 한도는 더 높을 수 있습니다.' });
+        // DSR이 한도를 정했다면 분모(연소득)를 어떻게 잡느냐가 곧 한도다. 은행이
+        // 장래소득을 얹으면 여기 결과보다 커진다 — 실제로 가장 흔한 차이 원인이다.
+        if (dsrApp.futureIncome && dsrApp.futureIncome.appliedInCalculator === false) {
+          notes.push({ kind: 'info', text: dsrApp.futureIncome.note });
+        }
       }
       notes.push({ kind: 'info', text: '대출 규제는 신청·실행 시점의 기준으로 판정됩니다. 이 계산기는 ' + (R.effectiveFrom || '') + ' 시행 기준이며, 이후 대책이 나오면 달라집니다.' });
       const icon = { warn: '⚠', info: 'ℹ' };

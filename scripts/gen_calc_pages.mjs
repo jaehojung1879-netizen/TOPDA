@@ -104,9 +104,9 @@ function head(lang, calc, t) {
 <meta name="twitter:card" content="summary_large_image" />
 ${alts}
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/${calc}.html" />
-<script defer src="https://topda.kr/assets/analytics.js?v=20260719"></script>
+<script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=20260719" />
+<link rel="stylesheet" href="../../assets/styles.css?v=b54e7c9b22" />
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"${UI[lang].home}","item":"https://topda.kr/${lang}/index.html"},{"@type":"ListItem","position":2,"name":"${UI[lang].calc}","item":"https://topda.kr/${lang}/calculators/index.html"},{"@type":"ListItem","position":3,"name":"${t.title}","item":"${canon}"}]}
 </script>
@@ -140,8 +140,8 @@ function chrome(lang, bodyMain) {
 </header>
 ${bodyMain}
 <footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. ${u.disc}</p></div></footer>
-<script src="../../assets/rates.js?v=20260719"></script>
-<script src="../../assets/app.js?v=20260719"></script>
+<script src="../../assets/rates.js?v=bfc9ebc58b"></script>
+<script src="../../assets/app.js?v=d3158aa00d"></script>
 </body>
 </html>
 `;
@@ -442,9 +442,9 @@ function indexHead(lang) {
 <meta name="twitter:card" content="summary_large_image" />
 ${alts}
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/index.html" />
-<script defer src="https://topda.kr/assets/analytics.js?v=20260719"></script>
+<script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=20260719" />
+<link rel="stylesheet" href="../../assets/styles.css?v=b54e7c9b22" />
 </head>`;
 }
 function indexBody(lang, calcList) {
