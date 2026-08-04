@@ -196260,22 +196260,6 @@
       "hh_src": "recap.hhldCnt",
       "built_year": 1996
     },
-    "서울 강서구|청솔샤르망1001동": {
-      "addr": "서울 강서구 내발산동 676-23",
-      "lat": 37.552905,
-      "lng": 126.838734,
-      "subway": {
-        "station": "우장산역 5호선",
-        "distance_m": 501
-      },
-      "elementary": {
-        "name": "서울내발산초등학교",
-        "distance_m": 159
-      },
-      "households": 49,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
-    },
     "서울 은평구|한성산장": {
       "addr": "서울 은평구 구산동 169-1",
       "lat": 37.609117,
@@ -196466,7 +196450,172 @@
       "households": 459,
       "hh_src": "recap.hhldCnt",
       "built_year": 2009
+    },
+    "서울 강서구|청솔샤르망1001동": {
+      "addr": "서울 강서구 내발산동 676-23",
+      "lat": 37.552905,
+      "lng": 126.838734,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 501
+      },
+      "elementary": {
+        "name": "서울내발산초등학교",
+        "distance_m": 159
+      }
+    },
+    "서울 서대문구|초원": {
+      "addr": "서울 서대문구 홍은동 8-26",
+      "lat": 37.603848,
+      "lng": 126.949732,
+      "subway": {
+        "station": "녹번역 3호선",
+        "distance_m": 1273
+      },
+      "elementary": {
+        "name": "상명대학교사범대학 부속초등학교",
+        "distance_m": 680
+      }
+    },
+    "인천 미추홀구|진성투토펠리체": {
+      "addr": "인천 미추홀구 숭의동 346-5",
+      "lat": 37.462065,
+      "lng": 126.640998,
+      "subway": {
+        "station": "숭의역 수인분당선",
+        "distance_m": 268
+      },
+      "elementary": {
+        "name": "인천신광초등학교",
+        "distance_m": 577
+      }
+    },
+    "경기 이천시|대원4": {
+      "addr": "경기 이천시 창전동 440-4",
+      "lat": 37.285553,
+      "lng": 127.447781,
+      "elementary": {
+        "name": "설봉초등학교",
+        "distance_m": 423
+      }
+    },
+    "부산 해운대구|에이스스카이뷰": {
+      "addr": "부산 해운대구 송정동 199-3",
+      "lat": 35.183845,
+      "lng": 129.203304,
+      "subway": {
+        "station": "송정역 동해선",
+        "distance_m": 449
+      },
+      "elementary": {
+        "name": "부산송정초등학교",
+        "distance_m": 658
+      }
+    },
+    "서울 금천구|거상홈타운801동": {
+      "addr": "서울 금천구 시흥동 949-18",
+      "lat": 37.440787,
+      "lng": 126.907278,
+      "subway": {
+        "station": "석수역 1호선",
+        "distance_m": 769
+      },
+      "elementary": {
+        "name": "서울금산초등학교",
+        "distance_m": 87
+      }
+    },
+    "경기 하남시|그린나래": {
+      "addr": "경기 하남시 덕풍동 537-4",
+      "lat": 37.533674,
+      "lng": 127.19864,
+      "subway": {
+        "station": "하남시청역 5호선",
+        "distance_m": 1143
+      },
+      "elementary": {
+        "name": "동부초등학교",
+        "distance_m": 539
+      }
+    },
+    "서울 중구|푸른마을(432-921)": {
+      "addr": "서울 중구 신당동 432-921",
+      "lat": 37.550882,
+      "lng": 127.005809,
+      "subway": {
+        "station": "버티고개역 6호선",
+        "distance_m": 348
+      },
+      "elementary": {
+        "name": "서울동호초등학교",
+        "distance_m": 613
+      }
+    },
+    "서울 강서구|스카이": {
+      "addr": "서울 강서구 공항동 14-10",
+      "lat": 37.562615,
+      "lng": 126.813785,
+      "subway": {
+        "station": "송정역 5호선",
+        "distance_m": 200
+      },
+      "elementary": {
+        "name": "서울송정초등학교",
+        "distance_m": 235
+      }
+    },
+    "경기 부천시 원미구|다청림": {
+      "addr": "경기 부천시 원미구 약대동 161-5",
+      "lat": 37.512863,
+      "lng": 126.771536,
+      "subway": {
+        "station": "부천시청역 7호선",
+        "distance_m": 1127
+      },
+      "elementary": {
+        "name": "약대초등학교",
+        "distance_m": 185
+      }
+    },
+    "서울 영등포구|제일골드타워": {
+      "addr": "서울 영등포구 신길동 1515-2",
+      "lat": 37.499791,
+      "lng": 126.917971,
+      "subway": {
+        "station": "보라매역 신림선",
+        "distance_m": 225
+      },
+      "elementary": {
+        "name": "서울대방초등학교",
+        "distance_m": 307
+      }
+    },
+    "서울 강동구|아크로파크": {
+      "addr": "서울 강동구 천호동 40-9",
+      "lat": 37.545314,
+      "lng": 127.139831,
+      "subway": {
+        "station": "굽은다리역 5호선",
+        "distance_m": 270
+      },
+      "elementary": {
+        "name": "서울천호초등학교",
+        "distance_m": 377
+      }
+    },
+    "서울 강동구|호암아펙스": {
+      "addr": "서울 강동구 성내동 455-3",
+      "lat": 37.528572,
+      "lng": 127.121785,
+      "subway": {
+        "station": "강동구청역 8호선",
+        "distance_m": 217
+      },
+      "elementary": {
+        "name": "서울성내초등학교",
+        "distance_m": 319
+      }
     }
   },
-  "as_of": "2026-08-03"
+  "as_of": "2026-08-04"
 }
