@@ -2346,6 +2346,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       ['mortgageBullet', L('주택담보대출 (만기일시·거치)', 'Mortgage (bullet / grace period)')],
       ['nonhouse', L('비주택담보대출 (상가·오피스텔·토지)', 'Non-housing mortgage (retail/officetel/land)')],
       ['jeonse', L('전세자금대출', 'Jeonse loan')],
+      ['progress', L('중도금·이주비대출', 'Interim payment / relocation loan')],
       ['deposit', L('예적금·보험약관 담보대출', 'Deposit/insurance-secured loan')],
       ['stock', L('유가증권·기타담보대출', 'Securities/other secured loan')],
       ['card', L('카드론·현금서비스', 'Card loan / cash advance')],
@@ -2356,21 +2357,30 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
     function otherLoanSpec(type) {
       switch (type) {
         case 'mortgage': return [function (a, t) { return a / t; }, L('주택담보대출(분할상환) → 원금(잔액÷잔존만기 N년) + 이자', 'Mortgage (amortizing) → principal (balance ÷ N-year remaining term) + interest'), true];
-        case 'mortgageBullet': return [function (a, t) { return a / t; }, L('주택담보대출(만기일시·거치) → 원금(대출액÷대출기간 N년) + 이자', 'Mortgage (bullet/grace) → principal (loan ÷ N-year term) + interest'), true];
-        case 'nonhouse': return [function (a) { return a / 8; }, L('비주택담보대출 → 원금(대출액÷8년) + 이자 (금감원 산정만기 8년)', 'Non-housing mortgage → principal (loan ÷ 8 years) + interest (FSS assumed 8-year term)'), false];
-        case 'jeonse': return [function () { return 0; }, L('전세자금대출 → 이자만 반영 (보증부는 DSR 산정 제외 가능)', 'Jeonse loan → interest only (guarantee-backed loans may be excluded from DSR)'), false];
-        // ⚠ 예·적금담보대출과 보험계약(약관)대출만 **DSR 산정에서 제외**된다.
-        //   유가증권(주식)담보대출은 제외 대상이 아니라 **산정만기 8년**으로 산입한다.
+        // 원금일시상환 주담대의 산정만기는 「대출총액 ÷ 대출기간(**최대 10년**)」이다.
+        // 만기를 그대로 나누면 15년·20년짜리에서 연간 원금이 실제 산정보다 작게 잡혀
+        // 기존 부채를 줄이고, 그만큼 주담대 한도가 과대 산출된다.
+        case 'mortgageBullet': return [function (a, t) { return a / Math.min(t || 10, 10); }, L('주택담보대출(만기일시·거치) → 원금(대출액÷대출기간, 최대 10년) + 이자', 'Mortgage (bullet/grace) → principal (loan ÷ term, capped at 10 years) + interest'), true];
+        case 'nonhouse': return [function (a) { return a / 8; }, L('비주택담보대출 → 원금(대출액÷8년) + 이자 (산정만기 8년)', 'Non-housing mortgage → principal (loan ÷ 8 years) + interest (8-year assumed term)'), false];
+        case 'progress': return [function (a) { return a / 25; }, L('중도금·이주비대출 → 원금(대출액÷25년) + 이자 (기존 부채일 때. 이 대출을 새로 신청하는 경우엔 DSR 규제 미적용)', 'Interim/relocation loan → principal (loan ÷ 25 years) + interest (as existing debt)'), false];
+        case 'jeonse': return [function () { return 0; }, L('전세자금대출 → 이자만 반영 (원금 미산입)', 'Jeonse loan → interest only (principal excluded)'), false];
+        // ⚠ 「규제 미적용」과 「기존 부채 미산입」은 다른 말이다.
         //
-        //   2026-08-02에 이 둘을 한 묶음으로 보고 주식담보대출까지 0으로 바꿨는데
-        //   틀렸다. 실사용자가 준 은행 DSR 원장(2026-04-14 조회)이 반증한다:
+        //   예·적금담보대출과 보험계약(약관)대출은 **그 대출을 새로 신청할 때** 차주단위
+        //   DSR 규제를 적용하지 않을 뿐, 다른 대출(주담대 등)을 신청하면 **기존 부채로
+        //   산입**된다. 은행 여신업무기준 FAQ(2025-11) Q7 단서가 명시한다 —
+        //   기존 부채에서까지 빠지는 건 주택연금(역모기지론) 하나뿐이다.
         //
-        //     한국증권금융 210-유가증권담보대출  잔액 29,934,000  연간원리금 4,867,000
-        //       29,934,000 ÷ 8 + 29,934,000 × 3.76% = 4,867,268   ← 사실상 일치
-        //
-        //   즉 원래 산식(원금÷8년 + 이자)이 맞았다. 되돌린다.
-        case 'deposit': return [function () { return 0; }, L('예적금·보험약관 담보대출 → <strong>DSR 산정 제외</strong> (원리금 모두 미산입)', 'Deposit/insurance-secured loan → <strong>excluded from DSR</strong>'), false, true];
-        case 'stock': return [function (a) { return a / 8; }, L('유가증권(주식)담보대출 → 원금(대출액÷8년) + 이자 <strong>(DSR 산입 — 제외 대상 아님)</strong>', 'Securities-secured loan → principal (loan ÷ 8 years) + interest <strong>(included in DSR)</strong>'), false];
+        //   이 칸은 '이미 갖고 있는 대출'을 넣는 자리이므로 산입해야 맞다. 0으로 두면
+        //   기존 부채가 줄어 주담대 한도가 **과대 산출**된다(2026-08-02~04의 오류).
+        //   다만 이 종류의 산정만기는 기준표 해당 행을 아직 확인하지 못해, 원금은 빼고
+        //   이자만 산입하는 보수적 중간값을 쓴다(전세대출과 같은 취급).
+        case 'deposit': return [function () { return 0; }, L('예적금·보험약관 담보대출 → 이자만 반영 <strong>(기존 부채로는 산입 — 이 대출을 새로 신청할 때만 DSR 규제 미적용)</strong>', 'Deposit/insurance-secured loan → interest only (counted as existing debt)'), false];
+        // 유가증권(주식)담보대출은 제외 대상이 아니다. 실사용자 은행 DSR 원장(2026-04-14)이
+        // 이를 확인해 준다 — 잔액 29,934,000 · 연간원리금 4,867,000으로 산입돼 있었다.
+        // 산정만기는 8년/10년 두 갈래로 읽혀 아직 확정하지 못했다(rates.js
+        // securedLoanTermUnresolved 참고). 한도를 과대 산출하지 않는 8년을 쓴다.
+        case 'stock': return [function (a) { return a / 8; }, L('유가증권·기타담보대출 → 원금(대출액÷8년) + 이자 <strong>(DSR 산입 — 제외 대상 아님)</strong>', 'Securities/other secured loan → principal (loan ÷ 8 years) + interest <strong>(included in DSR)</strong>'), false];
         case 'card': return [function (a, t) { return a / t; }, L('카드론·현금서비스 → 원금(잔액÷약정 N년) + 이자', 'Card loan/cash advance → principal (balance ÷ N-year term) + interest'), true];
         case 'auto': return [function (a, t) { return a / t; }, L('자동차 할부·리스 → 원금(잔액÷약정 N년) + 이자', 'Auto loan/lease → principal (balance ÷ N-year term) + interest'), true];
         case 'minus': return [function (a) { return a / 5; }, L('마이너스통장(한도대출) → 원금(한도÷5년) + 이자', 'Overdraft line → principal (limit ÷ 5 years) + interest'), false];

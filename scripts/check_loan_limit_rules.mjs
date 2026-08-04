@@ -705,19 +705,79 @@ check('은행 원장 대조 — 유가증권담보 29,934,000원의 연간원리
     `${Math.round(annual).toLocaleString()}원 (은행 4,867,000원)`);
 });
 
-check('예적금·보험계약 담보대출은 원금·이자 모두 미산입', () => {
-  const start = appSource.indexOf('function otherLoanSpec(type)');
-  const end = appSource.indexOf('function updateOtherLoanRow(', start);
-  const block = appSource.slice(start, end);
-  const i = block.indexOf("case 'deposit'");
-  assert.ok(i >= 0, "case 'deposit'이 없습니다.");
-  const line = block.slice(i, block.indexOf('\n', i));
-  assert.match(line, /return 0;/, '예적금담보대출의 원금이 산입됩니다.');
-  assert.match(line, /false, true\]/, '예적금담보대출에 DSR 제외 플래그가 없습니다.');
-  // 제외 플래그가 켜지면 이자도 산입하지 않아야 한다.
+check('DSR 완전제외 플래그가 켜지면 이자도 산입하지 않는다', () => {
+  // 플래그 자체는 남아 있어야 한다 — 주택연금처럼 기존 부채에서까지 빠지는
+  // 대출을 나중에 넣을 자리다. 다만 예적금·보험계약대출에는 붙이지 않는다.
   const rowStart = appSource.indexOf('function updateOtherLoanRow(');
   const rowBlock = appSource.slice(rowStart, appSource.indexOf('function otherLoansTotal(', rowStart));
   assert.match(rowBlock, /dsrExempt \? 0 : amount \* rate/, '제외 대출의 이자가 여전히 산입됩니다.');
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 P0-⑧] 「규제 미적용」 ≠ 「기존 부채 미산입」');
+// ─────────────────────────────────────────────────────────────────────
+// 은행 여신업무기준 FAQ(2025-11) Q7 단서:
+//   "단, 위 항목에 해당하지 않는 대출을 신규 취급하는 경우 위 항목의 대출은 DSR
+//    산출을 위한 기존 부채 금액에 포함됩니다.(주택연금(역모기지론)은 부채금액에서 제외)"
+// 예적금·보험계약대출을 부채에서까지 0으로 두면 기존 부채가 줄어 한도가 과대 산출된다.
+
+check('기존 부채에서까지 빠지는 것은 주택연금뿐이다', () => {
+  const app2 = RATES.dsr.applicability;
+  assert.ok(Array.isArray(app2.exemptAsNewLoan) && app2.exemptAsNewLoan.length >= 10,
+    '신규 취급 시 규제 미적용 목록이 없습니다.');
+  assert.deepEqual(Array.from(app2.exemptFromDebtToo), ['주택연금(역모기지론)']);
+  const asNew = Array.from(app2.exemptAsNewLoan).join(' ');
+  assert.match(asNew, /예·적금 담보대출/);
+  assert.match(asNew, /보험계약대출/);
+  assert.doesNotMatch(asNew, /유가증권/, '유가증권담보대출은 규제 미적용 목록에도 없습니다.');
+});
+
+check('예적금·보험약관 담보대출이 기존 부채로 산입된다', () => {
+  const start = appSource.indexOf('function otherLoanSpec(type)');
+  const block = appSource.slice(start, appSource.indexOf('function updateOtherLoanRow(', start));
+  const i = block.indexOf("case 'deposit'");
+  const line = block.slice(i, block.indexOf('\n', i));
+  // DSR 제외 플래그(4번째 인자 true)가 붙으면 이자까지 0이 된다 — 그건 주택연금뿐이다.
+  assert.doesNotMatch(line, /false, true\]/,
+    '예적금담보대출에 DSR 완전제외 플래그가 남아 있습니다(기존 부채로는 산입돼야 합니다).');
+});
+
+check('주담대 원금일시상환의 산정만기는 최대 10년으로 잘린다', () => {
+  const start = appSource.indexOf('function otherLoanSpec(type)');
+  const block = appSource.slice(start, appSource.indexOf('function updateOtherLoanRow(', start));
+  const i = block.indexOf("case 'mortgageBullet'");
+  const line = block.slice(i, block.indexOf('\n', i));
+  assert.match(line, /Math\.min\(t \|\| 10, 10\)/,
+    '만기 20년을 그대로 나누면 기존 부채가 작아져 한도가 과대 산출됩니다.');
+});
+
+check('중도금·이주비대출은 기존 부채일 때 25년으로 산입된다', () => {
+  const start = appSource.indexOf('var OTHER_TYPES');
+  const block = appSource.slice(start, appSource.indexOf('function updateOtherLoanRow(', start));
+  assert.match(block, /\['progress',/, '중도금·이주비 선택지가 없습니다.');
+  const i = block.indexOf("case 'progress'");
+  assert.ok(i >= 0, "case 'progress'가 없습니다.");
+  assert.match(block.slice(i, block.indexOf('\n', i)), /a \/ 25/);
+});
+
+check('산정만기 표가 기준정보에 있고 화면 산식과 일치한다', () => {
+  const t = RATES.dsr.applicability.assumedTermYears;
+  assert.equal(t.mortgageBullet.years, 10);
+  assert.equal(t.progressPayment.years, 25);
+  assert.equal(t.credit.years, 5);
+  assert.equal(t.nonHouse.years, 8);
+  assert.equal(t.otherSecured.years, 10);
+  assert.equal(t.cardLoan.years, 3);
+});
+
+check('유가증권담보 산정만기의 미확정 상태를 감추지 않는다', () => {
+  // 8년/10년 두 갈래로 읽히고 실사용자 원장으로도 갈리지 않는다. 조용히 하나를
+  // 고르면 나중에 근거 없이 굳는다 — 미확정임을 기준정보에 남긴다.
+  const u = RATES.dsr.applicability.securedLoanTermUnresolved;
+  assert.ok(u, '미확정 표시가 없습니다.');
+  assert.equal(u.confidence, 'needs-verification');
+  assert.equal(Array.from(u.candidates).join(','), '8,10');
+  assert.equal(u.usedYears, 8, '한도를 과대 산출하지 않는 쪽(8년)을 써야 합니다.');
 });
 
 check('장래소득은 계산에 반영하지 않되 화면에 밝힌다', () => {
