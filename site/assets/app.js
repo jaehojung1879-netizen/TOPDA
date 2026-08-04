@@ -2359,12 +2359,18 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
         case 'mortgageBullet': return [function (a, t) { return a / t; }, L('주택담보대출(만기일시·거치) → 원금(대출액÷대출기간 N년) + 이자', 'Mortgage (bullet/grace) → principal (loan ÷ N-year term) + interest'), true];
         case 'nonhouse': return [function (a) { return a / 8; }, L('비주택담보대출 → 원금(대출액÷8년) + 이자 (금감원 산정만기 8년)', 'Non-housing mortgage → principal (loan ÷ 8 years) + interest (FSS assumed 8-year term)'), false];
         case 'jeonse': return [function () { return 0; }, L('전세자금대출 → 이자만 반영 (보증부는 DSR 산정 제외 가능)', 'Jeonse loan → interest only (guarantee-backed loans may be excluded from DSR)'), false];
-        // ⚠ 예·적금담보대출·보험계약(약관)대출·유가증권(주식)담보대출은 담보가치가 확실해
-        //   **DSR 원리금 상환금액에서 통째로 제외**된다(이자도 산입하지 않는다).
-        //   과거 이 계산기는 주식담보대출을 '원금 ÷ 8년 + 이자'로 산입해 DSR을 부풀렸고,
-        //   그만큼 주담대 한도가 실제보다 적게 나왔다.
+        // ⚠ 예·적금담보대출과 보험계약(약관)대출만 **DSR 산정에서 제외**된다.
+        //   유가증권(주식)담보대출은 제외 대상이 아니라 **산정만기 8년**으로 산입한다.
+        //
+        //   2026-08-02에 이 둘을 한 묶음으로 보고 주식담보대출까지 0으로 바꿨는데
+        //   틀렸다. 실사용자가 준 은행 DSR 원장(2026-04-14 조회)이 반증한다:
+        //
+        //     한국증권금융 210-유가증권담보대출  잔액 29,934,000  연간원리금 4,867,000
+        //       29,934,000 ÷ 8 + 29,934,000 × 3.76% = 4,867,268   ← 사실상 일치
+        //
+        //   즉 원래 산식(원금÷8년 + 이자)이 맞았다. 되돌린다.
         case 'deposit': return [function () { return 0; }, L('예적금·보험약관 담보대출 → <strong>DSR 산정 제외</strong> (원리금 모두 미산입)', 'Deposit/insurance-secured loan → <strong>excluded from DSR</strong>'), false, true];
-        case 'stock': return [function () { return 0; }, L('유가증권(주식)담보대출 → <strong>DSR 산정 제외</strong> (담보가치가 확실한 대출은 원리금 상환금액에서 제외)', 'Securities-secured loan → <strong>excluded from DSR</strong> (loans with certain collateral value are excluded from the repayment total)'), false, true];
+        case 'stock': return [function (a) { return a / 8; }, L('유가증권(주식)담보대출 → 원금(대출액÷8년) + 이자 <strong>(DSR 산입 — 제외 대상 아님)</strong>', 'Securities-secured loan → principal (loan ÷ 8 years) + interest <strong>(included in DSR)</strong>'), false];
         case 'card': return [function (a, t) { return a / t; }, L('카드론·현금서비스 → 원금(잔액÷약정 N년) + 이자', 'Card loan/cash advance → principal (balance ÷ N-year term) + interest'), true];
         case 'auto': return [function (a, t) { return a / t; }, L('자동차 할부·리스 → 원금(잔액÷약정 N년) + 이자', 'Auto loan/lease → principal (balance ÷ N-year term) + interest'), true];
         case 'minus': return [function (a) { return a / 5; }, L('마이너스통장(한도대출) → 원금(한도÷5년) + 이자', 'Overdraft line → principal (limit ÷ 5 years) + interest'), false];
@@ -5037,6 +5043,41 @@ function suggestStressAdd(regionKey, rateType, grandfather) {
   };
 }
 
+// DSR 산정용 「대출원금 1원당 연간 원리금상환액」.
+//
+// ⚠ 한 곳에만 둔다. 예전에는 스트레스 적용분과 미적용분이 각자 산식을 들고 있어서,
+//   한쪽만 고치면 "스트레스가 한도를 얼마나 깎았는지"가 조용히 틀어졌다.
+//
+// ■ 원금균등은 **연평균 원리금** = (원금 + 총이자) ÷ 대출연수 로 잡는다
+//
+//   2026-08-04 이전에는 "상환부담이 가장 큰 첫해" 기준(12/n + i*(12-66/n))을 썼다.
+//   보수적으로 보였지만 실제 은행 DSR 산출과 달라 한도를 크게 적게 냈다. 실사용자가
+//   은행 DSR 원장 화면(2026-04-14 조회)을 제공해 대조한 결과:
+//
+//     본건 5.86억 · 원금균등 30년 · 스트레스 적용금리 6.86%
+//       은행 표시 본건 원리금   39,688,960원
+//       연평균 방식             39,688,966원   ← 6원 차이(사실상 일치)
+//       첫해 방식               58,945,700원   ← 48% 과다
+//
+//     은행 표시 「DSR 40% 기준 신청가능금액」 589,800,000원
+//       연평균 방식 역산        589,844,755원  ← 만원 단위 절사하면 일치
+//       첫해 방식               397,151,021원  ← 33% 과소
+//
+//   원리금균등은 매달 같은 금액이라 첫해 = 연평균이다. 원금균등만 첫해로 잡으면 두
+//   방식의 취급이 서로 어긋난다. 연평균으로 통일한다.
+//   (그 결과 원금균등이 원리금균등보다 한도가 **크게** 나온다 — 총이자가 적기 때문이며
+//    정상이다. 첫해 기준이던 때는 방향이 반대였다.)
+function dsrAnnualFactor(annualRatePercent, months, repayType) {
+  if (!(months > 0)) return Infinity;
+  const i = (annualRatePercent || 0) / 100 / 12;
+  if (repayType === 'principal') {
+    const totalInterest = i * (months + 1) / 2;  // 원금 1원당 총이자(잔액 선형 감소)
+    return (1 + totalInterest) / (months / 12);
+  }
+  const m = i > 0 ? i * Math.pow(1 + i, months) / (Math.pow(1 + i, months) - 1) : 1 / months;
+  return m * 12;
+}
+
 function calcMortgageLimit(input) {
   const {
     price, ltvPercent, regulatedMetro,
@@ -5081,18 +5122,8 @@ function calcMortgageLimit(input) {
   // DSR 한도 (스트레스 금리·만기 역산)
   const availAnnual = Math.max(0, (income || 0) * (dsrLimitPercent / 100) - (existingAnnualDebt || 0));
   const stressedRate = (rate || 0) + (stressAdd || 0);
-  const i = stressedRate / 100 / 12;
   const n = (termYears || 0) * 12;
-  let dsrFactorAnnual; // 대출원금 1원당 연간 상환액
-  if (n <= 0) dsrFactorAnnual = Infinity;
-  else if (repayType === 'principal') {
-    // 원금균등: 상환부담이 가장 큰 첫해 12개월 합계 기준
-    dsrFactorAnnual = 12 / n + i * (12 - 66 / n);
-  } else {
-    // 원리금균등
-    const m = i > 0 ? i * Math.pow(1 + i, n) / (Math.pow(1 + i, n) - 1) : 1 / n;
-    dsrFactorAnnual = m * 12;
-  }
+  const dsrFactorAnnual = dsrAnnualFactor(stressedRate, n, repayType);
   const dsrLimit = dsrFactorAnnual > 0 && isFinite(dsrFactorAnnual) ? availAnnual / dsrFactorAnnual : 0;
 
   const candidates = [
@@ -5106,14 +5137,8 @@ function calcMortgageLimit(input) {
   // 최종 한도(LTV·가격대별·DSR 중 최소값)를 실제로 빌렸을 때의 예상 DSR —
   // 한도 산정엔 스트레스 가산 금리를 쓰지만, 실제 상환은 스트레스 없는 실금리 기준이라
   // (binding이 DSR이 아니라 LTV·가격대별인 경우) 실제 DSR은 40/50% 한도보다 낮게 나온다.
-  const realI = (rate || 0) / 100 / 12;
-  let realFactorAnnual;
-  if (n <= 0) realFactorAnnual = 0;
-  else if (repayType === 'principal') realFactorAnnual = 12 / n + realI * (12 - 66 / n);
-  else {
-    const m2 = realI > 0 ? realI * Math.pow(1 + realI, n) / (Math.pow(1 + realI, n) - 1) : 1 / n;
-    realFactorAnnual = m2 * 12;
-  }
+  const realFactorRaw = dsrAnnualFactor(rate || 0, n, repayType);
+  const realFactorAnnual = isFinite(realFactorRaw) ? realFactorRaw : 0;
   const actualAnnualPmt = limit * realFactorAnnual;
   const actualDsrPct = income > 0 ? (actualAnnualPmt + (existingAnnualDebt || 0)) / income * 100 : 0;
 
@@ -5123,14 +5148,8 @@ function calcMortgageLimit(input) {
   //  그것 때문에 깎였다고 오해한다 — 실제로 얼마나 줄였는지 계산해 함께 보여준다.
   let limitWithoutStress = limit;
   if ((stressAdd || 0) > 0 && n > 0) {
-    const i0 = (rate || 0) / 100 / 12;
-    let f0;
-    if (repayType === 'principal') f0 = 12 / n + i0 * (12 - 66 / n);
-    else {
-      const m0 = i0 > 0 ? i0 * Math.pow(1 + i0, n) / (Math.pow(1 + i0, n) - 1) : 1 / n;
-      f0 = m0 * 12;
-    }
-    const dsrNoStress = f0 > 0 ? availAnnual / f0 : 0;
+    const f0 = dsrAnnualFactor(rate || 0, n, repayType);
+    const dsrNoStress = f0 > 0 && isFinite(f0) ? availAnnual / f0 : 0;
     limitWithoutStress = Math.max(0, Math.min(ltvLimit, priceCap, dsrNoStress));
   }
   const stressImpact = Math.max(0, limitWithoutStress - limit);
@@ -5397,6 +5416,11 @@ function calcJeonseLoanByAgency(deposit, opts) {
         notes.push({ kind: 'info', text: 'DSR이 한도를 결정했습니다. 차주단위 DSR은 전 금융권 총 대출액이 '
           + Math.round((dsrApp.totalDebtThreshold || 100000000) / 100000000) + '억원을 넘을 때 적용됩니다 — '
           + '이 계산기는 보수적으로 항상 적용하므로, 요건에 해당하지 않으면 실제 한도는 더 높을 수 있습니다.' });
+        // DSR이 한도를 정했다면 분모(연소득)를 어떻게 잡느냐가 곧 한도다. 은행이
+        // 장래소득을 얹으면 여기 결과보다 커진다 — 실제로 가장 흔한 차이 원인이다.
+        if (dsrApp.futureIncome && dsrApp.futureIncome.appliedInCalculator === false) {
+          notes.push({ kind: 'info', text: dsrApp.futureIncome.note });
+        }
       }
       notes.push({ kind: 'info', text: '대출 규제는 신청·실행 시점의 기준으로 판정됩니다. 이 계산기는 ' + (R.effectiveFrom || '') + ' 시행 기준이며, 이후 대책이 나오면 달라집니다.' });
       const icon = { warn: '⚠', info: 'ℹ' };

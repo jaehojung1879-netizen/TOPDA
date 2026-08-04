@@ -179,7 +179,13 @@ function legacyLimit({ price, regulated, ownership, income, existingAnnualDebt =
   const i = (rate + stressAdd) / 100 / 12;
   const n = termYears * 12;
   const m = i > 0 ? i * Math.pow(1 + i, n) / (Math.pow(1 + i, n) - 1) : 1 / n;
-  const factor = repayType === 'principal' ? 12 / n + i * (12 - 66 / n) : m * 12;
+  // ⚠ 이 비교의 목적은 **규제값**(LTV·스트레스·가격대별 한도)이 느슨해지지 않았는지다.
+  //   상환액 산식은 규제값이 아니므로 양쪽에서 같은 것을 써야 한다. 다르게 두면
+  //   산식을 고칠 때마다 규제와 무관한 이유로 이 테스트가 깨진다(2026-08-04에
+  //   원금균등을 첫해→연평균으로 바로잡으면서 실제로 그랬다).
+  const factor = repayType === 'principal'
+    ? (1 + i * (n + 1) / 2) / (n / 12)   // 원금균등: 연평균 원리금 (엔진과 동일)
+    : m * 12;
   const dsrLimit = availAnnual / factor;
   return Math.max(0, Math.min(ltvLimit, priceCap, dsrLimit));
 }
@@ -532,15 +538,80 @@ check('금융위 예시 — 감소폭이 공표치(약 14.7%)와 맞는다', () 
   assert.ok(Math.abs(drop - 14.7) < 0.5, `감소폭 ${drop.toFixed(1)}% (공표 14.7%)`);
 });
 
-check('상환방식이 DSR 한도를 바꾼다 — 원금균등이 원리금균등보다 낮다', () => {
-  // 원금균등은 첫해 원금상환액이 커서 DSR 이 먼저 찬다. 같은 조건에서 원리금균등보다
-  // 한도가 낮게 나오는 게 정상이며, 이 차이를 모르면 "계산기가 실제보다 적게 준다"로
-  // 읽힌다(실사용자 문의, 2026-08-03). 방향이 뒤집히면 산식이 잘못된 것이다.
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 검증] 실제 은행 DSR 원장과 대조 (2026-04-14 조회)');
+// ─────────────────────────────────────────────────────────────────────
+// 실사용자가 은행 DSR 산출 화면을 제공했다. 규제값이 맞는지와 별개로 **산식이
+// 은행과 같은지**를 확인할 수 있는 유일한 기준점이라 원 단위로 고정한다.
+//
+//   최종 연소득금액        127,685,915원  (원천징수 총급여 119,864,890 + 장래소득)
+//   본건외 원리금           11,125,000원  (신용대출 5,599,000 + 마이너스 659,000
+//                                          + 유가증권담보 4,867,000)
+//   본건 5.86억 · 원금균등 30년 · 스트레스 적용금리 6.86%
+//   → 본건 원리금           39,688,960원
+//   → DSR                        39.80%
+//   → DSR 40% 신청가능금액 589,800,000원
+const BANK = {
+  income: 127_685_915,
+  otherAnnual: 11_125_000,
+  principal: 586_000_000,
+  stressedRate: 6.86,
+  termYears: 30,
+};
+
+check('은행 원장 — 원금균등 본건 원리금이 39,688,960원과 일치한다', () => {
+  // 담보·가격대별이 아니라 DSR 이 한도를 정하도록 크게 잡고, 한도 역산으로 검산한다.
+  const r = calcMortgageLimit({
+    price: 5_000_000_000, ltvPercent: 100, region: 'regulated', ownership: 'none',
+    income: BANK.income, existingAnnualDebt: BANK.otherAnnual,
+    rate: BANK.stressedRate, stressAdd: 0,
+    termYears: BANK.termYears, dsrLimitPercent: 40, repayType: 'principal',
+  });
+  // 한도 1원당 연간 상환액 × 실제 대출액 = 은행이 표시한 본건 원리금
+  const avail = BANK.income * 0.4 - BANK.otherAnnual;
+  const factor = avail / r.dsrLimit;
+  const annual = factor * BANK.principal;
+  assert.ok(Math.abs(annual - 39_688_960) < 1000,
+    `본건 원리금 ${Math.round(annual).toLocaleString()}원 (은행 39,688,960원)`);
+});
+
+check('은행 원장 — DSR 40% 신청가능금액이 5억 8,980만원과 일치한다', () => {
+  const r = calcMortgageLimit({
+    price: 5_000_000_000, ltvPercent: 100, region: 'regulated', ownership: 'none',
+    income: BANK.income, existingAnnualDebt: BANK.otherAnnual,
+    rate: BANK.stressedRate, stressAdd: 0,
+    termYears: BANK.termYears, dsrLimitPercent: 40, repayType: 'principal',
+  });
+  // 은행 화면은 만원 단위 절사(589,844,755 → 589,800,000)라 그 폭까지 허용한다.
+  assert.ok(Math.abs(r.dsrLimit - 589_844_755) < 100_000,
+    `신청가능금액 ${Math.round(r.dsrLimit).toLocaleString()}원 (은행 589,800,000원)`);
+});
+
+check('원금균등 DSR은 첫해가 아니라 연평균 원리금 기준이다', () => {
+  // 첫해 기준(옛 산식)이면 같은 조건에서 한도가 3.97억으로 33% 적게 나온다.
+  // 방식이 되돌아가면 이 테스트가 먼저 깨진다.
+  const r = calcMortgageLimit({
+    price: 5_000_000_000, ltvPercent: 100, region: 'regulated', ownership: 'none',
+    income: BANK.income, existingAnnualDebt: BANK.otherAnnual,
+    rate: BANK.stressedRate, stressAdd: 0,
+    termYears: BANK.termYears, dsrLimitPercent: 40, repayType: 'principal',
+  });
+  const i = BANK.stressedRate / 100 / 12, n = BANK.termYears * 12;
+  const firstYearFactor = 12 / n + i * (12 - 66 / n);
+  const firstYearLimit = (BANK.income * 0.4 - BANK.otherAnnual) / firstYearFactor;
+  assert.ok(r.dsrLimit > firstYearLimit * 1.4,
+    '연평균이 아니라 첫해 기준으로 계산하고 있습니다.');
+});
+
+check('상환방식이 DSR 한도를 바꾼다 — 원금균등이 원리금균등보다 높다', () => {
+  // 연평균 기준에서는 원금균등이 원금을 더 빨리 갚아 **총이자가 적고**, 그만큼 연평균
+  // 원리금도 작아 한도가 더 크게 나온다. (첫해 기준이던 2026-08-03까지는 방향이
+  // 반대였다 — 은행 원장과 대조해 산식을 바로잡으면서 뒤집혔다.)
   const base = { ...FSC_EXAMPLE, stressAdd: 3.0 };
   const equal = calcMortgageLimit({ ...base, repayType: 'equal' }).dsrLimit;
   const principal = calcMortgageLimit({ ...base, repayType: 'principal' }).dsrLimit;
-  assert.ok(principal < equal,
-    `원금균등(${Math.round(principal).toLocaleString()})이 원리금균등(${Math.round(equal).toLocaleString()})보다 높습니다.`);
+  assert.ok(principal > equal,
+    `원금균등(${Math.round(principal).toLocaleString()})이 원리금균등(${Math.round(equal).toLocaleString()})보다 낮습니다.`);
 });
 
 // ─────────────────────────────────────────────────────────────────────
@@ -560,9 +631,11 @@ check('가격대별 한도가 결정 요인이면 스트레스 영향은 0이다
 });
 
 check('DSR이 결정 요인이면 스트레스가 깎은 금액을 알려준다', () => {
+  // 소득을 낮춰 DSR 이 먼저 차게 한다 — 연평균 산식으로 바로잡은 뒤에는 소득 1.19억·
+  // 원금균등 30년이면 DSR(7.0억)보다 LTV(6.0억)가 작아 DSR 이 결정 요인이 아니다.
   const r = calcMortgageLimit({
     price: 1_500_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
-    income: 119_000_000, existingAnnualDebt: 0, rate: 3.83, stressAdd: 3,
+    income: 80_000_000, existingAnnualDebt: 0, rate: 3.83, stressAdd: 3,
     termYears: 30, dsrLimitPercent: 40, repayType: 'principal',
   });
   assert.equal(r.binding.key, 'dsr');
@@ -572,9 +645,11 @@ check('DSR이 결정 요인이면 스트레스가 깎은 금액을 알려준다'
 });
 
 check('순수 고정금리는 스트레스 가산이 0이라 한도가 줄지 않는다', () => {
+  // 소득을 낮춰 두 경우 모두 DSR 이 결정 요인이 되게 한다 — 둘 다 LTV·가격대별 상한에
+  // 걸리면 한도가 같아져 스트레스의 효과를 볼 수 없다.
   const args = {
     price: 1_500_000_000, region: 'regulated', ownership: 'none', ltvPercent: 40,
-    income: 119_000_000, existingAnnualDebt: 0, rate: 3.83, termYears: 30,
+    income: 80_000_000, existingAnnualDebt: 0, rate: 3.83, termYears: 30,
     dsrLimitPercent: 40, repayType: 'principal',
   };
   const fixedStress = suggestStressAdd('regulated', 'fixed').value;
@@ -586,33 +661,76 @@ check('순수 고정금리는 스트레스 가산이 0이라 한도가 줄지 �
 });
 
 // ─────────────────────────────────────────────────────────────────────
-console.log('\n[대출 P0-⑥] DSR 산정 제외 대출 — 유가증권담보대출');
+console.log('\n[대출 P0-⑥] DSR 산정 제외 대출 — 무엇이 제외이고 무엇이 아닌가');
 // ─────────────────────────────────────────────────────────────────────
+// 2026-08-02에 유가증권(주식)담보대출을 예적금·보험계약대출과 한 묶음으로 보고
+// DSR 제외로 바꿨는데 틀렸다. 실사용자가 준 은행 DSR 원장(2026-04-14)이 반증한다:
+//
+//   한국증권금융 210-유가증권담보대출  잔액 29,934,000  연간원리금 4,867,000
+//     29,934,000 ÷ 8 + 29,934,000 × 3.76% = 4,867,268   ← 사실상 일치
+//
+// 즉 제외가 아니라 **산정만기 8년으로 산입**된다. 되돌렸고, 다시 뒤집히지 않게 막는다.
 
-check('유가증권(주식)담보대출이 DSR 산정 제외 목록에 있다', () => {
+check('유가증권(주식)담보대출은 DSR 제외 목록에 없다', () => {
   const list = Array.from(RATES.dsr.applicability.excludedFromDsr).join(' ');
-  assert.match(list, /유가증권/);
-  assert.match(list, /주식/);
+  assert.doesNotMatch(list, /유가증권/, '유가증권담보대출은 DSR 산정 제외가 아닙니다.');
+  // 예적금·보험계약대출은 진짜 제외다.
+  assert.match(list, /예·적금|예적금/);
+  assert.match(list, /보험계약/);
 });
 
-check('종합계산기가 주식·예적금 담보대출을 DSR에 산입하지 않는다', () => {
+check('유가증권담보대출의 산정만기 8년이 기준정보에 있다', () => {
+  const inc = RATES.dsr.applicability.includedWithAssumedTerm || [];
+  const stock = Array.from(inc).find((x) => /유가증권/.test(x.kind));
+  assert.ok(stock, '유가증권담보대출의 산정만기가 기준정보에 없습니다.');
+  assert.equal(stock.years, 8);
+});
+
+check('종합계산기가 유가증권담보대출을 8년 산정만기로 산입한다', () => {
   const start = appSource.indexOf('function otherLoanSpec(type)');
   const end = appSource.indexOf('function updateOtherLoanRow(', start);
   const block = appSource.slice(start, end);
-  // 과거엔 'stock'을 a/8 + 이자로 산입해 DSR을 부풀렸다.
-  assert.doesNotMatch(block, /case 'stock': return \[function \(a\) \{ return a \/ 8; \}/,
-    '주식담보대출이 여전히 DSR에 산입됩니다.');
-  for (const key of ["case 'deposit'", "case 'stock'"]) {
-    const i = block.indexOf(key);
-    assert.ok(i >= 0, `${key}가 없습니다.`);
-    const line = block.slice(i, block.indexOf('\n', i));
-    assert.match(line, /return 0;/, `${key}의 원금 산입이 0이 아닙니다.`);
-    assert.match(line, /false, true\]/, `${key}에 DSR 제외 플래그가 없습니다.`);
-  }
+  const i = block.indexOf("case 'stock'");
+  assert.ok(i >= 0, "case 'stock'이 없습니다.");
+  const line = block.slice(i, block.indexOf('\n', i));
+  assert.match(line, /return a \/ 8;/, '유가증권담보대출이 8년 산정만기로 산입되지 않습니다.');
+  assert.doesNotMatch(line, /false, true\]/, '유가증권담보대출에 DSR 제외 플래그가 붙어 있습니다.');
+});
+
+check('은행 원장 대조 — 유가증권담보 29,934,000원의 연간원리금', () => {
+  // 원금 = 잔액 ÷ 8년, 이자 = 잔액 × 금리. 은행 표시 4,867,000원.
+  const amount = 29_934_000, rate = 3.76 / 100;
+  const annual = amount / 8 + amount * rate;
+  assert.ok(Math.abs(annual - 4_867_000) < 1000,
+    `${Math.round(annual).toLocaleString()}원 (은행 4,867,000원)`);
+});
+
+check('예적금·보험계약 담보대출은 원금·이자 모두 미산입', () => {
+  const start = appSource.indexOf('function otherLoanSpec(type)');
+  const end = appSource.indexOf('function updateOtherLoanRow(', start);
+  const block = appSource.slice(start, end);
+  const i = block.indexOf("case 'deposit'");
+  assert.ok(i >= 0, "case 'deposit'이 없습니다.");
+  const line = block.slice(i, block.indexOf('\n', i));
+  assert.match(line, /return 0;/, '예적금담보대출의 원금이 산입됩니다.');
+  assert.match(line, /false, true\]/, '예적금담보대출에 DSR 제외 플래그가 없습니다.');
   // 제외 플래그가 켜지면 이자도 산입하지 않아야 한다.
   const rowStart = appSource.indexOf('function updateOtherLoanRow(');
   const rowBlock = appSource.slice(rowStart, appSource.indexOf('function otherLoansTotal(', rowStart));
   assert.match(rowBlock, /dsrExempt \? 0 : amount \* rate/, '제외 대출의 이자가 여전히 산입됩니다.');
+});
+
+check('장래소득은 계산에 반영하지 않되 화면에 밝힌다', () => {
+  // 은행 내규로 장래소득을 얹으면 연소득이 커져 DSR 한도가 올라간다. 요건·반영 폭이
+  // 은행마다 달라 계산하지 않지만, 실제 사례에서 총급여 119,864,890 → 127,685,915로
+  // 6.5% 상향됐다. 안 밝히면 "계산기가 틀렸다"로 읽힌다.
+  const fi = RATES.dsr.applicability.futureIncome;
+  assert.ok(fi, '장래소득 안내가 기준정보에 없습니다.');
+  assert.equal(fi.appliedInCalculator, false);
+  assert.match(fi.note, /장래소득/);
+  assert.match(fi.note, /은행/);
+  assert.match(appSource, /futureIncome && .*appliedInCalculator === false/,
+    '장래소득 안내가 결과 화면에 연결돼 있지 않습니다.');
 });
 
 console.log(`\n대출 한도 회귀 테스트 ${passed}개 통과\n`);
