@@ -26,6 +26,7 @@ collect_bond_rate.py 에 넣는 게 목적이다.
 
 실행: 워크플로 probe-bond-rate.yml (workflow_dispatch) 에서만.
 """
+import datetime as dt
 import re
 import sys
 import urllib.error
@@ -38,19 +39,28 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 KEYWORDS = ("할인율", "고객부담", "본인부담", "매도단가", "수익률")
 
 # 후보. GET 기본, POST 는 (url, data) 튜플.
+#
+# 2026-08-04 1차 진단에서 KB 페이지 소스에 드러난 JSON 엔드포인트를 맨 앞에 둔다 —
+# 이게 되면 브라우저도 폼 조작도 필요 없다. 조회 폼(IBS)의 파라미터 이름이 한글
+# (기준년월일·조회구분·요청페이지)이라 몇 가지 조합을 같이 시험한다.
+_TODAY = dt.date.today()
+_YMD, _YM = _TODAY.strftime("%Y%m%d"), _TODAY.strftime("%Y%m")
+_KB_JSON = "https://okbfex.kbstar.com/quics?page=C028010&QAction={}&RType=json&USER_TYPE=02"
+
 CANDIDATES = [
-    ("주택도시기금 FP070503(현재 1순위 후보)",
+    ("KB JSON 556954 (GET)", _KB_JSON.format(556954)),
+    ("KB JSON 556956 (GET)", _KB_JSON.format(556956)),
+    ("KB JSON 556954 (POST 기준년월일=오늘)",
+     (_KB_JSON.format(556954), {"기준년월일": _YMD, "조회구분": "1", "요청페이지": "1"})),
+    ("KB JSON 556956 (POST 기준년월일=이번달)",
+     (_KB_JSON.format(556956), {"기준년월일": _YM, "조회구분": "1", "요청페이지": "1"})),
+    ("KB JSON 556954 (POST 빈 폼)", (_KB_JSON.format(556954), {})),
+    ("주택도시기금 FP070503",
      "https://nhuf.molit.go.kr/FP/FP07/FP0705/FP070503.jsp"),
     ("주택도시기금 FP070503 (POST 빈 폼)",
      ("https://nhuf.molit.go.kr/FP/FP07/FP0705/FP070503.jsp", {})),
-    ("KB 매도단가/할인율조회",
+    ("KB 매도단가/할인율조회 (조회 폼 페이지)",
      "https://okbfex.kbstar.com/quics?page=C028010"),
-    ("우리은행 1종채권",
-     "https://svc.wooribank.com/svc/Dream?withyou=HBNHB0036"),
-    ("신한은행 국민주택채권",
-     "https://bank.shinhan.com/index.jsp#020508010000"),
-    ("주택도시기금 모바일",
-     "https://nhuf.molit.go.kr/MO/MO05/MO0503/MO050301.jsp"),
 ]
 
 
@@ -133,7 +143,24 @@ def show_keyword_html(html, width=700):
     return out
 
 
+def verdict(label, status, html):
+    """후보 하나에 대한 한 줄 판정 — 로그 맨 끝에 몰아 찍기 위한 것.
+
+    왜 필요한가: Actions 로그를 읽을 때 뒤에서부터 일정 줄만 볼 수 있는데, KB 페이지가
+    구글 애널리틱스·보안 키패드로 뱉는 초장문 URL 이 앞부분을 통째로 밀어낸다. 그래서
+    정작 중요한 '이 후보가 됐는가'가 매번 잘려 나갔다. 결론만 끝에 다시 모은다."""
+    if status is None:
+        return f"  ✗ {label}: 요청 실패 — {html}"
+    kw = [k for k in KEYWORDS if k in html]
+    tables = len(re.findall(r"<table", html, re.I))
+    # 표가 없어도 JSON 이면 숫자를 바로 집을 수 있다.
+    nums = re.findall(r'"[^"]*(?:할인율|부담률|단가)[^"]*"\s*:\s*"?([\d.]+)', html)
+    return (f"  {'✓' if kw else '·'} {label}: status={status} len={len(html)} "
+            f"table={tables} 키워드={kw or '없음'} 숫자후보={nums[:5] or '없음'}")
+
+
 def main():
+    summary = []
     for label, target in CANDIDATES:
         url = target[0] if isinstance(target, tuple) else target
         kind = "POST" if isinstance(target, tuple) else "GET"
@@ -142,7 +169,9 @@ def main():
             status, final_url, meta, html = fetch(target)
         except Exception as e:  # noqa: BLE001
             print(f"  ✗ 요청 실패: {type(e).__name__}: {e}")
+            summary.append(verdict(label, None, f"{type(e).__name__}: {e}"))
             continue
+        summary.append(verdict(label, status, html))
         print(f"  status={status} len={len(html)} enc={meta}")
         if final_url != url:
             print(f"  → 리다이렉트: {final_url}")
@@ -175,6 +204,9 @@ def main():
         else:
             print("  ⚠ 키워드가 아예 없음 — 이 응답에는 채권 정보가 없다.")
 
+    print(f"\n{'=' * 78}\n■ 정적 진단 요약 (로그 뒤에서 읽어도 잘리지 않게 결론만 다시)\n{'=' * 78}")
+    for line in summary:
+        print(line)
     print("\n진단 종료 — 저장한 파일 없음.")
     return 0
 
