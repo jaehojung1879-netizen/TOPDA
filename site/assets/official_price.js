@@ -110,6 +110,21 @@ window.TopdaOfficialPrice = (function () {
     return u[0] + '㎡(' + u[1] + '평)';
   }
 
+  // 검색 UI를 어디에 끼울지. 입력칸의 부모가 아니라 **단위 표시 래퍼 바깥**이어야 한다.
+  //
+  // `.input-suffix` 는 `position: relative` 에 `::after { top: 50% }` 로 '원'·'%' 를
+  // 세로 가운데에 그린다. 그 안에 검색 UI를 넣으면 래퍼가 400px 넘게 늘어나면서 '원'
+  // 글자가 래퍼 한가운데 — 즉 평형 선택 버튼들 위 — 로 내려와 겹쳐 찍힌다. 평형줄이
+  // 깨져 보이는 원인이었다. 래퍼를 건너뛰고 그 다음 형제로 붙인다.
+  function mountAfter(input) {
+    var node = input;
+    while (node.parentNode && node.parentNode.classList &&
+           node.parentNode.classList.contains('input-suffix')) {
+      node = node.parentNode;
+    }
+    return node;
+  }
+
   function attach(opts) {
     var input = opts && opts.input;
     if (!input || input.dataset.opAttached) return;
@@ -117,18 +132,26 @@ window.TopdaOfficialPrice = (function () {
 
     var wrap = document.createElement('div');
     wrap.className = 'op-picker';
+    // 컨테이너를 처음부터 만들어 둔다 — 예전에는 평형줄과 안내문을 그때그때
+    // appendChild 해서, 첫 선택 때는 '평형줄 → 안내문', 다시 고를 때는 '안내문 →
+    // 평형줄' 로 순서가 뒤집혔다.
     wrap.innerHTML =
       '<button type="button" class="op-toggle">🔎 단지 검색으로 공시가격 넣기</button>' +
       '<div class="op-panel" hidden>' +
       '  <input type="search" class="op-q" autocomplete="off" placeholder="단지명 (예: 헬리오시티)" />' +
       '  <div class="op-list"></div>' +
-      '</div>';
-    input.parentNode.insertBefore(wrap, input.nextSibling);
+      '</div>' +
+      '<div class="op-units-box" hidden></div>' +
+      '<span class="op-picked-warn data-stale" hidden></span>';
+    var anchor = mountAfter(input);
+    anchor.parentNode.insertBefore(wrap, anchor.nextSibling);
 
     var toggle = wrap.querySelector('.op-toggle');
     var panel = wrap.querySelector('.op-panel');
     var q = wrap.querySelector('.op-q');
     var list = wrap.querySelector('.op-list');
+    var unitsBox = wrap.querySelector('.op-units-box');
+    var warn = wrap.querySelector('.op-picked-warn');
 
     function note(html) { list.innerHTML = '<p class="op-note">' + html + '</p>'; }
 
@@ -165,15 +188,18 @@ window.TopdaOfficialPrice = (function () {
           return;
         }
         // 기준일을 결과 줄에도 적는다 — 고르기 전에 몇 년도 공시가격인지 보여야 한다.
-        // ⚠ 저장된 값은 단지 전체 호의 **중앙값**이다. 공시가격은 평형마다 다르므로
-        //   이 값이 곧 그 사람의 시가표준액은 아니다. 범위(min~max)를 함께 보여주고
-        //   "평형별로 다르다"를 분명히 해야, 중앙값을 자기 값으로 오해하지 않는다.
-        //   (평형별 값을 주려면 수집기가 호별 가격을 전유부 면적과 조인해야 한다 — 미구현.)
+        // ⚠ 결과 줄에 보이는 값은 단지 전체 호의 **중앙값**이다. 공시가격은 평형마다
+        //   다르므로 이 값이 곧 그 사람의 시가표준액은 아니다. 그래서 여기서 미리
+        //   "평형 N종을 고를 수 있다"고 알린다 — 예전에는 평형 선택줄이 단지를 고른
+        //   **뒤에야** 나타나서, 검색 결과만 보고 "평형 구분이 없네" 하고 닫아 버리면
+        //   중앙값이 그대로 남았다.
         list.innerHTML = hits.map(function (h, i) {
           var r = h.rec;
           var std = stdDayText(r.std_day);
+          var nu = units(r).length;
           var spread = (r.min && r.max && r.max > r.min)
-            ? '<span class="op-range">평형별 ' + won(r.min) + '~' + won(r.max) +
+            ? '<span class="op-range">' + (nu ? '평형 ' + nu + '종 · ' : '평형별 ') +
+              won(r.min) + '~' + won(r.max) +
               (r.n ? ' · ' + r.n + '호' : '') + '</span>'
             : '';
           return '<button type="button" class="op-hit" data-i="' + i + '">' +
@@ -187,19 +213,6 @@ window.TopdaOfficialPrice = (function () {
         list._hits = hits;
       });
     });
-
-    // 고른 단지의 평형 목록. 단지를 고를 때마다 다시 그린다.
-    var unitRow = null;
-
-    function warnBox() {
-      var warn = wrap.querySelector('.op-picked-warn');
-      if (!warn) {
-        warn = document.createElement('span');
-        warn.className = 'op-picked-warn data-stale';
-        wrap.appendChild(warn);
-      }
-      return warn;
-    }
 
     function spreadText(rec) {
       return (rec.min && rec.max && rec.max > rec.min)
@@ -220,43 +233,49 @@ window.TopdaOfficialPrice = (function () {
         (u ? ' ' + unitLabel(u) : '') + ' · ' + won(value) +
         (std ? ' · ' + std + ' 기준' : '') + '</span>';
 
-      warnBox().innerHTML = u
+      warn.hidden = false;
+      warn.innerHTML = u
         ? '이 값은 <strong>' + unitLabel(u) + ' 추정치</strong>입니다 — 단지 공시가격 '
           + '중앙값에 이 평형의 실거래 비율을 적용해 계산했습니다(실측값이 아닙니다). '
           + '정확한 값은 본인 호의 공시가격이며 ' + OFFICIAL_LINK + '에서 확인할 수 있습니다.'
         : '이 값은 <strong>단지 전체 호의 중앙값</strong>입니다 — 공시가격은 평형마다 '
-          + '다릅니다' + spreadText(rec) + '. 본인 호의 정확한 공시가격은 '
-          + OFFICIAL_LINK + '에서 확인해 직접 입력하세요.';
+          + '다릅니다' + spreadText(rec) + '. ' + (list2.length
+            ? '<strong>위에서 평형을 고르면</strong> 그 평형 추정치로 바뀝니다. 본인 호의 '
+            : '본인 호의 ')
+          + '정확한 공시가격은 ' + OFFICIAL_LINK + '에서 확인해 직접 입력하세요.';
 
-      if (unitRow) {
-        var btns = unitRow.querySelectorAll('.op-unit');
-        for (var i = 0; i < btns.length; i++) {
-          btns[i].setAttribute('aria-pressed', String(+btns[i].dataset.u === unitIdx));
-        }
+      var btns = unitsBox.querySelectorAll('.op-unit');
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].setAttribute('aria-pressed', String(+btns[i].dataset.u === unitIdx));
       }
       if (opts.onPick) opts.onPick(h, u);
     }
 
-    // 평형 선택줄. 평형별 추정이 없는 단지(거래 표본이 얕은 곳)에서는 아예 만들지
-    // 않는다 — 고를 게 없는 빈 줄은 고장으로 보인다.
+    // 평형 선택줄. 평형별 추정이 없는 단지에서는 버튼 대신 **왜 없는지**를 적는다 —
+    // 예전에는 줄 자체를 만들지 않아서, 사용자 입장에서는 평형 구분이 원래 없는
+    // 기능인지 이 단지만 없는 것인지 구분할 수가 없었다.
     function renderUnits(h) {
-      if (unitRow) { unitRow.remove(); unitRow = null; }
       var list2 = units(h.rec);
-      if (!list2.length) return;
-      unitRow = document.createElement('div');
-      unitRow.className = 'op-units';
-      unitRow.innerHTML = '<span class="op-units-label">평형 선택</span>' +
+      unitsBox.hidden = false;
+      if (!list2.length) {
+        unitsBox.innerHTML = '<p class="op-note">이 단지는 실거래 표본이 얕아 평형별 ' +
+          '추정을 만들지 않았습니다 — 아래 값은 단지 중앙값입니다. 본인 호의 값은 ' +
+          OFFICIAL_LINK + '에서 확인하세요.</p>';
+        return;
+      }
+      unitsBox.innerHTML =
+        '<div class="op-units"><span class="op-units-label">평형 선택</span>' +
         list2.map(function (u, i) {
           return '<button type="button" class="op-unit" data-u="' + i + '" ' +
                  'aria-pressed="false">' + unitLabel(u) +
                  '<small>' + won(u[2]) + '</small></button>';
-        }).join('');
-      unitRow.addEventListener('click', function (e) {
-        var b = e.target.closest ? e.target.closest('.op-unit') : null;
-        if (b) fill(h, +b.dataset.u);
-      });
-      wrap.appendChild(unitRow);
+        }).join('') + '</div>';
     }
+
+    unitsBox.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.op-unit') : null;
+      if (b && unitsBox._h) fill(unitsBox._h, +b.dataset.u);
+    });
 
     list.addEventListener('click', function (e) {
       var btn = e.target.closest ? e.target.closest('.op-hit') : null;
@@ -264,16 +283,15 @@ window.TopdaOfficialPrice = (function () {
       var h = list._hits[+btn.dataset.i];
       if (!h) return;
       panel.hidden = true;
+      unitsBox._h = h;
       renderUnits(h);
       // 처음에는 중앙값을 그대로 채운다(평형을 고르기 전 동작을 바꾸지 않는다).
       // 다만 그 값이 어느 평형쯤인지는 눌러서 보여 준다 — 기준점이 없으면 어느
       // 버튼을 눌러야 할지 알 수 없다.
       fill(h, -1);
-      if (unitRow) {
-        var near = nearestUnit(units(h.rec), h.rec.med);
-        var btns = unitRow.querySelectorAll('.op-unit');
-        if (near >= 0 && btns[near]) btns[near].classList.add('op-unit-median');
-      }
+      var near = nearestUnit(units(h.rec), h.rec.med);
+      var btns = unitsBox.querySelectorAll('.op-unit');
+      if (near >= 0 && btns[near]) btns[near].classList.add('op-unit-median');
     });
 
     return {

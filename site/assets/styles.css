@@ -4000,6 +4000,10 @@ ol.rt-list { list-style: decimal; }
 .op-hit .op-range { display: block; grid-column: 1 / -1; margin-top: 2px; font-size: 0.74rem; color: var(--text-muted); }
 .op-hit .op-price small { font-weight: 500; opacity: 0.7; }
 .op-picked-warn { display: block; margin-top: 8px; }
+/* 평형줄·안내문은 순서를 고정하려고 처음부터 만들어 두고 hidden 으로 감춘다.
+   .op-picked-warn 과 .data-stale 이 둘 다 display:block 이라 hidden 속성만으로는
+   안 숨는다 — 명시적으로 눌러 준다. */
+.op-units-box[hidden], .op-picked-warn[hidden] { display: none; }
 
 /* 평형 선택줄 — 단지 중앙값 대신 내 평형의 추정 공시가격을 고른다.
    360px 에서도 두 개씩은 들어가야 해서 버튼을 flex-wrap 으로 흘린다. */

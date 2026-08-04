@@ -1,0 +1,56 @@
+name: Probe bond rate sources (진단)
+
+# 국민주택채권 할인율 수집이 왜 실패하는지 **확인만** 하는 워크플로. 값을 저장하거나
+# 커밋하지 않는다.
+#
+# 왜 필요한가: 개발 환경에서는 nhuf.molit.go.kr·은행 도메인이 전부 막혀 있어
+# (HTTP 000/403) 응답을 볼 수 없다. 그래서 지금까지 "표 파서를 고쳐 보자"는 추측만
+# 반복됐고, 2026-08-03 CI 로그에서야 세 소스 모두 표가 아니라 메뉴 텍스트만 준다는
+# 게 드러났다. 네트워크가 열린 곳은 Actions 뿐이므로, 진단도 여기서 한다.
+#
+# 결과는 로그로만 본다. workflow_dispatch 는 워크플로 파일이 기본 브랜치에 있어야
+# 호출할 수 있어서, 작업 브랜치에서 바로 돌려 보려고 push 트리거를 함께 둔다
+# (진단 파일이 바뀔 때만 — 브랜치의 다른 커밋마다 은행 사이트를 두드리지 않는다).
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "claude/appraisal-price-bond-discount-**"
+    paths:
+      - "_meta/probe_bond_rate.py"
+      - "_meta/probe_bond_rate_render.mjs"
+      - ".github/workflows/probe-bond-rate.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 가설 A: 정적 GET/POST 로 표가 온다 — 그렇다면 파서만 고치면 된다.
+      - name: 정적 요청 진단
+        working-directory: _meta
+        run: python probe_bond_rate.py
+        continue-on-error: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # 가설 B: 표가 JS 로 채워진다 — 그렇다면 파서를 고쳐도 영원히 실패한다.
+      # 브라우저로 열어 표가 보이는지, 페이지가 어떤 요청으로 값을 받아오는지 본다.
+      - name: 브라우저 렌더 진단
+        working-directory: _meta
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm i playwright@1.56.1 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+          node probe_bond_rate_render.mjs
+        continue-on-error: true
