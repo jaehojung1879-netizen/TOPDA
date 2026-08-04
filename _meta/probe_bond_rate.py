@@ -26,6 +26,7 @@ collect_bond_rate.py 에 넣는 게 목적이다.
 
 실행: 워크플로 probe-bond-rate.yml (workflow_dispatch) 에서만.
 """
+import datetime as dt
 import re
 import sys
 import urllib.error
@@ -38,19 +39,28 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 KEYWORDS = ("할인율", "고객부담", "본인부담", "매도단가", "수익률")
 
 # 후보. GET 기본, POST 는 (url, data) 튜플.
+#
+# 2026-08-04 1차 진단에서 KB 페이지 소스에 드러난 JSON 엔드포인트를 맨 앞에 둔다 —
+# 이게 되면 브라우저도 폼 조작도 필요 없다. 조회 폼(IBS)의 파라미터 이름이 한글
+# (기준년월일·조회구분·요청페이지)이라 몇 가지 조합을 같이 시험한다.
+_TODAY = dt.date.today()
+_YMD, _YM = _TODAY.strftime("%Y%m%d"), _TODAY.strftime("%Y%m")
+_KB_JSON = "https://okbfex.kbstar.com/quics?page=C028010&QAction={}&RType=json&USER_TYPE=02"
+
 CANDIDATES = [
-    ("주택도시기금 FP070503(현재 1순위 후보)",
+    ("KB JSON 556954 (GET)", _KB_JSON.format(556954)),
+    ("KB JSON 556956 (GET)", _KB_JSON.format(556956)),
+    ("KB JSON 556954 (POST 기준년월일=오늘)",
+     (_KB_JSON.format(556954), {"기준년월일": _YMD, "조회구분": "1", "요청페이지": "1"})),
+    ("KB JSON 556956 (POST 기준년월일=이번달)",
+     (_KB_JSON.format(556956), {"기준년월일": _YM, "조회구분": "1", "요청페이지": "1"})),
+    ("KB JSON 556954 (POST 빈 폼)", (_KB_JSON.format(556954), {})),
+    ("주택도시기금 FP070503",
      "https://nhuf.molit.go.kr/FP/FP07/FP0705/FP070503.jsp"),
     ("주택도시기금 FP070503 (POST 빈 폼)",
      ("https://nhuf.molit.go.kr/FP/FP07/FP0705/FP070503.jsp", {})),
-    ("KB 매도단가/할인율조회",
+    ("KB 매도단가/할인율조회 (조회 폼 페이지)",
      "https://okbfex.kbstar.com/quics?page=C028010"),
-    ("우리은행 1종채권",
-     "https://svc.wooribank.com/svc/Dream?withyou=HBNHB0036"),
-    ("신한은행 국민주택채권",
-     "https://bank.shinhan.com/index.jsp#020508010000"),
-    ("주택도시기금 모바일",
-     "https://nhuf.molit.go.kr/MO/MO05/MO0503/MO050301.jsp"),
 ]
 
 
