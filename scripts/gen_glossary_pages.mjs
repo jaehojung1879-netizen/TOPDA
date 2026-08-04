@@ -121,7 +121,7 @@ ${categories}
   </div>
 </footer>
 
-<script src="../assets/app.js?v=d3158aa00d"></script>
+<script src="../assets/app.js?v=3e96bfcc7d"></script>
 <script>
 (function () {
   const input = document.getElementById('gl-search');

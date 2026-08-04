@@ -770,14 +770,27 @@ check('산정만기 표가 기준정보에 있고 화면 산식과 일치한다'
   assert.equal(t.cardLoan.years, 3);
 });
 
-check('유가증권담보 산정만기의 미확정 상태를 감추지 않는다', () => {
-  // 8년/10년 두 갈래로 읽히고 실사용자 원장으로도 갈리지 않는다. 조용히 하나를
-  // 고르면 나중에 근거 없이 굳는다 — 미확정임을 기준정보에 남긴다.
-  const u = RATES.dsr.applicability.securedLoanTermUnresolved;
-  assert.ok(u, '미확정 표시가 없습니다.');
-  assert.equal(u.confidence, 'needs-verification');
-  assert.equal(Array.from(u.candidates).join(','), '8,10');
-  assert.equal(u.usedYears, 8, '한도를 과대 산출하지 않는 쪽(8년)을 써야 합니다.');
+check('유가증권담보 산정만기 8년이 실측 근거와 함께 확정돼 있다', () => {
+  // 8년/10년 두 갈래로 읽혔고 원장 한 줄로도 안 갈렸다(둘 다 성립). 차주가 실제
+  // 약정금리 3.76%를 밝히면서 8년으로 확정됐다 — 근거를 기준정보에 남겨 두지 않으면
+  // 다음 사람이 다시 10년으로 되돌린다.
+  const t = RATES.dsr.applicability.securedLoanTerm;
+  assert.ok(t, '산정만기 확정 기록이 없습니다.');
+  assert.equal(t.years, 8);
+  assert.equal(t.confidence, 'verified');
+  assert.match(t.resolvedBy, /3\.76/, '확정 근거(실제 약정금리)가 적혀 있지 않습니다.');
+  assert.ok(t.assumption, '남은 전제(금리 변동 없음)를 밝혀야 합니다.');
+});
+
+check('은행 원장 대조 — 8년만 맞고 10년은 어긋난다', () => {
+  // 이 대조가 곧 산정만기의 근거다. 방향이 흔들리면 여기서 먼저 깨져야 한다.
+  const amount = 29_934_000, rate = 3.76 / 100, shown = 4_867_000;
+  const eight = amount / 8 + amount * rate;
+  const ten = amount / 10 + amount * rate;
+  assert.ok(Math.abs(eight - shown) < 1000,
+    `8년: ${Math.round(eight).toLocaleString()}원 (은행 ${shown.toLocaleString()}원)`);
+  assert.ok(Math.abs(ten - shown) > 100_000,
+    `10년이 은행 값과 너무 가깝습니다: ${Math.round(ten).toLocaleString()}원`);
 });
 
 check('장래소득은 계산에 반영하지 않되 화면에 밝힌다', () => {
