@@ -1,32 +1,68 @@
 #!/usr/bin/env python3
 """제1종국민주택채권 당일 할인율(고객부담률) → site/assets/bond_rate.json.
 
-⚠ 공식 오픈API가 없다. 정부(주택도시기금)·은행 포털 모두 사람이 보는 조회
-페이지(HTML)만 제공해, 이 수집기는 그 페이지를 파싱하는 방식이다.
+⚠ 공식 오픈API가 없다. 은행·정부 포털 모두 사람이 보는 조회 화면만 제공한다.
 
-2026-07-17 첫 실행에서 주택도시기금 포털(FP070509.jsp)이 실제 조회 화면이 아니라
-'청약/채권' 메뉴 목록만 반환해 JS 위젯으로 오판, 은행 페이지(우리은행·KB)를 대신
-1순위로 썼다. 이후 사용자가 실제 화면 캡처로 정확한 페이지(FP070503.jsp — '채권매도
-단가/수익률/할인율 조회', 정적 HTML로 표가 그대로 뜸)를 확인해줘 정부 원천을 1순위로
-돌렸는데, 2026-07-18 CI 재검증 결과 FP070503.jsp도 세션·쿠키 의존적인지 단순 GET에
-메뉴/사이트맵 텍스트만 돌아오는 경우가 있음을 확인(반면 같은 실행에서 우리은행은
-과거 정상적으로 실제 표를 반환한 전적이 있음 — 그때는 열 정렬 버그로 값만 틀렸을 뿐
-페이지 자체는 정상 수신했었다). 국민주택채권 할인율은 은행마다 다른 값이 아니라
-한국거래소 신고시장단가 기반의 전국 공통 기준값이라 어느 소스든 같은 숫자를
-보여주므로, CI에서 더 안정적으로 응답하는 우리은행을 1순위로 하고 주택도시기금·KB는
-폴백으로 둔다. 은행 페이지는 EUC-KR 인코딩·비브라우저 UA 차단 가능성이 있어 자체
-fetch(UA 지정 + cp949 폴백)를 쓴다.
+■ 왜 몇 주 동안 값이 멈춰 있었나 (2026-08-04 규명)
 
-⚠ 과거엔 표 구조 파서가 실패하면 '키워드 인근 숫자'를 그냥 집는 근접 정규식으로
-폴백했는데, 2026-07-18에 이 폴백이 두 번이나 같은 의심스러운 값(3.8546%, 실제
-고객부담률과 무관해 보이는 수치)을 만들어냈다 — 표 어디서 온 숫자인지 모르니
-틀려도 알 방법이 없었다. 그래서 폴백을 완전히 제거했다: 구조화 파서(표에서 열
-위치를 찾아 값을 취하는 방식)만 신뢰하고, 실패하면 그냥 실패로 처리해 기존 값을
-유지한다. '틀린 값'보다 '갱신 안 됨'이 안전하다는 원칙.
+지금까지 이 수집기는 "조회 페이지를 GET 해서 표를 파싱"하는 구조였고, 실패할 때마다
+표 파서(열 정렬·정규식)를 고쳐 왔다. 그건 오진이었다. **짚을 표가 애초에 없었다.**
 
-모든 소스가 실패하면 기존 값을 그대로 유지하고(save_json_safe), 소스별 실패
-사유와 '부담/할인' 키워드 주변 텍스트를 stderr에 남긴다 — Actions 로그의
-"[bond_rate]" 라인만 보면 다음에 표 구조 파서를 어떻게 고쳐야 할지 알 수 있게.
+KB 화면(quics?page=C028010)은 데이터 페이지가 아니라 **조회 폼**이다:
+
+    기준년도/기준월  [2023…2027] 년 / [01…12] 월   [조회]
+
+조회를 누르기 전에는 표가 존재하지 않는다. 그래서 GET 응답에는 메뉴·네비게이션
+텍스트만 있었고, 어떤 파서로도 값을 찾을 수 없었다. 개발 환경에서는 은행·기금
+도메인이 모두 막혀 있어(HTTP 000/403) 이 사실을 확인할 방법이 없었고, 네트워크가
+열린 GitHub Actions 에서 진단 워크플로(probe-bond-rate.yml)를 돌려서야 드러났다.
+
+■ 지금 방식 — 조회 폼을 그대로 재현한다
+
+같은 진단에서 조회 버튼의 정체를 확보했다:
+
+    <button type="button" onclick="uf_doInquiry(); return false;">조회</button>
+
+    function uf_doInquiry() {
+        var frm = document.IBS;
+        frm.elements['기준년월일'].value = frm.year1.value + frm.mon1.value + "00";
+        frm.elements['조회구분'].value   = "1";
+        frm.elements["gubunB"].value     = "Y";
+        ...
+        frm.action = '/quics?page=C028010&cc=b046309:b046309';
+        doAjaxCC(frm);
+    }
+
+즉 브라우저가 하는 일은 폼 필드 몇 개를 채워 POST 하는 것뿐이다. Playwright 를 상주
+시킬 필요 없이 같은 POST 를 그대로 보내면 된다(표준 라이브러리만 씀).
+
+응답 표는 이렇게 생겼다 — 2026-08-04 실측:
+
+    기준일       고객부담률(할인율)   매도단가(매도시세)
+    2026-08-05        15.0251 %          8,517 원
+    2026-08-04        15.0528 %          8,514 원
+    2026-08-03        15.1301 %          8,506 원
+
+■ 행 고르기 — 두 가지 함정
+
+  1) 행이 **내림차순**이다(최신이 맨 위). 예전 코드는 "헤더 아래 마지막 행이 최신"으로
+     가정했는데, 그 가정대로면 그 달의 가장 오래된 값을 집는다.
+  2) **미래 날짜가 섞인다.** 은행이 다음 영업일 값을 미리 올려 둔다(위 표의 08-05는
+     조회 시점 기준 내일이다). 그냥 최댓값을 고르면 오늘 쓸 수 없는 값이 들어온다.
+
+그래서 '오늘 이하 날짜 중 가장 최근' 행을 고른다. 날짜 순서나 행 위치에 기대지 않고
+셀에 찍힌 날짜를 실제로 비교한다.
+
+■ 실패했을 때
+
+값을 덮어쓰지 않는다(save_json_safe). '틀린 값'보다 '갱신 안 됨'이 안전하다는 원칙은
+그대로다. 과거에 표 파서가 실패하면 '키워드 인근 숫자'를 집는 근접 정규식으로 폴백한
+적이 있는데, 2026-07-18 에 그 폴백이 두 번이나 같은 엉뚱한 값(3.8546%)을 만들어냈다.
+어디서 온 숫자인지 알 수 없으니 틀려도 알 방법이 없었다 — 그래서 폴백은 없다.
+
+실패는 파일에도 남긴다(last_attempt_at·consecutive_failures·last_error). 예전에는
+조용히 끝나서 워크플로는 초록불인데 값만 몇 주째 그대로였고, 사용자가 화면에서
+예시값을 보고서야 알았다.
 """
 import datetime as dt
 import json
@@ -34,6 +70,7 @@ import os
 import re
 import sys
 import time
+import urllib.parse
 import urllib.request
 
 from lib_pdata import SITE_ASSETS, save_json_safe  # noqa: E402
@@ -46,23 +83,54 @@ FAIL_ALERT_AFTER = 3
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
 
-# 시도 순서: CI에서 실제로 안정적으로 응답하는 순.
-#  · 우리은행 — 2026-07-18 CI 실행에서 실제 표를 정상 수신한 전적 있음(1순위)
-#  · 주택도시기금 — 공식 원천(FP070503.jsp, 사용자 화면 캡처로 확인)이지만 CI에서
-#    세션·쿠키 의존인지 메뉴 텍스트만 돌아온 사례 있어 2순위. FP070509는 메뉴
-#    페이지라 표가 아예 없으니 절대 혼동하지 말 것
-#  · KB — 마지막 폴백
-SOURCES = [
-    ("우리은행 1종채권 매도단가/할인율", "https://svc.wooribank.com/svc/Dream?withyou=HBNHB0036"),
-    ("주택도시기금", "https://nhuf.molit.go.kr/FP/FP07/FP0705/FP070503.jsp"),
-    ("KB 1종채권 매도단가/할인율", "https://okbfex.kbstar.com/quics?page=C028010"),
-]
+# ── KB 조회 폼 재현 ───────────────────────────────────────────────────────
+# uf_doInquiry() 가 하는 일을 그대로 옮긴 것. cc= 파라미터까지 포함해야 조회 결과가
+# 온다(폼이 action 에 직접 박아 넣는 값이다).
+KB_POST_URL = "https://okbfex.kbstar.com/quics?page=C028010&cc=b046309:b046309"
 
-def fetch(url, timeout=15):
-    """UA를 브라우저로 지정해 GET. UTF-8 → CP949(EUC-KR) 순으로 디코딩 시도.
-    (은행 페이지는 EUC-KR이 흔해 utf-8 강제 디코딩 시 '고객부담률' 키워드가 깨져
-    정규식이 절대 매치되지 않는다.)"""
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Language": "ko"})
+# 다른 은행·주택도시기금은 소스로 쓰지 않는다 — 2026-08-04 진단 실측:
+#  · 우리은행(svc.wooribank.com): GitHub 러너에서 정적·렌더 모두 60초 타임아웃
+#  · 주택도시기금(FP070503.jsp): 렌더해도 본문이 882자뿐(제목·발자취·푸터만)
+# 할인율은 은행마다 다른 값이 아니라 한국거래소 신고시장단가 기반의 전국 공통
+# 기준값이므로, 응답하는 곳 한 군데만 있으면 된다.
+
+
+def kb_form_data(today):
+    """uf_doInquiry() 가 채우는 폼 필드. 기준년월일의 끝 '00' 은 일자 자리로,
+    '그 달 전체'를 뜻한다(함수가 year1+mon1+"00" 으로 만든다)."""
+    return {
+        "팝업여부": "N",
+        "LOGIN_PASS": "T",
+        "gubunB": "Y",
+        "기준년월일": today.strftime("%Y%m") + "00",
+        "조회구분": "1",
+        "요청페이지": "",
+        "year1": today.strftime("%Y"),
+        "mon1": today.strftime("%m"),
+    }
+
+
+def fetch(url, data=None, timeout=30):
+    """UA를 브라우저로 지정해 GET/POST. UTF-8 → CP949(EUC-KR) 순으로 디코딩 시도.
+
+    data 를 주면 폼 POST. 파라미터 **이름이 한글**(기준년월일·조회구분·팝업여부)이라
+    인코딩이 중요한데, KB 페이지는 `<meta charset="utf-8">` 이므로 브라우저도 UTF-8 로
+    퍼센트 인코딩해 보낸다 — 여기서도 UTF-8 을 쓴다.
+
+    응답은 EUC-KR 일 수 있어 cp949 폴백을 둔다. utf-8 로 강제 디코딩하면 '고객부담률'
+    키워드가 깨져 표를 영영 못 찾는다.
+
+    XHR 로 부르는 화면이라 X-Requested-With 를 붙인다 — 서버가 이 헤더로 전체 페이지
+    대신 조회 결과 조각만 돌려주는 경우가 있다.
+    """
+    headers = {"User-Agent": UA, "Accept-Language": "ko"}
+    body = None
+    if data is not None:
+        body = urllib.parse.urlencode(data, encoding="utf-8").encode()
+        headers["Content-Type"] = "application/x-www-form-urlencoded"
+        headers["X-Requested-With"] = "XMLHttpRequest"
+        headers["Referer"] = "https://okbfex.kbstar.com/quics?page=C028010"
+    req = urllib.request.Request(url, data=body, headers=headers)
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         raw = resp.read()
     for enc in ("utf-8", "cp949"):
@@ -197,9 +265,16 @@ def extract_rate_from_table(html, diag=None):
                         diag["matched_col"] = ci + 1
                     return same_row_val
 
-            # 헤더-데이터 세로 배치 — 헤더 아래 모든 행 중 유효한 값을 가진 '마지막'
-            # 행(최신 날짜)을 채택. 오탐(수익률과 값 동일) 행은 건너뛰되 탐색은 계속한다.
-            last_val, last_row = None, None
+            # 헤더-데이터 세로 배치 — 행마다 (기준일, 값)을 모은 뒤 **날짜로** 고른다.
+            #
+            # ⚠ 행 위치에 기대면 안 된다. 예전 코드는 "헤더 아래 마지막 행이 최신"으로
+            #   가정했는데, KB 표는 최신이 맨 위인 **내림차순**이다(2026-08-04 실측).
+            #   그 가정대로면 조회한 달의 가장 오래된 값을 집는다.
+            # ⚠ **미래 날짜가 섞인다.** 은행이 다음 영업일 값을 미리 올려 둔다 —
+            #   실측 표에 조회 당일(08-04)보다 하루 뒤인 08-05 행이 맨 위에 있었다.
+            #   최댓값을 고르면 오늘 쓸 수 없는 값이 들어온다.
+            # 그래서 '오늘 이하 중 가장 최근' 날짜의 행을 고른다.
+            picked = []
             for below in rows[ri + 1:]:
                 val = value_at(ci, below)
                 if val is None:
@@ -207,14 +282,32 @@ def extract_rate_from_table(html, diag=None):
                 yield_val = value_at(yield_ci, below) if yield_ci is not None else None
                 if yield_val is not None and abs(val - yield_val) < 1e-6:
                     continue
-                last_val, last_row = val, below
-            if last_val is not None:
-                if diag is not None:
-                    diag["matched_header_row"] = row
-                    diag["matched_value_row"] = last_row
-                    diag["matched_col"] = ci
-                    diag["matched_date"] = _row_date(last_row)
-                return last_val
+                picked.append((_row_date(below), val, below))
+            if not picked:
+                continue
+
+            today = dt.date.today().isoformat()
+            dated = [p for p in picked if p[0]]
+            usable = [p for p in dated if p[0] <= today]
+            if usable:
+                best = max(usable, key=lambda p: p[0])
+            elif dated:
+                # 전부 미래 날짜 — 표에 오늘 값이 아직 없다는 뜻이다. 그중 가장 이른
+                # 날짜를 쓰되 로그로 남긴다(주말·공휴일 조회에서 나올 수 있다).
+                best = min(dated, key=lambda p: p[0])
+                print(f"[bond_rate] 오늘({today}) 이하 기준일이 없어 최근접 미래분 "
+                      f"{best[0]} 을 사용", file=sys.stderr)
+            else:
+                # 날짜 열이 없는 표 — 값만 있으면 첫 유효 행을 쓴다.
+                best = picked[0]
+
+            if diag is not None:
+                diag["matched_header_row"] = row
+                diag["matched_value_row"] = best[2]
+                diag["matched_col"] = ci
+                diag["matched_date"] = best[0]
+                diag["candidates"] = [(p[0], p[1]) for p in picked[:8]]
+            return best[1]
     return None
 
 
@@ -274,35 +367,38 @@ def record_failure(reasons):
 def main():
     rate, used, diag = None, None, {}
     reasons = []
-    for label, url in SOURCES:
-        # 은행 페이지는 콜드 러너에서 첫 연결이 자주 끊긴다 — 한 번 실패했다고 바로
-        # 포기하지 말고 짧게 두 번 더 시도한다(타임아웃도 늘려 잡는다).
-        html = None
-        for attempt, timeout in enumerate((20, 30, 40), start=1):
-            try:
-                html = fetch(url, timeout=timeout)
-                break
-            except Exception as e:  # noqa: BLE001
-                msg = f"{label} 조회 실패(시도 {attempt}/3, timeout={timeout}s): {e}"
-                print(f"[bond_rate] {msg}", file=sys.stderr)
-                if attempt == 3:
-                    reasons.append(f"{label}: {e}")
-                else:
-                    time.sleep(3 * attempt)
-        if html is None:
-            continue
+    today = dt.date.today()
+    label = "KB 제1종국민주택채권 매도단가/할인율 조회"
+
+    # 조회 폼을 POST 로 재현한다. 은행 페이지는 콜드 러너에서 첫 연결이 자주 끊기므로
+    # 한 번 실패했다고 바로 포기하지 않는다(타임아웃도 늘려 잡는다).
+    html = None
+    for attempt, timeout in enumerate((25, 35, 45), start=1):
+        try:
+            html = fetch(KB_POST_URL, data=kb_form_data(today), timeout=timeout)
+            break
+        except Exception as e:  # noqa: BLE001
+            print(f"[bond_rate] {label} 실패(시도 {attempt}/3, timeout={timeout}s): {e}",
+                  file=sys.stderr)
+            if attempt == 3:
+                reasons.append(f"{label}: {e}")
+            else:
+                time.sleep(3 * attempt)
+
+    if html is not None:
         diag = {}
         rate = extract_rate(html, diag=diag)
         if rate is not None:
             used = label
-            break
-        excerpt = excerpt_around_keywords(html)
-        reasons.append(f"{label}: 파싱 실패")
-        print(f"[bond_rate] {label} 파싱 실패 — 키워드 주변: {excerpt!r}", file=sys.stderr)
+        else:
+            excerpt = excerpt_around_keywords(html)
+            reasons.append(f"{label}: 파싱 실패")
+            print(f"[bond_rate] {label} 파싱 실패(len={len(html)}) — 키워드 주변: {excerpt!r}",
+                  file=sys.stderr)
 
     if rate is None:
         n = record_failure(reasons or ["원인 미상"])
-        print(f"[bond_rate] 모든 소스에서 할인율 확보 실패 — 기존 값 유지 "
+        print(f"[bond_rate] 할인율 확보 실패 — 기존 값 유지 "
               f"(연속 {n}회 실패).", file=sys.stderr)
         # 조용한 실패를 막는다: 며칠째 계속 실패하면 워크플로에서 눈에 띄게 만든다.
         if n >= FAIL_ALERT_AFTER:
@@ -322,7 +418,7 @@ def main():
     # 이 값이 그대로 남고, 화면은 그 날짜로 값이 얼마나 오래됐는지 판단한다.
     # (as_of는 은행 표에 찍힌 '적용 기준일'이라 의미가 다르다 — 둘 다 노출한다.)
     data = {
-        "_meta": {"source": f"{used} 조회 페이지 파싱 — 제1종국민주택채권 고객부담률(할인율)",
+        "_meta": {"source": f"{used} — 조회 폼 POST 재현(uf_doInquiry 규약)",
                   "note": "공식 오픈API가 없어 조회 페이지를 파싱함. 실패 시 기존 값 유지. "
                           "seed=true 또는 collected_at 없음 = 예시값(자동 수집 전/실패) — "
                           "화면에서 실시간 값으로 표시하지 않는다."},

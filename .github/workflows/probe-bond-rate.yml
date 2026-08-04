@@ -40,6 +40,17 @@ jobs:
         run: python probe_bond_rate.py
         continue-on-error: true
 
+      # 수집기를 실제로 돌려 본다. 이 워크플로는 커밋하지 않으므로(permissions: read)
+      # 러너의 작업 사본만 바뀌고 저장소에는 아무 영향이 없다 — 배포 전에 "정말 값이
+      # 들어오는가"를 확인하는 유일한 방법이다(개발 환경에서는 도메인이 막혀 있다).
+      - name: 수집기 실행 (커밋 없음)
+        working-directory: _meta
+        run: |
+          python collect_bond_rate.py
+          echo "── 수집 결과 ──"
+          cat ../site/assets/bond_rate.json
+        continue-on-error: true
+
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
