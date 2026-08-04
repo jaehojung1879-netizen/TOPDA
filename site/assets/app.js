@@ -2378,8 +2378,10 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
         case 'deposit': return [function () { return 0; }, L('예적금·보험약관 담보대출 → 이자만 반영 <strong>(기존 부채로는 산입 — 이 대출을 새로 신청할 때만 DSR 규제 미적용)</strong>', 'Deposit/insurance-secured loan → interest only (counted as existing debt)'), false];
         // 유가증권(주식)담보대출은 제외 대상이 아니다. 실사용자 은행 DSR 원장(2026-04-14)이
         // 이를 확인해 준다 — 잔액 29,934,000 · 연간원리금 4,867,000으로 산입돼 있었다.
-        // 산정만기는 8년/10년 두 갈래로 읽혀 아직 확정하지 못했다(rates.js
-        // securedLoanTermUnresolved 참고). 한도를 과대 산출하지 않는 8년을 쓴다.
+        // 산정만기 8년은 2026-08-05 확정됐다: 차주가 밝힌 실제 약정금리 3.76%로
+        //   29,934,000 ÷ 8 + 29,934,000 × 3.76% = 4,867,268원 (은행 4,867,000원)
+        // 이 맞아떨어진다. 10년이면 4,118,918원으로 75만원 어긋난다.
+        // (rates.js securedLoanTerm 참고)
         case 'stock': return [function (a) { return a / 8; }, L('유가증권·기타담보대출 → 원금(대출액÷8년) + 이자 <strong>(DSR 산입 — 제외 대상 아님)</strong>', 'Securities/other secured loan → principal (loan ÷ 8 years) + interest <strong>(included in DSR)</strong>'), false];
         case 'card': return [function (a, t) { return a / t; }, L('카드론·현금서비스 → 원금(잔액÷약정 N년) + 이자', 'Card loan/cash advance → principal (balance ÷ N-year term) + interest'), true];
         case 'auto': return [function (a, t) { return a / t; }, L('자동차 할부·리스 → 원금(잔액÷약정 N년) + 이자', 'Auto loan/lease → principal (balance ÷ N-year term) + interest'), true];
