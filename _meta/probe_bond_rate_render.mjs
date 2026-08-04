@@ -87,34 +87,21 @@ try {
   console.log('  본문 조회 후보:', JSON.stringify(dump.clickables, null, 1));
   console.log('  전역 함수 후보:', JSON.stringify(dump.fnNames));
 
-  // 후보 중 첫 번째를 눌러 본다. 이동이 일어나면 위 framenavigated 로 드러난다.
-  const cp = page.locator('#CP');
-  const btn = cp.locator('a,button,input[type=submit],input[type=button],input[type=image]')
-    .filter({ hasText: '조회' }).first();
-  const n = await btn.count().catch(() => 0);
-  if (n) {
-    console.log('  → 본문 조회 클릭 시도');
-    await btn.click({ timeout: 15000 }).catch((e) => console.log('  클릭 실패:', e.message.split('\n')[0]));
-    await page.waitForTimeout(6000);
-  } else {
-    console.log('  ⚠ 본문에서 조회 후보를 못 찾음');
-  }
-
+  // ⚠ 클릭하지 않는다. 2·3차에서 '조회' 텍스트로 고른 요소가 매번 좌측 메뉴 링크였고,
+  // 페이지가 C028005 → C040727(로그인 필요)로 떠나 버려 아무것도 못 봤다. 어느 요소를
+  // 눌러야 하는지부터 로그로 확정한 뒤에 누른다.
   console.log(`  최종 URL: ${page.url()}`);
   console.log('  은행 도메인 요청:');
   for (const c of calls) console.log(`    · ${c}`);
 
-  const tables = await page.evaluate((kws) => Array.from(document.querySelectorAll('table')).map((t) => {
-    const rows = Array.from(t.querySelectorAll('tr')).map((tr) =>
-      Array.from(tr.querySelectorAll('th,td')).map((c) => c.innerText.replace(/\s+/g, ' ').trim()));
-    return { hit: kws.some((k) => rows.flat().join(' ').includes(k)), rows: rows.slice(0, 15) };
-  }).filter((t) => t.hit), KEYWORDS);
-  if (tables.length) {
-    console.log('  조회 후 표:');
-    for (const t of tables) for (const r of t.rows) console.log(`    ${JSON.stringify(r)}`);
-  } else {
-    console.log('  ⚠ 조회 후에도 키워드 표 없음');
-  }
+  // 결론을 맨 끝에 다시 모은다 — 이 페이지가 뱉는 초장문 GA·키패드 URL 이 앞부분을
+  // 밀어내서, 로그를 뒤에서 읽으면 정작 필요한 구조 정보가 매번 잘려 나갔다.
+  console.log(`\n${'='.repeat(78)}\n■ 렌더 진단 요약 (다음 라운드에서 누를 요소를 고르기 위한 것)\n${'='.repeat(78)}`);
+  console.log('  #CP 존재:', dump.cpFound);
+  console.log('  본문 select:', JSON.stringify(dump.selects));
+  console.log('  form:', JSON.stringify(dump.forms));
+  console.log('  본문 조회 후보:', JSON.stringify(dump.clickables));
+  console.log('  전역 함수 후보:', JSON.stringify(dump.fnNames));
 } catch (e) {
   console.log(`  ✗ 실패: ${e.message.split('\n')[0]}`);
 }

@@ -143,7 +143,24 @@ def show_keyword_html(html, width=700):
     return out
 
 
+def verdict(label, status, html):
+    """후보 하나에 대한 한 줄 판정 — 로그 맨 끝에 몰아 찍기 위한 것.
+
+    왜 필요한가: Actions 로그를 읽을 때 뒤에서부터 일정 줄만 볼 수 있는데, KB 페이지가
+    구글 애널리틱스·보안 키패드로 뱉는 초장문 URL 이 앞부분을 통째로 밀어낸다. 그래서
+    정작 중요한 '이 후보가 됐는가'가 매번 잘려 나갔다. 결론만 끝에 다시 모은다."""
+    if status is None:
+        return f"  ✗ {label}: 요청 실패 — {html}"
+    kw = [k for k in KEYWORDS if k in html]
+    tables = len(re.findall(r"<table", html, re.I))
+    # 표가 없어도 JSON 이면 숫자를 바로 집을 수 있다.
+    nums = re.findall(r'"[^"]*(?:할인율|부담률|단가)[^"]*"\s*:\s*"?([\d.]+)', html)
+    return (f"  {'✓' if kw else '·'} {label}: status={status} len={len(html)} "
+            f"table={tables} 키워드={kw or '없음'} 숫자후보={nums[:5] or '없음'}")
+
+
 def main():
+    summary = []
     for label, target in CANDIDATES:
         url = target[0] if isinstance(target, tuple) else target
         kind = "POST" if isinstance(target, tuple) else "GET"
@@ -152,7 +169,9 @@ def main():
             status, final_url, meta, html = fetch(target)
         except Exception as e:  # noqa: BLE001
             print(f"  ✗ 요청 실패: {type(e).__name__}: {e}")
+            summary.append(verdict(label, None, f"{type(e).__name__}: {e}"))
             continue
+        summary.append(verdict(label, status, html))
         print(f"  status={status} len={len(html)} enc={meta}")
         if final_url != url:
             print(f"  → 리다이렉트: {final_url}")
@@ -185,6 +204,9 @@ def main():
         else:
             print("  ⚠ 키워드가 아예 없음 — 이 응답에는 채권 정보가 없다.")
 
+    print(f"\n{'=' * 78}\n■ 정적 진단 요약 (로그 뒤에서 읽어도 잘리지 않게 결론만 다시)\n{'=' * 78}")
+    for line in summary:
+        print(line)
     print("\n진단 종료 — 저장한 파일 없음.")
     return 0
 
