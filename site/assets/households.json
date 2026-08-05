@@ -193840,19 +193840,6 @@
         "distance_m": 153
       }
     },
-    "부산 부산진구|범전시영1동": {
-      "addr": "부산 부산진구 범전동 43-4",
-      "lat": 35.166136,
-      "lng": 129.062044,
-      "subway": {
-        "station": "부전역 동해선",
-        "distance_m": 332
-      },
-      "elementary": {
-        "name": "성전초등학교",
-        "distance_m": 478
-      }
-    },
     "인천 부평구|금오파크뷰": {
       "addr": "인천 부평구 부평동 284-11",
       "lat": 37.489364,
@@ -198033,22 +198020,6 @@
       "hh_src": "recap.hhldCnt",
       "built_year": 2009
     },
-    "서울 강서구|청솔샤르망1001동": {
-      "addr": "서울 강서구 내발산동 676-23",
-      "lat": 37.552905,
-      "lng": 126.838734,
-      "subway": {
-        "station": "우장산역 5호선",
-        "distance_m": 501
-      },
-      "elementary": {
-        "name": "서울내발산초등학교",
-        "distance_m": 159
-      },
-      "households": 49,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
-    },
     "서울 서대문구|초원": {
       "addr": "서울 서대문구 홍은동 8-26",
       "lat": 37.603848,
@@ -198346,7 +198317,256 @@
       "households": 45,
       "hh_src": "title.hhldCnt",
       "built_year": 1993
+    },
+    "부산 부산진구|범전시영": {
+      "addr": "부산 부산진구 범전동 43-4",
+      "lat": 35.166136,
+      "lng": 129.062044,
+      "subway": {
+        "station": "부전역 동해선",
+        "distance_m": 332
+      },
+      "elementary": {
+        "name": "성전초등학교",
+        "distance_m": 478
+      }
+    },
+    "서울 강서구|청솔샤르망1001동": {
+      "addr": "서울 강서구 내발산동 676-23",
+      "lat": 37.552905,
+      "lng": 126.838734,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 501
+      },
+      "elementary": {
+        "name": "서울내발산초등학교",
+        "distance_m": 159
+      }
+    },
+    "부산 부산진구|범전시영1동": {
+      "addr": "부산 부산진구 범전동 43-4",
+      "lat": 35.166136,
+      "lng": 129.062044,
+      "subway": {
+        "station": "부전역 동해선",
+        "distance_m": 332
+      },
+      "elementary": {
+        "name": "성전초등학교",
+        "distance_m": 478
+      }
+    },
+    "인천 남동구|세연베르빌": {
+      "addr": "인천 남동구 구월동 1125",
+      "lat": 37.449465,
+      "lng": 126.702847,
+      "subway": {
+        "station": "예술회관역 인천1호선",
+        "distance_m": 200
+      },
+      "elementary": {
+        "name": "인천구월서초등학교",
+        "distance_m": 744
+      }
+    },
+    "경기 남양주시|서울": {
+      "addr": "경기 남양주시 금곡동 159-59",
+      "lat": 37.636656,
+      "lng": 127.211386,
+      "subway": {
+        "station": "금곡역 경춘선",
+        "distance_m": 348
+      },
+      "elementary": {
+        "name": "남양주금곡초등학교",
+        "distance_m": 113
+      }
+    },
+    "서울 강동구|집앤사스윗사이드아파트": {
+      "addr": "서울 강동구 천호동 328-1",
+      "lat": 37.545827,
+      "lng": 127.122437,
+      "subway": {
+        "station": "암사역 8호선",
+        "distance_m": 659
+      },
+      "elementary": {
+        "name": "서울신암초등학교",
+        "distance_m": 448
+      }
+    },
+    "서울 중랑구|에이트플레이스": {
+      "addr": "서울 중랑구 묵동 8",
+      "lat": 37.618867,
+      "lng": 127.087069,
+      "subway": {
+        "station": "화랑대역 6호선",
+        "distance_m": 329
+      },
+      "elementary": {
+        "name": "서울원묵초등학교",
+        "distance_m": 121
+      }
+    },
+    "서울 은평구|명남뉴아파트": {
+      "addr": "서울 은평구 역촌동 72-4",
+      "lat": 37.604565,
+      "lng": 126.909286,
+      "subway": {
+        "station": "응암역 6호선",
+        "distance_m": 871
+      },
+      "elementary": {
+        "name": "서울역촌초등학교",
+        "distance_m": 519
+      }
+    },
+    "경기 부천시 원미구|정우펠리스2차": {
+      "addr": "경기 부천시 원미구 심곡동 356-6",
+      "lat": 37.489713,
+      "lng": 126.783023,
+      "subway": {
+        "station": "부천역 1호선",
+        "distance_m": 635
+      },
+      "elementary": {
+        "name": "원미초등학교",
+        "distance_m": 404
+      }
+    },
+    "서울 도봉구|성원하이츠A동": {
+      "addr": "서울 도봉구 쌍문동 574",
+      "lat": 37.657575,
+      "lng": 127.038884,
+      "subway": {
+        "station": "창동역 1호선",
+        "distance_m": 904
+      },
+      "elementary": {
+        "name": "서울창경초등학교",
+        "distance_m": 373
+      }
+    },
+    "서울 중랑구|동일스카이씨티(37차)": {
+      "addr": "서울 중랑구 면목동 1286-1",
+      "lat": 37.592241,
+      "lng": 127.08871,
+      "subway": {
+        "station": "면목역 7호선",
+        "distance_m": 405
+      },
+      "elementary": {
+        "name": "서울면목초등학교",
+        "distance_m": 151
+      }
+    },
+    "경기 하남시|효천수리골마을": {
+      "households": 103,
+      "built_year": 2008,
+      "addr": "경기도 하남시 덕풍동 352-1 효천수리골",
+      "lat": 37.542479,
+      "lng": 127.200771,
+      "subway": {
+        "station": "하남시청역 5호선",
+        "distance_m": 491
+      },
+      "elementary": {
+        "name": "덕풍초등학교",
+        "distance_m": 322
+      }
+    },
+    "서울 양천구|강산빌라트": {
+      "addr": "서울 양천구 목동 758-1",
+      "lat": 37.537022,
+      "lng": 126.871459,
+      "subway": {
+        "station": "염창역 9호선",
+        "distance_m": 1146
+      },
+      "elementary": {
+        "name": "서울정목초등학교",
+        "distance_m": 107
+      }
+    },
+    "서울 구로구|다청림101동(143-1)": {
+      "addr": "서울 구로구 궁동 143-1",
+      "lat": 37.500139,
+      "lng": 126.830931,
+      "subway": {
+        "station": "온수역 1호선",
+        "distance_m": 1063
+      },
+      "elementary": {
+        "name": "서울온수초등학교",
+        "distance_m": 794
+      }
+    },
+    "부산 부산진구|다해미네스트": {
+      "addr": "부산 부산진구 연지동 156-1",
+      "lat": 35.169656,
+      "lng": 129.050797,
+      "subway": {
+        "station": "부전역 동해선",
+        "distance_m": 1005
+      },
+      "elementary": {
+        "name": "연지초등학교",
+        "distance_m": 308
+      }
+    },
+    "서울 중랑구|풀내음(A동)": {
+      "addr": "서울 중랑구 묵동 58-1",
+      "lat": 37.615876,
+      "lng": 127.080585,
+      "subway": {
+        "station": "화랑대역 6호선",
+        "distance_m": 511
+      },
+      "elementary": {
+        "name": "서울원묵초등학교",
+        "distance_m": 556
+      }
+    },
+    "서울 강북구|인성": {
+      "addr": "서울 강북구 미아동 224-40",
+      "lat": 37.626022,
+      "lng": 127.024133,
+      "subway": {
+        "station": "미아역 4호선",
+        "distance_m": 182
+      },
+      "elementary": {
+        "name": "서울화계초등학교",
+        "distance_m": 479
+      }
+    },
+    "서울 강서구|천우명덕": {
+      "addr": "서울 강서구 내발산동 680-5",
+      "lat": 37.553047,
+      "lng": 126.835073,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 482
+      },
+      "elementary": {
+        "name": "서울내발산초등학교",
+        "distance_m": 295
+      }
+    },
+    "서울 강북구|대림(수유)": {
+      "addr": "서울 강북구 수유동 50-75",
+      "lat": 37.631922,
+      "lng": 127.022223,
+      "subway": {
+        "station": "화계역 우이신설선",
+        "distance_m": 480
+      },
+      "elementary": {
+        "name": "서울수유초등학교",
+        "distance_m": 205
+      }
     }
   },
-  "as_of": "2026-08-04"
+  "as_of": "2026-08-05"
 }
