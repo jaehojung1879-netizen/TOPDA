@@ -1,13 +1,12 @@
 {
   "_meta": {
-    "source": "주택도시기금 포털 — 제1종국민주택채권 고객부담률(할인율)",
-    "note": "공식 오픈API가 없어 조회 페이지를 파싱함. 실패 시 기존 값 유지. seed=true 또는 collected_at=null 이면 예시값(자동 수집 전/실패)이며, 화면에서 실시간 조회값으로 표시하지 않는다. 2026-07-18 두 번째 자동 수집도 근접 텍스트 폴백이 동일한 의심스러운 값(3.8546%)을 재현해 신뢰 불가로 판단, seed로 재롤백. 폴백 정규식 제거 후 구조화 파서만 신뢰하도록 코드 수정."
+    "source": "KB 제1종국민주택채권 매도단가/할인율 조회 — 조회 폼 POST 재현(uf_doInquiry 규약)",
+    "note": "공식 오픈API가 없어 조회 페이지를 파싱함. 실패 시 기존 값 유지. seed=true 또는 collected_at 없음 = 예시값(자동 수집 전/실패) — 화면에서 실시간 값으로 표시하지 않는다."
   },
-  "as_of": "2026-07-17",
-  "collected_at": null,
-  "customer_burden_rate_pct": 15,
-  "seed": true,
-  "last_attempt_at": "2026-08-04",
-  "consecutive_failures": 1,
-  "last_error": "우리은행 1종채권 매도단가/할인율: <urlopen error timed out> / 주택도시기금: 파싱 실패 / KB 1종채권 매도단가/할인율: <urlopen error timed out>"
+  "as_of": "2026-08-05",
+  "collected_at": "2026-08-05",
+  "customer_burden_rate_pct": 15.0251,
+  "seed": false,
+  "last_attempt_at": "2026-08-05",
+  "consecutive_failures": 0
 }
