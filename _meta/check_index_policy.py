@@ -408,16 +408,27 @@ def run(rep):
                 rep.fail(f"14 중복 {label}", f"  '{k[:50]}' × {len(v)} — {', '.join(v[:3])}")
 
     # ── 15. 템플릿 대비 고유 콘텐츠 비율 (경고)
+    # 템플릿을 공유하는 묶음 단위로 본다. 예전에는 posts·calculators·apt-complex 세 묶음만
+    # 봤는데, 그러면 checklists·interior·categories 와 언어판이 통째로 사각지대가 된다.
+    # (실제로 /calculators/transactions.html 처럼 표를 JS 로 그리는 페이지가 색인·광고 상태로
+    #  고유 본문 322자였던 것을 이 검사를 켜고 나서야 발견했다.) 묶음을 넓게 잡는다.
+    FAMILIES = ("posts", "calculators", "checklists", "interior", "loan", "categories")
     groups = collections.defaultdict(list)
     for p, d in pages.items():
         if not indexable[p]:
             continue
         if re.match(r"^/apt/[^/]+/[^/]+/", p):
             groups["apt-complex"].append((p, d))
-        elif p.startswith("/posts/"):
-            groups["post"].append((p, d))
-        elif p.startswith("/calculators/"):
-            groups["calculator"].append((p, d))
+            continue
+        for fam in FAMILIES:
+            if p.startswith(f"/{fam}/"):
+                groups[fam].append((p, d))
+                break
+            # 언어판은 본문 언어가 달라 한국어 묶음과 섞으면 '공통 블록' 판정이 어긋난다.
+            m = re.match(rf"^/([A-Za-z-]+)/{fam}/", p)
+            if m:
+                groups[f"{m.group(1)}-{fam}"].append((p, d))
+                break
     for g, items in groups.items():
         if len(items) < 4:
             continue
