@@ -46,6 +46,13 @@ jobs:
         working-directory: _meta
         run: python build_home_issues.py --check
 
+      # RSS 는 손으로 관리하다 본문 정비와 어긋난 전력이 있다(2026-08-08 감사: 32건 중
+      # 21건 불일치, 정비가 걷어낸 과장 표현이 RSS 에만 남아 있었다). 생성기를 둔 이상
+      # 어긋난 채 머지되지 않도록 여기서 막는다.
+      - name: RSS 가 본문과 일치하는지 검증
+        working-directory: _meta
+        run: python build_feed.py --check
+
       - name: 색인·광고·신뢰 정책 검증
         working-directory: _meta
         run: python check_index_policy.py

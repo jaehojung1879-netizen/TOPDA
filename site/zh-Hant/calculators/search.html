@@ -430,12 +430,57 @@ var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板橋 Pangyo","여의도
 
   var DEALS_BY_APT = {};
 
+  // 사전집계본(finder_index.json)으로 단지를 채운다. 브라우저에서 거래 297,890건을 다시
+  // 집계하던 일을 빌드 시점으로 옮긴 것이라, 여기서는 완성된 값을 옮겨 담기만 한다.
+  // 키는 이 화면의 기존 방식 그대로 '단지명'이다(아래 enrichWithDeals 와 동일하게 맞춘다 —
+  // 여기서만 복합키로 바꾸면 정렬·모달의 조회 키와 어긋난다).
+  //
+  // ⚠ 인덱스의 거래 목록(c.d)은 최신 12건까지만 담는다. 따라서 거래 수·평균가를 그 목록으로
+  //   다시 계산하면 안 된다. 전 기간 유효 거래 기준 집계값(c.c·c.av 등)을 agg 에 실어
+  //   보내고, 모달이 그 값을 우선 쓴다(openAptModal 참고).
+  function toDeal(a) { return { date: a[0], area_m2: a[1], price: a[2], floor: a[3] }; }
+  function enrichFromIndex(list) {
+    var byName = {};
+    DATA.forEach(function (a) { byName[a.name] = a; });
+    for (var i = 0; i < list.length; i++) {
+      var c = list[i];
+      var apt = byName[c.n];
+      if (!apt) {
+        var parts = (c.rk || '').split(' ');
+        apt = {
+          name: c.n, region: c.r || c.rk, region_key: c.rk,
+          sido: parts[0] || '', sigungu: parts.slice(1).join(' '),
+          built_year: c.by || null, units: [], price_history: [], _from_deals: true,
+        };
+        byName[c.n] = apt;
+        DATA.push(apt);
+      }
+      if (!apt.units || !apt.units.length) {
+        apt.units = (c.u || []).map(function (u) {
+          return { label: u[0] + '㎡', area_m2: u[0], recent_price: u[1] };
+        });
+      }
+      if (!apt.price_history || !apt.price_history.length) apt.price_history = c.ph || [];
+      if (apt.recent_tx_count == null) apt.recent_tx_count = Number(c.r6) || 0;
+      if (!apt.built_year && c.by) apt.built_year = c.by;
+      DEALS_BY_APT[c.n] = {
+        latest: c.lt,
+        prices: (c.d || []).map(toDeal),
+        agg: { c: c.c, av: c.av, hi: c.hi, lo: c.lo, ua: c.ua },
+      };
+    }
+  }
+
   function enrichWithDeals() {
     if (!DEALS.length) return;
     var byName = {};
     DATA.forEach(function (a) { byName[a.name] = a; });
     var newApts = {};
     DEALS.forEach(function (d) {
+      // 국토부 해제(거래취소) 신고분은 집계에서 뺀다. 사전집계본(finder_index.json)도 같은
+      // 기준이라, 이 필터가 없으면 원장 폴백일 때만 거래 수가 부풀어 두 경로가 어긋난다.
+      // (실측: '래미안안양메가트리아' 원장 514건 = 유효 489 + 해제 25)
+      if (d.canceled) return;
       var apt = byName[d.apt];
       if (!apt) {
         if (!newApts[d.apt]) {
@@ -703,10 +748,15 @@ var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板橋 Pangyo","여의도
     var meta = [];
     if (deals.length) {
       var last = deals[0];
-      var vals = deals.map(function (d) { return d.price; });
-      var avg = Math.round(vals.reduce(function (s, v) { return s + v; }, 0) / vals.length);
+      // 거래 수·평균가는 '전 기간 유효 거래' 기준이어야 한다. 사전집계본을 쓸 때 표시용
+      // 목록(deals)은 최신 12건뿐이라 그것으로 평균을 내면 값이 달라진다 — 집계값이 있으면
+      // 그것을 쓰고, 원장 폴백일 때만(집계값 없음) 목록에서 계산한다.
+      var A = agg.agg;
+      var cnt = (A && A.c != null) ? Number(A.c) : deals.length;
+      var avg = (A && A.av != null) ? Number(A.av)
+        : Math.round(deals.reduce(function (s, d) { return s + d.price; }, 0) / deals.length);
       meta.push({ lbl: T.mLatest, val: fmt(last.price) + ' · ' + last.date });
-      meta.push({ lbl: T.mDeals, val: deals.length.toLocaleString() + T.dealsCnt });
+      meta.push({ lbl: T.mDeals, val: cnt.toLocaleString() + T.dealsCnt });
       meta.push({ lbl: T.mAvg, val: fmt(avg) });
     }
     if (a.built_year) meta.push({ lbl: T.mBuilt, val: a.built_year + T.builtYr });
@@ -798,23 +848,39 @@ var HUB_DISPLAY = {"강남":"江南 Gangnam","판교":"板橋 Pangyo","여의도
   searchInp.addEventListener('input', render);
   sortSel.addEventListener('change', render);
 
+  // 캐시: 예전에는 '?t=' + Date.now() 로 URL을 매번 바꾸고 cache:'no-store' 까지 걸어,
+  // 방문할 때마다 전국 원장(transactions.json — gzip 7.0MB · 거래 297,890건)을 통째로 다시
+  // 받았다. 두 장치를 모두 걷어내고 브라우저 캐시 + ETag 재검증에 맡긴다 — 내용이 그대로면
+  // 304 로 끝나므로 갱신은 그대로 반영되면서 재방문 비용이 사라진다.
+  //
+  // 원장: 이 화면은 거래 한 건씩이 아니라 단지별 집계만 쓴다. 그래서 전용 사전집계본
+  // (finder_index.json, 원장의 13%)을 읽는다. 없으면 원장으로 폴백해 동작은 유지한다.
+  // 한국어 화면(/calculators/search.html)이 먼저 적용한 방식을 그대로 맞춘 것이다 —
+  // 한쪽만 고쳐 두면 같은 결함이 언어별로 갈라진 채 남는다.
+  function getJson(path, fallback) {
+    return fetch('../../assets/' + path)
+      .then(function (r) { if (!r.ok) throw new Error(path); return r.json(); })
+      .catch(function () { return fallback; });
+  }
   Promise.all([
-    fetch('../../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('apt'); return r.json(); })
-      .catch(function () { return { apartments: [] }; }),
-    fetch('../../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('deals'); return r.json(); })
-      .catch(function () { return { deals: [] }; }),
-    fetch('../../assets/households.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('hh'); return r.json(); })
-      .catch(function () { return { map: {} }; }),
-    fetch('../../assets/jeonse_ratio.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('jr'); return r.json(); })
-      .catch(function () { return { regions: [] }; }),
+    getJson('apartments.json', { apartments: [] }),
+    getJson('finder_index.json', null),
+    getJson('households.json', { map: {} }),
+    getJson('jeonse_ratio.json', { regions: [] }),
   ]).then(function (results) {
     DATA = (results[0].apartments || []).slice();
-    DEALS = results[1].deals || [];
-    enrichWithDeals();
+    var index = results[1];
+    if (index && index.complexes) {
+      enrichFromIndex(index.complexes);
+      return results;
+    }
+    // 인덱스가 아직 배포되지 않은 과도기에도 화면이 죽지 않도록 원장으로 폴백한다.
+    return getJson('transactions.json', { deals: [] }).then(function (tx) {
+      DEALS = tx.deals || [];
+      enrichWithDeals();
+      return results;
+    });
+  }).then(function (results) {
     var HH = (results[2] && results[2].map) || {};
     DATA.forEach(function (a) {
       var e = HH[(a.region_key || '') + '|' + (a.name || '')];

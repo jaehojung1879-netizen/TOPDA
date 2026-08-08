@@ -277,7 +277,48 @@
     <p style="color:var(--text-muted); font-size:0.78rem; margin-top:4px;">좌표 정보가 있는 단지만 지도에 표시됩니다. 마커를 클릭하면 단지 상세를 볼 수 있습니다.</p>
   </div>
 
-  <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 32px;">국토교통부 실거래가 자료. 신고가 취소·정정 거래가 포함될 수 있어 계약 전 원자료 확인을 권합니다.</p>
+  <!-- 이 화면은 표를 자바스크립트로 그린다. 정적 HTML 만 보면 라벨과 빈 표뿐이라,
+       무엇을 근거로 한 숫자인지 알 수 없다(2026-08-08 감사에서 템플릿 제외 고유 본문
+       322자로 걸렸다 — 색인되고 광고가 붙은 페이지인데도). about.html 이 "각 계산기와
+       데이터 페이지 하단에 실제로 사용한 근거와 기준일을 적어 두었다"고 밝히고 있으므로,
+       그 약속을 이 페이지에서도 지킨다.
+       ⚠ 매일 바뀌는 수치(거래 건수·지역 수)는 여기 적지 않는다. 화면 상단의
+       '실거래 최신 갱신'이 그 값을 데이터에서 직접 읽어 표시한다. -->
+  <section class="tx-about" style="margin-top:32px; padding-top:20px; border-top:1px solid var(--line, #e3e9ef);">
+    <h2 style="font-size:1.05rem; margin:0 0 12px;">이 숫자는 어떤 자료인가</h2>
+
+    <h3 style="font-size:0.92rem; margin:16px 0 6px;">출처와 갱신</h3>
+    <p style="font-size:0.86rem; line-height:1.75; color:var(--text-muted); margin:0;">
+      국토교통부 <strong>아파트 매매 실거래가 공개시스템</strong>의 공개 API에서 받은 신고 자료입니다.
+      매매 신고분만 담고 있으며 전세·월세 임대차 신고는 포함하지 않습니다.
+      매일 자정(KST) 무렵 다시 수집해 그날 새벽 반영합니다. 화면 위쪽 &lsquo;실거래 최신 갱신&rsquo;에
+      적힌 날짜가 <strong>수집한 날이 아니라 자료가 실제로 담고 있는 가장 최근 계약일</strong>입니다.
+      거래는 계약 후 신고까지 시간이 걸리므로, 가장 최근 며칠은 아직 신고되지 않은 거래가 있습니다.
+    </p>
+
+    <h3 style="font-size:0.92rem; margin:16px 0 6px;">수록 범위</h3>
+    <p style="font-size:0.86rem; line-height:1.75; color:var(--text-muted); margin:0;">
+      최근 12개월치를 시·군·구 단위로 보관합니다(집계 기간은 단지 상세의 요약표에 함께 적습니다).
+      아직 전국을 다 덮지 못합니다 — 수집 대상에 없는 지역은 값을 지어내지 않고 비워 둡니다.
+      시·도 드롭다운에 보이는 지역이 현재 수록된 범위입니다.
+    </p>
+
+    <h3 style="font-size:0.92rem; margin:16px 0 6px;">해제(거래취소) 신고분 처리</h3>
+    <p style="font-size:0.86rem; line-height:1.75; color:var(--text-muted); margin:0;">
+      계약 후 해제된 거래도 국토부가 별도로 공개합니다. 톺다는 이것을
+      <strong>거래 건수·평균가 같은 집계에서 빼고</strong>, 거래 내역에만 해제 표시와 함께 남깁니다.
+      해제분을 섞어 세면 실제보다 거래가 활발해 보이고 평균가도 달라지기 때문입니다.
+    </p>
+
+    <h3 style="font-size:0.92rem; margin:16px 0 6px;">이 자료로 알 수 없는 것</h3>
+    <p style="font-size:0.86rem; line-height:1.75; color:var(--text-muted); margin:0;">
+      공개 자료에는 <strong>동·호수가 없습니다</strong>(개인정보). 세로 위치는 층만 알 수 있어,
+      같은 평형·같은 시기인데 가격이 다른 이유 가운데 향·동·조망·수리 상태는 이 표에서 확인할 수 없습니다.
+      단지 상세의 저/중/고 표시는 그 단지에서 관측된 최고층을 기준으로 나눈 것이라, 실제 층수와 다를 수 있습니다.
+      신고가는 나중에 정정·취소될 수 있고, 특정 단지의 시세 전망은 다루지 않습니다.
+      금액이 중요한 판단에 쓰인다면 계약 전 원자료를 직접 확인하시기 바랍니다.
+    </p>
+  </section>
 </main>
 
 <!-- 단지 상세 모달 -->
@@ -455,24 +496,35 @@
     return parts.length >= 2 ? parts.slice(1).join(' ') : '';
   }
 
+  // 드롭다운의 재료. 조각 방식에서는 manifest(거래 없이 지역 목록만)로 채우고,
+  // 원장 폴백에서는 실제 거래에서 뽑아 채운다. 두 경로가 같은 모양을 쓰도록 한 곳에 모은다.
+  //   REGIONS = { '서울': { sigungu: ['강남구', ...] }, ... }
+  var REGIONS = {};
+
+  function regionsFromDeals(deals) {
+    var out = {};
+    deals.forEach(function (d) {
+      var s = sidoOf(d); if (!s) return;
+      if (!out[s]) out[s] = { sigungu: {} };
+      var g = sigunguOf(d); if (g) out[s].sigungu[g] = true;
+    });
+    Object.keys(out).forEach(function (s) { out[s].sigungu = Object.keys(out[s].sigungu); });
+    return out;
+  }
+
   function fillSido() {
-    var set = {};
-    DATA.forEach(function (d) { var s = sidoOf(d); if (s) set[s] = true; });
-    R.fillSidoSelect(sidoSel, Object.keys(set));
+    R.fillSidoSelect(sidoSel, Object.keys(REGIONS));
     // 기본은 서울만 — 지도가 처음부터 전국을 다 그리면 무겁고, 대부분 관심 지역이 서울이라 기본값으로 좁혀둔다.
-    sidoSel.value = set['서울'] ? '서울' : 'all';
+    // (조각 방식에서는 이 기본값이 곧 '서울 조각만 내려받는다'는 뜻이기도 하다.)
+    sidoSel.value = REGIONS['서울'] ? '서울' : 'all';
   }
   function fillGu() {
     var sido = sidoSel.value;
-    if (!sido || sido === 'all') {
+    if (!sido || sido === 'all' || !REGIONS[sido]) {
       R.fillSigunguSelect(guSel, [], true);
       return;
     }
-    var set = {};
-    DATA.forEach(function (d) {
-      if (sidoOf(d) === sido) { var g = sigunguOf(d); if (g) set[g] = true; }
-    });
-    R.fillSigunguSelect(guSel, Object.keys(set), true);
+    R.fillSigunguSelect(guSel, REGIONS[sido].sigungu, true);
   }
 
   function filtered() {
@@ -987,35 +1039,148 @@
   }
 
   searchEl.addEventListener('input', debounce(renderActive, 200));
-  sidoSel.addEventListener('change', function () { fillGu(); renderActive(); });
+  // 시·도를 바꾸면 그 시·도 조각이 아직 없을 수 있다 — 받아온 뒤에 그린다.
+  sidoSel.addEventListener('change', function () {
+    fillGu();
+    ensureLoaded().then(renderActive);
+  });
   guSel.addEventListener('change', renderActive);
   areaSel.addEventListener('change', renderActive);
   windowSel.addEventListener('change', renderActive);
 
-  // 데이터 로드: transactions + apartments(보강용)
-  Promise.all([
-    fetch('../assets/transactions.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : { deals: [] }; }).catch(function () { return { deals: [] }; }),
-    fetch('../assets/apartments.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : { apartments: [] }; }).catch(function () { return { apartments: [] }; }),
-  ]).then(function (results) {
-    DATA = results[0].deals || [];
-    (results[1].apartments || []).forEach(function (a) { APARTMENTS[aptKey(a.region_key || a.region, a.name)] = a; });
-    computeWindow(DATA);
-    var latest = '';
-    for (var i = 0; i < DATA.length; i++) if (DATA[i].date > latest) latest = DATA[i].date;
-    if (asofEl) {
-      var d = daysSince(latest);
-      asofEl.innerHTML = '실거래 최신 갱신 <strong>' + (latest || '—') + '</strong>' + (d != null ? ' (' + ago(d) + ')' : '') + ' · 총 ' + DATA.length.toLocaleString() + '건';
+  /* ── 데이터 로드 ─────────────────────────────────────────────────────────
+   * 예전에는 전국 원장(transactions.json, 원본 56MB·gzip 7.0MB, 거래 297,890건)을
+   * `?t=' + Date.now()` + `cache:'no-store'` 로 **매 방문마다 통째로** 받았다.
+   * URL 을 매번 바꾸면 브라우저 캐시가 무력화되고, no-store 는 ETag 재검증(304)까지
+   * 막는다. 두 장치가 겹쳐 재방문에도 7MB를 다시 받았다 — 색인되고 광고가 붙은
+   * 페이지에서. 그런데 사용자가 실제로 보는 것은 시·군·구 하나다.
+   *
+   * 그래서 시·도 단위 조각(_meta/build_tx_shards.py)을 읽는다. 기본값 서울 기준
+   * 7.0MB → 1.5MB 이고, 파일명에 내용 해시가 붙어 재방문에는 재검증조차 필요 없다.
+   * 'all' 을 고르면 오늘과 같은 양을 받지만 그것은 사용자의 명시적 선택이다.
+   *
+   * 폴백: manifest 나 조각을 못 읽으면 원장을 그대로 읽어 예전 동작으로 되돌아간다.
+   * (배포 직후 옛 manifest 를 캐시한 브라우저가 사라진 해시 파일을 요청하는 경우 등.)
+   * 캐시 무효화 장치는 폴백 경로에도 넣지 않는다 — 그게 애초의 문제였다.
+   * ------------------------------------------------------------------------ */
+  var MANIFEST = null;
+  var SHARDS = {};          // 시·도 이름 → 거래 배열 (받아온 것만)
+  var PENDING = {};         // 시·도 이름 → 진행 중인 Promise (중복 요청 방지)
+  var LEDGER_MODE = false;  // 폴백으로 원장 전체를 이미 들고 있는 상태
+
+  function getJson(url) {
+    return fetch(url).then(function (r) {
+      if (!r.ok) throw new Error(url);
+      return r.json();
+    });
+  }
+
+  function setBusy(msg) {
+    if (!msg) return;
+    if (countEl) countEl.textContent = msg;
+    if (mapCountEl) mapCountEl.textContent = msg;
+  }
+
+  // 현재 선택에 필요한 시·도 목록. '전체'면 전부.
+  function neededSidos() {
+    var v = sidoSel.value;
+    if (!v || v === 'all') return MANIFEST.sido.map(function (s) { return s.name; });
+    return [v];
+  }
+
+  function loadShard(name) {
+    if (SHARDS[name]) return Promise.resolve();
+    if (PENDING[name]) return PENDING[name];
+    var entry = null;
+    for (var i = 0; i < MANIFEST.sido.length; i++) {
+      if (MANIFEST.sido[i].name === name) { entry = MANIFEST.sido[i]; break; }
     }
-    // 맞춤 내집 찾기 등 다른 페이지에서 ?q=단지명 으로 넘어온 경우 — 검색을 채우고 리스트를 바로 보여준다
+    if (!entry) return Promise.resolve();
+    PENDING[name] = getJson('../assets/tx/' + entry.file)
+      .then(function (j) { SHARDS[name] = j.deals || []; })
+      .catch(function () { return loadLedger(); })   // 조각 실패 → 원장 폴백
+      .then(function () { delete PENDING[name]; });
+    return PENDING[name];
+  }
+
+  // 원장 폴백. 한 번 읽으면 전국 데이터를 다 갖게 되므로 이후 조각 요청은 필요 없다.
+  var ledgerPromise = null;
+  function loadLedger() {
+    if (LEDGER_MODE) return Promise.resolve();
+    if (ledgerPromise) return ledgerPromise;
+    ledgerPromise = getJson('../assets/transactions.json')
+      .then(function (tx) {
+        DATA = tx.deals || [];
+        LEDGER_MODE = true;
+        REGIONS = regionsFromDeals(DATA);
+        computeWindow(DATA);
+      })
+      .catch(function () { DATA = []; LEDGER_MODE = true; });
+    return ledgerPromise;
+  }
+
+  // 선택에 필요한 조각을 모두 확보하고 DATA 를 다시 구성한다.
+  function ensureLoaded() {
+    if (LEDGER_MODE || !MANIFEST) return Promise.resolve();
+    var names = neededSidos();
+    var missing = names.filter(function (n) { return !SHARDS[n]; });
+    if (missing.length) {
+      setBusy(missing.length === 1 ? missing[0] + ' 실거래를 불러오는 중…' : '실거래를 불러오는 중…');
+    }
+    return Promise.all(names.map(loadShard)).then(function () {
+      if (LEDGER_MODE) return;   // 폴백이 걸렸으면 DATA 는 이미 전국치다
+      var out = [];
+      names.forEach(function (n) { if (SHARDS[n]) out = out.concat(SHARDS[n]); });
+      DATA = out;
+    });
+  }
+
+  function showAsof() {
+    if (!asofEl) return;
+    // 조각 방식에서는 최신 거래일·총 건수를 manifest 에서 읽는다. 현재 화면에 로드된
+    // 시·도만으로 계산하면 "전국 총 건수"가 선택에 따라 흔들린다.
+    var latest = MANIFEST ? MANIFEST.latest_date : '';
+    var total = MANIFEST ? MANIFEST.total : DATA.length;
+    if (!latest) {
+      for (var i = 0; i < DATA.length; i++) if (DATA[i].date > latest) latest = DATA[i].date;
+    }
+    var d = daysSince(latest);
+    asofEl.innerHTML = '실거래 최신 갱신 <strong>' + (latest || '—') + '</strong>'
+      + (d != null ? ' (' + ago(d) + ')' : '')
+      + ' · 총 ' + (total || 0).toLocaleString() + '건';
+  }
+
+  function start() {
     var qParam = '';
     try { qParam = new URLSearchParams(location.search).get('q') || ''; } catch (e) {}
     if (qParam) searchEl.value = qParam;
-    fillSido();
+    fillSido();     // 기본값 서울 확정 → 이 시점의 선택으로 필요한 조각이 정해진다
     fillGu();
-    render();
-    setView(qParam ? 'list' : 'map');
+    return ensureLoaded().then(function () {
+      showAsof();
+      render();
+      setView(qParam ? 'list' : 'map');
+    });
+  }
+
+  Promise.all([
+    // manifest 는 1KB 남짓이라 매번 재검증해도 사실상 공짜다(조각은 해시 URL 이라 영구 캐시).
+    getJson('../assets/tx/manifest.json').catch(function () { return null; }),
+    getJson('../assets/apartments.json').catch(function () { return { apartments: [] }; }),
+  ]).then(function (results) {
+    MANIFEST = results[0];
+    (results[1].apartments || []).forEach(function (a) {
+      APARTMENTS[aptKey(a.region_key || a.region, a.name)] = a;
+    });
+    if (MANIFEST && MANIFEST.sido && MANIFEST.sido.length) {
+      // 집계 기간은 manifest 값(전체 데이터 기준)을 쓴다. 시·도 조각으로 다시 계산하면
+      // "최근 12개월"이 시·도에 따라 11개월로 흔들린다.
+      var w = MANIFEST.window || {};
+      if (w.months) WINDOW = { months: w.months, from: w.from, to: w.to, label: '최근 ' + w.months + '개월' };
+      MANIFEST.sido.forEach(function (s) { REGIONS[s.name] = { sigungu: s.sigungu || [] }; });
+      return start();
+    }
+    return loadLedger().then(start);   // manifest 없음 → 예전 동작
   });
 })();
 </script>

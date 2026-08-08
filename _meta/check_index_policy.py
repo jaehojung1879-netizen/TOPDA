@@ -15,8 +15,8 @@
   11. 깨진 내부 링크 없음
   12. 아파트 색인 품질 게이트 (색인 허용 단지가 기준을 충족)
   13. robots.txt 와 sitemap 정책 일치 (noindex 를 Disallow 로 막지 않음)
-  14. 중복 title·description 보고 (경고)
-  15. 동일 템플릿 고유 콘텐츠 비율 보고 (경고)
+  14. 중복 title·description (canonical 로 통합된 묶음은 제외)
+  15. 동일 템플릿 안에서 그 페이지에만 있는 본문이 충분한가
 
 사용법
   python check_index_policy.py            # 전부 검사
@@ -49,6 +49,10 @@ SCRIPT_STYLE_RE = re.compile(r"<(script|style)\b.*?</\1>", re.S | re.I)
 # 자체 본문 없이 링크만 있는 것이 정상인 페이지(빈 페이지 검사 예외).
 EMPTY_OK = {"/naverad49c771a0767deb237476d745c1ee22.html"}
 MIN_TEXT_CHARS = 350          # 이보다 짧은 본문이 색인 허용이면 실패
+# 같은 템플릿을 쓰는 묶음 안에서, 그 페이지에만 있는 본문의 최소 길이(검사 15).
+# MIN_TEXT_CHARS 는 '본문이 있는가'를 보고, 이 값은 '남과 다른 내용이 있는가'를 본다.
+# 자동 생성 페이지가 늘어날 때 실제로 필요한 것은 후자다.
+MIN_UNIQUE_CHARS = 400
 
 
 def visible(raw):
@@ -358,7 +362,24 @@ def run(rep):
             if hit and all(indexable[p] for p in hit):
                 rep.warn("13 robots.txt", f"Disallow {d} 아래 페이지가 모두 색인 허용 상태입니다")
 
-    # ── 14. 중복 title / description (경고)
+    # ── 14. 중복 title / description
+    #
+    # 예전에는 보고만 했다. 그런데 '같은 템플릿에 숫자만 바꾼 페이지가 전부 색인 대상'인
+    # 상태가 2026-07 AdSense 지적의 직접 원인이었다. 자동 생성이 계속 늘어나는 구조에서
+    # 경고는 아무도 읽지 않으므로 실패로 올린다.
+    #
+    # 다만 **canonical 로 이미 한 페이지임을 선언한 묶음은 중복이 아니다.** 한글 슬러그
+    # 지역 페이지가 여기 해당한다 — /apt/서울-중구.html 과 /apt/seoul-junggu/ 는 둘 다
+    # canonical 이 후자를 가리키므로 검색엔진에는 한 페이지다. 이것을 목록(allowlist)이
+    # 아니라 규칙으로 두는 이유는, 새 별칭이 생겨도 등록을 잊어 통과/실패가 뒤집히지
+    # 않게 하기 위해서다.
+    def canon_target(page, d):
+        m = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]*href=["\']([^"\']+)["\']',
+                      d["head"], re.I)
+        if not m:
+            return page
+        return urllib.parse.unquote(m.group(1).replace(BASE, "")) or "/"
+
     titles, descs = collections.defaultdict(list), collections.defaultdict(list)
     for p, d in pages.items():
         if not indexable[p]:
@@ -370,23 +391,44 @@ def run(rep):
         if m:
             descs[html.unescape(m.group(1)).strip()].append(p)
     for label, table in (("title", titles), ("description", descs)):
-        dup = {k: v for k, v in table.items() if len(v) > 1}
-        if dup:
-            rep.warn(f"14 중복 {label}", f"{len(dup)}종이 중복 (색인 허용 페이지 기준)")
-            for k, v in sorted(dup.items(), key=lambda x: -len(x[1]))[:5]:
-                rep.warn(f"14 중복 {label}", f"  '{k[:50]}' × {len(v)} — {', '.join(v[:3])}")
+        real, merged = {}, 0
+        for k, v in table.items():
+            if len(v) < 2:
+                continue
+            if len({canon_target(p, pages[p]) for p in v}) == 1:
+                merged += 1          # canonical 로 통합된 별칭 묶음 — 중복이 아니다
+            else:
+                real[k] = v
+        if merged:
+            rep.note(f"14 중복 {label}: canonical 로 통합된 묶음 {merged}종은 중복으로 보지 않음")
+        if real:
+            rep.fail(f"14 중복 {label}",
+                     f"{len(real)}종이 서로 다른 URL 로 색인 허용된 채 {label} 이 같습니다")
+            for k, v in sorted(real.items(), key=lambda x: -len(x[1]))[:5]:
+                rep.fail(f"14 중복 {label}", f"  '{k[:50]}' × {len(v)} — {', '.join(v[:3])}")
 
     # ── 15. 템플릿 대비 고유 콘텐츠 비율 (경고)
+    # 템플릿을 공유하는 묶음 단위로 본다. 예전에는 posts·calculators·apt-complex 세 묶음만
+    # 봤는데, 그러면 checklists·interior·categories 와 언어판이 통째로 사각지대가 된다.
+    # (실제로 /calculators/transactions.html 처럼 표를 JS 로 그리는 페이지가 색인·광고 상태로
+    #  고유 본문 322자였던 것을 이 검사를 켜고 나서야 발견했다.) 묶음을 넓게 잡는다.
+    FAMILIES = ("posts", "calculators", "checklists", "interior", "loan", "categories")
     groups = collections.defaultdict(list)
     for p, d in pages.items():
         if not indexable[p]:
             continue
         if re.match(r"^/apt/[^/]+/[^/]+/", p):
             groups["apt-complex"].append((p, d))
-        elif p.startswith("/posts/"):
-            groups["post"].append((p, d))
-        elif p.startswith("/calculators/"):
-            groups["calculator"].append((p, d))
+            continue
+        for fam in FAMILIES:
+            if p.startswith(f"/{fam}/"):
+                groups[fam].append((p, d))
+                break
+            # 언어판은 본문 언어가 달라 한국어 묶음과 섞으면 '공통 블록' 판정이 어긋난다.
+            m = re.match(rf"^/([A-Za-z-]+)/{fam}/", p)
+            if m:
+                groups[f"{m.group(1)}-{fam}"].append((p, d))
+                break
     for g, items in groups.items():
         if len(items) < 4:
             continue
@@ -409,9 +451,19 @@ def run(rep):
             ratios.append((uniq * 100 // total, uniq, p))
         ratios.sort()
         avg = sum(r[0] for r in ratios) // len(ratios)
-        rep.warn("15 고유 콘텐츠 비율",
-                 f"{g}: 색인 허용 {len(items)}개 · 평균 고유 비율 {avg}% · "
+        rep.note(f"15 고유 콘텐츠 {g}: 색인 허용 {len(items)}개 · 평균 비율 {avg}% · "
                  f"최저 {ratios[0][0]}% ({ratios[0][2]}, 고유 {ratios[0][1]}자)")
+        # 같은 템플릿 안에서 '자기만의 내용'이 이만큼도 없는 페이지는 색인 허용하지 않는다.
+        # 비율이 아니라 글자 수로 재는 이유: 템플릿이 두꺼운 묶음(계산기)은 본문이 충분해도
+        # 비율이 낮게 나온다. 실제로 막고 싶은 것은 '틀만 있고 내용이 없는 페이지'다.
+        # 현재 최저치는 계산기 507자 · 글 789자 · 단지 1,891자 — 아래 값은 그보다 낮게 두어
+        # 기존 페이지를 통과시키되 새로 생기는 빈 껍데기는 걸리게 한다. 기준을 올릴 때는
+        # 그 시점의 최저치를 확인하고 함께 올린다.
+        for pct, uniq, path in ratios:
+            if uniq < MIN_UNIQUE_CHARS:
+                rep.fail("15 고유 콘텐츠",
+                         f"{path} 는 색인 허용인데 템플릿 제외 고유 본문이 {uniq}자입니다 "
+                         f"(최소 {MIN_UNIQUE_CHARS}자, {g} 묶음 기준 {pct}%)")
 
 
 def main():
