@@ -4032,3 +4032,120 @@ ol.rt-list { list-style: decimal; }
   content: "단지 중앙값"; font-size: 0.64rem; font-weight: 500;
   color: var(--text-muted, #94a3b8);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   가이드 허브 — 목록 좁히기 / 단계 이동 / 분야 색
+   ---------------------------------------------------------------------------
+   왜 (2026-08-08)
+     /guides.html 은 성격이 같은 카드 35개를 여섯 단계로 나눠 세로로 늘어놓고
+     있었다. 뱃지는 전부 같은 파란색이라 분야로 훑을 수 없고, 어느 단계에 무엇이
+     몇 개 있는지도 스크롤을 다 내려야 알 수 있었다. "무엇부터 누를까"에 답이
+     없는 화면이었다.
+
+   무엇을 했나
+     · 한 단어 검색 + 분야 칩으로 목록을 즉시 줄인다(app.js 의 가이드 허브 필터).
+     · 단계 바로가기 한 줄 — JS 없이도 동작하는 앵커. 개수는 JS 가 채운다.
+     · 분야마다 뱃지 색을 다르게 준다. 게시판 .badge-cat 과 같은 취급이다
+       (색이 장식이 아니라 분류 정보를 나르는 경우).
+     · 카드에 → 를 붙여 '누를 수 있는 것'임을 분명히 한다.
+
+   지키는 것
+     · 카드 유형은 이 페이지에서 여전히 한 종류다(.card).
+     · 파란색은 행동·현재 상태에만. 분야 색은 뱃지 안에서만 쓴다.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 목록 좁히기 ─────────────────────────────────────────────────────────── */
+.gfilter { margin: 0 0 14px; }
+.gfilter[hidden] { display: none; }
+
+.gfilter-search {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 14px; margin-bottom: 10px;
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  background: var(--surface);
+}
+.gfilter-search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.gfilter-search svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--text-subtle); }
+.gfilter-search input {
+  flex: 1; min-width: 0; border: 0; outline: 0; background: transparent;
+  font: inherit; font-size: 0.96rem; color: var(--text);
+}
+.gfilter-search input::placeholder { color: var(--text-subtle); }
+/* 브라우저 기본 지우기 버튼이 테두리와 겹쳐 보이는 것을 막는다. */
+.gfilter-search input::-webkit-search-cancel-button { cursor: pointer; }
+
+.gchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.gchip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 13px; border: 1px solid var(--border-strong); border-radius: 999px;
+  background: var(--surface); color: var(--text-muted);
+  font-size: 0.88rem; font-weight: 600; cursor: pointer;
+  font-family: inherit; line-height: 1.4;
+}
+.gchip:hover { border-color: var(--text-muted); color: var(--text); }
+.gchip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.gchip[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: #fff; }
+.gchip-n { font-size: 0.78rem; font-weight: 600; color: var(--text-subtle); font-variant-numeric: tabular-nums; }
+.gchip[aria-pressed="true"] .gchip-n { color: rgba(255,255,255,0.72); }
+
+.gfilter-status { margin: 10px 0 0; font-size: 0.86rem; color: var(--text-muted); }
+.gfilter-status:empty { display: none; }
+.gfilter-status button {
+  margin-left: 8px; padding: 0; border: 0; background: none; cursor: pointer;
+  font: inherit; font-size: 0.86rem; font-weight: 600; color: var(--accent);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.gfilter-status a { color: var(--accent); font-weight: 600; }
+
+/* ── 단계 바로가기 ───────────────────────────────────────────────────────
+   .subnav 와 달리 페이지 안 이동이라 조금 더 조용하게 둔다. 360px 에서도
+   두 줄을 넘기지 않도록 가로 스크롤이 아니라 wrap 을 쓴다. */
+.gjump { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 22px; }
+.gjump a {
+  padding: 6px 11px; border-radius: var(--radius-sm);
+  background: var(--surface-2); color: var(--text-muted);
+  font-size: 0.84rem; font-weight: 600; white-space: nowrap;
+}
+.gjump a:hover { background: var(--surface); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.gjump a .gjump-n { color: var(--text-subtle); font-variant-numeric: tabular-nums; margin-left: 3px; }
+.gjump a[data-empty] { opacity: 0.4; pointer-events: none; }
+
+/* ── 분야 색 ─────────────────────────────────────────────────────────────
+   같은 색 뱃지 35개는 분류 정보를 나르지 못한다. 값은 게시판 .badge-cat 과
+   같은 계열(연한 배경 + 진한 글자)로 맞춘다. */
+.guide-hub .card[data-cat] .badge { background: var(--surface-2); color: var(--text-muted); }
+.guide-hub .card[data-cat="매매"]      .badge { background: #eff6ff; color: #1d4ed8; }
+.guide-hub .card[data-cat="전세·월세"] .badge { background: #ecfdf5; color: #047857; }
+.guide-hub .card[data-cat="대출·금융"] .badge { background: #f5f3ff; color: #6d28d9; }
+.guide-hub .card[data-cat="세금"]      .badge { background: #fffbeb; color: #b45309; }
+.guide-hub .card[data-cat="이사·입주"] .badge { background: #ecfeff; color: #0e7490; }
+.guide-hub .card[data-cat="인테리어"]  .badge { background: #fdf2f8; color: #a21caf; }
+.guide-hub .card[data-cat="시장·투자"] .badge { background: #f1f5f9; color: #475569; }
+
+/* ── 카드 누를 수 있음 표시 ──────────────────────────────────────────────
+   제목이 곧 행동이라 CTA 문구는 넣지 않되, 화살표 하나로 링크임을 알린다. */
+.guide-hub .stage .card { position: relative; padding-bottom: 34px; }
+.guide-hub .stage .card::after {
+  content: "→"; position: absolute; right: 20px; bottom: 14px;
+  color: var(--text-subtle); font-size: 0.95rem; transition: transform 0.15s, color 0.15s;
+}
+.guide-hub .stage .card:hover::after { color: var(--accent); transform: translateX(3px); }
+.guide-hub .stage .card p { flex: 0 0 auto; }
+
+/* 필터가 걸러 낸 카드·단계 */
+.guide-hub .card[hidden], .guide-hub .stage[hidden] { display: none; }
+/* 검색어와 겹치는 부분 표시 — 새 요소를 만들지 않고 <mark> 를 쓴다. */
+.guide-hub mark { background: #fef08a; color: inherit; border-radius: 2px; padding: 0 1px; }
+
+.gempty {
+  margin: 4px 0 24px; padding: 22px 20px; text-align: center;
+  border: 1px dashed var(--border-strong); border-radius: var(--radius);
+  background: var(--surface); color: var(--text-muted); font-size: 0.94rem;
+}
+.gempty[hidden] { display: none; }
+.gempty strong { display: block; color: var(--text); font-weight: 650; margin-bottom: 6px; }
+
+@media (max-width: 480px) {
+  .gchip { padding: 6px 11px; font-size: 0.84rem; }
+  .guide-hub .stage .card { padding-bottom: 30px; }
+}

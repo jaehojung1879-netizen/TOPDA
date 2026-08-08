@@ -59,7 +59,7 @@ ${alts}
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/en/glossary.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=35b4b1c50a" />
+<link rel="stylesheet" href="../assets/styles.css?v=1315e3db3b" />
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"${u.home}","item":"https://topda.kr/${lang}/index.html"},{"@type":"ListItem","position":2,"name":"${u.title}","item":"${canon}"}]}
 </script>
@@ -121,7 +121,7 @@ ${categories}
   </div>
 </footer>
 
-<script src="../assets/app.js?v=3e96bfcc7d"></script>
+<script src="../assets/app.js?v=4aae4d5dfe"></script>
 <script>
 (function () {
   const input = document.getElementById('gl-search');

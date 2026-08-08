@@ -6033,3 +6033,236 @@ function calcJeonseLoanByAgency(deposit, opts) {
     });
   } catch (e) { /* noop */ }
 })();
+
+// ===== 가이드 허브 필터 (분야 칩 · 한 단어 검색 · 단계 개수) =====
+//
+// 왜: /guides.html 은 같은 모양의 카드 35개를 여섯 단계로 늘어놓고 있었다. 분야로
+//     훑을 수도, 단계별로 몇 개인지 알 수도 없어서 "무엇부터 누를까"에 답이 없었다.
+//
+// 마크업 계약 (site/guides.html):
+//   <div class="gfilter" data-guide-filter hidden>
+//     <input data-guide-search>  <div data-guide-chips></div>  <p data-guide-status></p>
+//   </div>
+//   <nav data-guide-jump><a href="#stage-…">…</a>…</nav>
+//   <div class="stage" id="stage-…"><div class="stage-head">…</div>
+//     <div class="cards-grid"><a class="card" data-cat="대출·금융">…</a>…</div></div>
+//
+// 점진적 향상: 컨트롤은 HTML 에 hidden 으로 두고 여기서 벗긴다. JS 가 죽으면
+// 전체 목록이 그대로 보이고, 동작하지 않는 입력칸을 보여 주지 않는다.
+(function () {
+  var filter = document.querySelector('[data-guide-filter]');
+  if (!filter) return;
+
+  var scope = filter.closest('.guide-hub') || document;
+  var stages = Array.prototype.slice.call(scope.querySelectorAll('.stage[id]'));
+  var cards = Array.prototype.slice.call(scope.querySelectorAll('.stage .card[data-cat]'));
+  if (!cards.length) return;
+
+  var input = filter.querySelector('[data-guide-search]');
+  var chipBox = filter.querySelector('[data-guide-chips]');
+  var status = filter.querySelector('[data-guide-status]');
+  var jump = scope.querySelector('[data-guide-jump]');
+
+  // 분야별 허브 페이지 — 칩을 고르면 "그 분야 전체 보기" 링크를 함께 띄운다.
+  var HUB = {
+    '매매': 'categories/sale.html',
+    '전세·월세': 'categories/lease.html',
+    '대출·금융': 'categories/loan.html',
+    '이사·입주': 'categories/moving.html',
+    '인테리어': 'interior/index.html'
+  };
+
+  var norm = function (s) { return (s || '').toLowerCase().replace(/\s+/g, ''); };
+
+  // 카드마다 검색 대상 문자열과 원본 제목·설명을 한 번만 만들어 둔다.
+  var items = cards.map(function (card) {
+    var h3 = card.querySelector('h3');
+    var p = card.querySelector('p');
+    return {
+      el: card,
+      cat: card.dataset.cat || '',
+      h3: h3, p: p,
+      h3Text: h3 ? h3.textContent : '',
+      pText: p ? p.textContent : '',
+      hay: norm((h3 ? h3.textContent : '') + ' ' + (p ? p.textContent : '') + ' ' + (card.dataset.cat || ''))
+    };
+  });
+
+  // ── 칩 만들기 (등장 순서 유지) ──
+  var order = [], count = {};
+  items.forEach(function (it) {
+    if (!count[it.cat]) { count[it.cat] = 0; order.push(it.cat); }
+    count[it.cat] += 1;
+  });
+
+  var state = { cat: '전체', q: '' };
+
+  var makeChip = function (label, n) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'gchip';
+    b.dataset.cat = label;
+    b.setAttribute('aria-pressed', String(label === state.cat));
+    b.innerHTML = '<span>' + label + '</span><span class="gchip-n">' + n + '</span>';
+    b.addEventListener('click', function () {
+      state.cat = (state.cat === label && label !== '전체') ? '전체' : label;
+      apply();
+      sync();
+    });
+    return b;
+  };
+
+  chipBox.appendChild(makeChip('전체', items.length));
+  order.forEach(function (cat) { chipBox.appendChild(makeChip(cat, count[cat])); });
+
+  // ── 빈 결과 안내 ──
+  var empty = document.createElement('p');
+  empty.className = 'gempty';
+  empty.hidden = true;
+  var lastStage = stages[stages.length - 1];
+  if (lastStage && lastStage.parentNode) lastStage.parentNode.insertBefore(empty, lastStage.nextSibling);
+
+  // ── 검색어 표시 ──
+  // 제목·설명을 통째로 다시 쓰므로 사용자가 넣은 문자열이 HTML 로 해석되지 않는다.
+  var mark = function (el, text, q) {
+    if (!el) return;
+    if (!q) { el.textContent = text; return; }
+    el.textContent = '';
+    var hayLower = text.toLowerCase();
+    var needle = q.toLowerCase();
+    var from = 0, at;
+    while ((at = hayLower.indexOf(needle, from)) !== -1) {
+      if (at > from) el.appendChild(document.createTextNode(text.slice(from, at)));
+      var m = document.createElement('mark');
+      m.textContent = text.slice(at, at + needle.length);
+      el.appendChild(m);
+      from = at + needle.length;
+    }
+    el.appendChild(document.createTextNode(text.slice(from)));
+  };
+
+  // ── 적용 ──
+  function apply() {
+    var q = norm(state.q);
+    // 검색어에서 공백을 뺐으므로, 표시용으로는 원본에서 공백만 정리한 값을 쓴다.
+    var qRaw = state.q.trim();
+    var shown = 0;
+    var perStage = {};
+
+    items.forEach(function (it) {
+      var ok = (state.cat === '전체' || it.cat === state.cat) && (!q || it.hay.indexOf(q) !== -1);
+      it.el.hidden = !ok;
+      if (!ok) return;
+      shown += 1;
+      var st = it.el.closest('.stage');
+      if (st) perStage[st.id] = (perStage[st.id] || 0) + 1;
+      // 하이라이트는 보이는 카드에만 — 숨은 카드까지 다시 쓸 이유가 없다.
+      mark(it.h3, it.h3Text, qRaw);
+      mark(it.p, it.pText, qRaw);
+    });
+
+    stages.forEach(function (st) { st.hidden = !perStage[st.id]; });
+
+    if (jump) {
+      Array.prototype.forEach.call(jump.querySelectorAll('a[href^="#"]'), function (a) {
+        var id = a.getAttribute('href').slice(1);
+        var n = perStage[id] || 0;
+        var badge = a.querySelector('.gjump-n');
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'gjump-n';
+          a.appendChild(badge);
+        }
+        badge.textContent = n;
+        if (n) a.removeAttribute('data-empty');
+        else a.setAttribute('data-empty', '');
+      });
+    }
+
+    // 상태 문구
+    status.textContent = '';
+    if (state.cat === '전체' && !qRaw) {
+      empty.hidden = true;
+      return;
+    }
+    if (!shown) {
+      empty.hidden = false;
+      empty.innerHTML = '';
+      var t = document.createElement('strong');
+      t.textContent = '조건에 맞는 가이드가 없습니다';
+      empty.appendChild(t);
+      empty.appendChild(document.createTextNode('다른 낱말로 찾아보거나 분야를 넓혀 보세요.'));
+    } else {
+      empty.hidden = true;
+    }
+    status.appendChild(document.createTextNode(
+      (state.cat === '전체' ? '' : state.cat + ' · ') + '가이드 ' + shown + '개'
+    ));
+    var hub = HUB[state.cat];
+    if (hub) {
+      status.appendChild(document.createTextNode(' — '));
+      var a = document.createElement('a');
+      a.href = hub;
+      a.textContent = state.cat + ' 허브 전체 보기 →';
+      status.appendChild(a);
+    }
+    status.appendChild(document.createTextNode(' · '));
+    var reset = document.createElement('button');
+    reset.type = 'button';
+    reset.textContent = '조건 지우기';
+    reset.addEventListener('click', function () {
+      state.cat = '전체';
+      state.q = '';
+      if (input) input.value = '';
+      apply();
+      sync();
+    });
+    status.appendChild(reset);
+  }
+
+  function sync() {
+    Array.prototype.forEach.call(chipBox.querySelectorAll('.gchip'), function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.cat === state.cat));
+    });
+    // 다른 페이지에서 guides.html#cat=대출·금융 으로 들어올 수 있게 해시에 남긴다.
+    try {
+      var h = state.cat === '전체' ? '' : '#cat=' + encodeURIComponent(state.cat);
+      history.replaceState(null, '', location.pathname + location.search + h);
+    } catch (e) { /* noop */ }
+  }
+
+  if (input) {
+    var timer = null;
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      timer = setTimeout(function () { state.q = input.value; apply(); }, 120);
+    });
+    // 입력 중 Enter 로 폼 제출/새로고침이 일어나지 않게 한다(폼 안이 아니어도 안전하게).
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); clearTimeout(timer); state.q = input.value; apply(); }
+      if (e.key === 'Escape') { input.value = ''; state.q = ''; apply(); }
+    });
+  }
+
+  // 해시로 분야 선택 (#cat=대출·금융). 다른 페이지에서 이 주소로 들어오는 경로.
+  // 같은 페이지에서 해시만 바뀌면 문서를 다시 읽지 않으므로 hashchange 도 듣는다.
+  function fromHash() {
+    try {
+      var m = location.hash.match(/^#cat=(.+)$/);
+      if (!m) return false;
+      var want = decodeURIComponent(m[1]);
+      if (want !== '전체' && !count[want]) return false;
+      if (want === state.cat) return false;
+      state.cat = want;
+      return true;
+    } catch (e) { return false; }
+  }
+  fromHash();
+  window.addEventListener('hashchange', function () {
+    if (fromHash()) { apply(); sync(); }
+  });
+
+  filter.hidden = false;
+  apply();
+  sync();
+})();
