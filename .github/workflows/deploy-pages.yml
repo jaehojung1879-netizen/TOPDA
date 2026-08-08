@@ -142,6 +142,14 @@ jobs:
             echo "SUPABASE_URL/SUPABASE_ANON_KEY 미설정 — 게시판은 로컬(localStorage) 전용으로 동작"
           fi
 
+      # RSS 를 본문에서 다시 만든다. CI 가 저장소의 feed.xml 최신성을 이미 막고 있지만,
+      # 본문 편집기(apply-content-edits.yml)가 제목·설명을 바꾼 커밋은 PR 검사를 거치지
+      # 않는다 — 그 경로로 들어온 변경도 배포본에는 반영되도록 여기서 한 번 더 만든다.
+      # (단지 페이지·sitemap 과 같은 취급: 배포본만 고치고 저장소에 커밋하지 않는다.)
+      - name: Rebuild RSS from articles
+        working-directory: _meta
+        run: python build_feed.py
+
       # 실거래 시·도 조각 + 데이터 상태 요약본. 단지 페이지와 같이 커밋하지 않고 여기서 만든다.
       #
       # ■ 왜 (2026-08-08 감사)
