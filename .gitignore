@@ -7,3 +7,10 @@ __pycache__/
 # 생성에 11초밖에 안 걸리고, 슬러그는 data/slug-map.json으로 영속화돼 URL은 그대로다.
 # 지역 허브(site/apt/{지역}/index.html)와 한글 지역 페이지는 수가 적어 계속 커밋한다.
 site/apt/*/*/
+
+# 실거래 시·도 조각과 데이터 상태 요약본도 같은 이유로 커밋하지 않는다.
+# 원장(transactions.json)이 매일 갱신되면 조각 8개가 매일 전부 바뀌어, 커밋하면
+# git 이력이 하루 56MB씩 늘어난다. 입력이 커밋돼 있어 결과는 언제든 재현 가능하다.
+# 생성기: _meta/build_tx_shards.py · 배포(deploy-pages.yml)가 매번 만든다.
+site/assets/tx/
+site/assets/data_status.json
