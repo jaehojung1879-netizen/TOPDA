@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="assets/styles.css?v=35b4b1c50a" />
+<link rel="stylesheet" href="assets/styles.css?v=1315e3db3b" />
 </head>
 <body>
 
@@ -48,22 +48,39 @@
   </div>
 </header>
 
-<main class="container-hub">
+<main class="container-hub guide-hub">
   <div class="article-header" style="border-bottom:0; padding-bottom:8px;">
     <div class="breadcrumb"><a href="index.html">홈</a> / 가이드</div>
     <h1>거래 단계별 가이드</h1>
     <p class="block-lead" data-edit="lead">거래 단계에 따라 지금 확인할 내용을 골라 보세요. 각 글은 계산기가 보여 준 숫자를 어떻게 읽어야 하는지 설명합니다.</p>
   </div>
 
+  <!-- ═══ 지금 화제 ═══════════════════════════════════════════════════════════
+       이 페이지의 1차 행동. 카드 30여 개가 똑같은 강도로 놓여 있으면 "무엇부터
+       눌러야 하나"에 답이 없다. 지금 가장 많이 찾는 것 하나만 다른 강도로 둔다.
+       (.primary-action 은 페이지당 하나만 쓰는 규칙 — styles.css 참고) -->
+  <a class="primary-action block-tight" href="loan/bank-limits.html">
+    <span class="pa-kicker">2026년 8월 · 대출·금융</span>
+    <span class="pa-title">은행이 주담대 한도를 줄이거나 닫고 있습니다</span>
+    <span class="pa-desc">규제는 그대로인데 실행액이 줄어드는 이유, 5~8월 은행별 조치, 계약 전·잔금 전에 확인할 순서를 도식으로 정리했습니다.</span>
+    <span class="pa-go">지금 확인하기</span>
+  </a>
+
   <!-- 카테고리는 홈·카테고리 페이지와 3중으로 겹치던 카드 그리드 대신 한 줄 이동 링크로 둔다. -->
-  <nav class="subnav" aria-label="거래 유형별 가이드">
-    <a href="categories/sale.html">매매</a>
-    <a href="categories/lease.html">전세·월세</a>
-    <a href="categories/loan.html">대출·금융</a>
-    <a href="interior/index.html">인테리어</a>
-    <a href="categories/moving.html">이사·입주</a>
-    <a href="categories/auction.html">경매·공매</a>
-  </nav>
+  <section class="block">
+    <div class="block-head">
+      <h2>거래 유형별 허브로 바로 가기</h2>
+      <p>계산기·체크리스트·출처까지 모아 둔 페이지</p>
+    </div>
+    <nav class="subnav" aria-label="거래 유형별 가이드 허브">
+      <a href="categories/sale.html">매매</a>
+      <a href="categories/lease.html">전세·월세</a>
+      <a href="categories/loan.html">대출·금융</a>
+      <a href="interior/index.html">인테리어</a>
+      <a href="categories/moving.html">이사·입주</a>
+      <a href="categories/auction.html">경매·공매</a>
+    </nav>
+  </section>
 
   <!-- ═══ 최근 이슈 ═══ -->
   <section class="block">
@@ -72,17 +89,17 @@
       <p>2026년 7월 확인</p>
     </div>
     <div class="cards-grid">
-      <a class="card" href="posts/recent-sale-issues-2026.html">
+      <a class="card" href="posts/recent-sale-issues-2026.html" data-cat="매매">
         <span class="badge badge-accent">매매</span>
         <h3>매매 — 가격 흐름·규제지역·양도세</h3>
         <p>1~6월 가격 변화와 수도권·지방 격차, 규제지역 지정 현황</p>
       </a>
-      <a class="card" href="posts/recent-jeonse-issues-2026.html">
+      <a class="card" href="posts/recent-jeonse-issues-2026.html" data-cat="전세·월세">
         <span class="badge badge-accent">전세·월세</span>
         <h3>전세·월세 — 전셋값·보증·전세사기 지원</h3>
         <p>보증 심사 기준과 피해자 지원 제도의 변경 내용</p>
       </a>
-      <a class="card" href="posts/recent-loan-issues-2026.html">
+      <a class="card" href="posts/recent-loan-issues-2026.html" data-cat="대출·금융">
         <span class="badge badge-accent">대출·금융</span>
         <h3>대출 — LTV·가계부채·기준금리</h3>
         <p>한도와 월 상환액을 바꾸는 정책 변경</p>
@@ -101,30 +118,53 @@
       <a href="posts/index.html">전체 글 목록</a>
     </div>
 
+    <!-- ═══ 목록 좁히기 ═══════════════════════════════════════════════════════
+         카드 30여 개를 눈으로 훑게 하지 않는다. 분야를 고르거나 한 단어만 쳐도
+         목록이 줄어든다. JS 가 없으면 이 블록은 숨은 채로 남고 전체 목록이
+         그대로 보인다(hidden 속성을 app.js 가 벗긴다) — 기능이 없는 컨트롤을
+         보여 주지 않기 위해서다. -->
+    <div class="gfilter" data-guide-filter hidden>
+      <label class="gfilter-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" data-guide-search placeholder="한 단어로 찾기 — 예: 전세, DSR, 잔금, 특약" aria-label="가이드 제목·설명에서 찾기" autocomplete="off" />
+      </label>
+      <div class="gchips" data-guide-chips role="group" aria-label="분야로 좁히기"></div>
+      <p class="gfilter-status" data-guide-status role="status"></p>
+    </div>
+
+    <nav class="gjump" data-guide-jump aria-label="거래 단계 바로가기">
+      <a href="#stage-search">매물 탐색 전</a>
+      <a href="#stage-before-contract">계약 전 확인</a>
+      <a href="#stage-after-contract">계약 후 준비</a>
+      <a href="#stage-loan-tax">대출·세금 확인</a>
+      <a href="#stage-closing">잔금일</a>
+      <a href="#stage-after-move">입주·이사 이후</a>
+    </nav>
+
     <div class="stage" id="stage-search">
       <div class="stage-head"><h2>매물 탐색 전</h2><span class="stage-when">계약 상대를 정하기 전</span></div>
       <div class="cards-grid">
-        <a class="card" href="posts/good-house-eye.html">
+        <a class="card" href="posts/good-house-eye.html" data-cat="매매">
           <span class="badge badge-accent">매매</span>
           <h3>매물을 볼 때 확인할 기준</h3>
           <p>바꿀 수 없는 조건과 고칠 수 있는 조건을 나눠 비교하기</p>
         </a>
-        <a class="card" href="posts/property-tour.html">
+        <a class="card" href="posts/property-tour.html" data-cat="매매">
           <span class="badge badge-accent">매매</span>
           <h3>임장에서 확인할 항목</h3>
           <p>채광·소음·수압·관리 상태를 시간대를 나눠 확인하기</p>
         </a>
-        <a class="card" href="posts/location-analysis.html">
+        <a class="card" href="posts/location-analysis.html" data-cat="매매">
           <span class="badge badge-accent">매매</span>
           <h3>입지를 비교할 때 쓰는 기준</h3>
           <p>여섯 가지 항목에 같은 배점을 적용하는 방법과 데이터 출처</p>
         </a>
-        <a class="card" href="posts/market-cycle.html">
+        <a class="card" href="posts/market-cycle.html" data-cat="시장·투자">
           <span class="badge badge-accent">시장·투자</span>
           <h3>시장 국면을 판단할 때 보는 지표</h3>
           <p>거래량·전세가율·미분양·입주물량·금리를 어디서 확인하는지</p>
         </a>
-        <a class="card" href="posts/reconstruction-invest.html">
+        <a class="card" href="posts/reconstruction-invest.html" data-cat="시장·투자">
           <span class="badge badge-accent">시장·투자</span>
           <h3>재건축·재개발 투자 분석</h3>
           <p>사업 단계·대지지분·비례율·분담금 계산</p>
@@ -135,32 +175,32 @@
     <div class="stage" id="stage-before-contract">
       <div class="stage-head"><h2>계약 전 확인</h2><span class="stage-when">계약서에 서명하기 전</span></div>
       <div class="cards-grid">
-        <a class="card" href="posts/registry-reading.html">
+        <a class="card" href="posts/registry-reading.html" data-cat="매매">
           <span class="badge badge-accent">매매</span>
           <h3>등기부등본에서 먼저 확인할 항목</h3>
           <p>갑구·을구와 말소기준권리를 읽는 순서</p>
         </a>
-        <a class="card" href="posts/jeonse-protection.html">
+        <a class="card" href="posts/jeonse-protection.html" data-cat="전세·월세">
           <span class="badge badge-accent">전세·월세</span>
           <h3>전세보증금 보호 요건 확인하기</h3>
           <p>대항력·우선변제권·보증보험이 각각 언제 생기는지</p>
         </a>
-        <a class="card" href="posts/jeonse-scam.html">
+        <a class="card" href="posts/jeonse-scam.html" data-cat="전세·월세">
           <span class="badge badge-accent">전세·월세</span>
           <h3>깡통전세·전세사기 판별법</h3>
           <p>계약 전에 확인할 수 있는 위험 신호</p>
         </a>
-        <a class="card" href="posts/sale-contract-tips.html">
+        <a class="card" href="posts/sale-contract-tips.html" data-cat="매매">
           <span class="badge badge-accent">매매</span>
           <h3>매매계약서에서 정해 둘 특약 조항</h3>
           <p>현 상태 매매·옵션 인계·근저당 말소·명도</p>
         </a>
-        <a class="card" href="posts/lease-contract-tips.html">
+        <a class="card" href="posts/lease-contract-tips.html" data-cat="전세·월세">
           <span class="badge badge-accent">전세·월세</span>
           <h3>전세계약서에서 정해 둘 특약 조항</h3>
           <p>전입·확정일자 협조, 선순위 임차인, 체납 확인</p>
         </a>
-        <a class="card" href="posts/contract-viewer-lease.html">
+        <a class="card" href="posts/contract-viewer-lease.html" data-cat="전세·월세">
           <span class="badge badge-accent">전세·월세</span>
           <h3>표준 주택임대차계약서 뷰어</h3>
           <p>조항을 눌러 보며 무엇을 정하는 칸인지 확인</p>
@@ -171,22 +211,22 @@
     <div class="stage" id="stage-after-contract">
       <div class="stage-head"><h2>계약 후 준비</h2><span class="stage-when">계약금을 넣은 뒤 잔금일까지</span></div>
       <div class="cards-grid">
-        <a class="card" href="posts/funding-plan.html">
+        <a class="card" href="posts/funding-plan.html" data-cat="매매">
           <span class="badge badge-accent">매매</span>
           <h3>자금조달계획서 작성 방법</h3>
           <p>자기자금·차입금 항목별 작성법과 증빙</p>
         </a>
-        <a class="card" href="posts/moving-types.html">
+        <a class="card" href="posts/moving-types.html" data-cat="이사·입주">
           <span class="badge badge-accent">이사·입주</span>
           <h3>일반·반포장·포장이사 차이</h3>
           <p>유형별 가격 구성과 업체가 지는 책임 범위</p>
         </a>
-        <a class="card" href="posts/moving-quote.html">
+        <a class="card" href="posts/moving-quote.html" data-cat="이사·입주">
           <span class="badge badge-accent">이사·입주</span>
           <h3>이사 견적 — 방문 vs 비대면</h3>
           <p>같은 조건으로 비교하고 추가 비용을 미리 확정하기</p>
         </a>
-        <a class="card" href="posts/moving-company.html">
+        <a class="card" href="posts/moving-company.html" data-cat="이사·입주">
           <span class="badge badge-accent">이사·입주</span>
           <h3>이사업체를 고를 때 확인할 항목</h3>
           <p>허가 여부·적재물배상보험·표준약관 확인</p>
@@ -197,42 +237,47 @@
     <div class="stage" id="stage-loan-tax">
       <div class="stage-head"><h2>대출·세금 확인</h2><span class="stage-when">한도와 세액이 정해지는 단계</span></div>
       <div class="cards-grid">
-        <a class="card" href="posts/dsr-explain.html">
+        <a class="card" href="loan/bank-limits.html" data-cat="대출·금융">
+          <span class="badge badge-accent">대출·금융</span>
+          <h3>은행별 주담대 한도 축소·중단</h3>
+          <p>총량관리가 창구 한도로 바뀌는 경로와 계약 전·잔금 전 확인 순서</p>
+        </a>
+        <a class="card" href="posts/dsr-explain.html" data-cat="대출·금융">
           <span class="badge badge-accent">대출·금융</span>
           <h3>DSR 계산 구조와 한도</h3>
           <p>어떤 부채가 합산되고 왜 한도가 줄어드는지</p>
         </a>
-        <a class="card" href="posts/ltv-explain.html">
+        <a class="card" href="posts/ltv-explain.html" data-cat="대출·금융">
           <span class="badge badge-accent">대출·금융</span>
           <h3>LTV 담보인정비율 계산 기준</h3>
           <p>규제지역 구분과 가격 구간별 추가 제한</p>
         </a>
-        <a class="card" href="posts/stress-dsr.html">
+        <a class="card" href="posts/stress-dsr.html" data-cat="대출·금융">
           <span class="badge badge-accent">대출·금융</span>
           <h3>스트레스 DSR</h3>
           <p>가산금리가 한도를 줄이는 방식</p>
         </a>
-        <a class="card" href="loan/mortgage.html">
+        <a class="card" href="loan/mortgage.html" data-cat="대출·금융">
           <span class="badge badge-accent">대출·금융</span>
           <h3>주택담보대출 구조와 신청 절차</h3>
           <p>가심사부터 근저당 설정·기표까지의 순서</p>
         </a>
-        <a class="card" href="loan/jeonse-loan.html">
+        <a class="card" href="loan/jeonse-loan.html" data-cat="대출·금융">
           <span class="badge badge-accent">대출·금융</span>
           <h3>전세자금대출 구조와 신청 절차</h3>
           <p>보증기관·질권설정·임대인 동의·전입신고 시점</p>
         </a>
-        <a class="card" href="posts/loan-policy.html">
+        <a class="card" href="posts/loan-policy.html" data-cat="대출·금융">
           <span class="badge badge-accent">대출·금융</span>
           <h3>주택도시기금 정책 대출 — 디딤돌·버팀목</h3>
           <p>자격 요건·한도·금리 구조와 신청 경로</p>
         </a>
-        <a class="card" href="posts/transfer-tax-guide.html">
+        <a class="card" href="posts/transfer-tax-guide.html" data-cat="세금">
           <span class="badge badge-accent">세금</span>
           <h3>양도소득세 계산 구조와 비과세 요건</h3>
           <p>비과세 요건·장기보유특별공제·일시적 2주택</p>
         </a>
-        <a class="card" href="posts/tax-roadmap.html">
+        <a class="card" href="posts/tax-roadmap.html" data-cat="세금">
           <span class="badge badge-accent">세금</span>
           <h3>취득·보유·양도 단계별 세금 정리</h3>
           <p>세 가지 세금이 각각 언제 발생하는지 한 시간축에서</p>
@@ -243,17 +288,17 @@
     <div class="stage" id="stage-closing">
       <div class="stage-head"><h2>잔금일</h2><span class="stage-when">돈과 열쇠가 오가는 날</span></div>
       <div class="cards-grid">
-        <a class="card" href="posts/balance-day-settlement.html">
+        <a class="card" href="posts/balance-day-settlement.html" data-cat="매매">
           <span class="badge badge-accent">매매</span>
           <h3>매매 잔금일 정산 항목</h3>
           <p>선수관리비·장기수선충당금·관리비 일할 계산</p>
         </a>
-        <a class="card" href="posts/moving-day-tips.html">
+        <a class="card" href="posts/moving-day-tips.html" data-cat="이사·입주">
           <span class="badge badge-accent">이사·입주</span>
           <h3>이사 당일 분쟁 안 만드는 법</h3>
           <p>파손·지연·추가요금이 생겼을 때의 처리 순서</p>
         </a>
-        <a class="card" href="posts/storage-moving.html">
+        <a class="card" href="posts/storage-moving.html" data-cat="이사·입주">
           <span class="badge badge-accent">이사·입주</span>
           <h3>보관이사 — 잔금일이 안 맞을 때</h3>
           <p>보관 기간·비용과 계약서에서 확인할 항목</p>
@@ -264,42 +309,42 @@
     <div class="stage" id="stage-after-move">
       <div class="stage-head"><h2>입주·이사 이후</h2><span class="stage-when">살기 시작한 뒤</span></div>
       <div class="cards-grid">
-        <a class="card" href="posts/move-in-admin.html">
+        <a class="card" href="posts/move-in-admin.html" data-cat="이사·입주">
           <span class="badge badge-accent">이사·입주</span>
           <h3>전입신고·우편·공과금 이전</h3>
           <p>기한이 있는 신고와 미루면 손해가 되는 처리</p>
         </a>
-        <a class="card" href="posts/lease-renewal.html">
+        <a class="card" href="posts/lease-renewal.html" data-cat="전세·월세">
           <span class="badge badge-accent">전세·월세</span>
           <h3>계약갱신요구권 정리</h3>
           <p>행사 조건·거절 사유·증액 상한</p>
         </a>
-        <a class="card" href="posts/lease-return.html">
+        <a class="card" href="posts/lease-return.html" data-cat="전세·월세">
           <span class="badge badge-accent">전세·월세</span>
           <h3>보증금 못 받을 때 — 임차권등기명령</h3>
           <p>이사를 가야 하는데 보증금이 나오지 않는 경우</p>
         </a>
-        <a class="card" href="interior/index.html">
+        <a class="card" href="interior/index.html" data-cat="인테리어">
           <span class="badge badge-accent">인테리어</span>
           <h3>인테리어 자재와 계약 기준</h3>
           <p>자재별 선택 기준, 견적·계약·하자 처리</p>
         </a>
-        <a class="card" href="posts/interior-quote.html">
+        <a class="card" href="posts/interior-quote.html" data-cat="인테리어">
           <span class="badge badge-accent">인테리어</span>
           <h3>인테리어 견적 비교의 정석</h3>
           <p>같은 범위로 맞춰야 비교가 되는 이유</p>
         </a>
-        <a class="card" href="posts/interior-contract.html">
+        <a class="card" href="posts/interior-contract.html" data-cat="인테리어">
           <span class="badge badge-accent">인테리어</span>
           <h3>인테리어 표준계약서와 대금 분할</h3>
           <p>지급 시점을 공정에 연결하는 방법</p>
         </a>
-        <a class="card" href="posts/interior-company.html">
+        <a class="card" href="posts/interior-company.html" data-cat="인테리어">
           <span class="badge badge-accent">인테리어</span>
           <h3>인테리어 업체를 고를 때 확인할 항목</h3>
           <p>등록 여부·실적·보증을 서류로 확인하기</p>
         </a>
-        <a class="card" href="posts/interior-defect.html">
+        <a class="card" href="posts/interior-defect.html" data-cat="인테리어">
           <span class="badge badge-accent">인테리어</span>
           <h3>하자보수 청구·분쟁 대응</h3>
           <p>담보책임기간과 통보·조정 절차</p>
@@ -347,6 +392,6 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=3e96bfcc7d"></script>
+<script src="assets/app.js?v=4aae4d5dfe"></script>
 </body>
 </html>

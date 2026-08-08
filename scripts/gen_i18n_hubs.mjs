@@ -138,7 +138,7 @@ function head(lang, page, title, desc, extraStyle, alts) {
 ${alts}
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=35b4b1c50a" />${extraStyle || ''}
+<link rel="stylesheet" href="../assets/styles.css?v=1315e3db3b" />${extraStyle || ''}
 </head>
 <body>`;
 }
@@ -275,7 +275,7 @@ ${g.ref.map(cardHtml).join('\n')}
 
 ${footer(c)}
 
-<script src="../assets/app.js?v=3e96bfcc7d"></script>
+<script src="../assets/app.js?v=4aae4d5dfe"></script>
 </body>
 </html>
 `;
@@ -454,7 +454,7 @@ ${m.tools.map(toolHtml).join('\n')}
 
 ${footer(c)}
 
-<script src="../assets/app.js?v=3e96bfcc7d"></script>
+<script src="../assets/app.js?v=4aae4d5dfe"></script>
 <script>
 (function () {
   Promise.all([
