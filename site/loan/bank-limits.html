@@ -249,7 +249,296 @@
         <g font-size="12">
           <!-- 1 -->
           <rect x="24" y="40" width="612" height="60" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/>
-          <text x="44" y="64" fill="var(--accent)" font-weight="700">① 법정 규제 상한 — LT…6280 tokens truncated…</section>
+          <text x="44" y="64" fill="var(--accent)" font-weight="700">① 법정 규제 상한 — LTV · 주택가격별 한도 · DSR</text>
+          <text x="44" y="84" fill="var(--text-muted)">공개된 규칙으로 계산한 상한. 은행 심사 전 참고값이다.</text>
+          <text x="622" y="74" text-anchor="end" fill="var(--accent)" font-weight="700" font-size="13">예: 4.0억</text>
+
+          <path d="M 330 100 L 330 116" stroke="var(--text-muted)" stroke-width="1.6"/>
+
+          <!-- 2 -->
+          <rect x="60" y="118" width="540" height="60" rx="8" fill="var(--surface)" stroke="var(--border-strong)"/>
+          <text x="80" y="142" fill="var(--text)" font-weight="700">② 은행 자체 최대한도 — 규제보다 더 낮게 스스로 설정</text>
+          <text x="80" y="162" fill="var(--text-muted)">예: 규제상 6억원 이내여도 은행 자체 상한은 3억원</text>
+          <text x="586" y="152" text-anchor="end" fill="var(--text)" font-weight="700" font-size="13">3.0억</text>
+
+          <path d="M 330 178 L 330 194" stroke="var(--text-muted)" stroke-width="1.6"/>
+
+          <!-- 3 -->
+          <rect x="96" y="196" width="468" height="60" rx="8" fill="var(--warning-soft)" stroke="var(--warning)"/>
+          <text x="116" y="220" fill="var(--warning)" font-weight="700">③ 방공제 — MCI·MCG 가입이 막히면 차감</text>
+          <text x="116" y="240" fill="var(--text-muted)">지역·주택 유형·임대차 현황에 따라 공제액이 달라짐</text>
+          <text x="550" y="230" text-anchor="end" fill="var(--warning)" font-weight="700" font-size="13">2.45억</text>
+
+          <path d="M 330 256 L 330 272" stroke="var(--text-muted)" stroke-width="1.6"/>
+
+          <!-- 4 -->
+          <rect x="120" y="274" width="420" height="60" rx="8" fill="var(--surface)" stroke="var(--border-strong)"/>
+          <text x="140" y="298" fill="var(--text)" font-weight="700">④ 담보·임대차 심사</text>
+          <text x="140" y="318" fill="var(--text-muted)">담보평가와 선순위 권리 등을 실제 서류로 확인</text>
+
+          <path d="M 330 334 L 330 350" stroke="var(--text-muted)" stroke-width="1.6"/>
+
+          <!-- 5 -->
+          <rect x="144" y="352" width="372" height="60" rx="8" fill="var(--surface)" stroke="var(--border-strong)"/>
+          <text x="164" y="376" fill="var(--text)" font-weight="700">⑤ 접수 채널·희망 실행일</text>
+          <text x="164" y="396" fill="var(--text-muted)">모집인·영업점별 접수 가능 여부를 확인</text>
+
+          <path d="M 330 412 L 330 428" stroke="var(--accent)" stroke-width="2" marker-end="url(#bl-arrow)"/>
+
+          <rect x="204" y="430" width="252" height="26" rx="6" fill="var(--accent)" stroke="var(--accent)"/>
+          <text x="330" y="448" text-anchor="middle" fill="#fff" font-weight="700" font-size="13">실제 실행액 = 가장 작은 값</text>
+        </g>
+      </svg>
+    </div>
+    <p class="table-scroll-hint">← 도식은 좌우로 넘겨 볼 수 있어요</p>
+
+    <p>특히 접수 물량과 채널 제한은 “한도가 얼마인가요?”라는 질문만으로는 드러나지 않습니다. 같은 주택·소득 조건을 놓고 은행 두세 곳에 아래 질문을 같은 순서로 해야 비교가 됩니다.</p>
+
+    <div class="callout callout-success">
+      <div class="icon">✓</div>
+      <div class="body"><strong>상담에서 이 다섯 문장을 그대로 물어보세요.</strong>
+        <br>① “제 조건으로 <strong>이 은행 자체 최대한도</strong>는 얼마인가요?”
+        <br>② “<strong>MCI 또는 MCG 가입</strong>이 지금 가능한가요? 안 되면 방공제로 얼마가 빠지나요?”
+        <br>③ “담보평가와 임대차 현황을 반영하면 <strong>예상 실행액</strong>은 얼마인가요?”
+        <br>④ “제가 원하는 <strong>실행일 기준</strong>으로 지금 접수할 수 있나요?”
+        <br>⑤ “<strong>모집인·비대면·영업점</strong> 가운데 어느 경로로 접수할 수 있나요?”
+      </div>
+    </div>
+
+    <p><a href="../calculators/loan-limit.html">대출 한도 계산기</a>와 <a href="../calculators/dsr.html">DSR 계산기</a>의 결과는 공개 규칙을 적용한 참고값입니다. 실제 한도는 은행 심사와 담보·보증 조건을 거쳐 달라질 수 있으므로, 계산 결과를 승인 약속으로 받아들이면 안 됩니다.</p>
+  </section>
+
+  <section class="g-chapter" id="measures">
+    <div class="g-chapter-head"><span class="g-chapter-num">CHAPTER 3</span><h2 class="g-chapter-title">보도에서 확인된 4가지 조치</h2></div>
+    <p class="g-chapter-lead" data-edit="measures.lead">아래는 이 글의 은행별 현황표에서 실제 출처를 확인한 조치만 추린 것입니다. 금액이 줄어드는 조치와 접수 경로가 제한되는 조치를 나눠 보면 자금계획에 미치는 영향을 판단하기 쉽습니다.</p>
+
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>조치</th><th>성격</th><th>내 대출에 미치는 영향</th></tr></thead>
+        <tbody>
+          <tr><td>자체 최대한도 인하</td><td>금액</td><td>규제 상한과 무관하게 상한이 낮아짐. 고가 주택일수록 타격이 큼</td></tr>
+          <tr><td>MCI·MCG 가입 제한</td><td>금액</td><td>소액임차보증금 공제가 반영될 수 있음. 지역·주택 유형·임대차 현황에 따라 차감액이 달라짐</td></tr>
+          <tr><td>대출모집인 경유 접수 제한</td><td>경로</td><td>모집인을 통한 신규 접수가 제한됨. 영업점 직접 접수 가능 여부는 따로 확인</td></tr>
+          <tr><td>실행월 조건</td><td>경로</td><td>특정 월 실행분의 접수가 제한될 수 있어 희망 실행일 기준 확인이 필요</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-scroll-hint">← 표는 좌우로 넘겨 볼 수 있어요</p>
+
+    <h3>가장 조용히 큰 금액을 깎는 것 — MCI·MCG 중단</h3>
+    <p><strong>MCI</strong>(모기지신용보험)와 <strong>MCG</strong>(모기지신용보증)는 소액임차보증금 공제로 줄어드는 대출 여력을 보완하는 보험·보증입니다. <a href="https://hf.go.kr/ko/sub02/sub02_02_02.do" target="_blank" rel="noopener">한국주택금융공사 MCG 안내</a>도 이를 “공제되는 최우선변제 소액임차보증금에 대한 보증으로 대출한도를 늘려주는 상품”이라고 설명합니다.</p>
+    <p>보증을 쓰지 못하면 소액임차보증금 공제가 반영될 수 있습니다. 다만 서울 5,500만원, 과밀억제권역 4,800만원은 <a href="https://www.law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&amp;lspttninfSeq=130113" target="_blank" rel="noopener">주택임대차보호법 시행령</a>상 지역별 최우선변제액이고, 모든 대출에서 언제나 그 금액이 한 번씩 빠진다는 뜻은 아닙니다. 주택 유형, 임대 방 수, 선순위 임대차, 보증 적용 방식에 따라 실제 공제액이 달라집니다. 구조와 지역별 금액표는 <a href="mortgage.html#limit">주택담보대출 구조와 신청 절차</a>에서도 확인할 수 있습니다.</p>
+
+    <div class="g-proscons">
+      <div class="g-proscons-col">
+        <h4>실행액을 줄이는 조치 — 확인할 것</h4>
+        <ul>
+          <li>자기자본을 더 넣거나 매수 가격대를 낮춘다</li>
+          <li>MCI·MCG를 취급하는 다른 금융회사를 함께 알아본다</li>
+          <li>기존 신용대출·마이너스통장을 먼저 정리해 DSR 여유를 만든다</li>
+          <li>정책대출(디딤돌·보금자리) 자격 여부를 확인한다</li>
+        </ul>
+      </div>
+      <div class="g-proscons-col">
+        <h4>접수 경로를 제한하는 조치 — 확인할 것</h4>
+        <ul>
+          <li>희망 실행일을 제시하고 접수 가능 여부를 묻는다</li>
+          <li>은행 두세 곳에 같은 조건으로 문의해 접수 경로를 비교한다</li>
+          <li>모집인 경유가 제한되면 영업점 직접 접수 가능 여부를 확인한다</li>
+          <li>은행이 안내한 예상 심사기간과 추가 서류를 기준으로 잔금일을 협의한다</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="g-chapter" id="banks">
+    <div class="g-chapter-head"><span class="g-chapter-num">CHAPTER 4</span><h2 class="g-chapter-title">출처로 확인한 은행별 조치 (2026.08.09)</h2></div>
+    <p class="g-chapter-lead" data-edit="banks.lead">은행 홈페이지의 상품안내에는 통상적인 대상·한도·금리가 나오지만, 한시적인 취급 기준은 기사에서 먼저 확인되는 경우도 있습니다. 아래 표에는 <strong>은행 설명을 인용한 기사에서 시행일과 적용 범위를 확인할 수 있는 항목만</strong> 남겼습니다. 기사에 적힌 시행 당시 기준이므로 현재 재개 여부는 신청 은행에 다시 확인해야 합니다.</p>
+
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>시행</th><th>은행</th><th>확인된 조치</th><th>적용 범위·주의</th><th>근거</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>5.20</td><td>NH농협</td><td>비수도권 주담대 MCI 신규 가입 제한</td>
+            <td>기사상 비수도권 대상. 6월에는 MCG 제한도 추가 보도</td>
+            <td><a href="https://www.ajunews.com/view/20260611132821486" target="_blank" rel="noopener">아주경제 6.11</a></td>
+          </tr>
+          <tr>
+            <td>6.12</td><td>NH농협</td><td>MCG 신규 가입 제한 추가</td>
+            <td>대면·비대면, 지역·상품별 예외는 영업점 확인 필요</td>
+            <td><a href="https://www.ajunews.com/view/20260611132821486" target="_blank" rel="noopener">아주경제 6.11</a></td>
+          </tr>
+          <tr>
+            <td>6.24</td><td>KB국민</td><td>MCI·MCG 신규 가입 제한</td>
+            <td>보험·보증 제한으로 공제액이 반영될 수 있음</td>
+            <td><a href="https://www.mt.co.kr/finance/2026/06/23/2026062316581779875" target="_blank" rel="noopener">머니투데이 6.23</a></td>
+          </tr>
+          <tr>
+            <td>7.1</td><td>하나</td><td>MCI·MCG 신규 가입 한시 제한</td>
+            <td>주담대 전체 판매 중단이 아니라 MCI·MCG 신규 가입 제한</td>
+            <td><a href="https://marketin.edaily.co.kr/News/ReadE?newsId=05858086645485328" target="_blank" rel="noopener">이데일리 6.25</a></td>
+          </tr>
+          <tr>
+            <td>7.10</td><td>KB국민</td><td>주택구입 목적 주담대 자체 최대한도 3억원</td>
+            <td>전국 적용으로 보도. 집단·정책대출 등 예외는 별도 확인</td>
+            <td><a href="https://www.ajunews.com/view/20260708172043587" target="_blank" rel="noopener">아주경제 7.8</a></td>
+          </tr>
+          <tr>
+            <td>7.10</td><td>신한</td><td>MCI·MCG 신규 가입 한시 제한</td>
+            <td>별도 안내 전까지로 보도된 한시 조치</td>
+            <td><a href="https://ir.newspim.com/news/view/20260709001162" target="_blank" rel="noopener">뉴스핌 7.9</a></td>
+          </tr>
+          <tr>
+            <td>7.8·7.10</td><td>신한·하나</td><td>대출모집인 경유 신규 접수 제한</td>
+            <td>하나는 실행월 조건이 붙은 것으로 보도. 영업점 직접 접수와 구분</td>
+            <td><a href="https://mobile.newsis.com/view/NISX20260713_0003707595" target="_blank" rel="noopener">뉴시스 7.13</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-scroll-hint">← 표는 좌우로 넘겨 볼 수 있어요</p>
+
+    <div class="callout callout-warn">
+      <div class="icon">⚠</div>
+      <div class="body"><strong>‘MCI·MCG 제한’과 ‘주담대 중단’은 다릅니다.</strong> MCI·MCG 신규 가입이 제한되면 한도가 줄어들 수 있지만, 담보대출 자체가 모두 막혔다고 단정할 수는 없습니다. 모집인 접수 제한도 영업점 직접 접수 가능 여부와 나눠 봐야 합니다. 제목만 보고 판단하지 말고 적용 지역·자금용도·채널·실행월을 확인하세요.</div>
+    </div>
+
+    <h3>공식 상품안내는 어디까지 확인해 주나</h3>
+    <p><a href="https://obank1.kbstar.com/quics?cc=b032425%3Ab033525&amp;page=C020709&amp;prcode=LN20001160" target="_blank" rel="noopener">KB 주택담보대출 공식 상품안내</a>처럼 은행 홈페이지에서는 기본 대상·기간·금리 구조를 확인할 수 있습니다. <a href="https://www.kebhana.com/cont/mall/mall08/mall0802/mall080202/1420299_115196.jsp" target="_blank" rel="noopener">하나은행 담보대출 상품안내</a>도 상품의 통상 조건을 제공합니다. 다만 이런 페이지가 당일의 접수 가능 여부나 MCI·MCG 신규 가입 여부까지 실시간으로 보여 주는 것은 아닙니다. 공식 페이지로 기본 조건을 확인한 뒤, 한시 조치는 영업점과 고객센터에서 다시 확인하는 순서가 현실적입니다.</p>
+
+    <div class="callout callout-info">
+      <div class="icon">i</div>
+      <div class="body"><strong>표에서 뺀 항목도 있습니다.</strong> 기준일 뒤 시행 예정이던 조치, 출처를 찾지 못한 지점별 한도, 적용 범위가 불명확한 숫자는 삭제했습니다. 확인되지 않은 내용을 ‘예정’이라는 이유로 현행 조치처럼 싣지 않는 것이 이 주제에서는 더 중요합니다.</div>
+    </div>
+  </section>
+
+  <section class="g-chapter" id="policy">
+    <div class="g-chapter-head"><span class="g-chapter-num">CHAPTER 5</span><h2 class="g-chapter-title">확정 규정과 은행 자체 조치 구분하기</h2></div>
+    <p class="g-chapter-lead" data-edit="policy.lead">규제는 모든 금융회사가 따라야 하는 공통선이고, 은행 자체 조치는 그 안에서 각 은행이 정한 취급 기준입니다. 기사에서 두 층을 섞어 쓰면 “정부가 주담대를 3억원으로 줄였다”거나 “MCI가 막혀 주담대 자체가 중단됐다”는 오해가 생깁니다.</p>
+
+    <div class="table-wrap">
+      <svg viewBox="0 0 660 400" role="img" aria-label="2026년 주택담보대출 한도를 정하는 두 층 — 왼쪽은 금융당국의 공통 규정과 총량관리, 오른쪽은 은행별 자체 한도·MCI·MCG·접수 채널 조치" style="min-width:620px; background:var(--surface);">
+        <text x="24" y="24" font-size="13" font-weight="700" fill="var(--text)">공통 규정 위에 은행별 취급 기준이 한 겹 더 놓인다</text>
+
+        <g font-size="12">
+          <!-- 조이는 축 -->
+          <rect x="24" y="40" width="300" height="332" rx="10" fill="var(--danger-soft)" stroke="var(--danger)" stroke-dasharray="5 4"/>
+          <text x="44" y="66" fill="var(--danger)" font-weight="700" font-size="13">금융당국 — 모든 금융회사에 적용</text>
+
+          <rect x="44" y="80" width="260" height="48" rx="7" fill="var(--surface)" stroke="var(--border-strong)"/>
+          <text x="60" y="100" fill="var(--text)" font-weight="700">관리대상 가계대출 증가율 1.5%</text>
+          <text x="60" y="118" fill="var(--text-muted)">2026년도 가계부채 관리방안</text>
+
+          <rect x="44" y="138" width="260" height="48" rx="7" fill="var(--surface)" stroke="var(--border-strong)"/>
+          <text x="60" y="158" fill="var(--text)" font-weight="700">주담대 별도 관리목표</text>
+          <text x="60" y="176" fill="var(--text-muted)">월별·분기별 관리계획 신설</text>
+
+          <rect x="44" y="196" width="260" height="48" rx="7" fill="var(--surface)" stroke="var(--border-strong)"/>
+          <text x="60" y="216" fill="var(--text)" font-weight="700">주택가격별 주담대 한도</text>
+          <text x="60" y="234" fill="var(--text-muted)">수도권·규제지역 6억·4억·2억원</text>
+
+          <rect x="44" y="254" width="260" height="48" rx="7" fill="var(--surface)" stroke="var(--warning)"/>
+          <text x="60" y="274" fill="var(--warning)" font-weight="700">스트레스 금리 하한 3.0%</text>
+          <text x="60" y="292" fill="var(--text-muted)">수도권·규제지역 주담대</text>
+
+          <rect x="44" y="312" width="260" height="48" rx="7" fill="var(--surface)" stroke="var(--border-strong)"/>
+          <text x="60" y="332" fill="var(--text)" font-weight="700">다주택자 만기연장 제한</text>
+          <text x="60" y="350" fill="var(--text-muted)">대상·예외는 4.1 공식 자료 확인</text>
+
+          <!-- 푸는 축 -->
+          <rect x="336" y="40" width="300" height="332" rx="10" fill="var(--success-soft)" stroke="var(--success)" stroke-dasharray="5 4"/>
+          <text x="356" y="66" fill="var(--success)" font-weight="700" font-size="13">개별 은행 — 자체·한시 취급 기준</text>
+
+          <rect x="356" y="80" width="260" height="48" rx="7" fill="var(--surface)" stroke="var(--border-strong)"/>
+          <text x="372" y="100" fill="var(--text)" font-weight="700">자체 최대한도</text>
+          <text x="372" y="118" fill="var(--text-muted)">KB 3억원처럼 규제보다 낮게 설정</text>
+
+          <rect x="356" y="138" width="260" height="48" rx="7" fill="var(--surface)" stroke="var(--warning)"/>
+          <text x="372" y="158" fill="var(--warning)" font-weight="700">MCI·MCG 신규 가입 제한</text>
+          <text x="372" y="176" fill="var(--text-muted)">공제 반영으로 실행액이 줄 수 있음</text>
+
+          <rect x="356" y="196" width="260" height="48" rx="7" fill="var(--surface)" stroke="var(--border-strong)"/>
+          <text x="372" y="216" fill="var(--text)" font-weight="700">대출모집인 접수 제한</text>
+          <text x="372" y="234" fill="var(--text-muted)">영업점 직접 접수와 별개일 수 있음</text>
+
+          <rect x="356" y="254" width="260" height="48" rx="7" fill="var(--surface)" stroke="var(--border-strong)"/>
+          <text x="372" y="274" fill="var(--text)" font-weight="700">지역·자금용도별 예외</text>
+          <text x="372" y="292" fill="var(--text-muted)">집단·정책·대환 등은 따로 확인</text>
+
+          <rect x="356" y="312" width="260" height="48" rx="7" fill="var(--surface-2)" stroke="var(--border)"/>
+          <text x="372" y="332" fill="var(--text)" font-weight="700">재개·변경 시점</text>
+          <text x="372" y="350" fill="var(--text-muted)">신청 당일 은행 재확인 필요</text>
+        </g>
+      </svg>
+    </div>
+    <p class="table-scroll-hint">← 도식은 좌우로 넘겨 볼 수 있어요</p>
+
+    <h3>두 층을 구분하면 기사를 잘못 읽을 일이 줄어듭니다</h3>
+    <p>수도권·규제지역의 주택가격별 한도와 스트레스 금리 하한은 <a href="https://www.fsc.go.kr/no010101/85432" target="_blank" rel="noopener">금융위원회 2025년 10월 15일 자료</a>에서 시행일과 대상을 확인할 수 있습니다. 반면 KB국민은행의 3억원 자체 한도나 은행별 MCI·MCG 제한은 모든 은행에 적용되는 법정 규제가 아닙니다. 같은 주택이어도 은행에 따라 결과가 다른 이유입니다.</p>
+    <p>자금계획에는 이미 시행 중인 공통 규정과 신청 은행이 확인해 준 현행 조건만 반영해야 합니다. ‘검토 중’, ‘예정’, ‘업계에서 거론’ 같은 표현은 실행 가능액에 넣지 않는 편이 안전합니다.</p>
+
+    <div class="callout callout-info">
+      <div class="icon">i</div>
+      <div class="body"><strong>공통 규정도 적용 지역과 대상을 확인해야 합니다.</strong> 규제지역 LTV 40%, 수도권·규제지역 주택구입 목적 주담대의 주택가격별 한도(15억원 이하 6억원 / 15억원 초과~25억원 이하 4억원 / 25억원 초과 2억원), 해당 지역 주담대의 스트레스 금리 하한 3.0%는 서로 적용 범위가 다릅니다. 항목별 근거와 계산은 <a href="../posts/recent-loan-issues-2026.html">2026년 상반기 대출 이슈 정리</a>와 <a href="../calculators/loan-limit.html">대출 한도 계산기</a>에서 확인하세요.</div>
+    </div>
+  </section>
+
+  <section class="g-chapter" id="timeline">
+    <div class="g-chapter-head"><span class="g-chapter-num">CHAPTER 6</span><h2 class="g-chapter-title">출처를 읽는 순서</h2></div>
+    <p class="g-chapter-lead" data-edit="timeline.lead">이 주제는 ‘공식 자료가 있느냐’만으로 끝나지 않습니다. 공식 자료는 공통 규칙을, 기사와 은행 상담은 한시적인 취급 기준을 확인하는 역할을 합니다. 아래 순서로 보면 서로 다른 층의 정보를 섞지 않을 수 있습니다.</p>
+
+    <div class="table-wrap">
+      <svg viewBox="0 0 660 300" role="img" aria-label="주택담보대출 제한 정보를 확인하는 네 단계 — 금융당국 공식 원문, 보증기관과 법령, 은행 설명이 담긴 기사, 신청 당일 은행 재확인" style="min-width:620px; background:var(--surface);">
+        <line x1="40" y1="150" x2="628" y2="150" stroke="var(--border-strong)" stroke-width="2"/>
+
+        <g font-size="12">
+          <!-- 1단계 -->
+          <circle cx="90" cy="150" r="7" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+          <text x="90" y="182" text-anchor="middle" fill="var(--text)" font-weight="700">1단계</text>
+          <text x="90" y="120" text-anchor="middle" fill="var(--text)" font-weight="700">금융위</text>
+          <text x="90" y="102" text-anchor="middle" fill="var(--text-muted)">공통 규정·총량 목표</text>
+          <line x1="90" y1="128" x2="90" y2="143" stroke="var(--border-strong)"/>
+
+          <!-- 2단계 -->
+          <circle cx="222" cy="150" r="7" fill="var(--surface)" stroke="var(--accent)" stroke-width="2.5"/>
+          <text x="222" y="182" text-anchor="middle" fill="var(--text)" font-weight="700">2단계</text>
+          <text x="222" y="212" text-anchor="middle" fill="var(--text)" font-weight="700">법령·보증기관</text>
+          <text x="222" y="230" text-anchor="middle" fill="var(--text-muted)">방공제·MCG 구조</text>
+          <text x="222" y="248" text-anchor="middle" fill="var(--text-muted)">상품의 원칙 확인</text>
+          <line x1="222" y1="157" x2="222" y2="196" stroke="var(--border-strong)"/>
+
+          <!-- 3단계 -->
+          <circle cx="354" cy="150" r="7" fill="var(--surface)" stroke="var(--danger)" stroke-width="2.5"/>
+          <text x="354" y="182" text-anchor="middle" fill="var(--text)" font-weight="700">3단계</text>
+          <text x="354" y="120" text-anchor="middle" fill="var(--danger)" font-weight="700">은행 설명 보도</text>
+          <text x="354" y="102" text-anchor="middle" fill="var(--text-muted)">시행일·대상·예외</text>
+          <text x="354" y="84" text-anchor="middle" fill="var(--text-muted)">은행 설명 인용 여부 확인</text>
+          <line x1="354" y1="128" x2="354" y2="143" stroke="var(--border-strong)"/>
+
+          <!-- 4단계 -->
+          <circle cx="486" cy="150" r="7" fill="var(--surface)" stroke="var(--danger)" stroke-width="2.5"/>
+          <text x="486" y="182" text-anchor="middle" fill="var(--text)" font-weight="700">4단계</text>
+          <text x="486" y="212" text-anchor="middle" fill="var(--danger)" font-weight="700">신청 은행 확인</text>
+          <text x="486" y="230" text-anchor="middle" fill="var(--text-muted)">최종 실행액·접수 여부</text>
+          <text x="486" y="248" text-anchor="middle" fill="var(--text-muted)">담당자·확인일 기록</text>
+          <line x1="486" y1="157" x2="486" y2="196" stroke="var(--border-strong)"/>
+
+          <!-- 실행 -->
+          <circle cx="600" cy="150" r="9" fill="var(--danger)" stroke="var(--danger)" stroke-width="2.5"/>
+          <text x="600" y="182" text-anchor="middle" fill="var(--text)" font-weight="700">실행 전</text>
+          <text x="600" y="120" text-anchor="middle" fill="var(--danger)" font-weight="700">재확인</text>
+          <text x="600" y="102" text-anchor="middle" fill="var(--text-muted)">실행 예정일</text>
+          <text x="600" y="84" text-anchor="middle" fill="var(--text-muted)">최종 승인 조건</text>
+          <text x="600" y="66" text-anchor="middle" fill="var(--text-muted)">변경 여부</text>
+          <line x1="600" y1="128" x2="600" y2="141" stroke="var(--border-strong)"/>
+        </g>
+
+        <text x="40" y="286" font-size="12" fill="var(--text-muted)">※ 기사 링크는 당시 시행 사실의 근거이며, 신청 시점의 접수 가능 여부를 대신하지 않습니다.</text>
+      </svg>
+    </div>
+    <p class="table-scroll-hint">← 도식은 좌우로 넘겨 볼 수 있어요</p>
+  </section>
 
   <section class="g-chapter" id="actions">
     <div class="g-chapter-head"><span class="g-chapter-num">CHAPTER 7</span><h2 class="g-chapter-title">상황별로 지금 할 일</h2></div>
@@ -458,4 +747,3 @@
 <script src="../assets/app.js?v=4aae4d5dfe"></script>
 </body>
 </html>
-
