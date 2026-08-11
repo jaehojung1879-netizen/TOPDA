@@ -1,7 +1,7 @@
 {
   "_meta": {
     "counts": {
-      "complexes": 8026,
+      "complexes": 8041,
       "regions": 79
     },
     "hubs": [
@@ -87,7 +87,7 @@
     ],
     "note": "한글 지역·단지명 → URL 슬러그 매핑. 한 번 발급한 슬러그는 바꾸지 않는다. 복합 키는 '지역|법정동|단지명'.",
     "romanization": "국어의 로마자 표기법(음절 단위, 자음동화 미적용)",
-    "updated": "2026-08-10"
+    "updated": "2026-08-11"
   },
   "complexes": {
     "경기 고양시 덕양구|고양동|고양동우방유쉘아파트": {
@@ -944,6 +944,14 @@
       "region_slug": "gyeonggi-goyang-deokyang",
       "since": "2026-07-26",
       "slug": "dmchobanbereudiumdeopore4danji",
+      "umd": "향동동"
+    },
+    "경기 고양시 덕양구|향동동|디엠씨하우스디엔에이치에프(임대)": {
+      "history": [],
+      "name": "디엠씨하우스디엔에이치에프(임대)",
+      "region_slug": "gyeonggi-goyang-deokyang",
+      "since": "2026-08-11",
+      "slug": "diemssihauseudieneichiepeu-imdae",
       "umd": "향동동"
     },
     "경기 고양시 덕양구|향동동|디엠씨해링턴플레이스엔에이치에프(임대)": {
@@ -3296,6 +3304,14 @@
       "region_slug": "gyeonggi-gwangju",
       "since": "2026-07-26",
       "slug": "opojaidiobeu-4danji",
+      "umd": "고산동"
+    },
+    "경기 광주시|고산동|오포자이오브제": {
+      "history": [],
+      "name": "오포자이오브제",
+      "region_slug": "gyeonggi-gwangju",
+      "since": "2026-08-11",
+      "slug": "opojaiobeuje",
       "umd": "고산동"
     },
     "경기 광주시|고산동|우림(Lumiart)": {
@@ -8786,6 +8802,14 @@
       "slug": "jugong",
       "umd": "소사본동"
     },
+    "경기 부천시 소사구|소사본동|청구": {
+      "history": [],
+      "name": "청구",
+      "region_slug": "gyeonggi-bucheon-sosa",
+      "since": "2026-08-11",
+      "slug": "cheonggu",
+      "umd": "소사본동"
+    },
     "경기 부천시 소사구|소사본동|풍림": {
       "history": [],
       "name": "풍림",
@@ -9009,6 +9033,14 @@
       "since": "2026-07-30",
       "slug": "jeilpunggyeongchaejeideukaunti2danji",
       "umd": "옥길동"
+    },
+    "경기 부천시 오정구|고강동|고강2차": {
+      "history": [],
+      "name": "고강2차",
+      "region_slug": "gyeonggi-bucheon-ojeong",
+      "since": "2026-08-11",
+      "slug": "gogang2cha",
+      "umd": "고강동"
     },
     "경기 부천시 오정구|고강동|삼화아르떼파크": {
       "history": [],
@@ -30010,6 +30042,14 @@
       "slug": "hanseungmimeideu",
       "umd": "송산동"
     },
+    "경기 화성시|송산동|화성아너스포레": {
+      "history": [],
+      "name": "화성아너스포레",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-11",
+      "slug": "hwaseonganeoseupore",
+      "umd": "송산동"
+    },
     "경기 화성시|송산동|효일목화": {
       "history": [],
       "name": "효일목화",
@@ -32728,6 +32768,14 @@
       "region_slug": "daegu-suseong",
       "since": "2026-07-26",
       "slug": "maehohyoseongbaeknyeongayak",
+      "umd": "매호동"
+    },
+    "대구 수성구|매호동|시지매호2동서": {
+      "history": [],
+      "name": "시지매호2동서",
+      "region_slug": "daegu-suseong",
+      "since": "2026-08-11",
+      "slug": "sijimaeho2dongseo",
       "umd": "매호동"
     },
     "대구 수성구|매호동|시지서한타운2": {
@@ -36642,6 +36690,14 @@
       "slug": "dongraekwinjeuw",
       "umd": "온천동"
     },
+    "부산 동래구|온천동|동영": {
+      "history": [],
+      "name": "동영",
+      "region_slug": "busan-dongrae",
+      "since": "2026-08-11",
+      "slug": "dongyeong",
+      "umd": "온천동"
+    },
     "부산 동래구|온천동|두비앙에코힐아파트": {
       "history": [],
       "name": "두비앙에코힐아파트",
@@ -38320,6 +38376,14 @@
       "region_slug": "busan-haeundae",
       "since": "2026-07-26",
       "slug": "haeundaesenteomteuruel2danji",
+      "umd": "반여동"
+    },
+    "부산 해운대구|반여동|현대1차": {
+      "history": [],
+      "name": "현대1차",
+      "region_slug": "busan-haeundae",
+      "since": "2026-08-11",
+      "slug": "hyeondae1cha",
       "umd": "반여동"
     },
     "부산 해운대구|반여동|현대3": {
@@ -41314,6 +41378,14 @@
       "slug": "suyupeurimieoem",
       "umd": "수유동"
     },
+    "서울 강북구|우이동|대우": {
+      "history": [],
+      "name": "대우",
+      "region_slug": "seoul-gangbuk",
+      "since": "2026-08-11",
+      "slug": "daeu",
+      "umd": "우이동"
+    },
     "서울 강북구|우이동|성원상떼빌": {
       "history": [],
       "name": "성원상떼빌",
@@ -42490,6 +42562,14 @@
       "slug": "daerimepyeonhansesang-2",
       "umd": "화곡동"
     },
+    "서울 강서구|화곡동|우장산롯데": {
+      "history": [],
+      "name": "우장산롯데",
+      "region_slug": "seoul-gangseo",
+      "since": "2026-08-11",
+      "slug": "ujangsanrotde",
+      "umd": "화곡동"
+    },
     "서울 강서구|화곡동|우장산롯데캐슬": {
       "history": [],
       "name": "우장산롯데캐슬",
@@ -42528,6 +42608,14 @@
       "region_slug": "seoul-gangseo",
       "since": "2026-08-05",
       "slug": "yurimnoreuweisup-919-1",
+      "umd": "화곡동"
+    },
+    "서울 강서구|화곡동|일성스카이빌": {
+      "history": [],
+      "name": "일성스카이빌",
+      "region_slug": "seoul-gangseo",
+      "since": "2026-08-11",
+      "slug": "ilseongseukaibil",
       "umd": "화곡동"
     },
     "서울 강서구|화곡동|중앙화곡하이츠": {
@@ -44768,6 +44856,14 @@
       "region_slug": "seoul-nowon",
       "since": "2026-07-26",
       "slug": "dusanhilseubilapateu",
+      "umd": "공릉동"
+    },
+    "서울 노원구|공릉동|미라쉘": {
+      "history": [],
+      "name": "미라쉘",
+      "region_slug": "seoul-nowon",
+      "since": "2026-08-11",
+      "slug": "miraswel",
       "umd": "공릉동"
     },
     "서울 노원구|공릉동|비선아파트": {
@@ -47864,6 +47960,14 @@
       "region_slug": "seoul-dongjak",
       "since": "2026-07-26",
       "slug": "sangdo1chagapeulmyeongga",
+      "umd": "상도동"
+    },
+    "서울 동작구|상도동|상도2차갑을명가": {
+      "history": [],
+      "name": "상도2차갑을명가",
+      "region_slug": "seoul-dongjak",
+      "since": "2026-08-11",
+      "slug": "sangdo2chagapeulmyeongga",
       "umd": "상도동"
     },
     "서울 동작구|상도동|상도더샵2차": {
@@ -52960,6 +53064,14 @@
       "region_slug": "seoul-yangcheon",
       "since": "2026-08-07",
       "slug": "buyeong2",
+      "umd": "목동"
+    },
+    "서울 양천구|목동|부영3": {
+      "history": [],
+      "name": "부영3",
+      "region_slug": "seoul-yangcheon",
+      "since": "2026-08-11",
+      "slug": "buyeong3",
       "umd": "목동"
     },
     "서울 양천구|목동|삼익": {
@@ -61185,6 +61297,14 @@
       "since": "2026-07-26",
       "slug": "juanyeokmichuholdeoribeu",
       "umd": "도화동"
+    },
+    "인천 미추홀구|문학동|호산": {
+      "history": [],
+      "name": "호산",
+      "region_slug": "incheon-michuhol",
+      "since": "2026-08-11",
+      "slug": "hosan",
+      "umd": "문학동"
     },
     "인천 미추홀구|숭의동|광해리드빌": {
       "history": [],
