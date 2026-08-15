@@ -45,6 +45,24 @@ def esc(s):
     return html.escape(str(s), quote=True)
 
 
+# calc_meta.json 의 자리표시자 표시. 사람이 채우기 전까지 **화면에 내보내지 않는다.**
+#
+# ⚠ 이 규칙이 없으면 초안 상태의 "TODO(작성필요): …" 문장이 그대로 배포된다. 지금은
+#   AdSense 가 '가치 없는 콘텐츠'로 판정한 도메인을 재심사받는 중이라, 빈 자리표시자가
+#   본문에 보이는 것은 아무것도 없는 것보다 나쁘다. 슬롯은 JSON 에 남겨 두고 화면에서만
+#   뺀다 — 문장을 채우면 그 항목이 자동으로 나타난다.
+PLACEHOLDER = "TODO(작성필요)"
+
+
+def authored(v):
+    """사람이 실제로 쓴 값인가. 자리표시자는 아직 안 쓴 것으로 본다."""
+    return bool(v) and PLACEHOLDER not in str(v)
+
+
+def authored_list(items):
+    return [i for i in (items or []) if authored(i)]
+
+
 # ───────────────────────────────────────── rates.js 파싱
 
 def parse_rates():
@@ -80,21 +98,76 @@ def ul(items):
     return "<ul>" + "".join(f"<li>{i}</li>" for i in items) + "</ul>"
 
 
-def render(slug, meta, last_reviewed, source, changelog, has_disclaimer=False):
+def faq_html(faq):
+    """FAQ 섹션(화면) + FAQPage JSON-LD. 둘의 문구는 같은 원본에서 나온다.
+
+    ⚠ 스키마와 화면 문구가 다르면 구조화 데이터 위반이다. 그래서 한쪽만 손댈 수 없도록
+    같은 리스트에서 둘 다 만든다.
+    """
+    faq = [f for f in faq if authored(f.get("q")) and authored(f.get("a"))]
+    if not faq:
+        return ""
+    items = "".join(
+        '<details class="explain">\n'
+        f'      <summary>{esc(f["q"])}</summary>\n'
+        f'      <div class="explain-body"><p>{esc(f["a"])}</p></div>\n'
+        '    </details>\n    ' for f in faq)
+    ld = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{"@type": "Question", "name": f["q"],
+                        "acceptedAnswer": {"@type": "Answer", "text": f["a"]}} for f in faq],
+    }, ensure_ascii=False, indent=2)
+    return ('<h3>자주 묻는 질문</h3>\n    ' + items
+            + f'<script type="application/ld+json">\n{ld}\n</script>')
+
+
+def howto_html(howto):
+    """계산 순서(화면 <ol>) + HowTo JSON-LD.
+
+    ⚠ HowTo 는 화면에 같은 단계가 보여야 한다. JSON-LD 만 넣으면 구조화 데이터 위반이라
+    여기서 <ol> 도 함께 낸다.
+    """
+    steps = [s for s in (howto.get("steps") or [])
+             if authored(s.get("name")) and authored(s.get("text"))]
+    if not steps:
+        return ""
+    lis = "".join(f"<li>{esc(s['name'])} — {esc(s['text'])}</li>" for s in steps)
+    ld = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": howto.get("name", ""),
+        "step": [{"@type": "HowToStep", "position": i, "name": s["name"], "text": s["text"]}
+                 for i, s in enumerate(steps, 1)],
+    }, ensure_ascii=False, indent=2)
+    return (f'<h3>{esc(howto.get("name") or "계산 순서")}</h3>\n'
+            f"<ol>{lis}</ol>\n"
+            f'<script type="application/ld+json">\n{ld}\n</script>')
+
+
+def render(slug, meta, last_reviewed, source, changelog, has_disclaimer=False,
+           allow_faq=True):
     """블록 HTML. 값이 없는 항목은 아예 출력하지 않는다."""
     parts = []
 
-    if meta.get("audience"):
+    if authored(meta.get("audience")):
         parts.append("<h3>어떤 경우에 쓰는 계산기인가</h3>\n"
                      f"<p>{esc(meta['audience'])}</p>")
-    if meta.get("inputs"):
-        parts.append("<h3>미리 준비할 값</h3>\n" + ul(esc(i) for i in meta["inputs"]))
-    if meta.get("formula"):
-        parts.append("<h3>적용 공식과 가정</h3>\n" + ul(esc(i) for i in meta["formula"]))
-    if meta.get("examples"):
-        parts.append("<h3>예시</h3>\n" + ul(esc(i) for i in meta["examples"]))
-    if meta.get("varies"):
-        parts.append("<h3>결과가 달라질 수 있는 조건</h3>\n" + ul(esc(i) for i in meta["varies"]))
+    for key, heading in (("inputs", "미리 준비할 값"), ("formula", "적용 공식과 가정"),
+                         ("examples", "예시"), ("varies", "결과가 달라질 수 있는 조건")):
+        items = authored_list(meta.get(key))
+        if items:
+            parts.append(f"<h3>{heading}</h3>\n" + ul(esc(i) for i in items))
+    if meta.get("howto"):
+        block = howto_html(meta["howto"])
+        if block:
+            parts.append(block)
+    # 페이지가 이미 손으로 쓴 FAQPage 를 갖고 있으면 여기서 또 내지 않는다.
+    # 한 페이지에 FAQPage 가 두 벌 있으면 구조화 데이터 위반이다.
+    if meta.get("faq") and allow_faq:
+        block = faq_html(meta["faq"])
+        if block:
+            parts.append(block)
     if meta.get("related"):
         links = "".join(f'<li><a href="{esc(r["href"])}">{esc(r["label"])}</a></li>'
                         for r in meta["related"])
@@ -163,7 +236,7 @@ def main():
     with open(META_JSON, encoding="utf-8") as f:
         metas = json.load(f)
 
-    changed, skipped, no_authored = 0, [], []
+    changed, skipped, no_authored, dup_faq = 0, [], [], []
     for fp in sorted(glob.glob(os.path.join(SITE, "calculators", "*.html"))):
         base = os.path.basename(fp)
         slug = base[: -len(".html")]
@@ -178,8 +251,13 @@ def main():
         # 이미 면책 문구가 있는 페이지인지 — calc:meta 구간은 제외하고 본다.
         outside = re.sub(re.escape(START) + r".*?" + re.escape(END), "", raw, flags=re.S)
         has_disclaimer = "자문이 아" in outside or "일반적 정보 제공" in outside
+        # 손으로 쓴 FAQPage 가 이미 본문에 있는 페이지는 생성 FAQ 를 넣지 않는다.
+        hand_faq = '"FAQPage"' in outside
+        if hand_faq and meta.get("faq"):
+            dup_faq.append(base)
         block = render(slug, meta, last_reviewed,
-                       sources.get(slug) or sources.get("default"), changelog, has_disclaimer)
+                       sources.get(slug) or sources.get("default"), changelog, has_disclaimer,
+                       allow_faq=not hand_faq)
         new = inject(raw, block)
         if new is None:
             print(f"[warn] {base}: </main> 을 찾지 못해 건너뜀")
@@ -197,6 +275,23 @@ def main():
     if no_authored:
         print(f"  calc_meta.json 에 설명이 없어 기준일·출처·변경 이력만 넣은 계산기: "
               f"{', '.join(no_authored)}")
+    if dup_faq:
+        print(f"  [warn] 본문에 손으로 쓴 FAQPage 가 이미 있어 calc_meta.json 의 faq 를 "
+              f"넣지 않은 계산기: {', '.join(dup_faq)}")
+
+    # 아직 사람이 채우지 않은 슬롯 현황. 자리표시자는 화면에 나가지 않으므로 실패가 아니라
+    # 진행 상황 보고다 — 문장을 채우면 그만큼 페이지에 나타난다.
+    pending = {}
+    for slug, meta in metas.items():
+        if slug.startswith("_"):
+            continue
+        n = len(re.findall(re.escape(PLACEHOLDER), json.dumps(meta, ensure_ascii=False)))
+        if n:
+            pending[slug] = n
+    if pending:
+        total = sum(pending.values())
+        print(f"  작성 대기 자리표시자 {total}개 (화면에는 나가지 않음): "
+              + ", ".join(f"{s} {n}" for s, n in sorted(pending.items())))
     return 0
 
 
