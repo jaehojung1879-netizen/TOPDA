@@ -126,8 +126,63 @@
 <!-- calc:meta:start -->
 <section class="calc-meta" aria-labelledby="calc-meta-h">
   <h2 id="calc-meta-h">이 계산기 정보</h2>
+  <h3>어떤 경우에 쓰는 계산기인가</h3>
+<p>상가나 오피스에 투자하거나 임차하려는 사람이 지역별 임대료·공실률·투자수익률 수준을 비교해 볼 때 쓰는 조회 화면입니다.</p>
+  <h3>미리 준비할 값</h3>
+<ul><li>지도 색상 기준 — 임대료 / 공실률 / 투자수익률 중 무엇으로 지역을 색칠할지</li><li>정렬 기준 — 임대료 높은 순, 공실률 높은 순, 수익률 높은 순</li></ul>
+  <h3>적용 공식과 가정</h3>
+<ul><li>임대료는 전용면적 1㎡당 월 임대료(원/㎡·월)로 표시합니다.</li><li>공실률은 임대 가능 면적 중 비어 있는 면적의 비율입니다.</li><li>투자수익률은 소득수익률과 자본수익률을 합한 값으로, 한국부동산원 상업용부동산 임대동향조사의 정의를 따릅니다.</li><li>이 화면은 계산기가 아니라 조사 통계를 지역별로 보여 주는 조회 도구입니다. 개별 물건의 수익률을 산출하지 않습니다.</li></ul>
+  <h3>예시</h3>
+<ul><li>지도 색상 기준을 &#x27;공실률&#x27;로 두면 같은 지역이라도 임대료가 높은 곳과 공실이 많은 곳이 다르게 보입니다.</li><li>&#x27;수익률 높은 순&#x27;으로 정렬하면 임대료는 낮아도 매매가가 더 낮아 수익률이 높게 잡히는 지역이 위로 올라옵니다.</li></ul>
+  <h3>결과가 달라질 수 있는 조건</h3>
+<ul><li>상권·층·전면 — 같은 지역, 같은 유형이라도 1층과 지하, 대로변과 이면도로의 임대료 차이가 큽니다.</li><li>유형 구분 — 오피스, 중대형상가, 소규모상가, 집합상가의 통계가 각각 다릅니다.</li><li>조사 주기 — 분기 단위 조사라 최근 급변한 상권은 반영이 늦습니다.</li><li>표본 — 조사 표본에 포함된 건물 기준이므로 특정 물건의 실제 임대료와 다를 수 있습니다.</li></ul>
+  <h3>자주 묻는 질문</h3>
+    <details class="explain">
+      <summary>이 시세는 어디서 온 자료인가요?</summary>
+      <div class="explain-body"><p>한국부동산원 상업용부동산 임대동향조사입니다. 조사 표본 건물을 기준으로 산출된 지역 평균이며, 개별 물건의 실제 계약 조건과는 다릅니다.</p></div>
+    </details>
+    <details class="explain">
+      <summary>얼마나 자주 갱신되나요?</summary>
+      <div class="explain-body"><p>원 조사가 분기 단위로 공표되므로 분기마다 갱신됩니다. 최근 상권 변화는 반영이 늦을 수 있습니다.</p></div>
+    </details>
+    <details class="explain">
+      <summary>이 수치로 개별 상가의 수익률을 알 수 있나요?</summary>
+      <div class="explain-body"><p>알 수 없습니다. 지역·유형별 평균이라 상권·층·전면·업종에 따른 차이가 반영되지 않습니다. 개별 물건은 실제 임대차계약과 매매가로 따로 계산해야 합니다.</p></div>
+    </details>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "이 시세는 어디서 온 자료인가요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "한국부동산원 상업용부동산 임대동향조사입니다. 조사 표본 건물을 기준으로 산출된 지역 평균이며, 개별 물건의 실제 계약 조건과는 다릅니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "얼마나 자주 갱신되나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "원 조사가 분기 단위로 공표되므로 분기마다 갱신됩니다. 최근 상권 변화는 반영이 늦을 수 있습니다."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "이 수치로 개별 상가의 수익률을 알 수 있나요?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "알 수 없습니다. 지역·유형별 평균이라 상권·층·전면·업종에 따른 차이가 반영되지 않습니다. 개별 물건은 실제 임대차계약과 매매가로 따로 계산해야 합니다."
+      }
+    }
+  ]
+}
+</script>
   <h3>함께 보기</h3>
-<ul><li><a href="rti-calculator.html">RTI 계산기</a></li><li><a href="loan-limit.html">대출 한도 계산기</a></li></ul>
+<ul><li><a href="rti-calculator.html">RTI 계산기 — 임대소득으로 이자 감당 여부</a></li><li><a href="loan-limit.html">대출 한도 계산기</a></li><li><a href="acquisition-tax.html">취득세 계산기 — 비주택 4.6%</a></li></ul>
   <h3>근거와 기준일</h3>
 <div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">관련 법령·고시 (각 계산기 하단 출처 참고)</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-08-02 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
   <details class="explain">
