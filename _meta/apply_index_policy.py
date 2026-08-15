@@ -69,6 +69,8 @@ HREFLANG_BLOCK_RE = re.compile(
 # ⚠ 속성 순서를 가정하면 안 된다. 저장소에는 rel 이 먼저인 태그와 href 가 먼저인 태그가
 #   섞여 있어서, 한쪽만 잡는 정규식을 쓰면 "canonical 이 없다"고 판단해 중복으로 하나 더 넣는다.
 CANONICAL_TAG_RE = re.compile(r'[ \t]*<link\b[^>]*\brel=["\']canonical["\'][^>]*>[ \t]*\n?', re.I)
+# ⚠ 이 정규식은 **canonical 태그 하나를 떼어낸 문자열**에만 쓴다. 문서 전체에 걸면
+#   head 맨 위의 <link rel="icon" href="...logo-32.png"> 가 먼저 걸린다.
 CANONICAL_HREF_RE = re.compile(r'\bhref=["\']([^"\']+)["\']', re.I)
 HANGUL_RE = re.compile(r"[가-힣]")
 SCRIPT_STYLE_RE = re.compile(r"<(script|style)\b.*?</\1>", re.S | re.I)
@@ -76,6 +78,15 @@ TAG_RE = re.compile(r"<[^>]+>")
 
 # EN 페이지 중 본문에 한국어가 섞여도 되는 예외 — 한국어 용어를 병기하는 용어집·외국인 안내.
 EN_HANGUL_ALLOW = ("/en/glossary.html", "/en/foreigner-loan.html", "/en/foreigner-tax.html")
+
+# 한국어 대응 페이지가 없어도 색인을 허용하는 EN 전용 콘텐츠.
+#
+# 기본 규칙은 "한국어판이 없는 EN 페이지는 색인 보류"다. 번역이 덜 된 껍데기가 색인되는
+# 것을 막으려는 규칙인데, 아래 3개는 그 경우가 아니다. 애초에 **한국어 독자에게는 필요
+# 없는 주제**(외국인 대상 대출·세금, 한국어 부동산 용어의 영문 해설)라 한국어판이 앞으로도
+# 생기지 않는다. 그런데도 규칙에 걸려 고유 본문 4,600~5,800자짜리 완성된 페이지 3개가
+# 색인에서 빠져 있었다(2026-08-15 감사). 예외를 목록으로 못박아 되돌린다.
+EN_ONLY_INDEX_ALLOW = ("/en/glossary.html", "/en/foreigner-loan.html", "/en/foreigner-tax.html")
 
 # EN 페이지의 한국어 대응 페이지 — 슬러그가 다른 경우만 적는다.
 # (슬러그가 같으면 /en/X ↔ /X 로 자동 매칭한다.)
@@ -90,6 +101,23 @@ EN_KO_ALIAS = {
 # 한국어 페이지로 가는 링크임을 화면에 밝힌 표시. 이 표시가 붙은 링크는
 # "갑자기 한국어로 이동"에 해당하지 않으므로 EN 게이트에서 문제로 보지 않는다.
 KO_LINK_MARK = "(KO)"
+
+
+def canonical_url(path, raw):
+    """이 페이지가 스스로 선언한 canonical URL. 선언이 없으면 자기 URL.
+
+    ⚠ url_path() 는 /x/index.html 을 /x/ 로 접지만, 저장소의 허브 페이지 19개는
+    canonical 과 sitemap 에 /x/index.html 형태를 쓴다. hreflang 을 url_path() 결과로
+    만들면 같은 페이지를 canonical 은 /calculators/index.html 로, hreflang 은
+    /calculators/ 로 가리켜 두 URL 이 어긋난다. Google 은 hreflang 의 각 URL 이 그
+    페이지의 canonical 과 일치할 것을 요구하고, 어긋나면 그 hreflang 묶음을 통째로
+    무시한다. 그래서 hreflang 은 반드시 '선언된 canonical' 을 기준으로 만든다.
+    """
+    tag = CANONICAL_TAG_RE.search(raw)
+    if not tag:
+        return BASE + path
+    href = CANONICAL_HREF_RE.search(tag.group(0))
+    return href.group(1).strip() if href else BASE + path
 
 
 def url_path(fp):
@@ -162,7 +190,7 @@ def en_gate(path, raw, ko_partner, en_support_ready):
     """EN 페이지가 색인 허용 조건을 모두 충족하는가 → (통과, 사유)."""
     if not en_support_ready:
         return False, "영어판 개인정보 처리방침·안내 페이지가 없음"
-    if not ko_partner:
+    if not ko_partner and path not in EN_ONLY_INDEX_ALLOW:
         return False, "대응하는 한국어 페이지가 없음(EN 전용 콘텐츠) — 한국어판을 만들면 색인 대상"
     hangul = len(HANGUL_RE.findall(visible_text(raw)))
     if hangul > 40 and path not in EN_HANGUL_ALLOW:
@@ -334,10 +362,13 @@ def decide(files):
         else:
             seen.add(path)
 
+    # 경로가 아니라 **각 대상 페이지가 선언한 canonical URL** 로 바꿔 담는다.
+    # (이유는 canonical_url() 주석 참고 — hreflang 과 canonical 이 어긋나면 무시된다.)
     hreflang = {}
     for members in groups:
+        urls = {lg: canonical_url(p, raws[p]) for lg, p in members.items()}
         for p in members.values():
-            hreflang[p] = dict(members)
+            hreflang[p] = dict(urls)
     for path in raws:
         policy[path]["hreflang"] = hreflang.get(path)
     return policy
@@ -346,13 +377,17 @@ def decide(files):
 # ────────────────────────────────────────────── 파일 수정
 
 def hreflang_html(members):
-    """ko 를 x-default 로 삼는다 — 한국 부동산 정보이므로 기본 언어는 한국어다."""
+    """ko 를 x-default 로 삼는다 — 한국 부동산 정보이므로 기본 언어는 한국어다.
+
+    members 의 값은 이미 절대 URL(각 페이지의 canonical)이다. 여기서 BASE 를 다시
+    붙이지 않는다.
+    """
     lines = []
     for lg in ("ko", "en"):
         if lg in members:
-            lines.append(f'<link rel="alternate" hreflang="{lg}" href="{BASE}{members[lg]}" />')
+            lines.append(f'<link rel="alternate" hreflang="{lg}" href="{members[lg]}" />')
     if "ko" in members:
-        lines.append(f'<link rel="alternate" hreflang="x-default" href="{BASE}{members["ko"]}" />')
+        lines.append(f'<link rel="alternate" hreflang="x-default" href="{members["ko"]}" />')
     return "\n".join(lines) + "\n"
 
 

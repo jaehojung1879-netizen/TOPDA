@@ -57,6 +57,18 @@ jobs:
         working-directory: _meta
         run: python check_index_policy.py
 
+      # calc_meta.json 의 작성 대기 슬롯은 build_calc_meta.py 가 화면에서 걸러내므로
+      # 정상 경로로는 배포본에 나갈 수 없다. 사람이 HTML 에 직접 써 넣은 경우만 남는데,
+      # 그건 "TODO(작성필요)" 가 본문에 그대로 보이는 상태다 — 재심사 중에는 빈
+      # 자리표시자가 아무것도 없는 것보다 나쁘므로 여기서 막는다.
+      - name: 자리표시자가 배포본에 남아 있지 않은지 검증
+        run: |
+          if grep -rl 'TODO(작성필요)' site/; then
+            echo "::error::위 파일의 본문에 자리표시자가 남아 있습니다. calc_meta.json 에 문장을 채우거나 해당 문구를 지우세요."
+            exit 1
+          fi
+          echo "배포본에 자리표시자 없음"
+
       # 감사 인벤토리는 검증이 아니라 현황 보고다. 실패시키지 않고 요약만 로그에 남긴다.
       - name: 콘텐츠 인벤토리 요약
         if: always()
