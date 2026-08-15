@@ -46,6 +46,23 @@ NOINDEX_GLOBS = (
     "/naverad*.html",                                          # 검색엔진 소유확인 파일
     # 자체 본문이 없는 JS 렌더링 링크 셸 — 탐색용으로 유지하되 색인에서 뺀다.
     "/market.html", "/*/market.html",
+
+    # ── 아직 실제 데이터가 없어 화면에 예시값을 띄우는 페이지 (2026-08-15 감사)
+    #
+    # 세 페이지 모두 본문에 "예시 데이터입니다 / 실제 시세가 아닙니다"라고 스스로 밝히면서
+    # **색인돼 있었고 AdSense 까지 붙어 있었다.** 방문자에게 숫자가 가짜라고 알리는 페이지에
+    # 광고를 싣는 상태라, '가치 없는 콘텐츠' 판정의 직접적인 근거가 된다.
+    #
+    #   /calculators/market-trends.html   R-ONE 통계 자동 갱신 준비 중
+    #   /calculators/jeonse-ratio.html    전월세 실거래 API 승인 대기
+    #   /calculators/commercial-rent.html RONE_COMM_TABLES 연동 대기
+    #
+    # 페이지는 그대로 두고(접근·탐색은 유지) 색인과 광고에서만 뺀다. noindex 로 두면
+    # 이 스크립트가 AdSense 스크립트도 함께 걷어낸다. 실제 데이터가 붙으면 이 세 줄을
+    # 지우는 것만으로 되돌아온다.
+    "/calculators/market-trends.html", "/*/calculators/market-trends.html",
+    "/calculators/jeonse-ratio.html", "/*/calculators/jeonse-ratio.html",
+    "/calculators/commercial-rent.html", "/*/calculators/commercial-rent.html",
 )
 
 # ── 이 스크립트가 건드리지 않는 경로.
