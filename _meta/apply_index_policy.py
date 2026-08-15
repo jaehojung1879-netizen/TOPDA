@@ -59,6 +59,8 @@ NOT_OURS_GLOBS = ("/apt/*/*/", "/apt/*/*/index.html")
 NO_ADS_GLOBS = (
     "/privacy.html", "/*/privacy.html",
     "/about.html", "/*/about.html",
+    "/terms.html", "/*/terms.html",
+    "/contact.html", "/*/contact.html",
 )
 
 ADS_SCRIPT_RE = re.compile(
