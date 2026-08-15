@@ -107,6 +107,8 @@ def build_footer(prefix):
         f'          <li><a href="{prefix}guides.html">가이드</a></li>\n'
         f'          <li><a href="{prefix}board.html">게시판</a></li>\n'
         f'          <li><a href="{prefix}about.html">안내</a></li>\n'
+        f'          <li><a href="{prefix}contact.html">문의</a></li>\n'
+        f'          <li><a href="{prefix}terms.html">이용약관</a></li>\n'
         f'          <li><a href="{prefix}privacy.html">개인정보 처리방침</a></li>\n'
         f'          <li><a href="{prefix}en/index.html">English</a></li>\n'
         '        </ul>\n'
@@ -200,6 +202,8 @@ EN_FOOTER = """<footer class="site-footer">
         <ul>
           <li><a href="{e}guides.html">Guides</a></li>
           <li><a href="{e}about.html">About</a></li>
+          <li><a href="{e}contact.html">Contact</a></li>
+          <li><a href="{e}terms.html">Terms</a></li>
           <li><a href="{e}privacy.html">Privacy</a></li>
           <li><a href="{k}board.html">Board (Korean)</a></li>
           <li><a href="{k}index.html">\ud55c\uad6d\uc5b4</a></li>
