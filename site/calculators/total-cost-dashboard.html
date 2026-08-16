@@ -206,11 +206,11 @@
 
         <h3 class="scn-section-title" data-loan-title>주담대</h3>
         <div class="field" data-house-only>
-          <label for="td-kbprice">KB시세 (담보 평가액) <span class="field-badge">한도 판정용</span><span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="LTV와 가격대별 한도(15억↓ 6억 / 15~25억 4억 / 25억↑ 2억)는 매매가가 아니라 '대출 신청일 기준 시가'로 판정합니다. KB부동산 일반평균가·한국부동산원 시세·감정평가액이 기준입니다. 15.65억에 샀어도 신청일 KB시세가 15억이면 15억 이하 구간(6억 한도)입니다. 취득세·중개보수·등기비용은 이 값과 무관하게 매매가로 계산합니다.">?</span></label>
+          <label for="td-kbprice">KB시세 (담보 평가액) <span class="field-badge">2025·10·15 대책 한도 판정</span><span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="2025년 6·27 대책에서 수도권·규제지역 주택구입 목적 주담대 상한 6억원이 도입됐고, 2025년 10·15 대책(10월 16일 시행)에서 신청일 시가별로 15억원 이하 6억 / 15억원 초과~25억원 이하 4억 / 25억원 초과 2억으로 차등화됐습니다. 주택가격은 대출 신청일 기준 KB부동산 일반평균가·한국부동산원 가격 등으로 판단합니다. 15.65억원에 샀어도 신청일 KB 일반평균가가 15억원이면 6억원 구간입니다. 취득세·중개보수·등기비용은 이 값이 아니라 매매가를 씁니다.">?</span></label>
           <div class="input-suffix" data-suffix="원">
             <input id="td-kbprice" name="kbPrice" type="text" inputmode="numeric" data-format="won" value="" placeholder="비워두면 매매가로 판정" />
           </div>
-          <span class="hint">한도 추정에만 쓰입니다. 비워두면 매매가로 판정합니다 — <a href="https://kbland.kr" target="_blank" rel="noopener">KB부동산</a> 일반평균가.</span>
+          <span class="hint">2025.10.16 시행된 시가별 6억·4억·2억원 한도 판정용입니다. <a href="https://kbland.kr" target="_blank" rel="noopener">KB부동산</a> 일반평균가를 넣고, 비우면 매매가로 추정합니다.</span>
         </div>
 
         <div class="field">
@@ -301,26 +301,22 @@
             <span class="cf-sum" data-out="foldRegTotal">—</span>
           </summary>
           <div class="calc-fold-body">
-            <p class="cf-lead">공시가격과 채권 할인율은 자동으로 채웁니다. 아는 값이 있을 때만 고치세요.</p>
+            <p class="cf-lead">공시가격은 단지와 전용면적을 골라 넣고, 채권 할인율은 최신 조회값을 자동으로 채웁니다.</p>
 
             <div class="field">
-              <label for="td-regStd">시가표준액 (채권 매입 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택채권 매입액은 매매가가 아니라 시가표준액(공동주택가격·개별주택가격·토지 공시지가)을 기준으로 합니다. 비워두면 매매가 × 70%로 추정하는데, 이 70%는 법정 비율이 아니라 단순 추정치입니다. 추정을 쓰면 결과 항목에 경고가 함께 표시됩니다.">?</span><a class="tip-link" href="https://www.realtyprice.kr/notice/main/main.do" target="_blank" rel="noopener" title="부동산공시가격알리미에서 정확한 공시가격 확인" aria-label="부동산공시가격알리미에서 정확한 공시가격 확인 (새 창)">↗ 공시가격 확인</a></label>
+              <label for="td-regStd">공시가격 (시가표준액)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="아파트 공동주택 공시가격은 국민주택채권 매입액뿐 아니라 재산세·종합부동산세 추정과 증여 취득세 중과 판정에도 쓰입니다. 같은 단지라도 전용면적·동·층·호에 따라 다르므로 단지 중앙값을 쓰지 말고 아래에서 전용면적을 선택하세요. 톺다의 평형별 값은 추정치이며, 정확한 호별 값은 부동산공시가격알리미에서 확인해야 합니다. 비워두면 매매가 × 70%로 단순 추정합니다(법정 비율 아님).">?</span><a class="tip-link" href="https://www.realtyprice.kr/notice/main/main.do" target="_blank" rel="noopener" title="부동산공시가격알리미에서 정확한 공시가격 확인" aria-label="부동산공시가격알리미에서 정확한 공시가격 확인 (새 창)">↗ 정확한 호별 가격</a></label>
               <div class="input-suffix" data-suffix="원">
                 <input id="td-regStd" name="regStd" type="text" inputmode="numeric" data-format="won" value="" />
               </div>
-              <span class="hint">모르면 비워두세요 — 매매가 × 70%로 추정합니다(법정 비율 아님).</span>
+              <span class="hint">아래 단지 검색에서 <strong>전용면적을 선택한 뒤</strong> 반영합니다. 정확한 값은 동·층·호별 공시가격을 확인하세요.</span>
             </div>
 
-            <!-- 국민주택채권 할인율 — 매일 자동 수집한다. 정상 수집된 날은 값과 기준일만
-                 한 줄로 보여 주고, 설명은 ? 로 넘긴다. 수집이 실패·지연된 날에만
-                 입력칸과 경고를 펼쳐 사용자가 직접 확인하게 한다. -->
+            <!-- 국민주택채권 할인율 — 종합·개별 계산기가 calculator_sources.js의 같은
+                 로더를 쓴다. 정상 조회값은 입력칸에 직접 채우고, 실패·지연 때만 15%와
+                 경고를 표시한다. -->
             <div class="field" data-bond-field>
-              <label for="td-regDiscount">국민주택채권 할인율<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="채권을 즉시 매도(할인)할 때 본인이 부담하는 손실률(고객부담률)입니다. 법정 요율이 아니라 시장금리에 따라 매일 바뀌는 시세라, 톺다가 매일 자동으로 수집해 채웁니다. 잔금일 당일 값이 필요하면 은행 국민주택채권 포털에서 확인해 직접 입력하세요.">?</span><button type="button" class="linkish" data-bond-edit hidden>직접 입력</button></label>
-              <p class="auto-value" data-bond-auto hidden>
-                <strong data-bond-auto-rate>—</strong>
-                <span data-bond-auto-src>자동 적용</span>
-              </p>
-              <div class="input-suffix" data-suffix="%" data-bond-input>
+              <label for="td-regDiscount">국민주택채권 할인율<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="채권을 즉시 매도할 때 본인이 부담하는 고객부담률입니다. 매일 바뀌는 시세를 자동 조회해 입력칸에 채우며, 조회 실패·지연 때만 경고와 함께 안전 기본값 15%를 넣습니다. 정확한 잔금 비용은 잔금일 당일 은행 국민주택채권 포털 값으로 다시 확인하세요.">?</span></label>
+              <div class="input-suffix" data-suffix="%">
                 <input id="td-regDiscount" name="regDiscount" type="number" min="0" max="30" step="0.01" value="15" />
               </div>
               <span id="td-regDiscount-note" class="data-stale" hidden></span>
@@ -921,7 +917,7 @@
   <h3>예시</h3>
 <ul><li>매매가 7억·1주택·비조정·전용 84㎡·대출 3억이면 취득세와 등기비용, 대출 실행에 따른 월 상환액이 한 화면에서 합산됩니다.</li><li>계약금 10%·중도금 40%를 넣으면 잔금일에 실제로 준비해야 하는 현금이 매매가에서 대출과 기납부액을 뺀 금액으로 표시됩니다.</li></ul>
   <h3>결과가 달라질 수 있는 조건</h3>
-<ul><li>국민주택채권 할인율(고객부담률)은 매일 바뀝니다. 톺다가 자동으로 수집해 채우고 적용 기준일을 함께 표시하지만, 잔금일 당일 값은 「직접 입력」으로 바꿔 넣으세요. 자동 수집이 실패한 날에는 예시값 경고가 대신 표시됩니다.</li><li>중개보수는 상한요율 기준이며 실제로는 협의로 정해집니다.</li><li>대출 실행 가능액은 은행 심사 결과이므로, 여기 입력한 금액이 그대로 나온다는 보장은 없습니다.</li><li>임대사업자 대출·갭투자 조건은 상품별 규제가 달라 별도 확인이 필요합니다.</li></ul>
+<ul><li>국민주택채권 할인율(고객부담률)은 매일 바뀝니다. 최신 조회값을 입력칸에 자동 반영하고, 조회 실패·지연 때만 경고와 함께 기본값 15%를 적용합니다. 잔금일 당일 값으로 다시 확인하세요.</li><li>공시가격 검색은 단지를 고른 뒤 전용면적까지 선택해야 반영됩니다. 평형별 값은 추정치이므로 정확한 동·층·호별 값은 공시가격알리미에서 확인하세요.</li><li>중개보수는 상한요율 기준이며 실제로는 협의로 정해집니다.</li><li>대출 실행 가능액은 은행 심사 결과이므로, 여기 입력한 금액이 그대로 나온다는 보장은 없습니다.</li><li>임대사업자 대출·갭투자 조건은 상품별 규제가 달라 별도 확인이 필요합니다.</li></ul>
   <h3>계산 순서</h3>
 <ol><li>매매가와 자산 조건 입력 — 매매가, 자산 유형, 본 거래를 포함한 주택 수, 조정대상지역 여부를 넣습니다.</li><li>면적과 감면 요건 입력 — 전용 85㎡ 초과 여부와 생애최초·출산양육 등 감면 요건을 고릅니다.</li><li>대출 조건 입력 — 대출 금액·금리·기간·상환 방식을 넣습니다.</li><li>시가표준액 입력 — 국민주택채권 매입 기준입니다. 공시가격 조회 링크로 확인할 수 있습니다.</li><li>계약금·중도금·부대비용 입력 — 지급 비율과 인테리어·이사비 등 예상 지출을 넣습니다.</li><li>총비용과 잔금일 현금 확인 — 세금·등기비용·부대비용 합계와, 잔금일에 필요한 현금을 확인합니다.</li></ol>
 <script type="application/ld+json">
@@ -1074,7 +1070,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="../assets/rates.js?v=7163e7567c"></script>
 <script src="../assets/app.js?v=9f6c208452"></script>
-<script src="../assets/official_price.js?v=49a90fa9bf"></script>
+<script src="../assets/official_price.js?v=c81ea19a89"></script>
+<script src="../assets/calculator_sources.js?v=7d8e2de06e"></script>
 <script>
 (function () {
   'use strict';
@@ -1110,70 +1107,19 @@
   } catch (e) {}
 
   // ── 국민주택채권 당일 할인율 ──
-  //  ⚠ seed·수집실패 값을 '오늘 자동 반영됨'으로 표시하면 안 된다. 고객부담률은 법정
-  //    요율이 아니라 매일 바뀌는 시세라, 예시값을 실시간 값처럼 보여주면 사용자가
-  //    확인해야 할 것을 확인하지 않고 지나간다. 상태 판정은 공통 함수가 담당한다.
-  //  정상 수집된 날(state === 'fresh')은 입력칸을 접고 「15.02% · 2026-08-14 기준」한 줄만
-  //  남긴다. 매일 자동으로 채워 넣는 값을 매번 확인하라고 문단으로 설명할 이유가 없다 —
-  //  근거는 ? 도움말이 들고, 고치고 싶은 사람만 「직접 입력」으로 입력칸을 편다.
-  //  seed·수집실패·오래된 값이면 예전 그대로 입력칸과 경고를 펼치고, 접혀 있던
-  //  등기·법무사 섹션까지 열어 준다.
+  // 종합계산기와 등기 계산기가 같은 공용 로더를 쓴다. 최신값은 입력칸에 바로 넣고,
+  // 못 가져오거나 오래된 값이면 15%를 넣은 뒤에만 경고한다.
   var discountInput = document.getElementById('td-regDiscount');
   var discountNote = document.getElementById('td-regDiscount-note');
-  var bondField = document.querySelector('[data-bond-field]');
-  var bondAuto = bondField && bondField.querySelector('[data-bond-auto]');
-  var bondAutoRate = bondField && bondField.querySelector('[data-bond-auto-rate]');
-  var bondAutoSrc = bondField && bondField.querySelector('[data-bond-auto-src]');
-  var bondInputBox = bondField && bondField.querySelector('[data-bond-input]');
-  var bondEditBtn = bondField && bondField.querySelector('[data-bond-edit]');
   var regFold = document.querySelector('[data-reg-fold]');
-  var discountTouched = false;
-
-  // 자동 표시 ↔ 직접 입력 전환. 한쪽만 보이게 둔다.
-  function showBondEditor(on) {
-    if (bondInputBox) bondInputBox.hidden = !on;
-    if (bondAuto) bondAuto.hidden = on;
-    if (bondEditBtn) bondEditBtn.hidden = on;
-  }
-
-  if (discountInput) {
-    discountInput.addEventListener('input', function () { discountTouched = true; });
-    if (bondEditBtn) {
-      bondEditBtn.addEventListener('click', function () {
-        showBondEditor(true);
-        discountInput.focus();
-        discountInput.select();
-      });
-    }
-    fetch('../assets/bond_rate.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .catch(function () { return null; })
-      .then(function (j) {
-        var res = applyBondDiscountRate(j);
-        if (res.shouldFill && !discountTouched) {
-          discountInput.value = res.rate;
-          discountInput.dispatchEvent(new Event('input', { bubbles: true }));
-          discountTouched = false;   // 자동 반영은 '사용자가 만졌다'로 치지 않는다
-        }
-        var auto = res.state === 'fresh' && !discountTouched;
-        if (auto) {
-          // 정상 수집 — 값·기준일만 한 줄. 전문(수집 이력)은 title 로 남긴다.
-          if (bondAutoRate) bondAutoRate.textContent = Number(res.rate).toFixed(2) + '%';
-          if (bondAutoSrc) bondAutoSrc.textContent = res.asOf ? '자동 적용 · ' + res.asOf + ' 기준' : '자동 적용';
-          if (bondAuto) bondAuto.title = res.message;
-          if (discountNote) discountNote.hidden = true;
-          showBondEditor(false);
-        } else {
-          // 예시값·수집 실패·오래된 값 — 사용자가 직접 확인해야 하므로 감추지 않는다.
-          if (discountNote) {
-            discountNote.className = 'data-stale';
-            discountNote.textContent = res.message;
-            discountNote.hidden = false;
-          }
-          showBondEditor(true);
-          if (regFold) regFold.open = true;
-        }
-      });
+  if (discountInput && window.TopdaCalculatorSources) {
+    TopdaCalculatorSources.bindBondDiscountRate({
+      input: discountInput,
+      note: discountNote,
+      onApplied: function (res, fresh) {
+        if (!fresh && regFold) regFold.open = true;
+      },
+    });
   }
 })();
 </script>
