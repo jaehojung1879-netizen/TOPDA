@@ -16,6 +16,12 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 
 const appSource = fs.readFileSync(new URL('../site/assets/app.js', import.meta.url), 'utf8');
+const calculatorSources = fs.readFileSync(
+  new URL('../site/assets/calculator_sources.js', import.meta.url), 'utf8',
+);
+const officialPriceSource = fs.readFileSync(
+  new URL('../site/assets/official_price.js', import.meta.url), 'utf8',
+);
 function functionBlock(startNeedle, endNeedle) {
   const start = appSource.indexOf(startNeedle);
   const end = appSource.indexOf(endNeedle, start);
@@ -274,6 +280,72 @@ check('bond_rate.json이 seed 상태를 명시하고 collected_at 필드를 갖�
   const collector = fs.readFileSync(new URL('../_meta/collect_bond_rate.py', import.meta.url), 'utf8');
   assert.match(collector, /"collected_at"/, '수집기가 collected_at을 기록하지 않습니다.');
   assert.match(collector, /"seed": False/, '수집기가 성공 시 seed=False를 기록하지 않습니다.');
+});
+
+check('자동 조회 실패·지연 시 공용 로더가 15%를 넣고 경고한다', () => {
+  const sourceContext = vm.createContext({ window: {}, applyBondDiscountRate });
+  vm.runInContext(calculatorSources, sourceContext);
+  const resolve = sourceContext.window.TopdaCalculatorSources.resolveBondRate;
+  assert.equal(resolve(null).value, 15, '조회 실패 때 15%가 적용되지 않습니다.');
+  assert.equal(resolve({ seed: true, customer_burden_rate_pct: 9 }).value, 15,
+    'seed 값을 실제 할인율처럼 적용했습니다.');
+  assert.equal(resolve({
+    seed: false, customer_burden_rate_pct: 12.34, as_of: today, collected_at: today,
+  }).value, 12.34, '최신 조회값이 입력값으로 선택되지 않습니다.');
+  const old = daysAgo(30);
+  assert.equal(resolve({
+    seed: false, customer_burden_rate_pct: 12.34, as_of: old, collected_at: old,
+  }).value, 15, '오래된 조회값 대신 15%를 적용해야 합니다.');
+  assert.match(calculatorSources, /note\.hidden = true/,
+    '정상 조회 때 불필요한 경고를 숨기지 않습니다.');
+  assert.match(calculatorSources, /기본값 15%를 적용했습니다/,
+    '조회 실패 때 15% 적용 경고가 없습니다.');
+});
+
+check('종합·등기 계산기가 같은 공시가격·채권 로더를 쓴다', () => {
+  for (const p of [
+    '../site/calculators/registration-cost.html',
+    '../site/calculators/total-cost-dashboard.html',
+  ]) {
+    const html = fs.readFileSync(new URL(p, import.meta.url), 'utf8');
+    assert.ok(html.includes('assets/official_price.js?v='), `${p}에 공시가격 공용 모듈이 없습니다.`);
+    assert.ok(html.includes('TopdaOfficialPrice.attach('), `${p}가 공시가격 공용 모듈을 호출하지 않습니다.`);
+    assert.ok(html.includes('assets/calculator_sources.js?v='), `${p}에 기준값 공용 로더가 없습니다.`);
+    assert.ok(html.includes('TopdaCalculatorSources.bindBondDiscountRate('),
+      `${p}가 채권 할인율 공용 로더를 호출하지 않습니다.`);
+    assert.ok(!html.includes("fetch('../assets/bond_rate.json"),
+      `${p}에 채권 할인율 fetch가 다시 복사돼 있습니다.`);
+  }
+});
+
+check('공시가격은 단지만 골라 중앙값을 넣지 않고 전용면적 선택 후에만 반영한다', () => {
+  assert.doesNotMatch(officialPriceSource, /fill\(h,\s*-1\)/,
+    '단지 선택 즉시 중앙값을 넣는 코드가 남아 있습니다.');
+  assert.match(officialPriceSource, /아직 값이 입력되지 않았습니다/,
+    '전용면적 선택 전 미반영 안내가 없습니다.');
+  assert.match(officialPriceSource, /단지명 \+ 전용면적/,
+    '단지명과 전용면적을 함께 검색하는 안내가 없습니다.');
+  assert.match(officialPriceSource, /if \(!u\) return;/,
+    '평형 레코드가 없는데도 값을 넣을 수 있습니다.');
+
+  const opContext = vm.createContext({ window: {} });
+  vm.runInContext(officialPriceSource, opContext);
+  const op = opContext.window.TopdaOfficialPrice;
+  const map = {
+    '서울 송파구|헬리오시티': { med: 2_000_000_000, u: [
+      [60, 18, 1_700_000_000], [85, 26, 2_000_000_000], [110, 33, 2_200_000_000],
+    ] },
+    '경기 성남시|헬리오빌': { med: 500_000_000, u: [[84, 25, 400_000_000]] },
+  };
+  const sqmHit = op.search(map, '헬리오시티 84')[0];
+  assert.equal(sqmHit.name, '헬리오시티', '단지명 정확 일치가 먼저 나오지 않습니다.');
+  assert.equal(sqmHit.area, 84, '84㎡ 검색값을 면적으로 분리하지 못했습니다.');
+  assert.equal(op.nearestArea(op.units(sqmHit.rec), sqmHit.area), 1,
+    '84㎡와 가장 가까운 85㎡ 평형을 찾지 못했습니다.');
+  const pyeongHit = op.search(map, '헬리오시티 34평')[0];
+  assert.equal(pyeongHit.area, 112, '34평을 전용면적 약 112㎡로 변환하지 못했습니다.');
+  assert.equal(op.nearestArea(op.units(pyeongHit.rec), pyeongHit.area), 2,
+    '34평과 가장 가까운 110㎡ 평형을 찾지 못했습니다.');
 });
 
 // ─────────────────────────────────────────────────────────────────────
