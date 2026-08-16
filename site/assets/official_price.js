@@ -58,24 +58,45 @@ window.TopdaOfficialPrice = (function () {
     return loading;
   }
 
-  // 단지명으로 시작하는 항목을 앞에 둔다. 앞에서부터 8개를 그냥 끊으면 '자이'를 쳤을 때
-  // 이름이 '○○자이'인 단지가 지역명에 걸린 엉뚱한 단지에 밀린다.
+  function normalized(s) {
+    return String(s || '').toLowerCase().replace(/[^0-9a-z가-힣]/g, '');
+  }
+
+  // "헬리오시티 84"처럼 단지명 뒤에 전용면적을 함께 입력할 수 있다. 숫자를 단지명의
+  // 일부로 취급하면 검색이 0건이 되므로, 10~300㎡ 숫자는 면적 힌트로 떼어 낸다.
+  function parseQuery(q) {
+    var raw = String(q || '').trim();
+    var m = raw.match(/(?:^|\s)(\d{2,3})(?:\s*(㎡|m2|평))?\s*$/i);
+    var n = m ? +m[1] : 0;
+    var area = n >= 10 && n <= 300 ? (m[2] === '평' ? Math.round(n * 3.3058) : n) : 0;
+    var text = area ? raw.slice(0, m.index).trim() : raw;
+    return { text: normalized(text), area: area };
+  }
+
+  // 단지명 정확 일치 → 단지명 시작 → 단지명 포함 → 지역 포함 순으로 둔다. 앞에서부터
+  // 8개를 그냥 끊으면 '자이'를 쳤을 때 지역명에 걸린 엉뚱한 단지가 먼저 나오는 문제를
+  // 막고, 띄어쓰기·괄호 차이도 검색에 영향을 주지 않게 한다.
   function search(map, q) {
-    q = String(q || '').trim().replace(/\s+/g, '');
+    var parsed = parseQuery(q);
+    q = parsed.text;
     if (q.length < 2) return [];
     var hits = [];
     for (var key in map) {
-      var flat = key.replace(/\s+/g, '');
+      var flat = normalized(key);
       if (flat.indexOf(q) < 0) continue;
       var parts = key.split('|');
       var name = parts[1] || '';
-      var at = name.replace(/\s+/g, '').indexOf(q);
+      var flatName = normalized(name);
+      var at = flatName.indexOf(q);
       hits.push({
         key: key, region: parts[0], name: name, rec: map[key],
-        rank: at === 0 ? 0 : (at > 0 ? 1 : 2),   // 이름 앞부분 > 이름 안 > 지역명만
+        area: parsed.area,
+        rank: flatName === q ? 0 : (at === 0 ? 1 : (at > 0 ? 2 : 3)),
       });
     }
-    hits.sort(function (a, b) { return a.rank - b.rank; });
+    hits.sort(function (a, b) {
+      return a.rank - b.rank || a.name.length - b.name.length || a.name.localeCompare(b.name, 'ko');
+    });
     return hits.slice(0, MAX_RESULTS);
   }
 
@@ -101,6 +122,16 @@ window.TopdaOfficialPrice = (function () {
     var best = -1, gap = Infinity;
     for (var i = 0; i < list.length; i++) {
       var g = Math.abs(list[i][2] - value);
+      if (g < gap) { gap = g; best = i; }
+    }
+    return best;
+  }
+
+  function nearestArea(list, area) {
+    if (!(area > 0)) return -1;
+    var best = -1, gap = Infinity;
+    for (var i = 0; i < list.length; i++) {
+      var g = Math.abs(list[i][0] - area);
       if (g < gap) { gap = g; best = i; }
     }
     return best;
@@ -138,7 +169,7 @@ window.TopdaOfficialPrice = (function () {
     wrap.innerHTML =
       '<button type="button" class="op-toggle">🔎 단지 검색으로 공시가격 넣기</button>' +
       '<div class="op-panel" hidden>' +
-      '  <input type="search" class="op-q" autocomplete="off" placeholder="단지명 (예: 헬리오시티)" />' +
+      '  <input type="search" class="op-q" autocomplete="off" placeholder="단지명 또는 단지명 + 전용면적 (예: 헬리오시티 84)" />' +
       '  <div class="op-list"></div>' +
       '</div>' +
       '<div class="op-units-box" hidden></div>' +
@@ -187,27 +218,22 @@ window.TopdaOfficialPrice = (function () {
                : '아직 수록되지 않은 단지입니다.<br>' + coverageNote(d));
           return;
         }
-        // 기준일을 결과 줄에도 적는다 — 고르기 전에 몇 년도 공시가격인지 보여야 한다.
-        // ⚠ 결과 줄에 보이는 값은 단지 전체 호의 **중앙값**이다. 공시가격은 평형마다
-        //   다르므로 이 값이 곧 그 사람의 시가표준액은 아니다. 그래서 여기서 미리
-        //   "평형 N종을 고를 수 있다"고 알린다 — 예전에는 평형 선택줄이 단지를 고른
-        //   **뒤에야** 나타나서, 검색 결과만 보고 "평형 구분이 없네" 하고 닫아 버리면
-        //   중앙값이 그대로 남았다.
+        // 기준일과 선택 가능한 전용면적을 결과 줄에 바로 보여준다. 단지 중앙값은 아예
+        // 입력하지 않는다 — 평형을 고르지 않은 중앙값은 채권·보유세 계산에 쓸 수 없다.
         list.innerHTML = hits.map(function (h, i) {
           var r = h.rec;
           var std = stdDayText(r.std_day);
-          var nu = units(r).length;
-          var spread = (r.min && r.max && r.max > r.min)
-            ? '<span class="op-range">' + (nu ? '평형 ' + nu + '종 · ' : '평형별 ') +
-              won(r.min) + '~' + won(r.max) +
-              (r.n ? ' · ' + r.n + '호' : '') + '</span>'
-            : '';
+          var us = units(r);
+          var areaText = us.length
+            ? us.slice(0, 6).map(function (u) { return u[0] + '㎡'; }).join(' · ')
+              + (us.length > 6 ? ' · 외 ' + (us.length - 6) + '개' : '')
+            : '평형별 자료 없음';
           return '<button type="button" class="op-hit" data-i="' + i + '">' +
                  '<span class="op-name">' + h.name + '</span>' +
                  '<span class="op-region">' + h.region +
                  (std ? ' · ' + std + ' 기준' : '') + '</span>' +
-                 '<span class="op-price">' + won(r.med) + ' <small>중앙값</small></span>' +
-                 spread +
+                 '<span class="op-price">' + (us.length ? '평형 선택' : '직접 확인') + '</span>' +
+                 '<span class="op-range">전용면적 ' + areaText + '</span>' +
                  '</button>';
         }).join('');
         list._hits = hits;
@@ -219,30 +245,25 @@ window.TopdaOfficialPrice = (function () {
         ? ' (이 단지는 ' + won(rec.min) + '~' + won(rec.max) + ' 분포)' : '';
     }
 
-    // 값을 채우고, 그 값이 무엇인지(중앙값인가 평형별 추정인가) 함께 남긴다.
-    // 숫자만 바꾸고 설명을 안 바꾸면 사용자는 여전히 중앙값을 보고 있다고 믿는다.
+    // 전용면적을 고른 뒤에만 값을 채운다. 단지만 선택한 상태에서 중앙값을 자동 입력하면
+    // 사용자가 평형 선택을 건너뛴 채 채권·보유세 계산에 쓰게 된다.
     function fill(h, unitIdx) {
       var rec = h.rec, list2 = units(rec);
       var u = (unitIdx >= 0 && list2[unitIdx]) || null;
-      var value = u ? u[2] : rec.med;
+      if (!u) return;
+      var value = u[2];
       input.value = value;
       input.dispatchEvent(new Event('input', { bubbles: true }));
 
       var std = stdDayText(rec.std_day);
       toggle.innerHTML = '🔎 다시 검색 <span class="op-filled">' + h.name +
-        (u ? ' ' + unitLabel(u) : '') + ' · ' + won(value) +
+        ' ' + unitLabel(u) + ' · ' + won(value) +
         (std ? ' · ' + std + ' 기준' : '') + '</span>';
 
       warn.hidden = false;
-      warn.innerHTML = u
-        ? '이 값은 <strong>' + unitLabel(u) + ' 추정치</strong>입니다 — 단지 공시가격 '
-          + '중앙값에 이 평형의 실거래 비율을 적용해 계산했습니다(실측값이 아닙니다). '
-          + '정확한 값은 본인 호의 공시가격이며 ' + OFFICIAL_LINK + '에서 확인할 수 있습니다.'
-        : '이 값은 <strong>단지 전체 호의 중앙값</strong>입니다 — 공시가격은 평형마다 '
-          + '다릅니다' + spreadText(rec) + '. ' + (list2.length
-            ? '<strong>위에서 평형을 고르면</strong> 그 평형 추정치로 바뀝니다. 본인 호의 '
-            : '본인 호의 ')
-          + '정확한 공시가격은 ' + OFFICIAL_LINK + '에서 확인해 직접 입력하세요.';
+      warn.innerHTML = '이 값은 <strong>' + unitLabel(u) + ' 평형별 추정치</strong>입니다 — 단지 공시가격 '
+        + '중앙값에 이 평형의 실거래 비율을 적용해 계산했습니다(호별 실측값 아님). '
+        + '동·층·호에 따른 정확한 공시가격은 ' + OFFICIAL_LINK + '에서 확인할 수 있습니다.';
 
       var btns = unitsBox.querySelectorAll('.op-unit');
       for (var i = 0; i < btns.length; i++) {
@@ -256,19 +277,21 @@ window.TopdaOfficialPrice = (function () {
     // 기능인지 이 단지만 없는 것인지 구분할 수가 없었다.
     function renderUnits(h) {
       var list2 = units(h.rec);
+      var nearArea = nearestArea(list2, h.area);
       unitsBox.hidden = false;
       if (!list2.length) {
         unitsBox.innerHTML = '<p class="op-note">이 단지는 실거래 표본이 얕아 평형별 ' +
-          '추정을 만들지 않았습니다 — 아래 값은 단지 중앙값입니다. 본인 호의 값은 ' +
+          '추정을 만들지 않았습니다. 단지 중앙값은 계산기에 넣지 않습니다. 본인 호의 값은 ' +
           OFFICIAL_LINK + '에서 확인하세요.</p>';
         return;
       }
       unitsBox.innerHTML =
-        '<div class="op-units"><span class="op-units-label">평형 선택</span>' +
+        '<div class="op-units"><span class="op-units-label">전용면적을 선택하세요 — 선택 후 계산기에 반영됩니다</span>' +
         list2.map(function (u, i) {
           return '<button type="button" class="op-unit" data-u="' + i + '" ' +
                  'aria-pressed="false">' + unitLabel(u) +
-                 '<small>' + won(u[2]) + '</small></button>';
+                 '<small>' + won(u[2]) + (i === nearArea ? ' · 입력 면적과 가장 가까움' : '') +
+                 '</small></button>';
         }).join('') + '</div>';
     }
 
@@ -285,13 +308,12 @@ window.TopdaOfficialPrice = (function () {
       panel.hidden = true;
       unitsBox._h = h;
       renderUnits(h);
-      // 처음에는 중앙값을 그대로 채운다(평형을 고르기 전 동작을 바꾸지 않는다).
-      // 다만 그 값이 어느 평형쯤인지는 눌러서 보여 준다 — 기준점이 없으면 어느
-      // 버튼을 눌러야 할지 알 수 없다.
-      fill(h, -1);
-      var near = nearestUnit(units(h.rec), h.rec.med);
-      var btns = unitsBox.querySelectorAll('.op-unit');
-      if (near >= 0 && btns[near]) btns[near].classList.add('op-unit-median');
+      toggle.innerHTML = '🔎 다시 검색 <span class="op-filled">' + h.name + ' · 평형 선택 필요</span>';
+      warn.hidden = false;
+      warn.innerHTML = units(h.rec).length
+        ? '<strong>아직 값이 입력되지 않았습니다.</strong> 아래에서 전용면적을 선택하세요.'
+        : '<strong>평형별 값을 만들 수 없는 단지입니다.</strong> ' + OFFICIAL_LINK +
+          '에서 동·층·호를 선택해 확인하세요.';
     });
 
     return {
@@ -302,6 +324,6 @@ window.TopdaOfficialPrice = (function () {
 
   return {
     attach: attach, load: load, search: search, won: won,
-    units: units, nearestUnit: nearestUnit, unitLabel: unitLabel,
+    units: units, nearestUnit: nearestUnit, nearestArea: nearestArea, unitLabel: unitLabel,
   };
 })();
