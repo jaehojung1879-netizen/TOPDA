@@ -494,6 +494,9 @@ check('종합계산기가 매매가가 아니라 KB시세로 한도를 판정한
   assert.match(block, /kbPrice > 0 \? kbPrice : price/, '시가 우선 판정이 아닙니다.');
   const html = fs.readFileSync(new URL('../site/calculators/total-cost-dashboard.html', import.meta.url), 'utf8');
   assert.ok(html.includes('name="kbPrice"'), '종합계산기에 KB시세 입력이 없습니다.');
+  assert.ok(html.includes('2025·10·15 대책'), 'KB시세 라벨에 규제 근거 시점이 없습니다.');
+  assert.ok(html.includes('10월 16일 시행'), 'KB시세 도움말에 시행일이 없습니다.');
+  assert.ok(html.includes('2025년 6·27 대책'), '6억원 상한의 최초 근거가 설명되지 않았습니다.');
 });
 
 check('대출 한도 페이지가 매매가를 넣지 말라고 안내한다', () => {
