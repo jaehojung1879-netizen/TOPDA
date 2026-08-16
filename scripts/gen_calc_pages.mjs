@@ -106,7 +106,7 @@ ${alts}
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/${calc}.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=1315e3db3b" />
+<link rel="stylesheet" href="../../assets/styles.css?v=938636aa94" />
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"${UI[lang].home}","item":"https://topda.kr/${lang}/index.html"},{"@type":"ListItem","position":2,"name":"${UI[lang].calc}","item":"https://topda.kr/${lang}/calculators/index.html"},{"@type":"ListItem","position":3,"name":"${t.title}","item":"${canon}"}]}
 </script>
@@ -140,8 +140,8 @@ function chrome(lang, bodyMain) {
 </header>
 ${bodyMain}
 <footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. ${u.disc}</p></div></footer>
-<script src="../../assets/rates.js?v=4422b7a3c8"></script>
-<script src="../../assets/app.js?v=4aae4d5dfe"></script>
+<script src="../../assets/rates.js?v=7163e7567c"></script>
+<script src="../../assets/app.js?v=9f6c208452"></script>
 </body>
 </html>
 `;
@@ -444,7 +444,7 @@ ${alts}
 <link rel="alternate" hreflang="x-default" href="https://topda.kr/calculators/index.html" />
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=1315e3db3b" />
+<link rel="stylesheet" href="../../assets/styles.css?v=938636aa94" />
 </head>`;
 }
 function indexBody(lang, calcList) {

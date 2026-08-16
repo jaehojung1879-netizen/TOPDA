@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="assets/styles.css?v=1315e3db3b" />
+<link rel="stylesheet" href="assets/styles.css?v=938636aa94" />
 </head>
 <body>
 
@@ -66,20 +66,112 @@
     <span class="pa-go">지금 확인하기</span>
   </a>
 
-  <!-- 카테고리는 홈·카테고리 페이지와 3중으로 겹치던 카드 그리드 대신 한 줄 이동 링크로 둔다. -->
+  <!-- ═══ 거래 유형별 허브 ═══════════════════════════════════════════════════
+       한 줄 .subnav 링크로 뒀더니 "여기 허브가 있다"는 사실이 눈에 걸리지 않았다.
+       분야 색은 아래 카드 뱃지(.guide-hub .card[data-cat])와 **같은 값**을 쓴다 —
+       색이 이어져야 타일에서 고른 분야를 목록에서 다시 찾을 수 있다. -->
   <section class="block">
     <div class="block-head">
       <h2>거래 유형별 허브로 바로 가기</h2>
       <p>계산기·체크리스트·출처까지 모아 둔 페이지</p>
     </div>
-    <nav class="subnav" aria-label="거래 유형별 가이드 허브">
-      <a href="categories/sale.html">매매</a>
-      <a href="categories/lease.html">전세·월세</a>
-      <a href="categories/loan.html">대출·금융</a>
-      <a href="interior/index.html">인테리어</a>
-      <a href="categories/moving.html">이사·입주</a>
-      <a href="categories/auction.html">경매·공매</a>
+    <nav class="type-grid" aria-label="거래 유형별 가이드 허브">
+      <a class="type-tile" href="categories/sale.html" data-cat="매매">
+        <span class="tt-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/></svg>
+        </span>
+        <span class="tt-body">
+          <span class="tt-name">매매</span>
+          <span class="tt-desc">취득세·중개보수·잔금</span>
+        </span>
+      </a>
+      <a class="type-tile" href="categories/lease.html" data-cat="전세·월세">
+        <span class="tt-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h4"/></svg>
+        </span>
+        <span class="tt-body">
+          <span class="tt-name">전세·월세</span>
+          <span class="tt-desc">보증금·특약·갱신</span>
+        </span>
+      </a>
+      <a class="type-tile" href="categories/loan.html" data-cat="대출·금융">
+        <span class="tt-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 4l9 5.5"/><path d="M5 10v8M10 10v8M14 10v8M19 10v8"/><path d="M3 21h18"/></svg>
+        </span>
+        <span class="tt-body">
+          <span class="tt-name">대출·금융</span>
+          <span class="tt-desc">LTV·DSR·한도</span>
+        </span>
+      </a>
+      <a class="type-tile" href="interior/index.html" data-cat="인테리어">
+        <span class="tt-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="12" height="5" rx="1"/><path d="M15 6.5h4a2 2 0 0 1 2 2V11a2 2 0 0 1-2 2h-7"/><path d="M12 13v3"/><rect x="10" y="16" width="4" height="5" rx="1"/></svg>
+        </span>
+        <span class="tt-body">
+          <span class="tt-name">인테리어</span>
+          <span class="tt-desc">견적·계약·하자</span>
+        </span>
+      </a>
+      <a class="type-tile" href="categories/moving.html" data-cat="이사·입주">
+        <span class="tt-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2z"/><path d="M13 10h4l4 3.5V16h-8z"/><circle cx="7" cy="18.5" r="1.8"/><circle cx="17" cy="18.5" r="1.8"/></svg>
+        </span>
+        <span class="tt-body">
+          <span class="tt-name">이사·입주</span>
+          <span class="tt-desc">견적·분쟁·전입신고</span>
+        </span>
+      </a>
+      <a class="type-tile" href="categories/auction.html" data-cat="경매·공매">
+        <span class="tt-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m5 14 5-5"/><rect x="8.6" y="4.4" width="7" height="4" rx="1" transform="rotate(45 12.1 6.4)"/><path d="M11 19h9"/><path d="m13 9 4 4"/></svg>
+        </span>
+        <span class="tt-body">
+          <span class="tt-name">경매·공매</span>
+          <span class="tt-desc">권리분석·입찰가</span>
+        </span>
+      </a>
     </nav>
+  </section>
+
+  <!-- ═══ 새로 올라온 가이드 ═══════════════════════════════════════════════
+       추보식 — 글이 늘면 이 세 칸의 맨 앞에 끼워 넣고 마지막 하나를 뺀다.
+       아래 '단계별' 목록은 순서가 고정돼 있어 새 글이 30여 개 카드 속에 묻힌다.
+       날짜를 붙여 두는 이유: 제도 글은 언제 쓴 것인지가 내용만큼 중요하다. -->
+  <section class="block">
+    <div class="block-head">
+      <h2>새로 올라온 가이드</h2>
+      <a href="posts/index.html">전체 글 목록</a>
+    </div>
+    <div class="fresh-grid">
+      <a class="fresh-card" href="posts/real-estate-tax-reform-2026.html" data-cat="세금">
+        <span class="fresh-meta">
+          <span class="fresh-new">NEW</span>
+          <time datetime="2026-08-15">2026년 8월 15일</time>
+          <span class="fresh-cat">세금</span>
+        </span>
+        <h3>2026 부동산 세제 개편안</h3>
+        <p>종부세·양도세 정부안에 무엇이 담겼고, 2027~2029년 중 언제부터 적용되는지 시행 일정으로 정리했습니다.</p>
+        <span class="fresh-go">지금 읽기</span>
+      </a>
+      <a class="fresh-card" href="loan/bank-limits.html" data-cat="대출·금융">
+        <span class="fresh-meta">
+          <time datetime="2026-08-08">2026년 8월 8일</time>
+          <span class="fresh-cat">대출·금융</span>
+        </span>
+        <h3>은행별 주담대 한도 축소·접수 제한</h3>
+        <p>규제상 한도와 실제 실행액이 다른 이유, 출처로 확인한 은행별 한시 조치, 계약 전·잔금 전 확인 순서.</p>
+        <span class="fresh-go">지금 읽기</span>
+      </a>
+      <a class="fresh-card" href="loan/mortgage.html" data-cat="대출·금융">
+        <span class="fresh-meta">
+          <time datetime="2026-07-28">2026년 7월 28일</time>
+          <span class="fresh-cat">대출·금융</span>
+        </span>
+        <h3>주택담보대출 구조와 신청 절차</h3>
+        <p>가심사부터 근저당 설정·기표까지, 잔금일에 돈이 실제로 들어오기까지 거치는 단계를 순서대로.</p>
+        <span class="fresh-go">지금 읽기</span>
+      </a>
+    </div>
   </section>
 
   <!-- ═══ 최근 이슈 ═══ -->
@@ -399,6 +491,6 @@
   </div>
 </footer>
 
-<script src="assets/app.js?v=4aae4d5dfe"></script>
+<script src="assets/app.js?v=9f6c208452"></script>
 </body>
 </html>

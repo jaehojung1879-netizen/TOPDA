@@ -2143,25 +2143,50 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       const i = annualRate / 100 / 12;
       return principal / n + principal * i;
     }
-    // 원금균등: 첫 1년(12개월) 원리금 합계 — DSR은 상환 부담이 가장 큰 첫해 기준으로 산정.
-    function equalPrincipalFirstYear(principal, annualRate, years) {
-      if (!principal || years <= 0) return 0;
-      const n = years * 12;
-      const i = annualRate / 100 / 12;
-      const months = Math.min(12, n);
-      let sum = 0;
-      for (let k = 0; k < months; k++) {
-        const balance = principal - (principal / n) * k;
-        sum += principal / n + balance * i;
-      }
-      return sum;
-    }
     // 원금균등: 만기까지 총 이자 = i × 원금 × (n+1)/2
     function equalPrincipalTotalInterest(principal, annualRate, years) {
       if (!principal || annualRate <= 0 || years <= 0) return 0;
       const n = years * 12;
       const i = annualRate / 100 / 12;
       return principal * i * (n + 1) / 2;
+    }
+
+    // ── 대출 상환 프로필 (월 상환액 · 총이자 · DSR 산입액) ──
+    //
+    // ⚠ DSR 산입액은 한도 계산과 **같은 함수**(dsrAnnualFactor)를 쓴다. 자체 산식을
+    //   두지 않는다.
+    //
+    //   예전에는 이 자리에서만 원금균등을 「첫해 원리금 합계」로 잡았다. 그래서 같은
+    //   화면 안에서 '예상 주담대 최대한도'(연평균 기준)와 'DSR %'(첫해 기준)가 서로
+    //   다른 산식으로 나왔다 — 실사용자 입력(5.86억·원금균등 30년·연 3.83%·소득
+    //   1.197억·신용대출 2,500만) 기준:
+    //       첫해 방식  연 41,634,242원 → DSR 39.0%   ← 한도 40% 코앞으로 표시
+    //       연평균 방식 연 30,786,405원 → DSR 29.9%
+    //   한도 박스는 "6억까지 가능"이라 하면서 DSR 박스는 "40%에 근접"이라고 말하는
+    //   모순이 생긴다. 연평균 방식이 실제 은행 DSR 원장과 일치한다(dsrAnnualFactor 주석).
+    function loanProfile(principal, annualRate, years, repay) {
+      const isEqualPrincipal = repay === 'principal';
+      const months = (years || 0) * 12;
+      // 연평균 원리금 — DSR 산입액이자 '연간 보유비용'의 주담대 몫이다.
+      // 원금균등에서 첫 회차 × 12 를 쓰면 두 곳 모두 과다 계상된다.
+      const annualPayment = principal > 0 && months > 0
+        ? principal * dsrAnnualFactor(annualRate, months, isEqualPrincipal ? 'principal' : 'equal')
+        : 0;
+      if (isEqualPrincipal) {
+        return {
+          monthly: equalPrincipalFirstMonth(principal, annualRate, years), // 첫 달(가장 큼)
+          monthlyLabel: L('월 상환액 (첫달·최대)', 'Monthly payment (1st mo., max)'),
+          totalInterest: equalPrincipalTotalInterest(principal, annualRate, years),
+          annualPayment,
+        };
+      }
+      const monthly = monthlyPayment(principal, annualRate, years);        // 매월 동일
+      return {
+        monthly,
+        monthlyLabel: L('월 원리금 상환', 'Monthly payment'),
+        totalInterest: monthly > 0 ? monthly * months - principal : 0,
+        annualPayment,
+      };
     }
 
     // 법무사·등기 부대비용 — 자체 산식을 두지 않고 공통 엔진 calcRegistrationCost()를 호출한다.
@@ -2511,10 +2536,26 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
         input.disabled = !eligible;
         if (!eligible) input.checked = false;
         const field = input.closest('.field');
-        if (field) field.classList.toggle('is-disabled', !eligible);
+        // 해당하지 않는 감면은 흐리게 두지 않고 감춘다. 고를 수 없는 칸이 6개 중 3~4개를
+        // 차지하고 있으면 "지금 내가 입력할 것"이 무엇인지 보이지 않는다. 무엇이 왜
+        // 빠졌는지는 바로 아래 자동 판정 안내 한 줄이 대신 말해 준다.
+        if (field) {
+          field.classList.toggle('is-disabled', !eligible);
+          field.style.display = eligible ? '' : 'none';
+        }
       };
+      // 감면 요건은 calcAcquisitionTax 와 **같은 기준**으로 판정한다 — 화면에서 고를 수 있는
+      // 항목과 엔진이 실제로 인정하는 항목이 갈리면 안 된다.
+      // 일시적 2주택을 켜면 2주택도 1주택으로 보므로(effHomesForRelief) 여기서도 그렇게 센다.
+      const effHomes = (homes === 2 && getCheck('tempTwoHome')) ? 1 : homes;
+      const oneHomeUnder12 = effHomes === 1 && price <= 1200000000;
       setEligible('tempTwoHome', homes === 2);
-      setEligible('firstHome', homes === 1 && price <= 1200000000);
+      setEligible('firstHome', oneHomeUnder12);
+      // 소형 비아파트·인구감소지역은 생애최초 감면의 **한도를 올리는** 옵션이라,
+      // 생애최초를 실제로 켰을 때만 의미가 있다. 단독으로 켜 두면 아무 일도 하지 않는
+      // 체크박스가 남는다.
+      setEligible('firstHomeSmallHouse', oneHomeUnder12 && getCheck('firstHome'));
+      setEligible('childbirth', oneHomeUnder12);
       setEligible('unsold2026', !areaOver85 && price <= 600000000);
       // 조례 추가 감면 선택은 미분양 감면을 켰을 때만 유효하다.
       const localSel = root.querySelector('[name="unsold2026LocalExtra"]');
@@ -2527,12 +2568,14 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       }
       const status = root.querySelector('[data-dashboard-acq-status]');
       if (status) {
+        // 감춘 항목을 여기서 이름으로 되짚어 준다 — 칸이 사라진 이유를 설명하지 않으면
+        // "생애최초는 어디 갔지?"가 된다.
         const excluded = [];
         if (homes !== 2) excluded.push(L('일시적 2주택', 'temporary 2-home relief'));
-        if (homes !== 1 || price > 1200000000) excluded.push(L('생애최초 감면', 'first-home relief'));
-        if (areaOver85 || price > 600000000) excluded.push(L('지방 미분양 감면', 'unsold-unit relief'));
+        if (!oneHomeUnder12) excluded.push(L('생애최초·출산양육 감면(1주택·12억 이하)', 'first-home / childbirth relief (1 home, ≤ KRW 1.2B)'));
+        if (areaOver85 || price > 600000000) excluded.push(L('지방 미분양 감면(85㎡·6억 이하)', 'unsold-unit relief (≤85㎡, ≤ KRW 600M)'));
         status.textContent = excluded.length
-          ? L('현재 입력값으로 자동 제외: ', 'Automatically unavailable: ') + excluded.join(L(' · ', ', '))
+          ? L('요건에 해당하지 않아 숨김: ', 'Hidden — requirements not met: ') + excluded.join(L(' · ', ', '))
           : L('가격·주택 수·면적으로 감면 적용 가능 여부를 자동 확인합니다.', 'Relief eligibility is checked automatically from price, home count, and floor area.');
       }
     }
@@ -2635,21 +2678,15 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       const regDiscount = (getNum('regDiscount') || 0) / 100;
       const selfReg = getCheck('selfReg');
       const reg = registrationCost(price, regStd, regDiscount, selfReg, nonhouse ? 'land' : 'house');
+      // 접어 둔 등기·법무사 묶음의 합계를 제목 줄에 띄운다 — 열지 않고도 금액은 보이게.
+      setText('foldRegTotal', fmt.won(reg.total));
       // 상환 방식(원리금균등 / 원금균등)에 따라 월 상환액·총이자·DSR 산정이 달라진다.
       const repay = getRadio('repay') || 'amortize';
-      const isEqualPrincipal = repay === 'principal';
-      let monthly, monthlyLabel, totalInterest, dsrAnnual;
-      if (isEqualPrincipal) {
-        monthly = equalPrincipalFirstMonth(loan, rate, term);   // 첫 달(가장 큼)
-        monthlyLabel = L('월 상환액 (첫달·최대)', 'Monthly payment (1st mo., max)');
-        totalInterest = equalPrincipalTotalInterest(loan, rate, term);
-        dsrAnnual = equalPrincipalFirstYear(loan, rate, term);  // DSR은 첫해 기준
-      } else {
-        monthly = monthlyPayment(loan, rate, term);             // 매월 동일
-        monthlyLabel = L('월 원리금 상환', 'Monthly payment');
-        totalInterest = monthly > 0 ? monthly * term * 12 - loan : 0;
-        dsrAnnual = monthly * 12;
-      }
+      const pay = loanProfile(loan, rate, term, repay);
+      const monthly = pay.monthly;
+      const monthlyLabel = pay.monthlyLabel;
+      const totalInterest = pay.totalInterest;
+      const dsrAnnual = pay.annualPayment;
       const existingAnnualDebt = getN('creditDebt') / 5 + otherLoansTotal();
       const mortgageBox = root.querySelector('[data-mortgage-limit-box]');
       if (!nonhouse && !isLeaseBiz) {
@@ -2699,7 +2736,9 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
         { label: L('등기·법무사', 'Registration & scrivener'), value: reg.total, color: '#a855f7' },
         { label: L('인지세', 'Stamp duty'), value: reg.stamp, sub: true },
         { label: L('등기신청 수수료', 'Registration filing fee'), value: reg.regFee, sub: true },
-        { label: L('국민주택채권 할인부담 (매입률 ' + (reg.rate * 100).toFixed(1) + '% · 할인 ' + (regDiscount * 100).toFixed(1) + '%)', 'National Housing Bond discount cost (purchase rate ' + (reg.rate * 100).toFixed(1) + '% · discount ' + (regDiscount * 100).toFixed(1) + '%)'), value: reg.bond, sub: true },
+        // 할인율은 자동 조회값이라 소수 둘째 자리까지 온다(예 15.0162%). 한 자리로 줄이면
+        // 라벨은 15.0%인데 계산은 15.02%로 돌아가 값이 안 맞는 것처럼 보인다.
+        { label: L('국민주택채권 할인부담 (매입률 ' + (reg.rate * 100).toFixed(1) + '% · 할인 ' + (regDiscount * 100).toFixed(2) + '%)', 'National Housing Bond discount cost (purchase rate ' + (reg.rate * 100).toFixed(1) + '% · discount ' + (regDiscount * 100).toFixed(2) + '%)'), value: reg.bond, sub: true },
         ...(selfReg
           ? [{ label: L('법무사 보수', 'Scrivener fee'), value: L('셀프 등기 (0원)', 'Self-filed (KRW 0)'), sub: true }]
           : [
@@ -3154,6 +3193,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       const broker = nonhouse ? Math.round(price * 0.009 * 1.1) : brokerFee(price, 'sale');
       const reg = registrationCost(price, getN('regStd'), (getNum('regDiscount') || 0) / 100,
         getCheck('selfReg'), nonhouse ? 'land' : 'house');
+      setText('foldRegTotal', fmt.won(reg.total));
 
       // ── 자금조달 ──
       const loan = getN('loan');
@@ -3189,7 +3229,12 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       const shortfall = fundingNeed - funded;
 
       // ── D. 연간 보유비용 ──
-      const mortgageMonthly = monthlyPayment(loan, rate, term);
+      // 상환 방식(원리금균등/원금균등)도 매수 탭에서 그대로 가져온다. 예전엔 이 탭만
+      // 원리금균등으로 고정돼 있어서, 매수 탭에서 원금균등을 골라도 자금계획의 보유비용·
+      // DSR 이 바뀌지 않았다("매수 탭 입력을 그대로 사용합니다"라는 안내와 어긋난다).
+      const planPay = loanProfile(loan, rate, term, getRadio('repay') || 'amortize');
+      const mortgageMonthly = planPay.monthly;
+      const mortgageAnnual = planPay.annualPayment;   // 원금균등은 첫 회차 × 12 가 아니라 연평균
       const creditMonthly = creditLoan > 0 ? creditLoan * (creditRate / 100) / 12 : 0;
       const officialPrice = getN('regStd') || Math.round(price * 0.7);
       const ptax = nonhouse ? { total: 0 } : propertyTaxEstimate(officialPrice, homes === 1);
@@ -3197,7 +3242,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       const mgmtMonthly = getN('planMgmt');
       const insuranceYear = getN('planInsurance');
       const repairYear = getN('planRepair');
-      const annualHolding = (mortgageMonthly + creditMonthly + mgmtMonthly) * 12
+      const annualHolding = mortgageAnnual + (creditMonthly + mgmtMonthly) * 12
         + ptax.total + ctax.total + insuranceYear + repairYear;
 
       if (resultTitle) resultTitle.textContent = L('잔금일에 필요한 현금', 'Cash needed on closing day');
@@ -3255,7 +3300,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
         { divider: true, label: shortfall > 0 ? L('부족자금', 'Shortfall') : L('자금 여유', 'Surplus'), value: Math.abs(shortfall) },
 
         { label: 'D. ' + L('연간 보유비용', 'Annual holding cost'), value: '' },
-        { label: L('주담대 원리금 (연)', 'Mortgage payments (yr)'), value: mortgageMonthly * 12, sub: true },
+        { label: L('주담대 원리금 (연평균)', 'Mortgage payments (annual avg.)'), value: mortgageAnnual, sub: true },
         ...(creditMonthly > 0 ? [{ label: L('신용대출 이자 (연)', 'Credit loan interest (yr)'), value: creditMonthly * 12, sub: true }] : []),
         { label: L('재산세 추정 (도시지역분·지방교육세 포함)', 'Property tax est.'), value: ptax.total, sub: true },
         { label: L('종합부동산세 추정', 'Comprehensive real-estate tax est.'),
@@ -3269,7 +3314,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
       // 자금계획 탭에서는 DSR·RTI·대출한도 박스를 매수 탭과 동일하게 유지한다.
       if (rtiBox) rtiBox.hidden = true;
       if (dsrBox) dsrBox.hidden = false;
-      renderDSR(mortgageMonthly * 12, getN('creditDebt') / 5 + otherLoansTotal());
+      renderDSR(planPay.annualPayment, getN('creditDebt') / 5 + otherLoansTotal());
     }
 
     function switchScn(name) {

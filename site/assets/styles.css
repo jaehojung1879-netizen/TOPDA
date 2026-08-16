@@ -585,6 +585,9 @@ button.linkish:hover { opacity: 0.8; }
   font-size: 0.78rem; line-height: 1.5; word-break: keep-all;
   background: rgba(5, 150, 105, 0.10); border-left: 3px solid #059669; color: var(--text-muted);
 }
+/* 둘 다 display:block 이라 hidden 속성만으로는 안 숨는다 — 빈 색 띠가 남는다.
+   (자동 적용에 성공한 날에는 이 경고를 감추고 값 한 줄만 남긴다) */
+.data-stale[hidden], .data-fresh[hidden] { display: none; }
 
 .result-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: -16px; margin-bottom: 22px; }
 .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -1746,6 +1749,56 @@ table.ref-table tr:last-child th, table.ref-table tr:last-child td {
   border-bottom: 1px solid var(--border);
 }
 .scn-section-title:first-child { margin-top: 0; }
+
+/* ── 접히는 입력 묶음 ─────────────────────────────────────────────────────
+   자동으로 채워지거나 예외적인 입력만 모아 접는다. 접힌 상태에서도 그 묶음의
+   합계는 제목 줄에 남겨 둔다 — "얼마인지"를 보려고 열게 만들지 않기 위해서다.
+   .scn-section-title 과 같은 높이·굵기로 맞춰서 접기 여부가 섹션 구조를 흔들지 않게 한다. */
+.calc-fold {
+  margin: 24px 0 0;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+.calc-fold > summary {
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 13px; cursor: pointer; list-style: none;
+  font-size: 0.85rem; font-weight: 700; color: var(--text-muted);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.calc-fold > summary::-webkit-details-marker { display: none; }
+/* 펼침 표시 — 삼각형을 직접 그려 브라우저별 마커 차이를 없앤다. */
+.calc-fold > summary::before {
+  content: ""; flex: 0 0 auto; width: 0; height: 0;
+  border-left: 5px solid currentColor;
+  border-top: 4px solid transparent; border-bottom: 4px solid transparent;
+  transition: transform 0.15s;
+}
+.calc-fold[open] > summary::before { transform: rotate(90deg); }
+.calc-fold > summary:hover { color: var(--text); }
+.calc-fold > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: var(--radius-sm); }
+.calc-fold .cf-title { flex: 1; min-width: 0; }
+.calc-fold .cf-sum {
+  font-weight: 700; font-size: 0.92rem; color: var(--text);
+  letter-spacing: -0.01em; text-transform: none; font-variant-numeric: tabular-nums;
+}
+.calc-fold-body { padding: 4px 13px 14px; border-top: 1px solid var(--border); }
+.calc-fold-body .field:last-of-type { margin-bottom: 0; }
+.cf-lead { margin: 12px 0 14px; font-size: 0.82rem; line-height: 1.55; color: var(--text-muted); }
+
+/* ── 자동으로 채운 값 ─────────────────────────────────────────────────────
+   매일 자동 수집하는 값(국민주택채권 할인율 등)은 입력칸 대신 결과 한 줄로 보여 준다.
+   근거는 라벨 옆 ? 도움말이 들고, 고치려는 사람만 「직접 입력」으로 입력칸을 편다.
+   수집이 실패한 날에는 이 줄 대신 입력칸과 .data-stale 경고가 나온다. */
+.auto-value {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px;
+  margin: 0; padding: 9px 12px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.auto-value strong { font-size: 1rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.auto-value span { font-size: 0.78rem; color: var(--text-muted); }
+/* display:flex 이 hidden 속성을 이깁니다 — 「직접 입력」으로 바꿨을 때 두 줄이 겹치지 않게. */
+.auto-value[hidden] { display: none; }
 
 .scn-note {
   font-size: 0.8rem; color: var(--text-muted);
@@ -4053,6 +4106,81 @@ ol.rt-list { list-style: decimal; }
      · 카드 유형은 이 페이지에서 여전히 한 종류다(.card).
      · 파란색은 행동·현재 상태에만. 분야 색은 뱃지 안에서만 쓴다.
    ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 거래 유형별 허브 타일 ───────────────────────────────────────────────
+   분야 색(--tt-bg/--tt-fg)은 아래 .guide-hub .card[data-cat] 뱃지와 같은 값이다.
+   두 곳이 갈리면 타일에서 고른 분야를 목록에서 색으로 다시 찾을 수 없다.
+   360px 에서 2열이 들어가야 해서 아이콘 34px · 설명 한 줄로 묶는다. */
+.type-grid { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; }
+@media (min-width: 680px) { .type-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; } }
+
+.type-tile {
+  --tt-bg: var(--surface-2); --tt-fg: var(--text-muted);
+  display: flex; align-items: center; gap: 11px;
+  padding: 13px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text);
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.type-tile:hover { border-color: var(--tt-fg); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.type-tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.type-tile .tt-ico {
+  flex: 0 0 auto; width: 34px; height: 34px; border-radius: 9px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--tt-bg); color: var(--tt-fg);
+}
+.type-tile .tt-ico svg { width: 19px; height: 19px; }
+.type-tile .tt-body { min-width: 0; }
+.type-tile .tt-name { display: block; font-size: 0.96rem; font-weight: 700; letter-spacing: -0.01em; }
+.type-tile .tt-desc {
+  display: block; margin-top: 2px; font-size: 0.78rem; line-height: 1.4;
+  color: var(--text-muted); word-break: keep-all;
+}
+.type-tile[data-cat="매매"]      { --tt-bg: #eff6ff; --tt-fg: #1d4ed8; }
+.type-tile[data-cat="전세·월세"] { --tt-bg: #ecfdf5; --tt-fg: #047857; }
+.type-tile[data-cat="대출·금융"] { --tt-bg: #f5f3ff; --tt-fg: #6d28d9; }
+.type-tile[data-cat="인테리어"]  { --tt-bg: #fdf2f8; --tt-fg: #a21caf; }
+.type-tile[data-cat="이사·입주"] { --tt-bg: #ecfeff; --tt-fg: #0e7490; }
+.type-tile[data-cat="경매·공매"] { --tt-bg: #f1f5f9; --tt-fg: #475569; }
+/* 360px 에서는 타일 하나의 글자 폭이 90px 남짓이라 아이콘을 줄여 설명 줄을 확보한다. */
+@media (max-width: 400px) {
+  .type-tile { padding: 11px 11px; gap: 9px; }
+  .type-tile .tt-ico { width: 30px; height: 30px; border-radius: 8px; }
+  .type-tile .tt-ico svg { width: 17px; height: 17px; }
+  .type-tile .tt-name { font-size: 0.92rem; }
+  .type-tile .tt-desc { font-size: 0.74rem; }
+}
+
+/* ── 새로 올라온 가이드 (추보식) ─────────────────────────────────────────
+   아래 단계별 목록은 순서가 고정이라 새 글이 묻힌다. 최신 3개만 따로,
+   .card 보다 한 단계 굵게 — 다만 페이지의 1차 행동(.primary-action)보다는 약하게. */
+.fresh-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 860px) { .fresh-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+
+.fresh-card {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 20px; border: 1px solid var(--border-strong); border-radius: var(--radius);
+  background: var(--surface); color: var(--text);
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.fresh-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.fresh-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fresh-card h3 { margin: 0; font-size: 1.12rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.4; word-break: keep-all; }
+.fresh-card p { margin: 0; flex: 1; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; word-break: keep-all; }
+
+.fresh-meta {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 7px;
+  font-size: 0.78rem; color: var(--text-subtle);
+}
+.fresh-meta time { font-variant-numeric: tabular-nums; }
+.fresh-new {
+  padding: 2px 7px; border-radius: 999px;
+  background: var(--accent); color: #fff; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em;
+}
+.fresh-cat { color: var(--text-muted); font-weight: 600; }
+/* 날짜와 분야 사이 구분점. flex gap 이 이미 간격을 주므로 점 뒤 공백은 넣지 않는다. */
+.fresh-cat::before { content: "·"; margin-right: 4px; color: var(--text-subtle); font-weight: 400; }
+.fresh-go { font-size: 0.86rem; font-weight: 600; color: var(--accent); }
+.fresh-go::after { content: " →"; }
 
 /* ── 목록 좁히기 ─────────────────────────────────────────────────────────── */
 .gfilter { margin: 0 0 14px; }
