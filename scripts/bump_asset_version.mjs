@@ -28,7 +28,9 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CHECK = process.argv.includes('--check');
 
 // 버전을 붙일 자산 — 계산 결과에 영향을 주는 것들.
-const ASSETS = ['app.js', 'rates.js', 'styles.css', 'official_price.js', 'analytics.js'];
+const ASSETS = [
+  'app.js', 'rates.js', 'styles.css', 'official_price.js', 'calculator_sources.js', 'analytics.js',
+];
 
 function hashOf(name) {
   const p = path.join(ROOT, 'site', 'assets', name);
