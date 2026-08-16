@@ -37,11 +37,20 @@ const context = vm.createContext({ window: { TOPDA_RATES: RATES } });
 vm.runInContext(
   [
     functionBlock('function loanRatesCfg()', '\n// 전세대출'),
-    'globalThis.cores = { calcMortgageLimit, loanRegionConfig, suggestLtvPercent, suggestStressAdd };',
+    // 종합계산기의 상환 프로필(loanProfile)도 같은 컨텍스트에 올려, **화면에 뜨는 DSR**이
+    // 한도 계산과 같은 산식을 쓰는지 값으로 대조한다. L()은 라벨용이라 스텁으로 둔다.
+    'const L = (ko) => ko;',
+    functionBlock('    function monthlyPayment(principal, annualRate, years)', '    // 법무사·등기 부대비용'),
+    'globalThis.cores = { calcMortgageLimit, loanRegionConfig, suggestLtvPercent, suggestStressAdd,'
+      + ' dsrAnnualFactor, loanProfile };',
   ].join('\n'),
   context,
 );
-const { calcMortgageLimit, loanRegionConfig, suggestLtvPercent, suggestStressAdd } = context.cores;
+const { calcMortgageLimit, loanRegionConfig, suggestLtvPercent, suggestStressAdd,
+  dsrAnnualFactor, loanProfile } = context.cores;
+
+const dsrPageSource = fs.readFileSync(new URL('../site/calculators/dsr.html', import.meta.url), 'utf8');
+const dashboardSource = fs.readFileSync(new URL('../site/calculators/total-cost-dashboard.html', import.meta.url), 'utf8');
 
 let passed = 0;
 const check = (name, fn) => { fn(); passed += 1; console.log('  ✓ ' + name); };
@@ -612,6 +621,81 @@ check('상환방식이 DSR 한도를 바꾼다 — 원금균등이 원리금균�
   const principal = calcMortgageLimit({ ...base, repayType: 'principal' }).dsrLimit;
   assert.ok(principal > equal,
     `원금균등(${Math.round(principal).toLocaleString()})이 원리금균등(${Math.round(equal).toLocaleString()})보다 낮습니다.`);
+});
+
+// ─────────────────────────────────────────────────────────────────────
+console.log('\n[대출 검증] 화면에 뜨는 DSR도 같은 원장 기준을 쓴다');
+// ─────────────────────────────────────────────────────────────────────
+// 위 원장 대조는 **한도 계산**(calcMortgageLimit)만 지키고 있었다. 그래서 2026-08-04에
+// 산식을 바로잡을 때 한도 경로만 고쳐졌고, 정작 사용자가 보는 'DSR %' 표시(종합계산기·
+// DSR 계산기)는 「첫 회차 × 12」로 남아 있었는데도 테스트는 계속 초록이었다.
+//   → 같은 화면에서 한도는 "6억까지 가능", DSR은 "40% 코앞"이라고 말하는 모순.
+// 표시 경로까지 같은 기준으로 묶어, 어느 한 곳만 되돌아가도 여기서 걸리게 한다.
+
+check('공통 함수가 은행 원장의 본건 원리금 39,688,960원을 그대로 낸다', () => {
+  // 한도 역산을 거치지 않고 dsrAnnualFactor 자체를 원장과 직접 맞춘다.
+  const annual = BANK.principal * dsrAnnualFactor(BANK.stressedRate, BANK.termYears * 12, 'principal');
+  assert.ok(Math.abs(annual - 39_688_960) < 1000,
+    `연 원리금 ${Math.round(annual).toLocaleString()}원 (은행 39,688,960원)`);
+});
+
+check('종합계산기 표시 DSR이 한도 계산과 같은 연 원리금을 쓴다', () => {
+  // loanProfile(화면 표시) 과 dsrAnnualFactor(한도) 가 같은 값을 내야 한다.
+  for (const repay of ['principal', 'amortize']) {
+    const key = repay === 'principal' ? 'principal' : 'equal';
+    const shown = loanProfile(BANK.principal, BANK.stressedRate, BANK.termYears, repay).annualPayment;
+    const used = BANK.principal * dsrAnnualFactor(BANK.stressedRate, BANK.termYears * 12, key);
+    assert.ok(Math.abs(shown - used) < 1,
+      `${repay}: 표시 ${Math.round(shown).toLocaleString()} ≠ 한도 ${Math.round(used).toLocaleString()}`);
+  }
+});
+
+check('종합계산기 원금균등 DSR이 첫해 기준으로 되돌아가지 않았다', () => {
+  // 첫해 방식이면 같은 조건에서 연 41,634,242원 → DSR 39.0% 로 부풀려진다.
+  const shown = loanProfile(586_000_000, 3.83, 30, 'principal').annualPayment;
+  assert.ok(Math.abs(shown - 30_786_405) < 1000,
+    `연 원리금 ${Math.round(shown).toLocaleString()}원 (연평균 30,786,405원 / 첫해 41,634,242원)`);
+});
+
+check('월 상환액 표시는 첫 회차 그대로 둔다 — DSR 산입액과 별개다', () => {
+  // 원금균등의 '월 상환액'은 첫 달(가장 큼)을 보여 주는 게 맞다. 산식을 통일한다고
+  // 이것까지 연평균으로 바꾸면 사용자가 첫 달에 실제로 빠져나갈 금액을 못 본다.
+  const p = loanProfile(586_000_000, 3.83, 30, 'principal');
+  assert.ok(Math.abs(p.monthly - 3_498_094) < 10,
+    `월 상환액 ${Math.round(p.monthly).toLocaleString()}원 (첫 회차 3,498,094원)`);
+  assert.ok(p.monthly * 12 > p.annualPayment,
+    '첫 회차 × 12 가 연평균보다 커야 정상이다.');
+});
+
+check('DSR 계산기가 자체 산식 없이 공통 함수를 호출한다', () => {
+  assert.ok(/dsrAnnualFactor\(/.test(dsrPageSource),
+    'dsr.html 이 dsrAnnualFactor() 를 호출하지 않습니다.');
+  assert.ok(!/newAnnual\s*=\s*newMonthly\s*\*\s*12/.test(dsrPageSource),
+    'dsr.html 이 연 원리금을 「월상환액 × 12」로 되돌렸습니다 — 원금균등에서 과다 산정됩니다.');
+});
+
+check('종합계산기에 첫해 기준 자체 산식이 남아 있지 않다', () => {
+  assert.ok(!/equalPrincipalFirstYear/.test(appSource),
+    '첫해 합계 산식(equalPrincipalFirstYear)이 되살아났습니다.');
+  assert.ok(/annualPayment\s*=\s*principal\s*>\s*0[\s\S]{0,120}dsrAnnualFactor\(/.test(appSource),
+    'loanProfile 이 DSR 산입액을 dsrAnnualFactor() 로 구하지 않습니다.');
+});
+
+check('자금계획 탭이 매수 탭의 상환 방식을 따라간다', () => {
+  // 예전엔 이 탭만 monthlyPayment(원리금균등)로 고정돼 있어, 매수 탭에서 원금균등을
+  // 골라도 보유비용·DSR 이 바뀌지 않았다.
+  assert.ok(/const planPay = loanProfile\(loan, rate, term, getRadio\('repay'\)/.test(appSource),
+    '자금계획 탭이 상환 방식을 무시하고 있습니다.');
+  assert.ok(/renderDSR\(planPay\.annualPayment/.test(appSource),
+    '자금계획 탭의 DSR이 연평균 원리금을 쓰지 않습니다.');
+});
+
+check('상환 방식 안내가 두 계산기에서 같은 말을 한다', () => {
+  // "DSR은 첫 회차 기준" 같은 옛 설명이 남아 있으면 화면과 산식이 어긋나 보인다.
+  for (const [name, src] of [['dsr.html', dsrPageSource], ['종합계산기', dashboardSource]]) {
+    assert.ok(/연평균 원리금/.test(src), `${name} 에 연평균 원리금 안내가 없습니다.`);
+    assert.ok(!/DSR 산정 시에는 통상 첫 회차/.test(src), `${name} 에 옛 '첫 회차 기준' 안내가 남아 있습니다.`);
+  }
 });
 
 // ─────────────────────────────────────────────────────────────────────
