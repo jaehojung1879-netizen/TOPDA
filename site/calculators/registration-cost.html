@@ -179,17 +179,17 @@
       </div>
 
       <div class="field">
-        <label for="rc-std">시가표준액 (채권 매입 기준)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="국민주택채권 매입액은 매매가가 아니라 '시가표준액(공동주택가격·개별주택가격·토지 공시지가)'을 기준으로 합니다. 비워두면 거래금액의 70%로 추정합니다. 정확한 값은 부동산공시가격알리미·위택스에서 조회하세요.">?</span><a class="tip-link" href="https://www.realtyprice.kr/notice/main/main.do" target="_blank" rel="noopener" title="부동산공시가격알리미에서 정확한 공시가격 확인" aria-label="부동산공시가격알리미에서 정확한 공시가격 확인 (새 창)">↗ 공시가격 확인</a></label>
+        <label for="rc-std">공시가격 (시가표준액)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="아파트 공동주택 공시가격은 국민주택채권 매입액의 기준이며 재산세·종합부동산세 추정과 증여 취득세 중과 판정에도 쓰입니다. 같은 단지라도 전용면적·동·층·호에 따라 다르므로 단지 중앙값을 쓰지 말고 아래에서 전용면적을 선택하세요. 톺다의 평형별 값은 추정치이며 정확한 호별 값은 부동산공시가격알리미에서 확인해야 합니다. 비워두면 거래금액의 70%로 단순 추정합니다(법정 비율 아님).">?</span><a class="tip-link" href="https://www.realtyprice.kr/notice/main/main.do" target="_blank" rel="noopener" title="부동산공시가격알리미에서 정확한 공시가격 확인" aria-label="부동산공시가격알리미에서 정확한 공시가격 확인 (새 창)">↗ 정확한 호별 가격</a></label>
         <div class="input-suffix" data-suffix="원">
           <input id="rc-std" name="std" type="text" inputmode="numeric" data-format="won" value=""/>
         </div>
-        <span class="hint"><strong>모르면 비워두세요 → 거래금액 × 70%로 추정합니다. 이 70%는 법정 비율이 아니라 단순 추정치</strong>입니다. 정확한 값은 <a href="https://www.realtyprice.kr/notice/main/main.do" target="_blank" rel="noopener">부동산공시가격알리미</a> · <a href="https://www.wetax.go.kr" target="_blank" rel="noopener">위택스</a>에서 확인하세요.</span>
+        <span class="hint">아래 단지 검색에서 <strong>전용면적을 선택한 뒤</strong> 반영합니다. 정확한 값은 동·층·호별 공시가격을 확인하세요.</span>
       </div>
 
       <div class="field">
-        <label for="rc-discount">국민주택채권 할인율 (고객부담률)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="대부분 채권을 즉시 매도(할인)하고 그 손실만 부담합니다. 고객부담률은 법정 요율이 아니라 시장금리에 따라 매일 바뀌는 시세입니다. 잔금일 당일 값을 은행 국민주택채권 포털(우리·국민·신한 등)에서 확인해 직접 입력하세요.">?</span></label>
+        <label for="rc-discount">국민주택채권 할인율 (고객부담률)<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="채권을 즉시 매도할 때 본인이 부담하는 고객부담률입니다. 매일 바뀌는 시세를 자동 조회해 입력칸에 채우며, 조회 실패·지연 때만 경고와 함께 안전 기본값 15%를 넣습니다. 정확한 잔금 비용은 잔금일 당일 은행 국민주택채권 포털 값으로 다시 확인하세요.">?</span></label>
         <div class="input-suffix" data-suffix="%">
-          <input id="rc-discount" name="discount" type="number" min="0" max="30" step="0.1" value="15"/>
+          <input id="rc-discount" name="discount" type="number" min="0" max="30" step="0.01" value="15"/>
         </div>
         <span id="rc-discount-note" class="data-stale" hidden></span>
       </div>
@@ -316,7 +316,7 @@
   <h3>예시</h3>
 <ul><li>매매가 5억이면 인지세는 구간별 정액으로 부과되고, 등기신청수수료는 방문 신청 18,000원·e-Form 15,000원 중 선택한 방식으로 붙습니다.</li><li>국민주택채권은 시가표준액에 지역·자산유형별 매입률을 곱해 매입액을 정한 뒤, 할인율(고객부담률)을 곱한 금액만 실제로 부담합니다.</li><li>셀프 등기를 선택하면 법무사 보수와 대행수수료가 빠지고 인지세·수수료·채권 부담금만 남습니다.</li></ul>
   <h3>결과가 달라질 수 있는 조건</h3>
-<ul><li>채권 할인율은 시장 금리에 따라 매일 바뀝니다 — 잔금일 당일 값으로 다시 계산해야 정확합니다. 자동 수집이 실패하면 예시값임을 결과에 표시합니다.</li><li>법무사 기본보수는 보수표가 정한 &#x27;상한&#x27;입니다. 사무소별 할인이 흔하고, 난이도에 따라 협의로 가산될 수도 있습니다.</li><li>법무사 기본보수의 20억원 초과 구간 요율과 부동산 거래신고 대행료는 1차 출처로 확정하지 못해 잠정값·범위로 표시합니다. 등기신청 수수료는 방식별 차이가 작아 가장 보수적인 방문(18,000원)으로 고정했습니다 — e-Form·전자신청은 실제로 조금 더 낮습니다.</li><li>시가표준액을 입력하지 않으면 매매가 × 70% 추정을 쓰며, 실제 공시가격과 다르면 채권 매입액이 달라집니다.</li></ul>
+<ul><li>채권 할인율은 시장 금리에 따라 매일 바뀝니다 — 최신 조회값을 입력칸에 자동 반영하고, 조회 실패·지연 때만 경고와 함께 기본값 15%를 적용합니다. 잔금일 당일 값으로 다시 계산해야 정확합니다.</li><li>법무사 기본보수는 보수표가 정한 &#x27;상한&#x27;입니다. 사무소별 할인이 흔하고, 난이도에 따라 협의로 가산될 수도 있습니다.</li><li>법무사 기본보수의 20억원 초과 구간 요율과 부동산 거래신고 대행료는 1차 출처로 확정하지 못해 잠정값·범위로 표시합니다. 등기신청 수수료는 방식별 차이가 작아 가장 보수적인 방문(18,000원)으로 고정했습니다 — e-Form·전자신청은 실제로 조금 더 낮습니다.</li><li>공시가격 검색은 단지를 고른 뒤 전용면적까지 선택해야 반영됩니다. 평형별 값은 추정치이므로 정확한 동·층·호별 값은 공시가격알리미에서 확인하세요.</li></ul>
   <h3>계산 순서</h3>
 <ol><li>거래금액과 시가표준액 입력 — 채권 매입 기준은 시가표준액입니다. 비워 두면 매매가의 70%로 추정하는데, 이는 법정 비율이 아닙니다.</li><li>소재지 선택 — 특별시·광역시와 그 밖의 지역은 채권 매입률이 다릅니다.</li><li>채권 할인율 입력 — 법정 요율이 아니라 매일 바뀌는 시세이므로 잔금일 당일 값을 확인해 넣습니다.</li><li>법무사 위임 업무 선택 — 취득세 신고·납부 대행, 채권 매입·매도 대행, 거래신고 대행 중 실제로 맡길 것만 고릅니다.</li><li>출장·실비 입력 — 출장 일당이나 그 밖의 실비, 이미 받은 견적이 있으면 함께 넣습니다.</li><li>항목별 금액과 합계 확인 — 세금·실비와 법무사 보수를 나누어 보고, 받은 견적과 대조합니다.</li></ol>
 <script type="application/ld+json">
@@ -479,12 +479,21 @@
 </footer>
 <script src="../assets/rates.js?v=7163e7567c"></script>
 <script src="../assets/app.js?v=9f6c208452"></script>
+<script src="../assets/official_price.js?v=c81ea19a89"></script>
+<script src="../assets/calculator_sources.js?v=7d8e2de06e"></script>
 <script>
 (function () {
   const won = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
   const $ = (id) => document.getElementById(id);
   const parseWon = (v) => Number(String(v).replace(/[^0-9]/g, '')) || 0;
   const wonText = (n) => won.format(Math.round(n)) + '원';
+
+  // 공시가격 입력은 종합계산기와 같은 검색 모듈을 쓴다. 단지 선택만으로 중앙값을
+  // 넣지 않고, 전용면적을 골랐을 때만 평형별 추정값을 반영한다.
+  var stdPriceInput = $('rc-std');
+  if (stdPriceInput && window.TopdaOfficialPrice) {
+    TopdaOfficialPrice.attach({ input: stdPriceInput });
+  }
 
   // ⚠ 인지세·채권매입률·법무사 보수 산식을 이 파일에 복붙하지 않는다.
   //   app.js의 공통 엔진(calcRegistrationCost)만 호출해 종합계산기와 결과를 일치시킨다.
@@ -641,28 +650,13 @@
   recalc();
 
   // ── 국민주택채권 당일 할인율 ──
-  //  ⚠ seed·수집실패 값을 '오늘 자동 반영됨'으로 보여주면 안 된다. 사용자가 확인해야 할
-  //    것을 확인하지 않고 지나간다. 상태별로 초록(실시간)/주황(예시·오래됨)을 구분한다.
-  var discountTouched = false;
-  $('rc-discount').addEventListener('input', function () { discountTouched = true; });
-  function showBondState(res) {
-    var note = $('rc-discount-note');
-    if (!note) return;
-    note.className = res.state === 'fresh' ? 'data-fresh' : 'data-stale';
-    note.textContent = res.message;
-    note.hidden = false;
-  }
-  fetch('../assets/bond_rate.json?t=' + Date.now(), { cache: 'no-store' })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .catch(function () { return null; })
-    .then(function (j) {
-      var res = applyBondDiscountRate(j);
-      showBondState(res);
-      if (res.shouldFill && !discountTouched) {
-        $('rc-discount').value = res.rate;
-        recalc();
-      }
+  // 종합계산기와 같은 공용 로더: 최신값은 입력칸에, 실패·지연 시에만 15% + 경고.
+  if (window.TopdaCalculatorSources) {
+    TopdaCalculatorSources.bindBondDiscountRate({
+      input: $('rc-discount'),
+      note: $('rc-discount-note'),
     });
+  }
 })();
 </script>
 </body>
