@@ -91,8 +91,21 @@ class MatchProvenanceTests(unittest.TestCase):
         self.kmap = {
             "sig": {"한진": "SIG"},
             "dong": {"묵현리": {"한진": "RI"}},
+            "addr": {"묵현리|47-3": "ADDR"},
+            "names": {"ADDR": "마석 한진아파트"},
             "n": 2, "n_dong": 1,
         }
+
+    def test_exact_parcel_beats_different_name(self):
+        self.assertEqual(CA.kapt_match_via(
+            self.kmap, "인터넷표기와다른이름", "묵현리",
+            "경기도 남양주시 화도읍 묵현리 47-3"), ("ADDR", "addr"))
+
+    def test_zero_parcel_is_not_an_identity(self):
+        self.assertEqual(CA._parcel_key("인천 서구 가정동 0"), "")
+
+    def test_official_name_is_retained_by_code(self):
+        self.assertEqual(CA.kapt_name(self.kmap, "ADDR"), "마석 한진아파트")
 
     def test_dong_scoped_match_is_reported(self):
         self.assertEqual(CA.kapt_match_via(self.kmap, "한진", "묵현리"), ("RI", "dong"))

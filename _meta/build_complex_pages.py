@@ -145,6 +145,8 @@ def aggregate(deals, hh_map, since):
         last = valid[-1]
         out.append({
             "region_key": rk, "umd": umd, "name": name,
+            "display_name": info.get("display_name") or name,
+            "name_src": info.get("name_src"),
             "deals": valid, "canceled": canceled,
             "n": len(valid),
             "households": info.get("households"),
@@ -310,7 +312,7 @@ def calc_url(page, c, price_manwon, area_m2):
     from urllib.parse import urlencode
     q = urlencode({
         "price": won(price_manwon),
-        "complex": c["name"],
+        "complex": c.get("display_name") or c["name"],
         "region_name": c["region_key"],
         "area_m2": area_m2,
         "source": "apt",
@@ -374,7 +376,8 @@ def summary_block(c, as_of_date):
     """A. 결론 요약 — 문장 + 요약 카드. 없는 값은 항목째 숨긴다."""
     last = c["last"]
     unit = last["price"] / last["area_m2"]
-    sent = (f'<p class="headline">{esc(c["region_key"])} {esc(c["umd"])} <strong>{esc(c["name"])}</strong>의 '
+    label = c.get("display_name") or c["name"]
+    sent = (f'<p class="headline">{esc(c["region_key"])} {esc(c["umd"])} <strong>{esc(label)}</strong>의 '
             f'가장 최근 신고 거래는 <strong>{esc(last["date"])}</strong> '
             f'전용 {last["area_m2"]}㎡ <strong>{fmt_price(last["price"])}</strong>'
             f'({last.get("floor") or "-"}층)입니다. '
@@ -499,9 +502,14 @@ def links_block(c, hub_url, siblings):
 
 def hh_source_name(hh_src):
     """세대수 출처 표기. hh_src가 없는 항목은 K-apt 경로로 붙은 값이다(대장 수집기만 기록)."""
-    return ("국토교통부 건축HUB 건축물대장정보"
-            if str(hh_src or "").startswith(("recap.", "title."))
-            else "공동주택관리정보시스템(K-apt) 공동주택 기본정보")
+    src = str(hh_src or "")
+    if src.startswith(("recap.", "title.")):
+        return "국토교통부 건축HUB 건축물대장정보"
+    if src.startswith("portal."):
+        return "주소 검증을 거친 부동산 포털 검색 결과"
+    if src.startswith("address_alias:"):
+        return hh_source_name(src.split(":", 1)[1])
+    return "공동주택관리정보시스템(K-apt) 공동주택 기본정보"
 
 
 def source_block(c, as_of_date, window_from, indexable=True, region_slug=""):
@@ -534,18 +542,19 @@ def source_block(c, as_of_date, window_from, indexable=True, region_slug=""):
 
 
 def ld_json(c, url, hub_url, as_of_date, window_from):
+    label = c.get("display_name") or c["name"]
     crumbs = {
         "@context": "https://schema.org", "@type": "BreadcrumbList",
         "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "아파트 실거래가", "item": f"{BASE}/apt/"},
             {"@type": "ListItem", "position": 2, "name": c["region_key"], "item": hub_url},
-            {"@type": "ListItem", "position": 3, "name": c["name"], "item": url},
+            {"@type": "ListItem", "position": 3, "name": label, "item": url},
         ],
     }
     dataset = {
         "@context": "https://schema.org", "@type": "Dataset",
-        "name": f'{c["name"]} 아파트 매매 실거래 내역',
-        "description": (f'{c["region_key"]} {c["umd"]} {c["name"]}의 최근 {_ACTUAL_MONTHS}개월 '
+        "name": f'{label} 아파트 매매 실거래 내역',
+        "description": (f'{c["region_key"]} {c["umd"]} {label}의 최근 {_ACTUAL_MONTHS}개월 '
                         f'아파트 매매 실거래 {c["n"]}건(전용면적·거래일·거래금액·층).'),
         "url": url,
         "creator": {"@type": "GovernmentOrganization", "name": "국토교통부",
@@ -565,16 +574,17 @@ def complex_page(c, region_slug, cslug, siblings, as_of_date, window_from, index
     url = f"{BASE}/apt/{region_slug}/{cslug}/"
     hub_url = f"{BASE}/apt/{region_slug}/"
     sigungu = c["region_key"].split()[-1]
-    title = f'{c["name"]} 실거래가·취득세 계산 | {sigungu} — 톺다'
+    label = c.get("display_name") or c["name"]
+    title = f'{label} 실거래가·취득세 계산 | {sigungu} — 톺다'
     last = c["last"]
-    desc = (f'{c["name"]}의 최근 실거래가({last["date"]} 전용 {last["area_m2"]}㎡ '
+    desc = (f'{label}의 최근 실거래가({last["date"]} 전용 {last["area_m2"]}㎡ '
             f'{fmt_price(last["price"])})와 전용면적별 거래 내역을 확인하고, '
             '해당 거래가격 기준 취득세·잔금·대출한도를 계산할 수 있습니다.')
     body = (
         '<div class="wrap">\n<header><a href="/index.html">톺다</a></header>\n'
         f'<nav class="crumb"><a href="/apt/">아파트 실거래</a> › '
-        f'<a href="/apt/{region_slug}/">{esc(c["region_key"])}</a> › {esc(c["name"])}</nav>\n'
-        f'<h1>{esc(c["name"])} 실거래가</h1>\n'
+        f'<a href="/apt/{region_slug}/">{esc(c["region_key"])}</a> › {esc(label)}</nav>\n'
+        f'<h1>{esc(label)} 실거래가</h1>\n'
         + summary_block(c, as_of_date)
         + f'<h2>최근 {_ACTUAL_MONTHS}개월 실거래 내역</h2>\n' + deals_table(c)
         + '<h2>면적별 요약</h2>\n' + area_table(c)
@@ -584,7 +594,7 @@ def complex_page(c, region_slug, cslug, siblings, as_of_date, window_from, index
         + source_block(c, as_of_date, window_from, indexable, region_slug)
         + ld_json(c, url, hub_url, as_of_date, window_from)
     )
-    return (head(title, desc, url, c["region_key"], c["name"], indexable=indexable)
+    return (head(title, desc, url, c["region_key"], label, indexable=indexable)
             + body + BAP.footer_html(as_of_date))
 
 
@@ -743,7 +753,7 @@ def main():
             if (o["region_key"], o["umd"], o["name"]) not in target_keys:
                 continue   # 아직 페이지가 없는 단지로는 링크하지 않는다(깨진 링크 방지)
             ors, ocs = smap.complex(o["region_key"], o["umd"], o["name"])
-            sibs.append((o["name"], f"/apt/{ors}/{ocs}/", o["n"]))
+            sibs.append((o.get("display_name") or o["name"], f"/apt/{ors}/{ocs}/", o["n"]))
             if len(sibs) >= 5:
                 break
         d = os.path.join(APT_DIR, rslug, cslug)

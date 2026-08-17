@@ -505,9 +505,13 @@
   }
 
   // 자유 검색 필터: 단지명·지역·시도·시군구 어디든 매치
+  function displayName(a) { return (a && (a.display_name || a.name)) || ''; }
   function matchesSearch(a, q) {
     if (!q) return true;
-    var hay = ((a.name || '') + ' ' + (a.region || '') + ' ' + (a.region_key || '') + ' ' + (a.builder || '')).toLowerCase();
+    // 원장 신고명과 주소 검증 후 확정한 대표명 양쪽 모두 검색된다. 내부 거래 키는
+    // a.name을 그대로 유지해 이름을 고쳐 보여줘도 기존 실거래 연결이 끊기지 않는다.
+    var hay = ((a.name || '') + ' ' + displayName(a) + ' ' + (a.region || '') + ' ' +
+      (a.region_key || '') + ' ' + (a.builder || '')).toLowerCase();
     return hay.indexOf(q) >= 0;
   }
 
@@ -747,7 +751,7 @@
       '<article class="apt-card" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region_key || '') + '">' +
         '<span class="rank">' + rank + '위</span>' +
         '<div class="apt-head">' +
-          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(a.region) + '</div></div>' +
+          '<div><div class="apt-name">' + esc(displayName(a)) + '</div><div class="apt-region">' + esc(a.region) + '</div></div>' +
           '<div class="apt-score"><div class="num">' + r.total + '</div><div class="lbl">종합점수</div></div>' +
         '</div>' +
         '<div class="apt-price">' + fmt(r.price) + ' <small>' + dealNote + '</small></div>' +
@@ -882,8 +886,8 @@
       if (!aptMap || aptMapPending !== a) return;
       aptMap.clear();
       aptMap.addCircle(a.lat, a.lng, {
-        fillColor: '#2563eb', radius: 11, title: a.name,
-        popupHtml: '<strong>' + esc(a.name) + '</strong><br>' + esc(a.region || ''),
+        fillColor: '#2563eb', radius: 11, title: displayName(a),
+        popupHtml: '<strong>' + esc(displayName(a)) + '</strong><br>' + esc(a.region || ''),
       });
       // 모달은 열릴 때까지 display:none이라 컨테이너 크기가 0이다. 보이게 된 뒤 재배치해야
       // 타일이 깨지지 않는다(relayout/invalidateSize).
@@ -931,7 +935,7 @@
   function openAptModal(name, regionKey) {
     var a = findApt(name, regionKey);
     if (!a) return;
-    document.getElementById('aptModalTitle').textContent = a.name;
+    document.getElementById('aptModalTitle').textContent = displayName(a);
     document.getElementById('aptModalSub').textContent = a.region || '';
 
     var agg = DEALS_BY_APT[aptKeyOf(a)] || { prices: [], canceled: [] };
@@ -1013,7 +1017,7 @@
       // 실거래가 → 계산기 동선. transactions.html 모달과 같은 흐름을 맞춤 내집 찾기에도 둔다.
       // price는 원 단위로 넘긴다(원장은 만원 단위).
       document.getElementById('aptModalCalc').innerHTML =
-        '<a href="total-cost-dashboard.html?price=' + (last.price * 10000) + '&apt=' + encodeURIComponent(a.name) + '">' +
+        '<a href="total-cost-dashboard.html?price=' + (last.price * 10000) + '&apt=' + encodeURIComponent(displayName(a)) + '">' +
         fmt(last.price) + '으로 총 매수비용 계산 →</a>' +
         '<span class="note">취득세·등기·중개수수료·대출한도를 이 가격으로 계산</span>';
     } else {
@@ -1176,6 +1180,8 @@
       if (!e) return;
       if (!a.households && e.households) a.households = e.households;
       if (!a.built_year && e.built_year) a.built_year = e.built_year;
+      if (!a.display_name && e.display_name) a.display_name = e.display_name;
+      if (!a.name_src && e.name_src) a.name_src = e.name_src;
       if (a.lat == null && e.lat != null) { a.lat = e.lat; a.lng = e.lng; }
       if (!a.subway && e.subway && e.subway.station) a.subway = { station: e.subway.station, line: '', distance_m: e.subway.distance_m };
       if (!a.elementary && e.elementary && e.elementary.name) a.elementary = { name: e.elementary.name, distance_m: e.elementary.distance_m, in_zone: false };

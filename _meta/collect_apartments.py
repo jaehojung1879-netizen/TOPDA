@@ -62,6 +62,39 @@ def _name_keys(s):
     return keys
 
 
+def _parcel_key(address):
+    """주소 문자열에서 ``법정동(리)|지번`` 키를 만든다.
+
+    실거래 단지명과 K-apt 단지명은 브랜드·띄어쓰기·차수 표기가 자주 다르지만 지번은
+    두 자료가 공유하는 강한 식별자다. 도로명주소처럼 지번이 없으면 빈 문자열을 돌려
+    기존 이름+법정동 매칭으로 폴백한다. ``0``·``0-0``은 입주 전 임시 지번이라 같은
+    키를 여러 신축 단지가 공유하므로 주소 일치로 인정하지 않는다.
+    """
+    tokens = str(address or "").replace(",", " ").split()
+    tail = []
+    dong = ""
+    for i, tok in enumerate(tokens):
+        if tok.endswith(_BJD_SUFFIX):
+            dong, tail = tok, tokens[i + 1:]
+            break
+    if not dong:
+        return ""
+    mountain = False
+    for tok in tail:
+        if tok == "산":
+            mountain = True
+            continue
+        m = re.match(r"^(?:산)?(\d{1,4})(?:-(\d{1,4}))?$", tok)
+        if not m:
+            continue
+        bun, ji = int(m.group(1)), int(m.group(2) or 0)
+        if bun == 0:
+            return ""
+        prefix = "산" if mountain or tok.startswith("산") else ""
+        return f"{dong}|{prefix}{bun}-{ji}"
+    return ""
+
+
 # 법정동 단위 접미사. 읍·면은 그보다 상위라 같은 층위가 아니다 — 아래 우선순위 참고.
 _BJD_SUFFIX = ("동", "가", "리")
 _UPPER_SUFFIX = ("읍", "면")
@@ -116,7 +149,7 @@ def kapt_map(sigungu_code, api_key):
             items = L.get_items(KAPT_HOST + op, {"serviceKey": api_key, "sigunguCode": sigungu_code,
                                                  "numOfRows": 3000, "pageNo": 1})
             _list_op = op   # 작동 버전 캐시 (이후 이 버전만 호출)
-            sig, dong = {}, {}
+            sig, dong, parcels, names = {}, {}, {}, {}
             n, n_dong = 0, 0
             for it in items:
                 code = str(it.get("kaptCode") or "").strip()
@@ -124,6 +157,7 @@ def kapt_map(sigungu_code, api_key):
                 if not (code and name):
                     continue
                 n += 1
+                names[code] = name
                 d = _kapt_dong(it)
                 if d:
                     n_dong += 1
@@ -132,14 +166,18 @@ def kapt_map(sigungu_code, api_key):
                     _put(sig, k, code)
                     if d:
                         _put(dmap, k, code)
-            return {"sig": sig, "dong": dong, "n": n, "n_dong": n_dong}
+                parcel = _parcel_key(it.get("kaptAddr") or it.get("doroJuso") or "")
+                if parcel:
+                    _put(parcels, parcel, code)
+            return {"sig": sig, "dong": dong, "addr": parcels, "names": names,
+                    "n": n, "n_dong": n_dong}
         except L.AuthError:
             auth_fail = True   # 이 버전 권한 없음 — 다음 버전 시도
         except Exception as e:  # noqa: BLE001 — 404(버전없음)·네트워크 등
             print(f"  ! K-apt 목록 실패 {sigungu_code} ({op}): {e}", file=sys.stderr)
     if auth_fail:
         return None
-    return {"sig": {}, "dong": {}, "n": 0, "n_dong": 0}
+    return {"sig": {}, "dong": {}, "addr": {}, "names": {}, "n": 0, "n_dong": 0}
 
 
 def _match_in(table, keys):
@@ -175,30 +213,39 @@ def addr_contradicts_dong(addr, dongs):
     return not any(d and d in addr for d in dongs)
 
 
-def kapt_match_via(kmap, name, dong=""):
+def kapt_match_via(kmap, name, dong="", address=""):
     """kapt_match와 같되 (kaptCode, via)를 돌려준다.
 
     via='dong' — 법정동 색인 안에서 확정. 이름+법정동이 함께 맞은 것이라 근거가 있다.
     via='sig'  — 시군구 전체에서 이름만으로 확정. 근거가 이름뿐이므로 호출부에서
                  주소로 한 번 더 확인해야 한다(addr_contradicts_dong).
     매칭 실패는 (None, "")."""
-    return _kapt_match_impl(kmap, name, dong)
+    return _kapt_match_impl(kmap, name, dong, address)
 
 
-def kapt_match(kmap, name, dong=""):
+def kapt_match(kmap, name, dong="", address=""):
     """단지명(+법정동) → kaptCode.
     ① 법정동 안에서 매칭(가장 정확 — '벽산'·'두산' 등 일반명 충돌을 동으로 해소)
     ② 실패 시 시군구 전체에서 매칭(기존 동작, 회귀 방지 폴백).
     실거래명이 법정동을 접두로 달고 오는 경우('대흥동태영')는 그 접두를 떼어 변형에 추가한다."""
-    return _kapt_match_impl(kmap, name, dong)[0]
+    return _kapt_match_impl(kmap, name, dong, address)[0]
 
 
-def _kapt_match_impl(kmap, name, dong=""):
+def _kapt_match_impl(kmap, name, dong="", address=""):
     # 하위호환: 옛 평면 dict가 오면 시군구 맵으로 취급
     if "sig" not in kmap and "dong" not in kmap:
-        sig, dmap = kmap, {}
+        sig, dmap, amap = kmap, {}, {}
     else:
         sig, dmap = kmap.get("sig", {}), kmap.get("dong", {})
+        amap = kmap.get("addr", {})
+
+    # 같은 지번을 여러 단지가 주장하면 kapt_map의 _put()이 ''로 표시한다. 그 경우에는
+    # 주소만 믿고 합치지 않고 아래 이름+법정동 매칭으로 내려간다.
+    parcel = _parcel_key(address)
+    if parcel:
+        code = amap.get(parcel)
+        if code:
+            return code, "addr"
 
     keys = list(_name_keys(name))
     # 법정동 접두 제거 변형: '대흥동태영'(+동) → '태영'
@@ -216,6 +263,11 @@ def _kapt_match_impl(kmap, name, dong=""):
             return code, "dong"
     code = _match_in(sig, keys)
     return (code, "sig") if code else (None, "")
+
+
+def kapt_name(kmap, code):
+    """매칭된 K-apt 코드의 공식 단지명. 옛 평면 맵에는 이름 사전이 없어 빈 값."""
+    return str((kmap.get("names", {}) if isinstance(kmap, dict) else {}).get(code) or "").strip()
 
 
 _info_diag = []   # 기본정보 조회 실패 사유 샘플(첫 몇 건) — 0건일 때 원인 진단용
@@ -479,6 +531,9 @@ def merge(existing, fresh):
                 cur["elementary"] = f["elementary"]
             if f.get("households"):
                 cur["households"] = f["households"]
+            if f.get("display_name"):
+                cur["display_name"] = f["display_name"]
+                cur["name_src"] = f.get("name_src") or cur.get("name_src")
             if f.get("builder") and f["builder"] != "기타":
                 cur["builder"] = f["builder"]
             for k in ("region_key", "sido", "sigungu", "region"):
@@ -607,7 +662,7 @@ def main():
             # K-apt 세대수·준공 보강 — 기존 세대수가 없을 때만
             if not cur.get("households"):
                 kstat["needed"] += 1
-                code = kapt_match(kmap, a["name"], _dong_of(a))
+                code = kapt_match(kmap, a["name"], _dong_of(a), a.get("_addr") or "")
                 if code:
                     kstat["matched"] += 1
                     hh, yr, _addr = kapt_info(code, kapt_key)
@@ -616,6 +671,10 @@ def main():
                         kstat["filled"] += 1
                     if yr and not a.get("built_year"):
                         a["built_year"] = yr
+                    official_name = kapt_name(kmap, code)
+                    if official_name and official_name != a["name"]:
+                        a["display_name"] = official_name
+                        a["name_src"] = "K-apt 단지목록(주소/법정동 검증)"
         fresh += agg
         print(f"[{region}] 거래 {len(region_items)}건 → 단지 {len(agg)}개")
     if not fresh:
