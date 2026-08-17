@@ -470,8 +470,8 @@
     </p>
   </div>
 </footer>
-<script src="../assets/rates.js?v=7163e7567c"></script>
-<script src="../assets/app.js?v=8bba98e95e"></script>
+<script src="../assets/rates.js?v=adf9d1eb37"></script>
+<script src="../assets/app.js?v=e58602c3f7"></script>
 <script src="../assets/official_price.js?v=c81ea19a89"></script>
 <script src="../assets/calculator_sources.js?v=7d8e2de06e"></script>
 <script>
@@ -504,9 +504,20 @@
       if (a) return { acquisition: a.acquisition, localEduTax: a.localEduTax, ruralTax: a.ruralTax, total: a.total,
         note: '(' + (a.baseRate * 100).toFixed(a.baseRate * 100 % 1 ? 2 : 0) + '%)' };
     }
-    // 토지·비주택
-    const acquisition = price * 0.04, ruralTax = price * 0.002, localEduTax = price * 0.004;
-    return { acquisition, localEduTax, ruralTax, total: acquisition + ruralTax + localEduTax, note: '(4.6%)' };
+    // ── 토지·비주택(상가·업무용 오피스텔 등) ──
+    //  지방세법 제11조 제1항 제7호 나목 표준세율 4% + 농특세 0.2% + 지방교육세 0.4% = 4.6%.
+    //  ⚠ 세율은 rates.js 한 곳에서만 온다. 여기에 리터럴을 다시 적으면 rates.js 를 고쳐도
+    //    이 화면만 옛 값으로 남는다(그 사고가 실제로 있었다).
+    const AT = ((window.TOPDA_RATES || {}).acquisitionTax) || {};
+    const baseRate = (AT.nonHouse != null ? AT.nonHouse : 4.0) / 100;
+    const ruralRate = (AT.ruralTaxOver85 != null ? AT.ruralTaxOver85 : 0.2) / 100;
+    // 비주택 지방교육세 = (표준세율 − 중과기준세율 2%) × 20% (지방세법 제151조 제1항 제1호)
+    const eduRate = Math.max(0, baseRate - 0.02) * 0.20;
+    const acquisition = price * baseRate;
+    const ruralTax = price * ruralRate;
+    const localEduTax = price * eduRate;
+    const totalPct = ((baseRate + ruralRate + eduRate) * 100).toFixed(1).replace(/\.0$/, '');
+    return { acquisition, localEduTax, ruralTax, total: acquisition + ruralTax + localEduTax, note: '(' + totalPct + '%)' };
   }
 
   function renderNotes(notes) {

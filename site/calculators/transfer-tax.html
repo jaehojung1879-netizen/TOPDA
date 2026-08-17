@@ -107,7 +107,7 @@
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../calculators/index.html">계산기</a> / 양도소득세</div>
     <h1>양도소득세 계산기</h1>
     <div class="meta">
-      <span>주택 매도 시 발생하는 양도세 · 지방소득세 합계 · 2025~2026년 소득세법 기준 · 최근 갱신</span>
+      <span>주택 매도 시 발생하는 양도세 · 지방소득세 합계 · 현행 소득세법 기준</span>
     </div>
   </div>
 
@@ -140,14 +140,14 @@
 
       <div class="field-row">
         <div class="field">
-          <label for="t-acqdate">취득일<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="취득일과 양도일을 모두 입력하면 보유 기간을 실제 경과일수로 계산합니다. 2년 비과세 요건과 장기보유특별공제 구간이 하루 차이로 갈리기 때문에, 연수를 어림잡는 것보다 정확합니다.">?</span></label>
+          <label for="t-acqdate">취득일<span class="tip" tabindex="0" role="button" aria-label="도움말" data-tip="취득일과 양도일을 모두 입력하면 보유 기간을 취득일 응당일 기준으로 계산합니다(소득세법 제95조 제4항, 취득일 산입). 예를 들어 2024-01-10 취득 → 2025-01-10 양도가 정확히 1년입니다. 1·2년 경계와 장기보유특별공제 구간이 하루 차이로 갈리기 때문에 연수를 어림잡는 것보다 정확합니다.">?</span></label>
           <input id="t-acqdate" name="acquireDate" type="date" value="" />
-          <span class="hint">잔금청산일과 등기접수일 중 <strong>빠른 날</strong>. 입력하면 아래 보유 기간 대신 실제 일수로 계산합니다.</span>
+          <span class="hint">잔금청산일과 등기접수일 중 <strong>빠른 날</strong>. 입력하면 아래 보유 기간 대신 응당일 기준 연수로 계산합니다.</span>
         </div>
         <div class="field">
           <label for="t-hold">보유 기간 (년)</label>
           <input id="t-hold" name="holdYears" type="number" min="0" max="30" step="1" value="8" />
-          <span class="hint">취득일·양도일을 모두 입력하면 이 값은 무시됩니다.</span>
+          <span class="hint">취득일·양도일을 모두 입력하면 이 값은 무시됩니다. 법정 구간이 연 단위이므로 정수 연수로 판정합니다.</span>
         </div>
       </div>
 
@@ -165,7 +165,7 @@
       <div class="field">
         <label for="t-live">거주 기간 (년)</label>
         <input id="t-live" name="liveYears" type="number" min="0" max="30" step="1" value="5" />
-        <span class="hint">1세대1주택 고가 장특공제용. <strong>거주 2년</strong>부터 8%, 3년 12%, 이후 연 +4%p(최대 40%). 위 거주 시작·종료일을 모두 입력하면 이 값 대신 실제 일수로 계산합니다.</span>
+        <span class="hint">1세대1주택 고가 장특공제용. <strong>거주 2년</strong>부터 8%, 3년 12%, 이후 연 +4%p(최대 40%). 위 거주 시작·종료일을 모두 입력하면 이 값 대신 응당일 기준 연수로 계산합니다.</span>
       </div>
 
       <div class="field-row">
@@ -213,7 +213,16 @@
         <label class="check-item" style="padding: 0; cursor: pointer;">
           <input type="checkbox" name="onlyHome" checked/>
           <span class="text">1세대 1주택 비과세 요건 충족
-            <span class="note">2년 이상 보유 (조정대상지역 취득 시 2년 거주 포함). 1주택일 때만 활성.</span>
+            <span class="note">2년 이상 보유. 취득 당시 조정대상지역이었다면 아래 항목을 함께 체크하세요.</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label class="check-item" style="padding: 0; cursor: pointer;">
+          <input type="checkbox" name="acquiredInRegulatedArea"/>
+          <span class="text">취득 당시 조정대상지역이었음
+            <span class="note">이 경우 1세대 1주택 비과세에 <strong>거주 2년 이상</strong> 요건이 추가됩니다(소득세법 시행령 제154조 제1항). 취득 후 조정대상지역에서 해제됐더라도 취득 당시를 기준으로 판정합니다.</span>
           </span>
         </label>
       </div>
@@ -339,6 +348,9 @@
         <div class="body" data-out="exemptMsg"><strong>비과세 대상</strong></div>
       </div>
 
+      <!-- 비과세 거주요건 등 판정 근거. 왜 그 결과가 나왔는지를 결과 옆에 남긴다. -->
+      <ul class="acq-notes" data-out="ttNotes" hidden style="margin-top: 16px;"></ul>
+
       <div class="callout callout-info" data-out="jointBox" style="display: none; margin-top: 16px; margin-bottom: 0;">
         <div class="icon">i</div>
         <div class="body">
@@ -362,7 +374,7 @@
 
   <section style="margin-top: 64px;">
   <details class="explain">
-    <summary>2025년 양도소득세 누진세율 (장기 보유 · 일반)</summary>
+    <summary>현행 양도소득세 기본세율 (장기 보유 · 일반)</summary>
     <div class="explain-body">
     <div class="table-wrap">
       <table class="data">
@@ -712,7 +724,7 @@
     </p>
   </div>
 </footer>
-<script src="../assets/rates.js?v=7163e7567c"></script>
-<script src="../assets/app.js?v=8bba98e95e"></script>
+<script src="../assets/rates.js?v=adf9d1eb37"></script>
+<script src="../assets/app.js?v=e58602c3f7"></script>
 </body>
 </html>

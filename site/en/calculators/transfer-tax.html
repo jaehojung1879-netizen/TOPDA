@@ -89,7 +89,10 @@
         </div>
       </div>
       <div class="field"><label class="check-item" style="padding:0; cursor:pointer;">
-        <input type="checkbox" name="onlyHome" checked/><span class="text">1-home household exemption eligible<span class="note">Held ≥ 2 years (incl. 2-year residency if acquired in a regulated area).</span></span>
+        <input type="checkbox" name="onlyHome" checked/><span class="text">1-home household exemption eligible<span class="note">Held ≥ 2 years. If the home was in a regulated area when acquired, tick the box below as well.</span></span>
+      </label></div>
+      <div class="field"><label class="check-item" style="padding:0; cursor:pointer;">
+        <input type="checkbox" name="acquiredInRegulatedArea"/><span class="text">Was in a regulated area at the time of acquisition<span class="note">Adds a <strong>two-year residence</strong> requirement to the one-home exemption (Enforcement Decree of the Income Tax Act art. 154(1)). Judged as of acquisition, even if the area was later de-designated.</span></span>
       </label></div>
       <div class="field"><label class="check-item" style="padding:0; cursor:pointer;">
         <input type="checkbox" name="regulated"/><span class="text">In a regulated area (at time of sale)<span class="note">Used to determine multi-home surcharge eligibility.</span></span>
@@ -115,6 +118,8 @@
       <div class="callout callout-success" data-out="exemptBox" style="display:none; margin-top:20px; margin-bottom:0;">
         <div class="icon">✓</div><div class="body" data-out="exemptMsg"></div>
       </div>
+      <!-- Why the exemption did or did not apply (residency requirement etc.) -->
+      <ul class="acq-notes" data-out="ttNotes" hidden style="margin-top:16px;"></ul>
       <div class="callout callout-info" data-out="jointBox" style="display:none; margin-top:16px; margin-bottom:0;">
         <div class="icon">i</div>
         <div class="body">
@@ -161,7 +166,7 @@
     </p>
   </div>
 </footer>
-<script src="../../assets/rates.js?v=7163e7567c"></script>
-<script src="../../assets/app.js?v=8bba98e95e"></script>
+<script src="../../assets/rates.js?v=adf9d1eb37"></script>
+<script src="../../assets/app.js?v=e58602c3f7"></script>
 </body>
 </html>

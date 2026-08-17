@@ -1,0 +1,165 @@
+{
+  "calculator": "loan-limit",
+  "engine": "calcMortgageLimit",
+  "description": "주택담보대출 한도 — 금융위 대책 기준 golden case. expected 는 scripts/reference/loan_reference.mjs 가 만든다. 그 파일은 상환액을 폐쇄형 공식이 아니라 **월별 시뮬레이션**으로 구하므로 production 의 등비수열 공식과 독립이다.",
+  "cases": [
+    {
+      "case_id": "loan_fsc_published_example_stress_1_5",
+      "effective_date": "2026-08-17",
+      "boundary": "금융위 공표 예시 — 스트레스 1.5%p 적용 시 한도 5억 8,700만원",
+      "inputs": {
+        "price": 1400000000, "ltvPercent": 40, "region": "regulated",
+        "income": 100000000, "dsrLimitPercent": 40,
+        "rate": 4, "stressAdd": 1.5, "termYears": 30, "repayType": "equal"
+      },
+      "expected": { "dsrLimit": 587072544 },
+      "tolerance": 100000,
+      "source": {
+        "type": "NOTICE",
+        "title": "금융위원회 「주택시장 안정화를 위한 대출수요 관리 방안」 보도자료 예시",
+        "article": "연소득 1억원 차주가 수도권에서 변동금리 주담대를 받는 경우 한도 5억 8,700만원 → 5억 100만원(약 14.7% 감소)",
+        "effective_from": "2025-10-16",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "official_published_example"],
+      "confidence": "A_PLUS",
+      "verified_at": "2026-08-17",
+      "note": "원리금균등 30년·명목금리 4.00% 전제. 독립 시뮬레이션이 공표 수치를 만원 단위에서 재현한다(587,072,544 → 5억 8,700만원)."
+    },
+    {
+      "case_id": "loan_fsc_published_example_stress_3_0",
+      "effective_date": "2026-08-17",
+      "boundary": "같은 예시 — 스트레스 3.0%p 적용 시 한도 5억 100만원",
+      "inputs": {
+        "price": 1400000000, "ltvPercent": 40, "region": "regulated",
+        "income": 100000000, "dsrLimitPercent": 40,
+        "rate": 4, "stressAdd": 3.0, "termYears": 30, "repayType": "equal"
+      },
+      "expected": { "dsrLimit": 501025226 },
+      "tolerance": 100000,
+      "source": {
+        "type": "NOTICE",
+        "title": "금융위원회 「주택시장 안정화를 위한 대출수요 관리 방안」 보도자료 예시",
+        "article": "수도권·규제지역 주담대 스트레스 금리 하한 3% 상향",
+        "effective_from": "2025-10-16",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "official_published_example"],
+      "confidence": "A_PLUS",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "loan_price_cap_exactly_15eok",
+      "effective_date": "2026-08-17",
+      "boundary": "시가 정확히 15억원 — '15억원 이하' 구간이므로 한도 6억원",
+      "inputs": {
+        "price": 1500000000, "ltvPercent": 40, "region": "regulated",
+        "income": 200000000, "dsrLimitPercent": 40,
+        "rate": 4, "stressAdd": 3.0, "termYears": 30, "repayType": "equal"
+      },
+      "expected": { "priceCap": 600000000, "ltvLimit": 600000000, "limit": 600000000 },
+      "tolerance": 1,
+      "source": {
+        "type": "NOTICE",
+        "title": "금융위원회 「대출수요 관리 방안」(2025.10.15 발표, 10.16 시행)",
+        "article": "수도권·규제지역 주택구입 목적 주담대 가격대별 한도 — 15억 이하 6억 / 15~25억 4억 / 25억 초과 2억",
+        "effective_from": "2025-10-16",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "B",
+      "verified_at": "2026-08-17",
+      "note": "감독규정이 아니라 금융위 행정지도·대책 기반이라 confidence 를 B 로 둔다."
+    },
+    {
+      "case_id": "loan_price_cap_15eok_plus_1won",
+      "effective_date": "2026-08-17",
+      "boundary": "시가 15억원 + 1원 → 한도 4억원으로 2억원 떨어진다 (규정 자체가 불연속)",
+      "inputs": {
+        "price": 1500000001, "ltvPercent": 40, "region": "regulated",
+        "income": 200000000, "dsrLimitPercent": 40,
+        "rate": 4, "stressAdd": 3.0, "termYears": 30, "repayType": "equal"
+      },
+      "expected": { "priceCap": 400000000, "limit": 400000000 },
+      "tolerance": 1,
+      "source": {
+        "type": "NOTICE",
+        "title": "금융위원회 「대출수요 관리 방안」(2025.10.15)",
+        "article": "가격대별 한도 구간",
+        "effective_from": "2025-10-16",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "B",
+      "verified_at": "2026-08-17",
+      "note": "1원 차이로 한도가 2억원 줄어드는 불연속은 규정 자체의 구조다. invariant test 의 '설명되지 않는 불연속' 예외로 등록되어 있다."
+    },
+    {
+      "case_id": "loan_price_cap_25eok_plus_1won",
+      "effective_date": "2026-08-17",
+      "boundary": "시가 25억원 + 1원 → 한도 2억원",
+      "inputs": {
+        "price": 2500000001, "ltvPercent": 40, "region": "regulated",
+        "income": 300000000, "dsrLimitPercent": 40,
+        "rate": 4, "stressAdd": 3.0, "termYears": 30, "repayType": "equal"
+      },
+      "expected": { "priceCap": 200000000, "limit": 200000000 },
+      "tolerance": 1,
+      "source": {
+        "type": "NOTICE",
+        "title": "금융위원회 「대출수요 관리 방안」(2025.10.15)",
+        "article": "가격대별 한도 구간",
+        "effective_from": "2025-10-16",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "B",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "loan_provincial_non_regulated_no_price_cap",
+      "effective_date": "2026-08-17",
+      "boundary": "지방 비규제지역 — 가격대별 한도 미적용, LTV 70%가 결정",
+      "inputs": {
+        "price": 500000000, "ltvPercent": 70, "region": "provincialNonRegulated",
+        "income": 100000000, "dsrLimitPercent": 40,
+        "rate": 4, "stressAdd": 0.75, "termYears": 30, "repayType": "equal"
+      },
+      "expected": { "ltvLimit": 350000000, "limit": 350000000 },
+      "tolerance": 1,
+      "source": {
+        "type": "NOTICE",
+        "title": "금융위원회 「대출수요 관리 방안」(2025.10.15) · 지방 주담대 스트레스 DSR 2단계 한시 유예",
+        "article": "가격대별 한도는 수도권·규제지역 주택구입 목적 주담대에만 적용",
+        "effective_from": "2025-10-16",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "B",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "loan_equal_principal_repayment",
+      "effective_date": "2026-08-17",
+      "boundary": "원금균등 상환 — DSR 산입액은 연평균 원리금((원금+총이자)÷대출연수)",
+      "inputs": {
+        "price": 1000000000, "ltvPercent": 40, "region": "regulated",
+        "income": 100000000, "dsrLimitPercent": 40,
+        "rate": 4, "stressAdd": 3.0, "termYears": 30, "repayType": "principal"
+      },
+      "expected": { "dsrLimit": 584534199, "ltvLimit": 400000000, "limit": 400000000 },
+      "tolerance": 100000,
+      "source": {
+        "type": "REGULATION",
+        "title": "은행 여신업무기준 — DSR 산출 시의 대출 연간 원리금 상환액 산정기준",
+        "article": "분할상환 주택담보대출의 연간 원리금상환액",
+        "effective_from": "2022-07-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "B",
+      "verified_at": "2026-08-17",
+      "note": "독립 구현은 월별 상환 스케줄을 실제로 만들어 총이자를 합산한다. production 은 i×(n+1)/2 폐쇄형을 쓴다 — 두 방법이 일치해야 통과한다."
+    }
+  ]
+}

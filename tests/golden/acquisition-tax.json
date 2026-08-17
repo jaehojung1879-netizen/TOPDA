@@ -1,0 +1,389 @@
+{
+  "calculator": "acquisition-tax",
+  "engine": "calcAcquisitionTax",
+  "description": "취득세 — 지방세법 기준 golden case. expected 는 scripts/reference/acquisition_tax_reference.mjs (독립 구현) 가 만든다. TOPDA production 결과를 복사한 값이 아니다.",
+  "cases": [
+    {
+      "case_id": "acq_paid_500m_1home",
+      "effective_date": "2026-08-17",
+      "boundary": "6억원 미만 구간 (1%)",
+      "inputs": { "price": 500000000, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": false },
+      "expected": { "baseRate": 0.01, "acquisition": 5000000, "ruralTax": 0, "localEduTax": 500000, "total": 5500000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제11조 제1항 제8호 가목 (6억원 이하 1천분의 10)",
+        "effective_from": "2020-08-12",
+        "effective_to": null,
+        "identifier": "법률 제17473호 등 개정 연혁 / 국가법령정보센터 지방세법 제11조"
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_paid_600m_exact_boundary",
+      "effective_date": "2026-08-17",
+      "boundary": "정확히 6억원 — '6억원 이하'이므로 1% 구간",
+      "inputs": { "price": 600000000, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": false },
+      "expected": { "baseRate": 0.01, "acquisition": 6000000, "ruralTax": 0, "localEduTax": 600000, "total": 6600000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제11조 제1항 제8호 가목",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_paid_600m_plus_1won",
+      "effective_date": "2026-08-17",
+      "boundary": "6억원 + 1원 — 누진 구간 진입. 세율 계산식 결과를 소수 넷째 자리로 반올림하면 0.01",
+      "inputs": { "price": 600000001, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": false },
+      "expected": { "baseRate": 0.01 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제11조 제1항 제8호 나목 — 세율 = (취득당시가액 × 2 / 3억원 − 3) × 1/100, 소수점 이하 다섯째 자리에서 반올림하여 넷째 자리까지",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17",
+      "note": "구간이 바뀌어도 세액이 튀지 않는다는 것을 보이는 케이스. 반올림 규칙이 없으면 이 값이 0.0100000067 이 되어 6억원 이하와 미세하게 달라진다."
+    },
+    {
+      "case_id": "acq_paid_700m_rounding",
+      "effective_date": "2026-08-17",
+      "boundary": "누진 구간 — 법정 반올림이 실제로 세액을 바꾸는 대표 케이스",
+      "inputs": { "price": 700000000, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": false },
+      "expected": { "baseRate": 0.0167, "acquisition": 11690000, "ruralTax": 0, "localEduTax": 1169000, "total": 12859000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제11조 제1항 제8호 나목 — 반올림 규칙",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17",
+      "note": "반올림 전 값은 0.016666…이며 세액이 11,666,667원이 된다. 법정 반올림을 적용하면 11,690,000원으로 23,333원 늘어난다."
+    },
+    {
+      "case_id": "acq_paid_750m_midpoint",
+      "effective_date": "2026-08-17",
+      "boundary": "누진 구간 중앙 — 계산식 결과가 정확히 2%",
+      "inputs": { "price": 750000000, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": false },
+      "expected": { "baseRate": 0.02, "acquisition": 15000000, "ruralTax": 0, "localEduTax": 1500000, "total": 16500000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제11조 제1항 제8호 나목",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_paid_900m_exact",
+      "effective_date": "2026-08-17",
+      "boundary": "정확히 9억원 — '9억원 이하'이므로 누진 구간(계산식 결과 3%)",
+      "inputs": { "price": 900000000, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": false },
+      "expected": { "baseRate": 0.03, "acquisition": 27000000, "total": 29700000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제11조 제1항 제8호 나목·다목 경계",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_paid_1200m_over85",
+      "effective_date": "2026-08-17",
+      "boundary": "9억원 초과 3% + 전용 85㎡ 초과 농특세 0.2%",
+      "inputs": { "price": 1200000000, "homes": 1, "regulated": false, "areaOver85": true, "firstHome": false },
+      "expected": { "baseRate": 0.03, "acquisition": 36000000, "ruralTax": 2400000, "localEduTax": 3600000, "total": 42000000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법 / 농어촌특별세법",
+        "article": "지방세법 제11조①8호 다목, 제151조 / 농어촌특별세법 제5조 제1항 [별표] 및 제4조 제11호(85㎡ 이하 비과세)",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_heavy_2home_regulated",
+      "effective_date": "2026-08-17",
+      "boundary": "조정대상지역 2주택 중과 8% + 지방교육세 0.4% 고정",
+      "inputs": { "price": 800000000, "homes": 2, "regulated": true, "areaOver85": false, "firstHome": false },
+      "expected": { "baseRate": 0.08, "acquisition": 64000000, "ruralTax": 0, "localEduTax": 3200000, "total": 67200000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제13조의2 제1항 (다주택 중과세율), 제151조 제1항 제1호 (중과분 지방교육세)",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_2home_nonregulated_standard",
+      "effective_date": "2026-08-17",
+      "boundary": "비조정지역 2주택 — 중과 없음, 표준세율",
+      "inputs": { "price": 800000000, "homes": 2, "regulated": false, "areaOver85": false, "firstHome": false },
+      "expected": { "baseRate": 0.0233 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제13조의2 제1항 제1호 — 조정대상지역 2주택만 중과",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_heavy_3home_regulated",
+      "effective_date": "2026-08-17",
+      "boundary": "조정대상지역 3주택 중과 12%",
+      "inputs": { "price": 600000000, "homes": 3, "regulated": true, "areaOver85": false, "firstHome": false },
+      "expected": { "baseRate": 0.12, "acquisition": 72000000, "localEduTax": 2400000, "total": 74400000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제13조의2 제1항 제2호",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_heavy_3home_nonregulated",
+      "effective_date": "2026-08-17",
+      "boundary": "비조정 3주택 = 8%",
+      "inputs": { "price": 600000000, "homes": 3, "regulated": false, "areaOver85": false, "firstHome": false },
+      "expected": { "baseRate": 0.08, "acquisition": 48000000, "localEduTax": 2400000, "total": 50400000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제13조의2 제1항 제1호·제2호",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_heavy_4home",
+      "effective_date": "2026-08-17",
+      "boundary": "4주택 이상 = 12% (조정 여부 무관)",
+      "inputs": { "price": 600000000, "homes": 4, "regulated": false, "areaOver85": false, "firstHome": false },
+      "expected": { "baseRate": 0.12, "acquisition": 72000000, "localEduTax": 2400000, "total": 74400000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제13조의2 제1항 제2호",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_inherit_no_home",
+      "effective_date": "2026-08-17",
+      "boundary": "상속 · 무주택 1가구1주택 특례 0.8% — 지방교육세 비과세",
+      "inputs": { "price": 500000000, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": false, "acqType": "inherit", "inheritNoHome": true },
+      "expected": { "baseRate": 0.008, "acquisition": 4000000, "localEduTax": 0, "ruralTax": 0, "total": 4000000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제15조 제1항 (세율의 특례 — 표준세율 2.8% − 중과기준세율 2%)",
+        "effective_from": "2011-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_inherit_other",
+      "effective_date": "2026-08-17",
+      "boundary": "상속(그 외) 2.8% — 지방교육세 (2.8%−2%)×20% = 0.16%",
+      "inputs": { "price": 500000000, "homes": 2, "regulated": false, "areaOver85": false, "firstHome": false, "acqType": "inherit", "inheritNoHome": false },
+      "expected": { "baseRate": 0.028, "acquisition": 14000000, "localEduTax": 800000, "total": 14800000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제11조 제1항 제1호 나목, 제151조 제1항 제1호",
+        "effective_from": "2011-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_gift_standard",
+      "effective_date": "2026-08-17",
+      "boundary": "무상취득(증여) 3.5% — 지방교육세 (3.5%−2%)×20% = 0.3%",
+      "inputs": { "price": 400000000, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": false, "acqType": "gift", "giftMarketValue": 400000000 },
+      "expected": { "baseRate": 0.035, "acquisition": 14000000, "localEduTax": 1200000, "total": 15200000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제11조 제1항 제2호 (그 밖의 무상취득 1천분의 35), 제10조의2 (무상취득 과세표준 = 시가인정액)",
+        "effective_from": "2023-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_gift_heavy_regulated",
+      "effective_date": "2026-08-17",
+      "boundary": "조정대상지역 시가표준액 3억원 이상 다주택자 증여 → 12% 중과. 세액은 시가인정액 기준",
+      "inputs": { "price": 500000000, "homes": 1, "regulated": true, "areaOver85": false, "firstHome": false, "acqType": "gift", "giftMarketValue": 500000000, "giftStdValue": 350000000, "giftDonorMultiHome": true },
+      "expected": { "baseRate": 0.12, "acquisition": 60000000, "localEduTax": 2000000, "total": 62000000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제13조의2 제2항 (조정대상지역 내 시가표준액 3억원 이상 주택의 무상취득 중과)",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17",
+      "note": "중과 판정 기준은 시가표준액(3.5억), 과세표준은 시가인정액(5억)이다. 두 값을 하나로 겸하면 판정이 틀린다."
+    },
+    {
+      "case_id": "acq_gift_below_heavy_threshold",
+      "effective_date": "2026-08-17",
+      "boundary": "시가인정액 5억이지만 시가표준액 2.9억 → 중과 대상 아님(3.5%)",
+      "inputs": { "price": 500000000, "homes": 1, "regulated": true, "areaOver85": false, "firstHome": false, "acqType": "gift", "giftMarketValue": 500000000, "giftStdValue": 290000000, "giftDonorMultiHome": true },
+      "expected": { "baseRate": 0.035, "acquisition": 17500000, "localEduTax": 1500000, "total": 19000000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제13조의2 제2항 — 시가표준액 3억원 미만은 중과 제외",
+        "effective_from": "2020-08-12",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_original_construction",
+      "effective_date": "2026-08-17",
+      "boundary": "원시취득(직접 신축) 2.8%",
+      "inputs": { "price": 300000000, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": false, "acqType": "original" },
+      "expected": { "baseRate": 0.028, "acquisition": 8400000, "localEduTax": 480000, "total": 8880000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세법",
+        "article": "제11조 제1항 제3호 (원시취득 1천분의 28)",
+        "effective_from": "2011-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_first_home_relief_cap",
+      "effective_date": "2026-08-17",
+      "boundary": "생애최초 감면 — 한도 200만원",
+      "inputs": { "price": 500000000, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": true },
+      "expected": { "firstHomeDeduct": 2000000, "acquisition": 3000000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세특례제한법",
+        "article": "제36조의3 (생애최초 주택 취득에 대한 취득세 감면 — 12억원 이하, 200만원 한도)",
+        "effective_from": "2024-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_first_home_over_1200m_no_relief",
+      "effective_date": "2026-08-17",
+      "boundary": "12억원 초과 → 생애최초 감면 배제",
+      "inputs": { "price": 1200000001, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": true },
+      "expected": { "firstHomeDeduct": 0 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세특례제한법",
+        "article": "제36조의3 — 취득당시가액 12억원 이하 요건",
+        "effective_from": "2024-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "acq_childbirth_relief_beats_first_home",
+      "effective_date": "2026-08-17",
+      "boundary": "생애최초(200만)와 출산·양육(500만) 중복 불가 → 유리한 500만원만 적용",
+      "inputs": { "price": 700000000, "homes": 1, "regulated": false, "areaOver85": false, "firstHome": true, "childbirth": true },
+      "expected": { "firstHomeDeduct": 5000000, "appliedReliefKey": "childbirth" },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "지방세특례제한법",
+        "article": "제36조의5 (출산·양육 가구 감면 500만원 한도) 및 제180조 (중복 감면 배제)",
+        "effective_from": "2024-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    }
+  ]
+}

@@ -15,9 +15,79 @@
 (function () {
   'use strict';
 
+  // ── 규정의 「시점(status)」 어휘 ─────────────────────────────────────────
+  //
+  //  세율·규제는 발표 → 입법 → 시행의 단계를 거친다. 이 셋을 구분하지 않으면
+  //  "정부가 발표한 개편안"이 현행 계산에 섞여 들어간다. 실제로 자주 나는 사고다.
+  //
+  //   CURRENT         계산 기준일 현재 시행 중  → production 계산에 적용
+  //   ENACTED_FUTURE  법률·고시로 확정됐으나 시행 전 → effectiveFrom 이후 계산에만 적용
+  //   PROPOSED        개편안·입법예고·국회 계류  → **절대 계산에 반영하지 않는다**. 안내 문구만.
+  //   EXPIRED         effectiveTo 가 지난 과거 규정 → 과거 시점 계산에만 적용
+  //
+  //  ⚠ production 계산기는 계산 기준일에 CURRENT 인 규정만 쓴다.
+  //    scripts/check_rule_versioning.mjs 가 이를 CI 에서 강제한다.
+  var RULE_STATUS = {
+    CURRENT: 'CURRENT',
+    ENACTED_FUTURE: 'ENACTED_FUTURE',
+    PROPOSED: 'PROPOSED',
+    EXPIRED: 'EXPIRED',
+  };
+
+  /**
+   * 규정 블록이 주어진 기준일에 적용 대상인지 판정한다.
+   * status 가 없으면 effectiveFrom/effectiveTo 만으로 판정한다(구 블록 호환).
+   */
+  function isRuleApplicable(block, asOfISO) {
+    if (!block) return false;
+    var asOf = asOfISO || new Date().toISOString().slice(0, 10);
+    if (block.status === RULE_STATUS.PROPOSED) return false;
+    if (block.effectiveFrom && String(block.effectiveFrom).slice(0, 10) > asOf) return false;
+    var end = block.effectiveTo || block.validUntil;
+    if (end && String(end).slice(0, 10) < asOf) return false;
+    return true;
+  }
+
   window.TOPDA_RATES = {
     // 사이트 전체 최종 검토일 (계산기 하단에 표기됨)
+    //  ⚠ 이 날짜는 "형식적으로 오늘로 바꾸는" 값이 아니다. 각 블록의 reviewedAt 을
+    //    실제로 대조한 항목만 올리고, 그중 가장 이른 날짜를 여기 둔다.
+    //    전 항목을 재검증하지 않은 채 이 값만 올리면 사용자에게 거짓 신호를 준다.
     lastReviewed: '2026-08-02',
+
+    // ── 계산 정확성 감사 이력 ──
+    //  lastReviewed(전 항목 재검토)와 다른 개념이다. "어떤 항목을 어떤 방법으로
+    //  검증했는지"를 남긴다. 검증하지 않은 항목의 reviewedAt 은 건드리지 않는다.
+    audits: [
+      {
+        date: '2026-08-17',
+        scope: '취득세·양도소득세·중개보수·전월세전환·인지세·청약가점·대출한도(DSR·LTV·스트레스)',
+        method: 'independent_reference_formula + golden/boundary/invariant/parity test',
+        verifiedBlocks: [
+          'acquisitionTax (제11조①8호 계산식·법정 반올림)',
+          'transferTax (제55·95·104조, 시행령 제154·156·160조)',
+          'brokerage (공인중개사법 시행규칙 [별표1])',
+          'jeonseConversion (주택임대차보호법 제7조의2·시행령 제9조)',
+          'stampDuty (인지세법 제3조①1호)',
+          'subscription (주택공급에 관한 규칙 [별표1])',
+          'loan.stress / loan.metroPriceCaps (금융위 공표 예시 재현)',
+        ],
+        limitation: '이 감사는 조문 텍스트 대조와 독립 구현 재현으로 수행했다. '
+          + '국가법령정보센터·위택스·홈택스 등 1차 사이트에 대한 자동 접근이 불가능한 '
+          + '환경이었으므로, 조문 원문 전문(全文) 대조가 아니라 검색으로 회수한 조문 '
+          + '인용문 대조다. 배포 전 각 조문을 law.go.kr 에서 눈으로 한 번 더 확인할 것.',
+        report: 'docs/calculator-audit-2026-08-17.md',
+      },
+    ],
+
+    // 규정 시점 어휘와 판정 헬퍼 — 계산기·테스트가 함께 쓴다.
+    RULE_STATUS: RULE_STATUS,
+    isRuleApplicable: isRuleApplicable,
+
+    // ── 시행 전·개편안 정보 (계산에 절대 반영하지 않음) ──
+    //  화면에는 "시행 예정"·"정부 발표 개편안" 정도의 안내만 가능하다.
+    //  여기에 항목을 추가할 때는 status 와 근거를 반드시 적는다.
+    upcoming: [],
 
     // 계산기별 주요 출처 (계산기 페이지 하단에 자동 표기)
     sources: {
@@ -153,6 +223,7 @@
           source: '은행 여신 내규(장래소득 인정) — 반영 요건·폭은 은행별로 다름',
         },
         effectiveFrom: '2022-07-01',
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-08-02',
         jurisdiction: 'KR',
         confidence: 'verified',
@@ -160,6 +231,7 @@
       },
 
       effectiveFrom: '2022-07-01',
+      status: RULE_STATUS.CURRENT,
       reviewedAt: '2026-08-02',
       jurisdiction: 'KR',
       confidence: 'verified',
@@ -167,10 +239,20 @@
     },
 
     // ── RTI (임대업이자상환비율) 승인 기준 ── consumed
+    //  ⚠ RTI 는 법령상 한도가 아니라 **감독당국의 여신심사 가이드라인**이다. 은행이
+    //    내규로 더 엄격하게 적용할 수 있고, 임대소득 인정 범위(간주임대료 산정률 등)도
+    //    은행마다 갈린다. 그래서 confidence 를 'guideline' 로 둔다 — 법정 확정값이 아니다.
     rti: {
       residential: 1.25, // 주택
       commercial: 1.5,   // 비주택
-      source: '금융감독원 임대업 이자상환비율(RTI)',
+      depositRate: 0.035, // 보증금 간주임대료 산정률(연). 은행별로 다를 수 있는 관행값
+      status: RULE_STATUS.CURRENT,
+      effectiveFrom: '2018-03-26',
+      reviewedAt: '2026-08-02',
+      jurisdiction: 'KR',
+      confidence: 'guideline',
+      note: '법정 한도가 아니라 감독당국 여신심사 가이드라인입니다. 실제 승인 기준은 은행 내규로 달라질 수 있습니다.',
+      source: '금융감독원 「여신심사 선진화를 위한 모범규준」 임대업 이자상환비율(RTI)',
     },
 
     // ── 국민주택채권 ── consumed (할인율 기본값)
@@ -190,6 +272,7 @@
       note: '고객부담률(할인율)은 시장금리에 따라 매일 바뀝니다. 잔금일 당일 값을 은행 국민주택채권 포털에서 확인해 직접 입력하세요.',
       roundUnit: 10000,     // 채권 매입금액 절상 단위(원)
       effectiveFrom: '2026-06',
+      status: RULE_STATUS.CURRENT,
       reviewedAt: '2026-08-02',
       jurisdiction: 'KR',
       confidence: 'market-rate', // 법정값 아님 — 시세
@@ -216,6 +299,7 @@
         omittedNote: '전자신청(인터넷등기소)은 위 두 방식보다 수수료가 낮지만, 2025.8.1 인상 후 금액을 1차 출처로 확인하지 못해 선택지에서 제외했습니다. 전자신청을 이용하면 실제 부담은 위 금액보다 조금 더 낮습니다.',
         perExtraProperty: 0, // 부동산 1개마다 부과 — 개수는 UI에서 곱한다
         effectiveFrom: '2025-08-01',
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-08-02',
         jurisdiction: 'KR',
         confidence: 'verified',
@@ -242,6 +326,7 @@
         maxComplexitySurchargeRatio: 1.0,
         unverifiedNote: '20억원 초과 구간의 요율은 협회 보수표 원문을 아직 대조하지 못한 잠정값입니다. 해당 금액대는 반드시 견적서로 확인하세요.',
         effectiveFrom: '2024-09-12',
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-08-02',
         jurisdiction: 'KR',
         confidence: 'partial', // 20억 이하 구간 검증, 초과 구간 미검증
@@ -274,6 +359,7 @@
       stdValueEstimateRatio: 0.7,
       stdValueEstimateNote: '시가표준액을 입력하지 않아 「매매가 × 70%」로 추정했습니다. 이 70%는 법령에 근거한 값이 아니라 단순 추정치이며, 실제 공시가격과 다르면 채권 매입액이 달라집니다.',
       effectiveFrom: '2025-08-01',
+      status: RULE_STATUS.CURRENT,
       reviewedAt: '2026-08-02',
       jurisdiction: 'KR',
       confidence: 'partial',
@@ -284,6 +370,7 @@
     // ⚠ 정부 대책에 따라 자주 바뀝니다. 출처·시행일을 반드시 1차 자료로 대조하세요.
     loan: {
       effectiveFrom: '2025-10-16', // 10·15 대책 대출규제 시행일
+      status: RULE_STATUS.CURRENT,
       reviewedAt: '2026-08-02',
       jurisdiction: 'KR',
       confidence: 'verified',
@@ -350,7 +437,9 @@
         isPurchasePrice: false,
         asOf: '대출 신청일',
         note: 'LTV와 가격대별 한도는 매매가가 아니라 대출 신청일 기준 시가(KB시세 일반평균가·한국부동산원 등)로 판정합니다. 계약 시점과 대출 신청일 사이에 시세가 바뀌면 한도도 달라집니다.',
+        effectiveFrom: '2025-10-16',
         fallbackNote: '시가를 입력하지 않아 매매가로 대신 판정했습니다. 매매가가 시세보다 높으면 한도가 실제보다 적게 나옵니다 — KB시세를 확인해 입력하세요.',
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-08-02',
         jurisdiction: 'KR',
         confidence: 'verified',
@@ -362,6 +451,7 @@
       //    같은 '주담대'라도 목적이 다르면 규제가 아예 다르므로, 범위를 밝히지 않으면
       //    생활안정자금·이주비 대출을 이 화면 값으로 오해한다.
       purposeScope: {
+        effectiveFrom: '2025-10-16',
         covered: '주택구입 목적 주택담보대출',
         excluded: [
           '생활안정자금 목적 주담대 — 10·15 대책의 한도 축소 규제 미적용(별도 한도 규정)',
@@ -370,6 +460,7 @@
           '전세자금대출 — LTV·가격대별 한도와 무관(전세 탭에서 별도 계산)',
           '정책대출(디딤돌·보금자리론 등) — 별도 자격·한도 기준',
         ],
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-08-02',
         confidence: 'verified',
         source: '금융위 「대출수요 관리 방안」 FAQ(2025.10.15) — 6억원 한도는 주택구입목적 주담대에 한정, 중도금대출 제외(잔금 전환 시 적용), 생활안정자금·이주비대출 미적용',
@@ -435,6 +526,7 @@
         },
 
         effectiveFrom: '2025-10-16',
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-08-02',
         confidence: 'verified',
         source: '금융위 스트레스 DSR 3단계 시행방안 · 「대출수요 관리 방안」(2025.10.15) · 지방 주담대 2단계 유예 연장(2026.7~12)',
@@ -481,6 +573,7 @@
         // 수 없다. 계산을 바꾸지 않고 경고만 남긴다 — 위 appliesToKeys 에 없는 이유다.
         refinanceNote: '대환은 종전 조건 승계 여부가 은행·상품마다 다릅니다. 계산에는 현행 규정을 그대로 적용했으니 실제 조건은 대환 은행에 확인하세요.',
         effectiveFrom: '2025-10-16',
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-08-02',
         confidence: 'verified',
         source: '금융위 「대출수요 관리 방안」 FAQ (2025.10.15) — 경과규정',
@@ -569,6 +662,7 @@
         smallHousePriceMaxMetro: 300000000,    // 수도권 소형주택 가액 상한(원)
         smallHousePriceMaxOther: 200000000,    // 비수도권 소형주택 가액 상한(원)
         effectiveFrom: '2025-01-01',
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-07-30',
         jurisdiction: 'KR',
         confidence: 'verified',
@@ -582,6 +676,7 @@
         deductMax: 5000000,
         validUntil: '2028-12-31',
         effectiveFrom: '2024-01-01',
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-07-30',
         jurisdiction: 'KR',
         confidence: 'verified',
@@ -607,6 +702,7 @@
         metroExcluded: true,         // 수도권은 대상 아님
         validUntil: '2026-12-31',
         effectiveFrom: '2026-01-01',
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-07-30',
         jurisdiction: 'KR',
         confidence: 'verified',
@@ -643,6 +739,7 @@
         // 부담부증여: 승계채무액은 유상취득, 나머지는 무상취득으로 나뉜다.
         burdenedGiftSplit: true,
         effectiveFrom: '2023-01-01', // 무상취득 과세표준 시가인정액 전환
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-08-02',
         jurisdiction: 'KR',
         confidence: 'verified',
@@ -650,6 +747,7 @@
       },
 
       effectiveFrom: '2026-01-01',
+      status: RULE_STATUS.CURRENT,
       reviewedAt: '2026-07-30',
       jurisdiction: 'KR',
       confidence: 'verified',
@@ -687,6 +785,7 @@
         landPermitApplyBy: '2026-05-09', // 토지거래허가 대상은 이 날까지 허가 신청
         landPermitWithinMonths: 6,
         effectiveFrom: '2026-05-10',
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-07-30',
         jurisdiction: 'KR',
         confidence: 'verified',
@@ -699,6 +798,7 @@
         withinYears: 10,
         appliesTo: '배우자 또는 직계존비속으로부터 증여받은 토지·건물·부동산에 관한 권리',
         effectiveFrom: '2023-01-01',
+        status: RULE_STATUS.CURRENT,
         reviewedAt: '2026-07-30',
         jurisdiction: 'KR',
         confidence: 'verified',
@@ -706,6 +806,7 @@
       },
 
       effectiveFrom: '2026-01-01',
+      status: RULE_STATUS.CURRENT,
       reviewedAt: '2026-07-30',
       jurisdiction: 'KR',
       confidence: 'verified',
@@ -760,6 +861,7 @@
         source: '상속세 및 증여세법 제47조·제58조',
       },
       effectiveFrom: '2026-01-01',
+      status: RULE_STATUS.CURRENT,
       reviewedAt: '2026-07-30',
       jurisdiction: 'KR',
       confidence: 'verified',
@@ -814,6 +916,7 @@
       regionAppliesTo: ['sale', 'jeonse', 'monthly'],
 
       effectiveFrom: '2021-10-19',
+      status: RULE_STATUS.CURRENT,
       reviewedAt: '2026-07-30',
       jurisdiction: 'KR-11', // 서울특별시 조례 기준
       confidence: 'verified',
@@ -831,6 +934,7 @@
       hardCapPct: 10.0,       // 법정 절대 상한(%)
       marketDefaultPct: 6.0,  // 시장 비교용 기본값(법정 상한 아님)
       effectiveFrom: '2020-09-29',
+      status: RULE_STATUS.CURRENT,
       reviewedAt: '2026-07-30',
       jurisdiction: 'KR',
       confidence: 'verified',
@@ -847,6 +951,7 @@
       spouseAccountRatio: 0.5,
       spouseAccountMaxPoints: 3,
       effectiveFrom: '2024-03-25',
+      status: RULE_STATUS.CURRENT,
       reviewedAt: '2026-07-30',
       jurisdiction: 'KR',
       confidence: 'verified',
@@ -855,6 +960,7 @@
 
     // 변경 이력
     changelog: [
+      { date: '2026-08-17', note: '계산기 전수 감사 + 공식 근거 기반 검증 체계 구축(docs/calculator-audit-2026-08-17.md). 법령에서 독립적으로 다시 구현한 Reference Formula(scripts/reference/)가 기대값을 만들고, golden 64건·boundary 31건·invariant 46건·parity 12건·versioning 12건이 CI에서 이를 강제합니다. 발견·수정한 오류 5건: ① 취득세 6~9억 누진세율의 법정 반올림 누락(지방세법 제11조①8호 나목 "소수점 이하 다섯째 자리에서 반올림하여 넷째 자리까지") — 7억 주택 기준 취득세가 25,666원 적게 나오던 오류. ② 양도세 장기보유특별공제 표1이 소수 연수를 보간해 3.5년 보유가 7%로 계산되던 오류(법정 6%, 연 단위 구간표) — 공제 과다 = 세액 과소. ③ 보유·거주기간을 365.2425로 나눠 취득일 응당일이 「1년 미만」으로 분류되던 오류 — 70% 단기세율이 잘못 적용됐다. 응당일 기준 정수 연수로 교체(소득세법 제95조④). ④ 1세대1주택 비과세에서 취득 당시 조정대상지역 주택의 거주 2년 요건(소득세법 시행령 제154조①)이 빠져 있어, 거주하지 않은 조정지역 취득 1주택자에게 세액 0을 표시하던 오류 — 입력을 신설하고 판정 근거를 결과에 노출. ⑤ DSR 계산기가 산정만기 상한을 적용하지 않아 만기일시 주담대에 30년을 입력하면 연간 원금이 법정(대출액÷10년)의 1/3로 잡히던 오류 — DSR 과소 = 대출 여력 과대 산출. 아울러 규정에 CURRENT/ENACTED_FUTURE/PROPOSED/EXPIRED 시점 구분을 도입해 시행 전 제도가 현행 계산에 섞이지 않도록 막고, dsr.html·registration-cost.html의 하드코딩 수치 10건을 rates.js로 이관했습니다.' },
       { date: '2026-08-16', note: '원금균등 상환의 DSR 산입액을 한도 계산과 같은 「연평균 원리금」((원금 + 총이자) ÷ 대출연수)으로 통일. 종합 대시보드의 DSR 표시와 DSR 계산기가 원금균등만 「첫 회차 × 12」로 잡고 있어서, 같은 화면의 「예상 주담대 최대한도」(연평균 기준)와 서로 다른 산식으로 나왔습니다 — 대출 5.86억·원금균등 30년·연 3.83%·소득 1.197억 기준 DSR 39.0%로 표시되던 것이 29.9%로 바로잡힙니다(연 41,634,242원 → 30,786,405원). 연평균 방식은 실사용자 은행 DSR 원장(본건 원리금 39,688,960원)과 6원 차이로 일치합니다. 원리금균등은 매달 상환액이 같아 값이 달라지지 않습니다. 자금계획 탭도 매수 탭의 상환 방식을 그대로 따르도록 고쳤습니다(예전에는 원리금균등으로 고정).' },
       { date: '2026-08-02', note: '실사용자 제보로 확인된 계산 오류 2건 수정. ① LTV·가격대별 한도의 판정 기준을 매매가가 아니라 「대출 신청일 기준 시가」(KB부동산 일반평균가·한국부동산원)로 명시하고, 종합계산기에 KB시세 입력을 분리 신설 — 매매가 15.65억·신청일 시가 15억인 주택이 15~25억 구간(4억)에 잘못 걸려 한도가 2억 적게 나오던 오류. ② 유가증권(주식)담보대출·예적금담보대출·보험계약대출을 DSR 산정에서 완전 제외 — 주식담보대출을 「원금÷8년 + 이자」로 산입해 DSR을 부풀리고 주담대 한도를 깎던 오류. ③ 스트레스 DSR이 실제로 한도를 줄였는지(줄였다면 얼마나) 결과에 표시 — 가격대별 한도·LTV가 결정 요인이면 스트레스 영향은 0이다.' },
       { date: '2026-08-02', note: '적용 대상 요건 명시. ① DSR·스트레스 DSR이 "어떤 대출에 붙는지"를 결과에 표시 — 차주단위 DSR은 총 대출 1억원 초과 시 적용, 전세·중도금·예적금담보·서민금융 등은 DSR 산정 제외, 신용대출 스트레스는 잔액 1억원 초과분만. 계산은 보수적으로 항상 DSR을 적용하되 요건 미해당 시 실제 한도가 더 높을 수 있음을 밝힌다. ② 가격대별 한도·LTV 하향이 「주택구입 목적」 주담대에만 적용됨을 명시 — 생활안정자금·이주비·중도금대출은 대상 밖. ③ 등기신청 수수료에서 금액 미확인 「전자신청」 선택지 제거(방문 18,000·e-Form 15,000만 유지, 보수적으로 방문이 기본값).' },

@@ -411,8 +411,15 @@ function calcAcquisitionTax(input) {
   const taxBase = isGift ? giftFreeBase : price;
 
   const eok = price / 100000000;
-  // 유상취득 6~9억 누진식: 세율 = (취득가액×2/3억 − 3) / 100
-  const progRate = eok <= 6 ? 0.01 : eok <= 9 ? ((eok * 2 / 3) - 3) / 100 : 0.03;
+  // 유상취득 6~9억 누진식 (지방세법 제11조 제1항 제8호 나목)
+  //   세율 = (해당 주택의 취득당시가액 × 2 / 3억원 − 3) × 1/100
+  //   ⚠ 조문은 이어서 "소수점 이하 다섯째 자리에서 반올림하여 소수점 넷째 자리까지
+  //     계산한다"고 정한다. 이 반올림을 빼면 7억원 주택의 세율이 1.66666…%가 되어
+  //     법정 1.67%보다 낮게 나오고, 취득세가 23,333원 적게 계산된다(교육세 포함
+  //     25,666원). 반올림은 세율 자체에 대한 법정 절차이므로 반드시 여기서 한다.
+  const progRate = eok <= 6 ? 0.01
+    : eok <= 9 ? Math.round((((eok * 2 / 3) - 3) / 100) * 10000) / 10000
+      : 0.03;
 
   // 감면 적용/미적용 이유를 사용자에게 그대로 보여주기 위한 메모
   const notes = [];
@@ -1404,6 +1411,9 @@ function calcTransferTax(input) {
     sellPrice, buyPrice, cost,
     holdYears: holdYearsInput, liveYears: liveYearsInput,
     homes, onlyHome, regulated,
+    // 취득 당시 조정대상지역이었는지 — 1세대 1주택 비과세의 거주 2년 요건 판정용.
+    // 현재 조정대상지역 여부(regulated, 중과 판정용)와 다른 사실이므로 따로 받는다.
+    acquiredInRegulatedArea = false,
     assetType = 'house', // 종합계산기의 비주택(상가·업무용 오피스텔·토지) 단기세율 분기용
     surchargeExempt = false, // 조정지역 다주택이라도 중과 제외 요건(장기임대·상속 등) 해당 시 true
     sellDate,        // 'YYYY-MM-DD' — 다주택 중과 한시 유예 자동 판단용
@@ -1432,10 +1442,25 @@ function calcTransferTax(input) {
 
   // ── 보유·거주기간: 날짜가 있으면 실제 경과일수로 계산한다 ──
   const isDateStr = (s) => Boolean(s) && /^\d{4}-\d{2}-\d{2}$/.test(s);
+  // ── 보유·거주기간은 「응당일(anniversary)」로 센다 ──
+  //  소득세법 제95조 제4항: 보유기간은 그 자산의 취득일부터 양도일까지로 한다(취득일 산입).
+  //  국세청 해석상 2024-01-10 취득 → 2025-01-10 양도가 「정확히 1년」이고,
+  //  2025-01-09 양도는 「1년 미만」이다.
+  //
+  //  ⚠ 예전에는 경과일수를 365.2425로 나눴다. 그러면 응당일(365일 경과)이 0.9993년이
+  //    되어 **1년 미만으로 잘못 분류**된다. 1년 경계는 세율이 70% → 기본세율로 바뀌는
+  //    자리라, 이 하루 차이가 세액을 몇 배로 바꾼다. 2년 경계(60% → 기본세율,
+  //    1세대1주택 비과세 요건)도 마찬가지다.
+  //
+  //  장기보유특별공제도 「3년 이상 4년 미만 6%」처럼 연 단위 구간이므로, 소수 연수를
+  //  그대로 쓰면 구간이 한 칸 올라간다. 그래서 여기서 정수 연수를 돌려준다.
   const yearsBetween = (from, to) => {
-    const a = Date.parse(from), b = Date.parse(to);
-    if (isNaN(a) || isNaN(b) || b <= a) return 0;
-    return (b - a) / (365.2425 * 24 * 3600 * 1000);
+    if (!isDateStr(from) || !isDateStr(to)) return 0;
+    const [fy, fm, fd] = from.split('-').map(Number);
+    const [ty, tm, td] = to.split('-').map(Number);
+    let years = ty - fy;
+    if (tm < fm || (tm === fm && td < fd)) years -= 1;
+    return Math.max(0, years);
   };
   let holdYears = Number(holdYearsInput) || 0;
   let liveYears = Number(liveYearsInput) || 0;
@@ -1472,17 +1497,41 @@ function calcTransferTax(input) {
 
   const rawGain = Math.max(0, sellPrice - effectiveBuyPrice - cost);
 
-  // 1세대 1주택 비과세 / 안분
+  // ── 1세대 1주택 비과세 / 고가주택 안분 ──
+  //  소득세법 제89조 제1항 제3호, 시행령 제154조 제1항·제160조 제1항.
+  //
+  //  ⚠ 보유 2년만으로 끝나지 않는다. **취득 당시 조정대상지역**에 있던 주택은
+  //    보유기간 중 **거주기간 2년 이상**도 요건이다(시행령 제154조①). 취득 후에
+  //    조정대상지역에서 해제됐더라도 취득 당시 기준으로 판정한다.
+  //    이 요건을 빼면 거주하지 않은 조정지역 취득 주택이 비과세로 계산돼 세액이
+  //    0으로 나온다 — 사용자에게 가장 손해가 큰 방향의 오차다.
+  const transferNotes = [];
   let exempted = false;
   let taxableGainRatio = 1;
   const isOneHome = isHousing && homes === 1 && onlyHome;
-  if (isOneHome && holdYears >= 2) {
+  const residencyRequired = Boolean(isOneHome && acquiredInRegulatedArea);
+  const residencyMet = !residencyRequired || liveYears >= 2;
+  if (isOneHome && holdYears >= 2 && residencyMet) {
     if (sellPrice <= 1200000000) {
       exempted = true;
       taxableGainRatio = 0;
     } else {
       taxableGainRatio = (sellPrice - 1200000000) / sellPrice;
     }
+  }
+  if (isOneHome && holdYears >= 2 && residencyRequired && !residencyMet) {
+    transferNotes.push({
+      kind: 'warn',
+      text: '취득 당시 조정대상지역 주택은 보유 2년 외에 **거주 2년 이상**도 1세대 1주택 비과세 요건입니다(소득세법 시행령 제154조 제1항). 입력한 거주기간이 2년 미만이라 비과세를 적용하지 않고 전액 과세로 계산했습니다.',
+      en: 'A home located in a regulated area at the time of acquisition needs two years of actual residence, on top of two years of ownership, to qualify for the one-home exemption (Enforcement Decree of the Income Tax Act art. 154(1)). The residence period entered is under two years, so the gain is treated as fully taxable.',
+    });
+  }
+  if (isOneHome && !acquiredInRegulatedArea) {
+    transferNotes.push({
+      kind: 'info',
+      text: '취득 당시 비조정대상지역 주택으로 보고 거주요건 없이 계산했습니다. 취득 당시 조정대상지역이었다면 거주 2년 요건이 추가되며, 그 경우 위 체크박스를 켜세요.',
+      en: 'Calculated without a residence requirement, on the assumption the home was outside a regulated area when acquired. If it was inside one, a two-year residence requirement applies — tick that box.',
+    });
   }
   const taxableGain = rawGain * taxableGainRatio;
 
@@ -1565,7 +1614,10 @@ function calcTransferTax(input) {
       ltDeductRate = Math.min(0.80, holdRate + liveRate);
     } else {
       // 표1(일반): 보유 연 2%, 3년 6% ~ 15년 30%
-      const y = Math.min(holdYears, 15);
+      //  ⚠ 소득세법 제95조 제2항 [표1]은 「3년 이상 4년 미만 100분의 6」처럼 **연 단위
+      //    구간표**다. 소수 연수를 그대로 곱하면 3.5년이 7%가 되어 법정 6%보다 크게
+      //    공제된다(= 세액 과소). 반드시 내림한 정수 연수로 판정한다.
+      const y = Math.min(Math.floor(holdYears), 15);
       ltDeductRate = Math.min(0.30, y * 0.02);
     }
   }
@@ -1682,6 +1734,9 @@ function calcTransferTax(input) {
     jointPerOwner, ownerSharePcts: shares ? shares.map((s) => s * 100) : null, sharesEqual,
     // 보유·거주기간을 날짜로 계산했는지 (화면에서 근거로 노출)
     holdYears, liveYears, holdFromDates, liveFromDates,
+    // 1세대 1주택 비과세 거주요건 판정 근거
+    acquiredInRegulatedArea, residencyRequired, residencyMet,
+    notes: transferNotes,
     // 비-한국어 표시용 구조화 필드(계산 로직은 위와 동일, 라벨 조립만 언어별로 분기)
     isShortTerm: !!shortTermRate, shortTermRatePct: shortTermRate ? shortTermRate * 100 : 0,
     marginalRatePct: !shortTermRate ? Math.round((rate - surchargeRate) * 100) : 0,
@@ -1690,7 +1745,8 @@ function calcTransferTax(input) {
 }
 
 function calcProgressiveTax(base) {
-  // 2025 기준 누진세율 (8구간)
+  // 현행 기본세율 8구간 — 소득세법 제55조 제1항 (2023-01-01 시행 개정 이후 변동 없음).
+  //  ⚠ 세율표를 여기서 고치면 tests/golden/transfer-tax.json 의 근거 조문·시행일도 함께 갱신할 것.
   const brackets = [
     { upTo: 14000000,    rate: 0.06, deduction: 0 },
     { upTo: 50000000,    rate: 0.15, deduction: 1260000 },
@@ -1722,6 +1778,8 @@ function calcProgressiveTax(base) {
     const homes = Number(root.querySelector('[name="homes"]:checked')?.value || 1);
     const onlyHome = root.querySelector('[name="onlyHome"]')?.checked || false;
     const regulated = root.querySelector('[name="regulated"]')?.checked || false;
+    // 취득 당시 조정대상지역 — 비과세 거주요건 판정용(현재 조정 여부와 다른 사실이다)
+    const acquiredInRegulatedArea = root.querySelector('[name="acquiredInRegulatedArea"]')?.checked || false;
     const surchargeExempt = root.querySelector('[name="surchargeExempt"]')?.checked || false;
     const sellDate = root.querySelector('[name="sellDate"]')?.value || '';
     const acquireDate = root.querySelector('[name="acquireDate"]')?.value || '';
@@ -1771,7 +1829,7 @@ function calcProgressiveTax(base) {
     });
     const r = calcTransferTax({
       sellPrice, buyPrice, cost, holdYears, liveYears,
-      homes, onlyHome, regulated, surchargeExempt,
+      homes, onlyHome, regulated, acquiredInRegulatedArea, surchargeExempt,
       sellDate, jointOwners, ownerShares,
       acquireDate, residenceStartDate, residenceEndDate,
       contractDate, downPaymentReceived, newRegulatedArea,
@@ -1813,6 +1871,18 @@ function calcProgressiveTax(base) {
       } else {
         carryBox.style.display = 'none';
       }
+    }
+    // 비과세 거주요건 등 판정 근거 — 왜 비과세가 적용/미적용됐는지 그대로 보여준다.
+    const ttNoteBox = root.querySelector('[data-out="ttNotes"]');
+    if (ttNoteBox) {
+      const rows = (r.notes || []).filter((n) => n && n.text);
+      ttNoteBox.hidden = !rows.length;
+      const icon = { warn: '⚠', info: 'ℹ', skip: '✕' };
+      const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      ttNoteBox.innerHTML = rows.map((n) =>
+        '<li class="acq-note acq-note-' + n.kind + '"><span class="acq-note-icon" aria-hidden="true">'
+        + (icon[n.kind] || 'ℹ') + '</span><span>' + esc(isEn && n.en ? n.en : n.text) + '</span></li>').join('');
     }
     if (exemptBox) {
       const html = exemptBoxHtml(r, ttLang, regulated, homes);

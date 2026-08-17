@@ -1,0 +1,67 @@
+{
+  "calculator": "stamp-duty",
+  "engine": "calcStampDuty",
+  "description": "인지세 — 인지세법 제3조 제1항 제1호 구간별 정액. 부동산 소유권 이전 증서 기준.",
+  "cases": [
+    {
+      "case_id": "stamp_10m_exempt",
+      "effective_date": "2026-08-17",
+      "boundary": "1천만원 이하 — 비과세",
+      "inputs": { "price": 10000000 },
+      "expected": { "stampDuty": 0 },
+      "tolerance": 0,
+      "source": { "type": "LAW", "title": "인지세법", "article": "제3조 제1항 제1호 및 제6조 (비과세문서)", "effective_from": "2015-01-01", "effective_to": null },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "stamp_10m_plus_1won",
+      "effective_date": "2026-08-17",
+      "boundary": "1천만원 + 1원 — 2만원 구간 진입",
+      "inputs": { "price": 10000001 },
+      "expected": { "stampDuty": 20000 },
+      "tolerance": 0,
+      "source": { "type": "LAW", "title": "인지세법", "article": "제3조 제1항 제1호 — 1천만원 초과 3천만원 이하 2만원", "effective_from": "2015-01-01", "effective_to": null },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "stamp_100m",
+      "effective_date": "2026-08-17",
+      "boundary": "1억원 — 7만원 구간의 상단",
+      "inputs": { "price": 100000000 },
+      "expected": { "stampDuty": 70000 },
+      "tolerance": 0,
+      "source": { "type": "LAW", "title": "인지세법", "article": "제3조 제1항 제1호 — 5천만원 초과 1억원 이하 7만원", "effective_from": "2015-01-01", "effective_to": null },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "stamp_1000m",
+      "effective_date": "2026-08-17",
+      "boundary": "10억원 — 15만원 구간의 상단",
+      "inputs": { "price": 1000000000 },
+      "expected": { "stampDuty": 150000 },
+      "tolerance": 0,
+      "source": { "type": "LAW", "title": "인지세법", "article": "제3조 제1항 제1호 — 1억원 초과 10억원 이하 15만원", "effective_from": "2015-01-01", "effective_to": null },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "stamp_over_1000m",
+      "effective_date": "2026-08-17",
+      "boundary": "10억원 초과 — 35만원",
+      "inputs": { "price": 1000000001 },
+      "expected": { "stampDuty": 350000 },
+      "tolerance": 0,
+      "source": { "type": "LAW", "title": "인지세법", "article": "제3조 제1항 제1호 — 10억원 초과 35만원", "effective_from": "2015-01-01", "effective_to": null },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    }
+  ]
+}

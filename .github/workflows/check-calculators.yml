@@ -23,6 +23,9 @@ on:
       - "site/calculators/**"
       - "site/en/calculators/**"
       - "scripts/check_*.mjs"
+      - "scripts/lib/**"
+      - "scripts/reference/**"
+      - "tests/golden/**"
       - "site/assets/official_price.js"
       - "site/assets/official_price.json"
       - "site/assets/images/brand/**"
@@ -54,6 +57,29 @@ jobs:
       # 계산됨). 자산 해시와 어긋난 페이지가 하나라도 있으면 여기서 막는다.
       - name: 정적 자산 캐시 버전 일치
         run: node scripts/bump_asset_version.mjs --check
+
+      # ── 공식 근거 기반 검증 (2026-08 감사에서 신설) ──
+      #
+      # 아래 네 단계는 "TOPDA 결과를 정답으로 고정"하는 회귀 테스트가 아니다.
+      # 법령·감독규정에서 독립적으로 다시 구현한 Reference Formula(scripts/reference/)
+      # 가 기대값을 만들고, 그 값과 production 계산이 일치하는지 본다. 기대값을
+      # production 함수로 만들면 같은 버그를 가진 코드가 자기 자신을 검증하게 된다.
+      #
+      # 이 네 단계 중 하나라도 실패하면 계산 로직 변경을 머지해서는 안 된다.
+      - name: 규정 시점(status) 정합성 — 시행 전 규정이 계산에 섞였는지
+        run: node scripts/check_rule_versioning.mjs
+
+      - name: Golden 테스트 — 법령 근거 기대값 대조
+        run: node scripts/check_golden_cases.mjs
+
+      - name: Boundary 테스트 — 법정 경계값 전수 점검
+        run: node scripts/check_calc_boundaries.mjs
+
+      - name: Invariant 테스트 — 단조성·연속성·상한
+        run: node scripts/check_calc_invariants.mjs
+
+      - name: Parity 테스트 — 개별 계산기 ↔ 종합계산기 ↔ 페이지 인라인
+        run: node scripts/check_calc_parity.mjs
 
       - name: 세무 정확성 회귀 테스트
         run: node scripts/check_tax_rules.mjs
