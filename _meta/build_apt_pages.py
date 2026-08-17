@@ -122,7 +122,8 @@ def build_region_rows(deals, apts, hh_map):
             if len(series) >= 2 and series[0] > 0:
                 trend = (series[-1] / series[0] - 1) * 100
             rows.append({
-                "name": name, "n": len(ds), "built": built, "households": households,
+                "name": name, "display_name": (cur.get("display_name") or extra.get("display_name") or name),
+                "n": len(ds), "built": built, "households": households,
                 "last_date": last["date"], "last_area": last["area_m2"],
                 "last_pyeong": last.get("pyeong") or round(last["area_m2"] / 3.3058),
                 "last_price": last["price"], "trend": trend, "trend_months": len(series),
@@ -187,10 +188,9 @@ def page_head(title, desc, canonical):
 def footer_html(as_of):
     return (
         '<footer>\n'
-        # 지역 페이지는 한 표에 여러 단지가 섞여 출처가 단지마다 다르다 — 둘 다 적는다.
-        # (K-apt는 의무관리대상만 수록해 나머지는 건축물대장으로 채운다.)
+        # 지역 페이지는 한 표에 여러 단지가 섞여 출처가 단지마다 다르다.
         f'<p>기준: 국토교통부 아파트 매매 실거래가 OpenAPI · 세대수/준공: K-apt 공동주택 기본정보'
-        f'·국토교통부 건축HUB 건축물대장정보 · {esc(as_of)} 자동 갱신</p>\n'
+        f'·국토교통부 건축HUB 건축물대장정보·주소 검증 보조자료 · {esc(as_of)} 자동 갱신</p>\n'
         '<p>본 페이지는 일반 정보 제공용입니다. 실거래가는 신고 기준이며 정정·취소로 달라질 수 있습니다. '
         '거래 판단의 근거로 사용하기 전 원자료를 확인하세요.</p>\n'
         '<p><a href="/index.html">톺다 홈</a> · <a href="/calculators/search.html">맞춤 단지 검색</a> · '
@@ -252,7 +252,7 @@ def region_page(rk, rows, as_of, ms=None, canonical=None, complex_urls=None):
     url = f"{BASE}/apt/{urllib.parse.quote(slug(rk))}.html"
     canonical = canonical or url
     complex_urls = complex_urls or {}
-    top = [r["name"] for r in rows[:5]]
+    top = [r.get("display_name") or r["name"] for r in rows[:5]]
     title = f"{rk} 아파트 실거래가·세대수·시세 추이 — 톺다"
     desc = (f"{rk} 아파트 단지별 최근 실거래가, 세대수, ㎡당 가격 추이 ({as_of} 기준). "
             + ", ".join(top[:4]) + " 등 " + str(len(rows)) + "개 단지.")
@@ -267,7 +267,7 @@ def region_page(rk, rows, as_of, ms=None, canonical=None, complex_urls=None):
         # 단지 페이지가 있으면 그쪽으로(실거래 상세 + 계산기 동선), 없으면 기존 맞춤검색으로.
         deep = complex_urls.get(r["name"]) or f"/calculators/search.html?apt={q}"
         return (
-            f'<tr id="{anchor}"><td class="name">{esc(r["name"])} '
+            f'<tr id="{anchor}"><td class="name">{esc(r.get("display_name") or r["name"])} '
             f'<a class="deep" href="{esc(deep)}">상세→</a></td>'
             f'<td>{built}</td><td>{hh}</td>'
             f'<td>{esc(r["last_date"])} · {r["last_pyeong"]}평 · <strong>{fmt_price(r["last_price"])}</strong></td>'
@@ -285,7 +285,7 @@ def region_page(rk, rows, as_of, ms=None, canonical=None, complex_urls=None):
         "name": f"{rk} 아파트 단지 실거래 목록",
         "numberOfItems": len(rows),
         "itemListElement": [
-            {"@type": "ListItem", "position": i + 1, "name": r["name"],
+            {"@type": "ListItem", "position": i + 1, "name": r.get("display_name") or r["name"],
              "url": complex_urls.get(r["name"]) and BASE + complex_urls[r["name"]]
                     or f"{canonical}#{urllib.parse.quote(r['name'])}"}
             for i, r in enumerate(rows[:30])

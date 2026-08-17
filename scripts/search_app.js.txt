@@ -76,9 +76,11 @@
     return f;
   }
 
+  function displayName(a) { return (a && (a.display_name || a.name)) || ''; }
   function matchesSearch(a, q) {
     if (!q) return true;
-    var hay = ((a.name || '') + ' ' + (a.region || '') + ' ' + (a.region_key || '') + ' ' + (a.builder || '')).toLowerCase();
+    var hay = ((a.name || '') + ' ' + displayName(a) + ' ' + (a.region || '') + ' ' +
+      (a.region_key || '') + ' ' + (a.builder || '')).toLowerCase();
     return hay.indexOf(q) >= 0;
   }
 
@@ -230,7 +232,7 @@
       '<article class="apt-card" data-apt="' + esc(a.name) + '" data-region="' + esc(a.region_key || '') + '">' +
         '<span class="rank">' + T.rankPre + rank + T.rankSuf + '</span>' +
         '<div class="apt-head">' +
-          '<div><div class="apt-name">' + esc(a.name) + '</div><div class="apt-region">' + esc(romanize(a.region)) + '</div></div>' +
+          '<div><div class="apt-name">' + esc(displayName(a)) + '</div><div class="apt-region">' + esc(romanize(a.region)) + '</div></div>' +
           '<div class="apt-score"><div class="num">' + r.total + '</div><div class="lbl">' + T.totalScore + '</div></div>' +
         '</div>' +
         '<div class="apt-price">' + fmt(r.price) + ' <small>' + dealNote + '</small></div>' +
@@ -356,7 +358,7 @@
       ad.clear();
       if (ad.relayout) ad.relayout();
       ad.setCenter(a.lat, a.lng);
-      ad.addCircle(a.lat, a.lng, { fillColor: '#2563eb', radius: 10, title: a.name });
+      ad.addCircle(a.lat, a.lng, { fillColor: '#2563eb', radius: 10, title: displayName(a) });
       // 모달이 방금 표시돼 컨테이너 크기가 잡히기 전이면 한 번 더 재배치·재중심.
       setTimeout(function () { if (ad.relayout) ad.relayout(); ad.setCenter(a.lat, a.lng); }, 90);
     }
@@ -369,7 +371,7 @@
   function openAptModal(name, regionKey) {
     var a = findApt(name, regionKey);
     if (!a) return;
-    document.getElementById('aptModalTitle').textContent = a.name;
+    document.getElementById('aptModalTitle').textContent = displayName(a);
     document.getElementById('aptModalSub').textContent = romanize(a.region || '');
 
     var agg = DEALS_BY_APT[a.name] || { prices: [] };
@@ -495,6 +497,8 @@
       if (!e) return;
       if (!a.households && e.households) a.households = e.households;
       if (!a.built_year && e.built_year) a.built_year = e.built_year;
+      if (!a.display_name && e.display_name) a.display_name = e.display_name;
+      if (!a.name_src && e.name_src) a.name_src = e.name_src;
       if (a.lat == null && e.lat != null) { a.lat = e.lat; a.lng = e.lng; }
       if (!a.subway && e.subway && e.subway.station) a.subway = { station: e.subway.station, line: '', distance_m: e.subway.distance_m };
       if (!a.elementary && e.elementary && e.elementary.name) a.elementary = { name: e.elementary.name, distance_m: e.elementary.distance_m, in_zone: false };

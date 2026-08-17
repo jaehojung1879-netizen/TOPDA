@@ -28,7 +28,7 @@ concurrency:
 jobs:
   listings:
     runs-on: ubuntu-latest
-    timeout-minutes: 130   # 스텝 타임아웃 합계(26+3+17+22+20+20+4+6+3=121분) + 커밋·셋업 여유
+    timeout-minutes: 150   # 스텝 타임아웃 합계 + 포털 보조조회(14분) + 커밋·셋업 여유
     # ⚠ 이 합계는 반드시 job timeout보다 작아야 한다(설계 원칙 3). 스텝을 늘릴 때 같이 올릴 것.
     # ※ 전월세 API 미승인 동안 전세가율 스텝은 선확인 후 수 초 만에 끝나므로 실제 소요는 훨씬 짧다.
     steps:
@@ -167,6 +167,25 @@ jobs:
 
       - name: Commit apartments.json
         run: bash _meta/git_commit_push.sh "단지 정보 자동 갱신 ($(date -u +%Y-%m-%d))" site/assets/apartments.json
+
+      # 4-b) 주소 기반 단지명·세대수 최종 보조조회.
+      # K-apt/건축물대장보다 반드시 뒤에 둔다. 공공 원본이 비어 있는 단지만 Kakao 공식
+      # Local·Web 검색 API로 조회하고, 정확 지번 또는 서로 다른 부동산 포털 2곳의 값이
+      # 일치할 때만 반영한다. HTML 직접 스크래핑은 약관·차단·마크업 변경 위험 때문에 하지 않는다.
+      # 동일 지번에 여러 단지가 있는 경우 이름 계열까지 일치하지 않으면 자동 합치지 않는다.
+      - name: Enrich unresolved households from portal search
+        working-directory: _meta
+        timeout-minutes: 14
+        env:
+          TIME_BUDGET_MIN: "12"
+          MAX_PORTAL_COMPLEXES: "150"
+          MAX_PORTAL_NAMES: "150"
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
+        run: python collect_portal_households.py
+        continue-on-error: true
+
+      - name: Commit address identity and portal enrichment
+        run: bash _meta/git_commit_push.sh "주소·포털 단지정보 보강 ($(date -u +%Y-%m-%d))" site/assets/apartments.json site/assets/households.json data/portal_household_candidates.json data/portal_household_misses.json
 
       # 5) 정적 페이지 생성 (SEO — 네이버·구글에 단지명이 정적 HTML로 노출).
       # 데이터 파일만 읽으므로 API 키 불필요, 수 초 내 종료.

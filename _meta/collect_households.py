@@ -69,14 +69,17 @@ def deals_only_names(apts):
 def _merge_kmaps(maps):
     """여러 LAWD 코드에서 받은 K-apt 단지목록을 하나로 합친다.
     같은 변형키를 서로 다른 코드가 주장하면 kapt_map과 같은 규칙으로 ''(모호) 표식."""
-    out = {"sig": {}, "dong": {}, "n": 0, "n_dong": 0}
+    out = {"sig": {}, "dong": {}, "addr": {}, "names": {}, "n": 0, "n_dong": 0}
     for m in maps:
         if not m:
             continue
         out["n"] += m.get("n", 0)
         out["n_dong"] += m.get("n_dong", 0)
+        out["names"].update(m.get("names", {}))
         for k, v in m.get("sig", {}).items():
             out["sig"][k] = "" if (k in out["sig"] and out["sig"][k] != v) else v
+        for k, v in m.get("addr", {}).items():
+            out["addr"][k] = "" if (k in out["addr"] and out["addr"][k] != v) else v
         for dong, tbl in m.get("dong", {}).items():
             cur = out["dong"].setdefault(dong, {})
             for k, v in tbl.items():
@@ -406,7 +409,10 @@ def main():
             if L.out_of_time(region_deadline, margin_sec=30):
                 break
             a_dong = CA._dong_of(a)
-            code, via = CA.kapt_match_via(kmap, a["name"], a_dong)
+            akey = f"{region}|{a['name']}"
+            raw_addr = addr_map.get(akey) or {}
+            raw_addr = raw_addr.get("addr") if isinstance(raw_addr, dict) else raw_addr
+            code, via = CA.kapt_match_via(kmap, a["name"], a_dong, raw_addr or "")
             if not code:
                 r_unmatched.append(a["name"])
                 if len(unmatched) < 10:
@@ -425,11 +431,18 @@ def main():
                 stat["filled"] += 1
             if yr and not a.get("built_year"):
                 a["built_year"] = yr
+            official_name = CA.kapt_name(kmap, code)
+            if official_name and official_name != a["name"]:
+                a["display_name"] = official_name
+                a["name_src"] = "K-apt 단지목록(주소/법정동 검증)"
         # 2) 실거래 원장에만 있는 단지 — households.json에 축적 (법정동 병용)
         for name, dong, dongs in extra_by_region.get(region, []):
             if L.out_of_time(region_deadline, margin_sec=30):
                 break
-            code, via = CA.kapt_match_via(kmap, name, dong)
+            akey = f"{region}|{name}"
+            raw_addr = addr_map.get(akey) or {}
+            raw_addr = raw_addr.get("addr") if isinstance(raw_addr, dict) else raw_addr
+            code, via = CA.kapt_match_via(kmap, name, dong, raw_addr or "")
             if not code:
                 r_unmatched.append(name)
                 continue
@@ -445,6 +458,10 @@ def main():
                     entry["built_year"] = yr
                 if addr:
                     entry["addr"] = addr   # 좌표·역·학교 보강용 (아래 위치 보강 패스)
+                official_name = CA.kapt_name(kmap, code)
+                if official_name and official_name != name:
+                    entry["display_name"] = official_name
+                    entry["name_src"] = "K-apt 단지목록(주소/법정동 검증)"
                 hh_map[f"{region}|{name}"] = entry
                 stat["extra_filled"] += 1
         # 3) 주소 백필 — 세대수는 있으나 주소가 없어 위치 보강을 못 한 항목을 다시 물어본다.
@@ -455,7 +472,9 @@ def main():
             entry = hh_map.get(f"{region}|{name}")
             if entry is None or entry.get("addr"):
                 continue
-            code, via = CA.kapt_match_via(kmap, name, dong)
+            raw_addr = addr_map.get(f"{region}|{name}") or {}
+            raw_addr = raw_addr.get("addr") if isinstance(raw_addr, dict) else raw_addr
+            code, via = CA.kapt_match_via(kmap, name, dong, raw_addr or "")
             if not code:
                 continue
             _hh, _yr, addr = CA.kapt_info(code, kapt_key)

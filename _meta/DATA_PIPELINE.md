@@ -28,11 +28,23 @@
 | `collect_apartments.py` | 국토부 실거래 + Kakao | `apartments.json`(단지·평형·실거래가·좌표·역/학교 거리) |
 | `collect_households.py` | K-apt | `apartments.json` 세대수·준공 + `households.json`(실거래 전용 단지 세대수) |
 | `collect_building_ledger.py` | 건축HUB 건축물대장(총괄표제부·표제부) + `complex_addr.json` 조회키 | `households.json` 세대수·준공연도 — **K-apt가 못 덮는 몫**. K-apt는 의무관리대상만 수록해 수록률 71%가 천장인데, 대장은 모든 건축물이 등재돼 그 천장이 없다. 단지명을 대조하지 않고 지번으로 부르므로 이름 표기 차이 문제도 없다. 대장에 없는 지번은 `data/ledger_misses.json`에 적어 45일간 다시 부르지 않는다 |
+| `collect_portal_households.py` | Kakao Local·Daum Web 공식 검색 API + `complex_addr.json` 지번 | 공공데이터에서도 비어 있는 단지의 대표명·세대수 최종 보조조회. 주소를 우선 identity로 쓰되 같은 지번의 다른 단지는 이름 계열로 분리한다. 정확 지번 또는 서로 다른 허용 포털 2곳이 같은 값을 줄 때만 자동 반영하고, 충돌·애매한 값은 `data/portal_household_candidates.json`에만 남긴다. HTML 페이지 직접 스크래핑은 하지 않는다 |
 | `build_apt_pages.py` | 위 JSON 3종(키 불필요) | `site/apt/*.html` 지역별 정적 단지 페이지(네이버·구글 SEO) + `site/sitemap.xml` |
 | `collect_market.py` | R-ONE | `market.json`(지역별 매매·전세 지수·전세가율) |
 | `collect_news.py` | 구글 뉴스 RSS(키 불필요) | `news.json`(홈 "이번 주 핵심 이슈" + "섹터별 부동산 뉴스") |
 | `collect_bond_rate.py` | 주택도시기금 포털 페이지 파싱(키 불필요·**공식 API 아님**) | `bond_rate.json`(제1종국민주택채권 당일 고객부담률) — 등기비용·종합계산기 할인율 입력란 자동 채움 |
 | `collect_official_price.py` | 건축HUB 건축물대장 주택가격(`getBrHsprcInfo`) + `complex_addr.json` 조회키 | `official_price.json`(단지별 공동주택가격 = 아파트의 시가표준액) — 종합계산기·취득세 계산기의 '단지 검색으로 공시가격 넣기' 위젯. 매일 자동 실행(`refresh-official-price.yml`), 거래가 많은 단지부터 채운다(아래 6번) |
+
+### 단지 identity와 출처 우선순위
+
+실거래의 `지역|신고 단지명`은 거래 연결을 위한 원본 키로 보존한다. 화면 대표명과 세대수
+검증은 `시군구코드+법정동코드+본번+부번` 지번 identity를 먼저 사용한다. 단, 동일 지번에
+여러 차수·블록이 존재할 수 있어 이름 계열이 다르면 별개 identity로 남긴다.
+
+세대수 우선순위는 **K-apt → 건축물대장 → 주소가 같은 검증 별칭 → 포털 검색**이다.
+후순위 수집기는 선순위 값을 덮어쓰지 않으며, 포털 반영값에는 `hh_src`, `hh_confidence`,
+`hh_checked_at`, `hh_evidence`를 함께 저장한다. 대표명도 내부 원장 키를 바꾸지 않고
+`display_name`으로만 제공해 기존 실거래·슬러그 연결을 보존한다.
 | `lib_pdata.py` | 공용 유틸 | — |
 
 ## 6) 공동주택 공시가격 (시가표준액 검색)
