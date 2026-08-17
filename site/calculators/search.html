@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>맞춤 내집 찾기 — 톺다</title>
 <meta name="robots" content="noindex,follow" />
-<meta name="description" content="예산·지역·평형·연식·역거리·초등학교 거리·세대수 조건을 입력하면, 단지별 종합점수로 추천 순위를 매겨주는 맞춤 내집 찾기. 조건은 몇 가지만 넣어도 됩니다." />
+<meta name="description" content="예산·지역·평형·연식·역 거리·세대수 등 원하는 조건에 가까운 아파트 단지를 찾아봅니다." />
 <!-- seo:meta -->
 <link rel="icon" href="https://topda.kr/assets/images/brand/logo-32.png" type="image/png" />
 <link rel="canonical" href="https://topda.kr/calculators/search.html" />
@@ -213,7 +213,7 @@
   <div class="article-header" style="margin-bottom: 8px;">
     <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="../market.html">시세정보</a> / 맞춤 내집 찾기</div>
     <h1 style="margin-bottom: 4px;">맞춤 내집 찾기</h1>
-    <p class="finder-intro" style="margin: 0;">조건만 넣으면 상승기대·역세권·학군 등으로 단지를 점수화해 추천합니다. <strong>예산을 입력하면 그 가격대에 가까운 단지</strong>가 먼저 노출됩니다. <button type="button" class="finder-howto-toggle" data-finder-howto>점수 산정 방식 ▾</button></p>
+    <p class="finder-intro" style="margin: 0;">예산·지역·역 거리·세대수 등 원하는 조건에 가까운 단지를 먼저 보여줍니다. <button type="button" class="finder-howto-toggle" data-finder-howto>정렬 기준 보기 ▾</button></p>
   </div>
 
   <div class="finder-layout">
@@ -243,7 +243,7 @@
         <div class="finder-suffix" data-suffix="억">
           <input id="f-budget" name="budget" type="number" min="0" step="0.5" inputmode="decimal" placeholder="예: 15" />
         </div>
-        <span class="finder-hint">이 금액 이하 평형이 있는 단지만 추천</span>
+        <span class="finder-hint">이 금액 이하 평형이 있는 단지만 표시합니다.</span>
       </div>
 
       <div class="finder-field">
@@ -267,7 +267,7 @@
       </div>
 
       <div class="finder-field">
-        <label for="f-family">가족 수 (선택 — 평형 추천)</label>
+        <label for="f-family">가족 수 (선택 — 평형 참고)</label>
         <select id="f-family" name="family">
           <option value="">선택 안 함</option>
           <option value="1">1~2인</option>
@@ -318,7 +318,7 @@
             <input id="f-commute" name="commute_max" type="number" min="0" step="5" inputmode="numeric" placeholder="40" />
           </div>
         </div>
-        <span class="finder-hint">업무지구를 고르고 최대 통근시간(분)을 넣으면 그 안에 드는 단지만 추천합니다.</span>
+        <span class="finder-hint">업무지구와 최대 통근시간을 고르면 조건 안에 드는 단지만 표시합니다.</span>
       </div>
 
       <div class="finder-field">
@@ -337,7 +337,7 @@
       </div>
 
       <div class="finder-actions">
-        <button type="submit" class="btn btn-primary">추천 받기</button>
+        <button type="submit" class="btn btn-primary">단지 찾기</button>
         <button type="button" class="btn btn-secondary" id="finderReset">초기화</button>
       </div>
     </form>
@@ -360,7 +360,7 @@
       <table class="data">
         <thead><tr><th>항목</th><th>가중치</th><th>점수 산식(0~100)</th></tr></thead>
         <tbody>
-          <tr><td>상승기대</td><td>23%</td><td>최근 실거래 <strong>㎡당 가격</strong>의 추세(선형회귀 기울기→연환산)를 65%, <strong>전세가율</strong>(낮을수록 상급지 경향)을 35%로 합산. 연 +20%면 만점, 0%면 50점.</td></tr>
+          <tr><td>최근 가격 흐름</td><td>23%</td><td>최근 실거래 <strong>㎡당 가격</strong>의 추세(선형회귀 기울기→연환산)를 65%, <strong>전세가율</strong>(낮을수록 상급지 경향)을 35%로 합산. 연 +20%면 만점, 0%면 50점.</td></tr>
           <tr><td>역세권</td><td>19%</td><td>가장 가까운 지하철역 도보거리. 300m 이하 100점, 1.5km 이상 0점(선형).</td></tr>
           <tr><td>학군</td><td>19%</td><td>가장 가까운 초등학교 거리. 150m 이하(초품아) 100점, 1.2km 이상 0점(선형).</td></tr>
           <tr><td>실거래 안정</td><td>14%</td><td>최근 실거래가의 변동계수(표준편차÷평균)가 작을수록 가점. 표본 2건 미만은 중립(60점).</td></tr>
@@ -415,8 +415,8 @@
 </div>
 
 <section class="content-comments" data-comments data-comment-type="page" data-comment-key="calculator:search" data-comment-title="맞춤 내집 찾기" data-comment-page="/calculators/search.html"></section>
-<script src="../assets/supabase-client.js?v=20260728"></script>
-<script src="../assets/comments.js?v=20260728"></script>
+<script src="../assets/supabase-client.js?v=f3fcb8c375"></script>
+<script src="../assets/comments.js?v=5cf2e12589"></script>
 <footer class="site-footer">
   <div class="container">
     <div class="row">
@@ -457,9 +457,9 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="../assets/kmap.js?v=20260726"></script>
-<script src="../assets/score.js?v=20260629"></script>
+<script src="../assets/score.js?v=2396a54a94"></script>
 <script src="../assets/region.js?v=20260629"></script>
-<script src="../assets/app.js?v=9f6c208452"></script>
+<script src="../assets/app.js?v=8bba98e95e"></script>
 <script>
 (function () {
   'use strict';
@@ -691,7 +691,7 @@
   }
   var curHub = '';
 
-  var SPEC_LABELS = { appreciation: '상승기대', subway: '역세권', school: '학군', stability: '실거래 안정', scale: '단지규모', age: '연식' };
+  var SPEC_LABELS = { appreciation: '최근 가격 흐름', subway: '역세권', school: '학군', stability: '실거래 안정', scale: '단지규모', age: '연식' };
 
   function barRow(label, val) {
     if (val == null) return '';
@@ -726,9 +726,9 @@
   function card(r, rank) {
     var a = r.apt;
     var reasons = r.reasons.map(function (t) { return '<span class="apt-chip">' + esc(t) + '</span>'; }).join('');
-    var relaxed = r.relaxed ? '<div class="apt-relaxed">⚠ 입력 조건 중 <strong>' + esc(r.relaxed.join(', ')) + '</strong> 은(는) 충족하지 못했지만 그 외 조건이 우수해 추천합니다.</div>' : '';
+    var relaxed = r.relaxed ? '<div class="apt-relaxed">⚠ 입력 조건 중 <strong>' + esc(r.relaxed.join(', ')) + '</strong> 은(는) 충족하지 못했지만 다른 조건이 가까워 함께 표시했습니다.</div>' : '';
     var bars = (r.sub.fit != null ? barRow('예산적합', r.sub.fit) : '')
-      + barRow('상승기대', r.sub.appreciation) + barRow('역세권', r.sub.subway) + barRow('학군', r.sub.school)
+      + barRow('최근 가격 흐름', r.sub.appreciation) + barRow('역세권', r.sub.subway) + barRow('학군', r.sub.school)
       + barRow('실거래', r.sub.stability) + barRow('거래활성', r.sub.liquidity)
       + barRow('규모', r.sub.scale) + barRow('연식', r.sub.age);
     var sub = a.subway && a.subway.distance_m != null
@@ -825,7 +825,7 @@
     if (!hasFilter) {
       relaxedEl.innerHTML = '';
       countEl.textContent = '';
-      showMessage('<div class="finder-empty">왼쪽에서 <strong>키워드 검색이나 조건을 하나 이상</strong> 입력해보세요<br/>조건에 맞는 단지를 종합점수 순으로 추천해 드립니다</div>');
+      showMessage('<div class="finder-empty">왼쪽에서 <strong>키워드 검색이나 조건을 하나 이상</strong> 입력해보세요<br/>조건에 가까운 단지를 종합점수 순으로 보여드립니다</div>');
       return;
     }
     // 단지 풀: 검색어가 있으면 우선 좁힌다
@@ -841,7 +841,7 @@
       // 조건을 1~2개 완화한 근접 추천
       var near = S.nearMatches(pool, f, null, 2);
       if (near.length) {
-        countEl.innerHTML = '정확히 맞는 단지가 없어 <span class="em">조건을 조금 완화</span>한 추천이에요';
+        countEl.innerHTML = '정확히 맞는 단지가 없어 <span class="em">조건을 조금 완화</span>한 결과입니다';
         relaxedEl.innerHTML = '<div class="finder-relaxed-banner">입력하신 조건을 모두 만족하는 단지는 없었지만, 조건을 1~2개 완화하면 맞는 단지들입니다 — 필터를 조금 넓혀보세요</div>';
         showList(near);
       } else {
@@ -1047,7 +1047,7 @@
     document.getElementById('aptModalNote').innerHTML =
       '국토교통부 실거래가 공개시스템은 <strong>동·호수를 제공하지 않습니다</strong>(개인정보). ' +
       '공개 범위는 전용면적 · 층 · 법정동까지이며, 위 표의 층과 저/중/고 구분이 그 안에서 가장 상세한 정보입니다. ' +
-      '해제 신고분은 평균·최고·최저·건수와 추천 점수 계산에서 제외했습니다.';
+      '해제 신고분은 평균·최고·최저·건수와 정렬 점수 계산에서 제외했습니다.';
 
     document.getElementById('aptModalMore').href = '../calculators/transactions.html?q=' + encodeURIComponent(a.name);
 

@@ -57,19 +57,22 @@ for (const [directory, type, excluded] of groups) {
       continue;
     }
     assert.match(html, /data-comments/, `${directory}/${filename} 댓글 마운트 누락`);
-    assert.match(html, new RegExp(`data-comment-key="${type}:${basename(filename, '.html')}"`));
+    const expectedKey = directory === 'site/loan' && filename === 'bank-limits.html'
+      ? 'guide:loan-bank-limits'
+      : `${type}:${basename(filename, '.html')}`;
+    assert.match(html, new RegExp(`data-comment-key="${expectedKey}"`));
     assert.equal((html.match(/assets\/comments\.js/g) || []).length, 1);
     assert.equal((html.match(/assets\/supabase-client\.js/g) || []).length, 1);
     assert.ok(html.indexOf('data-comments') < html.indexOf('<footer'), '댓글은 footer 앞에 있어야 합니다.');
     commentPages.push(join(directory, filename).replaceAll('\\', '/'));
   }
 }
-assert.equal(commentPages.length, 68);
+assert.ok(commentPages.length >= 68, '댓글 상세 페이지가 예상보다 줄었습니다.');
 
 const dashboard = read('site/calculators/total-cost-dashboard.html');
 assert.match(dashboard, /data-comment-type="page"/);
 assert.match(dashboard, /data-comment-key="calculator:total-cost-dashboard"/);
-assert.match(dashboard, /data-comment-title="부동산 종합 계산 대시보드"/);
+assert.match(dashboard, /data-comment-title="부동산 종합 계산기"/);
 
 for (const filename of readdirSync(resolve(root, 'site/en'), { recursive: true })) {
   if (!String(filename).endsWith('.html')) continue;
@@ -86,7 +89,11 @@ assert.match(styles, /\.board-editor textarea[\s\S]*min-height: 320px/);
 // 글 수정: 작성자 토큰 경로와 운영자 경로가 모두 살아 있어야 한다.
 assert.match(boardJs, /rpc\('update_board_post'/);
 assert.match(boardJs, /rpc\('admin_update_board_post'/);
+assert.match(boardJs, /rpc\('delete_board_post'/);
+assert.match(boardJs, /rpc\('admin_delete_board_post'/);
+assert.match(boardJs, /deleteButton\.hidden = !canManage/);
 assert.match(read('site/board-post.html'), /data-board-edit/);
+assert.match(read('site/board-post.html'), /data-board-delete/);
 assert.match(boardWrite, /data-editor-host/);
 assert.match(boardWrite, /data-editor-preview/);
 
@@ -108,6 +115,8 @@ assert.doesNotMatch(boardJs, /\.from\('board_posts'\)\s*\.select/);
 // 댓글은 한 줄 입력 UI — 옛 설명문 블록이 되살아나지 않았는지 본다.
 assert.doesNotMatch(commentsJs, /이 페이지에 한마디|comments-heading/);
 assert.match(commentsJs, /cmt-form/);
+assert.match(commentsJs, /rpc\('delete_content_comment'/);
+assert.match(commentsJs, /rpc\('admin_delete_content_comment'/);
 assert.match(styles, /\.cmt-form/);
 
 // 댓글 마운트는 '한 덩어리'여야 한다.

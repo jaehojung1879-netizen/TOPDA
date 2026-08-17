@@ -70,6 +70,9 @@ jobs:
       - name: 종합계산기 parity 테스트
         run: node scripts/check_total_dashboard_parity.mjs
 
+      - name: 방문자용 계산기 문구 검사
+        run: node scripts/check_public_copy.mjs
+
       # 아래 둘은 파이썬이라 별도 스텝으로 둔다. setup-python 없이도 러너에 python3 가 있다.
       # 평형별 추정 시가표준액은 취득세·국민주택채권 매입액의 입력이 되므로, 수집된
       # 호별 공시가격 분포를 벗어난 값이 배포되지 않게 막는다.

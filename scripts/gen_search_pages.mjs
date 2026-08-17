@@ -673,10 +673,10 @@ ${header(lang, c)}
 ${main(lang, t)}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<script src="../../assets/score.js?v=20260722"></script>
+<script src="../../assets/score.js?v=2396a54a94"></script>
 <script src="../../assets/region.js?v=20260629"></script>
 <script src="../../assets/kmap.js?v=20260722"></script>
-<script src="../../assets/app.js?v=9f6c208452"></script>
+<script src="../../assets/app.js?v=8bba98e95e"></script>
 <script>
 var T = ${JSON.stringify(t)};
 var HUB_DISPLAY = ${hubDisplayJson};

@@ -4426,28 +4426,28 @@ function calcInteriorEstimate({ area, grade, items }) {
 
     const MAP = {
       'acquisition-tax.html': [
-        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '취득세 포함 총 매수 비용을 한눈에'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 계산기', '취득세 포함 총 매수 비용을 한눈에'],
         ['dsr.html', '대출', 'DSR 한도 점검', '소득 대비 대출 한도 확인'],
         ['../checklists/sale-balance-day.html', '점검', '잔금일 체크리스트', '등기·정산 누락 방지'],
       ],
       'transfer-tax.html': [
-        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '매도 시나리오로 전체 비교'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 계산기', '매도 시나리오로 전체 비교'],
         ['brokerage-fee.html', '비용', '중개수수료 계산', '매도 시 부담 비용 확인'],
         ['acquisition-tax.html', '세금', '취득세 계산', '갈아타기 시 매수 비용까지'],
       ],
       'brokerage-fee.html': [
         ['acquisition-tax.html', '세금', '취득세 계산', '매수 시 총 세금 확인'],
         ['../checklists/sale-balance-day.html', '점검', '잔금일 체크리스트', '수수료 지급 시점 점검'],
-        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '전체 거래비용 비교'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 계산기', '전체 거래비용 비교'],
       ],
       'balance-settlement.html': [
         ['../checklists/sale-balance-day.html', '점검', '잔금일 체크리스트', '정산 항목 빠짐없이'],
         ['acquisition-tax.html', '세금', '취득세 계산', '잔금일 납부 세액 확인'],
-        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '총 비용으로 마무리'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 계산기', '총 비용으로 마무리'],
       ],
       'loan-compare.html': [
         ['dsr.html', '대출', 'DSR 한도 점검', '상환액이 한도 내인지 확인'],
-        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '대출 포함 총비용 비교'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 계산기', '대출 포함 총비용 비교'],
         ['acquisition-tax.html', '세금', '취득세 계산', '매수 부대비용 확인'],
       ],
       'jeonse-monthly.html': [
@@ -4458,27 +4458,27 @@ function calcInteriorEstimate({ area, grade, items }) {
       'housing-subscription.html': [
         ['dsr.html', '대출', 'DSR 한도 점검', '당첨 후 자금 계획'],
         ['acquisition-tax.html', '세금', '취득세 계산', '분양가 기준 취득세'],
-        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '입주까지 총비용'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 계산기', '입주까지 총비용'],
       ],
       'interior-estimate.html': [
         ['../checklists/interior-contract.html', '점검', '인테리어 계약 체크리스트', '견적·표준계약·하자'],
-        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '리모델링 포함 자금 계획'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 계산기', '리모델링 포함 자금 계획'],
         ['balance-settlement.html', '정산', '잔금일 정산 계산', '입주 전 정산 점검'],
       ],
       'auction-bid.html': [
         ['acquisition-tax.html', '세금', '취득세 계산', '낙찰 후 취득세 확인'],
         ['dsr.html', '대출', 'DSR 한도 점검', '경락잔금대출 가늠'],
-        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '총 부담액 종합 점검'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 계산기', '총 부담액 종합 점검'],
       ],
       'search.html': [
         ['acquisition-tax.html', '세금', '취득세 계산', '마음에 든 단지 매수 시 세금'],
-        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '매수 총비용 계산'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 계산기', '매수 총비용 계산'],
         ['loan-limit.html', '대출', '대출 한도 시뮬레이터', '실제 받을 수 있는 한도'],
       ],
       'loan-limit.html': [
         ['dsr.html', '대출', 'DSR 한도 계산', 'DSR만 따로 점검'],
         ['acquisition-tax.html', '세금', '취득세 계산', '매수 부대비용 확인'],
-        ['total-cost-dashboard.html', '종합', '종합 비용 대시보드', '대출 포함 총비용'],
+        ['total-cost-dashboard.html', '종합', '종합 비용 계산기', '대출 포함 총비용'],
       ],
     };
 

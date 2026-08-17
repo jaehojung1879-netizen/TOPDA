@@ -141,7 +141,7 @@ function chrome(lang, bodyMain) {
 ${bodyMain}
 <footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. ${u.disc}</p></div></footer>
 <script src="../../assets/rates.js?v=7163e7567c"></script>
-<script src="../../assets/app.js?v=9f6c208452"></script>
+<script src="../../assets/app.js?v=8bba98e95e"></script>
 </body>
 </html>
 `;

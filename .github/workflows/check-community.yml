@@ -1,0 +1,49 @@
+name: Check board and comments
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "site/board*.html"
+      - "site/assets/board.js"
+      - "site/assets/comments.js"
+      - "site/assets/supabase-client.js"
+      - "site/assets/styles.css"
+      - "site/calculators/**"
+      - "site/checklists/**"
+      - "site/interior/**"
+      - "site/posts/**"
+      - "site/loan/**"
+      - "scripts/check_board_comments.mjs"
+      - ".github/workflows/check-community.yml"
+  pull_request:
+    paths:
+      - "site/board*.html"
+      - "site/assets/board.js"
+      - "site/assets/comments.js"
+      - "site/assets/supabase-client.js"
+      - "site/assets/styles.css"
+      - "site/calculators/**"
+      - "site/checklists/**"
+      - "site/interior/**"
+      - "site/posts/**"
+      - "site/loan/**"
+      - "scripts/check_board_comments.mjs"
+      - ".github/workflows/check-community.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: 게시판·댓글 삭제 및 마운트 계약 검사
+        run: node scripts/check_board_comments.mjs

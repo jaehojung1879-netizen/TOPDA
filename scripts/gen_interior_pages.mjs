@@ -544,7 +544,7 @@ ${sched}
 
 ${footer(c)}
 
-<script src="../../assets/app.js?v=9f6c208452"></script>
+<script src="../../assets/app.js?v=8bba98e95e"></script>
 </body>
 </html>
 `;

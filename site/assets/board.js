@@ -1196,15 +1196,17 @@
     status.hidden = true;
 
     const tokens = readTokens();
-    const isOwner = !!localPublic || !!localSecret || !!tokens[id];
+    const ownerToken = tokens[id] || '';
+    const isOwner = post.localOnly ? (!!localPublic || !!localSecret) : !!ownerToken;
     const canManage = isOwner || !!adminKey();
 
     editButton.hidden = !canManage;
-    deleteButton.hidden = !isOwner;
+    deleteButton.hidden = !canManage;
+    deleteButton.textContent = isOwner ? '삭제' : '운영자 삭제';
     editButton.href = 'board-write.html?edit=' + encodeURIComponent(id);
 
     deleteButton.addEventListener('click', async () => {
-      if (!isOwner || !window.confirm('이 글을 삭제할까요?')) return;
+      if (!canManage || !window.confirm('이 글을 삭제할까요? 삭제한 글은 복구할 수 없습니다.')) return;
       deleteButton.disabled = true;
 
       if (post.localOnly) {
@@ -1214,13 +1216,15 @@
         return;
       }
 
-      const token = readTokens()[id];
-      if (!client || !token) {
+      if (!client) {
         setStatus(status, '삭제 권한을 확인할 수 없습니다.', 'error');
         deleteButton.disabled = false;
         return;
       }
-      const result = await client.rpc('delete_board_post', { post_id: id, token });
+
+      const result = ownerToken
+        ? await client.rpc('delete_board_post', { post_id: id, token: ownerToken })
+        : await client.rpc('admin_delete_board_post', { post_id: id, admin_key: adminKey() });
       if (!result.error && result.data) {
         removeToken(id);
         location.href = 'board.html';

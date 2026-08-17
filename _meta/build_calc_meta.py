@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""핵심 계산기 페이지에 '이 계산기 정보' 블록을 정적 HTML 로 넣는다 (지시서 8단계).
+"""핵심 계산기 페이지에 이용자가 필요한 계산 기준을 정적 HTML 로 넣는다.
 
-무엇이 문제였나: site/assets/rates.js 는 계산기별 출처(sources), 최종 검토일(lastReviewed),
-변경 이력(changelog)을 이미 관리하고 있었다. 주석에는 "계산기 하단에 표기됨"이라고 적혀
-있었지만 **어느 페이지도 그 값을 렌더링하지 않았다.** 즉 유지되는 데이터가 화면에 없었다.
+site/assets/rates.js 가 관리하는 계산기별 출처(sources)와 최종 검토일(lastReviewed)을
+화면의 근거·기준일 영역에 사용한다. 개발 변경 이력(changelog)은 코드와 Git 이력에만
+보관하며 계산기 화면에는 노출하지 않는다.
 
 그래서 이 스크립트는 새 문장을 만들어 붙이는 것이 아니라,
-  · rates.js 가 이미 관리하는 값 (적용 기준일 · 주요 출처 · 변경 이력) 을 꺼내 화면에 넣고,
+  · rates.js 가 이미 관리하는 값 (적용 기준일 · 주요 출처) 을 꺼내 화면에 넣고,
   · _meta/calc_meta.json 에 사람이 쓴 계산기 설명 (대상·준비 입력값·공식과 가정·
     결과가 달라지는 조건·예시·관련 링크) 을 함께 넣는다.
 분량을 늘리기 위한 일반론은 넣지 않는다. calc_meta.json 에 없는 계산기는 rates.js 기반
-정보(기준일·출처·변경 이력)만 받는다.
+정보(기준일·출처)만 받는다.
 
 정적 HTML 로 넣는 이유: JS 로 렌더링하면 네이버(Yeti) 같은 제한적 렌더러가 읽지 못하고,
 '출처와 기준일을 밝히지 않은 페이지'로 남는다.
@@ -35,7 +35,6 @@ META_JSON = os.path.join(HERE, "calc_meta.json")
 START = "<!-- calc:meta:start -->"
 END = "<!-- calc:meta:end -->"
 
-CHANGELOG_SHOW = 6          # 최근 몇 건까지 화면에 노출할지
 SKIP = {"index.html"}
 # 도구 성격이 달라 이 블록을 넣지 않는 페이지(내부 검색 결과·데이터 조회 화면).
 SKIP_SLUGS = {"search", "transactions", "market-trends", "jeonse-ratio"}
@@ -66,7 +65,7 @@ def authored_list(items):
 # ───────────────────────────────────────── rates.js 파싱
 
 def parse_rates():
-    """rates.js 에서 lastReviewed · sources · changelog 를 뽑는다.
+    """rates.js 에서 방문자에게 필요한 lastReviewed · sources 만 뽑는다.
 
     JS 파일이라 json.loads 를 쓸 수 없다. 세 항목의 형태가 단순하고 고정적이라
     정규식으로 읽는다. 형태가 바뀌면 여기서 값을 못 찾고 빈 값을 반환하므로,
@@ -83,13 +82,7 @@ def parse_rates():
         for k, v in re.findall(r"'([^']+)':\s*'((?:[^'\\]|\\.)*)'", m.group(1)):
             sources[k] = v.replace("\\'", "'")
 
-    changelog = []
-    m = re.search(r"changelog:\s*\[(.*?)\n    \],", src, re.S)
-    if m:
-        for date, note in re.findall(
-                r"\{\s*date:\s*'([^']+)',\s*note:\s*'((?:[^'\\]|\\.)*)'\s*\}", m.group(1)):
-            changelog.append((date, note.replace("\\'", "'")))
-    return last_reviewed, sources, changelog
+    return last_reviewed, sources
 
 
 # ───────────────────────────────────────── 렌더링
@@ -145,16 +138,16 @@ def howto_html(howto):
             f'<script type="application/ld+json">\n{ld}\n</script>')
 
 
-def render(slug, meta, last_reviewed, source, changelog, has_disclaimer=False,
+def render(slug, meta, last_reviewed, source, has_disclaimer=False,
            allow_faq=True):
     """블록 HTML. 값이 없는 항목은 아예 출력하지 않는다."""
     parts = []
 
     if authored(meta.get("audience")):
-        parts.append("<h3>어떤 경우에 쓰는 계산기인가</h3>\n"
+        parts.append("<h3>확인할 수 있는 내용</h3>\n"
                      f"<p>{esc(meta['audience'])}</p>")
-    for key, heading in (("inputs", "미리 준비할 값"), ("formula", "적용 공식과 가정"),
-                         ("examples", "예시"), ("varies", "결과가 달라질 수 있는 조건")):
+    for key, heading in (("inputs", "준비할 값"), ("formula", "계산 기준"),
+                         ("examples", "입력 예시"), ("varies", "결과가 달라지는 경우")):
         items = authored_list(meta.get(key))
         if items:
             parts.append(f"<h3>{heading}</h3>\n" + ul(esc(i) for i in items))
@@ -185,23 +178,6 @@ def render(slug, meta, last_reviewed, source, changelog, has_disclaimer=False,
         parts.append("<h3>근거와 기준일</h3>\n"
                      f'<div class="def-list">{"".join(basis)}</div>')
 
-    if changelog:
-        # ⚠ 변경 이력은 접어 둔다. rates.js 의 한 항목이 수백 자짜리 문단인 경우가 있어
-        #   펼쳐 두면 계산기 페이지 하단을 이력이 통째로 차지한다. 대부분의 방문자에게
-        #   필요한 정보가 아니고, 필요한 사람만 열어 보면 된다.
-        rows = "".join(
-            f'<div class="row"><span class="k">{esc(d)}</span>'
-            f'<span class="v">{esc(n)}</span></div>'
-            for d, n in changelog[:CHANGELOG_SHOW])
-        parts.append(
-            '<details class="explain">\n'
-            f'  <summary>계산 방식 변경 이력 (최근 {min(len(changelog), CHANGELOG_SHOW)}건)</summary>\n'
-            '  <div class="explain-body">\n'
-            '  <p class="note">계산 결과가 달라지는 변경만 기록합니다. 표기·문구만 다듬은 수정은 남기지 않습니다.</p>\n'
-            f'  <div class="def-list">{rows}</div>\n'
-            '  </div>\n'
-            '</details>')
-
     if not parts:
         return ""
     # 면책 문구가 이미 있는 페이지에는 다시 붙이지 않는다(같은 말이 두 번 나오면 읽지 않게 된다).
@@ -209,7 +185,7 @@ def render(slug, meta, last_reviewed, source, changelog, has_disclaimer=False,
                '\n  <p class="note">계산 결과는 입력하신 조건에 따른 <strong>추정값</strong>입니다. '
                '실제 고지·부과·승인 금액과 다를 수 있으며, 개별 사안에 대한 법률·세무·금융 자문이 아닙니다.</p>')
     return ('<section class="calc-meta" aria-labelledby="calc-meta-h">\n'
-            '  <h2 id="calc-meta-h">이 계산기 정보</h2>\n  '
+            '  <h2 id="calc-meta-h">계산 전에 확인하세요</h2>\n  '
             + "\n  ".join(parts) + closing + '\n'
             '</section>\n')
 
@@ -230,7 +206,7 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
-    last_reviewed, sources, changelog = parse_rates()
+    last_reviewed, sources = parse_rates()
     if not last_reviewed:
         print("[warn] rates.js 에서 lastReviewed 를 찾지 못했습니다 — 적용 기준일을 표시하지 않습니다")
     with open(META_JSON, encoding="utf-8") as f:
@@ -256,7 +232,7 @@ def main():
         if hand_faq and meta.get("faq"):
             dup_faq.append(base)
         block = render(slug, meta, last_reviewed,
-                       sources.get(slug) or sources.get("default"), changelog, has_disclaimer,
+                       sources.get(slug) or sources.get("default"), has_disclaimer,
                        allow_faq=not hand_faq)
         new = inject(raw, block)
         if new is None:
@@ -268,12 +244,12 @@ def main():
                 with open(fp, "w", encoding="utf-8") as f:
                     f.write(new)
 
-    print(f"계산기 {changed}개에 '이 계산기 정보' 블록 반영"
+    print(f"계산기 {changed}개에 '계산 전에 확인하세요' 블록 반영"
           + (" (dry-run)" if args.dry_run else ""))
-    print(f"  rates.js — 적용 기준일 {last_reviewed} · 출처 {len(sources)}개 · 변경 이력 {len(changelog)}건")
+    print(f"  rates.js — 적용 기준일 {last_reviewed} · 출처 {len(sources)}개")
     print(f"  블록 제외(도구 성격 다름): {', '.join(skipped)}")
     if no_authored:
-        print(f"  calc_meta.json 에 설명이 없어 기준일·출처·변경 이력만 넣은 계산기: "
+        print(f"  calc_meta.json 에 설명이 없어 기준일·출처만 넣은 계산기: "
               f"{', '.join(no_authored)}")
     if dup_faq:
         print(f"  [warn] 본문에 손으로 쓴 FAQPage 가 이미 있어 calc_meta.json 의 faq 를 "

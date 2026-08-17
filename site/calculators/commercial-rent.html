@@ -71,7 +71,7 @@
 
   <div class="callout callout-warn" data-cm-seed style="display:none;">
     <div class="icon">⚠</div>
-    <div class="body cm-seed-note"><strong>예시 데이터입니다.</strong> 한국부동산원 R-ONE 상업용 임대 통계표 ID를 연동(<code>RONE_COMM_TABLES</code>)하면 실제 분기 데이터로 자동 갱신됩니다.</div>
+    <div class="body cm-seed-note"><strong>현재는 예시 데이터입니다.</strong> 실제 계약 전에는 한국부동산원 R-ONE 등에서 최신 임대 시세를 확인하세요.</div>
   </div>
 
   <div class="cm-tabs" data-cm-types></div>
@@ -125,16 +125,16 @@
 
 <!-- calc:meta:start -->
 <section class="calc-meta" aria-labelledby="calc-meta-h">
-  <h2 id="calc-meta-h">이 계산기 정보</h2>
-  <h3>어떤 경우에 쓰는 계산기인가</h3>
+  <h2 id="calc-meta-h">계산 전에 확인하세요</h2>
+  <h3>확인할 수 있는 내용</h3>
 <p>상가나 오피스에 투자하거나 임차하려는 사람이 지역별 임대료·공실률·투자수익률 수준을 비교해 볼 때 쓰는 조회 화면입니다.</p>
-  <h3>미리 준비할 값</h3>
+  <h3>준비할 값</h3>
 <ul><li>지도 색상 기준 — 임대료 / 공실률 / 투자수익률 중 무엇으로 지역을 색칠할지</li><li>정렬 기준 — 임대료 높은 순, 공실률 높은 순, 수익률 높은 순</li></ul>
-  <h3>적용 공식과 가정</h3>
+  <h3>계산 기준</h3>
 <ul><li>임대료는 전용면적 1㎡당 월 임대료(원/㎡·월)로 표시합니다.</li><li>공실률은 임대 가능 면적 중 비어 있는 면적의 비율입니다.</li><li>투자수익률은 소득수익률과 자본수익률을 합한 값으로, 한국부동산원 상업용부동산 임대동향조사의 정의를 따릅니다.</li><li>이 화면은 계산기가 아니라 조사 통계를 지역별로 보여 주는 조회 도구입니다. 개별 물건의 수익률을 산출하지 않습니다.</li></ul>
-  <h3>예시</h3>
+  <h3>입력 예시</h3>
 <ul><li>지도 색상 기준을 &#x27;공실률&#x27;로 두면 같은 지역이라도 임대료가 높은 곳과 공실이 많은 곳이 다르게 보입니다.</li><li>&#x27;수익률 높은 순&#x27;으로 정렬하면 임대료는 낮아도 매매가가 더 낮아 수익률이 높게 잡히는 지역이 위로 올라옵니다.</li></ul>
-  <h3>결과가 달라질 수 있는 조건</h3>
+  <h3>결과가 달라지는 경우</h3>
 <ul><li>상권·층·전면 — 같은 지역, 같은 유형이라도 1층과 지하, 대로변과 이면도로의 임대료 차이가 큽니다.</li><li>유형 구분 — 오피스, 중대형상가, 소규모상가, 집합상가의 통계가 각각 다릅니다.</li><li>조사 주기 — 분기 단위 조사라 최근 급변한 상권은 반영이 늦습니다.</li><li>표본 — 조사 표본에 포함된 건물 기준이므로 특정 물건의 실제 임대료와 다를 수 있습니다.</li></ul>
   <h3>자주 묻는 질문</h3>
     <details class="explain">
@@ -185,21 +185,14 @@
 <ul><li><a href="rti-calculator.html">RTI 계산기 — 임대소득으로 이자 감당 여부</a></li><li><a href="loan-limit.html">대출 한도 계산기</a></li><li><a href="acquisition-tax.html">취득세 계산기 — 비주택 4.6%</a></li></ul>
   <h3>근거와 기준일</h3>
 <div class="def-list"><div class="row"><span class="k">주요 근거</span><span class="v">관련 법령·고시 (각 계산기 하단 출처 참고)</span></div><div class="row"><span class="k">적용 기준일</span><span class="v">2026-08-02 — 이 날짜의 법령·고시·요율을 기준으로 세율표를 대조했습니다. 이후 개정분은 반영되지 않았을 수 있습니다.</span></div></div>
-  <details class="explain">
-  <summary>계산 방식 변경 이력 (최근 6건)</summary>
-  <div class="explain-body">
-  <p class="note">계산 결과가 달라지는 변경만 기록합니다. 표기·문구만 다듬은 수정은 남기지 않습니다.</p>
-  <div class="def-list"><div class="row"><span class="k">2026-08-16</span><span class="v">원금균등 상환의 DSR 산입액을 한도 계산과 같은 「연평균 원리금」((원금 + 총이자) ÷ 대출연수)으로 통일. 종합 대시보드의 DSR 표시와 DSR 계산기가 원금균등만 「첫 회차 × 12」로 잡고 있어서, 같은 화면의 「예상 주담대 최대한도」(연평균 기준)와 서로 다른 산식으로 나왔습니다 — 대출 5.86억·원금균등 30년·연 3.83%·소득 1.197억 기준 DSR 39.0%로 표시되던 것이 29.9%로 바로잡힙니다(연 41,634,242원 → 30,786,405원). 연평균 방식은 실사용자 은행 DSR 원장(본건 원리금 39,688,960원)과 6원 차이로 일치합니다. 원리금균등은 매달 상환액이 같아 값이 달라지지 않습니다. 자금계획 탭도 매수 탭의 상환 방식을 그대로 따르도록 고쳤습니다(예전에는 원리금균등으로 고정).</span></div><div class="row"><span class="k">2026-08-02</span><span class="v">실사용자 제보로 확인된 계산 오류 2건 수정. ① LTV·가격대별 한도의 판정 기준을 매매가가 아니라 「대출 신청일 기준 시가」(KB부동산 일반평균가·한국부동산원)로 명시하고, 종합계산기에 KB시세 입력을 분리 신설 — 매매가 15.65억·신청일 시가 15억인 주택이 15~25억 구간(4억)에 잘못 걸려 한도가 2억 적게 나오던 오류. ② 유가증권(주식)담보대출·예적금담보대출·보험계약대출을 DSR 산정에서 완전 제외 — 주식담보대출을 「원금÷8년 + 이자」로 산입해 DSR을 부풀리고 주담대 한도를 깎던 오류. ③ 스트레스 DSR이 실제로 한도를 줄였는지(줄였다면 얼마나) 결과에 표시 — 가격대별 한도·LTV가 결정 요인이면 스트레스 영향은 0이다.</span></div><div class="row"><span class="k">2026-08-02</span><span class="v">적용 대상 요건 명시. ① DSR·스트레스 DSR이 &quot;어떤 대출에 붙는지&quot;를 결과에 표시 — 차주단위 DSR은 총 대출 1억원 초과 시 적용, 전세·중도금·예적금담보·서민금융 등은 DSR 산정 제외, 신용대출 스트레스는 잔액 1억원 초과분만. 계산은 보수적으로 항상 DSR을 적용하되 요건 미해당 시 실제 한도가 더 높을 수 있음을 밝힌다. ② 가격대별 한도·LTV 하향이 「주택구입 목적」 주담대에만 적용됨을 명시 — 생활안정자금·이주비·중도금대출은 대상 밖. ③ 등기신청 수수료에서 금액 미확인 「전자신청」 선택지 제거(방문 18,000·e-Form 15,000만 유지, 보수적으로 방문이 기본값).</span></div><div class="row"><span class="k">2026-08-02</span><span class="v">대출·등기·증여 정확성 정비. ① 규제지역 일반 LTV 50%→40%(10·15 대책), 생애최초 전국 70%(6·27 대책, 비규제 80% 표기 정정), 수도권 1주택 미처분·다주택 0%. ② 스트레스 가산금리 수도권·규제지역 1.5%p→3.0%p, 지방 비규제 0.75%p로 분리하고 금리유형별 적용비율 추가. ③ 지역 구분을 「수도권 비규제 / 규제지역 / 지방 비규제」 3분류로 세분화 — 가격대별 한도는 수도권·규제지역만 적용. ④ 경과규정(2025.10.15 이전 계약·신청접수)·대환을 사용자 입력으로 분리. ⑤ 법무사 기본보수에 20억·200억 초과 구간 추가(10억 초과 0.05% 고정 오류 수정)하고 대행수수료·실비·부가세를 별도 항목으로 분리. ⑥ 등기신청 수수료를 신청 방식별(방문 18,000 / e-Form 15,000 / 전자)로 구분(2025.8.1 인상 반영). ⑦ 국민주택채권 할인율의 seed·수집실패 값을 실시간 값으로 표시하지 않도록 예시값으로 분리. ⑧ 증여 취득세를 시가인정액(과세표준)·시가표준액(중과 판정)·승계채무액(부담부증여)으로 분리. ⑨ 양도세 공동명의 지분율 입력, 보유·거주기간 날짜 기준 계산. ⑩ 중개보수 시·도 선택 구조 추가.</span></div><div class="row"><span class="k">2026-07-30</span><span class="v">세무 정확성 정비(P0). ① 지방 미분양 감면을 전국 일률 50%→법정 25%+조례 추가 0~25%로 분리. ② 취득 원인에 「분양받은 신축주택(유상거래)」·「재개발 조합원」 추가 — 직접 신축(원시취득 2.8%)과 구분. ③ 양도세 장특공 거주 2년~3년 미만 8% 구간 추가. ④ 2026.5.9 다주택 중과 경과규정(계약일·계약금·토지거래허가) 반영. ⑤ 경매 계산기 취득세를 calcAcquisitionTax 공통 함수로 통합. ⑥ 상속세 배우자공제를 법정상속분 기반 범위 추정으로 교체. ⑦ 증여세 10년 합산 누진·기납부세액공제·혼인출산공제·세대생략 할증 반영. ⑧ 생애최초 300만원·출산양육 500만원 감면 추가. ⑨ 중개보수 월세 환산·오피스텔·상가/토지·협의요율. ⑩ 청약 배우자 통장 합산. ⑪ 전월세 법정 상한 분리 표시.</span></div><div class="row"><span class="k">2026-06-16</span><span class="v">등기비용 계산기에 취득세·지방교육세·농어촌특별세 통합(취득세 포함 토글, 주택수·조정·85㎡·생애최초 입력) — 총 등기비용 한 번에 산정.</span></div></div>
-  </div>
-</details>
 </section>
 <!-- calc:meta:end -->
 
 </main>
 
 <section class="content-comments" data-comments data-comment-type="page" data-comment-key="calculator:commercial-rent" data-comment-title="지역별 상가 임차시세" data-comment-page="/calculators/commercial-rent.html"></section>
-<script src="../assets/supabase-client.js?v=20260728"></script>
-<script src="../assets/comments.js?v=20260728"></script>
+<script src="../assets/supabase-client.js?v=f3fcb8c375"></script>
+<script src="../assets/comments.js?v=5cf2e12589"></script>
 <footer class="site-footer">
   <div class="container">
     <div class="row">
@@ -240,7 +233,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="../assets/kmap.js?v=20260716"></script>
-<script src="../assets/app.js?v=9f6c208452"></script>
+<script src="../assets/app.js?v=8bba98e95e"></script>
 <script>
 (function () {
   var MAP = null, PENDING = null, DATA = null, TYPE = 'office';

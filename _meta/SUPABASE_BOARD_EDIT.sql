@@ -1,4 +1,4 @@
--- 톺다 게시판 — 글 수정 기능 + 운영자 키 확인
+-- 톺다 게시판 — 글 수정·삭제 기능 + 운영자 키 확인
 -- Supabase SQL Editor에 이 파일 전체를 붙여넣고 한 번 실행한다.
 -- 여러 번 실행해도 안전하게 작성했다(idempotent).
 --
@@ -7,7 +7,8 @@
 --   2) board_posts_public 뷰를 updated_at 포함해 재생성
 --   3) update_board_post()        — 작성자 토큰으로 본인 글 수정
 --   4) admin_update_board_post()  — Vault 운영자 키로 수정
---   5) verify_admin_key()         — 운영자 키가 맞는지만 확인(목록을 받아오지 않음)
+--   5) admin_delete_board_post()  — Vault 운영자 키로 삭제
+--   6) verify_admin_key()         — 운영자 키가 맞는지만 확인(목록을 받아오지 않음)
 --
 -- 하지 않는 일 (기존 운영 데이터 보호)
 --   · board_posts 테이블은 절대 drop/재생성하지 않는다. 컬럼만 추가한다.
@@ -163,7 +164,46 @@ revoke all on function public.admin_update_board_post(uuid, text, text, text, te
 grant execute on function public.admin_update_board_post(uuid, text, text, text, text, text, text) to anon, authenticated;
 
 -- ---------------------------------------------------------------------------
--- 5) 운영자 키 확인만 — 맞으면 true, 틀리면 예외
+-- 5) 운영자 삭제 — Vault 의 board_admin_key 와 일치할 때만
+-- ---------------------------------------------------------------------------
+create or replace function public.admin_delete_board_post(
+  post_id uuid,
+  admin_key text
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  expected_key text;
+  affected integer;
+begin
+  select decrypted_secret
+    into expected_key
+  from vault.decrypted_secrets
+  where name = 'board_admin_key'
+  order by created_at desc
+  limit 1;
+
+  if expected_key is null
+     or admin_key is null
+     or admin_key = ''
+     or admin_key is distinct from expected_key then
+    raise exception 'invalid admin key';
+  end if;
+
+  delete from public.board_posts where id = post_id;
+  get diagnostics affected = row_count;
+  return affected > 0;
+end;
+$$;
+
+revoke all on function public.admin_delete_board_post(uuid, text) from public;
+grant execute on function public.admin_delete_board_post(uuid, text) to anon, authenticated;
+
+-- ---------------------------------------------------------------------------
+-- 6) 운영자 키 확인만 — 맞으면 true, 틀리면 예외
 --
 -- 지금까지는 키가 맞는지 확인하려면 admin_list_secret_posts() 로 비밀글을
 -- 통째로 받아오는 수밖에 없었다. 운영자 모드 UI 가 "키가 맞는지"만 묻고 싶을 때
@@ -215,5 +255,6 @@ select
   (select count(*) from pg_proc p
      join pg_namespace n on n.oid = p.pronamespace
     where n.nspname = 'public'
-      and p.proname in ('update_board_post', 'admin_update_board_post', 'verify_admin_key'))
+      and p.proname in ('update_board_post', 'admin_update_board_post',
+                        'admin_delete_board_post', 'verify_admin_key'))
                                                as new_rpc_count;

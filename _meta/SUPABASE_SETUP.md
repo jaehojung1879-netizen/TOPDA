@@ -152,6 +152,7 @@ Supabase SQL Editor에서 다음 파일 전체를 실행합니다.
 - `board_posts_public`: `updated_at`을 포함하도록 재생성 (owner_token·비밀글 제외 경계는 그대로)
 - `update_board_post(uuid, uuid, text, text, text, text, text)`: 작성자 토큰으로 본인 글 수정
 - `admin_update_board_post(uuid, text, text, text, text, text, text)`: Vault 운영자 키로 수정
+- `admin_delete_board_post(uuid, text)`: Vault 운영자 키로 삭제
 - `verify_admin_key(text)`: 운영자 키가 맞는지만 확인 (비밀글을 받아오지 않음)
 
 `board_posts` 테이블과 `get_posts_by_tokens`, `admin_list_secret_posts`,

@@ -607,7 +607,7 @@ function render(page) {
   <div class="callout callout-warn" style="margin-top:32px"><div class="icon">!</div><div class="body"><strong>General information only.</strong> Requirements, rates, market prices, and contract terms change. Verify current official records and consult a qualified Korean professional before making a legal, tax, financial, or contractual decision.</div></div>
 </main>
 <footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. General information only, not legal, tax, or financial advice.</p></div></footer>
-<script src="../../assets/app.js?v=9f6c208452"></script>
+<script src="../../assets/app.js?v=8bba98e95e"></script>
 </body>
 </html>
 `;

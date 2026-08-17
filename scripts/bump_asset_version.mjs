@@ -30,6 +30,7 @@ const CHECK = process.argv.includes('--check');
 // 버전을 붙일 자산 — 계산 결과에 영향을 주는 것들.
 const ASSETS = [
   'app.js', 'rates.js', 'styles.css', 'official_price.js', 'calculator_sources.js', 'analytics.js',
+  'board.js', 'comments.js', 'supabase-client.js', 'score.js',
 ];
 
 function hashOf(name) {
