@@ -1,0 +1,206 @@
+{
+  "calculator": "brokerage-fee",
+  "engine": "calcBrokerageFee",
+  "description": "중개보수 — 공인중개사법 시행규칙 [별표1] 및 시·도 조례 기준 golden case. expected 는 scripts/reference/misc_reference.mjs 의 표 순회 구현이 만든다(production 은 if/else 분기).",
+  "cases": [
+    {
+      "case_id": "bf_sale_just_under_50m",
+      "effective_date": "2026-08-17",
+      "boundary": "매매 5천만원 미만 — 0.6%, 한도 25만원(한도가 실제로 걸리는 자리)",
+      "inputs": { "price": 49999999, "type": "sale", "includeVat": false },
+      "expected": { "amount": 49999999, "rate": 0.006, "fee": 250000 },
+      "tolerance": 1,
+      "source": {
+        "type": "RULE",
+        "title": "공인중개사법 시행규칙",
+        "article": "제20조 및 [별표1] — 주택 매매·교환 5천만원 미만 1천분의 6, 한도액 25만원",
+        "effective_from": "2021-10-19",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "bf_sale_exactly_50m",
+      "effective_date": "2026-08-17",
+      "boundary": "매매 정확히 5천만원 — '5천만원 이상' 구간(0.5%, 한도 80만원)",
+      "inputs": { "price": 50000000, "type": "sale", "includeVat": false },
+      "expected": { "rate": 0.005, "fee": 250000 },
+      "tolerance": 1,
+      "source": {
+        "type": "RULE",
+        "title": "공인중개사법 시행규칙",
+        "article": "[별표1] — 5천만원 이상 2억원 미만 1천분의 5, 한도액 80만원",
+        "effective_from": "2021-10-19",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17",
+      "note": "구간이 바뀌어도 5천만원 × 0.5% = 25만원으로 앞 구간 한도액과 이어져 보수가 튀지 않는다."
+    },
+    {
+      "case_id": "bf_sale_200m",
+      "effective_date": "2026-08-17",
+      "boundary": "매매 2억원 — 0.4% 구간 진입, 한도액 없음",
+      "inputs": { "price": 200000000, "type": "sale", "includeVat": false },
+      "expected": { "rate": 0.004, "fee": 800000 },
+      "tolerance": 1,
+      "source": {
+        "type": "RULE",
+        "title": "공인중개사법 시행규칙",
+        "article": "[별표1] — 2억원 이상 9억원 미만 1천분의 4",
+        "effective_from": "2021-10-19",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "bf_sale_900m",
+      "effective_date": "2026-08-17",
+      "boundary": "매매 9억원 — 0.5% 구간",
+      "inputs": { "price": 900000000, "type": "sale", "includeVat": false },
+      "expected": { "rate": 0.005, "fee": 4500000 },
+      "tolerance": 1,
+      "source": {
+        "type": "RULE",
+        "title": "공인중개사법 시행규칙",
+        "article": "[별표1] — 9억원 이상 12억원 미만 1천분의 5",
+        "effective_from": "2021-10-19",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "bf_sale_1500m_top_band",
+      "effective_date": "2026-08-17",
+      "boundary": "매매 15억원 이상 — 0.7% 최상단",
+      "inputs": { "price": 1500000000, "type": "sale", "includeVat": false },
+      "expected": { "rate": 0.007, "fee": 10500000 },
+      "tolerance": 1,
+      "source": {
+        "type": "RULE",
+        "title": "공인중개사법 시행규칙",
+        "article": "[별표1] — 15억원 이상 1천분의 7",
+        "effective_from": "2021-10-19",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "bf_lease_100m",
+      "effective_date": "2026-08-17",
+      "boundary": "임대차 1억원 — 0.3% 구간",
+      "inputs": { "price": 100000000, "type": "jeonse", "includeVat": false },
+      "expected": { "rate": 0.003, "fee": 300000 },
+      "tolerance": 1,
+      "source": {
+        "type": "RULE",
+        "title": "공인중개사법 시행규칙",
+        "article": "[별표1] — 임대차 1억원 이상 6억원 미만 1천분의 3",
+        "effective_from": "2021-10-19",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "bf_monthly_conversion_x100",
+      "effective_date": "2026-08-17",
+      "boundary": "보증부 월세 — 거래금액 = 보증금 + 월세 × 100 (환산액 5천만원 이상)",
+      "inputs": { "price": 0, "type": "monthly", "deposit": 100000000, "monthlyRent": 1000000, "includeVat": false },
+      "expected": { "amount": 200000000, "rate": 0.003, "fee": 600000 },
+      "tolerance": 1,
+      "source": {
+        "type": "RULE",
+        "title": "공인중개사법 시행규칙",
+        "article": "제20조 제5항 — 임대차 중 보증금 외에 차임이 있는 경우 거래금액 = 보증금 + (월 차임액 × 100)",
+        "effective_from": "2021-10-19",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "bf_monthly_conversion_x70",
+      "effective_date": "2026-08-17",
+      "boundary": "환산액이 5천만원 미만이면 월세 × 70 으로 재환산",
+      "inputs": { "price": 0, "type": "monthly", "deposit": 10000000, "monthlyRent": 300000, "includeVat": false },
+      "expected": { "amount": 31000000, "rate": 0.005, "fee": 155000 },
+      "tolerance": 1,
+      "source": {
+        "type": "RULE",
+        "title": "공인중개사법 시행규칙",
+        "article": "제20조 제5항 단서 — 산출한 금액이 5천만원 미만인 경우 보증금 + (월 차임액 × 70)",
+        "effective_from": "2021-10-19",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "bf_officetel_sale",
+      "effective_date": "2026-08-17",
+      "boundary": "주거용 오피스텔 매매 — 0.5% 고정(조례 사항 아님)",
+      "inputs": { "price": 300000000, "type": "officetel-sale", "includeVat": false },
+      "expected": { "rate": 0.005, "fee": 1500000 },
+      "tolerance": 1,
+      "source": {
+        "type": "RULE",
+        "title": "공인중개사법 시행규칙",
+        "article": "제20조 제4항 — 전용면적 85㎡ 이하 등 요건을 갖춘 오피스텔 매매·교환 1천분의 5",
+        "effective_from": "2021-10-19",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "bf_other_property_cap",
+      "effective_date": "2026-08-17",
+      "boundary": "상가·토지 등 — 0.9% 이내 협의(기본값은 상한)",
+      "inputs": { "price": 500000000, "type": "other", "includeVat": false },
+      "expected": { "rate": 0.009, "fee": 4500000 },
+      "tolerance": 1,
+      "source": {
+        "type": "RULE",
+        "title": "공인중개사법 시행규칙",
+        "article": "제20조 제4항 — 그 밖의 중개대상물 1천분의 9 이내에서 협의",
+        "effective_from": "2021-10-19",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "bf_vat_included",
+      "effective_date": "2026-08-17",
+      "boundary": "부가가치세 10% 포함 총액 및 거래 양쪽 합계",
+      "inputs": { "price": 500000000, "type": "sale", "includeVat": true },
+      "expected": { "fee": 2000000, "total": 2200000, "bothParties": 4400000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "부가가치세법",
+        "article": "제30조 (세율 100분의 10) — 중개보수는 중개의뢰인 쌍방에게 각각 청구된다(공인중개사법 제32조 제1항)",
+        "effective_from": "2013-07-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    }
+  ]
+}

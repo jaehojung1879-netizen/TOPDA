@@ -1,0 +1,63 @@
+{
+  "calculator": "jeonse-monthly",
+  "engine": "calcJeonseMonthly / legalConversionCapPct",
+  "description": "전월세 전환 — 주택임대차보호법 제7조의2 및 시행령 제9조. 법정 상한은 min(연 10%, 한국은행 기준금리 + 2%p).",
+  "cases": [
+    {
+      "case_id": "jm_legal_cap_base_275",
+      "effective_date": "2026-08-17",
+      "boundary": "기준금리 2.75% → 상한 4.75% (10% 하드캡에 걸리지 않는 구간)",
+      "inputs": { "mode": "toMonthly", "deposit": 300000000, "monthly": 0, "baseDeposit": 50000000, "rate": 4.75, "bokBaseRatePct": 2.75 },
+      "expected": { "legalCapPct": 4.75, "convertibleDeposit": 250000000, "calcMonthly": 989583.3333333334 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "주택임대차보호법 / 같은 법 시행령",
+        "article": "법 제7조의2, 시행령 제9조 — min(연 1할, 한국은행 기준금리 + 연 2%)",
+        "effective_from": "2020-09-29",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17",
+      "note": "bokBaseRatePct 는 reference 전용 입력이다. production 은 rates.js 의 jeonseConversion.baseRatePct 를 읽으므로, 두 값이 어긋나면 이 케이스가 실패한다 — 기준금리 갱신 누락 탐지 장치."
+    },
+    {
+      "case_id": "jm_deposit_to_monthly",
+      "effective_date": "2026-08-17",
+      "boundary": "전세 → 월세 환산: 월세 = 전환대상 보증금 × 전환율 ÷ 12",
+      "inputs": { "mode": "toMonthly", "deposit": 500000000, "monthly": 0, "baseDeposit": 100000000, "rate": 6.0, "bokBaseRatePct": 2.75 },
+      "expected": { "convertibleDeposit": 400000000, "calcMonthly": 2000000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "주택임대차보호법",
+        "article": "제7조의2 — 월차임 전환 산정률",
+        "effective_from": "2020-09-29",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17",
+      "note": "입력 전환율 6%는 법정 상한 4.75%를 넘는 시장 전환율이다. 계산기는 상한 초과를 경고로 표시하되 사용자가 입력한 값으로 계산한다(신규 계약은 상한 적용 대상이 아니기 때문)."
+    },
+    {
+      "case_id": "jm_monthly_to_deposit",
+      "effective_date": "2026-08-17",
+      "boundary": "월세 → 전세 역환산 (전환 공식의 가역성)",
+      "inputs": { "mode": "toJeonse", "deposit": 100000000, "monthly": 2000000, "baseDeposit": 0, "rate": 6.0, "bokBaseRatePct": 2.75 },
+      "expected": { "convertibleDeposit": 400000000, "calcDeposit": 500000000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "주택임대차보호법",
+        "article": "제7조의2 (역산 — 같은 산정률의 역함수)",
+        "effective_from": "2020-09-29",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    }
+  ]
+}

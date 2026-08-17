@@ -1,0 +1,56 @@
+{
+  "calculator": "housing-subscription",
+  "engine": "calcSubscriptionScore",
+  "description": "청약가점 — 주택공급에 관한 규칙 제28조 및 [별표1] 가점제 산정기준표(총 84점).",
+  "cases": [
+    {
+      "case_id": "sub_max_84",
+      "effective_date": "2026-08-17",
+      "boundary": "만점 — 무주택 15년 32점 + 부양가족 6명 35점 + 통장 15년 17점",
+      "inputs": { "noHomeYears": 15, "dependents": 6, "accountYears": 15, "spouseAccountYears": 0 },
+      "expected": { "noHome": 32, "dependents": 35, "account": 17, "total": 84 },
+      "tolerance": 0,
+      "source": { "type": "RULE", "title": "주택공급에 관한 규칙", "article": "제28조 및 [별표1] 가점제 산정기준표", "effective_from": "2024-03-25", "effective_to": null },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "sub_zero_no_home_period",
+      "effective_date": "2026-08-17",
+      "boundary": "무주택기간 산정 개시 전(만 30세 미만 미혼 등) → 무주택 0점",
+      "inputs": { "noHomeYears": 0, "dependents": 0, "accountYears": 0.4, "spouseAccountYears": 0 },
+      "expected": { "noHome": 0, "dependents": 5, "account": 1, "total": 6 },
+      "tolerance": 0,
+      "source": { "type": "RULE", "title": "주택공급에 관한 규칙", "article": "[별표1] — 무주택기간은 만 30세 이후(30세 이전 혼인 시 혼인신고일)부터 산정", "effective_from": "2024-03-25", "effective_to": null },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "sub_account_6month_boundary",
+      "effective_date": "2026-08-17",
+      "boundary": "통장 가입 6개월 — 1점에서 2점으로",
+      "inputs": { "noHomeYears": 3, "dependents": 1, "accountYears": 0.5, "spouseAccountYears": 0 },
+      "expected": { "noHome": 8, "dependents": 10, "account": 2, "total": 20 },
+      "tolerance": 0,
+      "source": { "type": "RULE", "title": "주택공급에 관한 규칙", "article": "[별표1] — 6개월 미만 1점, 6개월 이상 1년 미만 2점", "effective_from": "2024-03-25", "effective_to": null },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "sub_spouse_account_bonus",
+      "effective_date": "2026-08-17",
+      "boundary": "배우자 통장 가입기간 점수의 50%를 최대 3점까지 합산 (연수의 50%가 아니다)",
+      "inputs": { "noHomeYears": 5, "dependents": 2, "accountYears": 5, "spouseAccountYears": 8 },
+      "expected": { "noHome": 12, "dependents": 15, "account": 10, "total": 37 },
+      "tolerance": 0,
+      "source": { "type": "RULE", "title": "주택공급에 관한 규칙", "article": "제28조 및 [별표1] — 배우자의 청약통장 가입기간 점수의 100분의 50(최대 3점) 합산", "effective_from": "2024-03-25", "effective_to": null },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17",
+      "note": "본인 5년 = 7점, 배우자 8년 = 10점 → 10 × 50% = 5점이지만 상한 3점 → 합계 10점. 상한이 실제로 걸리는 자리."
+    }
+  ]
+}

@@ -418,8 +418,8 @@
     </p>
   </div>
 </footer>
-<script src="../assets/rates.js?v=7163e7567c"></script>
-<script src="../assets/app.js?v=8bba98e95e"></script>
+<script src="../assets/rates.js?v=adf9d1eb37"></script>
+<script src="../assets/app.js?v=e58602c3f7"></script>
 <script>
 (function(){
   const fmt = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
@@ -454,34 +454,84 @@
     return P / n + P * rMonthly;
   }
 
-  // ── 기타 대출(여러 건) — 종합 계산기와 동일한 금감원 DSR 원금 산정 방식 ──
+  // ── 기타 대출(여러 건) — DSR 연간 원금 산정 ──
+  //
+  //  ⚠ 산정만기(대출총액을 몇 년으로 나눌지)는 **rates.js 의 dsr.applicability.assumedTermYears
+  //    한 곳**에서만 온다. 예전에는 이 파일이 8·5 같은 숫자를 직접 들고 있어서, rates.js 를
+  //    고쳐도 이 화면만 옛 값으로 남는 구조였다.
+  //
+  //  ⚠ 사용자가 만기를 입력하는 종류에도 **법정 상한**이 있다. 은행 여신업무기준의
+  //    「DSR 산출시의 대출 연간 원리금 상환액 산정기준」표는
+  //      · 주담대 원금일시상환 … 대출기간(**최대 10년**)
+  //      · 장기카드대출        … 약정만기 **3년 이내**(분할상환 구조는 5년 이내)
+  //    로 정한다. 상한을 안 걸면 만기를 길게 입력할수록 연간 원금이 줄어 DSR 이
+  //    실제보다 낮게 나오고, 그건 한도를 과대 산출하는 방향의 오차다.
+  var RD = ((window.TOPDA_RATES || {}).dsr) || {};
+  var ASSUMED = (RD.applicability && RD.applicability.assumedTermYears) || {};
+  var CREDIT_YEARS = RD.creditAnnualizeYears || 5;
+  function assumedYears(key, fallback) {
+    var row = ASSUMED[key];
+    return (row && row.years) || fallback;
+  }
+
   var OTHER_TYPES = [
     ['none', '없음'],
     ['mortgage', '주택담보대출 (분할상환·타 물건)'],
     ['mortgageBullet', '주택담보대출 (만기일시·거치)'],
-    ['nonhouse', '비주택담보대출 (상가·오피스텔·토지)'],
+    ['nonhouse', '비주택담보대출 (상가·업무용 오피스텔·토지)'],
     ['jeonse', '전세자금대출'],
     ['deposit', '예적금·보험약관 담보대출'],
-    ['stock', '유가증권·기타담보대출'],
+    ['stock', '유가증권(주식)담보대출'],
+    ['otherSecured', '그 밖의 담보대출'],
     ['card', '카드론·현금서비스'],
     ['auto', '자동차 할부·리스'],
     ['minus', '마이너스통장 (한도대출)'],
     ['monthly', '기타 (월상환액 직접 입력)'],
   ];
-  // 종류 → [원금산정함수(amount,term), 설명, 만기입력필요]  (amount: 원 단위)
+
+  // 종류 → [원금산정함수(amount, term), 설명, 만기입력필요]  (amount: 원 단위)
   function otherLoanSpec(type) {
+    var bulletCap = assumedYears('mortgageBullet', 10);      // 10년
+    var nonHouse = assumedYears('nonHouse', 8);              // 8년
+    var otherSecured = assumedYears('otherSecured', 10);     // 10년
+    var stockYears = (RD.applicability && RD.applicability.securedLoanTerm
+      && RD.applicability.securedLoanTerm.years) || nonHouse; // 유가증권담보 = 8년
+    var cardCap = assumedYears('cardLoan', 3);               // 3년
     switch (type) {
-      case 'mortgage': return [function (a, t) { return a / t; }, '주택담보대출(분할상환) → 원금(잔액÷잔존만기 N년) + 이자', true];
-      case 'mortgageBullet': return [function (a, t) { return a / t; }, '주택담보대출(만기일시·거치) → 원금(대출액÷대출기간 N년) + 이자', true];
-      case 'nonhouse': return [function (a) { return a / 8; }, '비주택담보대출 → 원금(대출액÷8년) + 이자 (금감원 산정만기 8년)', false];
-      case 'jeonse': return [function () { return 0; }, '전세자금대출 → 이자만 반영 (보증부는 DSR 산정 제외 가능)', false];
-      case 'deposit': return [function () { return 0; }, '예적금·보험약관 담보대출 → 이자만 반영 (원금 제외)', false];
-      case 'stock': return [function (a) { return a / 8; }, '유가증권·기타담보대출 → 원금(대출액÷8년) + 이자 (산정만기 8년)', false];
-      case 'card': return [function (a, t) { return a / t; }, '카드론·현금서비스 → 원금(잔액÷약정 N년) + 이자', true];
-      case 'auto': return [function (a, t) { return a / t; }, '자동차 할부·리스 → 원금(잔액÷약정 N년) + 이자', true];
-      case 'minus': return [function (a) { return a / 5; }, '마이너스통장(한도대출) → 원금(한도÷5년) + 이자', false];
-      case 'monthly': return [null, '월상환액 × 12로 연환산해 그대로 합산', false];
-      default: return [function () { return 0; }, '', false];
+      case 'mortgage':
+        return [function (a, t) { return a / Math.max(1, t); },
+          '주택담보대출(분할상환) → 원금(잔액÷잔존만기 N년) + 이자', true];
+      case 'mortgageBullet':
+        return [function (a, t) { return a / Math.min(Math.max(1, t), bulletCap); },
+          '주택담보대출(만기일시·거치) → 원금(대출액÷대출기간, 최대 ' + bulletCap + '년) + 이자', true];
+      case 'nonhouse':
+        return [function (a) { return a / nonHouse; },
+          '비주택담보대출 → 원금(대출액÷' + nonHouse + '년) + 이자 (산정만기 ' + nonHouse + '년)', false];
+      case 'jeonse':
+        return [function () { return 0; },
+          '전세자금대출 → 이자만 반영 (보증부 전세대출은 원금이 DSR 산정에서 제외됩니다)', false];
+      case 'deposit':
+        return [function () { return 0; },
+          '예적금·보험약관 담보대출 → 이자만 반영. 이 대출을 새로 받을 때는 DSR 규제 대상이 아니지만, 다른 대출을 신청하면 기존 부채로는 산입됩니다', false];
+      case 'stock':
+        return [function (a) { return a / stockYears; },
+          '유가증권(주식)담보대출 → 원금(대출액÷' + stockYears + '년) + 이자 (산정만기 ' + stockYears + '년)', false];
+      case 'otherSecured':
+        return [function (a) { return a / otherSecured; },
+          '그 밖의 담보대출 → 원금(대출액÷' + otherSecured + '년) + 이자 (산정만기 ' + otherSecured + '년)', false];
+      case 'card':
+        return [function (a, t) { return a / Math.min(Math.max(1, t), cardCap); },
+          '카드론·현금서비스 → 원금(잔액÷약정만기, 최대 ' + cardCap + '년) + 이자', true];
+      case 'auto':
+        return [function (a, t) { return a / Math.max(1, t); },
+          '자동차 할부·리스 → 원금(잔액÷약정 N년) + 이자', true];
+      case 'minus':
+        return [function (a) { return a / CREDIT_YEARS; },
+          '마이너스통장(한도대출) → 원금(**한도 전액**÷' + CREDIT_YEARS + '년) + 이자. 사용액이 아니라 약정 한도가 기준입니다', false];
+      case 'monthly':
+        return [null, '월상환액 × 12로 연환산해 그대로 합산', false];
+      default:
+        return [function () { return 0; }, '', false];
     }
   }
 
@@ -510,7 +560,7 @@
       annual = spec[0](amount, term) + amount * rate;
     }
     note.style.display = '';
-    note.innerHTML = spec[1].replace('N', term)
+    note.innerHTML = spec[1].replace('N', term).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       + (amount > 0 ? '<br/>이 대출의 DSR 반영액 ≈ <strong>' + fmt.format(Math.round(annual)) + '원 / 년</strong>' : '');
     return annual;
   }
@@ -570,7 +620,8 @@
     const newAnnual = (P > 0 && n > 0)
       ? P * dsrAnnualFactor(+$('new-rate').value || 0, n, method === 'principal' ? 'principal' : 'equal')
       : 0;
-    const creditAnnual = credit > 0 ? credit / 5 + credit * creditRate : 0;   // 원금(÷5년) + 이자
+    // 신용대출 연간 원금 = 대출총액 ÷ 연환산 연수(rates.js dsr.creditAnnualizeYears = 5년)
+    const creditAnnual = credit > 0 ? credit / CREDIT_YEARS + credit * creditRate : 0;
     const otherAnnual = otherLoansTotal();
     const totalAnnual = newAnnual + creditAnnual + otherAnnual;
     const dsrPct = income > 0 ? (totalAnnual / income) * 100 : 0;

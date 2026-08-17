@@ -1,0 +1,244 @@
+{
+  "calculator": "transfer-tax",
+  "engine": "calcTransferTax",
+  "description": "양도소득세 — 소득세법 기준 golden case. expected 는 scripts/reference/transfer_tax_reference.mjs (구간 적산 방식의 독립 구현) 가 만든다. production 은 「과세표준 × 한계세율 − 누진공제」 방식이므로 서로 다른 산식으로 같은 값이 나오는지 본다.",
+  "cases": [
+    {
+      "case_id": "tt_one_home_exempt_under_1200m",
+      "effective_date": "2026-08-17",
+      "boundary": "1세대1주택 · 12억원 이하 → 전액 비과세",
+      "inputs": { "sellPrice": 1100000000, "buyPrice": 700000000, "cost": 0, "holdYears": 5, "liveYears": 5, "homes": 1, "onlyHome": true, "regulated": false },
+      "expected": { "exempted": true, "total": 0 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "소득세법",
+        "article": "제89조 제1항 제3호 가목 / 시행령 제154조 제1항 (보유 2년)·제156조 제1항 (고가주택 기준 12억원)",
+        "effective_from": "2021-12-08",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "tt_one_home_exact_1200m",
+      "effective_date": "2026-08-17",
+      "boundary": "정확히 12억원 — 고가주택은 '12억원 초과'이므로 여전히 전액 비과세",
+      "inputs": { "sellPrice": 1200000000, "buyPrice": 700000000, "cost": 0, "holdYears": 5, "liveYears": 5, "homes": 1, "onlyHome": true, "regulated": false },
+      "expected": { "exempted": true, "total": 0 },
+      "tolerance": 1,
+      "source": {
+        "type": "DECREE",
+        "title": "소득세법 시행령",
+        "article": "제156조 제1항 — 고가주택 = 양도당시 실지거래가액 12억원을 초과하는 주택",
+        "effective_from": "2021-12-08",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "tt_one_home_1200m_plus_1won",
+      "effective_date": "2026-08-17",
+      "boundary": "12억원 + 1원 — 안분 과세 진입. 세액이 0에서 튀지 않고 연속이어야 한다",
+      "inputs": { "sellPrice": 1200000001, "buyPrice": 700000000, "cost": 0, "holdYears": 5, "liveYears": 5, "homes": 1, "onlyHome": true, "regulated": false },
+      "expected": { "exempted": false, "total": 0 },
+      "tolerance": 1,
+      "source": {
+        "type": "DECREE",
+        "title": "소득세법 시행령",
+        "article": "제160조 제1항 — 고가주택 과세대상 양도차익 = 양도차익 × (양도가액 − 12억원) ÷ 양도가액",
+        "effective_from": "2021-12-08",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17",
+      "note": "안분 비율이 8.3e-10 이라 과세표준이 기본공제 250만원에도 못 미쳐 세액 0. 12억 경계에서 세액 급등(cliff)이 없다는 근거."
+    },
+    {
+      "case_id": "tt_one_home_high_value_table2",
+      "effective_date": "2026-08-17",
+      "boundary": "고가 1주택 · 보유 10년 · 거주 10년 → 장특공 표2 최대 80%",
+      "inputs": { "sellPrice": 2000000000, "buyPrice": 1000000000, "cost": 0, "holdYears": 10, "liveYears": 10, "homes": 1, "onlyHome": true, "regulated": false },
+      "expected": { "exempted": false, "ltDeductRate": 0.80, "taxBase": 77500000, "incomeTax": 12840000, "localTax": 1284000, "total": 14124000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "소득세법",
+        "article": "제95조 제2항 [표2] — 1세대1주택 보유분 최대 40% + 거주분 최대 40%, 합계 80%",
+        "effective_from": "2021-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "tt_short_under_1y_house",
+      "effective_date": "2026-08-17",
+      "boundary": "주택 보유 1년 미만 → 70% 단일세율",
+      "inputs": { "sellPrice": 900000000, "buyPrice": 700000000, "cost": 0, "holdYears": 0, "homes": 1, "onlyHome": false, "regulated": false },
+      "expected": { "taxBase": 197500000, "incomeTax": 138250000, "localTax": 13825000, "total": 152075000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "소득세법",
+        "article": "제104조 제1항 제2호·제3호 — 주택·조합원입주권·분양권 1년 미만 100분의 70",
+        "effective_from": "2021-06-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "tt_short_1y_to_2y_house",
+      "effective_date": "2026-08-17",
+      "boundary": "주택 보유 1년 이상 2년 미만 → 60%",
+      "inputs": { "sellPrice": 900000000, "buyPrice": 700000000, "cost": 0, "holdYears": 1, "homes": 1, "onlyHome": false, "regulated": false },
+      "expected": { "taxBase": 197500000, "incomeTax": 118500000, "localTax": 11850000, "total": 130350000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "소득세법",
+        "article": "제104조 제1항 제3호 — 1년 이상 2년 미만 100분의 60",
+        "effective_from": "2021-06-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "tt_basic_rate_at_2y",
+      "effective_date": "2026-08-17",
+      "boundary": "보유 2년 → 단기 중과 해제, 기본세율",
+      "inputs": { "sellPrice": 900000000, "buyPrice": 700000000, "cost": 0, "holdYears": 2, "homes": 1, "onlyHome": false, "regulated": false },
+      "expected": { "taxBase": 197500000, "incomeTax": 55110000, "localTax": 5511000, "total": 60621000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "소득세법",
+        "article": "제55조 제1항 (기본세율 8구간), 제103조 제1항 (기본공제 250만원)",
+        "effective_from": "2023-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17",
+      "note": "과세표준 1억9,750만원 → 1.5억~3억 구간 38%, 누진공제 1,994만원. 구간 적산 방식과 누진공제 방식이 같은 값을 낸다."
+    },
+    {
+      "case_id": "tt_ltd_exact_3y",
+      "effective_date": "2026-08-17",
+      "boundary": "장특공 표1 진입 — 보유 정확히 3년 → 6%",
+      "inputs": { "sellPrice": 900000000, "buyPrice": 600000000, "cost": 0, "holdYears": 3, "homes": 2, "onlyHome": false, "regulated": false },
+      "expected": { "ltDeductRate": 0.06, "taxBase": 279500000, "incomeTax": 86270000, "total": 94897000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "소득세법",
+        "article": "제95조 제2항 [표1] — 3년 이상 4년 미만 100분의 6",
+        "effective_from": "2020-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "tt_ltd_15y_cap",
+      "effective_date": "2026-08-17",
+      "boundary": "장특공 표1 상한 — 15년 이상 30%",
+      "inputs": { "sellPrice": 900000000, "buyPrice": 600000000, "cost": 0, "holdYears": 15, "homes": 2, "onlyHome": false, "regulated": false },
+      "expected": { "ltDeductRate": 0.30, "taxBase": 207500000, "incomeTax": 58910000, "total": 64801000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "소득세법",
+        "article": "제95조 제2항 [표1] — 15년 이상 100분의 30",
+        "effective_from": "2020-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "tt_multi_home_2_regulated",
+      "effective_date": "2026-08-17",
+      "boundary": "조정대상지역 2주택 중과 +20%p · 장특공 배제",
+      "inputs": { "sellPrice": 1000000000, "buyPrice": 500000000, "cost": 0, "holdYears": 5, "homes": 2, "onlyHome": false, "regulated": true },
+      "expected": { "ltDeductRate": 0, "taxBase": 497500000, "incomeTax": 272560000, "localTax": 27256000, "total": 299816000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "소득세법",
+        "article": "제104조 제7항 제1호 (기본세율 + 20%p), 제95조 제2항 단서 (중과 대상 장특공 배제)",
+        "effective_from": "2021-06-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17",
+      "note": "중과 한시 유예(2026-05-09 종료)가 지난 시점의 계산. 유예 적용 케이스는 boundary 테스트에서 별도로 다룬다."
+    },
+    {
+      "case_id": "tt_multi_home_3_regulated",
+      "effective_date": "2026-08-17",
+      "boundary": "조정대상지역 3주택 이상 중과 +30%p",
+      "inputs": { "sellPrice": 1000000000, "buyPrice": 500000000, "cost": 0, "holdYears": 5, "homes": 3, "onlyHome": false, "regulated": true },
+      "expected": { "ltDeductRate": 0, "taxBase": 497500000, "incomeTax": 322310000, "localTax": 32231000, "total": 354541000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "소득세법",
+        "article": "제104조 제7항 제2호 (기본세율 + 30%p)",
+        "effective_from": "2021-06-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "tt_nonhouse_under_1y",
+      "effective_date": "2026-08-17",
+      "boundary": "비주택(상가·토지) 1년 미만 → 50%",
+      "inputs": { "sellPrice": 500000000, "buyPrice": 400000000, "cost": 0, "holdYears": 0, "homes": 1, "onlyHome": false, "regulated": false, "assetType": "nonhouse" },
+      "expected": { "taxBase": 97500000, "incomeTax": 48750000, "total": 53625000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "소득세법",
+        "article": "제104조 제1항 제1호 — 토지·건물 1년 미만 100분의 50",
+        "effective_from": "2014-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    },
+    {
+      "case_id": "tt_nonhouse_1y_to_2y",
+      "effective_date": "2026-08-17",
+      "boundary": "비주택 1년 이상 2년 미만 → 40%",
+      "inputs": { "sellPrice": 500000000, "buyPrice": 400000000, "cost": 0, "holdYears": 1, "homes": 1, "onlyHome": false, "regulated": false, "assetType": "nonhouse" },
+      "expected": { "taxBase": 97500000, "incomeTax": 39000000, "total": 42900000 },
+      "tolerance": 1,
+      "source": {
+        "type": "LAW",
+        "title": "소득세법",
+        "article": "제104조 제1항 제1호 — 1년 이상 2년 미만 100분의 40",
+        "effective_from": "2014-01-01",
+        "effective_to": null
+      },
+      "verification_method": ["independent_reference_formula", "boundary_probe"],
+      "confidence": "A",
+      "verified_at": "2026-08-17"
+    }
+  ]
+}
