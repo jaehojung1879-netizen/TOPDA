@@ -210917,7 +210917,10 @@
       },
       "households": 49,
       "hh_src": "title.hhldCnt",
-      "built_year": 2004
+      "built_year": 2004,
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-08-18",
+      "hh_evidence": []
     },
     "경기 구리시|포스필아파트(101동)": {
       "addr": "경기 구리시 인창동 605-36",
@@ -213517,7 +213520,10 @@
       },
       "households": 28,
       "hh_src": "title.hhldCnt",
-      "built_year": 2006
+      "built_year": 2006,
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-08-18",
+      "hh_evidence": []
     },
     "인천 미추홀구|삼성캐슬": {
       "addr": "인천 미추홀구 주안동 220-13",
@@ -214914,26 +214920,299 @@
     },
     "서울 강서구|청솔샤르망1001동": {
       "addr": "서울 강서구 내발산동 676-23",
-      "households": 49,
-      "hh_src": "address_alias:title.hhldCnt",
-      "hh_confidence": "high",
-      "hh_checked_at": "2026-08-18",
-      "hh_evidence": []
+      "lat": 37.552905,
+      "lng": 126.838734,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 501
+      },
+      "elementary": {
+        "name": "서울내발산초등학교",
+        "distance_m": 159
+      }
     },
     "서울 강동구|광남캐스빌105동": {
       "addr": "서울 강동구 둔촌동 435-4",
-      "households": 28,
-      "hh_src": "address_alias:title.hhldCnt",
-      "hh_confidence": "high",
-      "hh_checked_at": "2026-08-18",
-      "hh_evidence": []
+      "lat": 37.53339,
+      "lng": 127.139259,
+      "subway": {
+        "station": "길동역 5호선",
+        "distance_m": 496
+      },
+      "elementary": {
+        "name": "서울한산초등학교",
+        "distance_m": 579
+      }
     },
     "서울 관악구|에메랄드105동": {
-      "addr": "서울 관악구 봉천동 41-261"
+      "addr": "서울 관악구 봉천동 41-261",
+      "lat": 37.485747,
+      "lng": 126.952813,
+      "subway": {
+        "station": "서울대입구역 2호선",
+        "distance_m": 495
+      },
+      "elementary": {
+        "name": "서울신봉초등학교",
+        "distance_m": 324
+      }
     },
     "부산 부산진구|범전시영1동": {
-      "addr": "부산 부산진구 범전동 43-4"
+      "addr": "부산 부산진구 범전동 43-4",
+      "lat": 35.166136,
+      "lng": 129.062044,
+      "subway": {
+        "station": "부전역 동해선",
+        "distance_m": 332
+      },
+      "elementary": {
+        "name": "성전초등학교",
+        "distance_m": 478
+      }
+    },
+    "경기 수원시 팔달구|센트럴시티아리스타": {
+      "addr": "경기 수원시 팔달구 인계동 1036-13",
+      "lat": 37.266826,
+      "lng": 127.031168,
+      "subway": {
+        "station": "수원시청역 수인분당선",
+        "distance_m": 544
+      },
+      "elementary": {
+        "name": "매여울초등학교",
+        "distance_m": 651
+      }
+    },
+    "부산 부산진구|연지동백리명가에덴": {
+      "addr": "부산 부산진구 연지동 41-5",
+      "lat": 35.171787,
+      "lng": 129.058194,
+      "subway": {
+        "station": "부전역 동해선",
+        "distance_m": 868
+      },
+      "elementary": {
+        "name": "연지초등학교",
+        "distance_m": 583
+      }
+    },
+    "경기 수원시 권선구|새롬101동": {
+      "addr": "경기 수원시 권선구 탑동 1-28",
+      "lat": 37.274523,
+      "lng": 126.978602,
+      "subway": {
+        "station": "화서역 1호선",
+        "distance_m": 1435
+      },
+      "elementary": {
+        "name": "탑동초등학교",
+        "distance_m": 503
+      }
+    },
+    "경기 이천시|힐스테이트이천역1단지": {
+      "households": 937,
+      "built_year": 2026,
+      "addr": "경기도 이천시 증일동 393 힐스테이트이천역1단지",
+      "lat": 37.266843,
+      "lng": 127.437923,
+      "subway": {
+        "station": "이천역 경강선",
+        "distance_m": 475
+      },
+      "elementary": {
+        "name": "중리초등학교",
+        "distance_m": 559
+      }
+    },
+    "경기 부천시 원미구|성도베스트홈": {
+      "addr": "경기 부천시 원미구 역곡동 72-2",
+      "lat": 37.488484,
+      "lng": 126.809163,
+      "subway": {
+        "station": "역곡역 1호선",
+        "distance_m": 435
+      },
+      "elementary": {
+        "name": "부천역곡초등학교",
+        "distance_m": 289
+      }
+    },
+    "서울 금천구|그린포레아파트": {
+      "addr": "서울 금천구 시흥동 1035",
+      "lat": 37.435393,
+      "lng": 126.906634,
+      "subway": {
+        "station": "석수역 1호선",
+        "distance_m": 383
+      },
+      "elementary": {
+        "name": "서울금산초등학교",
+        "distance_m": 677
+      }
+    },
+    "경기 평택시|광성": {
+      "addr": "경기 평택시 안중읍 학현리 504-24",
+      "lat": 36.988569,
+      "lng": 126.923944,
+      "elementary": {
+        "name": "안중초등학교",
+        "distance_m": 221
+      }
+    },
+    "경기 부천시 원미구|JN팰리스A동": {
+      "addr": "경기 부천시 원미구 심곡동 365-11",
+      "lat": 37.490342,
+      "lng": 126.783004,
+      "subway": {
+        "station": "부천역 1호선",
+        "distance_m": 705
+      },
+      "elementary": {
+        "name": "원미초등학교",
+        "distance_m": 420
+      }
+    },
+    "경기 이천시|힐스테이트이천역2단지": {
+      "households": 885,
+      "built_year": 2026,
+      "addr": "경기도 이천시 증일동 394 힐스테이트 이천역 2단지",
+      "display_name": "힐스테이트 이천역 2단지",
+      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "lat": 37.265823,
+      "lng": 127.437276,
+      "subway": {
+        "station": "이천역 경강선",
+        "distance_m": 468
+      },
+      "elementary": {
+        "name": "중리초등학교",
+        "distance_m": 684
+      }
+    },
+    "서울 영등포구|근상프리즘": {
+      "addr": "서울 영등포구 영등포동7가 29-130",
+      "lat": 37.52323,
+      "lng": 126.908966,
+      "subway": {
+        "station": "영등포시장역 5호선",
+        "distance_m": 339
+      },
+      "elementary": {
+        "name": "서울영동초등학교",
+        "distance_m": 418
+      }
+    },
+    "서울 서초구|우면파크아파트": {
+      "addr": "서울 서초구 양재동 385-9",
+      "lat": 37.470113,
+      "lng": 127.048428,
+      "subway": {
+        "station": "양재시민의숲역 신분당선",
+        "distance_m": 880
+      },
+      "elementary": {
+        "name": "서울매헌초등학교",
+        "distance_m": 587
+      }
+    },
+    "서울 노원구|송이월드A동": {
+      "addr": "서울 노원구 상계동 1101-2",
+      "lat": 37.676104,
+      "lng": 127.052115,
+      "subway": {
+        "station": "수락산역 7호선",
+        "distance_m": 346
+      },
+      "elementary": {
+        "name": "서울노일초등학교",
+        "distance_m": 361
+      }
+    },
+    "경기 평택시|힐스테이트평택화양": {
+      "addr_bad": true
+    },
+    "부산 부산진구|아틀리에933": {
+      "addr": "부산 부산진구 양정동 406-5",
+      "lat": 35.173544,
+      "lng": 129.070686,
+      "subway": {
+        "station": "양정역 부산1호선",
+        "distance_m": 91
+      },
+      "elementary": {
+        "name": "양정초등학교",
+        "distance_m": 187
+      }
+    },
+    "서울 동대문구|동일스카이씨티": {
+      "addr": "서울 동대문구 회기동 65-81",
+      "lat": 37.589506,
+      "lng": 127.05391,
+      "subway": {
+        "station": "회기역 경의중앙선",
+        "distance_m": 346
+      },
+      "elementary": {
+        "name": "서울청량초등학교",
+        "distance_m": 332
+      }
+    },
+    "경기 성남시 중원구|주원": {
+      "addr": "경기 성남시 중원구 하대원동 173-2",
+      "lat": 37.432266,
+      "lng": 127.150538,
+      "subway": {
+        "station": "신흥역 8호선",
+        "distance_m": 996
+      },
+      "elementary": {
+        "name": "대하초등학교",
+        "distance_m": 128
+      }
+    },
+    "서울 강동구|운암화인빌102": {
+      "addr": "서울 강동구 성내동 466-1",
+      "lat": 37.525732,
+      "lng": 127.127635,
+      "subway": {
+        "station": "둔촌동역 5호선",
+        "distance_m": 787
+      },
+      "elementary": {
+        "name": "서울성일초등학교",
+        "distance_m": 429
+      }
+    },
+    "서울 서초구|서리풀래디앙아파트": {
+      "addr": "서울 서초구 방배동 805-14",
+      "lat": 37.492287,
+      "lng": 126.994181,
+      "subway": {
+        "station": "내방역 7호선",
+        "distance_m": 516
+      },
+      "elementary": {
+        "name": "서울서래초등학교",
+        "distance_m": 615
+      }
+    },
+    "서울 관악구|서울대벤처타운역푸르지오": {
+      "households": 571,
+      "built_year": 2025,
+      "addr": "서울특별시 관악구 신림동 316-62 서울대벤처타운역푸르지오아파트",
+      "display_name": "서울대벤처타운역푸르지오아파트",
+      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "lat": 37.462455,
+      "lng": 126.932059,
+      "subway": {
+        "station": "서울대벤처타운역 신림선",
+        "distance_m": 1073
+      },
+      "elementary": {
+        "name": "서울신우초등학교",
+        "distance_m": 79
+      }
     }
   },
-  "as_of": "2026-08-18"
+  "as_of": "2026-08-19"
 }
