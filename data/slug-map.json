@@ -1,7 +1,7 @@
 {
   "_meta": {
     "counts": {
-      "complexes": 8180,
+      "complexes": 8189,
       "regions": 79
     },
     "hubs": [
@@ -87,7 +87,7 @@
     ],
     "note": "한글 지역·단지명 → URL 슬러그 매핑. 한 번 발급한 슬러그는 바꾸지 않는다. 복합 키는 '지역|법정동|단지명'.",
     "romanization": "국어의 로마자 표기법(음절 단위, 자음동화 미적용)",
-    "updated": "2026-08-19"
+    "updated": "2026-08-20"
   },
   "complexes": {
     "경기 고양시 덕양구|고양동|고양동우방유쉘아파트": {
@@ -3410,6 +3410,14 @@
       "slug": "opoaipakeu",
       "umd": "능평동"
     },
+    "경기 광주시|능평동|오포우림필유골드135": {
+      "history": [],
+      "name": "오포우림필유골드135",
+      "region_slug": "gyeonggi-gwangju",
+      "since": "2026-08-20",
+      "slug": "opourimpilyugoldeu135",
+      "umd": "능평동"
+    },
     "경기 광주시|대쌍령리|신일드림빌": {
       "history": [],
       "name": "신일드림빌",
@@ -4584,6 +4592,14 @@
       "region_slug": "gyeonggi-guri",
       "since": "2026-07-26",
       "slug": "guriinchang2chadongmungutmoninghil",
+      "umd": "인창동"
+    },
+    "경기 구리시|인창동|구리인창공원우림필유": {
+      "history": [],
+      "name": "구리인창공원우림필유",
+      "region_slug": "gyeonggi-guri",
+      "since": "2026-08-20",
+      "slug": "guriinchanggongwonurimpilyu",
       "umd": "인창동"
     },
     "경기 구리시|인창동|구리인창금호어울림": {
@@ -15088,6 +15104,14 @@
       "region_slug": "gyeonggi-siheung",
       "since": "2026-07-26",
       "slug": "sincheonkoaruwelraum",
+      "umd": "신천동"
+    },
+    "경기 시흥시|신천동|우남한신휴플러스": {
+      "history": [],
+      "name": "우남한신휴플러스",
+      "region_slug": "gyeonggi-siheung",
+      "since": "2026-08-20",
+      "slug": "unamhansinhyupeulreoseu",
       "umd": "신천동"
     },
     "경기 시흥시|월곶동|나보나시티": {
@@ -25928,6 +25952,14 @@
       "region_slug": "gyeonggi-paju",
       "since": "2026-07-30",
       "slug": "jugong-922-0",
+      "umd": "금촌동"
+    },
+    "경기 파주시|금촌동|한일유앤아이1차(1014-0)": {
+      "history": [],
+      "name": "한일유앤아이1차(1014-0)",
+      "region_slug": "gyeonggi-paju",
+      "since": "2026-08-20",
+      "slug": "hanilyuaenai1cha-1014-0",
       "umd": "금촌동"
     },
     "경기 파주시|금촌동|후곡마을1단지중앙하이츠(997-0)": {
@@ -38770,6 +38802,14 @@
       "slug": "gwangankccseuwichenhabeobyu",
       "umd": "민락동"
     },
+    "부산 수영구|민락동|광안현대하이페리온": {
+      "history": [],
+      "name": "광안현대하이페리온",
+      "region_slug": "busan-suyeong",
+      "since": "2026-08-20",
+      "slug": "gwanganhyeondaehaiperion",
+      "umd": "민락동"
+    },
     "부산 수영구|민락동|롯데캐슬자이언트": {
       "history": [],
       "name": "롯데캐슬자이언트",
@@ -39264,6 +39304,14 @@
       "region_slug": "busan-haeundae",
       "since": "2026-07-26",
       "slug": "senteomsensibil",
+      "umd": "우동"
+    },
+    "부산 해운대구|우동|신동아": {
+      "history": [],
+      "name": "신동아",
+      "region_slug": "busan-haeundae",
+      "since": "2026-08-20",
+      "slug": "sindonga-3",
       "umd": "우동"
     },
     "부산 해운대구|우동|해운대 I PARK": {
@@ -54010,6 +54058,14 @@
       "slug": "useong",
       "umd": "목동"
     },
+    "서울 양천구|목동|트라팰리스웨스턴에비뉴": {
+      "history": [],
+      "name": "트라팰리스웨스턴에비뉴",
+      "region_slug": "seoul-yangcheon",
+      "since": "2026-08-20",
+      "slug": "teurapaelriseuweseuteonebinyu",
+      "umd": "목동"
+    },
     "서울 양천구|목동|하이페리온2": {
       "history": [],
       "name": "하이페리온2",
@@ -55048,6 +55104,14 @@
       "region_slug": "seoul-yeongdeungpo",
       "since": "2026-07-26",
       "slug": "ribeobyusinaninseubil1danji",
+      "umd": "문래동4가"
+    },
+    "서울 영등포구|문래동4가|리버뷰신안인스빌2단지": {
+      "history": [],
+      "name": "리버뷰신안인스빌2단지",
+      "region_slug": "seoul-yeongdeungpo",
+      "since": "2026-08-20",
+      "slug": "ribeobyusinaninseubil2danji",
       "umd": "문래동4가"
     },
     "서울 영등포구|문래동4가|문래동삼환": {
@@ -57192,6 +57256,14 @@
       "region_slug": "seoul-jungrang",
       "since": "2026-07-30",
       "slug": "sinwon",
+      "umd": "망우동"
+    },
+    "서울 중랑구|망우동|예성그린캐슬": {
+      "history": [],
+      "name": "예성그린캐슬",
+      "region_slug": "seoul-jungrang",
+      "since": "2026-08-20",
+      "slug": "yeseonggeurinkaeseul",
       "umd": "망우동"
     },
     "서울 중랑구|망우동|중랑숲리가": {
