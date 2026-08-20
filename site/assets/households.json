@@ -216449,67 +216449,6 @@
         "distance_m": 423
       }
     },
-    "서울 강서구|청솔샤르망1001동": {
-      "addr": "서울 강서구 내발산동 676-23",
-      "lat": 37.552905,
-      "lng": 126.838734,
-      "subway": {
-        "station": "우장산역 5호선",
-        "distance_m": 501
-      },
-      "elementary": {
-        "name": "서울내발산초등학교",
-        "distance_m": 159
-      },
-      "households": 49,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
-    },
-    "서울 강동구|광남캐스빌105동": {
-      "addr": "서울 강동구 둔촌동 435-4",
-      "lat": 37.53339,
-      "lng": 127.139259,
-      "subway": {
-        "station": "길동역 5호선",
-        "distance_m": 496
-      },
-      "elementary": {
-        "name": "서울한산초등학교",
-        "distance_m": 579
-      },
-      "households": 28,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
-    },
-    "서울 관악구|에메랄드105동": {
-      "addr": "서울 관악구 봉천동 41-261",
-      "lat": 37.485747,
-      "lng": 126.952813,
-      "subway": {
-        "station": "서울대입구역 2호선",
-        "distance_m": 495
-      },
-      "elementary": {
-        "name": "서울신봉초등학교",
-        "distance_m": 324
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2012
-    },
-    "부산 부산진구|범전시영1동": {
-      "addr": "부산 부산진구 범전동 43-4",
-      "lat": 35.166136,
-      "lng": 129.062044,
-      "subway": {
-        "station": "부전역 동해선",
-        "distance_m": 332
-      },
-      "elementary": {
-        "name": "성전초등학교",
-        "distance_m": 478
-      }
-    },
     "경기 수원시 팔달구|센트럴시티아리스타": {
       "addr": "경기 수원시 팔달구 인계동 1036-13",
       "lat": 37.266826,
@@ -216752,7 +216691,191 @@
         "name": "서울신우초등학교",
         "distance_m": 79
       }
+    },
+    "서울 강서구|청솔샤르망1001동": {
+      "addr": "서울 강서구 내발산동 676-23",
+      "lat": 37.552905,
+      "lng": 126.838734,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 501
+      },
+      "elementary": {
+        "name": "서울내발산초등학교",
+        "distance_m": 159
+      }
+    },
+    "서울 강동구|광남캐스빌105동": {
+      "addr": "서울 강동구 둔촌동 435-4",
+      "lat": 37.53339,
+      "lng": 127.139259,
+      "subway": {
+        "station": "길동역 5호선",
+        "distance_m": 496
+      },
+      "elementary": {
+        "name": "서울한산초등학교",
+        "distance_m": 579
+      }
+    },
+    "서울 관악구|에메랄드105동": {
+      "addr": "서울 관악구 봉천동 41-261",
+      "lat": 37.485747,
+      "lng": 126.952813,
+      "subway": {
+        "station": "서울대입구역 2호선",
+        "distance_m": 495
+      },
+      "elementary": {
+        "name": "서울신봉초등학교",
+        "distance_m": 324
+      }
+    },
+    "부산 부산진구|범전시영1동": {
+      "addr": "부산 부산진구 범전동 43-4",
+      "lat": 35.166136,
+      "lng": 129.062044,
+      "subway": {
+        "station": "부전역 동해선",
+        "distance_m": 332
+      },
+      "elementary": {
+        "name": "성전초등학교",
+        "distance_m": 478
+      }
+    },
+    "대전 서구|둔산자이아이파크": {
+      "households": 1974,
+      "built_year": 2025,
+      "addr": "대전광역시 서구 탄방동 514-360 둔산자이아이파크",
+      "lat": 36.343295,
+      "lng": 127.381071,
+      "subway": {
+        "station": "탄방역 대전1호선",
+        "distance_m": 401
+      },
+      "elementary": {
+        "name": "대전백운초등학교",
+        "distance_m": 442
+      }
+    },
+    "경기 시흥시|우진둥지": {
+      "addr": "경기 시흥시 신천동 860-1",
+      "lat": 37.435882,
+      "lng": 126.788129,
+      "subway": {
+        "station": "신천역 서해선",
+        "distance_m": 392
+      },
+      "elementary": {
+        "name": "시흥신일초등학교",
+        "distance_m": 428
+      }
+    },
+    "서울 동대문구|가야써니빌(373-7)": {
+      "addr": "서울 동대문구 장안동 373-7",
+      "lat": 37.569602,
+      "lng": 127.069289,
+      "subway": {
+        "station": "장한평역 5호선",
+        "distance_m": 1015
+      },
+      "elementary": {
+        "name": "서울안평초등학교",
+        "distance_m": 477
+      }
+    },
+    "경기 안양시 만안구|서해": {
+      "addr": "경기 안양시 만안구 석수동 293-4",
+      "lat": 37.411549,
+      "lng": 126.906464,
+      "subway": {
+        "station": "관악역 1호선",
+        "distance_m": 908
+      },
+      "elementary": {
+        "name": "화창초등학교",
+        "distance_m": 279
+      }
+    },
+    "경기 김포시|백암주택": {
+      "addr": "경기 김포시 사우동 258-3",
+      "lat": 37.616323,
+      "lng": 126.714798,
+      "subway": {
+        "station": "사우역 김포골드라인",
+        "distance_m": 623
+      },
+      "elementary": {
+        "name": "금파초등학교",
+        "distance_m": 883
+      }
+    },
+    "경기 부천시 소사구|현대7차": {
+      "addr": "경기 부천시 소사구 괴안동 126-2",
+      "lat": 37.48393,
+      "lng": 126.813698,
+      "subway": {
+        "station": "역곡역 1호선",
+        "distance_m": 211
+      },
+      "elementary": {
+        "name": "부천양지초등학교",
+        "distance_m": 424
+      }
+    },
+    "서울 은평구|메카": {
+      "addr": "서울 은평구 갈현동 543",
+      "lat": 37.622407,
+      "lng": 126.911655,
+      "subway": {
+        "station": "연신내역 GTX-A",
+        "distance_m": 881
+      },
+      "elementary": {
+        "name": "선일초등학교",
+        "distance_m": 334
+      }
+    },
+    "서울 서초구|렉스빌": {
+      "addr": "서울 서초구 방배동 847-25",
+      "lat": 37.491443,
+      "lng": 126.996723,
+      "subway": {
+        "station": "내방역 7호선",
+        "distance_m": 502
+      },
+      "elementary": {
+        "name": "서울방일초등학교",
+        "distance_m": 673
+      }
+    },
+    "경기 하남시|정목e-미지": {
+      "addr": "경기 하남시 덕풍동 416-7",
+      "lat": 37.539113,
+      "lng": 127.202988,
+      "subway": {
+        "station": "하남시청역 5호선",
+        "distance_m": 432
+      },
+      "elementary": {
+        "name": "동부초등학교",
+        "distance_m": 184
+      }
+    },
+    "서울 강동구|광남캐스빌610V": {
+      "addr": "서울 강동구 길동 410-3",
+      "lat": 37.536484,
+      "lng": 127.141171,
+      "subway": {
+        "station": "길동역 5호선",
+        "distance_m": 180
+      },
+      "elementary": {
+        "name": "서울길동초등학교",
+        "distance_m": 392
+      }
     }
   },
-  "as_of": "2026-08-19"
+  "as_of": "2026-08-20"
 }
