@@ -1,7 +1,7 @@
 {
   "_meta": {
     "counts": {
-      "complexes": 8189,
+      "complexes": 8196,
       "regions": 79
     },
     "hubs": [
@@ -87,7 +87,7 @@
     ],
     "note": "한글 지역·단지명 → URL 슬러그 매핑. 한 번 발급한 슬러그는 바꾸지 않는다. 복합 키는 '지역|법정동|단지명'.",
     "romanization": "국어의 로마자 표기법(음절 단위, 자음동화 미적용)",
-    "updated": "2026-08-21"
+    "updated": "2026-08-22"
   },
   "complexes": {
     "경기 고양시 덕양구|고양동|고양동우방유쉘아파트": {
@@ -5880,6 +5880,14 @@
       "region_slug": "gyeonggi-gimpo",
       "since": "2026-08-01",
       "slug": "daeu",
+      "umd": "북변동"
+    },
+    "경기 김포시|북변동|동변마을(동양파라곤2차)": {
+      "history": [],
+      "name": "동변마을(동양파라곤2차)",
+      "region_slug": "gyeonggi-gimpo",
+      "since": "2026-08-22",
+      "slug": "dongbyeonmaeul-dongyangparagon2cha",
       "umd": "북변동"
     },
     "경기 김포시|북변동|산호": {
@@ -16978,6 +16986,14 @@
       "slug": "dijainsitibeulruming",
       "umd": "만정리"
     },
+    "경기 안성시|만정리|라포르테공도": {
+      "history": [],
+      "name": "라포르테공도",
+      "region_slug": "gyeonggi-anseong",
+      "since": "2026-08-22",
+      "slug": "raporeutegongdo",
+      "umd": "만정리"
+    },
     "경기 안성시|만정리|부영": {
       "history": [],
       "name": "부영",
@@ -24522,6 +24538,14 @@
       "slug": "welringteon",
       "umd": "용현동"
     },
+    "경기 의정부시|의정부동|DS더웰가": {
+      "history": [],
+      "name": "DS더웰가",
+      "region_slug": "gyeonggi-uijeongbu",
+      "since": "2026-08-22",
+      "slug": "dsdeowelga",
+      "umd": "의정부동"
+    },
     "경기 의정부시|의정부동|남해오네뜨": {
       "history": [],
       "name": "남해오네뜨",
@@ -30464,6 +30488,14 @@
       "region_slug": "gyeonggi-hwaseong",
       "since": "2026-07-31",
       "slug": "sinhyeondae1cha",
+      "umd": "송산동"
+    },
+    "경기 화성시|송산동|신현대2차": {
+      "history": [],
+      "name": "신현대2차",
+      "region_slug": "gyeonggi-hwaseong",
+      "since": "2026-08-22",
+      "slug": "sinhyeondae2cha",
       "umd": "송산동"
     },
     "경기 화성시|송산동|우남블루존": {
@@ -45858,6 +45890,14 @@
       "slug": "hwarangtaunapateu",
       "umd": "공릉동"
     },
+    "서울 노원구|공릉동|화랑해링턴플레이스아파트": {
+      "history": [],
+      "name": "화랑해링턴플레이스아파트",
+      "region_slug": "seoul-nowon",
+      "since": "2026-08-22",
+      "slug": "hwaranghaeringteonpeulreiseuapateu",
+      "umd": "공릉동"
+    },
     "서울 노원구|공릉동|효성아파트": {
       "history": [],
       "name": "효성아파트",
@@ -57370,6 +57410,14 @@
       "slug": "dusan5",
       "umd": "면목동"
     },
+    "서울 중랑구|면목동|두원": {
+      "history": [],
+      "name": "두원",
+      "region_slug": "seoul-jungrang",
+      "since": "2026-08-22",
+      "slug": "duwon",
+      "umd": "면목동"
+    },
     "서울 중랑구|면목동|마젤란21": {
       "history": [],
       "name": "마젤란21",
@@ -61656,6 +61704,14 @@
       "region_slug": "incheon-namdong",
       "since": "2026-07-26",
       "slug": "sinyeongguwoljiwelsitipureujio",
+      "umd": "구월동"
+    },
+    "인천 남동구|구월동|아델라이": {
+      "history": [],
+      "name": "아델라이",
+      "region_slug": "incheon-namdong",
+      "since": "2026-08-22",
+      "slug": "adelrai",
       "umd": "구월동"
     },
     "인천 남동구|구월동|중앙헤리티지": {
