@@ -220132,102 +220132,6 @@
       "hh_src": "title.hhldCnt",
       "built_year": 1981
     },
-    "서울 강서구|청솔샤르망1001동": {
-      "addr": "서울 강서구 내발산동 676-23",
-      "lat": 37.552905,
-      "lng": 126.838734,
-      "subway": {
-        "station": "우장산역 5호선",
-        "distance_m": 501
-      },
-      "elementary": {
-        "name": "서울내발산초등학교",
-        "distance_m": 159
-      },
-      "households": 49,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
-    },
-    "서울 강동구|광남캐스빌105동": {
-      "addr": "서울 강동구 둔촌동 435-4",
-      "lat": 37.53339,
-      "lng": 127.139259,
-      "subway": {
-        "station": "길동역 5호선",
-        "distance_m": 496
-      },
-      "elementary": {
-        "name": "서울한산초등학교",
-        "distance_m": 579
-      },
-      "households": 28,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
-    },
-    "서울 관악구|에메랄드105동": {
-      "addr": "서울 관악구 봉천동 41-261",
-      "lat": 37.485747,
-      "lng": 126.952813,
-      "subway": {
-        "station": "서울대입구역 2호선",
-        "distance_m": 495
-      },
-      "elementary": {
-        "name": "서울신봉초등학교",
-        "distance_m": 324
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2012
-    },
-    "경기 부천시 원미구|주영홈타운102동": {
-      "addr": "경기 부천시 원미구 도당동 92-10",
-      "lat": 37.517353,
-      "lng": 126.791613,
-      "subway": {
-        "station": "부천종합운동장역 서해선",
-        "distance_m": 1350
-      },
-      "elementary": {
-        "name": "도당초등학교",
-        "distance_m": 246
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2005
-    },
-    "서울 강서구|우공팰리스101동": {
-      "addr": "서울 강서구 화곡동 1026-27",
-      "lat": 37.544482,
-      "lng": 126.838542,
-      "subway": {
-        "station": "화곡역 5호선",
-        "distance_m": 356
-      },
-      "elementary": {
-        "name": "서울신월초등학교",
-        "distance_m": 450
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2005
-    },
-    "부산 부산진구|범전시영1동": {
-      "addr": "부산 부산진구 범전동 43-4",
-      "lat": 35.166136,
-      "lng": 129.062044,
-      "subway": {
-        "station": "부전역 동해선",
-        "distance_m": 332
-      },
-      "elementary": {
-        "name": "성전초등학교",
-        "distance_m": 478
-      },
-      "households": 90,
-      "hh_src": "title.hhldCnt",
-      "built_year": 1986
-    },
     "울산 남구|동인킹덤빌리지": {
       "addr": "울산 남구 달동 866-12",
       "lat": 35.536592,
@@ -220349,7 +220253,25 @@
       "households": 169,
       "hh_src": "recap.hhldCnt",
       "built_year": 1995
+    },
+    "서울 강서구|청솔샤르망1001동": {
+      "addr": "서울 강서구 내발산동 676-23"
+    },
+    "서울 강동구|광남캐스빌105동": {
+      "addr": "서울 강동구 둔촌동 435-4"
+    },
+    "서울 관악구|에메랄드105동": {
+      "addr": "서울 관악구 봉천동 41-261"
+    },
+    "경기 부천시 원미구|주영홈타운102동": {
+      "addr": "경기 부천시 원미구 도당동 92-10"
+    },
+    "서울 강서구|우공팰리스101동": {
+      "addr": "서울 강서구 화곡동 1026-27"
+    },
+    "부산 부산진구|범전시영1동": {
+      "addr": "부산 부산진구 범전동 43-4"
     }
   },
-  "as_of": "2026-08-25"
+  "as_of": "2026-08-26"
 }
