@@ -129,19 +129,6 @@ html, body { overflow-x: hidden; }
 }
 @media (min-width: 768px) { .brand-mark { width: 28px; height: 28px; } }
 
-/* 로고 옆 beta 표식. 헤더 로고에만 붙이며(푸터·본문 .brand 제외), 모든 페이지가
-   이 스타일시트를 공유하므로 CSS만으로 전 페이지에 일괄 적용된다. */
-.site-header .brand::after {
-  content: "beta";
-  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.02em;
-  line-height: 1; text-transform: lowercase;
-  padding: 3px 5px; border-radius: 4px;
-  border: 1px solid var(--border);
-  background: var(--surface-2); color: var(--text-subtle);
-  align-self: center;
-  flex-shrink: 0;
-}
-
 /* 네비는 항상 [로고·톺다]와 [KR/EN] 사이 한 줄에 컴팩트하게. 좁으면 가로 스크롤. */
 .nav {
   display: flex; align-items: center;

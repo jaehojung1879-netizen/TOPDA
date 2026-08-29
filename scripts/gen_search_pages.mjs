@@ -357,7 +357,7 @@ function head(lang, t) {
 ${alts}
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=938636aa94" />
+<link rel="stylesheet" href="../../assets/styles.css?v=33042e9c97" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 ${STYLE}
 </head>
@@ -676,7 +676,7 @@ ${main(lang, t)}
 <script src="../../assets/score.js?v=2396a54a94"></script>
 <script src="../../assets/region.js?v=20260629"></script>
 <script src="../../assets/kmap.js?v=20260722"></script>
-<script src="../../assets/app.js?v=e58602c3f7"></script>
+<script src="../../assets/app.js?v=abdf518dca"></script>
 <script>
 var T = ${JSON.stringify(t)};
 var HUB_DISPLAY = ${hubDisplayJson};

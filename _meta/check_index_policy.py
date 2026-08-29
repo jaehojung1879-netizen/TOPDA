@@ -13,7 +13,7 @@
    9. Article 페이지에 작성자·게시일·수정일 존재
   10. 작성자 URL 이 실제 존재
   11. 깨진 내부 링크 없음
-  12. 아파트 색인 품질 게이트 (색인 허용 단지가 기준을 충족)
+  12. 단지별 대량 정적 URL 미생성 + 레거시 지역 별칭 noindex
   13. robots.txt 와 sitemap 정책 일치 (noindex 를 Disallow 로 막지 않음)
   14. 중복 title·description (canonical 로 통합된 묶음은 제외)
   15. 동일 템플릿 안에서 그 페이지에만 있는 본문이 충분한가
@@ -310,33 +310,23 @@ def run(rep):
     for (p, tgt), _ in sorted(broken.items()):
         rep.fail("11 내부 링크", f"{p} → {tgt} (대상 없음)")
 
-    # ── 12. 아파트 색인 품질 게이트
-    apt_index = [p for p in pages
-                 if re.match(r"^/apt/[^/]+/[^/]+/index\.html$", p) and indexable[p]]
+    # ── 12. 아파트 URL 구조
+    # 단지별 정적 HTML은 공개 URL 수를 4,500개 이상 부풀렸지만 각 문서의 독립 본문은
+    # 작았다. 상세 조회는 통합 검색으로 옮겼으므로 다시 생성되면 CI에서 즉시 막는다.
     apt_all = [p for p in pages if re.match(r"^/apt/[^/]+/[^/]+/index\.html$", p)]
     if apt_all:
-        cap = int(os.environ.get("APT_INDEX_MAX_PAGES", "100") or 0)
-        min_deals = int(os.environ.get("APT_INDEX_MIN_DEALS", "30"))
-        min_areas = int(os.environ.get("APT_INDEX_MIN_AREA_TYPES", "2"))
-        if cap and len(apt_index) > cap:
-            rep.fail("12 apt 게이트",
-                     f"색인 허용 단지 페이지 {len(apt_index)}개 > 상한 {cap}개")
-        for p in apt_index:
-            raw = pages[p]["raw"]
-            deals = len(re.findall(r"<tr[^>]*><td>\d{4}-\d{2}-\d{2}", raw))
-            areas = len(re.findall(r"<h3>전용 [\d.]+㎡", raw))
-            if deals < min_deals:
-                rep.fail("12 apt 게이트", f"{p}: 색인 허용인데 거래 {deals}건 < {min_deals}건")
-            if areas < min_areas:
-                rep.fail("12 apt 게이트", f"{p}: 색인 허용인데 면적 {areas}유형 < {min_areas}유형")
-            if "추이 차트를 표시하지 않습니다" in raw:
-                rep.fail("12 apt 게이트", f"{p}: 색인 허용인데 분기 추이 차트가 없습니다")
-            if "데이터 기준일" not in visible(raw):
-                rep.fail("12 apt 게이트", f"{p}: 데이터 기준일 표시가 없습니다")
-        rep.note(f"단지 페이지 {len(apt_all):,}개 중 색인 허용 {len(apt_index):,}개")
+        rep.fail("12 apt URL", f"단지별 정적 HTML {len(apt_all):,}개가 다시 생성됐습니다")
     else:
-        rep.note("단지 페이지가 생성되지 않은 상태 — apt 게이트 검사 생략 "
-                 "(build_complex_pages.py --all 실행 후 검사됨)")
+        rep.note("단지별 정적 HTML 0개 — 상세 조회는 통합 검색 사용")
+
+    aliases = [p for p in pages if re.match(r"^/apt/[^/]+/index\.html$", p)]
+    for p in aliases:
+        raw = pages[p]["raw"]
+        if indexable[p]:
+            rep.fail("12 apt URL", f"{p}: 레거시 지역 별칭이 indexable 상태입니다")
+        if "http-equiv=\"refresh\"" not in raw.lower():
+            rep.fail("12 apt URL", f"{p}: 레거시 지역 별칭에 이동 태그가 없습니다")
+    rep.note(f"레거시 지역 별칭 {len(aliases):,}개 noindex 리다이렉트 확인")
 
     # ── 13. robots.txt
     rp = os.path.join(SITE, "robots.txt")

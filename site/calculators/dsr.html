@@ -24,7 +24,7 @@
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=938636aa94" />
+<link rel="stylesheet" href="../assets/styles.css?v=33042e9c97" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -272,7 +272,7 @@
   <h3>준비할 값</h3>
 <ul><li>세전 연소득</li><li>새로 받을 대출의 원금·금리·기간·상환 방식</li><li>신용대출 잔액과 금리</li><li>기타 DSR 합산 대상 대출의 금액(잔액 또는 한도)·금리·남은 만기</li></ul>
   <h3>계산 기준</h3>
-<ul><li>DSR = (모든 대출의 연 원리금 상환액 합계) ÷ 연소득 × 100.</li><li>신용대출은 만기와 무관하게 잔액을 5년으로 나눠 연 원리금으로 환산합니다.</li><li>마이너스통장은 실제 사용액이 아니라 한도를 기준으로 잡습니다.</li><li>한도는 1금융권 40%, 2금융권 50%입니다.</li><li>가정: 정책 전세대출 일부, 주택연금, 서민금융상품 등 DSR 산정에서 빠지는 항목은 직접 제외해야 합니다.</li></ul>
+<ul><li>DSR = (규정상 산입되는 대출의 연 원리금 상환액 합계) ÷ 연소득 × 100.</li><li>신용대출은 만기와 무관하게 잔액을 5년으로 나눠 연 원리금으로 환산합니다.</li><li>마이너스통장은 실제 사용액이 아니라 한도를 기준으로 잡습니다.</li><li>한도는 은행권 40%, 비은행권 50%가 기본 규제선입니다.</li><li>전세대출은 일반적으로 제외됩니다. 1주택자가 수도권·규제지역에서 2025년 10월 29일 이후 신규 취급한 경우 등 이자 반영 요건에 해당할 때만 기타대출에 추가하세요.</li><li>정책 전세대출, 주택연금, 서민금융상품 등 DSR 산정에서 빠지는 항목은 직접 제외해야 합니다.</li></ul>
   <h3>입력 예시</h3>
 <ul><li>연소득 6,000만원에 1금융권 DSR 40%를 적용하면 연간 원리금 상환액이 2,400만원을 넘지 못합니다. 기존 대출 상환액이 있으면 그만큼 신규 여력이 줄어듭니다.</li><li>신용대출 5,000만원은 실제 만기와 무관하게 5년으로 나눠 연 1,000만원의 원금 상환이 있는 것으로 계산됩니다.</li></ul>
   <h3>결과가 달라지는 경우</h3>
@@ -323,7 +323,7 @@
     </details>
     <details class="explain">
       <summary>전세자금대출도 DSR 에 포함되나요?</summary>
-      <div class="explain-body"><p>전세자금대출은 그 대출을 신규로 받을 때는 DSR 규제 대상이 아닙니다. 다만 나중에 주택담보대출 같은 다른 대출을 신청하면 기존 부채로 산입됩니다. &#x27;규제 미적용&#x27;과 &#x27;부채에서 제외&#x27;는 다른 말입니다.</p></div>
+      <div class="explain-body"><p>전세자금대출은 일반적으로 DSR 산정에서 제외됩니다. 다만 2025년 10월 29일부터 1주택자가 수도권·규제지역에서 새로 받는 전세대출은 원금을 제외하고 이자상환분만 DSR에 반영합니다. 버팀목 등 정책 목적 대출과 시행 전 계약은 예외가 있으므로 신청 은행에서 확인하세요.</p></div>
     </details>
     <details class="explain">
       <summary>신용대출은 어떻게 계산되나요?</summary>
@@ -355,7 +355,7 @@
       "name": "전세자금대출도 DSR 에 포함되나요?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "전세자금대출은 그 대출을 신규로 받을 때는 DSR 규제 대상이 아닙니다. 다만 나중에 주택담보대출 같은 다른 대출을 신청하면 기존 부채로 산입됩니다. '규제 미적용'과 '부채에서 제외'는 다른 말입니다."
+        "text": "전세자금대출은 일반적으로 DSR 산정에서 제외됩니다. 다만 2025년 10월 29일부터 1주택자가 수도권·규제지역에서 새로 받는 전세대출은 원금을 제외하고 이자상환분만 DSR에 반영합니다. 버팀목 등 정책 목적 대출과 시행 전 계약은 예외가 있으므로 신청 은행에서 확인하세요."
       }
     },
     {
@@ -418,8 +418,8 @@
     </p>
   </div>
 </footer>
-<script src="../assets/rates.js?v=adf9d1eb37"></script>
-<script src="../assets/app.js?v=e58602c3f7"></script>
+<script src="../assets/rates.js?v=c3c8d2ce94"></script>
+<script src="../assets/app.js?v=abdf518dca"></script>
 <script>
 (function(){
   const fmt = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
@@ -509,7 +509,7 @@
           '비주택담보대출 → 원금(대출액÷' + nonHouse + '년) + 이자 (산정만기 ' + nonHouse + '년)', false];
       case 'jeonse':
         return [function () { return 0; },
-          '전세자금대출 → 이자만 반영 (보증부 전세대출은 원금이 DSR 산정에서 제외됩니다)', false];
+          '전세자금대출 → 적용 요건 해당 시 이자만 반영. 일반적으로 제외되며 1주택자의 수도권·규제지역 신규대출 등만 확인하세요', false];
       case 'deposit':
         return [function () { return 0; },
           '예적금·보험약관 담보대출 → 이자만 반영. 이 대출을 새로 받을 때는 DSR 규제 대상이 아니지만, 다른 대출을 신청하면 기존 부채로는 산입됩니다', false];

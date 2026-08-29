@@ -49,43 +49,20 @@ jobs:
         with:
           python-version: "3.12"
 
-      # 단지 페이지(site/apt/{지역}/{단지}/index.html)는 저장소에 커밋하지 않는다.
-      # 4,500개 이상이 매일 데이터 갱신과 함께 통째로 재생성되기 때문에, 커밋하면
-      # git 이력이 하루 5MB씩(연 1.8GB) 늘어난다. 대신 배포할 때마다 여기서 만든다.
-      # 생성은 11초면 끝나고, 읽는 데이터(transactions/households)와 슬러그 대장
-      # (data/slug-map.json)은 모두 커밋돼 있어 URL은 실행마다 동일하다.
-      #
-      # 순서 주의: 반드시 Kakao 키 주입보다 **먼저** 와야 한다. 나중에 오면 방금 만든
-      # 페이지에는 플레이스홀더가 그대로 남는다.
-      # ⚠ continue-on-error를 쓰지 않는다. 다른 수집 워크플로에서는 한 스텝이 실패해도
-      # 앞 산출물을 지키려고 계속 진행하지만, 여기서는 정반대다. 페이지가 커밋돼 있지
-      # 않으므로 생성이 실패한 채 배포가 이어지면 단지 페이지 4,500여 개가 통째로 빠진
-      # 사이트가 그대로 올라간다 — 그것도 '배포 성공'으로 보이면서. 여기서 실패시키면
-      # 배포가 중단되고 GitHub Pages는 직전 배포본을 그대로 서비스하므로, 살아 있는
-      # 사이트는 멀쩡한 채로 알림만 받는다. 그게 옳은 실패 방향이다.
-      - name: Build complex pages (커밋하지 않는 SEO 페이지)
+      # 지역 집계 페이지만 정적으로 만든다. 단지별 4,500여 URL은 페이지 수를 부풀리면서
+      # 본문 차이가 작아 AdSense의 '가치가 별로 없는 콘텐츠' 판단 위험을 키웠다.
+      # 상세 단지 조회는 /calculators/search.html 한 화면에서 제공한다.
+      - name: Build canonical region pages
         working-directory: _meta
-        timeout-minutes: 10
-        run: python build_complex_pages.py --all
+        timeout-minutes: 4
+        run: python build_apt_pages.py
 
-      # 생성기가 0을 반환하고도 페이지를 거의 못 만드는 경우(데이터 파일 파손 등)를 잡는다.
-      # 배포 후에 알아차리면 이미 검색 노출이 빠진 뒤다.
-      - name: Verify complex pages exist
-        run: |
-          MIN=1000
-          N=$(find site/apt -mindepth 3 -name index.html | wc -l)
-          echo "생성된 단지 페이지: ${N}개 (최소 기대치 ${MIN})"
-          if [ "$N" -lt "$MIN" ]; then
-            echo "::error::단지 페이지가 ${N}개뿐입니다. 생성이 정상적으로 끝나지 않았을 수 있어 배포를 중단합니다."
-            exit 1
-          fi
+      # 과거 영문 슬러그 지역 URL은 북마크 호환을 위해 noindex 리다이렉트만 남긴다.
+      - name: Retire legacy region aliases
+        working-directory: _meta
+        run: python retire_apt_aliases.py
 
-      # 단지 페이지를 방금 다시 만들었으므로 sitemap 도 그 결과에 맞춰 다시 만든다.
-      # 이것을 빼면, 데이터가 바뀌어 색인 품질 게이트 통과 단지가 달라졌는데도 배포본의
-      # sitemap 은 커밋 당시 목록을 그대로 실어, noindex 페이지를 sitemap 에 올리는
-      # 모순된 신호를 보내게 된다. build_complex_pages 가 sitemap-all.xml(평면 목록)을
-      # 갱신하고, 이 스텝이 그것을 분류별 sitemap + sitemap index 로 쪼갠다.
-      # ⚠ 배포본만 고치는 것이고 저장소에 커밋하지 않는다(단지 페이지와 같은 취급).
+      # 정식 지역 URL만 sitemap에 싣고 분류별 sitemap + index를 다시 만든다.
       - name: Rebuild sitemaps (색인 허용 URL만)
         working-directory: _meta
         run: python build_sitemaps.py

@@ -7,8 +7,8 @@ index.html 밖에서는 해석되지 않는다. 즉 화면에도 구조화 데�
 없었다.
 
 무엇을 넣나 (모두 **확인 가능한 값만**)
-  · 작성 주체      — 사이트(톺다). 운영자 실명을 쓰지 않는다 — 개인 신상은 공개 대상이 아니고,
-                    사이트 소개·출처 원칙·면책은 /about.html 한 장에 모아 두었다.
+  · 작성 주체      — 톺다 운영자. 실명 대신 일관된 개인 작성 주체를 표시하고,
+                    경력·출처 원칙·면책은 /about.html 한 장에 모아 둔다.
   · 최초 게시일   — 그 파일을 추가한 커밋의 날짜 (git)
   · 최근 수정일   — 그 파일을 마지막으로 바꾼 사람 커밋의 날짜 (git, 봇 커밋 제외)
   · 주요 공식 출처 — **페이지에 이미 걸려 있는** 공공기관 링크에서 추출
@@ -49,7 +49,7 @@ ROOT = os.path.abspath(os.path.join(HERE, ".."))
 SITE = os.path.join(ROOT, "site")
 BASE = "https://topda.kr"
 
-AUTHOR_NAME = "톺다"
+AUTHOR_NAME = "톺다 운영자"
 AUTHOR_URL = f"{BASE}/about.html"   # 사이트 소개·출처 원칙·면책·문의를 모아 둔 페이지
 
 # 자동 데이터 갱신 커밋 — 본문을 바꾼 것이 아니므로 '수정일' 계산에서 뺀다.
@@ -246,9 +246,7 @@ PUBLISHER = {
 
 
 def author_node():
-    # Person 이 아니라 Organization 으로 둔다. 개인 실명을 구조화 데이터에 넣지 않으며,
-    # schema.org 에서 author 는 Organization 도 허용한다.
-    return {"@type": "Organization", "name": AUTHOR_NAME, "url": AUTHOR_URL}
+    return {"@type": "Person", "name": AUTHOR_NAME, "url": AUTHOR_URL}
 
 
 def patch_jsonld(raw, url, title, desc, published, modified):

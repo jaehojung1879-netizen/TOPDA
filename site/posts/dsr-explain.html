@@ -21,7 +21,7 @@
 <meta name="twitter:image" content="https://topda.kr/assets/images/brand/logo.png" />
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../assets/styles.css?v=938636aa94" /><script type="application/ld+json">
+<link rel="stylesheet" href="../assets/styles.css?v=33042e9c97" /><script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
@@ -60,8 +60,8 @@
     "@id": "https://topda.kr/posts/dsr-explain.html"
   },
   "author": {
-    "@type": "Organization",
-    "name": "톺다",
+    "@type": "Person",
+    "name": "톺다 운영자",
     "url": "https://topda.kr/about.html"
   },
   "publisher": {
@@ -74,7 +74,7 @@
     }
   },
   "datePublished": "2026-05-27",
-  "dateModified": "2026-08-01"
+  "dateModified": "2026-08-29"
 }
 </script>
 </head><body>
@@ -104,13 +104,13 @@
       <span class="badge badge-accent">대출</span>
     </div>
     <h1>DSR 계산 구조와 한도</h1>
-    <div class="byline" data-byline><span><a href="/about.html" rel="author">톺다</a> 작성</span><span class="dot">·</span><span>게시 <time datetime="2026-05-27">2026-05-27</time></span><span class="dot">·</span><span>내용 검토 <time datetime="2026-08-01">2026-08-01</time></span><p class="byline-basis">2026-08-01 기준입니다. 이후 법령·세율·정책이 바뀌면 달라질 수 있으니, 본문에 링크한 공식 원문의 현행 내용을 함께 확인하세요.</p></div>
+    <div class="byline" data-byline><span><a href="/about.html" rel="author">톺다 운영자</a> 작성</span><span class="dot">·</span><span>게시 <time datetime="2026-05-27">2026-05-27</time></span><span class="dot">·</span><span>내용 검토 <time datetime="2026-08-29">2026-08-29</time></span><p class="byline-basis">2026-08-29 기준입니다. 이후 법령·세율·정책이 바뀌면 달라질 수 있으니, 본문에 링크한 공식 원문의 현행 내용을 함께 확인하세요.</p></div>
 <div class="meta"><span>7분 읽기</span></div>
   </div>
 
   <div class="article-summary">
     <div class="label">계산 전에 확인할 조건</div>
-    <p>DSR = 모든 대출의 연 원리금 합 ÷ 연소득. 1금융 40%, 2금융 50%. 신용대출·카드론·자동차할부까지 전부 들어갑니다.</p>
+    <p>DSR은 규정상 산입되는 대출의 연 원리금 ÷ 연소득입니다. 은행권 40%, 비은행권 50%가 기본 규제선이지만 대출 종류·총대출액·예외와 금융회사 심사를 함께 확인해야 합니다.</p>
   </div>
 
 <div class="prose">
@@ -124,45 +124,46 @@
 
     <h2 id="s2">한도</h2>
     <ul class="ref-list">
-      <li><strong>1금융권 (은행)</strong>: 40%</li>
-      <li><strong>2금융권 (저축은행·캐피탈·보험사)</strong>: 50%</li>
-      <li><strong>스트레스 DSR</strong>: 실제 금리에 +1.5%p 가산해 한도 계산</li>
+      <li><strong>은행권</strong>: 차주단위 DSR 40%가 기본 규제선</li>
+      <li><strong>비은행권</strong>: 50%가 기본 규제선</li>
+      <li><strong>스트레스 DSR</strong>: 실제 납부금리가 아니라 한도 산정 금리에 가산합니다. 변동금리 주담대 기준 수도권·규제지역은 3.0%p, 지방 비규제지역은 0.75%p이며, 혼합형·주기형은 고정기간과 만기에 따라 적용비율이 달라집니다.</li>
     </ul>
+    <p>규제선 안에 들어와도 금융회사별 총량·신용평가·소득 인정 방식 때문에 실제 한도는 더 낮을 수 있습니다.</p>
 
     <h2 id="s3">‘모든 대출’이란?</h2>
-    <p data-edit="p">DSR에 합산되는 항목:</p>
+    <p data-edit="p">‘모든 대출’은 모든 부채를 예외 없이 더한다는 뜻이 아닙니다. 차주단위 DSR 적용 대상인지 먼저 보고, 대출 종류별 산정 방식과 제외 규정을 적용합니다.</p>
     <ul class="ref-list">
       <li>주택담보대출 (원리금)</li>
       <li><strong>신용대출</strong> — 잔액을 5년으로 나눠 연원리금 환산 (10년 만기여도)</li>
-      <li>전세자금대출 (이자만 분할 상환의 경우 이자만)</li>
       <li>카드론·현금서비스</li>
-      <li>자동차 할부·렌탈</li>
-      <li>마이너스통장 (한도 기준)</li>
-      <li>학자금 대출, 의료비 대출, 보험 약관대출 등 모든 대출</li>
+      <li>자동차 할부 등 기타대출 — 상품별 산정만기를 적용</li>
+      <li>마이너스통장 — 약정한도 기준으로 신용대출에 포함</li>
     </ul>
-    <p data-edit="p.2">제외: 정부 정책 전세대출 일부, 주택연금, 서민금융상품 일부.</p>
+    <p data-edit="p.2"><strong>전세자금대출은 일반적으로 DSR 산정에서 제외</strong>됩니다. 다만 2025년 10월 29일부터 1주택자가 수도권·규제지역에서 새로 받는 전세대출은 원금을 빼고 이자상환분만 DSR에 반영합니다. 버팀목 등 정책 목적 전세대출과 시행 전 계약 등은 예외가 있으므로 신청 은행에서 확인해야 합니다.</p>
+    <p>중도금·이주비대출, 예·적금담보대출, 보험계약대출, 정책서민금융 등도 규정상 제외될 수 있습니다. ‘대출이 있다’는 이유만으로 임의 합산하지 마세요.</p>
 
     <h2 id="s4">예시 — 연봉 7천만원, 신규 주담대 4억 (30년, 4.5%)</h2>
     <ul class="ref-list">
-      <li>신규 주담대 월 원리금: 약 202만원 / 연 2,424만원</li>
-      <li>기존 신용대출 5천만 → 연 환산: 5000만 ÷ 5년 + 이자 = 약 1,200만원</li>
-      <li>합계 연 원리금: 3,624만원</li>
-      <li>DSR: 3,624만 ÷ 7,000만 × 100 = <strong>51.7%</strong> (40% 초과 → 1금융 거절)</li>
-      <li>→ 신규 주담대 한도 줄이거나 신용대출 먼저 상환 필요</li>
+      <li>신규 주담대 월 원리금: 약 202.7만원 / 연 약 2,432만원</li>
+      <li>기존 신용대출 5천만원, 금리 6% 가정 → 원금 5년 환산 1,000만원 + 이자 300만원</li>
+      <li>합계 연 원리금: 약 3,732만원</li>
+      <li>명목금리 기준 DSR: 3,732만 ÷ 7,000만 × 100 = <strong>약 53.3%</strong></li>
+      <li>실제 한도 심사에서는 지역·금리유형에 따른 스트레스 금리까지 적용돼 DSR이 더 높아질 수 있습니다.</li>
     </ul>
 
-    <h2 id="s5">한도 늘리는 법</h2>
+    <h2 id="s5">한도를 점검할 순서</h2>
     <ol class="ref-list">
-      <li><strong>기존 신용대출 상환</strong>: DSR 산정에서 빠짐</li>
-      <li><strong>대출 기간 연장</strong>: 30년 → 40년/50년 (월 원리금 감소)</li>
-      <li><strong>부부 합산 소득 활용</strong>: 공동명의로 대출</li>
-      <li><strong>정책상품 활용</strong>: 디딤돌·보금자리는 DSR 우대</li>
-      <li><strong>2금융권</strong>: 50% 한도로 추가 대출 가능 (금리 1~2%p 높음)</li>
+      <li><strong>기존 신용대출 잔액과 한도성 대출 정리</strong>: 상환·해지 효과를 은행 산식으로 다시 확인합니다.</li>
+      <li><strong>만기와 상환방식 비교</strong>: 긴 만기는 연 원리금을 낮추지만 총이자는 늘어납니다.</li>
+      <li><strong>소득 합산 요건 확인</strong>: 배우자 소득은 공동차주 등 금융회사가 인정하는 구조여야 하며, 공동명의만으로 자동 합산되지 않습니다.</li>
+      <li><strong>금리유형 비교</strong>: 순수 고정·혼합·주기·변동형에 따라 스트레스 적용비율이 다릅니다.</li>
+      <li><strong>정책상품 자격 확인</strong>: 디딤돌·보금자리론 등은 일반 주담대와 한도 규칙이 다릅니다.</li>
     </ol>
 
     <h2 id="s6">관련 자료</h2>
     <ul class="ref-list">
-      <li><a href="https://www.fss.or.kr" target="_blank" rel="noopener">금융감독원 (DSR 안내)</a></li>
+      <li><a href="https://www.fsc.go.kr/po020201/85518" target="_blank" rel="noopener">금융위원회 — 대출수요 관리 방안 FAQ</a></li>
+      <li><a href="https://www.fsc.go.kr/no010101/84617" target="_blank" rel="noopener">금융위원회 — 3단계 스트레스 DSR 시행방안</a></li>
       <li><a href="../calculators/dsr.html">DSR 한도 계산기</a></li>
       <li><a href="ltv-explain.html">LTV 담보인정비율 계산 기준</a></li>
       <li><a href="stress-dsr.html">스트레스 DSR</a></li>
@@ -233,5 +234,5 @@
     </p>
   </div>
 </footer>
-<script src="../assets/app.js?v=e58602c3f7"></script>
+<script src="../assets/app.js?v=abdf518dca"></script>
 </body></html>

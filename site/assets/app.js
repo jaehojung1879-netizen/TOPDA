@@ -2458,7 +2458,7 @@ function calcSubscriptionScore({ noHomeYears, dependents, accountYears, spouseAc
         case 'mortgageBullet': return [function (a, t) { return a / Math.min(t || 10, 10); }, L('주택담보대출(만기일시·거치) → 원금(대출액÷대출기간, 최대 10년) + 이자', 'Mortgage (bullet/grace) → principal (loan ÷ term, capped at 10 years) + interest'), true];
         case 'nonhouse': return [function (a) { return a / 8; }, L('비주택담보대출 → 원금(대출액÷8년) + 이자 (산정만기 8년)', 'Non-housing mortgage → principal (loan ÷ 8 years) + interest (8-year assumed term)'), false];
         case 'progress': return [function (a) { return a / 25; }, L('중도금·이주비대출 → 원금(대출액÷25년) + 이자 (기존 부채일 때. 이 대출을 새로 신청하는 경우엔 DSR 규제 미적용)', 'Interim/relocation loan → principal (loan ÷ 25 years) + interest (as existing debt)'), false];
-        case 'jeonse': return [function () { return 0; }, L('전세자금대출 → 이자만 반영 (원금 미산입)', 'Jeonse loan → interest only (principal excluded)'), false];
+        case 'jeonse': return [function () { return 0; }, L('전세자금대출 → 적용 요건 해당 시 이자만 반영 (일반적으로 제외)', 'Jeonse loan → interest only when applicable (generally excluded)'), false];
         // ⚠ 「규제 미적용」과 「기존 부채 미산입」은 다른 말이다.
         //
         //   예·적금담보대출과 보험계약(약관)대출은 **그 대출을 새로 신청할 때** 차주단위
