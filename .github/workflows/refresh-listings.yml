@@ -187,33 +187,18 @@ jobs:
       - name: Commit address identity and portal enrichment
         run: bash _meta/git_commit_push.sh "주소·포털 단지정보 보강 ($(date -u +%Y-%m-%d))" site/assets/apartments.json site/assets/households.json data/portal_household_candidates.json data/portal_household_misses.json
 
-      # 5) 정적 페이지 생성 (SEO — 네이버·구글에 단지명이 정적 HTML로 노출).
+      # 5) 지역 집계 페이지 생성. 단지별 상세는 통합 검색 화면에서만 제공한다.
       # 데이터 파일만 읽으므로 API 키 불필요, 수 초 내 종료.
-      #
-      # ⚠ 실행 순서 고정: build_apt_pages → build_complex_pages.
-      #   · build_apt_pages 는 한글 지역 URL(/apt/*.html)과 /apt/ 색인의 sitemap 항목을,
-      #     build_complex_pages 는 슬러그 URL(/apt/{slug}/…) 항목을 각각 재생성한다.
-      #   · 한글 지역 페이지의 canonical을 슬러그 허브로 넘기는 판단은 build_apt_pages가
-      #     data/slug-map.json(_meta.hubs)을 읽어 하므로, 허브를 만드는 쪽이 나중이면
-      #     그날 새로 생긴 허브는 다음 실행에 반영된다(1일 지연, 색인상 무해).
-      - name: Build static region pages (SEO)
+      - name: Build canonical region pages
         working-directory: _meta
         timeout-minutes: 4
         run: python build_apt_pages.py
         continue-on-error: true
 
-      # 단지 페이지 — 기준 통과 전체(2026-07-26 기준 4,586개). 샘플 10개 단계는 끝났다.
-      #
-      # 여기서 생성하는 이유는 HTML을 커밋하기 위해서가 아니다(HTML은 .gitignore로 빠진다).
-      # 이 실행이 남겨야 하는 건 두 가지다:
-      #   · data/slug-map.json — 새로 등장한 단지의 슬러그를 발급·영속화한다. 이게 커밋돼야
-      #     배포 때 다시 생성해도 같은 URL이 나온다(한 번 발급한 슬러그는 바꾸지 않는다).
-      #   · sitemap — 생성 대상 URL 목록.
-      # 실제 HTML은 deploy-pages.yml이 배포할 때마다 다시 만들어 올린다.
-      - name: Build complex pages (슬러그·sitemap 갱신)
+      # 기존 영문 지역 별칭은 중복 본문 대신 noindex 리다이렉트 셸로 유지한다.
+      - name: Retire legacy region aliases
         working-directory: _meta
-        timeout-minutes: 6
-        run: python build_complex_pages.py --all
+        run: python retire_apt_aliases.py
         continue-on-error: true
 
       # sitemap 분할 — 생성기들이 쓴 평면 목록(sitemap-all.xml)을 분류별 파일 +
@@ -224,5 +209,5 @@ jobs:
         run: python build_sitemaps.py
         continue-on-error: true
 
-      - name: Commit region/complex pages
-        run: bash _meta/git_commit_push.sh "단지·지역 페이지 자동 생성 ($(date -u +%Y-%m-%d))" site/apt site/sitemap.xml site/sitemap-all.xml site/sitemap-*.xml data/slug-map.json
+      - name: Commit region pages
+        run: bash _meta/git_commit_push.sh "지역 페이지 자동 갱신 ($(date -u +%Y-%m-%d))" site/apt site/sitemap.xml site/sitemap-all.xml site/sitemap-*.xml

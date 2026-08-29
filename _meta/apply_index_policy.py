@@ -7,7 +7,7 @@
   1) robots 메타      — 색인이 필요 없는 페이지에 noindex,follow
   2) AdSense 스크립트 — 정책·문의·게시판·내부검색·noindex·오류 페이지에서 제거
   3) canonical        — 없으면 자기 URL 로 추가
-  4) hreflang         — ko·en 만 남기고, **색인 허용된 실제 파일**끼리만 상호 연결
+  4) hreflang         — 현재 심사 중에는 한국어 핵심 콘텐츠만 색인하고 번역판 연결 제거
 
 원칙
   · noindex 로 바꿔도 페이지는 그대로 접근·동작한다. robots.txt 로 크롤을 막지 않는다
@@ -31,9 +31,9 @@ ROOT = os.path.abspath(os.path.join(HERE, ".."))
 SITE = os.path.join(ROOT, "site")
 BASE = "https://topda.kr"
 
-# 색인 언어(1차). 나머지 언어는 사용자 여정이 완성될 때까지 noindex,follow.
-INDEX_LANGS = {"ko", "en"}
-DEINDEX_LANG_DIRS = ("zh-Hans", "zh-Hant", "vi", "th")
+# AdSense 재심사 동안 한국어 원문만 색인한다. 자동 번역판은 접근 가능하되 noindex,follow.
+INDEX_LANGS = {"ko"}
+DEINDEX_LANG_DIRS = ("en", "zh-Hans", "zh-Hant", "vi", "th")
 
 # ── 언어와 무관하게 noindex 로 두는 경로 (glob, URL 경로 기준)
 NOINDEX_GLOBS = (
@@ -46,6 +46,8 @@ NOINDEX_GLOBS = (
     "/naverad*.html",                                          # 검색엔진 소유확인 파일
     # 자체 본문이 없는 JS 렌더링 링크 셸 — 탐색용으로 유지하되 색인에서 뺀다.
     "/market.html", "/*/market.html",
+    # 레거시 영문 지역 별칭 및 과거 단지별 URL. 실제 지역 콘텐츠는 /apt/*.html 하나만 둔다.
+    "/apt/*/", "/apt/*/index.html",
 
     # ── 아직 실제 데이터가 없어 화면에 예시값을 띄우는 페이지 (2026-08-15 감사)
     #
@@ -64,13 +66,6 @@ NOINDEX_GLOBS = (
     "/calculators/jeonse-ratio.html", "/*/calculators/jeonse-ratio.html",
     "/calculators/commercial-rent.html", "/*/calculators/commercial-rent.html",
 )
-
-# ── 이 스크립트가 건드리지 않는 경로.
-#    단지 페이지(/apt/{지역}/{단지}/)의 robots 메타는 build_complex_pages.py 의 색인 품질
-#    게이트가 결정한다. 여기서 함께 관리하면 두 생성기가 서로의 태그를 지운다 —
-#    실제로 이 스크립트가 게이트가 붙인 noindex 4,716개를 지운 적이 있다(robots 메타를
-#    일단 제거하고 자기 판단으로만 다시 넣기 때문). 소유권을 한쪽에만 둔다.
-NOT_OURS_GLOBS = ("/apt/*/*/", "/apt/*/*/index.html")
 
 # ── AdSense 를 넣지 않는 경로 (noindex 페이지는 자동 포함)
 NO_ADS_GLOBS = (
@@ -304,8 +299,6 @@ def decide(files):
         if not raw.lstrip().startswith("<"):
             continue
         path = url_path(fp)
-        if matches(path, NOT_OURS_GLOBS):
-            continue
         raws[path] = raw
     # ⚠ EN 링크 정규화가 raws 를 직접 바꾸므로, '파일을 다시 써야 하는가'의 비교 기준은
     #   원본 사본이어야 한다. 정규화 결과와 비교하면 링크만 바뀐 파일이 기록되지 않는다.
@@ -353,7 +346,7 @@ def decide(files):
         if matches(path, NOINDEX_GLOBS):
             noindex, reason = True, "검색 색인이 필요 없는 화면(게시판·내부검색·오류·운영자·소유확인)"
         elif lang in DEINDEX_LANG_DIRS:
-            noindex, reason = True, f"{lang} 사용자 여정 미완성 — 접근은 유지, 색인만 보류"
+            noindex, reason = True, f"{lang} 번역판 — 한국어 핵심 콘텐츠 검증 기간에는 색인 보류"
         elif lang == "en":
             ko = partner.get(path, {}).get("ko")
             ok, why = en_gate(path, raw, ko if ko in raws else None, en_support_ready)
@@ -497,7 +490,7 @@ def main():
           + (" (dry-run — 파일은 그대로)" if args.dry_run else ""))
     print(f"noindex,follow 적용: {len(noindexed):,}개")
     print(f"AdSense 스크립트 제거: {len(ads_removed)}개")
-    print(f"hreflang 상호 연결 페이지: {hl}개 (ko·en 만)")
+    print(f"hreflang 상호 연결 페이지: {hl}개 (현재 색인 언어: {', '.join(sorted(INDEX_LANGS))})")
     print()
     print("noindex 사유별:")
     by = {}

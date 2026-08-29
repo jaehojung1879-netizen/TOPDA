@@ -8,7 +8,7 @@
 생성물:
   site/apt/index.html            — 전 지역 색인
   site/apt/{지역-slug}.html      — 지역별 단지 표(단지명·준공·세대수·최근 실거래·㎡당 추세)
-  sitemap-all.xml                — /apt/ 항목 재생성(다른 항목 보존)
+  sitemap-all.xml                — /apt/ 항목 재생성(단지별 대량 URL은 제거)
 
 원칙(CLAUDE.md): 단일 HTML(CSS 인라인)·클라이언트 저장 없음·모바일 360px·출처/면책 하단 고정.
 가격 추세는 월별 ㎡당가 평균 기준 — 평형 혼합 왜곡 방지(왕십리자이 상승가치 민원과 동일 원인).
@@ -307,16 +307,14 @@ def region_page(rk, rows, as_of, ms=None, canonical=None, complex_urls=None):
     return page_head(title, desc, canonical) + body + footer_html(as_of)
 
 
-def index_page(region_rows, as_of, hubs=None):
-    hubs = hubs or {}
+def index_page(region_rows, as_of):
     url = f"{BASE}/apt/"
     title = "아파트 실거래가·세대수 지역별 — 톺다"
     n_apt = sum(len(v) for v in region_rows.values())
     desc = f"전국 {len(region_rows)}개 지역 {n_apt:,}개 아파트 단지의 최근 실거래가·세대수·㎡당 추이 ({as_of} 기준)."
     links = "\n".join(
         '<li><a href="{}">{} <span class="muted">({})</span></a></li>'.format(
-            esc(hubs[rk][len(BASE):] if rk in hubs
-                else f"/apt/{urllib.parse.quote(slug(rk))}.html"),
+            esc(f"/apt/{urllib.parse.quote(slug(rk))}.html"),
             esc(rk), len(rows))
         for rk, rows in sorted(region_rows.items())
     )
@@ -329,12 +327,14 @@ def index_page(region_rows, as_of, hubs=None):
     return page_head(title, desc, url) + body + footer_html(as_of)
 
 
-def update_sitemap(region_rows, today, skip=()):
-    """sitemap-all.xml에서 한글 지역 URL(/apt/*.html)과 /apt/ 색인만 재생성(다른 항목 보존).
+def update_sitemap(region_rows, today):
+    """sitemap-all.xml의 /apt/ 항목을 지역 집계 URL만으로 다시 만든다.
 
-    슬러그 URL(/apt/{slug}/...)은 build_complex_pages.py 소관이라 정규식이 겹치지 않게
-    `.html`로 끝나는 항목과 `/apt/` 자신만 지운다. skip에 든 지역은 canonical을 슬러그
-    허브로 넘겼으므로 sitemap에서 제외한다(정식 URL만 싣는다).
+    과거에는 단지별 정적 HTML 4,500여 개와 지역별 영문 슬러그 별칭을 함께 남겼다.
+    noindex 여부와 무관하게 공개 URL 수가 사이트의 사람 작성 콘텐츠보다 압도적으로 많아졌고,
+    AdSense 심사에서는 사이트가 대량 생성 데이터 페이지 모음으로 보일 수 있었다.
+    이제 단지 조회는 ``/calculators/search.html`` 한 화면에서 제공하고, sitemap에는
+    사용자에게 독립적인 비교 가치를 주는 지역 집계 페이지만 싣는다.
     """
     try:
         with open(SITEMAP, encoding="utf-8") as f:
@@ -342,32 +342,17 @@ def update_sitemap(region_rows, today, skip=()):
     except FileNotFoundError:
         xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>\n')
-    # 기존 한글 지역 항목 + /apt/ 색인만 제거
-    xml = re.sub(r"  <url>\s*<loc>" + re.escape(BASE) + r"/apt/(?:[^<]*\.html)?</loc>.*?</url>\n",
+    # 기존 /apt/ 항목을 전부 제거한다. 여기에는 레거시 슬러그 지역 URL과 단지별 URL도
+    # 포함된다. 다음 줄에서 정식 지역 URL만 다시 추가한다.
+    xml = re.sub(r"  <url>\s*<loc>" + re.escape(BASE) + r"/apt/[^<]*</loc>.*?</url>\n",
                  "", xml, flags=re.S)
     entries = [f"  <url>\n    <loc>{BASE}/apt/</loc>\n    <lastmod>{today}</lastmod>\n    <priority>0.7</priority>\n  </url>\n"]
     for rk in sorted(region_rows):
-        if rk in skip:
-            continue
         loc = f"{BASE}/apt/{urllib.parse.quote(slug(rk))}.html"
         entries.append(f"  <url>\n    <loc>{loc}</loc>\n    <lastmod>{today}</lastmod>\n    <priority>0.7</priority>\n  </url>\n")
     xml = xml.replace("</urlset>", "".join(entries) + "</urlset>")
     with open(SITEMAP, "w", encoding="utf-8") as f:
         f.write(xml)
-
-
-def migrated_hubs():
-    """슬러그 허브로 색인을 이전한 지역 → {region_key: hub_url}.
-    data/slug-map.json의 _meta.hubs를 읽는다(build_complex_pages.py가 기록)."""
-    path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "slug-map.json"))
-    m = L.load_json(path, default=None) or {}
-    regions = m.get("regions") or {}
-    out = {}
-    for rk in (m.get("_meta", {}).get("hubs") or []):
-        rec = regions.get(rk)
-        if rec and rec.get("slug"):
-            out[rk] = f"{BASE}/apt/{rec['slug']}/"
-    return out
 
 
 def main():
@@ -381,20 +366,16 @@ def main():
         return
     as_of = max(d.get("date", "") for d in deals)[:7] or dt.date.today().strftime("%Y-%m")
     os.makedirs(APT_DIR, exist_ok=True)
-    hubs = migrated_hubs()
     for rk, rows in region_rows.items():
         path = os.path.join(APT_DIR, f"{slug(rk)}.html")
         with open(path, "w", encoding="utf-8") as f:
-            # 허브로 이전한 지역은 canonical만 허브를 가리키고, 페이지 자체는 그대로 둔다
-            # (기존 색인·북마크를 살려 두기 위해 즉시 삭제하지 않는다).
-            f.write(region_page(rk, rows, as_of, market_summary(rk, market),
-                                canonical=hubs.get(rk)))
+            f.write(region_page(rk, rows, as_of, market_summary(rk, market)))
     with open(os.path.join(APT_DIR, "index.html"), "w", encoding="utf-8") as f:
-        f.write(index_page(region_rows, as_of, hubs))
-    update_sitemap(region_rows, dt.date.today().strftime("%Y-%m-%d"), skip=set(hubs))
+        f.write(index_page(region_rows, as_of))
+    update_sitemap(region_rows, dt.date.today().strftime("%Y-%m-%d"))
     n = sum(len(v) for v in region_rows.values())
     print(f"[ok] 지역 페이지 {len(region_rows)}개 + 색인 1개 생성 · 단지 {n:,}개 노출 · "
-          f"슬러그 허브 이전 {len(hubs)}개 · sitemap 갱신")
+          "단지 상세는 통합 검색으로 연결 · sitemap 갱신")
 
 
 if __name__ == "__main__":

@@ -563,7 +563,7 @@ function render(page) {
 <meta name="twitter:image" content="${image}" />
 <script defer src="https://topda.kr/assets/analytics.js?v=3e86e8b800"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-<link rel="stylesheet" href="../../assets/styles.css?v=938636aa94" />
+<link rel="stylesheet" href="../../assets/styles.css?v=33042e9c97" />
 <script type="application/ld+json">${jsonLd}</script>
 </head>
 <body>
@@ -607,7 +607,7 @@ function render(page) {
   <div class="callout callout-warn" style="margin-top:32px"><div class="icon">!</div><div class="body"><strong>General information only.</strong> Requirements, rates, market prices, and contract terms change. Verify current official records and consult a qualified Korean professional before making a legal, tax, financial, or contractual decision.</div></div>
 </main>
 <footer class="site-footer"><div class="container"><p class="disclaimer">&copy; TOPDA. General information only, not legal, tax, or financial advice.</p></div></footer>
-<script src="../../assets/app.js?v=e58602c3f7"></script>
+<script src="../../assets/app.js?v=abdf518dca"></script>
 </body>
 </html>
 `;
