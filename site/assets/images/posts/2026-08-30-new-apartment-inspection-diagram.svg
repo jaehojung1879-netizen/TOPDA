@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 980" role="img" aria-labelledby="title desc">
+  <title id="title">신축 아파트 사전점검부터 보수 확인까지의 다섯 단계</title>
+  <desc id="desc">안내문 확인, 현장 점검, 하자 접수, 조치계획 확인, 재점검과 기록 보관 순서로 이어지는 절차도</desc>
+  <rect width="760" height="980" rx="32" fill="#f7f9fc"/>
+  <text x="380" y="62" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="30" font-weight="700" fill="#172033">사전점검은 ‘찾기’보다 ‘기록과 확인’이 중요합니다</text>
+  <text x="380" y="100" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="22" fill="#5b6474">현장에서 끝내지 말고 접수번호와 보수 결과까지 한 묶음으로 보관하세요.</text>
+
+  <g font-family="Pretendard, Apple SD Gothic Neo, sans-serif">
+    <rect x="56" y="142" width="648" height="126" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="120" cy="205" r="35" fill="#195fb5"/>
+    <text x="120" y="216" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">1</text>
+    <text x="176" y="193" font-size="28" font-weight="700" fill="#172033">안내문·준비물 확인</text>
+    <text x="176" y="231" font-size="23" fill="#5b6474">방문시간, 점검표, 옵션·도면, 대행업체 출입 조건</text>
+
+    <path d="M380 268v38" stroke="#87a6cc" stroke-width="5" stroke-linecap="round"/>
+    <path d="m366 296 14 16 14-16" fill="none" stroke="#87a6cc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="56" y="318" width="648" height="126" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="120" cy="381" r="35" fill="#195fb5"/>
+    <text x="120" y="392" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">2</text>
+    <text x="176" y="369" font-size="28" font-weight="700" fill="#172033">공간별 현장 점검</text>
+    <text x="176" y="407" font-size="23" fill="#5b6474">현관 → 창호 → 방 → 주방 → 욕실 → 설비 순서</text>
+
+    <path d="M380 444v38" stroke="#87a6cc" stroke-width="5" stroke-linecap="round"/>
+    <path d="m366 472 14 16 14-16" fill="none" stroke="#87a6cc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="56" y="494" width="648" height="126" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="120" cy="557" r="35" fill="#0f8a74"/>
+    <text x="120" y="568" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">3</text>
+    <text x="176" y="545" font-size="28" font-weight="700" fill="#172033">하자 한 건씩 접수</text>
+    <text x="176" y="583" font-size="23" fill="#5b6474">위치 + 증상 + 사진·영상 + 원하는 조치</text>
+
+    <path d="M380 620v38" stroke="#87a6cc" stroke-width="5" stroke-linecap="round"/>
+    <path d="m366 648 14 16 14-16" fill="none" stroke="#87a6cc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="56" y="670" width="648" height="126" rx="22" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="120" cy="733" r="35" fill="#0f8a74"/>
+    <text x="120" y="744" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">4</text>
+    <text x="176" y="721" font-size="28" font-weight="700" fill="#172033">조치계획 확인</text>
+    <text x="176" y="759" font-size="23" fill="#5b6474">하자 구분, 보수 방법, 예정일, 접수번호 확인</text>
+
+    <path d="M380 796v38" stroke="#87a6cc" stroke-width="5" stroke-linecap="round"/>
+    <path d="m366 824 14 16 14-16" fill="none" stroke="#87a6cc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="56" y="846" width="648" height="104" rx="22" fill="#eaf3ff" stroke="#195fb5" stroke-width="2"/>
+    <circle cx="120" cy="898" r="35" fill="#195fb5"/>
+    <text x="120" y="909" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">5</text>
+    <text x="176" y="889" font-size="28" font-weight="700" fill="#172033">재점검·미조치 기록 보관</text>
+    <text x="176" y="927" font-size="23" fill="#5b6474">완료 사진만 믿지 말고 현장에서 기능을 다시 확인</text>
+  </g>
+</svg>
