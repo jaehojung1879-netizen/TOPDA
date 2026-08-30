@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-08-29"
+    "portal_checked_at": "2026-08-30"
   },
   "apartments": [
     {
@@ -1959,7 +1959,11 @@
       },
       "households": 2444,
       "sido": "서울",
-      "sigungu": "서초구"
+      "sigungu": "서초구",
+      "display_name": "래미안퍼스티지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/17135449"
     },
     {
       "name": "래미안 리더스원",
@@ -7063,7 +7067,11 @@
         "여의도": 38,
         "광화문": 29
       },
-      "households": 1177
+      "households": 1177,
+      "display_name": "더샵스타시티아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/7837099"
     },
     {
       "name": "자양우성7",
@@ -7795,7 +7803,11 @@
         "여의도": 38,
         "광화문": 25
       },
-      "households": 499
+      "households": 499,
+      "display_name": "동서울한양아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11324293"
     },
     {
       "name": "신내6대주",
@@ -8397,7 +8409,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "신내11단지대명아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11352251"
     },
     {
       "name": "정릉풍림아이원",
@@ -13667,7 +13683,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "시범아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11124885"
     },
     {
       "name": "경남아너스빌",
@@ -13722,7 +13742,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "경남아너스빌아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11048245"
     },
     {
       "name": "대림아파트",
@@ -18032,7 +18056,11 @@
         "여의도": 54,
         "광화문": 52
       },
-      "households": 503
+      "households": 503,
+      "display_name": "가천대역두산위브아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/1969280834"
     },
     {
       "name": "위례센트럴자이",
@@ -19645,7 +19673,11 @@
         "name": "고봉초등학교",
         "distance_m": 219,
         "in_zone": false
-      }
+      },
+      "display_name": "중산마을2단지코오롱아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11156838"
     },
     {
       "name": "일산두산위브더제니스",
@@ -26260,7 +26292,11 @@
         "여의도": 55,
         "광화문": 70
       },
-      "households": 782
+      "households": 782,
+      "display_name": "구월아시아드선수촌5단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/26415006"
     },
     {
       "name": "힐스테이트푸르지오주안",
@@ -26789,7 +26825,11 @@
         "name": "영화초등학교",
         "distance_m": 687,
         "in_zone": false
-      }
+      },
+      "display_name": "서희스타힐스스타디움센트럴씨티아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/1468440657"
     },
     {
       "name": "더샵인천스카이타워2단지",
@@ -26835,7 +26875,11 @@
         "여의도": 63,
         "광화문": 77
       },
-      "households": 588
+      "households": 588,
+      "display_name": "더샵인천스카이타워2단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/2024300948"
     },
     {
       "name": "아시아선수촌아파트",
@@ -32878,7 +32922,11 @@
         "여의도": 33,
         "광화문": 28
       },
-      "households": 1144
+      "households": 1144,
+      "display_name": "삼성힐스테이트1단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/8163221"
     },
     {
       "name": "구봉마을9단지",
@@ -33835,7 +33883,11 @@
         "여의도": 39,
         "광화문": 25
       },
-      "households": 600
+      "households": 600,
+      "display_name": "동답한신아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11335053"
     },
     {
       "name": "엘지,쌍용아파트",
@@ -39688,7 +39740,11 @@
         "여의도": 31,
         "광화문": 18
       },
-      "households": 758
+      "households": 758,
+      "display_name": "왕십리풍림아이원아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/8139266"
     },
     {
       "name": "우성1",
@@ -44428,7 +44484,11 @@
         "여의도": 26,
         "광화문": 17
       },
-      "households": 704
+      "households": 704,
+      "display_name": "홍제현대아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11205888"
     },
     {
       "name": "홍제삼성래미안",
@@ -44484,7 +44544,11 @@
         "여의도": 24,
         "광화문": 14
       },
-      "households": 474
+      "households": 474,
+      "display_name": "홍제삼성래미안아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/10443222"
     },
     {
       "name": "홍제역해링턴플레이스",
@@ -44882,7 +44946,11 @@
         "여의도": 23,
         "광화문": 25
       },
-      "households": 657
+      "households": 657,
+      "display_name": "상암월드컵파크2단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11261671"
     },
     {
       "name": "목동센트럴아이파크위브4단지",
@@ -44993,7 +45061,11 @@
         "여의도": 22,
         "광화문": 36
       },
-      "households": 1081
+      "households": 1081,
+      "display_name": "목동힐스테이트아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/24993215"
     },
     {
       "name": "건영",
@@ -46177,7 +46249,11 @@
         "여의도": 20,
         "광화문": 36
       },
-      "households": 735
+      "households": 735,
+      "display_name": "현대연예인아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11285805"
     },
     {
       "name": "대림1",
@@ -47570,7 +47646,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "우성아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11189376"
     },
     {
       "name": "신동아",
@@ -49317,7 +49397,11 @@
         "name": "서울거원초등학교",
         "distance_m": 142,
         "in_zone": false
-      }
+      },
+      "display_name": "거여5단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11260864"
     },
     {
       "name": "현대리버빌1지구",
@@ -51192,7 +51276,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "까치마을1단지대우롯데선경아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11358872"
     },
     {
       "name": "매화마을공무원1",
@@ -52565,7 +52653,11 @@
         "name": "한류초등학교",
         "distance_m": 655,
         "in_zone": false
-      }
+      },
+      "display_name": "킨텍스원시티3블럭아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/36250775"
     },
     {
       "name": "힐스테이트킨텍스레이크뷰",
@@ -53061,7 +53153,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "강선마을8단지럭키롯데아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11044635"
     },
     {
       "name": "강선마을11단지태영",
@@ -56804,7 +56900,11 @@
         "name": "민락초등학교",
         "distance_m": 355,
         "in_zone": false
-      }
+      },
+      "display_name": "민락주공2단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11283901"
     },
     {
       "name": "녹양힐스테이트",
@@ -60256,7 +60356,11 @@
         "name": "동원초등학교",
         "distance_m": 216,
         "in_zone": false
-      }
+      },
+      "display_name": "당감뜨란채아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/10253441"
     },
     {
       "name": "백양푸른채",
@@ -61061,7 +61165,11 @@
         58425
       ],
       "builder": "아이에스동서",
-      "households": 959
+      "households": 959,
+      "display_name": "죽전역에일린의뜰아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/1306587095"
     },
     {
       "name": "코오롱하늘채",
@@ -65309,7 +65417,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "길동우성아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/10209346"
     },
     {
       "name": "주공",
@@ -65626,7 +65738,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "탑마을주공8단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11229126"
     },
     {
       "name": "동천센트럴자이",
@@ -69023,7 +69139,11 @@
         "여의도": 60,
         "광화문": 57
       },
-      "households": 545
+      "households": 545,
+      "display_name": "롯데캐슬아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11701321"
     },
     {
       "name": "e편한세상금빛그랑메종2단지",
@@ -73582,7 +73702,11 @@
         "name": "부원초등학교",
         "distance_m": 494,
         "in_zone": false
-      }
+      },
+      "display_name": "부천한신더휴메트로아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/121596697"
     },
     {
       "name": "이편한세상온수역",
@@ -76554,7 +76678,11 @@
         "name": "안산청석초등학교",
         "distance_m": 151,
         "in_zone": false
-      }
+      },
+      "display_name": "안산고잔푸르지오7차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/7831295"
     },
     {
       "name": "푸른마을주공5",
@@ -76769,7 +76897,11 @@
         "name": "초당초등학교",
         "distance_m": 308,
         "in_zone": false
-      }
+      },
+      "display_name": "e편한세상상록아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/1712526699"
     },
     {
       "name": "반월한양",
@@ -77130,7 +77262,11 @@
         38500
       ],
       "builder": "우미건설",
-      "households": 870
+      "households": 870,
+      "display_name": "우미린센트럴파크아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/24973954"
     },
     {
       "name": "철산푸르지오하늘채",
@@ -79588,7 +79724,11 @@
         "name": "청계초등학교",
         "distance_m": 330,
         "in_zone": false
-      }
+      },
+      "display_name": "과천푸르지오써밋아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/1929260645"
     },
     {
       "name": "센트럴파크푸르지오써밋",
@@ -82743,7 +82883,11 @@
         "name": "산현초등학교",
         "distance_m": 199,
         "in_zone": false
-      }
+      },
+      "display_name": "목감레이크푸르지오아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/26912407"
     },
     {
       "name": "시흥배곧한신더휴",
@@ -87826,7 +87970,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "양주옥정신도시디에트르에듀포레아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/534727458"
     },
     {
       "name": "율정마을13단지",
@@ -89353,7 +89501,11 @@
         "여의도": 43,
         "광화문": 57
       },
-      "households": 414
+      "households": 414,
+      "display_name": "하얀마을경남아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11254012"
     },
     {
       "name": "인성",
@@ -89892,7 +90044,11 @@
         "name": "인천예송초등학교",
         "distance_m": 296,
         "in_zone": false
-      }
+      },
+      "display_name": "더샵송도프라임뷰20BL아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/1280467129"
     },
     {
       "name": "현대2차",
@@ -91236,7 +91392,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "계산주공아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11335901"
     },
     {
       "name": "현대2-1차",
@@ -94446,7 +94606,11 @@
         "name": "외삼초등학교",
         "distance_m": 376,
         "in_zone": false
-      }
+      },
+      "display_name": "반석마을7단지삼부르네상스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11363163"
     },
     {
       "name": "대전노은4지구한화꿈에그린1블록",
@@ -95228,7 +95392,11 @@
         "name": "대구수성초등학교",
         "distance_m": 665,
         "in_zone": false
-      }
+      },
+      "display_name": "수성동일하이빌레이크시티아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/23869808"
     },
     {
       "name": "자양삼성",
@@ -96776,7 +96944,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "동안마을주공3단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11345262"
     },
     {
       "name": "뉴서울(284-401)",
@@ -97822,7 +97994,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "당정마을LG아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/11370355"
     },
     {
       "name": "호반베르디움더숲",
@@ -101460,7 +101636,11 @@
         "여의도": 42,
         "광화문": 27
       },
-      "households": 900
+      "households": 900,
+      "display_name": "휘경SK뷰아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/74498400"
     },
     {
       "name": "대림서초리시온",
@@ -101783,7 +101963,11 @@
         47988
       ],
       "builder": "기타",
-      "households": 544
+      "households": 544,
+      "display_name": "대덕테크노밸리6단지네오미아아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/8127010"
     },
     {
       "name": "버들치마을성복힐스테이트2차",
@@ -103607,7 +103791,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "보라매SK뷰아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/1823338674"
     },
     {
       "name": "신대방경남",
@@ -107168,7 +107356,11 @@
         67500
       ],
       "builder": "KCC건설",
-      "households": 638
+      "households": 638,
+      "display_name": "센텀KCC스위첸아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/1624347601"
     },
     {
       "name": "롯데",
@@ -109560,7 +109752,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-19",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "양주옥정LH엘리프아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/893397118"
     },
     {
       "name": "도두리마을동남",
@@ -110067,7 +110263,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-22",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "e편한세상미사아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-08-30",
+      "name_evidence": "http://place.map.kakao.com/27583813"
     },
     {
       "name": "롯데캐슬캠퍼스타운",
