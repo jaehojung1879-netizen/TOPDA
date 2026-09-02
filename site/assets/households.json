@@ -132610,7 +132610,9 @@
         "name": "인천부원초등학교",
         "distance_m": 226
       },
-      "built_year": 2015
+      "built_year": 2015,
+      "households": 56,
+      "hh_src": "title.hhldCnt"
     },
     "인천 부평구|동원(82-36)": {
       "addr": "인천 부평구 산곡동 82-36",
@@ -223406,7 +223408,10 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 159
-      }
+      },
+      "households": 49,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2004
     },
     "서울 양천구|주함헤븐103동": {
       "addr": "서울 양천구 신월동 203-14",
@@ -223415,7 +223420,10 @@
       "elementary": {
         "name": "서울신원초등학교",
         "distance_m": 57
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2006
     },
     "서울 강동구|광남캐스빌105동": {
       "addr": "서울 강동구 둔촌동 435-4",
@@ -223428,7 +223436,10 @@
       "elementary": {
         "name": "서울한산초등학교",
         "distance_m": 579
-      }
+      },
+      "households": 28,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2006
     },
     "서울 관악구|에메랄드105동": {
       "addr": "서울 관악구 봉천동 41-261",
@@ -223441,7 +223452,10 @@
       "elementary": {
         "name": "서울신봉초등학교",
         "distance_m": 324
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2012
     },
     "서울 강서구|우공팰리스101동": {
       "addr": "서울 강서구 화곡동 1026-27",
@@ -223454,7 +223468,10 @@
       "elementary": {
         "name": "서울신월초등학교",
         "distance_m": 450
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2005
     },
     "부산 부산진구|범전시영1동": {
       "addr": "부산 부산진구 범전동 43-4",
@@ -223467,7 +223484,10 @@
       "elementary": {
         "name": "성전초등학교",
         "distance_m": 478
-      }
+      },
+      "households": 90,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1986
     },
     "서울 관악구|동아타운21": {
       "addr": "서울 관악구 봉천동 7-312",
@@ -223480,7 +223500,10 @@
       "elementary": {
         "name": "서울봉현초등학교",
         "distance_m": 286
-      }
+      },
+      "households": 18,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2003
     },
     "인천 연수구|송도아리스타프라임아파트": {
       "addr": "인천 연수구 송도동 22-6",
@@ -223493,7 +223516,10 @@
       "elementary": {
         "name": "인천신정초등학교",
         "distance_m": 372
-      }
+      },
+      "households": 90,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2023
     },
     "서울 송파구|송파레이크힐": {
       "addr": "서울 송파구 거여동 606",
@@ -223506,7 +223532,10 @@
       "elementary": {
         "name": "서울거원초등학교",
         "distance_m": 194
-      }
+      },
+      "households": 394,
+      "hh_src": "recap.hhldCnt",
+      "built_year": 2021
     },
     "경기 부천시 소사구|우석WS아파트": {
       "addr": "경기 부천시 소사구 괴안동 1-15",
@@ -223519,7 +223548,10 @@
       "elementary": {
         "name": "부천동초등학교",
         "distance_m": 593
-      }
+      },
+      "households": 27,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2016
     },
     "서울 송파구|잠실라펜앤": {
       "addr": "서울 송파구 방이동 456",
@@ -223532,7 +223564,10 @@
       "elementary": {
         "name": "서울방이초등학교",
         "distance_m": 347
-      }
+      },
+      "households": 42,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2024
     },
     "서울 서초구|N-Suite102동(1511-3)": {
       "addr": "서울 서초구 서초동 1511-3",
@@ -223545,7 +223580,10 @@
       "elementary": {
         "name": "서울교육대학교 부설초등학교",
         "distance_m": 782
-      }
+      },
+      "households": 18,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2004
     },
     "서울 강남구|청담디에브스아파트": {
       "addr": "서울 강남구 청담동 62-6",
@@ -223558,7 +223596,10 @@
       "elementary": {
         "name": "서울언북초등학교",
         "distance_m": 496
-      }
+      },
+      "households": 18,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2017
     }
   },
   "as_of": "2026-09-02"
