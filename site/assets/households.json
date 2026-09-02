@@ -223338,50 +223338,6 @@
       "hh_src": "title.hhldCnt",
       "built_year": 2003
     },
-    "서울 강서구|청솔샤르망1001동": {
-      "addr": "서울 강서구 내발산동 676-23",
-      "lat": 37.552905,
-      "lng": 126.838734,
-      "subway": {
-        "station": "우장산역 5호선",
-        "distance_m": 501
-      },
-      "elementary": {
-        "name": "서울내발산초등학교",
-        "distance_m": 159
-      },
-      "households": 49,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
-    },
-    "서울 양천구|주함헤븐103동": {
-      "addr": "서울 양천구 신월동 203-14",
-      "lat": 37.530052,
-      "lng": 126.829623,
-      "elementary": {
-        "name": "서울신원초등학교",
-        "distance_m": 57
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
-    },
-    "서울 강동구|광남캐스빌105동": {
-      "addr": "서울 강동구 둔촌동 435-4",
-      "lat": 37.53339,
-      "lng": 127.139259,
-      "subway": {
-        "station": "길동역 5호선",
-        "distance_m": 496
-      },
-      "elementary": {
-        "name": "서울한산초등학교",
-        "distance_m": 579
-      },
-      "households": 28,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
-    },
     "인천 계양구|경신": {
       "addr": "인천 계양구 계산동 산37-6",
       "lat": 37.545414,
@@ -223411,54 +223367,6 @@
       "hh_src": "title.hhldCnt",
       "built_year": 2002
     },
-    "서울 관악구|에메랄드105동": {
-      "addr": "서울 관악구 봉천동 41-261",
-      "lat": 37.485747,
-      "lng": 126.952813,
-      "subway": {
-        "station": "서울대입구역 2호선",
-        "distance_m": 495
-      },
-      "elementary": {
-        "name": "서울신봉초등학교",
-        "distance_m": 324
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2012
-    },
-    "서울 강서구|우공팰리스101동": {
-      "addr": "서울 강서구 화곡동 1026-27",
-      "lat": 37.544482,
-      "lng": 126.838542,
-      "subway": {
-        "station": "화곡역 5호선",
-        "distance_m": 356
-      },
-      "elementary": {
-        "name": "서울신월초등학교",
-        "distance_m": 450
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2005
-    },
-    "부산 부산진구|범전시영1동": {
-      "addr": "부산 부산진구 범전동 43-4",
-      "lat": 35.166136,
-      "lng": 129.062044,
-      "subway": {
-        "station": "부전역 동해선",
-        "distance_m": 332
-      },
-      "elementary": {
-        "name": "성전초등학교",
-        "distance_m": 478
-      },
-      "households": 90,
-      "hh_src": "title.hhldCnt",
-      "built_year": 1986
-    },
     "경기 부천시 원미구|주영홈타운101동": {
       "addr": "경기 부천시 원미구 도당동 92",
       "lat": 37.517592,
@@ -223486,7 +223394,172 @@
       "households": 19,
       "hh_src": "title.hhldCnt",
       "built_year": 1998
+    },
+    "서울 강서구|청솔샤르망1001동": {
+      "addr": "서울 강서구 내발산동 676-23",
+      "lat": 37.552905,
+      "lng": 126.838734,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 501
+      },
+      "elementary": {
+        "name": "서울내발산초등학교",
+        "distance_m": 159
+      }
+    },
+    "서울 양천구|주함헤븐103동": {
+      "addr": "서울 양천구 신월동 203-14",
+      "lat": 37.530052,
+      "lng": 126.829623,
+      "elementary": {
+        "name": "서울신원초등학교",
+        "distance_m": 57
+      }
+    },
+    "서울 강동구|광남캐스빌105동": {
+      "addr": "서울 강동구 둔촌동 435-4",
+      "lat": 37.53339,
+      "lng": 127.139259,
+      "subway": {
+        "station": "길동역 5호선",
+        "distance_m": 496
+      },
+      "elementary": {
+        "name": "서울한산초등학교",
+        "distance_m": 579
+      }
+    },
+    "서울 관악구|에메랄드105동": {
+      "addr": "서울 관악구 봉천동 41-261",
+      "lat": 37.485747,
+      "lng": 126.952813,
+      "subway": {
+        "station": "서울대입구역 2호선",
+        "distance_m": 495
+      },
+      "elementary": {
+        "name": "서울신봉초등학교",
+        "distance_m": 324
+      }
+    },
+    "서울 강서구|우공팰리스101동": {
+      "addr": "서울 강서구 화곡동 1026-27",
+      "lat": 37.544482,
+      "lng": 126.838542,
+      "subway": {
+        "station": "화곡역 5호선",
+        "distance_m": 356
+      },
+      "elementary": {
+        "name": "서울신월초등학교",
+        "distance_m": 450
+      }
+    },
+    "부산 부산진구|범전시영1동": {
+      "addr": "부산 부산진구 범전동 43-4",
+      "lat": 35.166136,
+      "lng": 129.062044,
+      "subway": {
+        "station": "부전역 동해선",
+        "distance_m": 332
+      },
+      "elementary": {
+        "name": "성전초등학교",
+        "distance_m": 478
+      }
+    },
+    "서울 관악구|동아타운21": {
+      "addr": "서울 관악구 봉천동 7-312",
+      "lat": 37.488929,
+      "lng": 126.957146,
+      "subway": {
+        "station": "숭실대입구역 7호선",
+        "distance_m": 877
+      },
+      "elementary": {
+        "name": "서울봉현초등학교",
+        "distance_m": 286
+      }
+    },
+    "인천 연수구|송도아리스타프라임아파트": {
+      "addr": "인천 연수구 송도동 22-6",
+      "lat": 37.394198,
+      "lng": 126.645036,
+      "subway": {
+        "station": "센트럴파크역 인천1호선",
+        "distance_m": 902
+      },
+      "elementary": {
+        "name": "인천신정초등학교",
+        "distance_m": 372
+      }
+    },
+    "서울 송파구|송파레이크힐": {
+      "addr": "서울 송파구 거여동 606",
+      "lat": 37.485985,
+      "lng": 127.144019,
+      "subway": {
+        "station": "거여역 5호선",
+        "distance_m": 815
+      },
+      "elementary": {
+        "name": "서울거원초등학교",
+        "distance_m": 194
+      }
+    },
+    "경기 부천시 소사구|우석WS아파트": {
+      "addr": "경기 부천시 소사구 괴안동 1-15",
+      "lat": 37.482744,
+      "lng": 126.805377,
+      "subway": {
+        "station": "역곡역 1호선",
+        "distance_m": 656
+      },
+      "elementary": {
+        "name": "부천동초등학교",
+        "distance_m": 593
+      }
+    },
+    "서울 송파구|잠실라펜앤": {
+      "addr": "서울 송파구 방이동 456",
+      "lat": 37.512745,
+      "lng": 127.116686,
+      "subway": {
+        "station": "송파나루역 9호선",
+        "distance_m": 404
+      },
+      "elementary": {
+        "name": "서울방이초등학교",
+        "distance_m": 347
+      }
+    },
+    "서울 서초구|N-Suite102동(1511-3)": {
+      "addr": "서울 서초구 서초동 1511-3",
+      "lat": 37.487434,
+      "lng": 127.007727,
+      "subway": {
+        "station": "서초역 2호선",
+        "distance_m": 490
+      },
+      "elementary": {
+        "name": "서울교육대학교 부설초등학교",
+        "distance_m": 782
+      }
+    },
+    "서울 강남구|청담디에브스아파트": {
+      "addr": "서울 강남구 청담동 62-6",
+      "lat": 37.522885,
+      "lng": 127.049195,
+      "subway": {
+        "station": "청담역 7호선",
+        "distance_m": 552
+      },
+      "elementary": {
+        "name": "서울언북초등학교",
+        "distance_m": 496
+      }
     }
   },
-  "as_of": "2026-09-01"
+  "as_of": "2026-09-02"
 }
