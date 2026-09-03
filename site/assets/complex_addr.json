@@ -2,15 +2,10 @@
   "_meta": {
     "source": "국토교통부 실거래가 OpenAPI(상세 자료)",
     "note": "'지역키|단지명' → {addr, sgg, umd, bun, ji}. addr은 좌표·역·학교 보강용 지번 주소, 나머지는 건축물대장(getBrTitleInfo) 조회 키(sigunguCd·bjdongCd·bun·ji). 한 단지가 여러 지번에 걸치면 최빈 지번.",
-    "resolved_fields": {
-      "sgg": "sggCd",
-      "umd": "umdCd",
-      "bun": "bonbun",
-      "ji": "bubun"
-    },
+    "resolved_fields": {},
     "keyed": 16402
   },
-  "as_of": "2026-09-02",
+  "as_of": "2026-09-03",
   "map": {
     "경기 수원시 권선구|수원하늘채더퍼스트2단지": {
       "addr": "경기 수원시 권선구 곡반정동 654",
