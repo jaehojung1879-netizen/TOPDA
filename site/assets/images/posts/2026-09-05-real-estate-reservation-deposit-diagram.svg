@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 920" role="img" aria-labelledby="title desc">
+  <title id="title">부동산 가계약금 반환 여부를 확인하는 순서</title>
+  <desc id="desc">중요한 계약 조건의 합의 여부를 확인한 뒤 계약 성립 가능성과 가계약금 몰취 약정을 각각 살펴보는 흐름도</desc>
+  <rect width="760" height="920" rx="32" fill="#f7f9fc"/>
+  <g font-family="Pretendard, Apple SD Gothic Neo, sans-serif">
+    <text x="380" y="58" text-anchor="middle" font-size="30" font-weight="700" fill="#172033">계약서를 썼는지보다 ‘무엇을 합의했는지’가 중요합니다</text>
+    <text x="380" y="96" text-anchor="middle" font-size="21" fill="#5b6474">가계약금이라는 이름만으로 반환 여부가 정해지지는 않습니다.</text>
+
+    <rect x="74" y="136" width="612" height="116" rx="22" fill="#ffffff" stroke="#195fb5" stroke-width="3"/>
+    <text x="380" y="180" text-anchor="middle" font-size="27" font-weight="700" fill="#172033">집·가격·지급일 등 중요한 조건을</text>
+    <text x="380" y="219" text-anchor="middle" font-size="27" font-weight="700" fill="#172033">서로 확정했나요?</text>
+
+    <path d="M380 252v62M380 286H207M380 286h173" fill="none" stroke="#87a6cc" stroke-width="5" stroke-linecap="round"/>
+    <path d="m193 304 14 16 14-16M539 304l14 16 14-16" fill="none" stroke="#87a6cc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="207" y="282" text-anchor="middle" font-size="22" font-weight="700" fill="#0f8a74">아니요</text>
+    <text x="553" y="282" text-anchor="middle" font-size="22" font-weight="700" fill="#195fb5">네</text>
+
+    <rect x="42" y="326" width="330" height="120" rx="20" fill="#e8f7f3" stroke="#0f8a74" stroke-width="2"/>
+    <text x="207" y="371" text-anchor="middle" font-size="26" font-weight="700" fill="#172033">본계약이 아직 성립하지</text>
+    <text x="207" y="407" text-anchor="middle" font-size="26" font-weight="700" fill="#172033">않았을 가능성</text>
+
+    <rect x="388" y="326" width="330" height="120" rx="20" fill="#eaf3ff" stroke="#195fb5" stroke-width="2"/>
+    <text x="553" y="371" text-anchor="middle" font-size="26" font-weight="700" fill="#172033">계약이 이미 성립했을</text>
+    <text x="553" y="407" text-anchor="middle" font-size="26" font-weight="700" fill="#172033">가능성</text>
+
+    <path d="M207 446v54M553 446v54" stroke="#87a6cc" stroke-width="5" stroke-linecap="round"/>
+    <path d="m193 490 14 16 14-16M539 490l14 16 14-16" fill="none" stroke="#87a6cc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="42" y="512" width="330" height="152" rx="20" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="207" y="554" text-anchor="middle" font-size="24" font-weight="700" fill="#172033">가계약금을 포기하기로 한</text>
+    <text x="207" y="589" text-anchor="middle" font-size="24" font-weight="700" fill="#172033">약정이 명확한가?</text>
+    <text x="207" y="630" text-anchor="middle" font-size="20" fill="#5b6474">문자·가계약서·통화 내용 확인</text>
+
+    <rect x="388" y="512" width="330" height="152" rx="20" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="553" y="554" text-anchor="middle" font-size="24" font-weight="700" fill="#172033">계약금의 성격과</text>
+    <text x="553" y="589" text-anchor="middle" font-size="24" font-weight="700" fill="#172033">이행 착수 여부는?</text>
+    <text x="553" y="630" text-anchor="middle" font-size="20" fill="#5b6474">민법 제565조 적용 여부 확인</text>
+
+    <path d="M207 664v52M553 664v52" stroke="#87a6cc" stroke-width="5" stroke-linecap="round"/>
+    <path d="m193 706 14 16 14-16M539 706l14 16 14-16" fill="none" stroke="#87a6cc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="42" y="728" width="330" height="114" rx="20" fill="#e8f7f3" stroke="#0f8a74" stroke-width="2"/>
+    <text x="207" y="772" text-anchor="middle" font-size="24" font-weight="700" fill="#172033">명확한 몰취 약정이 없다면</text>
+    <text x="207" y="809" text-anchor="middle" font-size="23" fill="#0b6f60">반환을 요구해 볼 수 있음</text>
+
+    <rect x="388" y="728" width="330" height="114" rx="20" fill="#fff4e5" stroke="#e59b32" stroke-width="2"/>
+    <text x="553" y="772" text-anchor="middle" font-size="24" font-weight="700" fill="#172033">계약금 포기·배액 상환으로</text>
+    <text x="553" y="809" text-anchor="middle" font-size="23" fill="#8a4f00">해제 가능한지 개별 판단</text>
+
+    <text x="380" y="882" text-anchor="middle" font-size="20" fill="#5b6474">분쟁이 생기면 송금 전후 문자와 통화 기록을 보존하세요.</text>
+  </g>
+</svg>
