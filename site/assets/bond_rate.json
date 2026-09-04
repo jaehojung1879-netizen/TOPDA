@@ -3,10 +3,10 @@
     "source": "KB 제1종국민주택채권 매도단가/할인율 조회 — 조회 폼 POST 재현(uf_doInquiry 규약)",
     "note": "공식 오픈API가 없어 조회 페이지를 파싱함. 실패 시 기존 값 유지. seed=true 또는 collected_at 없음 = 예시값(자동 수집 전/실패) — 화면에서 실시간 값으로 표시하지 않는다."
   },
-  "as_of": "2026-09-03",
-  "collected_at": "2026-09-03",
-  "customer_burden_rate_pct": 15.8005,
+  "as_of": "2026-09-04",
+  "collected_at": "2026-09-04",
+  "customer_burden_rate_pct": 15.5734,
   "seed": false,
-  "last_attempt_at": "2026-09-03",
+  "last_attempt_at": "2026-09-04",
   "consecutive_failures": 0
 }
