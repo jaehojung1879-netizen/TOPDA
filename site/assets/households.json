@@ -224145,7 +224145,10 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 176
-      }
+      },
+      "households": 77,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2007
     },
     "서울 강서구|청솔샤르망1001동": {
       "addr": "서울 강서구 내발산동 676-23",
@@ -224158,7 +224161,10 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 159
-      }
+      },
+      "households": 49,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2004
     },
     "서울 양천구|주함헤븐103동": {
       "addr": "서울 양천구 신월동 203-14",
@@ -224167,7 +224173,10 @@
       "elementary": {
         "name": "서울신원초등학교",
         "distance_m": 57
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2006
     },
     "서울 강동구|광남캐스빌105동": {
       "addr": "서울 강동구 둔촌동 435-4",
@@ -224180,7 +224189,10 @@
       "elementary": {
         "name": "서울한산초등학교",
         "distance_m": 579
-      }
+      },
+      "households": 28,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2006
     },
     "서울 관악구|에메랄드105동": {
       "addr": "서울 관악구 봉천동 41-261",
@@ -224193,7 +224205,10 @@
       "elementary": {
         "name": "서울신봉초등학교",
         "distance_m": 324
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2012
     },
     "서울 강서구|우공팰리스101동": {
       "addr": "서울 강서구 화곡동 1026-27",
@@ -224206,7 +224221,10 @@
       "elementary": {
         "name": "서울신월초등학교",
         "distance_m": 450
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2005
     },
     "부산 부산진구|범전시영1동": {
       "addr": "부산 부산진구 범전동 43-4",
@@ -224219,7 +224237,10 @@
       "elementary": {
         "name": "성전초등학교",
         "distance_m": 478
-      }
+      },
+      "households": 90,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1986
     },
     "경기 시흥시|무궁화": {
       "addr": "경기 시흥시 포동 1-76",
@@ -224232,7 +224253,10 @@
       "elementary": {
         "name": "포리초등학교",
         "distance_m": 1522
-      }
+      },
+      "households": 75,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1988
     },
     "경기 오산시|이화B": {
       "addr": "경기 오산시 오산동 80-1",
@@ -224241,7 +224265,10 @@
       "elementary": {
         "name": "운천초등학교",
         "distance_m": 366
-      }
+      },
+      "households": 19,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1991
     },
     "부산 부산진구|대우리치빌": {
       "addr": "부산 부산진구 전포동 554-2",
@@ -224254,7 +224281,10 @@
       "elementary": {
         "name": "성전초등학교",
         "distance_m": 114
-      }
+      },
+      "households": 55,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2003
     },
     "대전 유성구|삼영아트빌": {
       "addr": "대전 유성구 구암동 594-13",
@@ -224267,7 +224297,10 @@
       "elementary": {
         "name": "대전상대초등학교",
         "distance_m": 652
-      }
+      },
+      "households": 21,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2003
     },
     "서울 성북구|삼성아지오아파트": {
       "addr": "서울 성북구 돈암동 552-9",
@@ -224280,7 +224313,10 @@
       "elementary": {
         "name": "서울정덕초등학교",
         "distance_m": 65
-      }
+      },
+      "households": 18,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2007
     },
     "경기 화성시|오색마을사랑으로부영10단지": {
       "addr": "경기 화성시 향남읍 하길리 1502",
@@ -224289,7 +224325,10 @@
       "elementary": {
         "name": "화원초등학교",
         "distance_m": 252
-      }
+      },
+      "households": 980,
+      "hh_src": "recap.hhldCnt",
+      "built_year": 2014
     },
     "부산 해운대구|회현하이츠빌라": {
       "addr": "부산 해운대구 반송동 401-7",
@@ -224302,10 +224341,14 @@
       "elementary": {
         "name": "운송초등학교",
         "distance_m": 730
-      }
+      },
+      "households": 18,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1992
     },
     "경기 파주시|운정자이퍼스트시티": {
-      "addr_bad": true
+      "addr_bad": true,
+      "built_year": 1997
     },
     "대구 수성구|동산타운": {
       "addr": "대구 수성구 지산동 1204-14",
@@ -224318,7 +224361,10 @@
       "elementary": {
         "name": "대구용지초등학교",
         "distance_m": 187
-      }
+      },
+      "households": 16,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1995
     },
     "부산 부산진구|동진": {
       "addr": "부산 부산진구 부전동 420-16",
@@ -224331,7 +224377,10 @@
       "elementary": {
         "name": "부전초등학교",
         "distance_m": 443
-      }
+      },
+      "households": 8,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2003
     },
     "서울 구로구|청우아트빌리지(738-39)": {
       "addr": "서울 구로구 구로동 738-39",
@@ -224344,7 +224393,10 @@
       "elementary": {
         "name": "서울영일초등학교",
         "distance_m": 278
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1994
     },
     "부산 수영구|금오파크빌": {
       "addr": "부산 수영구 광안동 505-11",
@@ -224357,7 +224409,10 @@
       "elementary": {
         "name": "수영초등학교",
         "distance_m": 433
-      }
+      },
+      "households": 14,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2007
     },
     "서울 용산구|로얄카운티-3": {
       "addr": "서울 용산구 원효로1가 17-66",
@@ -224370,7 +224425,10 @@
       "elementary": {
         "name": "신광초등학교",
         "distance_m": 346
-      }
+      },
+      "households": 16,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2007
     },
     "경기 평택시|평택화양서희스타힐스센트럴파크아파트": {
       "addr_bad": true
@@ -224386,7 +224444,10 @@
       "elementary": {
         "name": "서울매헌초등학교",
         "distance_m": 844
-      }
+      },
+      "households": 14,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2001
     },
     "서울 마포구|힐스테이트마포더퍼스트": {
       "addr": "서울 마포구 신수동 91-90",
@@ -224412,7 +224473,10 @@
       "elementary": {
         "name": "서울방일초등학교",
         "distance_m": 427
-      }
+      },
+      "households": 34,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2026
     }
   },
   "as_of": "2026-09-04"
