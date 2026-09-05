@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1120" viewBox="0 0 900 1120" role="img" aria-labelledby="title desc">
+  <title id="title">2026년 월세 세액공제 확인 순서</title>
+  <desc id="desc">연말 현재 무주택 여부, 소득, 주택, 계약과 전입 주소, 지급 증빙을 확인한 뒤 세액공제를 신청하고, 요건이 맞지 않으면 현금영수증 소득공제를 검토하는 흐름도</desc>
+  <rect width="900" height="1120" rx="36" fill="#f6f8fb"/>
+  <text x="450" y="70" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="34" font-weight="700" fill="#172033">2026년 월세 세액공제 확인 순서</text>
+  <text x="450" y="108" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="20" fill="#5b6474">12월 31일 상태와 실제 지급 자료를 함께 봅니다</text>
+
+  <g font-family="Pretendard, Arial, sans-serif">
+    <rect x="110" y="145" width="680" height="112" rx="20" fill="#ffffff" stroke="#b8c3d4" stroke-width="2"/>
+    <circle cx="166" cy="201" r="27" fill="#176b67"/>
+    <text x="166" y="209" text-anchor="middle" font-size="23" font-weight="700" fill="#ffffff">1</text>
+    <text x="215" y="192" font-size="25" font-weight="700" fill="#172033">연말 현재 세대가 무주택인가?</text>
+    <text x="215" y="226" font-size="19" fill="#5b6474">주소가 다른 배우자도 같은 세대로 보는 것이 원칙</text>
+
+    <path d="M450 257v46" stroke="#8fa0b6" stroke-width="4" stroke-linecap="round"/>
+    <path d="m438 291 12 14 12-14" fill="none" stroke="#8fa0b6" stroke-width="4" stroke-linecap="round"/>
+
+    <rect x="110" y="305" width="680" height="112" rx="20" fill="#ffffff" stroke="#b8c3d4" stroke-width="2"/>
+    <circle cx="166" cy="361" r="27" fill="#176b67"/>
+    <text x="166" y="369" text-anchor="middle" font-size="23" font-weight="700" fill="#ffffff">2</text>
+    <text x="215" y="352" font-size="25" font-weight="700" fill="#172033">총급여가 8,000만 원 이하인가?</text>
+    <text x="215" y="386" font-size="19" fill="#5b6474">종합소득금액 7,000만 원 초과자는 제외</text>
+
+    <path d="M450 417v46" stroke="#8fa0b6" stroke-width="4" stroke-linecap="round"/>
+    <path d="m438 451 12 14 12-14" fill="none" stroke="#8fa0b6" stroke-width="4" stroke-linecap="round"/>
+
+    <rect x="110" y="465" width="680" height="132" rx="20" fill="#ffffff" stroke="#b8c3d4" stroke-width="2"/>
+    <circle cx="166" cy="531" r="27" fill="#176b67"/>
+    <text x="166" y="539" text-anchor="middle" font-size="23" font-weight="700" fill="#ffffff">3</text>
+    <text x="215" y="512" font-size="25" font-weight="700" fill="#172033">주택 면적 또는 기준시가가 맞는가?</text>
+    <text x="215" y="548" font-size="19" fill="#5b6474">국민주택규모 또는 기준시가 4억 원 이하</text>
+    <text x="215" y="578" font-size="18" fill="#176b67">기본공제대상 자녀·손자녀 3명 이상: 100㎡ 이하도 가능</text>
+
+    <path d="M450 597v46" stroke="#8fa0b6" stroke-width="4" stroke-linecap="round"/>
+    <path d="m438 631 12 14 12-14" fill="none" stroke="#8fa0b6" stroke-width="4" stroke-linecap="round"/>
+
+    <rect x="110" y="645" width="680" height="132" rx="20" fill="#ffffff" stroke="#b8c3d4" stroke-width="2"/>
+    <circle cx="166" cy="711" r="27" fill="#176b67"/>
+    <text x="166" y="719" text-anchor="middle" font-size="23" font-weight="700" fill="#ffffff">4</text>
+    <text x="215" y="692" font-size="25" font-weight="700" fill="#172033">계약 명의와 전입 주소가 맞는가?</text>
+    <text x="215" y="728" font-size="19" fill="#5b6474">본인·기본공제대상자가 계약하고 주소가 일치</text>
+    <text x="215" y="758" font-size="18" fill="#5b6474">주거용 오피스텔·고시원도 요건을 갖추면 가능</text>
+
+    <path d="M450 777v46" stroke="#8fa0b6" stroke-width="4" stroke-linecap="round"/>
+    <path d="m438 811 12 14 12-14" fill="none" stroke="#8fa0b6" stroke-width="4" stroke-linecap="round"/>
+
+    <rect x="110" y="825" width="680" height="112" rx="20" fill="#ffffff" stroke="#b8c3d4" stroke-width="2"/>
+    <circle cx="166" cy="881" r="27" fill="#176b67"/>
+    <text x="166" y="889" text-anchor="middle" font-size="23" font-weight="700" fill="#ffffff">5</text>
+    <text x="215" y="872" font-size="25" font-weight="700" fill="#172033">월세 지급 내역을 증명할 수 있는가?</text>
+    <text x="215" y="906" font-size="19" fill="#5b6474">등본·계약서 사본·계좌이체 등 지급 증빙 준비</text>
+
+    <path d="M450 937v38" stroke="#8fa0b6" stroke-width="4" stroke-linecap="round"/>
+    <path d="m438 963 12 14 12-14" fill="none" stroke="#8fa0b6" stroke-width="4" stroke-linecap="round"/>
+
+    <rect x="70" y="978" width="500" height="94" rx="20" fill="#176b67"/>
+    <text x="320" y="1017" text-anchor="middle" font-size="25" font-weight="700" fill="#ffffff">요건 충족 → 연말정산 때 신청</text>
+    <text x="320" y="1049" text-anchor="middle" font-size="18" fill="#dff3f1">집주인 동의서 없이 세 가지 서류 제출</text>
+
+    <rect x="590" y="978" width="240" height="94" rx="20" fill="#fff4df" stroke="#e3a53b" stroke-width="2"/>
+    <text x="710" y="1017" text-anchor="middle" font-size="21" font-weight="700" fill="#6d4b0f">요건이 안 맞으면</text>
+    <text x="710" y="1049" text-anchor="middle" font-size="17" fill="#6d4b0f">현금영수증 소득공제 검토</text>
+  </g>
+  <text x="450" y="1100" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="15" fill="#717b8c">근거: 조세특례제한법 제95조의2·시행령 제95조 · 기준일 2026-09-06</text>
+</svg>
