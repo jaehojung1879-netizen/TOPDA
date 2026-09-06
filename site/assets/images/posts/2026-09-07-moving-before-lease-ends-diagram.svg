@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" role="img" aria-labelledby="title desc">
+  <title id="title">계약 만료 전에 이사할 때 계약 상태별 확인 순서</title>
+  <desc id="desc">처음 맺은 고정기간 계약은 중도해지 특약이나 집주인과의 합의를 확인하고, 묵시적 갱신이나 계약갱신요구권에 따른 계약은 해지 통지가 도달한 날부터 3개월 뒤 종료되는 과정을 보여준다.</desc>
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#0f172a" flood-opacity=".10"/></filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#64748b"/></marker>
+    <style>
+      text{font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;fill:#172033}
+      .heading{font-size:30px;font-weight:800}
+      .sub{font-size:17px;fill:#526071}
+      .label{font-size:20px;font-weight:800}
+      .body{font-size:17px;font-weight:600}
+      .note{font-size:15px;fill:#526071}
+      .box{fill:#fff;stroke:#dbe3ec;stroke-width:2;rx:16;filter:url(#shadow)}
+      .fixed{fill:#fff7ed;stroke:#fdba74;stroke-width:2;rx:16}
+      .renewed{fill:#eff6ff;stroke:#93c5fd;stroke-width:2;rx:16}
+      .end{fill:#f0fdf4;stroke:#86efac;stroke-width:2;rx:16}
+      .arrow{stroke:#64748b;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="900" height="720" fill="#f7f9fc" rx="24"/>
+  <text x="450" y="52" text-anchor="middle" class="heading">계약이 어떻게 갱신됐는지 먼저 확인하세요</text>
+  <text x="450" y="82" text-anchor="middle" class="sub">같은 중도 이사라도 계약 종료일과 보증금 반환 시점이 달라집니다</text>
+
+  <rect x="270" y="112" width="360" height="76" class="box"/>
+  <text x="450" y="143" text-anchor="middle" class="label">현재 계약 상태 확인</text>
+  <text x="450" y="169" text-anchor="middle" class="note">계약서 · 갱신 문자 · 만료일을 함께 봅니다</text>
+
+  <path d="M450 188V220H220V246" class="arrow"/>
+  <path d="M450 188V220H680V246" class="arrow"/>
+
+  <rect x="60" y="248" width="320" height="92" class="fixed"/>
+  <text x="220" y="282" text-anchor="middle" class="label">처음 맺은 고정기간 계약</text>
+  <text x="220" y="309" text-anchor="middle" class="body">계약기간이 아직 남아 있음</text>
+  <text x="220" y="330" text-anchor="middle" class="note">또는 합의 재계약 여부가 불분명함</text>
+
+  <rect x="520" y="248" width="320" height="92" class="renewed"/>
+  <text x="680" y="282" text-anchor="middle" class="label">묵시적 갱신 · 갱신요구권</text>
+  <text x="680" y="309" text-anchor="middle" class="body">세입자가 해지 통지 가능</text>
+  <text x="680" y="330" text-anchor="middle" class="note">종이를 다시 썼어도 갱신 경위 확인</text>
+
+  <path d="M220 340V384" class="arrow"/>
+  <path d="M680 340V384" class="arrow"/>
+
+  <rect x="60" y="386" width="320" height="112" class="box"/>
+  <text x="220" y="421" text-anchor="middle" class="label">특약 또는 집주인 동의 확인</text>
+  <text x="220" y="451" text-anchor="middle" class="body">종료일 · 보증금 · 월세</text>
+  <text x="220" y="477" text-anchor="middle" class="body">중개보수 정산을 서면 합의</text>
+
+  <rect x="520" y="386" width="320" height="112" class="box"/>
+  <text x="680" y="421" text-anchor="middle" class="label">해지 의사가 집주인에게 도달</text>
+  <text x="680" y="451" text-anchor="middle" class="body">받은 날짜를 증명할 자료 보관</text>
+  <text x="680" y="477" text-anchor="middle" class="note">문자 회신 · 배달증명 · 내용증명 등</text>
+
+  <path d="M220 498V542" class="arrow"/>
+  <path d="M680 498V542" class="arrow"/>
+
+  <rect x="60" y="544" width="320" height="92" class="end"/>
+  <text x="220" y="578" text-anchor="middle" class="label">합의한 날 계약 종료</text>
+  <text x="220" y="607" text-anchor="middle" class="body">집 인도와 보증금 반환 정산</text>
+
+  <rect x="520" y="544" width="320" height="92" class="end"/>
+  <text x="680" y="578" text-anchor="middle" class="label">도달일부터 3개월 후 종료</text>
+  <text x="680" y="607" text-anchor="middle" class="body">그때까지 월세 등 의무 유지</text>
+
+  <text x="450" y="679" text-anchor="middle" class="note">보증금 미반환 상태로 전출해야 한다면 계약 종료 후 임차권등기 완료를 먼저 확인합니다.</text>
+  <text x="450" y="704" text-anchor="middle" class="note">근거: 민법 제636조, 주택임대차보호법 제6조의2·제6조의3 · 기준일 2026-09-07</text>
+</svg>
