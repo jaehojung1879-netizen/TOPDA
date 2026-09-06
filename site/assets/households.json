@@ -225047,114 +225047,6 @@
       "hh_src": "title.hhldCnt",
       "built_year": 2026
     },
-    "서울 강서구|청솔숲속마을102동": {
-      "addr": "서울 강서구 내발산동 738",
-      "lat": 37.551938,
-      "lng": 126.839856,
-      "subway": {
-        "station": "우장산역 5호선",
-        "distance_m": 466
-      },
-      "elementary": {
-        "name": "서울내발산초등학교",
-        "distance_m": 176
-      },
-      "households": 77,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2007
-    },
-    "서울 강서구|청솔샤르망1001동": {
-      "addr": "서울 강서구 내발산동 676-23",
-      "lat": 37.552905,
-      "lng": 126.838734,
-      "subway": {
-        "station": "우장산역 5호선",
-        "distance_m": 501
-      },
-      "elementary": {
-        "name": "서울내발산초등학교",
-        "distance_m": 159
-      },
-      "households": 49,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
-    },
-    "서울 양천구|주함헤븐103동": {
-      "addr": "서울 양천구 신월동 203-14",
-      "lat": 37.530052,
-      "lng": 126.829623,
-      "elementary": {
-        "name": "서울신원초등학교",
-        "distance_m": 57
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
-    },
-    "서울 강동구|광남캐스빌105동": {
-      "addr": "서울 강동구 둔촌동 435-4",
-      "lat": 37.53339,
-      "lng": 127.139259,
-      "subway": {
-        "station": "길동역 5호선",
-        "distance_m": 496
-      },
-      "elementary": {
-        "name": "서울한산초등학교",
-        "distance_m": 579
-      },
-      "households": 28,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
-    },
-    "서울 관악구|에메랄드105동": {
-      "addr": "서울 관악구 봉천동 41-261",
-      "lat": 37.485747,
-      "lng": 126.952813,
-      "subway": {
-        "station": "서울대입구역 2호선",
-        "distance_m": 495
-      },
-      "elementary": {
-        "name": "서울신봉초등학교",
-        "distance_m": 324
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2012
-    },
-    "서울 강서구|우공팰리스101동": {
-      "addr": "서울 강서구 화곡동 1026-27",
-      "lat": 37.544482,
-      "lng": 126.838542,
-      "subway": {
-        "station": "화곡역 5호선",
-        "distance_m": 356
-      },
-      "elementary": {
-        "name": "서울신월초등학교",
-        "distance_m": 450
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2005
-    },
-    "부산 부산진구|범전시영1동": {
-      "addr": "부산 부산진구 범전동 43-4",
-      "lat": 35.166136,
-      "lng": 129.062044,
-      "subway": {
-        "station": "부전역 동해선",
-        "distance_m": 332
-      },
-      "elementary": {
-        "name": "성전초등학교",
-        "distance_m": 478
-      },
-      "households": 90,
-      "hh_src": "title.hhldCnt",
-      "built_year": 1986
-    },
     "경기 파주시|양우내안애1단지": {
       "addr": "경기 파주시 문산읍 선유리 1353",
       "lat": 37.860385,
@@ -225280,7 +225172,94 @@
       "households": 18,
       "hh_src": "title.hhldCnt",
       "built_year": 2004
+    },
+    "서울 강서구|청솔숲속마을102동": {
+      "addr": "서울 강서구 내발산동 738",
+      "lat": 37.551938,
+      "lng": 126.839856,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 466
+      },
+      "elementary": {
+        "name": "서울내발산초등학교",
+        "distance_m": 176
+      }
+    },
+    "서울 강서구|청솔샤르망1001동": {
+      "addr": "서울 강서구 내발산동 676-23",
+      "lat": 37.552905,
+      "lng": 126.838734,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 501
+      },
+      "elementary": {
+        "name": "서울내발산초등학교",
+        "distance_m": 159
+      }
+    },
+    "서울 양천구|주함헤븐103동": {
+      "addr": "서울 양천구 신월동 203-14",
+      "lat": 37.530052,
+      "lng": 126.829623,
+      "elementary": {
+        "name": "서울신원초등학교",
+        "distance_m": 57
+      }
+    },
+    "서울 강동구|광남캐스빌105동": {
+      "addr": "서울 강동구 둔촌동 435-4",
+      "lat": 37.53339,
+      "lng": 127.139259,
+      "subway": {
+        "station": "길동역 5호선",
+        "distance_m": 496
+      },
+      "elementary": {
+        "name": "서울한산초등학교",
+        "distance_m": 579
+      }
+    },
+    "서울 관악구|에메랄드105동": {
+      "addr": "서울 관악구 봉천동 41-261",
+      "lat": 37.485747,
+      "lng": 126.952813,
+      "subway": {
+        "station": "서울대입구역 2호선",
+        "distance_m": 495
+      },
+      "elementary": {
+        "name": "서울신봉초등학교",
+        "distance_m": 324
+      }
+    },
+    "서울 강서구|우공팰리스101동": {
+      "addr": "서울 강서구 화곡동 1026-27",
+      "lat": 37.544482,
+      "lng": 126.838542,
+      "subway": {
+        "station": "화곡역 5호선",
+        "distance_m": 356
+      },
+      "elementary": {
+        "name": "서울신월초등학교",
+        "distance_m": 450
+      }
+    },
+    "부산 부산진구|범전시영1동": {
+      "addr": "부산 부산진구 범전동 43-4",
+      "lat": 35.166136,
+      "lng": 129.062044,
+      "subway": {
+        "station": "부전역 동해선",
+        "distance_m": 332
+      },
+      "elementary": {
+        "name": "성전초등학교",
+        "distance_m": 478
+      }
     }
   },
-  "as_of": "2026-09-05"
+  "as_of": "2026-09-06"
 }
