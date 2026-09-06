@@ -14248,6 +14248,11 @@
           "recent_price": 900000
         },
         {
+          "label": "134㎡(41평)",
+          "area_m2": 134,
+          "recent_price": 900000
+        },
+        {
           "label": "169㎡(51평)",
           "area_m2": 169,
           "recent_price": 1220000
@@ -14256,7 +14261,7 @@
       "price_history": [
         854296,
         847122,
-        916719
+        851366
       ],
       "builder": "삼성물산",
       "lat": 37.507061,
@@ -18627,7 +18632,7 @@
         {
           "label": "85㎡(26평)",
           "area_m2": 85,
-          "recent_price": 63500
+          "recent_price": 64100
         },
         {
           "label": "98㎡(30평)",
@@ -18638,7 +18643,8 @@
       "price_history": [
         65687,
         70321,
-        68382
+        68382,
+        64108
       ],
       "builder": "HDC현대산업",
       "lat": 37.67889,
@@ -18767,7 +18773,7 @@
         50798,
         46973,
         49464,
-        45300
+        46000
       ],
       "builder": "기타",
       "lat": 37.677049,
@@ -31171,7 +31177,7 @@
         {
           "label": "50㎡(15평)",
           "area_m2": 50,
-          "recent_price": 60000
+          "recent_price": 42700
         },
         {
           "label": "91㎡(28평)",
@@ -31182,7 +31188,7 @@
       "price_history": [
         49748,
         50183,
-        49242
+        47576
       ],
       "builder": "기타",
       "lat": 37.669134,
@@ -33495,13 +33501,14 @@
         {
           "label": "48㎡(15평)",
           "area_m2": 48,
-          "recent_price": 64200
+          "recent_price": 59900
         }
       ],
       "price_history": [
         64009,
         62657,
-        62685
+        62685,
+        59900
       ],
       "builder": "일성건설",
       "lat": 37.561394,
@@ -42427,7 +42434,7 @@
       ],
       "price_history": [
         113809,
-        118462,
+        121466,
         127506
       ],
       "builder": "기타",
@@ -47477,9 +47484,9 @@
       "built_year": 2003,
       "units": [
         {
-          "label": "34㎡(10평)",
-          "area_m2": 34,
-          "recent_price": 34500
+          "label": "42㎡(13평)",
+          "area_m2": 42,
+          "recent_price": 50000
         },
         {
           "label": "45㎡(14평)",
@@ -47490,17 +47497,11 @@
           "label": "50㎡(15평)",
           "area_m2": 50,
           "recent_price": 72000
-        },
-        {
-          "label": "66㎡(20평)",
-          "area_m2": 66,
-          "recent_price": 82000
         }
       ],
       "price_history": [
-        51904,
         51000,
-        58751
+        57126
       ],
       "builder": "삼성물산",
       "households": 440,
@@ -59397,9 +59398,14 @@
       "built_year": 2006,
       "units": [
         {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 38300
+        },
+        {
           "label": "75㎡(23평)",
           "area_m2": 75,
-          "recent_price": 53800
+          "recent_price": 50300
         },
         {
           "label": "85㎡(26평)",
@@ -59430,7 +59436,7 @@
       "price_history": [
         53685,
         53110,
-        58400
+        57510
       ],
       "builder": "롯데건설",
       "households": 4256,
@@ -63815,7 +63821,7 @@
       ],
       "price_history": [
         845447,
-        875148
+        862623
       ],
       "builder": "기타",
       "households": 765,
@@ -68030,7 +68036,7 @@
         {
           "label": "44㎡(13평)",
           "area_m2": 44,
-          "recent_price": 25000
+          "recent_price": 25700
         },
         {
           "label": "60㎡(18평)",
@@ -68051,7 +68057,8 @@
       "price_history": [
         44838,
         45137,
-        47212
+        47212,
+        48805
       ],
       "builder": "DL이앤씨",
       "lat": 37.156344,
@@ -68365,7 +68372,7 @@
         {
           "label": "85㎡(26평)",
           "area_m2": 85,
-          "recent_price": 49400
+          "recent_price": 48500
         },
         {
           "label": "121㎡(37평)",
@@ -68376,7 +68383,8 @@
       "price_history": [
         47831,
         49034,
-        50029
+        50029,
+        48626
       ],
       "builder": "두산건설",
       "lat": 37.239636,
@@ -68641,7 +68649,7 @@
         {
           "label": "75㎡(23평)",
           "area_m2": 75,
-          "recent_price": 50500
+          "recent_price": 51500
         },
         {
           "label": "85㎡(26평)",
@@ -68652,7 +68660,8 @@
       "price_history": [
         43929,
         44290,
-        43713
+        43713,
+        43742
       ],
       "builder": "기타",
       "lat": 37.248942,
@@ -69117,7 +69126,7 @@
       ],
       "price_history": [
         36784,
-        36667,
+        35945,
         32000
       ],
       "builder": "기타",
@@ -80583,7 +80592,7 @@
         75998,
         75405,
         77370,
-        74252
+        74003
       ],
       "builder": "대우건설",
       "households": 2003,
@@ -100165,7 +100174,7 @@
         {
           "label": "60㎡(18평)",
           "area_m2": 60,
-          "recent_price": 27500
+          "recent_price": 29500
         },
         {
           "label": "85㎡(26평)",
@@ -100176,7 +100185,8 @@
       "price_history": [
         36629,
         32816,
-        38911
+        38911,
+        41741
       ],
       "builder": "기타",
       "lat": 37.23906,
@@ -109157,7 +109167,7 @@
         {
           "label": "85㎡(26평)",
           "area_m2": 85,
-          "recent_price": 46500
+          "recent_price": 45000
         },
         {
           "label": "125㎡(38평)",
@@ -109168,7 +109178,8 @@
       "price_history": [
         39918,
         43600,
-        41054
+        41054,
+        45000
       ],
       "builder": "기타",
       "display_name": "용인삼환나우빌아파트",
@@ -115520,6 +115531,73 @@
       "hh_evidence": [],
       "name_checked_at": "2026-09-05",
       "name_evidence": "http://place.map.kakao.com/11372048"
+    },
+    {
+      "name": "시흥(817-29)",
+      "region": "서울 금천구 시흥동",
+      "region_key": "서울 금천구",
+      "sido": "서울",
+      "sigungu": "금천구",
+      "built_year": 1975,
+      "units": [
+        {
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 24300
+        },
+        {
+          "label": "44㎡(13평)",
+          "area_m2": 44,
+          "recent_price": 26500
+        },
+        {
+          "label": "49㎡(15평)",
+          "area_m2": 49,
+          "recent_price": 28000
+        }
+      ],
+      "price_history": [
+        25835,
+        28807,
+        26923
+      ],
+      "builder": "기타",
+      "households": null
+    },
+    {
+      "name": "반달마을(건영)",
+      "region": "경기 부천시 원미구 상동",
+      "region_key": "경기 부천시 원미구",
+      "sido": "경기",
+      "sigungu": "부천시 원미구",
+      "built_year": 1993,
+      "units": [
+        {
+          "label": "40㎡(12평)",
+          "area_m2": 40,
+          "recent_price": 26500
+        },
+        {
+          "label": "56㎡(17평)",
+          "area_m2": 56,
+          "recent_price": 35000
+        },
+        {
+          "label": "60㎡(18평)",
+          "area_m2": 60,
+          "recent_price": 44800
+        }
+      ],
+      "price_history": [
+        40559,
+        41223,
+        39623,
+        44740
+      ],
+      "builder": "기타",
+      "display_name": "상동반달마을건영",
+      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "households": null
     }
   ]
 }
