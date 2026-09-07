@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1040" viewBox="0 0 900 1040" role="img" aria-labelledby="title desc">
+  <title id="title">집주인이 바뀌었을 때 확인하는 순서</title>
+  <desc id="desc">소유권 변경 연락을 받은 뒤 등기사항증명서, 대항력, 기존 계약서, 임대료 계좌와 보증기관을 확인하고 만기에 새 소유자에게 보증금을 청구하는 절차를 보여준다.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2f8f7"/><stop offset="1" stop-color="#f8f5ed"/></linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#163a3a" flood-opacity=".11"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#2e716d"/></marker>
+  </defs>
+  <rect width="900" height="1040" rx="34" fill="url(#bg)"/>
+  <text x="450" y="70" text-anchor="middle" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="32" font-weight="800" fill="#173b3a">집주인이 바뀌었다는 연락을 받았다면</text>
+  <text x="450" y="108" text-anchor="middle" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="19" fill="#496766">새 계약서에 서명하기 전에 아래 순서로 확인하세요</text>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="150" width="680" height="118" rx="22" fill="#fff" stroke="#78aaa6" stroke-width="2"/>
+    <circle cx="168" cy="209" r="32" fill="#1e625e"/>
+    <text x="168" y="219" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#fff">1</text>
+    <text x="222" y="194" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="25" font-weight="800" fill="#173b3a">최신 등기부부터 발급</text>
+    <text x="222" y="230" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="18" fill="#496766">현재 소유자 · 이전 접수일 · 지분 · 새 근저당 확인</text>
+  </g>
+  <path d="M450 268V310" stroke="#2e716d" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="320" width="680" height="130" rx="22" fill="#fff" stroke="#78aaa6" stroke-width="2"/>
+    <circle cx="168" cy="385" r="32" fill="#1e625e"/>
+    <text x="168" y="395" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#fff">2</text>
+    <text x="222" y="369" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="25" font-weight="800" fill="#173b3a">입주와 전입신고 시점 확인</text>
+    <text x="222" y="404" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="18" fill="#496766">소유권 이전 전에 대항력을 갖추고 유지했는지 점검</text>
+  </g>
+  <path d="M450 450V492" stroke="#2e716d" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="502" width="680" height="130" rx="22" fill="#fff" stroke="#78aaa6" stroke-width="2"/>
+    <circle cx="168" cy="567" r="32" fill="#1e625e"/>
+    <text x="168" y="577" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#fff">3</text>
+    <text x="222" y="551" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="25" font-weight="800" fill="#173b3a">기존 계약서와 확정일자 보관</text>
+    <text x="222" y="586" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="18" fill="#496766">조건이 그대로라면 원본을 대체하는 새 계약서는 불필요</text>
+  </g>
+  <path d="M450 632V674" stroke="#2e716d" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="684" width="680" height="130" rx="22" fill="#fff" stroke="#78aaa6" stroke-width="2"/>
+    <circle cx="168" cy="749" r="32" fill="#1e625e"/>
+    <text x="168" y="759" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#fff">4</text>
+    <text x="222" y="733" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="25" font-weight="800" fill="#173b3a">계좌 · 보증 · 대출 정보 변경</text>
+    <text x="222" y="768" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="18" fill="#496766">새 소유자 확인 후 HUG·HF·은행에 직접 문의</text>
+  </g>
+  <path d="M450 814V856" stroke="#2e716d" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="866" width="680" height="112" rx="22" fill="#174c49"/>
+    <circle cx="168" cy="922" r="32" fill="#e7bb58"/>
+    <text x="168" y="932" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#173b3a">5</text>
+    <text x="222" y="910" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="25" font-weight="800" fill="#fff">만기에는 현재 소유자에게 반환 청구</text>
+    <text x="222" y="946" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="18" fill="#d9ecea">보증금을 받기 전 전출·열쇠 인도를 먼저 하지 않기</text>
+  </g>
+  <text x="450" y="1012" text-anchor="middle" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="15" fill="#5c7472">기준일 2026-09-08 · 주택임대차보호법 제3조 및 관련 판례 기준</text>
+</svg>
