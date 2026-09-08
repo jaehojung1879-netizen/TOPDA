@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1080" viewBox="0 0 900 1080" role="img" aria-labelledby="title desc">
+  <title id="title">아파트 관리비가 갑자기 올랐을 때 확인하는 순서</title>
+  <desc id="desc">고지서 총액을 항목별로 나눈 뒤 전년 같은 달의 사용량과 비교하고, K-apt에서 유사 단지 공용관리비를 확인한 다음 관리사무소에 산출근거를 요청하여 정정 또는 분쟁조정으로 이어지는 절차다.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1f8f7"/><stop offset="1" stop-color="#faf6ec"/></linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#173b3a" flood-opacity=".11"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#2e716d"/></marker>
+  </defs>
+  <rect width="900" height="1080" rx="34" fill="url(#bg)"/>
+  <text x="450" y="67" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="31" font-weight="800" fill="#173b3a">관리비가 많이 나왔다면</text>
+  <text x="450" y="105" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="19" fill="#526b69">총액이 아니라 증가한 항목부터 원인을 좁혀 보세요</text>
+
+  <g filter="url(#shadow)">
+    <rect x="95" y="145" width="710" height="120" rx="22" fill="#fff" stroke="#78aaa6" stroke-width="2"/>
+    <circle cx="155" cy="205" r="32" fill="#1e625e"/><text x="155" y="215" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#fff">1</text>
+    <text x="210" y="190" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="25" font-weight="800" fill="#173b3a">고지서를 항목별로 나누기</text>
+    <text x="210" y="226" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="18" fill="#526b69">공용관리비 · 개별사용료 · 장기수선충당금 · 이용료</text>
+  </g>
+  <path d="M450 265V306" stroke="#2e716d" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="95" y="316" width="710" height="120" rx="22" fill="#fff" stroke="#78aaa6" stroke-width="2"/>
+    <circle cx="155" cy="376" r="32" fill="#1e625e"/><text x="155" y="386" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#fff">2</text>
+    <text x="210" y="361" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="25" font-weight="800" fill="#173b3a">작년 같은 달과 사용량 비교</text>
+    <text x="210" y="397" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="18" fill="#526b69">검침값 · 사용기간 · 단가 · 할인 종료를 함께 확인</text>
+  </g>
+  <path d="M450 436V477" stroke="#2e716d" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="95" y="487" width="710" height="120" rx="22" fill="#fff" stroke="#78aaa6" stroke-width="2"/>
+    <circle cx="155" cy="547" r="32" fill="#1e625e"/><text x="155" y="557" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#fff">3</text>
+    <text x="210" y="532" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="25" font-weight="800" fill="#173b3a">K-apt에서 유사 단지 확인</text>
+    <text x="210" y="568" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="18" fill="#526b69">세대수 · 연식 · 난방방식이 비슷한 단지의 ㎡당 공용비</text>
+  </g>
+  <path d="M450 607V648" stroke="#2e716d" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="95" y="658" width="710" height="120" rx="22" fill="#fff" stroke="#78aaa6" stroke-width="2"/>
+    <circle cx="155" cy="718" r="32" fill="#1e625e"/><text x="155" y="728" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#fff">4</text>
+    <text x="210" y="703" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="25" font-weight="800" fill="#173b3a">관리사무소에 근거 요청</text>
+    <text x="210" y="739" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="18" fill="#526b69">고지월 · 항목 · 산식 · 검침자료를 구체적으로 적기</text>
+  </g>
+  <path d="M450 778V819" stroke="#2e716d" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="95" y="829" width="340" height="135" rx="22" fill="#174c49"/>
+    <text x="265" y="876" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="24" font-weight="800" fill="#fff">오류가 확인됐다면</text>
+    <text x="265" y="914" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="18" fill="#d9ecea">정정 고지서와 수정 사유 보관</text>
+    <text x="265" y="943" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="16" fill="#d9ecea">자동이체·납부기한도 함께 확인</text>
+
+    <rect x="465" y="829" width="340" height="135" rx="22" fill="#fff" stroke="#d6a83e" stroke-width="3"/>
+    <text x="635" y="876" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="24" font-weight="800" fill="#4a3a18">설명이 부족하다면</text>
+    <text x="635" y="914" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="18" fill="#635631">입주자대표회의 · 지자체 문의</text>
+    <text x="635" y="943" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="16" fill="#635631">분쟁조정 신청 가능 여부 확인</text>
+  </g>
+  <path d="M450 819H265V829M450 819H635V829" stroke="#2e716d" stroke-width="4" fill="none"/>
+
+  <rect x="95" y="995" width="710" height="48" rx="14" fill="#e7f0ef"/>
+  <text x="450" y="1025" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="16" fill="#496766">기준일 2026-09-09 · 공동주택관리법과 K-apt 공개 기준</text>
+</svg>
