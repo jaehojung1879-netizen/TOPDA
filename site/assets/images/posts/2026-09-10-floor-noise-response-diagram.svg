@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1120" viewBox="0 0 900 1120" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1060" viewBox="0 0 900 1060" role="img" aria-labelledby="title desc">
   <title id="title">층간소음이 계속될 때 대응 순서</title>
-  <desc id="desc">소음 발생 기록, 관리사무소 중재, 단지 층간소음관리위원회, 층간소음 이웃사이센터 상담과 측정, 분쟁조정 순서와 위협이나 폭력이 있을 때 112에 신고하는 예외를 보여 주는 흐름도</desc>
+  <desc id="desc">소음 발생 기록, 관리사무소 중재, 단지 층간소음관리위원회, 층간소음 이웃사이센터 상담과 측정, 분쟁조정 순서를 보여 주는 흐름도</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#eff6ff"/>
@@ -17,7 +17,7 @@
       .arrow{stroke:#64748b;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
     </style>
   </defs>
-  <rect width="900" height="1120" rx="28" fill="url(#bg)"/>
+  <rect width="900" height="1060" rx="28" fill="url(#bg)"/>
   <text x="450" y="65" text-anchor="middle" font-size="34" font-weight="850">층간소음이 계속될 때 이렇게 대응하세요</text>
   <text x="450" y="101" text-anchor="middle" font-size="18" fill="#64748b">윗집으로 단정하거나 바로 찾아가기보다 기록과 중재부터 시작합니다</text>
 
@@ -65,6 +65,4 @@
     <text class="body" x="105" y="82">공동주택관리 또는 환경분쟁 조정기관의 관할·요건 확인</text>
   </g>
 
-  <rect x="105" y="1055" width="690" height="42" rx="12" fill="#fff1f2" stroke="#fecdd3"/>
-  <text x="450" y="1082" text-anchor="middle" font-size="17" font-weight="700" fill="#9f1239">위협·폭력·주거침입처럼 즉시 위험한 상황은 중재 순서와 별개로 112 신고</text>
 </svg>
