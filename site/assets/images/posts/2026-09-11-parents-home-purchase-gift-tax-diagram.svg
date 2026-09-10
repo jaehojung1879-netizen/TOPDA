@@ -1,66 +1,46 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="1080" viewBox="0 0 900 1080" role="img" aria-labelledby="title desc">
-  <title id="title">부모님 돈으로 집을 살 때 증여와 대여를 구분하는 순서</title>
-  <desc id="desc">부모님 돈을 갚지 않아도 되면 증여로 보고 최근 10년 증여와 공제를 확인한 뒤 신고한다. 갚아야 한다면 송금 전 차용 조건을 정하고 이자와 원금을 실제로 상환한다.</desc>
+  <title id="title">부모님에게 집 살 돈을 빌릴 때 남겨야 할 자료</title>
+  <desc id="desc">송금 전에 차용 조건을 정하고, 계좌로 자금을 보내고, 약정에 따라 이자와 원금을 갚으며, 변경사항과 잔액을 계속 기록하는 순서를 설명한다. 세법상 적정이자율 4.6%와 연간 이익 1천만원 기준은 원금의 대여 인정 기준이 아니라는 주의사항을 포함한다.</desc>
   <defs>
-    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#18324a" flood-opacity=".12"/></filter>
-    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0L12 6L0 12Z" fill="#6b7f91"/></marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#17384d" flood-opacity=".12"/></filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0L12 6L0 12Z" fill="#678092"/></marker>
     <style>
-      .bg{fill:#f5f8f6}.card{fill:#fff;stroke:#d9e2df;stroke-width:2;filter:url(#shadow)}.start{fill:#123d57}.gift{fill:#eaf6ef;stroke:#80b59a}.loan{fill:#edf3fa;stroke:#8daac2}.warn{fill:#fff4df;stroke:#e4b35d}.h{font:700 32px Pretendard,Arial,sans-serif;fill:#173042}.t{font:600 24px Pretendard,Arial,sans-serif;fill:#173042}.s{font:400 20px Pretendard,Arial,sans-serif;fill:#4b6170}.w{fill:#fff}.line{stroke:#6b7f91;stroke-width:4;fill:none;marker-end:url(#arrow)}.pill{font:700 18px Pretendard,Arial,sans-serif;fill:#fff}.foot{font:400 17px Pretendard,Arial,sans-serif;fill:#607482}
+      .bg{fill:#f4f8f6}.card{fill:#fff;stroke:#d7e1de;stroke-width:2;filter:url(#shadow)}.num{fill:#175a46}.numtxt{font:700 24px Pretendard,Arial,sans-serif;fill:#fff}.h{font:700 32px Pretendard,Arial,sans-serif;fill:#173042}.t{font:700 25px Pretendard,Arial,sans-serif;fill:#173042}.s{font:400 20px Pretendard,Arial,sans-serif;fill:#4b6170}.line{stroke:#678092;stroke-width:4;fill:none;marker-end:url(#arrow)}.note{fill:#fff3da;stroke:#e3b35e;stroke-width:2}.noteh{font:700 23px Pretendard,Arial,sans-serif;fill:#653f00}.notes{font:500 19px Pretendard,Arial,sans-serif;fill:#6b5122}.foot{font:400 17px Pretendard,Arial,sans-serif;fill:#607482}
     </style>
   </defs>
   <rect class="bg" width="900" height="1080" rx="32"/>
-  <text class="h" x="450" y="64" text-anchor="middle">부모님 돈이 집값에 들어갈 때</text>
-  <text class="s" x="450" y="98" text-anchor="middle">돈을 보내기 전에 ‘갚을 돈인지’부터 정하세요</text>
+  <text class="h" x="450" y="61" text-anchor="middle">차용증만 쓰고 끝내면 부족합니다</text>
+  <text class="s" x="450" y="96" text-anchor="middle">처음 약속과 실제 상환이 같은 흐름으로 이어져야 합니다</text>
 
-  <rect class="start" x="205" y="138" width="490" height="100" rx="24" filter="url(#shadow)"/>
-  <text class="t w" x="450" y="181" text-anchor="middle">부모님이 집 살 돈을 보내기로 함</text>
-  <text class="s w" x="450" y="213" text-anchor="middle">예: 계약금·잔금 1억원</text>
-  <path class="line" d="M450 238V288"/>
+  <rect class="card" x="110" y="134" width="680" height="154" rx="24"/>
+  <circle class="num" cx="162" cy="184" r="31"/><text class="numtxt" x="162" y="193" text-anchor="middle">1</text>
+  <text class="t" x="216" y="180">송금 전에 조건을 적습니다</text>
+  <text class="s" x="216" y="219">원금 · 이율 · 이자 지급일 · 만기 · 원금 상환방법</text>
+  <text class="s" x="216" y="253">자녀 소득으로 지킬 수 있는 일정인지 함께 계산</text>
+  <path class="line" d="M450 288V335"/>
 
-  <rect class="card" x="170" y="292" width="560" height="112" rx="24"/>
-  <text class="t" x="450" y="338" text-anchor="middle">자녀가 이 돈을 실제로 갚아야 하나요?</text>
-  <text class="s" x="450" y="373" text-anchor="middle">서류 이름이 아니라 가족의 약속과 실제 행동으로 판단</text>
+  <rect class="card" x="110" y="340" width="680" height="154" rx="24"/>
+  <circle class="num" cx="162" cy="390" r="31"/><text class="numtxt" x="162" y="399" text-anchor="middle">2</text>
+  <text class="t" x="216" y="386">돈의 흐름을 계좌에 남깁니다</text>
+  <text class="s" x="216" y="425">부모님 계좌에서 계약금·잔금으로 이어진 이체내역</text>
+  <text class="s" x="216" y="459">현금이나 불필요하게 여러 계좌를 거치는 방식은 피하기</text>
+  <path class="line" d="M450 494V541"/>
 
-  <path class="line" d="M300 404V470"/>
-  <path class="line" d="M600 404V470"/>
-  <rect x="242" y="426" width="116" height="38" rx="19" fill="#438761"/><text class="pill" x="300" y="452" text-anchor="middle">아니요</text>
-  <rect x="542" y="426" width="116" height="38" rx="19" fill="#557f9e"/><text class="pill" x="600" y="452" text-anchor="middle">예</text>
+  <rect class="card" x="110" y="546" width="680" height="154" rx="24"/>
+  <circle class="num" cx="162" cy="596" r="31"/><text class="numtxt" x="162" y="605" text-anchor="middle">3</text>
+  <text class="t" x="216" y="592">약정일에 실제로 갚습니다</text>
+  <text class="s" x="216" y="631">이자와 원금을 구분해 자녀 계좌에서 부모 계좌로 이체</text>
+  <text class="s" x="216" y="665">차용증의 금액·날짜와 실제 거래가 맞는지 확인</text>
+  <path class="line" d="M450 700V747"/>
 
-  <rect class="card gift" x="60" y="478" width="390" height="178" rx="24"/>
-  <text class="t" x="255" y="523" text-anchor="middle">돌려주지 않는 돈 → 증여</text>
-  <text class="s" x="92" y="565">• 최근 10년 부모·조부모 증여 확인</text>
-  <text class="s" x="92" y="603">• 성년 자녀 일반 공제 5천만원</text>
-  <text class="s" x="92" y="641">• 혼인·출산 추가 공제 해당 여부</text>
+  <rect class="card" x="110" y="752" width="680" height="154" rx="24"/>
+  <circle class="num" cx="162" cy="802" r="31"/><text class="numtxt" x="162" y="811" text-anchor="middle">4</text>
+  <text class="t" x="216" y="798">바뀐 조건과 남은 원금을 관리합니다</text>
+  <text class="s" x="216" y="837">연장·유예가 필요하면 변경 시점에 합의서를 작성</text>
+  <text class="s" x="216" y="871">차용증 · 이체내역 · 소득자료 · 잔액표를 함께 보관</text>
 
-  <rect class="card loan" x="470" y="478" width="370" height="178" rx="24"/>
-  <text class="t" x="655" y="523" text-anchor="middle">실제로 갚는 돈 → 대여</text>
-  <text class="s" x="502" y="565">• 송금 전 금액·이자·만기 약정</text>
-  <text class="s" x="502" y="603">• 소득으로 지킬 수 있는 상환계획</text>
-  <text class="s" x="502" y="641">• 계좌로 이자·원금 실제 지급</text>
-
-  <path class="line" d="M255 656V718"/>
-  <path class="line" d="M655 656V718"/>
-
-  <rect class="card gift" x="60" y="726" width="390" height="174" rx="24"/>
-  <text class="t" x="255" y="772" text-anchor="middle">공제 후 세액 계산</text>
-  <text class="s" x="92" y="814">1억원 첫 증여 단순 예시</text>
-  <text class="t" x="92" y="854">산출세액 500만원</text>
-  <text class="s" x="92" y="883">기한 내 신고 예시 약 485만원</text>
-
-  <rect class="card loan" x="470" y="726" width="370" height="174" rx="24"/>
-  <text class="t" x="655" y="772" text-anchor="middle">상환을 계속 기록</text>
-  <text class="s" x="502" y="814">차용증을 보관하는 데서 끝내지 않고</text>
-  <text class="s" x="502" y="850">약정대로 갚은 이체내역을 남김</text>
-  <text class="s" x="502" y="883">조건 변경도 그 시점에 문서화</text>
-
-  <path class="line" d="M255 900V946"/>
-  <rect class="warn" x="60" y="954" width="390" height="76" rx="20"/>
-  <text class="t" x="255" y="987" text-anchor="middle">받은 달 말일부터 3개월 내 신고</text>
-  <text class="foot" x="255" y="1017" text-anchor="middle">증여받은 자녀가 홈택스 또는 관할 세무서에 신고</text>
-
-  <rect class="warn" x="470" y="954" width="370" height="76" rx="20"/>
-  <text class="t" x="655" y="987" text-anchor="middle">차용증만 있고 상환이 없으면 위험</text>
-  <text class="foot" x="655" y="1017" text-anchor="middle">저리 이익 과세와 원금의 대여 인정은 별개</text>
-
-  <text class="foot" x="450" y="1060" text-anchor="middle">근거: 국세청 증여세 안내, 상속세 및 증여세법 · 정보 기준일 2026-09-11</text>
+  <rect class="note" x="72" y="944" width="756" height="94" rx="22"/>
+  <text class="noteh" x="450" y="979" text-anchor="middle">4.6%와 연 1천만원 기준은 ‘이자 이익’을 계산하는 세법 기준</text>
+  <text class="notes" x="450" y="1013" text-anchor="middle">그 기준 아래여도 원금이 진짜 대여인지 여부는 상환 약정과 실제 이행으로 따로 판단합니다</text>
+  <text class="foot" x="450" y="1062" text-anchor="middle">근거: 상속세 및 증여세법 제41조의4 · 시행령 제31조의4 · 기준일 2026-09-11</text>
 </svg>
