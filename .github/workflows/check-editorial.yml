@@ -1,0 +1,51 @@
+name: Check reading hub
+on:
+  pull_request:
+    paths:
+      - 'site/index.html'
+      - 'site/posts/**'
+      - 'site/assets/editorial.*'
+      - 'site/assets/styles.css'
+      - 'site/assets/app.js'
+      - 'scripts/check_editorial_browser.mjs'
+      - '_meta/*editorial*'
+      - '.github/workflows/check-editorial.yml'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate editorial renderer
+        run: python -m unittest discover -s _meta -p 'test_build_editorial.py' -v
+      # Existing daily content PRs need not edit generated homepage cards manually.
+      - name: Rebuild and verify idempotence
+        run: |
+          python _meta/build_editorial.py
+          python _meta/build_editorial.py --check
+      - name: Check browser script syntax
+        run: node --check site/assets/editorial.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test dependency
+        run: |
+          npm install --prefix "$RUNNER_TEMP/topda-browser" playwright@1.51.1
+          node "$RUNNER_TEMP/topda-browser/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Check desktop and mobile reading surfaces
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/topda-browser/node_modules/playwright/index.mjs
+        run: node scripts/check_editorial_browser.mjs
+      - name: Upload layout screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: editorial-layout-screenshots
+          path: artifacts/editorial

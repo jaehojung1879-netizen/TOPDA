@@ -1,0 +1,54 @@
+/* Reading surfaces only: calculators and article layouts remain unchanged. */
+.editorial-home .home-intro { padding-top: 36px; padding-bottom: 26px; }
+.editorial-home .home-tagline { font-size: clamp(2rem, 4vw, 2.8rem); }
+.editorial-home .cat-tile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cat-tile-editorial { background: #eff6ff; border-color: #bfd3f7; }
+.cat-tile-editorial h3 { color: #1e40af; }
+.editorial-home .cat-tile:last-child { grid-column: 1 / -1; }
+.editorial-section { padding: 24px 0 32px; }
+.editorial-eyebrow { color: #1e40af; font-size: .72rem; font-weight: 800; letter-spacing: .14em; margin: 0 0 10px; }
+.editorial-lead { color: var(--text-muted); font-size: 1rem; line-height: 1.8; margin: 12px 0 0; }
+.editorial-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+.editorial-stories { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.editorial-story { display: flex; flex-direction: column; min-width: 0; padding: 22px; border: 1px solid var(--border); border-radius: 16px; background: #fff; color: var(--text); }
+.editorial-story:hover { border-color: #93b4ed; }
+.editorial-story h3 { font-size: 1.08rem; line-height: 1.5; letter-spacing: -.025em; margin: 9px 0; word-break: keep-all; overflow-wrap: anywhere; }
+.editorial-story p { font-size: .88rem; line-height: 1.7; color: var(--text-muted); margin: 0 0 18px; }
+.editorial-story .editorial-date { margin-top: auto; }
+.editorial-story-featured { background: #f3f7ff; border-color: #cddcf5; }
+.editorial-story-featured h3 { font-size: clamp(1.25rem, 2.4vw, 1.65rem); }
+.editorial-label { color: #1e40af; font-size: .75rem; font-weight: 700; }
+.editorial-date { color: var(--text-muted); font-size: .76rem; }
+.editorial-market { min-width: 0; background: #172f50; border-radius: 16px; padding: 26px; color: #fff; }
+.editorial-market .editorial-eyebrow { color: #a9c9ff; }
+.editorial-market h2 { color: #fff; font-size: 1.35rem; margin: 10px 0 14px; }
+.editorial-market p { color: #d2deee; font-size: .9rem; line-height: 1.8; }
+.editorial-market a { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+.editorial-market ul { padding-left: 20px; margin: 20px 0; }
+.editorial-market li { margin: 12px 0; font-size: .9rem; }
+.editorial-market .editorial-date { color: #d2deee; }
+.editorial-market .editorial-status { font-size: .8rem; border-top: 1px solid #46607e; padding-top: 18px; margin-top: 22px; }
+.editorial-hub .article-header { padding-bottom: 28px; }
+.editorial-hub .article-header h1 { margin-top: 0; }
+.editorial-archive { margin: 44px 0 60px; }
+.editorial-series { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; }
+.editorial-series button { font: inherit; font-size: .9rem; font-weight: 700; padding: 11px 17px; border: 1px solid var(--border); background: #fff; color: var(--text-muted); border-radius: 10px; cursor: pointer; }
+.editorial-series button[aria-pressed="true"] { color: #fff; background: #1e3a8a; border-color: #1e3a8a; }
+.editorial-hub .post-search { min-width: 0; flex-basis: 100%; }
+.editorial-hub .card time { display: block; margin-top: 16px; color: var(--text-muted); font-size: .76rem; }
+.editorial-hub .card { min-width: 0; }
+.editorial-hub [hidden] { display: none !important; }
+.editorial-home a:focus-visible, .editorial-hub a:focus-visible, .editorial-hub button:focus-visible, .editorial-hub input:focus-visible { outline: 3px solid #2563eb; outline-offset: 4px; }
+@media (min-width: 600px) {
+  .editorial-home .cat-tile-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .editorial-home .cat-tile:last-child { grid-column: auto; }
+  .editorial-stories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .editorial-story-featured { grid-column: 1 / -1; }
+}
+@media (min-width: 1000px) {
+  .editorial-home .cat-tile-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .editorial-layout { grid-template-columns: minmax(0, 1.8fr) minmax(270px, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .editorial-home .cat-tile { transition: none; }
+}

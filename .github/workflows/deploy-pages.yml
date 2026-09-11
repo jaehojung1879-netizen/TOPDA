@@ -127,6 +127,9 @@ jobs:
         working-directory: _meta
         run: python build_feed.py
 
+      - name: Rebuild reading hub and latest posts
+        run: python _meta/build_editorial.py
+
       # 실거래 시·도 조각 + 데이터 상태 요약본. 단지 페이지와 같이 커밋하지 않고 여기서 만든다.
       #
       # ■ 왜 (2026-08-08 감사)
