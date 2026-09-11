@@ -3,31 +3,31 @@
     "source": "Google News RSS (한국어) — 섹터별 부동산 검색 집계",
     "note": "여러 보도를 자동 집계한 목록이며 투자 권유가 아닙니다."
   },
-  "generated_at": "2026-09-11 03:19 KST",
+  "generated_at": "2026-09-12 03:23 KST",
   "weekly": {
     "as_of": "2026년 9월 2주",
-    "updated": "2026-09-11",
+    "updated": "2026-09-12",
     "headlines": [
       {
         "badge": "주택 매매·집값",
-        "title": "서울 아파트 거래 ‘이중 절벽’…집값보다 무서운 거래량 붕괴",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE80dDY0cEN1VzAtZjZjRE9HUWRSa0lxUjdsTW0yS1NPSmJVNnRpY1hLZjJ0eUp4Z2c5RFM2M1lhWnFIZ0FOajlEak0xNjBNbFlIdS1ibWY0eFQ2eG5rQ2JvTEJXWGV4bXBYWUt2Xy12cVI?oc=5",
-        "source": "thedailyeconomy.kr",
-        "date": "2026-09-07"
+        "title": "집 살 사람은 다 샀다? 뜨겁던 서울 부동산에 '찬바람' - 머니투데이",
+        "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9XWS1zblhScHFLcHN6dEdDemhLajBQaVlYMTZTd0lYTzNjYVdVNlowMVIxUUduYXFuNDQ2bFpQOGJrNDRxV1BfUVNzOTAtVmdGQWk5Nk1VOG5CRzZONkJ4TERJSWVvYW04U3fSAW9BVV95cUxOVGhsSmdKSkEyMzN0VTgzMDRnNTVwaW90Yml4UHQwQTh0dFVaRUw3YWxpRDcxWUx6Y1BNTWVvdkh1MjJIY2ZEYkpRRjdxekVNTDY3RkhSaEhLTnhGeS00SUNXaVZROFN5ODhDSjV2Wk0?oc=5",
+        "source": "머니투데이",
+        "date": "2026-09-10"
       },
       {
         "badge": "전세·월세",
         "title": "월세 부담 낮추고 임대 수익은 보장…'전월세 안심신탁' 출시 - 키워드 뉴스 | 뉴스",
         "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQTnlvOVV6azZfbC1vb092aVlXd0ttY1RDTzdUVExVM3RxZTctRGVrODJTYS1SMXJzRmpqRGNRZml5eGNmVld4RFVVOXBFUWg2ODB1LUVuOXJuNzdlSk9hTUVYaVhUZl8tN0dCRktWQTFXRk5BYTdEUm4yR2ZjczB6OW1mV0FhZ0t1VTd3NW5RUQ?oc=5",
-        "source": "대한민국 정책브리핑",
+        "source": "korea.kr",
         "date": "2026-09-06"
       },
       {
         "badge": "청약·분양",
-        "title": "“비싸도 살 사람은 어차피 산다”…고분양가 참패 공식 깨졌다는데",
-        "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5vbGJ6UnZnWGdWWGM2MFFCWGRfdl9ULVpIY3Vhal9oSHB2ZG10Z1Mxbk1Vdk9qdU9LaFZTX3hhVzVNNDBqV0tSaVByNXhrQ0pWRUFreVlVTWM?oc=5",
-        "source": "매일경제",
-        "date": "2026-09-10"
+        "title": "아파트 공급 부족에 전세난까지…'아파텔' 청약 몰린다",
+        "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9CWVp6SEpnSU8takhYTXlJaHNGS2F3bXhuMmR2LUJMdHBWZG40VjNkRnRNemxCb2pxTnlueU0xMFdtb3ZucjFvWF9TZGpzallWRkFnMjVZSHQ3b3VoZFNvbW5KOGFpTHVka2Qw?oc=5",
+        "source": "한국부동산뉴스",
+        "date": "2026-09-11"
       },
       {
         "badge": "대출·금융",
@@ -53,12 +53,18 @@
     ]
   },
   "daily": {
-    "updated": "2026-09-11 03:19 KST",
+    "updated": "2026-09-12 03:23 KST",
     "sectors": [
       {
         "key": "housing",
         "name": "주택 매매·집값",
         "items": [
+          {
+            "title": "집 살 사람은 다 샀다? 뜨겁던 서울 부동산에 '찬바람' - 머니투데이",
+            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9XWS1zblhScHFLcHN6dEdDemhLajBQaVlYMTZTd0lYTzNjYVdVNlowMVIxUUduYXFuNDQ2bFpQOGJrNDRxV1BfUVNzOTAtVmdGQWk5Nk1VOG5CRzZONkJ4TERJSWVvYW04U3fSAW9BVV95cUxOVGhsSmdKSkEyMzN0VTgzMDRnNTVwaW90Yml4UHQwQTh0dFVaRUw3YWxpRDcxWUx6Y1BNTWVvdkh1MjJIY2ZEYkpRRjdxekVNTDY3RkhSaEhLTnhGeS00SUNXaVZROFN5ODhDSjV2Wk0?oc=5",
+            "source": "머니투데이",
+            "date": "2026-09-10"
+          },
           {
             "title": "\"매물은 늘었는데 거래는 반토막\"…집값은 버티는 '엇박자' 시장 - 머니투데이",
             "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1yU3R5WkFDUWJ2azJla1IyZHZlT3hMalRMNmdwSE4yVlJ3NHFVS3FDN0ZKelFtMXVRRUYzWUMyS3dwM0JteU9lOHpxdXlBX2M5eFVyQ0R0ZXFnQWpyTHBFdm9JSUFhMkV1NFFSeG51SdIBb0FVX3lxTE1yU3R5WkFDUWJ2azJla1IyZHZlT3hMalRMNmdwSE4yVlJ3NHFVS3FDN0ZKelFtMXVRRUYzWUMyS3dwM0JteU9lOHpxdXlBX2M5eFVyQ0R0ZXFnQWpyTHBFdm9JSUFhMkV1NFFSeG51SQ?oc=5",
@@ -66,15 +72,9 @@
             "date": "2026-09-10"
           },
           {
-            "title": "9월 첫주 서울 아파트값, 강북 뛰면서 0.2%↑…한은 \"불확실성 높다\"",
-            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1KUFhFTjEwUVd0ck14SWJlS3lGSDZqRFg4Q2NmM25TV2Z5djdmR3pXLUk1eUZaV3JMd0xQNU1Mb1c3bzZ1VVVoZkZPOFZ6WVluamp2OXFhQzlmSHFRR2F4OWVQcGJXbEhDUkFVRmVyQQ?oc=5",
-            "source": "뉴스웍스",
-            "date": "2026-09-10"
-          },
-          {
-            "title": "대출 조여도 집값·가계대출↑…한은 \"금융불균형 위험\"",
-            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1GVmI0YmpXNjBPZm1rTWJ5b1kyNmxHSDNwNmMydXJ5MnU4ak4wR0d2dzVBak1DQkhtWU5wdHV4a0Q2RlU3aE1ybjZoVU42MVVwOHd1Q3pTa2FnbTNTM29LY9IBYEFVX3lxTE1GVmI0YmpXNjBPZm1rTWJ5b1kyNmxHSDNwNmMydXJ5MnU4ak4wR0d2dzVBak1DQkhtWU5wdHV4a0Q2RlU3aE1ybjZoVU42MVVwOHd1Q3pTa2FnbTNTM29LYw?oc=5",
-            "source": "yna.co.kr",
+            "title": "\"집값, 올해안에 100주연속 상승 기록할 것..文때와 상승의 질 다르다\"",
+            "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1QSy1LckVrUmxvYWp3QTBOVUVNWFBHTmE2Nk4yNmJ3bGdoWHl3U0l5cHFubFFnWmJsMU0wRjk1YVVBOFJoWVpNSTNHV3pNQlhHNjlqYW1CeEN2cWVtRXc?oc=5",
+            "source": "YTN",
             "date": "2026-09-10"
           }
         ]
@@ -84,21 +84,21 @@
         "name": "전세·월세",
         "items": [
           {
+            "title": "“서울과 부산 시장은 다르다”… 부산 공인중개사들, 지역 맞춤형 정책 촉구",
+            "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQMG1iX2ZQcmdTNXVPZWlwSHBVZHJ2Y2FFN0kxYXJLUWhLWG5ib25nNEpoakREeUtKN3ZCUGJBMGxqbWRTS2l4MXV1VnlwckJ2SFM2QUxLM1I3Wll5U0MzZml3NUl5YmZPVWxqMXNCWkdka0QxZHdNSy1Pek5HME55VmdhQ2FJZGg1QkNNLWpR?oc=5",
+            "source": "국제신문",
+            "date": "2026-09-11"
+          },
+          {
+            "title": "서울 부동산 지형 재편 강남불패 공식 깨졌나?",
+            "url": "https://news.google.com/rss/articles/CBMiQ0FVX3lxTE1oX0owSFR3ZXNUcnI4TF9pTmFkaDdyUlhYN1o0WVhjQTk0ZDQzMGFLWFZtQXBSRjBBRzNJVWhva2I5MEU?oc=5",
+            "source": "주간현대",
+            "date": "2026-09-11"
+          },
+          {
             "title": "전세사기로 보증금 못 받았는데… 경매로 집 산 새 주인의 \"월세 내라\", 줘야 될까",
             "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE95dDljQ3FnaXcwVUVMbTN4aG1BZkR6UzlFWm0yclpiNFJXeU0wdTRpSHd5RjBMRXd5eDZwT3B0bjVReFJpS3ZMMzI0YmN4ZFlLU3ZOOEtFWWNzQQ?oc=5",
             "source": "로톡뉴스",
-            "date": "2026-09-10"
-          },
-          {
-            "title": "공공기관 이전 앞둔 세종…살 사람 없고 전세만 품귀",
-            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9PbnRhMFFReGVRcmxEcVNKSUJjVmx2OWhQSmZHeUg2TFE3OXg4RkVhZ1BsZ3FRUzBMbmNydDJNdzNZeE1XcVMwazc4a2dCRnl2aEkwdWU3YlNOYktrT3ZiRNIBeEFVX3lxTE9NaDl1TllBZmFqVWxtSTRKbWFjNGdoM3R2N0kyd3dzRmR3cVAyYURzX3JwSnRiYWRGV25UUVZna0N5dmtyLUtpM3hPT1VJdzVKbGQxYkk2VXhia2JZZlNuWHFXTVNVQUZUVnlFZnkyZl9WT1UxeE5uWQ?oc=5",
-            "source": "뉴시스",
-            "date": "2026-09-10"
-          },
-          {
-            "title": "프로토 토토 승부 식 원 벳원 의 역사와 발전: 과거에서 현재까지 - 전문가의 관점에서",
-            "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE80Z0JacU02elVfaVc5WUw4QlhjTFp3MG14R2xlUFBmZGxPWmNZVW5kZkg2aFQxbG1iRnBjRTZuZFAxOWt3WDRtSUtScG1wanNSUkktc2hBenA1bTFJWmhsNnI3SFdCWWNIaVlLVlkxeW5rV2QzOXd3WUZqWUoyTE0?oc=5",
-            "source": "Histoire pour tous",
             "date": "2026-09-10"
           }
         ]
@@ -108,22 +108,22 @@
         "name": "청약·분양",
         "items": [
           {
-            "title": "부천, 8년 만에 새 아파트…'역세권·교육' 수요 몰렸다",
-            "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE82NC1BVzUzZDY3Nl9rMWJkbGtuR0xDX2lfZGpYUV9vZFRxWEN5Y01pMW93YTBycFI0RFl3N1pzLUJUQzJEOGw5WVZ2Wm9xcmlCd1BoNTFUa09Pdw?oc=5",
-            "source": "한국경제",
-            "date": "2026-09-09"
-          },
-          {
-            "title": "한강 푸르지오 리버프론트 줍줍 (’26. 9/14)",
-            "url": "https://news.google.com/rss/articles/CBMiQEFVX3lxTFAtNDZYMXhhTXU3dGRUY0Fab3ROZzFWMmJzeUZkZXUycVB5a0JTcDhYVWNPOFlZMURwYzg4QmJ4Y08?oc=5",
-            "source": "홈두부",
-            "date": "2026-09-09"
+            "title": "아파트 공급 부족에 전세난까지…'아파텔' 청약 몰린다",
+            "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE9CWVp6SEpnSU8takhYTXlJaHNGS2F3bXhuMmR2LUJMdHBWZG40VjNkRnRNemxCb2pxTnlueU0xMFdtb3ZucjFvWF9TZGpzallWRkFnMjVZSHQ3b3VoZFNvbW5KOGFpTHVka2Qw?oc=5",
+            "source": "한국부동산뉴스",
+            "date": "2026-09-11"
           },
           {
             "title": "“비싸도 살 사람은 어차피 산다”…고분양가 참패 공식 깨졌다는데",
-            "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5vbGJ6UnZnWGdWWGM2MFFCWGRfdl9ULVpIY3Vhal9oSHB2ZG10Z1Mxbk1Vdk9qdU9LaFZTX3hhVzVNNDBqV0tSaVByNXhrQ0pWRUFreVlVTWM?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE43Q2p1cHpsdlF3M05IazV2NWhPZkpKQ2xVQ2JVUHlXWTJRSmluREYtdUdUWk1HbVlhWkRoUmhCbVdYa2ZkTnc?oc=5",
             "source": "매일경제",
             "date": "2026-09-10"
+          },
+          {
+            "title": "아파트 공급 감소에 몸값 높아진 ‘아파텔’…실수요 대안으로 부상",
+            "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE41aXJoSnduMGN4LU5NUGlrMF9mTThBLVFCd0ZxNmh5LVBJM2c1WTQtTEVlUDFaeUNVQkFGa2VWaVNOMUltdFZIM3QybnloWnROSFZJYjUybnpHMUFOMXZRYkhIMFNoOERxajE4?oc=5",
+            "source": "충청메트로",
+            "date": "2026-09-11"
           }
         ]
       },
@@ -132,22 +132,22 @@
         "name": "대출·금융",
         "items": [
           {
-            "title": "안산시의회, 부동산 경기 활성화 촉구 건의안 ‘채택’",
-            "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE1abWxIS0FPVnhMb0lYS200dWphOFRSaENwS29rN1E5Nl9rVkZIallGZ0diYk5kTW9sZmt5ZTB1WkFQR1RvZGN2bmJyZXM?oc=5",
-            "source": "시사일보",
+            "title": "이재복 의원 발의 ‘부동산 경기 활성화 촉구 건의안’ 채택",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFB3Y3gtVVBSRkltaGc1bUVkbFh0ZjJWeVJ0bTQ4N1pxaGM4c2lfcHpqcXZfOTcxSnAxdkNxWEVsQ0JFTGtyT0hiNjdFZlJaT2ZTa2ZadUl5UEdYd3NPcHJRUDBZMnhoSGdqeXBZSg?oc=5",
+            "source": "안산뉴스",
+            "date": "2026-09-11"
+          },
+          {
+            "title": "금리 오르면 집값 폭락?…지금은 '영끌 시대'와 다르다",
+            "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPUlN5Q1pyV01sRFN2VFlTVnA0ZlRMUVAxdE5fU3FxWmJoYS1qczZ6ZUxXbVFHNURHTkdRd2ttLWlzNEk5YjVYalEtRkowTHllNFF6Vkh0aHVCTG41dEhtQm5xRjRqTmRCQkVVN2Rwb0U5bldjM2k0cUNoemZMSmpMNw?oc=5",
+            "source": "edaily.co.kr",
             "date": "2026-09-10"
           },
           {
-            "title": "“이제, 노후자금 어떻게 마련하나…” 얼어붙은 서울 아파트 거래",
-            "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9HekNCU2RfTk4wREhXLXpvN29xWnZzdjFYWXdEbWQtRGxHWUVKRzUxczBtOFY1YUVuSHMzWklfTkM4bTJXcDZZcVdId1lpRm9qbWNxelZfMmUxdw?oc=5",
-            "source": "이투데이",
-            "date": "2026-09-07"
-          },
-          {
-            "title": "'대출규제·금리·공사비·미분양' 전방위 압박에 9월 분양전망 급랭 - 머니투데이",
-            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5fR0hWXzl2aGdKVzg0NllLUDZ0UlhYR2pUTEJXa1VnSHdIYVBJOFFCV2NmSFdUblY0cmkyTVl4YjYyQ2I1LXAyVnZkaHo1WmZ6RUVGR1VpLVJycjR0Y09tSWgtMEdEaU9fUzdDNl90Y9IBb0FVX3lxTE5fR0hWXzl2aGdKVzg0NllLUDZ0UlhYR2pUTEJXa1VnSHdIYVBJOFFCV2NmSFdUblY0cmkyTVl4YjYyQ2I1LXAyVnZkaHo1WmZ6RUVGR1VpLVJycjR0Y09tSWgtMEdEaU9fUzdDNl90Yw?oc=5",
-            "source": "머니투데이",
-            "date": "2026-09-08"
+            "title": "안산시의회, 부동산 경기 활성화 촉구 건의안 ‘채택’",
+            "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5zR2N2SG4wNDRZNWNpb3J4NXlGVkdhNDRCN2hoVkVRZ041UmV4dkh4R0tFc3UwOWtVOG1sZV92cnQ2cXE5ZEUtTU1vY08tU054X0VBVExR?oc=5",
+            "source": "문화매일신문",
+            "date": "2026-09-10"
           }
         ]
       },
@@ -174,16 +174,16 @@
             "date": "2026-09-10"
           },
           {
-            "title": "`26 세제개편안, 양도세·종부세 동시 강화 논란…시장 왜곡 키우나",
-            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE51c3kyZUhtN0lEUnhZWUZqdTE4Q21vLTFCaDNUTlZ5a2VEVElBbGVhVFJLQTh1aklsbDRUSzgwX1Q1dTRvUG9YZUlxNEdnNkZJX3k5UWdmTHo2Si1qX19rQkFJLU0zd09mYTlJYw?oc=5",
-            "source": "세정일보",
-            "date": "2026-09-09"
+            "title": "일반 라운드로 돌아오는 시점, 한국 일본 토토 진행 규칙",
+            "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxOZDYxRlFxV2c4MmxJeGw1V05YNENwWGNVMllQQkdMYVBUSldKRTFhSk83R2doelMweE1TcmNtTXBJblF4QnBxV2pVMTNqVW51cFVrUDJqdFhtM2NPZDJWbjZZa0xZcmVaVGdTUF9YVlZDMTFvaG9qZGVoQ3EzZEJaZlUtT2puOEhjbFlKMEFkY293M2xxeDU5Vjh0THRMb2I3c25RNTZFNGJaOUt2TXBlaWdYbERqR2hjamRUdmd0czVMOHVTMGxqOV9qRGpwb2gxU3ZxYW5HbGJFU3JVMVh3dndfS2RnUmVqYmV0ckV3?oc=5",
+            "source": "Histoire pour tous",
+            "date": "2026-09-10"
           },
           {
-            "title": "아무나 서울에 못 사나…비거주 '편가르기'가 불러올 비극[부동산 인사이트]",
-            "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOTzZ0NHJEb2lMSU5ENFotakd6ZC1qMnB3aFYwaWNRVWotNkF5eXg4Ykp4bnRUWk93Mi0wUk5MMWZMaVBKX2JDUXVlM3EzWDRiUnlyc3VBR0laRjgxWk00ejJGemR3S3hXOHpXc0JhaG45QTZ0eFg2dGNiRXZmcG9JMQ?oc=5",
-            "source": "edaily.co.kr",
-            "date": "2026-09-09"
+            "title": "기본 설명이 충분한지 따져보는 카지노 총판 구인",
+            "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNSVJXUTh5RktIVW93Z2dlcGVxS1pfazByRldBVEg0b0R0YXV4NDAwT1c1WnkzMVVYWUhsVVZOS0QwZ1pyWFNyRXhLNnpRTjROX015RnNkenZUaWJZV1VtQ1RaSlpFR3FwT3Fxa2xWdlVGTEdBTF9TTjZWNjZlU3hBRHZwd3FMS2JpdVo3NDBIWFh4Mkt6MXg0WHFCS2VXYnM3bmg0NW54NGg?oc=5",
+            "source": "Histoire pour tous",
+            "date": "2026-09-11"
           }
         ]
       }
