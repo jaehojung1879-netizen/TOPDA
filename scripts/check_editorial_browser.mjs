@@ -37,7 +37,8 @@ try {
       await page.screenshot({ path: `${output}/${name}-${width}.png`, fullPage: true });
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: horizontal overflow at ${width}`);
       if (name === 'home') {
-        assert.equal(await page.locator('.cat-tile').nth(1).getAttribute('href'), 'posts/index.html');
+        const readingHref = await page.locator('.cat-tile').nth(1).getAttribute('href');
+        assert.equal(new URL(readingHref, page.url()).pathname, '/posts/index.html');
         if (width === 360) {
           const sale = await page.locator('.cat-tile').nth(0).boundingBox();
           const reading = await page.locator('.cat-tile').nth(1).boundingBox();
