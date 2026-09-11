@@ -67,6 +67,8 @@ try {
   await page.goto(origin);
   await page.getByRole('button', { name: '메뉴 열기', exact: true }).click();
   assert.equal(await page.locator('[data-nav-toggle]').getAttribute('aria-expanded'), 'true');
+  await page.locator('[data-nav-toggle]').click();
+  assert.equal(await page.locator('[data-nav-toggle]').getAttribute('aria-expanded'), 'false');
   await page.locator('.cat-tile-editorial').click();
   assert(page.url().endsWith('/posts/index.html'));
   const nojs = await browser.newContext({ javaScriptEnabled: false });
