@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1120" viewBox="0 0 900 1120" role="img" aria-labelledby="title desc">
+  <title id="title">아파트 1층 실거래 가격 차이 분석</title>
+  <desc id="desc">같은 단지, 같은 전용면적, 계약일 앞뒤 45일 안의 다른 층 거래와 비교한 1층 7,203건의 가격 차이 중간값은 마이너스 8.2퍼센트다. 서울은 7.6퍼센트, 경기 인천은 8.1퍼센트, 부산 대구 대전 울산 세종은 10.1퍼센트 낮았다.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fffaf3"/>
+      <stop offset="1" stop-color="#f7f4ee"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#2e2a25" flood-opacity=".08"/>
+    </filter>
+  </defs>
+  <rect width="900" height="1120" rx="32" fill="url(#bg)"/>
+
+  <text x="64" y="76" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="25" font-weight="700" fill="#b15c18">국토교통부 실거래가 비교</text>
+  <text x="64" y="126" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="38" font-weight="800" fill="#1f2933">1층은 다른 층보다 얼마나 낮았나</text>
+  <text x="64" y="166" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="21" fill="#59636e">같은 단지·전용면적, 계약일 앞뒤 45일의 거래만 비교</text>
+
+  <rect x="64" y="208" width="772" height="224" rx="24" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="100" y="258" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="21" font-weight="700" fill="#59636e">가격 차이 중간값</text>
+  <text x="96" y="350" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="82" font-weight="850" fill="#d56a15">−8.2%</text>
+  <text x="445" y="310" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="23" font-weight="700" fill="#1f2933">1층 거래 7,203건</text>
+  <text x="445" y="350" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="21" fill="#59636e">단지·면적 묶음 4,215개</text>
+  <text x="445" y="388" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="21" fill="#59636e">가운데 절반: 4.4~11.9% 낮음</text>
+
+  <text x="64" y="495" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="29" font-weight="800" fill="#1f2933">지역별 중간값</text>
+  <text x="64" y="530" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="19" fill="#6b7280">막대가 길수록 다른 층보다 낮게 거래된 비율이 큽니다</text>
+
+  <text x="66" y="590" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="22" font-weight="700" fill="#27313b">서울</text>
+  <rect x="270" y="564" width="500" height="34" rx="17" fill="#eee9e0"/>
+  <rect x="270" y="564" width="376" height="34" rx="17" fill="#f3a45f"/>
+  <text x="790" y="590" text-anchor="end" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="23" font-weight="800" fill="#a84d0c">7.6%</text>
+  <text x="66" y="657" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="22" font-weight="700" fill="#27313b">경기·인천</text>
+  <rect x="270" y="631" width="500" height="34" rx="17" fill="#eee9e0"/>
+  <rect x="270" y="631" width="401" height="34" rx="17" fill="#e98532"/>
+  <text x="790" y="657" text-anchor="end" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="23" font-weight="800" fill="#a84d0c">8.1%</text>
+  <text x="66" y="724" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="22" font-weight="700" fill="#27313b">5개 광역시·세종</text>
+  <rect x="270" y="698" width="500" height="34" rx="17" fill="#eee9e0"/>
+  <rect x="270" y="698" width="500" height="34" rx="17" fill="#d56a15"/>
+  <text x="810" y="724" text-anchor="end" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="23" font-weight="800" fill="#a84d0c">10.1%</text>
+
+  <text x="64" y="803" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="29" font-weight="800" fill="#1f2933">7,203건은 이렇게 흩어져 있었습니다</text>
+  <rect x="64" y="842" width="772" height="56" rx="16" fill="#ffffff"/>
+  <rect x="64" y="842" width="93" height="56" rx="16" fill="#a84d0c"/>
+  <rect x="157" y="842" width="187" height="56" fill="#c45d10"/>
+  <rect x="344" y="842" width="273" height="56" fill="#e98532"/>
+  <rect x="617" y="842" width="153" height="56" fill="#f3b47e"/>
+  <rect x="770" y="842" width="45" height="56" fill="#8e9aa5"/>
+  <rect x="815" y="842" width="21" height="56" rx="10" fill="#65717c"/>
+
+  <circle cx="76" cy="944" r="8" fill="#a84d0c"/>
+  <text x="96" y="952" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="19" fill="#34404b">15% 이상 낮음 12.1%</text>
+  <circle cx="328" cy="944" r="8" fill="#c45d10"/>
+  <text x="348" y="952" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="19" fill="#34404b">10~15% 낮음 24.2%</text>
+  <circle cx="616" cy="944" r="8" fill="#e98532"/>
+  <text x="636" y="952" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="19" fill="#34404b">5~10% 낮음 35.4%</text>
+  <circle cx="76" cy="988" r="8" fill="#f3b47e"/>
+  <text x="96" y="996" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="19" fill="#34404b">0~5% 낮음 19.8%</text>
+  <circle cx="328" cy="988" r="8" fill="#8e9aa5"/>
+  <text x="348" y="996" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="19" fill="#34404b">같거나 5% 미만 높음 5.8%</text>
+  <circle cx="690" cy="988" r="8" fill="#65717c"/>
+  <text x="710" y="996" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="19" fill="#34404b">5% 이상 높음 2.7%</text>
+
+  <line x1="64" y1="1038" x2="836" y2="1038" stroke="#d8d2c8"/>
+  <text x="64" y="1074" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="17" fill="#6b7280">기간 2025-10-01~2026-09-09 · 해제 거래 제외 · 8개 시·도 79개 시·군·구</text>
+  <text x="64" y="1100" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="17" fill="#6b7280">출처: 국토교통부 아파트 매매 실거래가 상세 자료 (2026-09-10 갱신본)</text>
+</svg>
