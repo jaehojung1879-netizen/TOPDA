@@ -32,7 +32,11 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   for (const width of [360, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
-    for (const [name, path] of [['home', '/'], ['hub', '/posts/index.html']]) {
+    for (const [name, path] of [
+      ['home', '/'],
+      ['hub', '/posts/index.html'],
+      ['report', '/posts/weekly-market-2026-09-07.html']
+    ]) {
       await page.goto(origin + path);
       await page.screenshot({ path: `${output}/${name}-${width}.png`, fullPage: true });
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: horizontal overflow at ${width}`);
@@ -44,6 +48,10 @@ try {
           const sale = await page.locator('.cat-tile').nth(1).boundingBox();
           assert.equal(magazine.y, sale.y, 'Magazine must sit immediately left of sale on mobile');
         }
+      }
+      if (name === 'report') {
+        assert(await page.getByRole('heading', { name: /강남3구는 모두 내렸습니다/ }).isVisible());
+        assert.equal(await page.locator('.market-kpi').count(), 4);
       }
     }
   }
@@ -78,7 +86,7 @@ try {
   await staticPage.goto(origin + '/posts/index.html');
   assert.equal(await staticPage.locator('#postGrid .card:visible').count(), total);
   assert.deepEqual(errors, []);
-  console.log('Browser checks passed: 4 widths, magazine left of sale, first weekly report, filters, deep links, mobile menu, no-JS archive.');
+  console.log('Browser checks passed: 4 widths, magazine left of sale, weekly report charts, filters, deep links, mobile menu, no-JS archive.');
 } finally {
   if (browser) await browser.close();
   await new Promise(resolve => server.close(resolve));
