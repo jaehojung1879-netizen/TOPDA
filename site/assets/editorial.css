@@ -1,53 +1,139 @@
-/* Reading surfaces only: calculators and article layouts remain unchanged. */
+/* 톺다 매거진 전용 편집면: 그림자 대신 괘선·그리드·명확한 위계를 사용한다. */
 .editorial-home .home-intro { padding-top: 36px; padding-bottom: 26px; }
 .editorial-home .home-tagline { font-size: clamp(2rem, 4vw, 2.8rem); }
-.editorial-home .cat-tile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.cat-tile-editorial { background: #eff6ff; border-color: #bfd3f7; }
-.cat-tile-editorial h3 { color: #1e40af; }
+
+/* 홈의 핵심 진입점은 하나의 단단한 내비게이션 판처럼 묶는다. */
+.editorial-home .cat-tile-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px; padding: 1px; background: #cfd6df;
+}
+.editorial-home .cat-tile {
+  min-height: 112px; padding: 16px 14px; border: 0; border-radius: 0;
+  background: #fff; box-shadow: none; transition: background-color .15s, color .15s;
+}
+.editorial-home .cat-tile:hover { background: #f3f5f7; border-color: transparent; box-shadow: none; }
+.editorial-home .cat-tile-icon { border-radius: 2px; }
 .editorial-home .cat-tile:last-child { grid-column: 1 / -1; }
-.editorial-section { padding: 24px 0 32px; }
-.editorial-eyebrow { color: #1e40af; font-size: .72rem; font-weight: 800; letter-spacing: .14em; margin: 0 0 10px; }
+.editorial-home .cat-tile-editorial { background: #182f4f; color: #fff; }
+.editorial-home .cat-tile-editorial:hover { background: #10243f; }
+.editorial-home .cat-tile-editorial h3,
+.editorial-home .cat-tile-editorial p { color: #fff; }
+.editorial-home .cat-tile-editorial p { color: #d8e2ef; }
+.editorial-home .cat-tile-editorial .cat-tile-icon { background: #fff; color: #182f4f; }
+.editorial-home .cat-tile-editorial:hover .cat-tile-icon { background: #dfe8f3; color: #182f4f; }
+
+.editorial-section { padding: 30px 0 38px; }
+.editorial-eyebrow {
+  color: #365675; font-size: .7rem; font-weight: 800;
+  letter-spacing: .16em; margin: 0 0 8px;
+}
 .editorial-lead { color: var(--text-muted); font-size: 1rem; line-height: 1.8; margin: 12px 0 0; }
-.editorial-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
-.editorial-stories { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
-.editorial-story { display: flex; flex-direction: column; min-width: 0; padding: 22px; border: 1px solid var(--border); border-radius: 16px; background: #fff; color: var(--text); }
-.editorial-story:hover { border-color: #93b4ed; }
-.editorial-story h3 { font-size: 1.08rem; line-height: 1.5; letter-spacing: -.025em; margin: 9px 0; word-break: keep-all; overflow-wrap: anywhere; }
-.editorial-story p { font-size: .88rem; line-height: 1.7; color: var(--text-muted); margin: 0 0 18px; }
+
+/* 홈 매거진 표제부와 본문은 하나의 편집면으로 이어진다. */
+.editorial-masthead {
+  display: grid; gap: 12px; align-items: end;
+  padding: 22px 20px; border: 1px solid #cfd6df; border-top: 4px solid #182f4f;
+  background: #f5f1e9; margin-bottom: -1px;
+}
+.editorial-masthead h2 { margin: 0; font-size: clamp(1.55rem, 3vw, 2.1rem); letter-spacing: -.04em; }
+.editorial-masthead > p { color: #4b5563; font-size: .9rem; line-height: 1.6; margin: 0; }
+.editorial-masthead > a { color: #182f4f; font-size: .86rem; font-weight: 800; }
+.editorial-shell { border: 1px solid #cfd6df; border-top: 4px solid #182f4f; background: #fff; }
+.editorial-home .editorial-shell { border-top-width: 1px; }
+.editorial-layout { display: grid; grid-template-columns: minmax(0, 1fr); }
+.editorial-stories { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; }
+.editorial-story {
+  display: flex; flex-direction: column; min-width: 0; color: var(--text);
+  border-bottom: 1px solid #d7dde5; background: #fff;
+}
+.editorial-story:hover { background: #f7f8f9; }
+.editorial-story-body { display: flex; flex: 1; flex-direction: column; min-width: 0; padding: 21px 20px; }
+.editorial-story h3 {
+  font-size: 1.06rem; line-height: 1.48; letter-spacing: -.025em;
+  margin: 8px 0; word-break: keep-all; overflow-wrap: anywhere;
+}
+.editorial-story p { color: var(--text-muted); font-size: .86rem; line-height: 1.65; margin: 0 0 18px; }
 .editorial-story .editorial-date { margin-top: auto; }
-.editorial-story-featured { background: #f3f7ff; border-color: #cddcf5; }
-.editorial-story-featured h3 { font-size: clamp(1.25rem, 2.4vw, 1.65rem); }
-.editorial-label { color: #1e40af; font-size: .75rem; font-weight: 700; }
-.editorial-date { color: var(--text-muted); font-size: .76rem; }
-.editorial-market { min-width: 0; background: #172f50; border-radius: 16px; padding: 26px; color: #fff; }
-.editorial-market .editorial-eyebrow { color: #a9c9ff; }
-.editorial-market h2 { color: #fff; font-size: 1.35rem; margin: 10px 0 14px; }
-.editorial-market p { color: #d2deee; font-size: .9rem; line-height: 1.8; }
-.editorial-market a { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
-.editorial-market ul { padding-left: 20px; margin: 20px 0; }
-.editorial-market li { margin: 12px 0; font-size: .9rem; }
-.editorial-market .editorial-date { color: #d2deee; }
-.editorial-market .editorial-status { font-size: .8rem; border-top: 1px solid #46607e; padding-top: 18px; margin-top: 22px; }
-.editorial-hub .article-header { padding-bottom: 28px; }
-.editorial-hub .article-header h1 { margin-top: 0; }
-.editorial-archive { margin: 44px 0 60px; }
-.editorial-series { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; }
-.editorial-series button { font: inherit; font-size: .9rem; font-weight: 700; padding: 11px 17px; border: 1px solid var(--border); background: #fff; color: var(--text-muted); border-radius: 10px; cursor: pointer; }
-.editorial-series button[aria-pressed="true"] { color: #fff; background: #1e3a8a; border-color: #1e3a8a; }
+.editorial-story-featured h3 { font-size: clamp(1.24rem, 2.3vw, 1.72rem); }
+.editorial-story-media { display: block; aspect-ratio: 16 / 8.4; overflow: hidden; background: #e8edf2; }
+.editorial-story-media img { width: 100%; height: 100%; object-fit: cover; }
+.editorial-label { color: #365675; font-size: .72rem; font-weight: 800; letter-spacing: .02em; }
+.editorial-date { color: var(--text-muted); font-size: .74rem; font-variant-numeric: tabular-nums; }
+
+/* 주간 리포트는 별도 카드가 아니라 같은 판의 고정 칼럼이다. */
+.editorial-market {
+  display: flex; flex-direction: column; justify-content: space-between; min-width: 0;
+  padding: 24px 22px 0; background: #182f4f; color: #fff; border-top: 1px solid #51647b;
+}
+.editorial-market .editorial-eyebrow { color: #b9cbe0; }
+.editorial-market h2 { color: #fff; font-size: 1.32rem; margin: 8px 0 18px; letter-spacing: -.03em; }
+.editorial-market h3 { font-size: 1.17rem; line-height: 1.5; margin: 8px 0 10px; }
+.editorial-market p { color: #d7e1ed; font-size: .86rem; line-height: 1.7; margin: 0 0 14px; }
+.editorial-market a { color: #fff; }
+.editorial-market h3 a:hover,
+.editorial-market-primary:hover { text-decoration: underline; text-underline-offset: 4px; }
+.editorial-market-period { color: #b9cbe0 !important; font-size: .74rem !important; font-variant-numeric: tabular-nums; }
+.editorial-market-primary { display: inline-block; margin: 18px 0 24px; font-size: .82rem; font-weight: 800; }
+.editorial-market .editorial-date { display: block; color: #b9cbe0; margin-top: 16px; }
+.editorial-market-tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 12px -22px 0; border-top: 1px solid #52667d; }
+.editorial-market-tools a { padding: 15px 14px; border-right: 1px solid #52667d; font-size: .79rem; font-weight: 700; }
+.editorial-market-tools a:last-child { border-right: 0; }
+.editorial-market-tools span { display: block; color: #9fb5cd; font-size: .62rem; letter-spacing: .12em; margin-bottom: 3px; }
+.editorial-market .editorial-status { border-top: 1px solid #52667d; padding-top: 15px; }
+
+/* 매거진 허브의 표제와 아카이브 역시 둥근 카드보다 편집 그리드를 따른다. */
+.editorial-hub .article-header {
+  margin: 28px 0 -1px; padding: 24px 24px 28px;
+  border: 1px solid #cfd6df; border-top: 4px solid #182f4f; background: #f5f1e9;
+}
+.editorial-hub .article-header h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.7rem); letter-spacing: -.055em; }
+.editorial-hub-title { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+.editorial-issue { color: #365675; font-size: .68rem; font-weight: 800; letter-spacing: .14em; line-height: 1.6; text-align: right; margin: 0; }
+.editorial-archive { margin: 46px 0 60px; }
+.editorial-series { display: flex; flex-wrap: wrap; gap: 0; margin: 0 0 18px; border-bottom: 2px solid #182f4f; }
+.editorial-series button {
+  font: inherit; font-size: .86rem; font-weight: 750; padding: 11px 16px;
+  border: 1px solid #cfd6df; border-bottom: 0; background: #fff;
+  color: var(--text-muted); border-radius: 0; cursor: pointer; margin-right: -1px;
+}
+.editorial-series button[aria-pressed="true"] { color: #fff; background: #182f4f; border-color: #182f4f; }
 .editorial-hub .post-search { min-width: 0; flex-basis: 100%; }
-.editorial-hub .card time { display: block; margin-top: 16px; color: var(--text-muted); font-size: .76rem; }
-.editorial-hub .card { min-width: 0; }
+.editorial-hub .post-search input { border-radius: 2px; }
+.editorial-hub .post-chip { border-radius: 2px; transition: none; }
+.editorial-hub .post-chip.active { background: #365675; border-color: #365675; }
+.editorial-hub .cards-grid { gap: 1px; padding: 1px; background: #d7dde5; }
+.editorial-hub .card { min-width: 0; border: 0; border-radius: 0; box-shadow: none; padding: 22px; }
+.editorial-hub .card:hover { background: #f7f8f9; border-color: transparent; transform: none; box-shadow: none; }
+.editorial-hub .card time { display: block; margin-top: 16px; color: var(--text-muted); font-size: .74rem; }
+.editorial-hub .post-empty { border-radius: 0 !important; }
 .editorial-hub [hidden] { display: none !important; }
-.editorial-home a:focus-visible, .editorial-hub a:focus-visible, .editorial-hub button:focus-visible, .editorial-hub input:focus-visible { outline: 3px solid #2563eb; outline-offset: 4px; }
+.editorial-home a:focus-visible,
+.editorial-hub a:focus-visible,
+.editorial-hub button:focus-visible,
+.editorial-hub input:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+
 @media (min-width: 600px) {
   .editorial-home .cat-tile-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .editorial-home .cat-tile:last-child { grid-column: auto; }
+  .editorial-masthead { grid-template-columns: minmax(220px, .8fr) minmax(280px, 1.4fr) auto; padding: 24px 26px; }
   .editorial-stories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .editorial-story-featured { grid-column: 1 / -1; }
+  .editorial-story:nth-child(2) { border-right: 1px solid #d7dde5; }
+  .editorial-story:nth-child(2), .editorial-story:nth-child(3) { border-bottom: 0; }
+}
+@media (min-width: 760px) {
+  .editorial-story-featured { display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(0, .94fr); }
+  .editorial-story-featured .editorial-story-media { height: 100%; aspect-ratio: auto; }
+  .editorial-story-featured .editorial-story-body { padding: 28px 26px; }
 }
 @media (min-width: 1000px) {
   .editorial-home .cat-tile-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
-  .editorial-layout { grid-template-columns: minmax(0, 1.8fr) minmax(270px, 1fr); }
+  .editorial-layout { grid-template-columns: minmax(0, 2fr) minmax(285px, .82fr); }
+  .editorial-market { border-top: 0; border-left: 1px solid #52667d; }
+}
+@media (max-width: 599px) {
+  .editorial-hub-title { display: block; }
+  .editorial-issue { margin-top: 18px; text-align: left; }
 }
 @media (prefers-reduced-motion: reduce) {
   .editorial-home .cat-tile { transition: none; }

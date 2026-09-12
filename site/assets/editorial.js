@@ -32,7 +32,7 @@
     count.textContent = shown + '편 · 최신 발행순' + (category !== 'all' ? ' · ' + category : '');
     empty.style.display = shown ? 'none' : '';
     empty.textContent = series === 'market' && !cards.some(function (c) { return c.dataset.series === 'market'; })
-      ? '주간 시장분석은 첫 발행을 준비하고 있습니다. 위의 시세 대시보드와 실거래가 조회를 먼저 살펴보세요.'
+      ? '주간 시장 리포트는 첫 발행을 준비하고 있습니다. 위의 시세 대시보드와 실거래가 조회를 먼저 살펴보세요.'
       : '검색 결과가 없습니다. 다른 주제나 검색어로 찾아보세요.';
     if (updateUrl) {
       var url = new URL(location.href);
