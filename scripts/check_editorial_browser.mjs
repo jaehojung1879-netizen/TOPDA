@@ -55,6 +55,7 @@ try {
       }
     }
   }
+  await page.goto(origin + '/posts/index.html');
   const total = await page.locator('#postGrid .card').count();
   assert(total > 0);
   await page.getByRole('button', { name: '주간 시장 리포트', exact: true }).click();
