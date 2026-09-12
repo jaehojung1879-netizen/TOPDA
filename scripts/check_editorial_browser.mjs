@@ -37,22 +37,23 @@ try {
       await page.screenshot({ path: `${output}/${name}-${width}.png`, fullPage: true });
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: horizontal overflow at ${width}`);
       if (name === 'home') {
-        const readingHref = await page.locator('.cat-tile').nth(1).getAttribute('href');
-        assert.equal(new URL(readingHref, page.url()).pathname, '/posts/index.html');
+        const magazineHref = await page.locator('.cat-tile').nth(0).getAttribute('href');
+        assert.equal(new URL(magazineHref, page.url()).pathname, '/posts/index.html');
         if (width === 360) {
-          const sale = await page.locator('.cat-tile').nth(0).boundingBox();
-          const reading = await page.locator('.cat-tile').nth(1).boundingBox();
-          assert.equal(sale.y, reading.y, 'Reading must sit beside sale on mobile');
+          const magazine = await page.locator('.cat-tile').nth(0).boundingBox();
+          const sale = await page.locator('.cat-tile').nth(1).boundingBox();
+          assert.equal(magazine.y, sale.y, 'Magazine must sit immediately left of sale on mobile');
         }
       }
     }
   }
   const total = await page.locator('#postGrid .card').count();
   assert(total > 0);
-  await page.getByRole('button', { name: '주간 시장분석', exact: true }).click();
+  await page.getByRole('button', { name: '주간 시장 리포트', exact: true }).click();
   assert.equal(await page.locator('#postGrid .card:visible').count(), await page.locator('#postGrid .card[data-series="market"]').count());
+  assert.equal(await page.locator('#postGrid .card[data-series="market"]').count(), 1);
   assert(new URL(page.url()).searchParams.get('series') === 'market');
-  await page.getByRole('button', { name: '실용 가이드', exact: true }).click();
+  await page.getByRole('button', { name: '실용 포스트', exact: true }).click();
   await page.locator('.post-chip[data-cat="매매"]').click();
   await page.getByRole('searchbox', { name: '글 검색', exact: true }).fill('1층');
   assert.equal(await page.locator('#postGrid .card:visible').count(), 1);
@@ -77,7 +78,7 @@ try {
   await staticPage.goto(origin + '/posts/index.html');
   assert.equal(await staticPage.locator('#postGrid .card:visible').count(), total);
   assert.deepEqual(errors, []);
-  console.log('Browser checks passed: 4 widths, homepage entry, filters, deep links, mobile menu, no-JS archive.');
+  console.log('Browser checks passed: 4 widths, magazine left of sale, first weekly report, filters, deep links, mobile menu, no-JS archive.');
 } finally {
   if (browser) await browser.close();
   await new Promise(resolve => server.close(resolve));
