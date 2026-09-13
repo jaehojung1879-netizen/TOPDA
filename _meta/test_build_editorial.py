@@ -27,7 +27,11 @@ class EditorialTests(unittest.TestCase):
         self.assertEqual(len(load_posts(before[1])), len(load_posts(first[1])))
         self.assertIn('href="posts/index.html" class="cat-tile cat-tile-editorial"', first[0])
         self.assertLess(first[0].index('cat-tile-editorial'), first[0].index('categories/sale.html'))
-        self.assertIn('톺다 매거진', first[0])
+        self.assertIn('<h3>매거진</h3>', first[0])
+        home_block = first[0].split('<!-- editorial:home:start -->', 1)[1].split('<!-- editorial:home:end -->', 1)[0]
+        self.assertEqual(home_block.count('<a class="editorial-story"'), 1)
+        self.assertEqual(home_block.count('class="editorial-weekly-brief"'), 1)
+        self.assertIn('새로 나온 포스트', home_block)
         self.assertLess(first[0].index('editorial:home:start'), first[0].index('<!-- ===== Tools: calculators'))
 
     def test_publication_not_modification_order(self):
@@ -45,8 +49,8 @@ class EditorialTests(unittest.TestCase):
         self.assertIn('data-series="market"', hub)
         self.assertIn('2026.09.01~09.06', home)
         self.assertNotIn('첫 분석 글을 준비', home)
-        self.assertIn('posts/index.html?series=market', home)
-        self.assertIn('주간 시장 리포트', home)
+        self.assertIn('href="posts/weekly.html"', home)
+        self.assertIn('주간 브리핑', home)
 
     def test_market_category_does_not_imply_weekly_series(self):
         card = self.article('guide.html').replace('data-cat="매매"', 'data-cat="시장·투자"')
@@ -80,7 +84,7 @@ class EditorialTests(unittest.TestCase):
         card = self.article('guide.html')
         home, hub = render(self.home, self.hub.format(cards=card), self.site)
         self.assertIn('제목 &amp; 질문', home)
-        self.assertIn('calculators/market-trends.html', home)
+        self.assertIn('첫 브리핑을 준비하고 있습니다', home)
         self.assertNotIn('data-series="market"', hub)
         self.assertEqual(len(load_posts(hub, self.site)), 1)
 

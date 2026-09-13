@@ -124,6 +124,30 @@ def magazine_shell(posts, prefix, root):
             market_panel(posts, prefix, root) + '</div></div>')
 
 
+def weekly_brief(posts, prefix):
+    markets = [post for post in posts if post['series'] == 'market']
+    if not markets:
+        return ('<div class="editorial-weekly-brief editorial-weekly-brief-empty">'
+                '<span class="editorial-label">주간 브리핑</span><h3>첫 브리핑을 준비하고 있습니다</h3>'
+                '<p>공식 지표와 실거래 흐름을 한 주 단위로 정리해 전해드립니다.</p></div>')
+    post = markets[0]
+    return (f'<a class="editorial-weekly-brief" href="{prefix}{post["href"]}">'
+            '<span class="editorial-label">주간 브리핑</span>'
+            f'<span class="editorial-brief-period">{escape(post["period"])}</span>'
+            f'<h3>{escape(post["title"])}</h3><p>{escape(post["description"])}</p>'
+            '<span class="editorial-brief-link">브리핑 읽기 →</span></a>')
+
+
+def home_summary(posts):
+    guides = [post for post in posts if post['series'] == 'guide']
+    latest = story(guides[0], 'posts/', '', False) if guides else ''
+    return ('<section class="editorial-section" aria-labelledby="homeReadingTitle"><div class="container">'
+            '<div class="strip-head"><h2 id="homeReadingTitle">새로 나온 포스트</h2>'
+            '<a class="strip-link" href="posts/index.html">전체 포스트 →</a></div>'
+            '<div class="editorial-home-grid" aria-label="최신 포스트와 주간 브리핑">' + latest +
+            weekly_brief(posts, 'posts/') + '</div></div></section>')
+
+
 def replace_block(source, name, content):
     start, end = f'<!-- editorial:{name}:start -->', f'<!-- editorial:{name}:end -->'
     if source.count(start) != 1 or source.count(end) != 1:
@@ -144,17 +168,9 @@ def render(home, hub, site=SITE):
         card = card.replace('</a>', stamp(post) + '\n    </a>')
         cards.append(card)
     hub = GRID.sub(lambda m: m[1] + '\n    ' + '\n    '.join(cards) + m[3], hub)
-    for name, prefix, root in [('home', 'posts/', ''), ('hub', '', '../')]:
-        content = magazine_shell(posts, prefix, root)
-        if name == 'home':
-            content = ('<section class="editorial-section" aria-labelledby="homeReadingTitle"><div class="container">'
-                       '<header class="editorial-masthead"><div><p class="editorial-eyebrow">TOPDA MAGAZINE</p>'
-                       '<h2 id="homeReadingTitle">톺다 매거진</h2></div>'
-                       '<p>생활의 질문은 구체적으로, 시장의 변화는 차분하게.</p>'
-                       '<a href="posts/index.html">모든 포스트 →</a></header>' + content + '</div></section>')
-            home = replace_block(home, name, content)
-        else:
-            hub = replace_block(hub, name, '<section aria-label="이번 호">' + content + '</section>')
+    home = replace_block(home, 'home', home_summary(posts))
+    hub = replace_block(hub, 'hub', '<section aria-label="이번 호">' +
+                        magazine_shell(posts, '', '../') + '</section>')
     return home, hub
 
 
