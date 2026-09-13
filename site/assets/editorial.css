@@ -1,28 +1,13 @@
-/* 톺다 매거진 전용 편집면: 그림자 대신 괘선·그리드·명확한 위계를 사용한다. */
+/* 톺다 매거진 전용 화면. 홈은 기존 TOPDA 카드 흐름을 따른다. */
 .editorial-home .home-intro { padding-top: 36px; padding-bottom: 26px; }
 .editorial-home .home-tagline { font-size: clamp(2rem, 4vw, 2.8rem); }
 
-/* 홈의 핵심 진입점은 하나의 단단한 내비게이션 판처럼 묶는다. */
-.editorial-home .cat-tile-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px; padding: 1px; background: #cfd6df;
-}
-.editorial-home .cat-tile {
-  min-height: 112px; padding: 16px 14px; border: 0; border-radius: 0;
-  background: #fff; box-shadow: none; transition: background-color .15s, color .15s;
-}
-.editorial-home .cat-tile:hover { background: #f3f5f7; border-color: transparent; box-shadow: none; }
-.editorial-home .cat-tile-icon { border-radius: 2px; }
+.editorial-home .cat-tile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cat-tile-editorial { background: #eff6ff; border-color: #bfd3f7; }
+.cat-tile-editorial h3 { color: #1e40af; }
 .editorial-home .cat-tile:last-child { grid-column: 1 / -1; }
-.editorial-home .cat-tile-editorial { background: #182f4f; color: #fff; }
-.editorial-home .cat-tile-editorial:hover { background: #10243f; }
-.editorial-home .cat-tile-editorial h3,
-.editorial-home .cat-tile-editorial p { color: #fff; }
-.editorial-home .cat-tile-editorial p { color: #d8e2ef; }
-.editorial-home .cat-tile-editorial .cat-tile-icon { background: #fff; color: #182f4f; }
-.editorial-home .cat-tile-editorial:hover .cat-tile-icon { background: #dfe8f3; color: #182f4f; }
 
-.editorial-section { padding: 30px 0 38px; }
+.editorial-section { padding: 24px 0 32px; }
 .editorial-eyebrow {
   color: #365675; font-size: .7rem; font-weight: 800;
   letter-spacing: .16em; margin: 0 0 8px;
@@ -59,6 +44,29 @@
 .editorial-story-media img { width: 100%; height: 100%; object-fit: cover; }
 .editorial-label { color: #365675; font-size: .72rem; font-weight: 800; letter-spacing: .02em; }
 .editorial-date { color: var(--text-muted); font-size: .74rem; font-variant-numeric: tabular-nums; }
+
+/* 홈은 최신 포스트 하나와 주간 브리핑 하나만 가볍게 노출한다. */
+.editorial-home-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.editorial-home-grid .editorial-story,
+.editorial-weekly-brief {
+  min-width: 0; padding: 22px; border: 1px solid var(--border); border-radius: 16px;
+  background: #fff; color: var(--text); transition: border-color .18s, box-shadow .18s;
+}
+.editorial-home-grid .editorial-story { display: flex; }
+.editorial-home-grid .editorial-story-body { padding: 0; }
+.editorial-home-grid .editorial-story:hover,
+.editorial-weekly-brief:hover { border-color: #93b4ed; box-shadow: 0 12px 32px -22px rgba(30, 58, 138, .28); }
+.editorial-home-grid .editorial-story h3,
+.editorial-weekly-brief h3 {
+  font-size: clamp(1.08rem, 2vw, 1.3rem); line-height: 1.48; letter-spacing: -.025em;
+  margin: 8px 0; word-break: keep-all; overflow-wrap: anywhere;
+}
+.editorial-home-grid .editorial-story p,
+.editorial-weekly-brief p { color: var(--text-muted); font-size: .86rem; line-height: 1.65; margin: 0 0 18px; }
+.editorial-weekly-brief { display: flex; flex-direction: column; background: #f3f7ff; border-color: #cddcf5; }
+.editorial-brief-period { color: var(--text-muted); font-size: .74rem; margin-top: 8px; font-variant-numeric: tabular-nums; }
+.editorial-brief-link { color: #1e40af; font-size: .82rem; font-weight: 800; margin-top: auto; }
+.editorial-weekly-brief-empty:hover { border-color: #cddcf5; box-shadow: none; }
 
 /* 주간 리포트는 별도 카드가 아니라 같은 판의 고정 칼럼이다. */
 .editorial-market {
@@ -120,6 +128,9 @@
   .editorial-story-featured { grid-column: 1 / -1; }
   .editorial-story:nth-child(2) { border-right: 1px solid #d7dde5; }
   .editorial-story:nth-child(2), .editorial-story:nth-child(3) { border-bottom: 0; }
+}
+@media (min-width: 768px) {
+  .editorial-home-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); }
 }
 @media (min-width: 760px) {
   .editorial-story-featured { display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(0, .94fr); }

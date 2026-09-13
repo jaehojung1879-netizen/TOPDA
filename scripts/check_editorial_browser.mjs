@@ -41,6 +41,9 @@ try {
       await page.screenshot({ path: `${output}/${name}-${width}.png`, fullPage: true });
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: horizontal overflow at ${width}`);
       if (name === 'home') {
+        assert.equal(await page.locator('.editorial-home-grid .editorial-story').count(), 1, 'Home shows one latest post');
+        assert.equal(await page.locator('.editorial-home-grid .editorial-weekly-brief').count(), 1, 'Home shows one weekly brief');
+        assert.equal(await page.locator('.editorial-masthead').count(), 0, 'Home magazine masthead stays removed');
         const magazineHref = await page.locator('.cat-tile').nth(0).getAttribute('href');
         assert.equal(new URL(magazineHref, page.url()).pathname, '/posts/index.html');
         if (width === 360) {
