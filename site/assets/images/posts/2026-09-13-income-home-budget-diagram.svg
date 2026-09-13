@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1080" viewBox="0 0 900 1080" role="img" aria-labelledby="title desc">
+  <title id="title">연봉 5천만원과 현금 1억 5천만원일 때 지역별 아파트 구입 예산 비교</title>
+  <desc id="desc">기존 대출이 없는 사람의 DSR상 대출한도는 약 2억 4천3백만원이다. 수도권 비규제지역에서는 DSR이 먼저 적용돼 집값 약 3억 9천3백만원, 규제지역에서는 LTV 40퍼센트가 먼저 적용돼 약 2억 5천만원으로 계산된다.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4f8ff"/>
+      <stop offset="1" stop-color="#eef3f8"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#16304f" flood-opacity=".1"/>
+    </filter>
+    <style>
+      text{font-family:Pretendard,"Noto Sans KR","Noto Sans CJK KR","Apple SD Gothic Neo","Malgun Gothic",Arial,sans-serif;fill:#172235}
+      .eyebrow{font-size:20px;font-weight:750;letter-spacing:2px;fill:#3568b8}
+      .title{font-size:42px;font-weight:850}
+      .sub{font-size:23px;font-weight:550;fill:#506078}
+      .label{font-size:20px;font-weight:700;fill:#5b6b82}
+      .value{font-size:33px;font-weight:850}
+      .card-title{font-size:28px;font-weight:850}
+      .body{font-size:24px;font-weight:600;fill:#3e4d62}
+      .amount{font-size:39px;font-weight:900}
+      .reason{font-size:23px;font-weight:800}
+      .note{font-size:20px;font-weight:550;fill:#617087}
+    </style>
+  </defs>
+  <rect width="900" height="1080" rx="36" fill="url(#bg)"/>
+
+  <text x="60" y="66" class="eyebrow">TOPDA · 내집 마련 계산</text>
+  <text x="60" y="125" class="title">연봉이 같아도 집값은 달라집니다</text>
+  <text x="60" y="168" class="sub">연봉 5천만원 · 매매대금용 현금 1억 5천만원 · 기존 대출 없음</text>
+
+  <rect x="60" y="215" width="780" height="194" rx="28" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="100" y="267" class="label">은행 DSR 40%로 먼저 계산</text>
+  <text x="100" y="319" class="value">연 원리금 2,000만원</text>
+  <path d="M475 285h58" stroke="#9cb5da" stroke-width="4" stroke-linecap="round"/>
+  <path d="m522 274 13 11-13 11" fill="none" stroke="#9cb5da" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="566" y="267" class="label">심사용 금리 7.3% · 30년</text>
+  <text x="566" y="319" class="value">약 2억 4,300만원</text>
+  <text x="100" y="371" class="note">비교용 실제금리 4.3% + 수도권·규제지역 스트레스 금리 3.0%p</text>
+
+  <path d="M450 409v55M450 464H242v38M450 464h208v38" fill="none" stroke="#9cb5da" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="450" cy="464" r="7" fill="#3568b8"/>
+
+  <rect x="60" y="502" width="372" height="358" rx="28" fill="#ffffff" stroke="#a9c7ef" stroke-width="3" filter="url(#shadow)"/>
+  <circle cx="105" cy="551" r="21" fill="#e5efff"/>
+  <path d="M96 552h18M105 543v18" stroke="#3568b8" stroke-width="4" stroke-linecap="round"/>
+  <text x="142" y="560" class="card-title">수도권 비규제지역</text>
+  <text x="100" y="617" class="body">LTV 70% 안에서</text>
+  <text x="100" y="656" class="body">DSR 한도만큼 대출</text>
+  <rect x="100" y="690" width="292" height="2" fill="#dce6f2"/>
+  <text x="100" y="738" class="label">현금 + 대출</text>
+  <text x="100" y="790" class="amount" fill="#245da9">약 3억 9,300만원</text>
+  <rect x="100" y="815" width="173" height="34" rx="17" fill="#eaf2ff"/>
+  <text x="186" y="839" text-anchor="middle" class="reason" fill="#245da9">DSR에서 제한</text>
+
+  <rect x="468" y="502" width="372" height="358" rx="28" fill="#ffffff" stroke="#f0be83" stroke-width="3" filter="url(#shadow)"/>
+  <circle cx="513" cy="551" r="21" fill="#fff0dc"/>
+  <path d="M505 551h16" stroke="#c36d18" stroke-width="4" stroke-linecap="round"/>
+  <text x="550" y="560" class="card-title">규제지역</text>
+  <text x="508" y="617" class="body">LTV 40%가 먼저 적용돼</text>
+  <text x="508" y="656" class="body">대출은 1억원</text>
+  <rect x="508" y="690" width="292" height="2" fill="#eee3d8"/>
+  <text x="508" y="738" class="label">현금 + 대출</text>
+  <text x="508" y="790" class="amount" fill="#b65f13">약 2억 5,000만원</text>
+  <rect x="508" y="815" width="168" height="34" rx="17" fill="#fff1e2"/>
+  <text x="592" y="839" text-anchor="middle" class="reason" fill="#b65f13">LTV에서 제한</text>
+
+  <rect x="60" y="905" width="780" height="102" rx="22" fill="#18375f"/>
+  <text x="90" y="946" font-size="22" font-weight="800" fill="#ffffff">이 숫자는 매매대금 상한 비교입니다</text>
+  <text x="90" y="980" font-size="19" font-weight="550" fill="#dce9f8">취득세·중개보수·등기·이사비와 비상자금은 별도로 남겨 두세요.</text>
+
+  <text x="60" y="1043" class="note">기준: 금융위원회 대출규정 · 한국은행 2026년 7월 전체 신규 대출금리 · 2026-09-13</text>
+</svg>
