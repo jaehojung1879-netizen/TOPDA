@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1060" viewBox="0 0 900 1060" role="img" aria-labelledby="title desc">
+  <title id="title">아파트 누수 발생 뒤 확인 순서</title>
+  <desc id="desc">피해 기록과 관계자 통보, 현장 점검을 거쳐 누수 원인이 전유부분인지 공용부분인지 확인하고, 원인 수리 후 피해 복구와 보험 처리를 진행하는 흐름도</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3f8ff"/>
+      <stop offset="1" stop-color="#f8f4ed"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#17385f" flood-opacity=".10"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#527291"/>
+    </marker>
+  </defs>
+  <rect width="900" height="1060" rx="32" fill="url(#bg)"/>
+  <text x="60" y="76" font-family="Pretendard, Arial, sans-serif" font-size="34" font-weight="800" fill="#15344f">천장에 물이 샌다면 이렇게 확인하세요</text>
+  <text x="60" y="116" font-family="Pretendard, Arial, sans-serif" font-size="20" fill="#557085">보이는 위치만으로 책임을 정하지 않고, 원인을 확인한 뒤 비용을 나눕니다.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="120" y="160" width="660" height="122" rx="22" fill="#ffffff"/>
+    <circle cx="180" cy="221" r="31" fill="#dcecff"/>
+    <text x="180" y="231" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="27" font-weight="800" fill="#1765a5">1</text>
+    <text x="235" y="205" font-family="Pretendard, Arial, sans-serif" font-size="25" font-weight="750" fill="#17364f">피해를 기록하고 바로 알리기</text>
+    <text x="235" y="243" font-family="Pretendard, Arial, sans-serif" font-size="19" fill="#5b7183">사진·영상·발생 시각 → 관리사무소·윗집·집주인</text>
+  </g>
+  <path d="M450 282v52" stroke="#527291" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="120" y="344" width="660" height="122" rx="22" fill="#ffffff"/>
+    <circle cx="180" cy="405" r="31" fill="#dcecff"/>
+    <text x="180" y="415" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="27" font-weight="800" fill="#1765a5">2</text>
+    <text x="235" y="389" font-family="Pretendard, Arial, sans-serif" font-size="25" font-weight="750" fill="#17364f">누수 원인 확인하기</text>
+    <text x="235" y="427" font-family="Pretendard, Arial, sans-serif" font-size="19" fill="#5b7183">점검서에 원인 지점·시험 방법·수리 부위 남기기</text>
+  </g>
+  <path d="M450 466v54" stroke="#527291" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <rect x="270" y="530" width="360" height="86" rx="43" fill="#173f67"/>
+  <text x="450" y="565" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="23" font-weight="750" fill="#ffffff">물이 시작된 곳은 어디인가?</text>
+  <text x="450" y="593" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="17" fill="#dceaff">전유부분과 공용부분을 구분</text>
+
+  <path d="M390 616v54H235v38" fill="none" stroke="#527291" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M510 616v54H665v38" fill="none" stroke="#527291" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="60" y="718" width="350" height="158" rx="22" fill="#ffffff" stroke="#8dbde5" stroke-width="3"/>
+    <text x="90" y="758" font-family="Pretendard, Arial, sans-serif" font-size="24" font-weight="800" fill="#1765a5">개별 세대 사용 부분</text>
+    <text x="90" y="795" font-family="Pretendard, Arial, sans-serif" font-size="18" fill="#3e596f">욕실 방수·세대 배관·호스 등</text>
+    <text x="90" y="830" font-family="Pretendard, Arial, sans-serif" font-size="18" fill="#3e596f">소유자·점유자의 관리 책임과</text>
+    <text x="90" y="858" font-family="Pretendard, Arial, sans-serif" font-size="18" fill="#3e596f">보험 적용 여부 확인</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="490" y="718" width="350" height="158" rx="22" fill="#ffffff" stroke="#d9b36d" stroke-width="3"/>
+    <text x="520" y="758" font-family="Pretendard, Arial, sans-serif" font-size="24" font-weight="800" fill="#9a6520">공동으로 관리하는 부분</text>
+    <text x="520" y="795" font-family="Pretendard, Arial, sans-serif" font-size="18" fill="#3e596f">옥상·외벽·공용 수직배관 등</text>
+    <text x="520" y="830" font-family="Pretendard, Arial, sans-serif" font-size="18" fill="#3e596f">관리사무소에 보수 요청 후</text>
+    <text x="520" y="858" font-family="Pretendard, Arial, sans-serif" font-size="18" fill="#3e596f">단지 보험과 책임 주체 확인</text>
+  </g>
+
+  <path d="M235 876v45h215" fill="none" stroke="#527291" stroke-width="4"/>
+  <path d="M665 876v45H450" fill="none" stroke="#527291" stroke-width="4"/>
+  <path d="M450 921v30" stroke="#527291" stroke-width="4" marker-end="url(#arrow)"/>
+  <rect x="155" y="960" width="590" height="66" rx="18" fill="#e2f1e9"/>
+  <text x="450" y="990" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="22" font-weight="800" fill="#225d46">원인 수리 → 충분히 건조 → 아래층 피해 복구</text>
+  <text x="450" y="1016" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="16" fill="#4e7565">탐지비·원인 수리비·피해 복구비는 구분해 기록</text>
+  <text x="450" y="1048" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="14" fill="#708493">정보 기준일 2026-09-14 · 톺다</text>
+</svg>
