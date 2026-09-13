@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build reading surfaces from the existing post cards and article metadata.
+"""Build magazine surfaces from the existing post cards and article metadata.
 
 No second post registry: continue adding cards to posts/index.html as before.
 Weekly articles explicitly opt in with topda-series=market and topda-period.
@@ -69,9 +69,14 @@ def load_posts(hub, site=SITE):
         title, description = text(card, 'h3'), text(card, 'p')
         if not title or not description:
             raise ValueError(f'{href}: missing card title/description')
+        image = meta.get('og:image', '').strip()
+        if image.startswith('https://topda.kr/'):
+            image = image.removeprefix('https://topda.kr/')
+        else:
+            image = ''
         posts.append(dict(href=href, title=title, description=description,
                           category=attr(card.split('>')[0], 'data-cat'), series=series,
-                          published=published, period=period, card=card))
+                          published=published, period=period, image=image, card=card))
     # Stable same-day tie break, independent of file modification time or card insertion.
     return sorted(posts, key=lambda p: (-int(p['published'].replace('-', '') or '0'), p['href']))
 
@@ -82,27 +87,41 @@ def stamp(post):
     return f'<time class="editorial-date" datetime="{post["published"]}">발행 {post["published"]}</time>'
 
 
-def story(post, prefix, featured=False):
-    label = '주간 시장분석' if post['series'] == 'market' else '실용 가이드'
+def story(post, prefix, root, featured=False):
+    label = '주간 리포트' if post['series'] == 'market' else '실용 포스트'
+    media = ''
+    if featured and post['image']:
+        media = (f'<span class="editorial-story-media"><img src="{root}{escape(post["image"])}" '
+                 f'alt="" width="1200" height="630" loading="lazy"></span>')
     return (f'<a class="editorial-story{" editorial-story-featured" if featured else ""}" href="{prefix}{post["href"]}">'
-            f'<span class="editorial-label">{label} · {escape(post["category"])}</span>'
-            f'<h3>{escape(post["title"])}</h3><p>{escape(post["description"])}</p>{stamp(post)}</a>')
+            f'{media}<span class="editorial-story-body"><span class="editorial-label">{label} · {escape(post["category"])}</span>'
+            f'<h3>{escape(post["title"])}</h3><p>{escape(post["description"])}</p>{stamp(post)}</span></a>')
 
 
 def market_panel(posts, prefix, root):
     markets = [p for p in posts if p['series'] == 'market']
-    content = ('<p>가격·거래량·전세 흐름을 함께 살피고, 한 주의 변화를 정리하는 연재입니다.</p>')
+    content = ('<p class="editorial-market-intro">가격·거래·전세를 한 흐름으로 읽고, 다음 주에 확인할 지표까지 짚습니다.</p>')
     if markets:
         post = markets[0]
-        content = (f'<p>{escape(post["period"])}</p><h3><a href="{prefix}{post["href"]}">{escape(post["title"])}</a></h3>'
+        content = (f'<p class="editorial-market-period">분석 기간 {escape(post["period"])}</p>'
+                   f'<h3><a href="{prefix}{post["href"]}">{escape(post["title"])}</a></h3>'
                    f'<p>{escape(post["description"])}</p>{stamp(post)}'
-                   f'<p><a href="{prefix}index.html?series=market#archiveHeading">시장분석 모아보기 →</a></p>')
-    return ('<aside class="editorial-market" aria-label="주간 시장분석">'
-            '<p class="editorial-eyebrow">WEEKLY MARKET</p><h2>주간 시장분석</h2>' + content +
-            '<ul>'
-            f'<li><a href="{root}calculators/market-trends.html">지역 시세 대시보드 →</a></li>'
-            f'<li><a href="{root}calculators/transactions.html">실거래가 직접 확인하기 →</a></li>'
-            '</ul>' + ('' if markets else '<p class="editorial-status">첫 분석 글을 준비하고 있습니다.<br>지금은 공개된 지표와 실거래가를 먼저 살펴보세요.</p>') + '</aside>')
+                   f'<a class="editorial-market-primary" href="{prefix}index.html?series=market#archiveHeading">리포트 모아보기 →</a>')
+    return ('<aside class="editorial-market" aria-label="주간 시장 리포트">'
+            '<div><p class="editorial-eyebrow">WEEKLY MARKET</p><h2>주간 시장 리포트</h2>' + content + '</div>'
+            '<div class="editorial-market-tools">'
+            f'<a href="{root}calculators/market-trends.html"><span>PRICE</span> 지역 시세</a>'
+            f'<a href="{root}calculators/transactions.html"><span>DEALS</span> 실거래가</a>'
+            '</div>' + ('' if markets else '<p class="editorial-status">첫 리포트를 준비하고 있습니다.</p>') + '</aside>')
+
+
+def magazine_shell(posts, prefix, root):
+    guides = [post for post in posts if post['series'] == 'guide'][:3]
+    latest = ''.join(story(post, prefix, root, index == 0)
+                     for index, post in enumerate(guides))
+    return ('<div class="editorial-shell"><div class="editorial-layout">'
+            '<div class="editorial-stories" aria-label="최신 실용 포스트">' + latest + '</div>' +
+            market_panel(posts, prefix, root) + '</div></div>')
 
 
 def replace_block(source, name, content):
@@ -126,16 +145,16 @@ def render(home, hub, site=SITE):
         cards.append(card)
     hub = GRID.sub(lambda m: m[1] + '\n    ' + '\n    '.join(cards) + m[3], hub)
     for name, prefix, root in [('home', 'posts/', ''), ('hub', '', '../')]:
-        latest = ''.join(story(p, prefix, i == 0) for i, p in enumerate(posts[:3]))
-        content = ('<div class="editorial-layout"><div class="editorial-stories">' + latest +
-                   '</div>' + market_panel(posts, prefix, root) + '</div>')
+        content = magazine_shell(posts, prefix, root)
         if name == 'home':
             content = ('<section class="editorial-section" aria-labelledby="homeReadingTitle"><div class="container">'
-                       '<div class="strip-head"><h2 id="homeReadingTitle">새로 나온 읽을거리</h2>'
-                       '<a class="strip-link" href="posts/index.html">전체 글 보기 →</a></div>' + content + '</div></section>')
+                       '<header class="editorial-masthead"><div><p class="editorial-eyebrow">TOPDA MAGAZINE</p>'
+                       '<h2 id="homeReadingTitle">톺다 매거진</h2></div>'
+                       '<p>생활의 질문은 구체적으로, 시장의 변화는 차분하게.</p>'
+                       '<a href="posts/index.html">모든 포스트 →</a></header>' + content + '</div></section>')
             home = replace_block(home, name, content)
         else:
-            hub = replace_block(hub, name, '<section aria-label="최신 읽을거리">' + content + '</section>')
+            hub = replace_block(hub, name, '<section aria-label="이번 호">' + content + '</section>')
     return home, hub
 
 

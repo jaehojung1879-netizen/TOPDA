@@ -26,6 +26,8 @@ class EditorialTests(unittest.TestCase):
         self.assertEqual(first, render(*first))
         self.assertEqual(len(load_posts(before[1])), len(load_posts(first[1])))
         self.assertIn('href="posts/index.html" class="cat-tile cat-tile-editorial"', first[0])
+        self.assertLess(first[0].index('cat-tile-editorial'), first[0].index('categories/sale.html'))
+        self.assertIn('톺다 매거진', first[0])
         self.assertLess(first[0].index('editorial:home:start'), first[0].index('<!-- ===== Tools: calculators'))
 
     def test_publication_not_modification_order(self):
@@ -44,6 +46,7 @@ class EditorialTests(unittest.TestCase):
         self.assertIn('2026.09.01~09.06', home)
         self.assertNotIn('첫 분석 글을 준비', home)
         self.assertIn('posts/index.html?series=market', home)
+        self.assertIn('주간 시장 리포트', home)
 
     def test_market_category_does_not_imply_weekly_series(self):
         card = self.article('guide.html').replace('data-cat="매매"', 'data-cat="시장·투자"')

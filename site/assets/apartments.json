@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-09-11"
+    "portal_checked_at": "2026-09-12"
   },
   "apartments": [
     {
@@ -5147,7 +5147,11 @@
         "여의도": 24,
         "광화문": 12
       },
-      "households": 810
+      "households": 810,
+      "display_name": "인왕산아이파크1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-12",
+      "name_evidence": "http://place.map.kakao.com/11169426"
     },
     {
       "name": "창신쌍용1",
@@ -33662,7 +33666,11 @@
         "여의도": 24,
         "광화문": 38
       },
-      "households": 440
+      "households": 440,
+      "display_name": "신안약수아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-12",
+      "name_evidence": "http://place.map.kakao.com/11111898"
     },
     {
       "name": "목동청구한신아파트",
@@ -41306,7 +41314,11 @@
         "여의도": 39,
         "광화문": 23
       },
-      "households": 480
+      "households": 480,
+      "display_name": "미아동부센트레빌아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-12",
+      "name_evidence": "http://place.map.kakao.com/7838012"
     },
     {
       "name": "꿈의숲한신더휴",
@@ -62896,7 +62908,11 @@
         "name": "서울초당초등학교",
         "distance_m": 156,
         "in_zone": false
-      }
+      },
+      "display_name": "우성아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-12",
+      "name_evidence": "http://place.map.kakao.com/11361619"
     },
     {
       "name": "한양6",
@@ -63851,7 +63867,11 @@
         "name": "서울영문초등학교",
         "distance_m": 505,
         "in_zone": false
-      }
+      },
+      "display_name": "양평벽산블루밍아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-12",
+      "name_evidence": "http://place.map.kakao.com/11374826"
     },
     {
       "name": "우성3",
@@ -77658,7 +77678,11 @@
         "여의도": 74,
         "광화문": 84
       },
-      "households": 279
+      "households": 279,
+      "display_name": "수원인계한양수자인아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-12",
+      "name_evidence": "http://place.map.kakao.com/1667754445"
     },
     {
       "name": "청계천두산위브더제니스",
@@ -97402,7 +97426,11 @@
         "여의도": 42,
         "광화문": 25
       },
-      "households": 615
+      "households": 615,
+      "display_name": "꿈의숲롯데캐슬아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-12",
+      "name_evidence": "http://place.map.kakao.com/25983037"
     },
     {
       "name": "중산마을1단지(두산)",
@@ -102729,7 +102757,11 @@
         81643
       ],
       "builder": "기타",
-      "households": 662
+      "households": 662,
+      "display_name": "북한산현대홈타운아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-12",
+      "name_evidence": "http://place.map.kakao.com/9039727"
     },
     {
       "name": "대우미래사랑",
