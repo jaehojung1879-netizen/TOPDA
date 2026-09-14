@@ -328,6 +328,21 @@ def run(rep):
             rep.fail("12 apt URL", f"{p}: 레거시 지역 별칭에 이동 태그가 없습니다")
     rep.note(f"레거시 지역 별칭 {len(aliases):,}개 noindex 리다이렉트 확인")
 
+    regions = [p for p in pages if re.match(r"^/apt/(?!index\.html$)[^/]+\.html$", p)]
+    for p in regions:
+        if indexable[p]:
+            rep.fail("12 apt URL", f"{p}: 재심사 기간 지역 집계 페이지가 indexable 상태입니다")
+    rep.note(f"지역 집계 {len(regions):,}개 noindex 확인 · 색인은 /apt/ 허브만 허용")
+
+    navigation_no_ads = {
+        "/", "/guides.html", "/posts/index.html", "/calculators/index.html",
+        "/checklists/index.html", "/interior/index.html",
+    }
+    navigation_no_ads.update(p for p in pages if p.startswith("/categories/"))
+    for p in sorted(navigation_no_ads):
+        if p in pages and "pagead2.googlesyndication.com" in pages[p]["raw"]:
+            rep.fail("12 탐색면 광고", f"{p}: 탐색 중심 화면에 AdSense 스크립트가 있습니다")
+
     # ── 13. robots.txt
     rp = os.path.join(SITE, "robots.txt")
     if not os.path.exists(rp):

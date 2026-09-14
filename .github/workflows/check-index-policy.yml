@@ -42,6 +42,10 @@ jobs:
         working-directory: _meta
         run: python retire_apt_aliases.py
 
+      - name: Apply review index and ads policy
+        working-directory: _meta
+        run: python apply_index_policy.py
+
       - name: Rebuild sitemaps
         working-directory: _meta
         run: python build_sitemaps.py

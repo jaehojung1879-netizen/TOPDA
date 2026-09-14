@@ -34,6 +34,10 @@ SITEMAP = os.path.join(SITE, "sitemap.xml")
 FLAT = os.path.join(SITE, "sitemap-all.xml")     # 평면 원본(생성기들이 계속 쓰는 대상)
 MAX_URLS = 50000
 
+# 최신 글을 노출하는 허브는 내용이 바뀌어도 과거 수동 lastmod가 그대로 남아 있었다.
+# 검색엔진이 오래된 홈을 계속 들고 있지 않도록 실제 최신 게시일로만 보정한다.
+EDITORIAL_HUBS = {f"{BASE}/", f"{BASE}/guides.html", f"{BASE}/posts/index.html"}
+
 NS = 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'
 
 
@@ -64,6 +68,28 @@ def parse(xml):
         pr = re.search(r"<priority>([^<]+)</priority>", block)
         out.append((loc.group(1), lm.group(1) if lm else None, pr.group(1) if pr else None))
     return out
+
+
+def latest_post_date():
+    posts = os.path.join(SITE, "posts")
+    dates = []
+    try:
+        names = os.listdir(posts)
+    except OSError:
+        return None
+    for name in names:
+        if not name.endswith(".html") or name == "index.html":
+            continue
+        try:
+            text = open(os.path.join(posts, name), encoding="utf-8").read()
+        except OSError:
+            continue
+        if NOINDEX_RE.search(text.split("</head>", 1)[0]):
+            continue
+        m = re.search(r'"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})', text)
+        if m:
+            dates.append(m.group(1))
+    return max(dates) if dates else None
 
 
 NOINDEX_RE = re.compile(r'<meta[^>]+name=["\']robots["\'][^>]*content=["\'][^"\']*noindex', re.I)
@@ -123,6 +149,14 @@ def main():
     if not entries:
         print("! URL 없음 — 중단")
         return 1
+
+
+    editorial_date = latest_post_date()
+    if editorial_date:
+        entries = [
+            (loc, editorial_date if loc in EDITORIAL_HUBS else lastmod, pri)
+            for loc, lastmod, pri in entries
+        ]
 
     # 평면 원본 보존(생성기들이 계속 여기에 쓰도록 다음 실행의 입력이 된다)
     with open(FLAT, "w", encoding="utf-8") as f:

@@ -201,6 +201,10 @@ jobs:
         run: python retire_apt_aliases.py
         continue-on-error: true
 
+      - name: Apply review index and ads policy
+        working-directory: _meta
+        run: python apply_index_policy.py
+
       # sitemap 분할 — 생성기들이 쓴 평면 목록(sitemap-all.xml)을 분류별 파일 +
       # sitemap index(sitemap.xml)로 변환한다. 반드시 모든 생성기 뒤에 온다.
       - name: Split sitemap into index
