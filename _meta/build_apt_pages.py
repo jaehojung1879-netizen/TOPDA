@@ -163,16 +163,18 @@ ul.idx a{display:block;padding:8px 10px;border:1px solid var(--line);border-radi
 """
 
 
-def page_head(title, desc, canonical):
+def page_head(title, desc, canonical, *, noindex=False):
     # 파비콘과 OG 이미지는 쓰임새가 달라 크기도 다르다. 파비콘은 16~32px 자리라
     # 688KB 원본을 물리면 모든 페이지가 그만큼을 헛으로 받는다(2026-08-02 실측에서
     # 가장 느린 리소스였다). OG 카드는 크롤러가 받는 큰 그림이라 원본을 그대로 둔다.
     favicon = BASE + "/assets/images/brand/logo-32.png"
     logo = BASE + "/assets/images/brand/logo.png"
+    robots = '<meta name="robots" content="noindex,follow" />\n' if noindex else ''
     return (
         '<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="utf-8" />\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1" />\n'
         f'<title>{esc(title)}</title>\n'
+        f'{robots}'
         f'<meta name="description" content="{esc(desc)}" />\n'
         f'<link rel="icon" href="{esc(favicon)}" type="image/png" />\n'
         f'<link rel="canonical" href="{esc(canonical)}" />\n'
@@ -304,7 +306,9 @@ def region_page(rk, rows, as_of, ms=None, canonical=None, complex_urls=None):
         ('<p class="note">표 하단 거래 1건 단지는 표본이 적어 추이를 표시하지 않습니다.</p>\n' if thin_rows else '')
         + f'<script type="application/ld+json">{ld}</script>\n'
     )
-    return page_head(title, desc, canonical) + body + footer_html(as_of)
+    # 지역별 자동 집계는 사용자가 링크를 따라 볼 수 있게 유지하되, 검색 결과에서는
+    # 사람이 편집한 가이드와 하나의 지역 허브(/apt/)가 대표하도록 한다.
+    return page_head(title, desc, canonical, noindex=True) + body + footer_html(as_of)
 
 
 def index_page(region_rows, as_of):

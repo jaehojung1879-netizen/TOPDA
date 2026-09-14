@@ -62,6 +62,10 @@ jobs:
         working-directory: _meta
         run: python retire_apt_aliases.py
 
+      - name: Apply review index and ads policy
+        working-directory: _meta
+        run: python apply_index_policy.py
+
       # 정식 지역 URL만 sitemap에 싣고 분류별 sitemap + index를 다시 만든다.
       - name: Rebuild sitemaps (색인 허용 URL만)
         working-directory: _meta
@@ -72,6 +76,12 @@ jobs:
       # 주소를 알면 열린다). 저장소에는 남기고 배포본에서만 뺀다.
       - name: Drop internal flat sitemap from artifact
         run: rm -f site/sitemap-all.xml
+
+      # 번역 원본은 저장소에 보존하지만, 한국어 핵심 사이트를 검증하는 동안에는
+      # 미완성 다국어 여정과 meta-refresh 레거시 별칭을 공개 산출물에서 제외한다.
+      - name: Prune legacy and untranslated public pages
+        working-directory: _meta
+        run: python prune_public_artifact.py
 
       - name: Inject Kakao JavaScript key
         env:

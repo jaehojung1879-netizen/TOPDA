@@ -12,8 +12,8 @@
 원칙
   · noindex 로 바꿔도 페이지는 그대로 접근·동작한다. robots.txt 로 크롤을 막지 않는다
     (막으면 검색엔진이 noindex 태그 자체를 읽지 못한다).
-  · 언어 선택 UX 는 건드리지 않는다. zh-Hans·zh-Hant·vi·th 페이지는 남아 있고 링크도 살아 있다.
-    검색 색인과 hreflang 에서만 뺀다.
+  · 번역 원본은 저장소에 보존한다. 다만 AdSense 재심사 배포본에서는
+    prune_public_artifact.py가 미완성 다국어 여정과 레거시 별칭을 제외한다.
   · 되돌릴 수 있어야 한다. 여러 번 실행해도 결과가 같다(idempotent).
 
 사용법
@@ -49,6 +49,27 @@ NOINDEX_GLOBS = (
     # 레거시 영문 지역 별칭 및 과거 단지별 URL. 실제 지역 콘텐츠는 /apt/*.html 하나만 둔다.
     "/apt/*/", "/apt/*/index.html",
 
+    # 지역 집계 79개는 데이터는 다르지만 같은 템플릿·표 구조가 사이트 색인 문서의
+    # 절반 가까이를 차지한다. 재심사 기간에는 /apt/ 허브와 통합 검색만 색인하고,
+    # 지역 페이지는 사용자가 링크로 열 수 있게 유지하되 검색·광고에서는 제외한다.
+    "/apt/*.html",
+
+    # 초기의 짧은 설명 글. 현재도 참고 자료로 접근은 가능하지만 독립적인 심사 대상
+    # 문서로 두기에는 사례·근거·행동 지침이 부족하다. 후속 통합/개정 전까지 색인과
+    # 광고에서 제외한다.
+    "/posts/interior-contract.html",
+    "/posts/interior-defect.html",
+    "/posts/lease-contract-tips.html",
+    "/posts/lease-renewal.html",
+    "/posts/lease-return.html",
+    "/posts/ltv-explain.html",
+    "/posts/move-in-admin.html",
+    "/posts/moving-day-tips.html",
+    "/posts/moving-quote.html",
+    "/posts/moving-types.html",
+    "/posts/storage-moving.html",
+    "/posts/stress-dsr.html",
+
     # ── 아직 실제 데이터가 없어 화면에 예시값을 띄우는 페이지 (2026-08-15 감사)
     #
     # 세 페이지 모두 본문에 "예시 데이터입니다 / 실제 시세가 아닙니다"라고 스스로 밝히면서
@@ -73,6 +94,12 @@ NO_ADS_GLOBS = (
     "/about.html", "/*/about.html",
     "/terms.html", "/*/terms.html",
     "/contact.html", "/*/contact.html",
+
+    # 홈·목록·카테고리 허브는 방문자가 다른 콘텐츠를 고르는 탐색 화면이다.
+    # AdSense 코드는 독립 본문이나 계산 기능이 있는 상세 화면에만 둔다.
+    "/", "/guides.html", "/posts/",
+    "/calculators/", "/categories/*",
+    "/checklists/", "/interior/",
 )
 
 ADS_SCRIPT_RE = re.compile(

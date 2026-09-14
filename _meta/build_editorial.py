@@ -51,8 +51,7 @@ def load_posts(hub, site=SITE):
         seen.add(href)
         source = (site / 'posts' / href).read_text(encoding='utf-8')
         meta = Metadata(source).meta
-        if 'noindex' in meta.get('robots', '').lower():
-            continue
+        indexable = 'noindex' not in meta.get('robots', '').lower()
         series = meta.get('topda-series', 'guide')
         if series not in ('guide', 'market'):
             raise ValueError(f'{href}: unknown topda-series {series}')
@@ -76,7 +75,8 @@ def load_posts(hub, site=SITE):
             image = ''
         posts.append(dict(href=href, title=title, description=description,
                           category=attr(card.split('>')[0], 'data-cat'), series=series,
-                          published=published, period=period, image=image, card=card))
+                          published=published, period=period, image=image, card=card,
+                          indexable=indexable))
     # Stable same-day tie break, independent of file modification time or card insertion.
     return sorted(posts, key=lambda p: (-int(p['published'].replace('-', '') or '0'), p['href']))
 
@@ -99,7 +99,7 @@ def story(post, prefix, root, featured=False):
 
 
 def market_panel(posts, prefix, root):
-    markets = [p for p in posts if p['series'] == 'market']
+    markets = [p for p in posts if p['series'] == 'market' and p['indexable']]
     content = ('<p class="editorial-market-intro">가격·거래·전세를 한 흐름으로 읽고, 다음 주에 확인할 지표까지 짚습니다.</p>')
     if markets:
         post = markets[0]
@@ -116,7 +116,7 @@ def market_panel(posts, prefix, root):
 
 
 def magazine_shell(posts, prefix, root):
-    guides = [post for post in posts if post['series'] == 'guide'][:3]
+    guides = [post for post in posts if post['series'] == 'guide' and post['indexable']][:3]
     latest = ''.join(story(post, prefix, root, index == 0)
                      for index, post in enumerate(guides))
     return ('<div class="editorial-shell"><div class="editorial-layout">'
@@ -125,7 +125,7 @@ def magazine_shell(posts, prefix, root):
 
 
 def weekly_brief(posts, prefix):
-    markets = [post for post in posts if post['series'] == 'market']
+    markets = [post for post in posts if post['series'] == 'market' and post['indexable']]
     if not markets:
         return ('<div class="editorial-weekly-brief editorial-weekly-brief-empty">'
                 '<span class="editorial-label">주간 브리핑</span><h3>첫 브리핑을 준비하고 있습니다</h3>'
@@ -139,7 +139,7 @@ def weekly_brief(posts, prefix):
 
 
 def home_summary(posts):
-    guides = [post for post in posts if post['series'] == 'guide']
+    guides = [post for post in posts if post['series'] == 'guide' and post['indexable']]
     latest = story(guides[0], 'posts/', '', False) if guides else ''
     return ('<section class="editorial-section" aria-labelledby="homeReadingTitle"><div class="container">'
             '<div class="strip-head"><h2 id="homeReadingTitle">새로 나온 포스트</h2>'

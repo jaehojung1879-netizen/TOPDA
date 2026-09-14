@@ -66,9 +66,17 @@ class EditorialTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'unknown'):
             load_posts(self.hub.format(cards=card), self.site)
 
-    def test_noindex_excluded(self):
+    def test_noindex_retained_in_archive_but_excluded_from_editorial_surfaces(self):
         cards = self.article('hidden.html', meta='<meta name="robots" content="noindex">') + self.article('visible.html')
-        self.assertEqual(len(load_posts(self.hub.format(cards=cards), self.site)), 1)
+        posts = load_posts(self.hub.format(cards=cards), self.site)
+        self.assertEqual(len(posts), 2)
+        self.assertEqual([post['href'] for post in posts if post['indexable']], ['visible.html'])
+        home, hub = render(self.home, self.hub.format(cards=cards), self.site)
+        home_editorial = home.split('<!-- editorial:home:start -->', 1)[1].split('<!-- editorial:home:end -->', 1)[0]
+        hub_editorial = hub.split('<!-- editorial:hub:start -->', 1)[1].split('<!-- editorial:hub:end -->', 1)[0]
+        self.assertNotIn('hidden.html', home_editorial)
+        self.assertNotIn('hidden.html', hub_editorial)
+        self.assertIn('href="hidden.html"', hub)
 
     def test_duplicate_rejected(self):
         card = self.article('duplicate.html')
