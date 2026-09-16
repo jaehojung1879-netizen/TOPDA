@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1120" viewBox="0 0 900 1120" role="img" aria-labelledby="title desc">
+  <title id="title">주택담보대출 1억원 중도상환 판단 순서</title>
+  <desc id="desc">은행 앱에서 실제 수수료를 조회한 뒤 비상자금과 고금리 부채를 확인하고, 대출이자 절감액에서 포기하는 세후 수익을 빼 수수료 회수기간을 계산하는 흐름도다. 예시는 대출금리 4.3퍼센트, 수수료율 0.55퍼센트, 대출 후 1년 경과 조건이다.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f5f7fb}.card{fill:#fff;stroke:#d9e1ec;stroke-width:2}.accent{fill:#eaf2ff;stroke:#6f9ce8;stroke-width:2}.good{fill:#e9f7ef;stroke:#55a878;stroke-width:2}.warn{fill:#fff5df;stroke:#d6a23d;stroke-width:2}.t{font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;fill:#172033}.h{font-size:34px;font-weight:800}.sh{font-size:23px;font-weight:750}.p{font-size:19px;font-weight:500}.small{font-size:16px;fill:#596579}.num{font-size:27px;font-weight:800;fill:#255fb5}.line{stroke:#8ea1ba;stroke-width:4;fill:none}.dot{fill:#356fc4}.pill{fill:#2f6dcc}.white{fill:#fff;font-size:17px;font-weight:750}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10z" fill="#8ea1ba"/></marker>
+  </defs>
+  <rect class="bg" width="900" height="1120" rx="36"/>
+  <text class="t h" x="60" y="75">1억원을 미리 갚기 전, 이 순서로 계산하세요</text>
+  <text class="t small" x="60" y="108">예시: 대출금리 4.3% · 수수료율 0.55% · 대출 후 1년 경과</text>
+
+  <rect class="card" x="60" y="145" width="780" height="155" rx="24"/>
+  <rect class="pill" x="85" y="170" width="96" height="34" rx="17"/><text class="t white" x="107" y="193">먼저</text>
+  <text class="t sh" x="205" y="198">은행 앱에서 ‘오늘 상환할 금액’을 조회</text>
+  <text class="t p" x="85" y="242">약정 수수료율 · 면제 한도 · 부과 종료일 · 예상 수수료</text>
+  <text class="t small" x="85" y="274">인터넷 계산보다 금융회사가 보여 주는 실제 청구액이 우선입니다.</text>
+
+  <path class="line" d="M450 300V346" marker-end="url(#arrow)"/>
+  <rect class="warn" x="60" y="355" width="780" height="145" rx="24"/>
+  <text class="t sh" x="85" y="403">상환 뒤에도 생활비와 예정 지출을 버틸 현금이 남나요?</text>
+  <text class="t p" x="85" y="445">부족하다면 전액 상환보다 일부 상환 또는 보류를 먼저 검토</text>
+  <text class="t small" x="85" y="476">다시 돈을 빌리면 금리·한도·부대비용이 달라질 수 있습니다.</text>
+
+  <path class="line" d="M450 500V546" marker-end="url(#arrow)"/>
+  <rect class="accent" x="60" y="555" width="780" height="225" rx="24"/>
+  <text class="t sh" x="85" y="602">수수료보다 ‘매달 줄어드는 순비용’을 비교</text>
+  <text class="t p" x="85" y="649">중도상환수수료</text><text class="t num" x="610" y="649">약 36만7천원</text>
+  <text class="t p" x="85" y="695">첫 달 대출이자 감소</text><text class="t num" x="610" y="695">약 35만8천원</text>
+  <line x1="85" y1="718" x2="815" y2="718" stroke="#b9cceb" stroke-width="2"/>
+  <text class="t small" x="85" y="751">계산: 1억원 × 0.55% × 730/1,095 · 이자: 1억원 × 4.3% ÷ 12</text>
+
+  <path class="line" d="M450 780V826" marker-end="url(#arrow)"/>
+  <rect class="good" x="60" y="835" width="780" height="180" rx="24"/>
+  <text class="t sh" x="85" y="883">예금·투자에서 포기하는 세후 수익도 빼세요</text>
+  <text class="t p" x="85" y="927">현금을 그냥 두는 경우: 수수료 회수 약 1.0개월</text>
+  <text class="t p" x="85" y="966">세후 연 2.5% 수익을 포기하는 경우: 약 2.4개월</text>
+  <text class="t small" x="85" y="995">수익률 2.5%는 비교용 가정이며 현재 예금금리를 뜻하지 않습니다.</text>
+
+  <circle class="dot" cx="450" cy="1058" r="9"/>
+  <text class="t small" x="60" y="1092">기준일 2026-09-16 · 제도: 금융위원회 · 상품 예시: KB국민은행 2026년 변동금리 부동산담보대출</text>
+</svg>
