@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1080" viewBox="0 0 900 1080" role="img" aria-labelledby="title desc">
+  <title id="title">장기수선충당금 반환 확인 순서</title>
+  <desc id="desc">관리비 고지서에서 장기수선충당금을 찾고, 관리사무소에서 납부확인서를 발급받은 뒤, 계약 특약과 소유자 변경을 확인해 집주인에게 정산을 요청하는 네 단계 흐름도</desc>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef5ff"/><stop offset="1" stop-color="#f8fafc"/></linearGradient><style>.t{font-family:Pretendard,'Noto Sans KR',Arial,sans-serif;fill:#172033}.h{font-size:38px;font-weight:800}.s{font-size:21px;fill:#516078}.n{font-size:18px;font-weight:800;fill:#fff}.ch{font-size:27px;font-weight:800}.cb{font-size:19px;fill:#516078}.arrow{stroke:#7c93b8;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}</style></defs>
+  <rect width="900" height="1080" rx="40" fill="url(#bg)"/>
+  <text class="t h" x="70" y="86">이사 전, 이 순서로 확인하세요</text>
+  <text class="t s" x="70" y="126">관리사무소는 금액을 확인하고, 반환은 주택 소유자에게 청구합니다</text>
+  <g transform="translate(70 178)">
+    <rect width="760" height="158" rx="26" fill="#fff" stroke="#cbd9ee" stroke-width="2"/>
+    <circle cx="58" cy="58" r="28" fill="#315b9c"/><text class="t n" x="58" y="65" text-anchor="middle">1</text>
+    <text class="t ch" x="105" y="61">관리비 고지서에서 항목 찾기</text>
+    <text class="t cb" x="105" y="99">‘장기수선충당금’인지 정확히 확인</text>
+    <text class="t cb" x="105" y="130">수선유지비는 반환 대상에 합산하지 않기</text>
+  </g>
+  <path class="arrow" d="M450 348v38m-12-12 12 12 12-12"/>
+  <g transform="translate(70 398)">
+    <rect width="760" height="158" rx="26" fill="#fff" stroke="#cbd9ee" stroke-width="2"/>
+    <circle cx="58" cy="58" r="28" fill="#315b9c"/><text class="t n" x="58" y="65" text-anchor="middle">2</text>
+    <text class="t ch" x="105" y="61">관리사무소에서 납부확인서 받기</text>
+    <text class="t cb" x="105" y="99">실제 입주일~퇴거일의 월별 납부액 확인</text>
+    <text class="t cb" x="105" y="130">미납월·집주인 직접 납부월은 제외</text>
+  </g>
+  <path class="arrow" d="M450 568v38m-12-12 12 12 12-12"/>
+  <g transform="translate(70 618)">
+    <rect width="760" height="158" rx="26" fill="#fff" stroke="#cbd9ee" stroke-width="2"/>
+    <circle cx="58" cy="58" r="28" fill="#315b9c"/><text class="t n" x="58" y="65" text-anchor="middle">3</text>
+    <text class="t ch" x="105" y="61">계약 특약과 집주인 변경 확인</text>
+    <text class="t cb" x="105" y="99">임차인 부담·반환 포기 문구가 있는지 확인</text>
+    <text class="t cb" x="105" y="130">소유자가 바뀌었다면 변경일 전후 금액 구분</text>
+  </g>
+  <path class="arrow" d="M450 788v38m-12-12 12 12 12-12"/>
+  <g transform="translate(70 838)">
+    <rect width="760" height="158" rx="26" fill="#173f78"/>
+    <circle cx="58" cy="58" r="28" fill="#fff"/><text x="58" y="65" text-anchor="middle" font-family="Pretendard,'Noto Sans KR',Arial,sans-serif" font-size="18" font-weight="800" fill="#173f78">4</text>
+    <text x="105" y="61" font-family="Pretendard,'Noto Sans KR',Arial,sans-serif" font-size="27" font-weight="800" fill="#fff">집주인에게 금액과 지급일 요청</text>
+    <text x="105" y="99" font-family="Pretendard,'Noto Sans KR',Arial,sans-serif" font-size="19" fill="#d9e7fb">납부확인서·계좌·지급기한을 기록으로 남기기</text>
+    <text x="105" y="130" font-family="Pretendard,'Noto Sans KR',Arial,sans-serif" font-size="19" fill="#d9e7fb">합의가 안 되면 임대차분쟁조정 여부 확인</text>
+  </g>
+  <text class="t s" x="70" y="1042">근거: 공동주택관리법 제30조, 같은 법 시행령 제31조 제8항 · 기준일 2026-09-17</text>
+</svg>
