@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1040" viewBox="0 0 900 1040" role="img" aria-labelledby="title desc">
+  <title id="title">전세 재계약 증액분의 확정일자 순위 예시</title>
+  <desc id="desc">2024년 기존 보증금 3억원 계약과 확정일자, 2026년 6월 새 근저당권, 2026년 9월 보증금 1,500만원 증액과 새 확정일자의 순서를 보여준다. 기존 보증금과 증액분은 서로 다른 날짜를 기준으로 순위가 정해질 수 있음을 설명한다.</desc>
+  <rect width="900" height="1040" rx="34" fill="#f7f8fb"/>
+  <text x="60" y="78" font-family="Pretendard, Arial, sans-serif" font-size="36" font-weight="800" fill="#17233c">기존 보증금과 증액분의 날짜는 다를 수 있습니다</text>
+  <text x="60" y="120" font-family="Pretendard, Arial, sans-serif" font-size="21" fill="#53617b">예시: 기존 3억원에 1,500만원을 더해 재계약하는 경우</text>
+  <line x1="132" y1="206" x2="132" y2="848" stroke="#b7c3d8" stroke-width="8" stroke-linecap="round"/>
+
+  <circle cx="132" cy="245" r="24" fill="#246bfe"/>
+  <rect x="192" y="180" width="648" height="180" rx="22" fill="#ffffff" stroke="#dbe2ee" stroke-width="2"/>
+  <text x="226" y="224" font-family="Pretendard, Arial, sans-serif" font-size="20" font-weight="700" fill="#246bfe">2024년 9월 20일</text>
+  <text x="226" y="268" font-family="Pretendard, Arial, sans-serif" font-size="28" font-weight="800" fill="#17233c">보증금 3억원 계약 · 입주 · 전입신고</text>
+  <text x="226" y="312" font-family="Pretendard, Arial, sans-serif" font-size="22" fill="#53617b">기존 계약서에 확정일자를 받아 우선변제 요건을 갖춤</text>
+
+  <circle cx="132" cy="481" r="24" fill="#ed7a3a"/>
+  <rect x="192" y="416" width="648" height="180" rx="22" fill="#fff9f4" stroke="#f2c6aa" stroke-width="2"/>
+  <text x="226" y="460" font-family="Pretendard, Arial, sans-serif" font-size="20" font-weight="700" fill="#c85c23">2026년 6월 10일</text>
+  <text x="226" y="504" font-family="Pretendard, Arial, sans-serif" font-size="28" font-weight="800" fill="#17233c">집주인이 새 근저당권을 설정</text>
+  <text x="226" y="548" font-family="Pretendard, Arial, sans-serif" font-size="22" fill="#53617b">이 권리는 뒤에 늘어난 보증금보다 앞설 수 있음</text>
+
+  <circle cx="132" cy="717" r="24" fill="#15966d"/>
+  <rect x="192" y="652" width="648" height="180" rx="22" fill="#f3fbf8" stroke="#a8ddcd" stroke-width="2"/>
+  <text x="226" y="696" font-family="Pretendard, Arial, sans-serif" font-size="20" font-weight="700" fill="#087854">2026년 9월 18일</text>
+  <text x="226" y="740" font-family="Pretendard, Arial, sans-serif" font-size="28" font-weight="800" fill="#17233c">1,500만원 증액 · 새 확정일자</text>
+  <text x="226" y="784" font-family="Pretendard, Arial, sans-serif" font-size="22" fill="#53617b">증액분은 새 날짜를 기준으로 순위를 따짐</text>
+
+  <rect x="60" y="884" width="780" height="104" rx="20" fill="#17233c"/>
+  <text x="92" y="928" font-family="Pretendard, Arial, sans-serif" font-size="23" font-weight="800" fill="#ffffff">재계약 전에 할 일</text>
+  <text x="92" y="965" font-family="Pretendard, Arial, sans-serif" font-size="21" fill="#d9e1ef">최신 등기부 확인 → 증액 계약 작성 → 새 확정일자 → 증액분 송금</text>
+  <text x="60" y="1020" font-family="Pretendard, Arial, sans-serif" font-size="17" fill="#6d7890">자료 기준일 2026-09-18 · 실제 순위는 대항력, 접수시각, 세금과 다른 권리까지 함께 판단합니다.</text>
+</svg>
