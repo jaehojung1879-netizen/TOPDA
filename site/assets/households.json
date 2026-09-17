@@ -229205,45 +229205,383 @@
     },
     "서울 강서구|청솔숲속마을102동": {
       "addr": "서울 강서구 내발산동 738",
-      "households": 77,
-      "hh_src": "address_alias:title.hhldCnt",
-      "hh_confidence": "high",
-      "hh_checked_at": "2026-09-16",
-      "hh_evidence": []
+      "lat": 37.551938,
+      "lng": 126.839856,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 466
+      },
+      "elementary": {
+        "name": "서울내발산초등학교",
+        "distance_m": 176
+      }
     },
     "서울 강서구|청솔샤르망1001동": {
       "addr": "서울 강서구 내발산동 676-23",
-      "households": 49,
-      "hh_src": "address_alias:title.hhldCnt",
-      "hh_confidence": "high",
-      "hh_checked_at": "2026-09-16",
-      "hh_evidence": []
+      "lat": 37.552905,
+      "lng": 126.838734,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 501
+      },
+      "elementary": {
+        "name": "서울내발산초등학교",
+        "distance_m": 159
+      }
     },
     "서울 양천구|주함헤븐103동": {
       "addr": "서울 양천구 신월동 203-14",
-      "households": 12,
-      "hh_src": "address_alias:title.hhldCnt",
-      "hh_confidence": "high",
-      "hh_checked_at": "2026-09-16",
-      "hh_evidence": []
+      "lat": 37.530052,
+      "lng": 126.829623,
+      "elementary": {
+        "name": "서울신원초등학교",
+        "distance_m": 57
+      }
     },
     "서울 강동구|광남캐스빌105동": {
       "addr": "서울 강동구 둔촌동 435-4",
-      "households": 28,
-      "hh_src": "address_alias:title.hhldCnt",
-      "hh_confidence": "high",
-      "hh_checked_at": "2026-09-16",
-      "hh_evidence": []
+      "lat": 37.53339,
+      "lng": 127.139259,
+      "subway": {
+        "station": "길동역 5호선",
+        "distance_m": 496
+      },
+      "elementary": {
+        "name": "서울한산초등학교",
+        "distance_m": 579
+      }
     },
     "서울 관악구|에메랄드105동": {
-      "addr": "서울 관악구 봉천동 41-261"
+      "addr": "서울 관악구 봉천동 41-261",
+      "lat": 37.485747,
+      "lng": 126.952813,
+      "subway": {
+        "station": "서울대입구역 2호선",
+        "distance_m": 495
+      },
+      "elementary": {
+        "name": "서울신봉초등학교",
+        "distance_m": 324
+      }
     },
     "서울 강서구|우공팰리스101동": {
-      "addr": "서울 강서구 화곡동 1026-27"
+      "addr": "서울 강서구 화곡동 1026-27",
+      "lat": 37.544482,
+      "lng": 126.838542,
+      "subway": {
+        "station": "화곡역 5호선",
+        "distance_m": 356
+      },
+      "elementary": {
+        "name": "서울신월초등학교",
+        "distance_m": 450
+      }
     },
     "부산 부산진구|범전시영1동": {
-      "addr": "부산 부산진구 범전동 43-4"
+      "addr": "부산 부산진구 범전동 43-4",
+      "lat": 35.166136,
+      "lng": 129.062044,
+      "subway": {
+        "station": "부전역 동해선",
+        "distance_m": 332
+      },
+      "elementary": {
+        "name": "성전초등학교",
+        "distance_m": 478
+      }
+    },
+    "대구 수성구|수성풀비체": {
+      "addr": "대구 수성구 만촌동 641",
+      "lat": 35.872017,
+      "lng": 128.645627,
+      "subway": {
+        "station": "만촌역 대구2호선",
+        "distance_m": 1462
+      },
+      "elementary": {
+        "name": "대구중앙초등학교",
+        "distance_m": 524
+      }
+    },
+    "서울 강남구|래미안신사": {
+      "addr": "서울 강남구 신사동 506-9",
+      "lat": 37.52013,
+      "lng": 127.019621,
+      "subway": {
+        "station": "신사역 3호선",
+        "distance_m": 414
+      },
+      "elementary": {
+        "name": "서울신구초등학교",
+        "distance_m": 552
+      }
+    },
+    "경기 용인시 처인구|조양맨션(2,3동)": {
+      "addr": "경기 용인시 처인구 역북동 412-2",
+      "lat": 37.238164,
+      "lng": 127.192713,
+      "subway": {
+        "station": "명지대역 에버라인",
+        "distance_m": 215
+      },
+      "elementary": {
+        "name": "역북초등학교",
+        "distance_m": 399
+      }
+    },
+    "서울 관악구|예촌그린": {
+      "addr": "서울 관악구 남현동 1072-46",
+      "lat": 37.47258,
+      "lng": 126.972991,
+      "subway": {
+        "station": "사당역 2호선",
+        "distance_m": 877
+      },
+      "elementary": {
+        "name": "서울사당초등학교",
+        "distance_m": 131
+      }
+    },
+    "서울 마포구|광남벨라스2동": {
+      "addr": "서울 마포구 동교동 200-4",
+      "lat": 37.558687,
+      "lng": 126.922561,
+      "subway": {
+        "station": "홍대입구역 2호선",
+        "distance_m": 228
+      },
+      "elementary": {
+        "name": "서울서교초등학교",
+        "distance_m": 460
+      }
+    },
+    "경기 군포시|삼성그린": {
+      "addr": "경기 군포시 당동 761-11",
+      "lat": 37.35204,
+      "lng": 126.940693,
+      "subway": {
+        "station": "군포역 1호선",
+        "distance_m": 733
+      },
+      "elementary": {
+        "name": "군포초등학교",
+        "distance_m": 449
+      }
+    },
+    "울산 남구|우일명가": {
+      "addr": "울산 남구 신정동 22-15",
+      "lat": 35.547571,
+      "lng": 129.322411,
+      "elementary": {
+        "name": "월봉초등학교",
+        "distance_m": 291
+      }
+    },
+    "경기 수원시 장안구|영림프라자": {
+      "addr": "경기 수원시 장안구 파장동 577-2",
+      "lat": 37.308427,
+      "lng": 126.99425,
+      "elementary": {
+        "name": "파장초등학교",
+        "distance_m": 184
+      }
+    },
+    "서울 중랑구|청원다미소": {
+      "addr": "서울 중랑구 중화동 286-22",
+      "lat": 37.602003,
+      "lng": 127.079991,
+      "subway": {
+        "station": "중화역 7호선",
+        "distance_m": 85
+      },
+      "elementary": {
+        "name": "서울묵동초등학교",
+        "distance_m": 281
+      }
+    },
+    "경기 의왕시|남양모란": {
+      "addr": "경기 의왕시 오전동 358-19",
+      "lat": 37.354018,
+      "lng": 126.975281,
+      "elementary": {
+        "name": "오전초등학교",
+        "distance_m": 272
+      }
+    },
+    "부산 동래구|남흥": {
+      "addr": "부산 동래구 안락동 600-6",
+      "lat": 35.195117,
+      "lng": 129.10557,
+      "subway": {
+        "station": "안락역 동해선",
+        "distance_m": 461
+      },
+      "elementary": {
+        "name": "안남초등학교",
+        "distance_m": 439
+      }
+    },
+    "경기 하남시|감일스윗시티1단지": {
+      "addr": "경기 하남시 감일동 481",
+      "lat": 37.5069,
+      "lng": 127.150609,
+      "subway": {
+        "station": "마천역 5호선",
+        "distance_m": 1331
+      },
+      "elementary": {
+        "name": "서울남천초등학교",
+        "distance_m": 665
+      }
+    },
+    "서울 구로구|대성": {
+      "addr": "서울 구로구 구로동 799-1",
+      "lat": 37.485648,
+      "lng": 126.887886,
+      "subway": {
+        "station": "남구로역 7호선",
+        "distance_m": 79
+      },
+      "elementary": {
+        "name": "서울구로남초등학교",
+        "distance_m": 257
+      }
+    },
+    "인천 연수구|송도대경스위트리아파크뷰": {
+      "addr": "인천 연수구 송도동 21-34",
+      "lat": 37.395153,
+      "lng": 126.646028,
+      "subway": {
+        "station": "센트럴파크역 인천1호선",
+        "distance_m": 1010
+      },
+      "elementary": {
+        "name": "인천신정초등학교",
+        "distance_m": 287
+      }
+    },
+    "경기 광주시|광주송정중흥S-클래스파크뷰": {
+      "addr": "경기 광주시 송정동 715",
+      "lat": 37.419933,
+      "lng": 127.259813,
+      "elementary": {
+        "name": "광주송정초등학교",
+        "distance_m": 518
+      }
+    },
+    "인천 미추홀구|성도아파트(2동)": {
+      "addr": "인천 미추홀구 용현동 88-23",
+      "lat": 37.44929,
+      "lng": 126.659708,
+      "subway": {
+        "station": "인하대역 수인분당선",
+        "distance_m": 886
+      },
+      "elementary": {
+        "name": "인천학익초등학교",
+        "distance_m": 292
+      }
+    },
+    "서울 광진구|홍익봄마을(101동)": {
+      "addr": "서울 광진구 군자동 346-18",
+      "lat": 37.549875,
+      "lng": 127.0701,
+      "subway": {
+        "station": "어린이대공원역 7호선",
+        "distance_m": 455
+      },
+      "elementary": {
+        "name": "서울장안초등학교",
+        "distance_m": 190
+      }
+    },
+    "서울 성북구|서라벌": {
+      "addr": "서울 성북구 돈암동 7-15",
+      "lat": 37.602632,
+      "lng": 127.027736,
+      "subway": {
+        "station": "길음역 4호선",
+        "distance_m": 251
+      },
+      "elementary": {
+        "name": "서울개운초등학교",
+        "distance_m": 78
+      }
+    },
+    "경기 부천시 오정구|르네상스3차": {
+      "addr": "경기 부천시 오정구 원종동 292-6",
+      "lat": 37.524211,
+      "lng": 126.809805,
+      "subway": {
+        "station": "원종역 서해선",
+        "distance_m": 438
+      },
+      "elementary": {
+        "name": "오정초등학교",
+        "distance_m": 385
+      }
+    },
+    "서울 서대문구|파크카운티": {
+      "addr": "서울 서대문구 연희동 1-78",
+      "lat": 37.582266,
+      "lng": 126.939191,
+      "subway": {
+        "station": "홍제역 3호선",
+        "distance_m": 847
+      },
+      "elementary": {
+        "name": "서울고은초등학교",
+        "distance_m": 473
+      }
+    },
+    "서울 동대문구|태솔타워": {
+      "addr": "서울 동대문구 장안동 364-9",
+      "lat": 37.568254,
+      "lng": 127.069888,
+      "subway": {
+        "station": "장한평역 5호선",
+        "distance_m": 918
+      },
+      "elementary": {
+        "name": "서울안평초등학교",
+        "distance_m": 324
+      }
+    },
+    "서울 종로구|노블레스빌": {
+      "addr": "서울 종로구 평창동 155-1",
+      "lat": 37.607438,
+      "lng": 126.970249,
+      "elementary": {
+        "name": "서울세검정초등학교",
+        "distance_m": 935
+      }
+    },
+    "서울 강동구|현대토파즈": {
+      "addr": "서울 강동구 성내동 468",
+      "lat": 37.525485,
+      "lng": 127.125956,
+      "subway": {
+        "station": "강동구청역 8호선",
+        "distance_m": 716
+      },
+      "elementary": {
+        "name": "서울성일초등학교",
+        "distance_m": 503
+      }
+    },
+    "서울 서초구|방배서리풀힐스": {
+      "addr": "서울 서초구 방배동 915-16",
+      "lat": 37.481058,
+      "lng": 126.994604,
+      "subway": {
+        "station": "방배역 2호선",
+        "distance_m": 264
+      },
+      "elementary": {
+        "name": "서울방일초등학교",
+        "distance_m": 593
+      }
     }
   },
-  "as_of": "2026-09-16"
+  "as_of": "2026-09-17"
 }
