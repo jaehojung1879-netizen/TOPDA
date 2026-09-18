@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-09-17"
+    "portal_checked_at": "2026-09-18"
   },
   "apartments": [
     {
@@ -5270,7 +5270,11 @@
         "여의도": 23,
         "광화문": 11
       },
-      "households": 1148
+      "households": 1148,
+      "display_name": "경희궁자이2단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-18",
+      "name_evidence": "http://place.map.kakao.com/211594893"
     },
     {
       "name": "경희궁자이(4단지)",
@@ -5925,7 +5929,11 @@
         "여의도": 21,
         "광화문": 12
       },
-      "households": 712
+      "households": 712,
+      "display_name": "중림삼성사이버빌리지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-18",
+      "name_evidence": "http://place.map.kakao.com/27239939"
     },
     {
       "name": "한가람",
@@ -6177,7 +6185,11 @@
         "여의도": 18,
         "광화문": 16
       },
-      "households": 589
+      "households": 589,
+      "display_name": "용산더프라임아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-18",
+      "name_evidence": "http://place.map.kakao.com/12630761"
     },
     {
       "name": "강촌",
@@ -33139,7 +33151,11 @@
         "여의도": 24,
         "광화문": 10
       },
-      "households": 744
+      "households": 744,
+      "display_name": "광화문스페이스본1단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-18",
+      "name_evidence": "http://place.map.kakao.com/10874623"
     },
     {
       "name": "청구e편한세상",
@@ -38246,7 +38262,11 @@
       "hh_src": "address_alias:title.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "산호아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-18",
+      "name_evidence": "http://place.map.kakao.com/11506305"
     },
     {
       "name": "후암미주",
@@ -38426,7 +38446,11 @@
         "여의도": 21,
         "광화문": 22
       },
-      "households": 226
+      "households": 226,
+      "display_name": "신동아아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-18",
+      "name_evidence": "http://place.map.kakao.com/11293629"
     },
     {
       "name": "용산시티파크(1단지)",
@@ -46323,7 +46347,11 @@
         "여의도": 24,
         "광화문": 41
       },
-      "households": 554
+      "households": 554,
+      "display_name": "독산중앙하이츠빌아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-18",
+      "name_evidence": "http://place.map.kakao.com/11150018"
     },
     {
       "name": "시흥동월드메르디앙",
@@ -62535,7 +62563,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "텐즈힐2단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-18",
+      "name_evidence": "http://place.map.kakao.com/15292203"
     },
     {
       "name": "우성2",
@@ -68909,7 +68941,11 @@
         "여의도": 61,
         "광화문": 61
       },
-      "households": 842
+      "households": 842,
+      "display_name": "동분당센트럴파크아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-18",
+      "name_evidence": "http://place.map.kakao.com/12123495"
     },
     {
       "name": "e편한세상용인한숲시티5단지",
@@ -70017,7 +70053,11 @@
         "여의도": 101,
         "광화문": 105
       },
-      "households": 1345
+      "households": 1345,
+      "display_name": "힐스테이트용인고진역1단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-18",
+      "name_evidence": "http://place.map.kakao.com/2079855804"
     },
     {
       "name": "성원1차",
@@ -119781,7 +119821,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-14",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "호반써밋라프리미어아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-18",
+      "name_evidence": "http://place.map.kakao.com/519009701"
     },
     {
       "name": "파주금촌금호어울림",
