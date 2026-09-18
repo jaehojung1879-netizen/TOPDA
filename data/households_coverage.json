@@ -1,46 +1,23 @@
 {
- "as_of": "2026-09-17",
+ "as_of": "2026-09-18",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 17702,
-  "filled": 17206,
-  "target": 537,
-  "kapt_list": 11587,
+  "complexes": 17727,
+  "filled": 17258,
+  "target": 510,
+  "kapt_list": 11589,
   "kapt_ratio": 0.65,
-  "name_gap": 37,
-  "matched_this_run": 22,
+  "name_gap": 19,
+  "matched_this_run": 23,
   "filled_this_run": 0,
   "addr_reject": 0,
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 31,
-  "dong_indexed": 11587
+  "jibun_seeded": 15,
+  "dong_indexed": 11589
  },
  "regions": [
-  {
-   "region": "인천 서구",
-   "target": 91,
-   "filled": 117,
-   "total": 208,
-   "kapt_list": 135,
-   "kapt_ratio": 0.65,
-   "name_gap": 18,
-   "matched": 2,
-   "codes": [
-    "28275"
-   ],
-   "unmatched_sample": [
-    "호반써밋1차",
-    "우미린더시그니처",
-    "검단신도시한신더휴캐널파크(THEHUECANALPARK)",
-    "검단신도시푸르지오더베뉴",
-    "호반베르디움앤영무예다음",
-    "루원시티SKLeaders'VIEW",
-    "검단신도시디에트르더힐",
-    "검단 금호어울림 센트럴"
-   ]
-  },
   {
    "region": "경기 성남시 분당구",
    "target": 6,
@@ -123,7 +100,7 @@
    "target": 2,
    "filled": 136,
    "total": 138,
-   "kapt_list": 147,
+   "kapt_list": 148,
    "kapt_ratio": 1.07,
    "name_gap": 2,
    "matched": 0,
@@ -201,9 +178,9 @@
   {
    "region": "서울 성북구",
    "target": 4,
-   "filled": 174,
-   "total": 178,
-   "kapt_list": 147,
+   "filled": 175,
+   "total": 179,
+   "kapt_list": 148,
    "kapt_ratio": 0.83,
    "name_gap": 0,
    "matched": 0,
@@ -277,6 +254,29 @@
    ]
   },
   {
+   "region": "인천 서구",
+   "target": 57,
+   "filled": 154,
+   "total": 211,
+   "kapt_list": 135,
+   "kapt_ratio": 0.64,
+   "name_gap": 0,
+   "matched": 1,
+   "codes": [
+    "28275"
+   ],
+   "unmatched_sample": [
+    "호반써밋1차",
+    "우미린더시그니처",
+    "검단신도시한신더휴캐널파크(THEHUECANALPARK)",
+    "검단신도시푸르지오더베뉴",
+    "루원시티SKLeaders'VIEW",
+    "검단신도시디에트르더힐",
+    "검단 금호어울림 센트럴",
+    "원당풍림아이원"
+   ]
+  },
+  {
    "region": "인천 미추홀구",
    "target": 18,
    "filled": 325,
@@ -301,13 +301,13 @@
   },
   {
    "region": "서울 노원구",
-   "target": 3,
+   "target": 4,
    "filled": 280,
-   "total": 283,
+   "total": 284,
    "kapt_list": 231,
-   "kapt_ratio": 0.82,
+   "kapt_ratio": 0.81,
    "name_gap": 0,
-   "matched": 0,
+   "matched": 1,
    "codes": [
     "11350"
    ],
@@ -360,8 +360,8 @@
   {
    "region": "서울 중랑구",
    "target": 3,
-   "filled": 227,
-   "total": 230,
+   "filled": 228,
+   "total": 231,
    "kapt_list": 136,
    "kapt_ratio": 0.59,
    "name_gap": 0,
@@ -378,8 +378,8 @@
   {
    "region": "서울 구로구",
    "target": 23,
-   "filled": 316,
-   "total": 339,
+   "filled": 318,
+   "total": 341,
    "kapt_list": 181,
    "kapt_ratio": 0.53,
    "name_gap": 0,
@@ -424,8 +424,8 @@
   {
    "region": "경기 고양시 덕양구",
    "target": 2,
-   "filled": 232,
-   "total": 234,
+   "filled": 233,
+   "total": 235,
    "kapt_list": 199,
    "kapt_ratio": 0.85,
    "name_gap": 0,
@@ -532,9 +532,9 @@
   },
   {
    "region": "경기 부천시 원미구",
-   "target": 12,
+   "target": 13,
    "filled": 285,
-   "total": 297,
+   "total": 298,
    "kapt_list": 135,
    "kapt_ratio": 0.45,
    "name_gap": 0,
@@ -544,20 +544,20 @@
    ],
    "unmatched_sample": [
     "역곡현대",
+    "선결레미앙주상복합",
     "에코스마트3",
     "에코스마트2",
     "마스터웍바이로뎀",
     "에코스마트1",
     "쁘띠-오타운",
-    "한도(7-8동)",
-    "센텀시티"
+    "한도(7-8동)"
    ]
   },
   {
    "region": "경기 부천시 소사구",
    "target": 6,
-   "filled": 202,
-   "total": 208,
+   "filled": 203,
+   "total": 209,
    "kapt_list": 83,
    "kapt_ratio": 0.4,
    "name_gap": 0,
@@ -636,8 +636,8 @@
   {
    "region": "인천 계양구",
    "target": 4,
-   "filled": 192,
-   "total": 196,
+   "filled": 193,
+   "total": 197,
    "kapt_list": 139,
    "kapt_ratio": 0.71,
    "name_gap": 0,
@@ -654,9 +654,9 @@
   },
   {
    "region": "경기 고양시 일산서구",
-   "target": 1,
+   "target": 2,
    "filled": 181,
-   "total": 182,
+   "total": 183,
    "kapt_list": 150,
    "kapt_ratio": 0.82,
    "name_gap": 0,
@@ -665,14 +665,15 @@
     "41287"
    ],
    "unmatched_sample": [
-    "후곡마을(롯데)"
+    "후곡마을(롯데)",
+    "까뮤이스테이트"
    ]
   },
   {
    "region": "서울 용산구",
    "target": 5,
-   "filled": 177,
-   "total": 182,
+   "filled": 178,
+   "total": 183,
    "kapt_list": 86,
    "kapt_ratio": 0.47,
    "name_gap": 0,
@@ -736,9 +737,9 @@
   },
   {
    "region": "경기 평택시",
-   "target": 14,
+   "target": 13,
    "filled": 330,
-   "total": 344,
+   "total": 343,
    "kapt_list": 312,
    "kapt_ratio": 0.91,
    "name_gap": 0,
@@ -748,13 +749,13 @@
    ],
    "unmatched_sample": [
     "평택화양휴먼빌퍼스트시티아파트",
-    "평택서정동롯데캐슬",
-    "평일",
-    "영흥(가,나,다)",
     "외기노조",
+    "평택서정동롯데캐슬",
+    "영흥(가,나,다)",
     "한일(A,B)",
     "명원",
-    "베스트빌"
+    "베스트빌",
+    "수아비스(965-8)"
    ]
   },
   {
@@ -788,6 +789,22 @@
    "unmatched_sample": [
     "현대콤비타운",
     "유엘비치나움"
+   ]
+  },
+  {
+   "region": "경기 용인시 처인구",
+   "target": 1,
+   "filled": 163,
+   "total": 164,
+   "kapt_list": 88,
+   "kapt_ratio": 0.54,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "41461"
+   ],
+   "unmatched_sample": [
+    "조양맨션(2,3동)"
    ]
   },
   {
@@ -892,8 +909,8 @@
   {
    "region": "대전 유성구",
    "target": 3,
-   "filled": 205,
-   "total": 208,
+   "filled": 206,
+   "total": 209,
    "kapt_list": 173,
    "kapt_ratio": 0.83,
    "name_gap": 0,
@@ -905,6 +922,22 @@
     "K-town",
     "유성캠퍼스타워-I",
     "메가시티"
+   ]
+  },
+  {
+   "region": "경기 안성시",
+   "target": 1,
+   "filled": 96,
+   "total": 97,
+   "kapt_list": 83,
+   "kapt_ratio": 0.86,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "41550"
+   ],
+   "unmatched_sample": [
+    "원곡"
    ]
   },
   {
@@ -934,6 +967,114 @@
     "41390"
    ],
    "unmatched_sample": []
+  },
+  {
+   "region": "경기 용인시 기흥구",
+   "target": 0,
+   "filled": 242,
+   "total": 242,
+   "kapt_list": 233,
+   "kapt_ratio": 0.96,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "41463"
+   ],
+   "unmatched_sample": []
+  },
+  {
+   "region": "대구 수성구",
+   "target": 3,
+   "filled": 310,
+   "total": 313,
+   "kapt_list": 271,
+   "kapt_ratio": 0.87,
+   "name_gap": 0,
+   "matched": 1,
+   "codes": [
+    "27260"
+   ],
+   "unmatched_sample": [
+    "범어네거리클래시아",
+    "한도맨션"
+   ]
+  },
+  {
+   "region": "경기 오산시",
+   "target": 0,
+   "filled": 122,
+   "total": 122,
+   "kapt_list": 110,
+   "kapt_ratio": 0.9,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "41370"
+   ],
+   "unmatched_sample": []
+  },
+  {
+   "region": "대전 서구",
+   "target": 4,
+   "filled": 245,
+   "total": 249,
+   "kapt_list": 174,
+   "kapt_ratio": 0.7,
+   "name_gap": 0,
+   "matched": 2,
+   "codes": [
+    "30170"
+   ],
+   "unmatched_sample": [
+    "타워렉스",
+    "코스모스"
+   ]
+  },
+  {
+   "region": "부산 부산진구",
+   "target": 12,
+   "filled": 357,
+   "total": 369,
+   "kapt_list": 171,
+   "kapt_ratio": 0.46,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "26230"
+   ],
+   "unmatched_sample": [
+    "세영",
+    "토운모닝톤",
+    "KH마이우스",
+    "타워팰리스",
+    "더블루오피스텔",
+    "다솜빌",
+    "목연정M팰리스",
+    "성원쌍떼뷰"
+   ]
+  },
+  {
+   "region": "부산 수영구",
+   "target": 10,
+   "filled": 225,
+   "total": 235,
+   "kapt_list": 64,
+   "kapt_ratio": 0.27,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "26500"
+   ],
+   "unmatched_sample": [
+    "성우센텀스카이뷰에이",
+    "오션스카이남천",
+    "더클래스센텀",
+    "성우이린타워",
+    "한웅남천마티안",
+    "수영엔스타Ⅱ",
+    "광안센텀스카이뷰",
+    "W-PARKⅡ"
+   ]
   },
   {
    "region": "경기 이천시",
@@ -974,59 +1115,42 @@
    ]
   },
   {
-   "region": "경기 용인시 기흥구",
+   "region": "대구 달서구",
    "target": 0,
-   "filled": 242,
-   "total": 242,
-   "kapt_list": 233,
-   "kapt_ratio": 0.96,
+   "filled": 312,
+   "total": 312,
+   "kapt_list": 247,
+   "kapt_ratio": 0.79,
    "name_gap": 0,
    "matched": 0,
    "codes": [
-    "41463"
+    "27290"
    ],
    "unmatched_sample": []
   },
   {
-   "region": "대구 수성구",
-   "target": 3,
-   "filled": 309,
-   "total": 312,
-   "kapt_list": 271,
-   "kapt_ratio": 0.87,
+   "region": "경기 하남시",
+   "target": 1,
+   "filled": 129,
+   "total": 130,
+   "kapt_list": 123,
+   "kapt_ratio": 0.95,
    "name_gap": 0,
    "matched": 1,
    "codes": [
-    "27260"
-   ],
-   "unmatched_sample": [
-    "범어네거리클래시아",
-    "한도맨션"
-   ]
-  },
-  {
-   "region": "경기 오산시",
-   "target": 0,
-   "filled": 122,
-   "total": 122,
-   "kapt_list": 110,
-   "kapt_ratio": 0.9,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "41370"
+    "41450"
    ],
    "unmatched_sample": []
   },
   {
    "region": "서울 영등포구",
-   "target": 4,
+   "target": 5,
    "filled": 234,
-   "total": 238,
+   "total": 239,
    "kapt_list": 180,
-   "kapt_ratio": 0.76,
+   "kapt_ratio": 0.75,
    "name_gap": 0,
-   "matched": 0,
+   "matched": 1,
    "codes": [
     "11560"
    ],
@@ -1052,62 +1176,6 @@
    "unmatched_sample": []
   },
   {
-   "region": "경기 용인시 처인구",
-   "target": 1,
-   "filled": 163,
-   "total": 164,
-   "kapt_list": 88,
-   "kapt_ratio": 0.54,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "41461"
-   ],
-   "unmatched_sample": [
-    "조양맨션(2,3동)"
-   ]
-  },
-  {
-   "region": "대전 서구",
-   "target": 4,
-   "filled": 244,
-   "total": 248,
-   "kapt_list": 174,
-   "kapt_ratio": 0.7,
-   "name_gap": 0,
-   "matched": 2,
-   "codes": [
-    "30170"
-   ],
-   "unmatched_sample": [
-    "타워렉스",
-    "코스모스"
-   ]
-  },
-  {
-   "region": "부산 부산진구",
-   "target": 11,
-   "filled": 357,
-   "total": 368,
-   "kapt_list": 171,
-   "kapt_ratio": 0.46,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "26230"
-   ],
-   "unmatched_sample": [
-    "토운모닝톤",
-    "KH마이우스",
-    "타워팰리스",
-    "더블루오피스텔",
-    "다솜빌",
-    "목연정M팰리스",
-    "성원쌍떼뷰",
-    "예일프라자"
-   ]
-  },
-  {
    "region": "경기 안산시 단원구",
    "target": 0,
    "filled": 85,
@@ -1122,30 +1190,33 @@
    "unmatched_sample": []
   },
   {
+   "region": "서울 도봉구",
+   "target": 2,
+   "filled": 175,
+   "total": 177,
+   "kapt_list": 120,
+   "kapt_ratio": 0.68,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "11320"
+   ],
+   "unmatched_sample": [
+    "그린스테이트",
+    "선덕빌라트아파트"
+   ]
+  },
+  {
    "region": "경기 안산시 상록구",
    "target": 0,
-   "filled": 84,
-   "total": 84,
+   "filled": 85,
+   "total": 85,
    "kapt_list": 56,
-   "kapt_ratio": 0.67,
+   "kapt_ratio": 0.66,
    "name_gap": 0,
    "matched": 0,
    "codes": [
     "41271"
-   ],
-   "unmatched_sample": []
-  },
-  {
-   "region": "대구 달서구",
-   "target": 0,
-   "filled": 311,
-   "total": 311,
-   "kapt_list": 247,
-   "kapt_ratio": 0.79,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "27290"
    ],
    "unmatched_sample": []
   },
@@ -1167,19 +1238,21 @@
    ]
   },
   {
-   "region": "경기 안성시",
-   "target": 1,
-   "filled": 96,
-   "total": 97,
-   "kapt_list": 83,
-   "kapt_ratio": 0.86,
+   "region": "서울 강서구",
+   "target": 3,
+   "filled": 435,
+   "total": 438,
+   "kapt_list": 212,
+   "kapt_ratio": 0.48,
    "name_gap": 0,
    "matched": 0,
    "codes": [
-    "41550"
+    "11500"
    ],
    "unmatched_sample": [
-    "원곡"
+    "경동엠파이어스테이트",
+    "강서동도센트리움",
+    "강서크라운팰리스"
    ]
   },
   {
@@ -1202,20 +1275,21 @@
    ]
   },
   {
-   "region": "서울 도봉구",
-   "target": 2,
-   "filled": 175,
-   "total": 177,
-   "kapt_list": 120,
-   "kapt_ratio": 0.68,
+   "region": "서울 서초구",
+   "target": 3,
+   "filled": 454,
+   "total": 457,
+   "kapt_list": 203,
+   "kapt_ratio": 0.44,
    "name_gap": 0,
    "matched": 0,
    "codes": [
-    "11320"
+    "11650"
    ],
    "unmatched_sample": [
-    "그린스테이트",
-    "선덕빌라트아파트"
+    "서초레몬",
+    "urbanplace",
+    "방배서리풀힐스"
    ]
   },
   {
@@ -1237,80 +1311,6 @@
     "뉴골든(다동)",
     "렉스타워",
     "신송"
-   ]
-  },
-  {
-   "region": "서울 서대문구",
-   "target": 6,
-   "filled": 211,
-   "total": 217,
-   "kapt_list": 96,
-   "kapt_ratio": 0.44,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11410"
-   ],
-   "unmatched_sample": [
-    "파크카운티",
-    "신촌자이엘라",
-    "피어리스",
-    "세한숲속마을",
-    "예스에이피엠",
-    "파라타워"
-   ]
-  },
-  {
-   "region": "경기 하남시",
-   "target": 1,
-   "filled": 129,
-   "total": 130,
-   "kapt_list": 123,
-   "kapt_ratio": 0.95,
-   "name_gap": 0,
-   "matched": 1,
-   "codes": [
-    "41450"
-   ],
-   "unmatched_sample": []
-  },
-  {
-   "region": "서울 강북구",
-   "target": 1,
-   "filled": 108,
-   "total": 109,
-   "kapt_list": 58,
-   "kapt_ratio": 0.53,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11305"
-   ],
-   "unmatched_sample": [
-    "대림(수유)"
-   ]
-  },
-  {
-   "region": "부산 수영구",
-   "target": 9,
-   "filled": 225,
-   "total": 234,
-   "kapt_list": 64,
-   "kapt_ratio": 0.27,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "26500"
-   ],
-   "unmatched_sample": [
-    "성우센텀스카이뷰에이",
-    "더클래스센텀",
-    "성우이린타워",
-    "한웅남천마티안",
-    "수영엔스타Ⅱ",
-    "광안센텀스카이뷰",
-    "W-PARKⅡ",
-    "더폼타워"
    ]
   },
   {
@@ -1337,39 +1337,45 @@
    ]
   },
   {
-   "region": "서울 강서구",
-   "target": 3,
-   "filled": 435,
-   "total": 438,
-   "kapt_list": 212,
-   "kapt_ratio": 0.48,
+   "region": "서울 강동구",
+   "target": 6,
+   "filled": 377,
+   "total": 383,
+   "kapt_list": 151,
+   "kapt_ratio": 0.39,
    "name_gap": 0,
    "matched": 0,
    "codes": [
-    "11500"
+    "11740"
    ],
    "unmatched_sample": [
-    "경동엠파이어스테이트",
-    "강서동도센트리움",
-    "강서크라운팰리스"
+    "영상라이브센스",
+    "현대토파즈",
+    "두산위브센티움",
+    "강동밀레니얼중흥S-클래스",
+    "이연아마빌레(293-8)",
+    "동양넥스빌"
    ]
   },
   {
-   "region": "서울 서초구",
-   "target": 3,
-   "filled": 453,
-   "total": 456,
-   "kapt_list": 203,
-   "kapt_ratio": 0.45,
+   "region": "서울 서대문구",
+   "target": 6,
+   "filled": 211,
+   "total": 217,
+   "kapt_list": 96,
+   "kapt_ratio": 0.44,
    "name_gap": 0,
    "matched": 0,
    "codes": [
-    "11650"
+    "11410"
    ],
    "unmatched_sample": [
-    "서초레몬",
-    "urbanplace",
-    "방배서리풀힐스"
+    "파크카운티",
+    "신촌자이엘라",
+    "피어리스",
+    "세한숲속마을",
+    "예스에이피엠",
+    "파라타워"
    ]
   },
   {
@@ -1396,6 +1402,22 @@
    ]
   },
   {
+   "region": "서울 강북구",
+   "target": 1,
+   "filled": 108,
+   "total": 109,
+   "kapt_list": 58,
+   "kapt_ratio": 0.53,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "11305"
+   ],
+   "unmatched_sample": [
+    "대림(수유)"
+   ]
+  },
+  {
    "region": "서울 금천구",
    "target": 2,
    "filled": 118,
@@ -1413,32 +1435,12 @@
    ]
   },
   {
-   "region": "서울 강동구",
-   "target": 5,
-   "filled": 377,
-   "total": 382,
-   "kapt_list": 151,
-   "kapt_ratio": 0.4,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11740"
-   ],
-   "unmatched_sample": [
-    "현대토파즈",
-    "두산위브센티움",
-    "강동밀레니얼중흥S-클래스",
-    "이연아마빌레(293-8)",
-    "동양넥스빌"
-   ]
-  },
-  {
    "region": "경기 성남시 수정구",
    "target": 1,
-   "filled": 93,
-   "total": 94,
+   "filled": 94,
+   "total": 95,
    "kapt_list": 63,
-   "kapt_ratio": 0.67,
+   "kapt_ratio": 0.66,
    "name_gap": 0,
    "matched": 0,
    "codes": [
@@ -1467,17 +1469,18 @@
   },
   {
    "region": "경기 성남시 중원구",
-   "target": 1,
+   "target": 2,
    "filled": 94,
-   "total": 95,
+   "total": 96,
    "kapt_list": 54,
-   "kapt_ratio": 0.57,
+   "kapt_ratio": 0.56,
    "name_gap": 0,
    "matched": 0,
    "codes": [
     "41133"
    ],
    "unmatched_sample": [
+    "현성라비도르",
     "산호"
    ]
   },
