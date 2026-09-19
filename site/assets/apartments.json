@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-09-18"
+    "portal_checked_at": "2026-09-19"
   },
   "apartments": [
     {
@@ -7040,7 +7040,11 @@
         "여의도": 45,
         "광화문": 34
       },
-      "households": 1170
+      "households": 1170,
+      "display_name": "광장현대파크빌10차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/8156944"
     },
     {
       "name": "현대3",
@@ -13674,7 +13678,11 @@
         "여의도": 23,
         "광화문": 31
       },
-      "households": 162
+      "households": 162,
+      "display_name": "스타팰리스이수아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/1594117588"
     },
     {
       "name": "사당롯데캐슬골든포레",
@@ -31927,7 +31935,11 @@
         "name": "서울교육대학교 부설초등학교",
         "distance_m": 518,
         "in_zone": false
-      }
+      },
+      "display_name": "서초이오빌아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/11267516"
     },
     {
       "name": "소만마을(성원)6",
@@ -34245,7 +34257,11 @@
         "여의도": 29,
         "광화문": 28
       },
-      "households": 990
+      "households": 990,
+      "display_name": "서초롯데캐슬클래식아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/7855573"
     },
     {
       "name": "위례24단지(꿈에그린)",
@@ -36292,7 +36308,11 @@
         "여의도": 18,
         "광화문": 16
       },
-      "households": 1248
+      "households": 1248,
+      "display_name": "마포그랑자이아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/280246370"
     },
     {
       "name": "삼익",
@@ -40645,7 +40665,11 @@
         "여의도": 43,
         "광화문": 30
       },
-      "households": 245
+      "households": 245,
+      "display_name": "쌍용더플래티넘용마산아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/1876137379"
     },
     {
       "name": "현대",
@@ -44407,7 +44431,11 @@
         "여의도": 14,
         "광화문": 19
       },
-      "households": 510
+      "households": 510,
+      "display_name": "강변힐스테이트아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/11268973"
     },
     {
       "name": "상암월드컵파크2단지",
@@ -64864,7 +64892,11 @@
         "name": "서울문정초등학교",
         "distance_m": 451,
         "in_zone": false
-      }
+      },
+      "display_name": "힐스테이트e편한세상문정아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/808091645"
     },
     {
       "name": "강동헤리티지자이",
@@ -103114,7 +103146,11 @@
         188503
       ],
       "builder": "기타",
-      "households": 583
+      "households": 583,
+      "display_name": "극동그린아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/11032655"
     },
     {
       "name": "서울숲삼부아파트",
@@ -109325,7 +109361,11 @@
         109151
       ],
       "builder": "기타",
-      "households": 703
+      "households": 703,
+      "display_name": "신정현대6차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/11119447"
     },
     {
       "name": "서초동삼성쉐르빌2",
@@ -110013,8 +110053,10 @@
       ],
       "builder": "삼정",
       "households": 313,
-      "display_name": "사직역삼정그린코아 더베스트1차",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)"
+      "display_name": "사직역삼정그린코아더베스트1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/23579934"
     },
     {
       "name": "범물한라창신태성맨션",
@@ -120623,7 +120665,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "월배쌍용예가아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-19",
+      "name_evidence": "http://place.map.kakao.com/11294895"
     },
     {
       "name": "우성",
