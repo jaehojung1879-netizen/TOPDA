@@ -30,12 +30,15 @@ try {
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
+  await page.goto(origin + '/');
+  const latestReportHref = await page.locator('.editorial-home-grid .editorial-weekly-brief').getAttribute('href');
+  const latestReportPath = new URL(latestReportHref, page.url()).pathname;
   for (const width of [360, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
     for (const [name, path] of [
       ['home', '/'],
       ['hub', '/posts/index.html'],
-      ['report', '/posts/weekly-market-2026-09-07.html']
+      ['report', latestReportPath]
     ]) {
       await page.goto(origin + path);
       await page.screenshot({ path: `${output}/${name}-${width}.png`, fullPage: true });
@@ -53,7 +56,7 @@ try {
         }
       }
       if (name === 'report') {
-        assert(await page.getByRole('heading', { name: /강남3구는 모두 내렸습니다/ }).isVisible());
+        assert(await page.locator('.article-header h1').isVisible());
         assert.equal(await page.locator('.market-kpi').count(), 4);
       }
     }
@@ -63,7 +66,12 @@ try {
   assert(total > 0);
   await page.getByRole('button', { name: '주간 시장 리포트', exact: true }).click();
   assert.equal(await page.locator('#postGrid .card:visible').count(), await page.locator('#postGrid .card[data-series="market"]').count());
-  assert.equal(await page.locator('#postGrid .card[data-series="market"]').count(), 1);
+  assert(await page.locator('#postGrid .card[data-series="market"]').count() >= 2, 'Weekly archive preserves past reports');
+  assert.equal(
+    new URL(await page.locator('#postGrid .card[data-series="market"]').first().getAttribute('href'), page.url()).pathname,
+    latestReportPath,
+    'Latest weekly report stays first in the archive'
+  );
   assert(new URL(page.url()).searchParams.get('series') === 'market');
   await page.getByRole('button', { name: '실용 포스트', exact: true }).click();
   await page.locator('.post-chip[data-cat="매매"]').click();
