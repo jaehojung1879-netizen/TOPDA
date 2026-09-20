@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-09-19"
+    "portal_checked_at": "2026-09-20"
   },
   "apartments": [
     {
@@ -68884,7 +68884,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "산성아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-20",
+      "name_evidence": "http://place.map.kakao.com/11321629"
     },
     {
       "name": "중앙동힐스테이트1차",
@@ -73634,7 +73638,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "부천한신아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-20",
+      "name_evidence": "http://place.map.kakao.com/11324339"
     },
     {
       "name": "주공뜨란채",
@@ -89081,7 +89089,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "성남어울림아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-20",
+      "name_evidence": "http://place.map.kakao.com/11033633"
     },
     {
       "name": "신원1차",
@@ -105010,7 +105022,11 @@
         44284
       ],
       "builder": "기타",
-      "households": 390
+      "households": 390,
+      "display_name": "건건동영무예다음아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-20",
+      "name_evidence": "http://place.map.kakao.com/1580473437"
     },
     {
       "name": "예술인",
@@ -111057,7 +111073,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-28",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "일산동양아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-20",
+      "name_evidence": "http://place.map.kakao.com/11096056"
     },
     {
       "name": "역곡신세계드림A.P.T",
