@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1120" viewBox="0 0 900 1120" role="img" aria-labelledby="title desc">
+  <title id="title">퇴거 원상회복 비용 확인 순서</title>
+  <desc id="desc">퇴거 때 발견한 흔적을 입주 전 상태와 비교하고, 통상적인 생활 흔적과 세입자 과실 훼손, 원인 불명으로 나눈 뒤 특약과 실제 보수 범위를 확인하는 흐름도</desc>
+  <rect width="900" height="1120" rx="38" fill="#f6f8fb"/>
+  <text x="70" y="85" font-family="Pretendard, sans-serif" font-size="35" font-weight="750" fill="#14233c">도배비·청소비, 무엇부터 확인할까?</text>
+  <text x="70" y="125" font-family="Pretendard, sans-serif" font-size="19" fill="#5d6b80">총액보다 입주 전후 상태와 훼손 원인을 먼저 나눕니다</text>
+
+  <rect x="125" y="175" width="650" height="112" rx="24" fill="#ffffff" stroke="#cdd8e8" stroke-width="2"/>
+  <circle cx="185" cy="231" r="31" fill="#173b67"/>
+  <text x="185" y="239" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="24" font-weight="700" fill="#ffffff">1</text>
+  <text x="235" y="220" font-family="Pretendard, sans-serif" font-size="24" font-weight="700" fill="#17243a">입주 당시와 퇴거 상태를 비교</text>
+  <text x="235" y="255" font-family="Pretendard, sans-serif" font-size="18" fill="#59677b">사진·영상·수리 요청 문자·매물 사진을 함께 확인</text>
+  <path d="M450 287v48" stroke="#9aacc2" stroke-width="4" stroke-linecap="round"/>
+  <path d="m438 326 12 14 12-14" fill="none" stroke="#9aacc2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="125" y="350" width="650" height="112" rx="24" fill="#ffffff" stroke="#cdd8e8" stroke-width="2"/>
+  <circle cx="185" cy="406" r="31" fill="#173b67"/>
+  <text x="185" y="414" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="24" font-weight="700" fill="#ffffff">2</text>
+  <text x="235" y="395" font-family="Pretendard, sans-serif" font-size="24" font-weight="700" fill="#17243a">왜 생긴 흔적인지 구분</text>
+  <text x="235" y="430" font-family="Pretendard, sans-serif" font-size="18" fill="#59677b">사용 기간·위치·원인·통지 여부를 기록</text>
+  <path d="M450 462v50M450 512H178M450 512h272" stroke="#9aacc2" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+  <rect x="45" y="535" width="250" height="220" rx="26" fill="#eaf4ef" stroke="#95bea7" stroke-width="2"/>
+  <text x="170" y="584" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="22" font-weight="750" fill="#205f3d">생활 흔적</text>
+  <text x="170" y="625" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#355b47">햇빛에 바랜 벽지</text>
+  <text x="170" y="656" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#355b47">가구를 둔 자리</text>
+  <text x="170" y="687" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#355b47">시간 경과로 낡은 부분</text>
+  <rect x="76" y="710" width="188" height="30" rx="15" fill="#cfe7d9"/>
+  <text x="170" y="731" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="15" font-weight="700" fill="#205f3d">임대인 부담 가능성</text>
+
+  <rect x="325" y="535" width="250" height="220" rx="26" fill="#fff1ea" stroke="#e6aa8c" stroke-width="2"/>
+  <text x="450" y="584" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="22" font-weight="750" fill="#8b3f22">세입자 과실</text>
+  <text x="450" y="625" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#6f4838">낙서·음식물 얼룩</text>
+  <text x="450" y="656" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#6f4838">반려동물 긁힘</text>
+  <text x="450" y="687" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#6f4838">이삿짐에 찍힌 마루</text>
+  <rect x="356" y="710" width="188" height="30" rx="15" fill="#f7d8c8"/>
+  <text x="450" y="731" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="15" font-weight="700" fill="#8b3f22">임차인 부담 가능성</text>
+
+  <rect x="605" y="535" width="250" height="220" rx="26" fill="#fff7df" stroke="#dabf6d" stroke-width="2"/>
+  <text x="730" y="584" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="22" font-weight="750" fill="#765d12">원인이 섞임</text>
+  <text x="730" y="625" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#665b37">누수·결로·곰팡이</text>
+  <text x="730" y="656" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#665b37">기존 하자와 새 손상</text>
+  <text x="730" y="687" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#665b37">책임 범위가 불분명</text>
+  <rect x="636" y="710" width="188" height="30" rx="15" fill="#f4e6ad"/>
+  <text x="730" y="731" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="15" font-weight="700" fill="#765d12">원인·통지 기록 확인</text>
+
+  <path d="M170 755v55M450 755v55M730 755v55M170 810h560M450 810v40" stroke="#9aacc2" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="m438 841 12 14 12-14" fill="none" stroke="#9aacc2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="125" y="865" width="650" height="120" rx="24" fill="#ffffff" stroke="#cdd8e8" stroke-width="2"/>
+  <circle cx="185" cy="925" r="31" fill="#173b67"/>
+  <text x="185" y="933" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="24" font-weight="700" fill="#ffffff">3</text>
+  <text x="235" y="914" font-family="Pretendard, sans-serif" font-size="24" font-weight="700" fill="#17243a">특약·보수 범위·견적을 대조</text>
+  <text x="235" y="949" font-family="Pretendard, sans-serif" font-size="18" fill="#59677b">부분 보수 가능성, 기존 자재 상태와 실제 작업비 확인</text>
+
+  <rect x="125" y="1015" width="650" height="58" rx="20" fill="#173b67"/>
+  <text x="450" y="1052" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="20" font-weight="700" fill="#ffffff">인정하는 금액과 다투는 금액을 나눠 서면으로 정산</text>
+  <text x="450" y="1100" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="15" fill="#708096">근거: 민법 제615조·제654조, 서울중앙지법 2005가합100279 등 · 2026-09-22 확인</text>
+</svg>
