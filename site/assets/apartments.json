@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-09-22"
+    "portal_checked_at": "2026-09-23"
   },
   "apartments": [
     {
@@ -15216,7 +15216,11 @@
         "여의도": 33,
         "광화문": 31
       },
-      "households": 499
+      "households": 499,
+      "display_name": "강남센트럴아이파크아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-23",
+      "name_evidence": "http://place.map.kakao.com/1216057640"
     },
     {
       "name": "문정시영",
@@ -50597,7 +50601,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "꽃뫼노을마을풍림아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-23",
+      "name_evidence": "http://place.map.kakao.com/11345189"
     },
     {
       "name": "수원화서역동문굿모닝힐",
@@ -65201,7 +65209,11 @@
         "name": "서울신명초등학교",
         "distance_m": 161,
         "in_zone": false
-      }
+      },
+      "display_name": "강동헤리티지자이아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-23",
+      "name_evidence": "http://place.map.kakao.com/980717838"
     },
     {
       "name": "래미안강동팰리스",
@@ -93686,7 +93698,11 @@
         "name": "남천초등학교",
         "distance_m": 426,
         "in_zone": false
-      }
+      },
+      "display_name": "남천엑슬루타워아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-23",
+      "name_evidence": "http://place.map.kakao.com/17929341"
     },
     {
       "name": "롯데골드로즈",
@@ -103034,7 +103050,11 @@
         70373
       ],
       "builder": "현대건설",
-      "households": 1360
+      "households": 1360,
+      "display_name": "힐스테이트용인고진역2단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-23",
+      "name_evidence": "http://place.map.kakao.com/1331079502"
     },
     {
       "name": "퇴계원힐스테이트",
@@ -121409,13 +121429,15 @@
         205000
       ],
       "builder": "삼성물산",
-      "display_name": "신공덕1차삼성래미안아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "display_name": "신공덕삼성래미안1차아파트",
+      "name_src": "portal.kakao_local",
       "households": 834,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-22",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-09-23",
+      "name_evidence": "http://place.map.kakao.com/8376396"
     },
     {
       "name": "도무스서초청년주택",
@@ -122005,7 +122027,11 @@
         136000
       ],
       "builder": "기타",
-      "households": null
+      "households": 126,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-23",
+      "hh_evidence": []
     },
     {
       "name": "광나루현대",
@@ -122028,7 +122054,11 @@
       "builder": "기타",
       "display_name": "광장동 광나루현대",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 380,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-23",
+      "hh_evidence": []
     },
     {
       "name": "경남아너스빌",
@@ -122061,9 +122091,15 @@
         61752
       ],
       "builder": "SM경남기업",
-      "display_name": "경남아너스빌(구산동)",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "경남아너스빌아파트",
+      "name_src": "portal.kakao_local",
+      "households": 475,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-23",
+      "hh_evidence": [],
+      "name_checked_at": "2026-09-23",
+      "name_evidence": "http://place.map.kakao.com/8180217"
     },
     {
       "name": "마곡힐스테이트",
@@ -122091,7 +122127,14 @@
         171434
       ],
       "builder": "현대건설",
-      "households": null
+      "households": 603,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-23",
+      "hh_evidence": [],
+      "display_name": "마곡힐스테이트아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-23"
     },
     {
       "name": "보성,유원",
@@ -122114,7 +122157,14 @@
         37127
       ],
       "builder": "기타",
-      "households": null
+      "households": 1200,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-23",
+      "hh_evidence": [],
+      "display_name": "보성유원아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-23"
     },
     {
       "name": "남천금호어울림더비치",
@@ -122137,7 +122187,14 @@
         99000
       ],
       "builder": "금호건설",
-      "households": null
+      "households": 421,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-23",
+      "hh_evidence": [],
+      "display_name": "남천금호어울림더비치아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-23"
     }
   ]
 }
