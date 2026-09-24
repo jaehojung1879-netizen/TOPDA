@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1120" viewBox="0 0 900 1120" role="img" aria-labelledby="title desc">
+  <title id="title">주택담보대출 부족 시 계약금 확인 순서</title>
+  <desc id="desc">계약 전 대출 전제 확인, 계약서 특약 확인, 실제 승인 결과 대조, 부족할 때 통보와 합의 순서를 보여주는 흐름도</desc>
+  <rect width="900" height="1120" rx="34" fill="#f5f1e8"/>
+  <text x="64" y="78" fill="#172f4f" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="34" font-weight="800">대출이 부족해졌다면 무엇부터 볼까</text>
+  <text x="64" y="118" fill="#667085" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="18">예상 한도 → 계약서 합의 → 실제 승인 → 통보·협의 순서</text>
+
+  <rect x="64" y="166" width="772" height="150" rx="22" fill="#fff" stroke="#d8d2c5"/>
+  <circle cx="116" cy="216" r="28" fill="#172f4f"/><text x="116" y="225" text-anchor="middle" fill="#fff" font-family="Pretendard,sans-serif" font-size="24" font-weight="800">1</text>
+  <text x="166" y="210" fill="#172f4f" font-family="Pretendard,sans-serif" font-size="25" font-weight="800">계약 전: 예상 한도의 전제 확인</text>
+  <text x="166" y="248" fill="#344054" font-family="Pretendard,sans-serif" font-size="19">집 주소·매매가·소득·기존 부채를 반영했는가?</text>
+  <text x="166" y="280" fill="#667085" font-family="Pretendard,sans-serif" font-size="17">상담 결과와 실제 승인은 구분</text>
+  <path d="M450 316v42" stroke="#b58a45" stroke-width="4"/><path d="m438 348 12 14 12-14" fill="none" stroke="#b58a45" stroke-width="4"/>
+
+  <rect x="64" y="370" width="772" height="172" rx="22" fill="#fff" stroke="#d8d2c5"/>
+  <circle cx="116" cy="420" r="28" fill="#172f4f"/><text x="116" y="429" text-anchor="middle" fill="#fff" font-family="Pretendard,sans-serif" font-size="24" font-weight="800">2</text>
+  <text x="166" y="414" fill="#172f4f" font-family="Pretendard,sans-serif" font-size="25" font-weight="800">계약서: 대출 특약이 있는가?</text>
+  <text x="166" y="452" fill="#344054" font-family="Pretendard,sans-serif" font-size="19">상품 · 최소 승인액 · 결과 기한 · 증빙 · 반환 시점</text>
+  <rect x="166" y="478" width="294" height="40" rx="20" fill="#eaf0f7"/><text x="313" y="504" text-anchor="middle" fill="#172f4f" font-family="Pretendard,sans-serif" font-size="17" font-weight="700">구체적 합의 있음</text>
+  <rect x="478" y="478" width="294" height="40" rx="20" fill="#f7ece8"/><text x="625" y="504" text-anchor="middle" fill="#8a3c2d" font-family="Pretendard,sans-serif" font-size="17" font-weight="700">없거나 모호함</text>
+  <path d="M450 542v42" stroke="#b58a45" stroke-width="4"/><path d="m438 574 12 14 12-14" fill="none" stroke="#b58a45" stroke-width="4"/>
+
+  <rect x="64" y="596" width="772" height="154" rx="22" fill="#fff" stroke="#d8d2c5"/>
+  <circle cx="116" cy="646" r="28" fill="#172f4f"/><text x="116" y="655" text-anchor="middle" fill="#fff" font-family="Pretendard,sans-serif" font-size="24" font-weight="800">3</text>
+  <text x="166" y="640" fill="#172f4f" font-family="Pretendard,sans-serif" font-size="25" font-weight="800">심사 결과: 숫자와 날짜를 대조</text>
+  <text x="166" y="678" fill="#344054" font-family="Pretendard,sans-serif" font-size="19">신청액·승인액·거절 사유·결과일을 문서로 확인</text>
+  <text x="166" y="710" fill="#667085" font-family="Pretendard,sans-serif" font-size="17">일부 승인도 특약의 ‘불가’에 포함되는지 확인</text>
+  <path d="M450 750v42" stroke="#b58a45" stroke-width="4"/><path d="m438 782 12 14 12-14" fill="none" stroke="#b58a45" stroke-width="4"/>
+
+  <rect x="64" y="804" width="772" height="174" rx="22" fill="#172f4f"/>
+  <circle cx="116" cy="854" r="28" fill="#b58a45"/><text x="116" y="863" text-anchor="middle" fill="#fff" font-family="Pretendard,sans-serif" font-size="24" font-weight="800">4</text>
+  <text x="166" y="848" fill="#fff" font-family="Pretendard,sans-serif" font-size="25" font-weight="800">부족 확인: 잔금일 전에 알리고 서면 합의</text>
+  <text x="166" y="888" fill="#e5eaf1" font-family="Pretendard,sans-serif" font-size="19">특약 통보 → 계약금 반환·해제 절차 확인</text>
+  <text x="166" y="922" fill="#e5eaf1" font-family="Pretendard,sans-serif" font-size="19">특약 없음 → 부족액 조달·잔금 연장 협의</text>
+  <text x="166" y="954" fill="#cbd5e1" font-family="Pretendard,sans-serif" font-size="17">말로 미루지 말고 날짜·비용·계약금 처리를 기록</text>
+
+  <rect x="64" y="1012" width="772" height="62" rx="18" fill="#fff" stroke="#d8d2c5"/>
+  <text x="450" y="1052" text-anchor="middle" fill="#8a3c2d" font-family="Pretendard,sans-serif" font-size="18" font-weight="800">대출 부족만으로 계약금이 자동 반환되거나 자동 몰수되는 것은 아닙니다</text>
+  <text x="64" y="1102" fill="#667085" font-family="Pretendard,sans-serif" font-size="14">근거: 민법 제105조·제398조·제544조·제548조·제565조 (2026-09-25 확인)</text>
+</svg>
