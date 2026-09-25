@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1120" viewBox="0 0 900 1120" role="img" aria-labelledby="title desc">
+  <title id="title">이사 중 파손 보상 확인 순서</title>
+  <desc id="desc">파손 발견 후 현장 기록, 업체 서면 통지, 수리 가능 여부 확인, 보상액 자료 준비, 협의 또는 소비자 분쟁 해결로 이어지는 흐름도</desc>
+  <rect width="900" height="1120" rx="36" fill="#f5f7fb"/>
+  <text x="70" y="82" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="36" font-weight="750" fill="#14213d">이사 중 파손, 이 순서로 확인하세요</text>
+  <text x="70" y="122" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="19" fill="#536179">금액 협의보다 현장 기록과 업체 통지가 먼저입니다</text>
+
+  <g font-family="Pretendard, Noto Sans KR, sans-serif">
+    <rect x="70" y="168" width="760" height="132" rx="24" fill="#ffffff" stroke="#ccd6e5" stroke-width="2"/>
+    <circle cx="132" cy="234" r="32" fill="#1d4ed8"/><text x="132" y="244" text-anchor="middle" font-size="27" font-weight="750" fill="#fff">1</text>
+    <text x="190" y="220" font-size="27" font-weight="720" fill="#17233c">발견한 자리에서 멈추고 기록</text>
+    <text x="190" y="260" font-size="20" fill="#4b5870">전체·손상 부위·주변 작업 흔적을 사진과 영상으로 남깁니다</text>
+    <path d="M450 300v34" stroke="#8aa0bf" stroke-width="4"/><path d="m438 327 12 14 12-14" fill="none" stroke="#8aa0bf" stroke-width="4"/>
+
+    <rect x="70" y="342" width="760" height="132" rx="24" fill="#ffffff" stroke="#ccd6e5" stroke-width="2"/>
+    <circle cx="132" cy="408" r="32" fill="#1d4ed8"/><text x="132" y="418" text-anchor="middle" font-size="27" font-weight="750" fill="#fff">2</text>
+    <text x="190" y="394" font-size="27" font-weight="720" fill="#17233c">계약한 업체에 서면 통지</text>
+    <text x="190" y="434" font-size="20" fill="#4b5870">사진·품목·발견일을 문자나 이메일로 보내고 접수번호를 받습니다</text>
+    <path d="M450 474v34" stroke="#8aa0bf" stroke-width="4"/><path d="m438 501 12 14 12-14" fill="none" stroke="#8aa0bf" stroke-width="4"/>
+
+    <rect x="70" y="516" width="760" height="144" rx="24" fill="#eaf1ff" stroke="#93b4f6" stroke-width="2"/>
+    <text x="450" y="568" text-anchor="middle" font-size="27" font-weight="750" fill="#17376c">전문업체 진단: 수리할 수 있나요?</text>
+    <line x1="450" y1="594" x2="450" y2="640" stroke="#93b4f6" stroke-width="2"/>
+    <text x="260" y="630" text-anchor="middle" font-size="21" font-weight="700" fill="#1d4ed8">수리 가능</text>
+    <text x="640" y="630" text-anchor="middle" font-size="21" font-weight="700" fill="#9a4d12">수리 불가능·분실</text>
+
+    <path d="M260 660v38" stroke="#8aa0bf" stroke-width="4"/><path d="m248 691 12 14 12-14" fill="none" stroke="#8aa0bf" stroke-width="4"/>
+    <path d="M640 660v38" stroke="#8aa0bf" stroke-width="4"/><path d="m628 691 12 14 12-14" fill="none" stroke="#8aa0bf" stroke-width="4"/>
+    <rect x="70" y="706" width="360" height="154" rx="22" fill="#ffffff" stroke="#8eb3a6" stroke-width="2"/>
+    <text x="250" y="754" text-anchor="middle" font-size="25" font-weight="750" fill="#145c48">수선 또는 수리비</text>
+    <text x="250" y="793" text-anchor="middle" font-size="19" fill="#4b5870">진단서·견적서</text><text x="250" y="824" text-anchor="middle" font-size="19" fill="#4b5870">수리 전후 사진·영수증</text>
+    <rect x="470" y="706" width="360" height="154" rx="22" fill="#ffffff" stroke="#e7ad76" stroke-width="2"/>
+    <text x="650" y="754" text-anchor="middle" font-size="25" font-weight="750" fill="#8a460e">물품 가액 기준 손해</text>
+    <text x="650" y="793" text-anchor="middle" font-size="19" fill="#4b5870">구입가·연식·상태</text><text x="650" y="824" text-anchor="middle" font-size="19" fill="#4b5870">수리불가 확인·현재 거래자료</text>
+
+    <path d="M250 860v34h400v-34M450 894v34" fill="none" stroke="#8aa0bf" stroke-width="4"/><path d="m438 921 12 14 12-14" fill="none" stroke="#8aa0bf" stroke-width="4"/>
+    <rect x="70" y="936" width="760" height="116" rx="24" fill="#14213d"/>
+    <text x="450" y="983" text-anchor="middle" font-size="26" font-weight="750" fill="#ffffff">업체와 서면 협의 → 안 되면 1372·한국소비자원</text>
+    <text x="450" y="1022" text-anchor="middle" font-size="19" fill="#cbd7ea">계산 근거와 회신기한을 정하고 계약서·사진·견적을 함께 제출</text>
+
+    <rect x="70" y="1070" width="760" height="2" fill="#d5deeb"/>
+    <text x="70" y="1102" font-size="16" fill="#66758c">주의: 일부 멸실·훼손은 인도받은 날부터 30일 안에 사업자에게 통지</text>
+  </g>
+</svg>
