@@ -1,10 +1,10 @@
 {
- "as_of": "2026-09-25",
+ "as_of": "2026-09-26",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
   "complexes": 17799,
-  "filled": 17389,
-  "target": 451,
+  "filled": 17392,
+  "target": 448,
   "kapt_list": 11587,
   "kapt_ratio": 0.65,
   "name_gap": 19,
@@ -253,8 +253,8 @@
   },
   {
    "region": "인천 서구",
-   "target": 20,
-   "filled": 194,
+   "target": 17,
+   "filled": 197,
    "total": 214,
    "kapt_list": 135,
    "kapt_ratio": 0.63,
