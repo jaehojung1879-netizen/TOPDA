@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-09-25"
+    "portal_checked_at": "2026-09-26"
   },
   "apartments": [
     {
@@ -43798,7 +43798,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "은평뉴타운상림마을8단지롯데캐슬아파트(821~830동)",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-26",
+      "name_evidence": "http://place.map.kakao.com/11338995"
     },
     {
       "name": "거장메카",
@@ -48221,7 +48225,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "동아아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-26",
+      "name_evidence": "http://place.map.kakao.com/11325223"
     },
     {
       "name": "방배대우디오빌",
@@ -59934,7 +59942,11 @@
       "hh_src": "address_alias:title.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "SK허브올리브아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-26",
+      "name_evidence": "http://place.map.kakao.com/8104316"
     },
     {
       "name": "포레나동래",
@@ -63996,7 +64008,11 @@
         "name": "서울상지초등학교",
         "distance_m": 228,
         "in_zone": false
-      }
+      },
+      "display_name": "상암월드컵파크7단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-26",
+      "name_evidence": "http://place.map.kakao.com/11139009"
     },
     {
       "name": "창전래미안",
@@ -64092,7 +64108,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "성산현대2차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-26",
+      "name_evidence": "http://place.map.kakao.com/11203481"
     },
     {
       "name": "마포래미안푸르지오3단지",
@@ -104388,7 +104408,11 @@
         56657
       ],
       "builder": "기타",
-      "households": 630
+      "households": 630,
+      "display_name": "국제산장아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-26",
+      "name_evidence": "http://place.map.kakao.com/11037837"
     },
     {
       "name": "아크로리버뷰신반포",
@@ -111056,7 +111080,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-25",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "상암월드컵파크5단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-26",
+      "name_evidence": "http://place.map.kakao.com/11141396"
     },
     {
       "name": "강변삼익",
@@ -111467,7 +111495,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-28",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "서초힐스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-26",
+      "name_evidence": "http://place.map.kakao.com/14493491"
     },
     {
       "name": "삼환나우빌",
@@ -113923,7 +113955,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-01",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "미륭아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-26",
+      "name_evidence": "http://place.map.kakao.com/11356382"
     },
     {
       "name": "송파더플래티넘",
@@ -120945,7 +120981,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "호반써밋서초파크아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-26",
+      "name_evidence": "http://place.map.kakao.com/22906329"
     },
     {
       "name": "가천대역동부센트레빌2단지",
