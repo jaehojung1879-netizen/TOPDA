@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1120" viewBox="0 0 900 1120" role="img" aria-labelledby="title desc">
+  <title id="title">매수 후 숨은 하자 발견 때 대응 순서</title>
+  <desc id="desc">추가 피해 차단과 현장 기록부터 원인 확인, 계약 자료 대조, 매도인 서면 통지, 현장 확인, 수리와 비용 협의까지의 순서입니다.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f8f6}.card{fill:#fff;stroke:#d8ded9;stroke-width:2}.n{fill:#1d6b52}.nt{fill:#fff;font:700 24px Pretendard,Arial,sans-serif;text-anchor:middle}.h{fill:#173f34;font:700 29px Pretendard,Arial,sans-serif}.p{fill:#44534e;font:500 21px Pretendard,Arial,sans-serif}.cap{fill:#173f34;font:800 34px Pretendard,Arial,sans-serif}.sub{fill:#52615c;font:500 20px Pretendard,Arial,sans-serif}.arrow{stroke:#89a398;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}.warn{fill:#fff8e8;stroke:#e4c46d;stroke-width:2}.small{fill:#675520;font:600 20px Pretendard,Arial,sans-serif}
+    </style>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#89a398"/></marker>
+  </defs>
+  <rect class="bg" width="900" height="1120" rx="30"/>
+  <text class="cap" x="450" y="66" text-anchor="middle">수리 전에 원인과 증거부터 남기세요</text>
+  <text class="sub" x="450" y="102" text-anchor="middle">발견일보다 ‘매매 당시 존재했는지’가 책임 판단의 핵심입니다</text>
+
+  <rect class="card" x="90" y="145" width="720" height="120" rx="20"/>
+  <circle class="n" cx="145" cy="205" r="30"/><text class="nt" x="145" y="214">1</text>
+  <text class="h" x="195" y="193">추가 피해를 막고 현장을 기록</text>
+  <text class="p" x="195" y="231">밸브·전기 안전조치 → 사진·영상·발견 시각 보관</text>
+  <path class="arrow" d="M450 265V305" marker-end="url(#m)"/>
+
+  <rect class="card" x="90" y="315" width="720" height="120" rx="20"/>
+  <circle class="n" cx="145" cy="375" r="30"/><text class="nt" x="145" y="384">2</text>
+  <text class="h" x="195" y="363">원인과 발생 시점을 확인</text>
+  <text class="p" x="195" y="401">관리사무소 기록 + 원인 소견 + 과거 보수 흔적</text>
+  <path class="arrow" d="M450 435V475" marker-end="url(#m)"/>
+
+  <rect class="card" x="90" y="485" width="720" height="120" rx="20"/>
+  <circle class="n" cx="145" cy="545" r="30"/><text class="nt" x="145" y="554">3</text>
+  <text class="h" x="195" y="533">계약 자료와 대조</text>
+  <text class="p" x="195" y="571">계약서·특약·확인설명서·매수 전 사진·문자</text>
+  <path class="arrow" d="M450 605V645" marker-end="url(#m)"/>
+
+  <rect class="card" x="90" y="655" width="720" height="120" rx="20"/>
+  <circle class="n" cx="145" cy="715" r="30"/><text class="nt" x="145" y="724">4</text>
+  <text class="h" x="195" y="703">매도인에게 서면으로 통지</text>
+  <text class="p" x="195" y="741">발견일·원인·요구사항·답변 기한을 구체적으로</text>
+  <path class="arrow" d="M450 775V815" marker-end="url(#m)"/>
+
+  <rect class="card" x="90" y="825" width="720" height="120" rx="20"/>
+  <circle class="n" cx="145" cy="885" r="30"/><text class="nt" x="145" y="894">5</text>
+  <text class="h" x="195" y="873">현장 확인 뒤 수리·비용 협의</text>
+  <text class="p" x="195" y="911">원인 제거·원상복구·성능 개선 비용을 구분</text>
+
+  <rect class="warn" x="90" y="985" width="720" height="84" rx="16"/>
+  <text class="small" x="450" y="1019" text-anchor="middle">급한 누수는 바로 막되, 철거 전·중·후 사진과 교체 부품을 보관</text>
+  <text class="small" x="450" y="1052" text-anchor="middle">민법 제582조: 하자를 안 날부터 6개월 안에 권리 행사</text>
+  <text class="sub" x="450" y="1100" text-anchor="middle">근거: 민법 제580조·제582조·제584조 (2026-09-27 기준)</text>
+</svg>
