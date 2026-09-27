@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-09-26"
+    "portal_checked_at": "2026-09-27"
   },
   "apartments": [
     {
@@ -50664,7 +50664,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "수원화서역동문굿모닝힐아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-27",
+      "name_evidence": "http://place.map.kakao.com/11094472"
     },
     {
       "name": "파크뷰",
@@ -51374,7 +51378,11 @@
         "name": "성남양지초등학교",
         "distance_m": 452,
         "in_zone": false
-      }
+      },
+      "display_name": "선경논골아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-27",
+      "name_evidence": "http://place.map.kakao.com/15713265"
     },
     {
       "name": "위례 래미안이편한세상",
@@ -74557,7 +74565,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "원종아이원시티아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-27",
+      "name_evidence": "http://place.map.kakao.com/1842869889"
     },
     {
       "name": "오정휴먼시아2단지",
@@ -110946,7 +110958,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-22",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "백송마을7단지임광아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-27",
+      "name_evidence": "http://place.map.kakao.com/11315707"
     },
     {
       "name": "이편한세상미사",
@@ -114409,7 +114425,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-01",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "동분당더퍼스트아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-27",
+      "name_evidence": "http://place.map.kakao.com/11785138"
     },
     {
       "name": "래미안이스트팰리스3단지",
@@ -118665,12 +118685,14 @@
       ],
       "builder": "기타",
       "display_name": "봇들마을3단지아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "name_src": "portal.kakao_local",
       "households": 870,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-08",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-09-27",
+      "name_evidence": "http://place.map.kakao.com/11330305"
     },
     {
       "name": "신세계쉐덴",
