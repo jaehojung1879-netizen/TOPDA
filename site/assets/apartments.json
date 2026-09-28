@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-09-27"
+    "portal_checked_at": "2026-09-28"
   },
   "apartments": [
     {
@@ -70407,7 +70407,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "금전마을계룡리슈빌아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-28",
+      "name_evidence": "http://place.map.kakao.com/11364044"
     },
     {
       "name": "힐스테이트용인고진역1단지",
@@ -89185,7 +89189,11 @@
         "여의도": 17,
         "광화문": 21
       },
-      "households": 834
+      "households": 834,
+      "display_name": "한강대우아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-28",
+      "name_evidence": "http://place.map.kakao.com/10951439"
     },
     {
       "name": "한남더힐",
@@ -111608,12 +111616,14 @@
       ],
       "builder": "기타",
       "display_name": "용인삼환나우빌아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "name_src": "portal.kakao_local",
       "households": 458,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-28",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-09-28",
+      "name_evidence": "http://place.map.kakao.com/11139242"
     },
     {
       "name": "일산동양(955-2)",
@@ -122386,7 +122396,15 @@
         41514
       ],
       "builder": "기타",
-      "households": null
+      "households": 484,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-28",
+      "hh_evidence": [],
+      "display_name": "송파해링턴타워아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-28",
+      "name_evidence": "http://place.map.kakao.com/1288896633"
     },
     {
       "name": "미도",
@@ -122407,7 +122425,11 @@
         91500
       ],
       "builder": "기타",
-      "households": null
+      "households": 280,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-28",
+      "hh_evidence": []
     },
     {
       "name": "고덕국제신도시제일풍경채2차에듀",
@@ -122435,9 +122457,15 @@
         69181
       ],
       "builder": "기타",
-      "display_name": "고덕국제신도시 제일풍경채아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "고덕국제신도시제일풍경채2차에듀아파트",
+      "name_src": "portal.kakao_local",
+      "households": 1022,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-28",
+      "hh_evidence": [],
+      "name_checked_at": "2026-09-28",
+      "name_evidence": "http://place.map.kakao.com/1982920025"
     },
     {
       "name": "의왕서해그랑블(블루스퀘어)",
@@ -122465,9 +122493,15 @@
         75736
       ],
       "builder": "기타",
-      "display_name": "의왕서해그랑블",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "의왕서해그랑블블루스퀘어아파트",
+      "name_src": "portal.kakao_local",
+      "households": 536,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-28",
+      "hh_evidence": [],
+      "name_checked_at": "2026-09-28",
+      "name_evidence": "http://place.map.kakao.com/26416821"
     },
     {
       "name": "시흥시청역트리플포레",
@@ -122495,9 +122529,15 @@
         47319
       ],
       "builder": "기타",
-      "display_name": "시흥시청역 트리플포레아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "시흥시청역트리플포레아파트",
+      "name_src": "portal.kakao_local",
+      "households": 614,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-28",
+      "hh_evidence": [],
+      "name_checked_at": "2026-09-28",
+      "name_evidence": "http://place.map.kakao.com/1357468762"
     },
     {
       "name": "시티오씨엘1단지",
@@ -122537,7 +122577,11 @@
       "builder": "기타",
       "display_name": "시티오씨엘 1단지",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 1131,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-28",
+      "hh_evidence": []
     },
     {
       "name": "대림이편한세상",
@@ -122580,7 +122624,14 @@
         48247
       ],
       "builder": "DL이앤씨",
-      "households": null
+      "households": 664,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-28",
+      "hh_evidence": [],
+      "display_name": "수성대림e-편한세상아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-28"
     },
     {
       "name": "한샘",
@@ -122608,7 +122659,14 @@
         22772
       ],
       "builder": "기타",
-      "households": null
+      "households": 1026,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-09-28",
+      "hh_evidence": [],
+      "display_name": "성서한샘아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-28"
     }
   ]
 }
