@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1120" viewBox="0 0 900 1120" role="img" aria-labelledby="title desc">
+  <title id="title">전셋집 경매 통지를 받은 뒤 확인할 순서</title>
+  <desc id="desc">법원명과 사건번호, 배당요구 종기를 확인하고 계약서와 전입·확정일자 자료를 준비해 배당요구를 접수한 뒤 점유와 주민등록을 유지하고 매각·배당 결과를 확인하는 흐름도</desc>
+  <rect width="900" height="1120" rx="36" fill="#f5f7fa"/>
+  <text x="70" y="74" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="34" font-weight="700" fill="#17243a">경매 통지를 받았다면 이 순서로</text>
+  <text x="70" y="116" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="19" fill="#586174">집주인과의 협상보다 법원 사건과 마감일 확인이 먼저입니다</text>
+
+  <g font-family="Pretendard,Apple SD Gothic Neo,sans-serif">
+    <rect x="70" y="160" width="760" height="128" rx="22" fill="#fff" stroke="#c9d2df" stroke-width="2"/>
+    <circle cx="132" cy="224" r="33" fill="#294b7a"/><text x="132" y="233" text-anchor="middle" font-size="25" font-weight="700" fill="#fff">1</text>
+    <text x="190" y="210" font-size="25" font-weight="700" fill="#17243a">사건번호 · 주소 · 법원명 확인</text>
+    <text x="190" y="249" font-size="18" fill="#586174">법원 경매정보와 등기부에서 통지 내용을 다시 대조</text>
+    <path d="M450 288v42" stroke="#8a97a9" stroke-width="4"/><path d="m438 320 12 14 12-14" fill="none" stroke="#8a97a9" stroke-width="4"/>
+
+    <rect x="70" y="334" width="760" height="128" rx="22" fill="#fff7e8" stroke="#d7ae55" stroke-width="2"/>
+    <circle cx="132" cy="398" r="33" fill="#c18120"/><text x="132" y="407" text-anchor="middle" font-size="25" font-weight="700" fill="#fff">2</text>
+    <text x="190" y="384" font-size="25" font-weight="700" fill="#3d3118">배당요구 종기 기록</text>
+    <text x="190" y="423" font-size="18" fill="#6d5a33">마지막 날보다 일찍 접수할 일정과 서류 보완 기간 확보</text>
+    <path d="M450 462v42" stroke="#8a97a9" stroke-width="4"/><path d="m438 494 12 14 12-14" fill="none" stroke="#8a97a9" stroke-width="4"/>
+
+    <rect x="70" y="508" width="760" height="146" rx="22" fill="#fff" stroke="#c9d2df" stroke-width="2"/>
+    <circle cx="132" cy="581" r="33" fill="#294b7a"/><text x="132" y="590" text-anchor="middle" font-size="25" font-weight="700" fill="#fff">3</text>
+    <text x="190" y="559" font-size="25" font-weight="700" fill="#17243a">내 권리와 서류를 한 묶음으로</text>
+    <text x="190" y="598" font-size="18" fill="#586174">계약서 · 보증금 이체 · 전입 변동 · 확정일자</text>
+    <text x="190" y="628" font-size="18" fill="#586174">등기부의 선순위 근저당·압류 날짜와 비교</text>
+    <path d="M450 654v42" stroke="#8a97a9" stroke-width="4"/><path d="m438 686 12 14 12-14" fill="none" stroke="#8a97a9" stroke-width="4"/>
+
+    <rect x="70" y="700" width="760" height="128" rx="22" fill="#edf7f3" stroke="#5a9b82" stroke-width="2"/>
+    <circle cx="132" cy="764" r="33" fill="#337761"/><text x="132" y="773" text-anchor="middle" font-size="25" font-weight="700" fill="#fff">4</text>
+    <text x="190" y="750" font-size="25" font-weight="700" fill="#174d3d">관할 법원에 배당요구 접수</text>
+    <text x="190" y="789" font-size="18" fill="#3f665a">접수증과 제출서류 사본 보관 · 보완 요구 확인</text>
+    <path d="M450 828v42" stroke="#8a97a9" stroke-width="4"/><path d="m438 860 12 14 12-14" fill="none" stroke="#8a97a9" stroke-width="4"/>
+
+    <rect x="70" y="874" width="360" height="150" rx="22" fill="#fff1ee" stroke="#c66b5d" stroke-width="2"/>
+    <text x="250" y="924" text-anchor="middle" font-size="22" font-weight="700" fill="#8c352b">이사·전출은 잠시 멈춤</text>
+    <text x="250" y="964" text-anchor="middle" font-size="18" fill="#71463f">대항요건 유지</text>
+    <text x="250" y="994" text-anchor="middle" font-size="18" fill="#71463f">필요하면 임차권등기 완료 확인</text>
+
+    <rect x="470" y="874" width="360" height="150" rx="22" fill="#edf4fb" stroke="#7697bd" stroke-width="2"/>
+    <text x="650" y="924" text-anchor="middle" font-size="22" font-weight="700" fill="#264c78">매각·배당 일정 추적</text>
+    <text x="650" y="964" text-anchor="middle" font-size="18" fill="#49627f">예상 부족액 · 보증기관 통지</text>
+    <text x="650" y="994" text-anchor="middle" font-size="18" fill="#49627f">배당표와 잔액 청구 확인</text>
+
+    <path d="M450 1024v32" stroke="#8a97a9" stroke-width="3"/>
+    <text x="450" y="1090" text-anchor="middle" font-size="16" fill="#657080">근거: 주택임대차보호법, 민사집행법, 인천지방법원 FAQ · 2026-09-30 확인</text>
+  </g>
+</svg>
