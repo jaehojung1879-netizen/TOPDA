@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-09-29"
+    "portal_checked_at": "2026-09-30"
   },
   "apartments": [
     {
@@ -878,7 +878,11 @@
       "mgmt_fee_per_pyeong": 10331,
       "builder": "동부건설",
       "sido": "서울",
-      "sigungu": "동작구"
+      "sigungu": "동작구",
+      "display_name": "흑석한강센트레빌1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-30",
+      "name_evidence": "http://place.map.kakao.com/11247513"
     },
     {
       "id": "ap-dmc",
@@ -44568,7 +44572,11 @@
         "여의도": 16,
         "광화문": 22
       },
-      "households": 617
+      "households": 617,
+      "display_name": "메세나폴리스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-30",
+      "name_evidence": "http://place.map.kakao.com/11363005"
     },
     {
       "name": "상암월드컵파크9단지",
@@ -44927,7 +44935,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "건영아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-30",
+      "name_evidence": "http://place.map.kakao.com/11041086"
     },
     {
       "name": "래미안목동아델리체(101동~118동)",
@@ -46493,7 +46505,11 @@
         "여의도": 20,
         "광화문": 37
       },
-      "households": 341
+      "households": 341,
+      "display_name": "신도브래뉴아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-30",
+      "name_evidence": "http://place.map.kakao.com/7972170"
     },
     {
       "name": "남서울건영2",
@@ -58904,7 +58920,11 @@
         33000
       ],
       "builder": "기타",
-      "households": 550
+      "households": 550,
+      "display_name": "용현성원상떼빌아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-30",
+      "name_evidence": "http://place.map.kakao.com/11260111"
     },
     {
       "name": "신동아3",
@@ -88121,7 +88141,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "옥정중앙역중흥S-클래스센텀시티3블록아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-30",
+      "name_evidence": "http://place.map.kakao.com/1230526674"
     },
     {
       "name": "세창리베하우스",
@@ -93018,7 +93042,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "우방아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-30",
+      "name_evidence": "http://place.map.kakao.com/11333877"
     },
     {
       "name": "삼익파크맨션",
@@ -93956,7 +93984,11 @@
         "name": "수영초등학교",
         "distance_m": 375,
         "in_zone": false
-      }
+      },
+      "display_name": "광안동롯데골드로즈아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-30",
+      "name_evidence": "http://place.map.kakao.com/378956722"
     },
     {
       "name": "남천동원로얄듀크",
@@ -113596,7 +113628,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-01",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "우남퍼스트빌더센트럴아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-09-30",
+      "name_evidence": "http://place.map.kakao.com/2017389025"
     },
     {
       "name": "대덕트윈빌",
