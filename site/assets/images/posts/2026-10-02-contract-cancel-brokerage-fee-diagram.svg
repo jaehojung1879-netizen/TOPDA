@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1020" viewBox="0 0 900 1020" role="img" aria-labelledby="title desc">
+  <title id="title">계약 파기 뒤 중개보수 지급 여부 확인 흐름도</title>
+  <desc id="desc">거래계약이 성립했는지, 파기 원인이 당사자에게 있는지 중개사의 고의 또는 과실에 있는지를 차례로 확인해 중개보수 청구 가능성을 판단하는 흐름도</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5f7ff"/><stop offset="1" stop-color="#eef8f4"/></linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#172554" flood-opacity=".10"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#536079"/></marker>
+  </defs>
+  <rect width="900" height="1020" rx="36" fill="url(#bg)"/>
+  <text x="450" y="70" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="34" font-weight="800" fill="#172554">계약이 깨졌다면 무엇부터 확인할까?</text>
+  <text x="450" y="108" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="18" fill="#536079">계약 성립 여부와 파기 원인을 먼저 나누면 중개보수 판단이 쉬워집니다</text>
+
+  <g filter="url(#shadow)">
+    <rect x="210" y="155" width="480" height="120" rx="24" fill="#fff" stroke="#8da2d8" stroke-width="3"/>
+    <text x="450" y="205" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="25" font-weight="750" fill="#172554">매매·임대차 계약이 성립했나요?</text>
+    <text x="450" y="240" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="18" fill="#536079">서명 계약서뿐 아니라 합의 내용과 송금 기록도 확인</text>
+  </g>
+
+  <path d="M330 275 V345 H190 V390" fill="none" stroke="#536079" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M570 275 V345 H710 V390" fill="none" stroke="#536079" stroke-width="4" marker-end="url(#arrow)"/>
+  <rect x="240" y="310" width="72" height="35" rx="17" fill="#5d6da8"/><text x="276" y="334" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="17" font-weight="700" fill="#fff">아니요</text>
+  <rect x="588" y="310" width="62" height="35" rx="17" fill="#21836b"/><text x="619" y="334" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="17" font-weight="700" fill="#fff">예</text>
+
+  <g filter="url(#shadow)">
+    <rect x="55" y="395" width="270" height="185" rx="24" fill="#fff" stroke="#8da2d8" stroke-width="3"/>
+    <text x="190" y="442" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="23" font-weight="800" fill="#172554">협의가 끝난 단계인지 확인</text>
+    <text x="190" y="482" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="18" fill="#536079"><tspan x="190">단순 문의·집 보기·조건 협의만으로는</tspan><tspan x="190" dy="29">중개가 완성됐다고 단정하기 어렵습니다</tspan></text>
+    <text x="190" y="552" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="17" font-weight="700" fill="#5d6da8">합의 내용과 증거를 따로 검토</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="470" y="395" width="375" height="145" rx="24" fill="#fff" stroke="#55a891" stroke-width="3"/>
+    <text x="658" y="442" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="23" font-weight="800" fill="#123a31">왜 계약이 깨졌나요?</text>
+    <text x="658" y="480" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="18" fill="#536079">당사자 사정인지 중개사의 잘못인지 확인</text>
+  </g>
+
+  <path d="M585 540 V630 H500 V675" fill="none" stroke="#536079" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M730 540 V630 H785 V675" fill="none" stroke="#536079" stroke-width="4" marker-end="url(#arrow)"/>
+  <rect x="430" y="585" width="144" height="35" rx="17" fill="#5d6da8"/><text x="502" y="609" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="16" font-weight="700" fill="#fff">당사자 사정·합의</text>
+  <rect x="687" y="585" width="156" height="35" rx="17" fill="#bd5b4e"/><text x="765" y="609" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="16" font-weight="700" fill="#fff">중개사 고의·과실</text>
+
+  <g filter="url(#shadow)">
+    <rect x="355" y="680" width="285" height="195" rx="24" fill="#fff" stroke="#8da2d8" stroke-width="3"/>
+    <text x="498" y="728" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="23" font-weight="800" fill="#172554">원칙적으로 보수 청구 가능</text>
+    <text x="498" y="770" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="18" fill="#536079"><tspan x="498">해약금·위약금과는 별개입니다</tspan><tspan x="498" dy="30">약정요율과 법정 상한을 확인하세요</tspan></text>
+    <text x="498" y="844" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="17" font-weight="700" fill="#5d6da8">최고요율이 자동 적용되는 것은 아님</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="665" y="680" width="200" height="195" rx="24" fill="#fff" stroke="#d98174" stroke-width="3"/>
+    <text x="765" y="728" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="22" font-weight="800" fill="#772c24">법정 예외 검토</text>
+    <text x="765" y="770" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="17" fill="#536079"><tspan x="765">그 잘못 때문에 거래가</tspan><tspan x="765" dy="29">무효·취소·해제됐다면</tspan><tspan x="765" dy="29">보수를 지급하지 않음</tspan></text>
+  </g>
+
+  <rect x="75" y="915" width="750" height="64" rx="18" fill="#172554"/>
+  <text x="450" y="955" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="18" font-weight="700" fill="#fff">근거: 공인중개사법 제32조 · 시행령 제27조의2 · 2026년 10월 2일 확인</text>
+</svg>
