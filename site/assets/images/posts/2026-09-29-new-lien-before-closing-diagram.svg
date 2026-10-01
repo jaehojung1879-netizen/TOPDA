@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1120" viewBox="0 0 900 1120" role="img" aria-labelledby="title desc">
+  <title id="title">잔금 전 새 권리제한 발견 시 대응 순서</title>
+  <desc id="desc">잔금 송금 직전 등기부를 다시 확인하고, 새 근저당권이나 가압류가 없다면 예정대로 동시이행하며, 있다면 송금을 보류한 뒤 말소 가능성과 서류를 확인해 해소 시 동시 처리하고 미해소 시 서면 최고와 계약 해제를 검토하는 흐름도</desc>
+  <rect width="900" height="1120" rx="36" fill="#f5f3ee"/>
+  <text x="70" y="82" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="34" font-weight="700" fill="#17243a">잔금 송금 전에 한 번 더 확인</text>
+  <text x="70" y="126" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="20" fill="#586174">계약일의 등기부가 아니라 지금의 권리관계를 봅니다</text>
+
+  <rect x="70" y="176" width="760" height="126" rx="22" fill="#ffffff" stroke="#c7ced8" stroke-width="2"/>
+  <circle cx="132" cy="239" r="34" fill="#223a5e"/>
+  <text x="132" y="248" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="26" font-weight="700" fill="#ffffff">1</text>
+  <text x="190" y="226" font-family="Pretendard,sans-serif" font-size="25" font-weight="700" fill="#17243a">최신 등기사항증명서 재확인</text>
+  <text x="190" y="263" font-family="Pretendard,sans-serif" font-size="19" fill="#586174">소유자 · 갑구 · 을구 · 처리 중인 신청 여부 확인</text>
+
+  <path d="M450 302v48" stroke="#8893a3" stroke-width="4" stroke-linecap="round"/>
+  <path d="m438 338 12 14 12-14" fill="none" stroke="#8893a3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="70" y="350" width="760" height="142" rx="22" fill="#fff8e8" stroke="#d8ad4a" stroke-width="2"/>
+  <text x="450" y="405" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="25" font-weight="700" fill="#3b2f14">계약 때 없던 권리제한이 있나요?</text>
+  <text x="450" y="445" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="19" fill="#66552e">근저당권 · 가압류 · 압류 · 가등기 · 가처분 등</text>
+  <text x="250" y="525" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="20" font-weight="700" fill="#21735b">없음</text>
+  <text x="650" y="525" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="20" font-weight="700" fill="#ad4d3f">있음</text>
+  <path d="M330 492 250 565" stroke="#3f9277" stroke-width="4" fill="none"/>
+  <path d="M570 492 650 565" stroke="#c66b5d" stroke-width="4" fill="none"/>
+
+  <rect x="70" y="566" width="350" height="158" rx="22" fill="#edf8f3" stroke="#3f9277" stroke-width="2"/>
+  <text x="245" y="616" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="23" font-weight="700" fill="#175b49">예정대로 동시이행</text>
+  <text x="245" y="654" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="18" fill="#375b50">잔금 지급</text>
+  <text x="245" y="684" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="18" fill="#375b50">소유권이전 서류 교부 · 등기 접수</text>
+
+  <rect x="480" y="566" width="350" height="158" rx="22" fill="#fff1ee" stroke="#c66b5d" stroke-width="2"/>
+  <text x="655" y="616" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="23" font-weight="700" fill="#8c352b">송금부터 보류</text>
+  <text x="655" y="654" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="18" fill="#71463f">권리 원인 · 금액 · 말소서류</text>
+  <text x="655" y="684" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="18" fill="#71463f">당일 해소 가능 여부 확인</text>
+
+  <path d="M655 724v52" stroke="#8893a3" stroke-width="4"/>
+  <path d="m643 764 12 14 12-14" fill="none" stroke="#8893a3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="480" y="778" width="350" height="104" rx="20" fill="#ffffff" stroke="#c7ced8" stroke-width="2"/>
+  <text x="655" y="822" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="21" font-weight="700" fill="#17243a">매도인에게 서면으로 해소 요구</text>
+  <text x="655" y="853" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="17" fill="#586174">기한 · 말소방법 · 잔금일 조정 기록</text>
+
+  <path d="M655 882v50" stroke="#8893a3" stroke-width="4"/>
+  <path d="m643 920 12 14 12-14" fill="none" stroke="#8893a3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="70" y="934" width="350" height="116" rx="22" fill="#edf8f3" stroke="#3f9277" stroke-width="2"/>
+  <text x="245" y="978" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="22" font-weight="700" fill="#175b49">해소 가능</text>
+  <text x="245" y="1015" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="18" fill="#375b50">말소 · 이전등기 · 잔금 동시 처리</text>
+  <rect x="480" y="934" width="350" height="116" rx="22" fill="#fff1ee" stroke="#c66b5d" stroke-width="2"/>
+  <text x="655" y="978" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="22" font-weight="700" fill="#8c352b">기한 내 미해소</text>
+  <text x="655" y="1015" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="18" fill="#71463f">최고 · 해제 · 손해배상 검토</text>
+  <path d="M655 934 655 912 245 912 245 934" fill="none" stroke="#8893a3" stroke-width="3"/>
+
+  <text x="450" y="1090" text-anchor="middle" font-family="Pretendard,sans-serif" font-size="16" fill="#6c7480">근거: 민법 제536조·제544조·제568조, 대법원 91다6368 등 · 2026-09-29 확인</text>
+</svg>
