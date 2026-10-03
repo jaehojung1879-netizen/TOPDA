@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-02"
+    "portal_checked_at": "2026-10-03"
   },
   "apartments": [
     {
@@ -40984,7 +40984,11 @@
         "여의도": 44,
         "광화문": 27
       },
-      "households": 380
+      "households": 380,
+      "display_name": "번동솔그린아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-03",
+      "name_evidence": "http://place.map.kakao.com/11354837"
     },
     {
       "name": "극동",
@@ -42765,7 +42769,11 @@
       "hh_src": "address_alias:title.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "거장메카아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-03",
+      "name_evidence": "http://place.map.kakao.com/1693104480"
     },
     {
       "name": "현대1",
@@ -83917,7 +83925,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "증포한솔솔파크1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-03",
+      "name_evidence": "http://place.map.kakao.com/11340844"
     },
     {
       "name": "이천중리우미린트리쉐이드",
@@ -84018,7 +84030,11 @@
         "name": "마장초등학교",
         "distance_m": 390,
         "in_zone": false
-      }
+      },
+      "display_name": "이천마장리젠시빌란트더웰아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-03",
+      "name_evidence": "http://place.map.kakao.com/864021411"
     },
     {
       "name": "주은풍림",
@@ -101960,7 +101976,11 @@
         34322
       ],
       "builder": "기타",
-      "households": 366
+      "households": 366,
+      "display_name": "서교동대우미래사랑아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-03",
+      "name_evidence": "http://place.map.kakao.com/7820008"
     },
     {
       "name": "신트리3",
@@ -117634,7 +117654,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-14",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "대교아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-03",
+      "name_evidence": "http://place.map.kakao.com/22722814"
     },
     {
       "name": "개포주공7단지",
@@ -120860,13 +120884,15 @@
         66350
       ],
       "builder": "기타",
-      "display_name": "신정푸른마을3단지",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "display_name": "푸른마을3단지아파트",
+      "name_src": "portal.kakao_local",
       "households": 440,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-10-01",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-03",
+      "name_evidence": "http://place.map.kakao.com/11322028"
     },
     {
       "name": "해태",
@@ -124018,7 +124044,14 @@
         119997
       ],
       "builder": "롯데건설",
-      "households": null
+      "households": 1163,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-03",
+      "hh_evidence": [],
+      "display_name": "노원롯데캐슬시그니처아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-03"
     }
   ]
 }
