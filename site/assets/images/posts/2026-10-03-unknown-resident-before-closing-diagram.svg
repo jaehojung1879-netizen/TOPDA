@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1080" viewBox="0 0 900 1080" role="img" aria-labelledby="title desc">
+  <title id="title">잔금 전 전입세대확인서에 모르는 사람이 있을 때 확인 흐름도</title>
+  <desc id="desc">전입세대확인서 발급, 이름과 전입일 확인, 매도인 관계와 실제 점유 확인, 임대차계약과 보증금 확인, 불일치 해소 후 잔금 지급 순서를 보여 주는 흐름도</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4f7ff"/><stop offset="1" stop-color="#eef8f4"/></linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#172554" flood-opacity=".1"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#536079"/></marker>
+  </defs>
+  <rect width="900" height="1080" rx="36" fill="url(#bg)"/>
+  <text x="450" y="65" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="34" font-weight="800" fill="#172554">모르는 전입자가 보이면 잔금보다 확인이 먼저</text>
+  <text x="450" y="103" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="18" fill="#536079">전입 기록만으로 임차권을 단정하지 말고 실제 점유와 계약을 함께 봅니다</text>
+
+  <g filter="url(#shadow)">
+    <rect x="175" y="145" width="550" height="120" rx="24" fill="#fff" stroke="#8da2d8" stroke-width="3"/>
+    <text x="450" y="194" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="25" font-weight="800" fill="#172554">잔금 직전 전입세대확인서 발급</text>
+    <text x="450" y="231" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="18" fill="#536079">주소·동호수, 세대주·동거인 성명과 전입일 확인</text>
+  </g>
+  <path d="M450 265 V325" fill="none" stroke="#536079" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="210" y="330" width="480" height="120" rx="24" fill="#fff" stroke="#55a891" stroke-width="3"/>
+    <text x="450" y="380" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="25" font-weight="800" fill="#123a31">계약 때 들은 사람과 모두 일치하나요?</text>
+    <text x="450" y="416" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="18" fill="#536079">매도인 가족·기존 임차인·처음 보는 이름 구분</text>
+  </g>
+  <path d="M330 450 V520 H200 V570" fill="none" stroke="#536079" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M570 450 V520 H700 V570" fill="none" stroke="#536079" stroke-width="4" marker-end="url(#arrow)"/>
+  <rect x="237" y="486" width="72" height="34" rx="17" fill="#21836b"/><text x="273" y="510" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="17" font-weight="700" fill="#fff">일치</text>
+  <rect x="592" y="486" width="92" height="34" rx="17" fill="#bd5b4e"/><text x="638" y="510" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="17" font-weight="700" fill="#fff">불일치</text>
+
+  <g filter="url(#shadow)">
+    <rect x="45" y="575" width="310" height="190" rx="24" fill="#fff" stroke="#55a891" stroke-width="3"/>
+    <text x="200" y="622" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="22" font-weight="800" fill="#123a31">빈집 인도까지 다시 확인</text>
+    <text x="200" y="664" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="17" fill="#536079"><tspan x="200">실제 퇴거·열쇠·짐 반출</tspan><tspan x="200" dy="29">매도인 약속과 현장 일치</tspan><tspan x="200" dy="29">대출은행 요구서류 확인</tspan></text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="505" y="575" width="350" height="190" rx="24" fill="#fff" stroke="#d98174" stroke-width="3"/>
+    <text x="680" y="622" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="22" font-weight="800" fill="#772c24">누구인지와 점유 이유 확인</text>
+    <text x="680" y="664" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="17" fill="#536079"><tspan x="680">매도인 관계·현재 거주 여부</tspan><tspan x="680" dy="29">임대차계약서·보증금·만기</tspan><tspan x="680" dy="29">외국인은 체류확인서 별도 확인</tspan></text>
+  </g>
+
+  <path d="M680 765 V825" fill="none" stroke="#536079" stroke-width="4" marker-end="url(#arrow)"/>
+  <g filter="url(#shadow)">
+    <rect x="470" y="830" width="385" height="145" rx="24" fill="#fff" stroke="#d98174" stroke-width="3"/>
+    <text x="663" y="877" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="22" font-weight="800" fill="#772c24">불일치가 풀리기 전 잔금 보류 협의</text>
+    <text x="663" y="916" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="17" fill="#536079"><tspan x="663">전출·퇴거 또는 임대차 승계 조건을</tspan><tspan x="663" dy="28">서면으로 확정한 뒤 지급 순서 결정</tspan></text>
+  </g>
+
+  <path d="M200 765 V925 H450" fill="none" stroke="#536079" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M663 975 V1005 H450" fill="none" stroke="#536079" stroke-width="4" marker-end="url(#arrow)"/>
+  <rect x="130" y="1000" width="640" height="52" rx="18" fill="#172554"/>
+  <text x="450" y="1033" text-anchor="middle" font-family="Pretendard,Apple SD Gothic Neo,sans-serif" font-size="18" font-weight="700" fill="#fff">확인서 + 실제 점유 + 임대차계약이 맞을 때 잔금·인도 동시 진행</text>
+</svg>
