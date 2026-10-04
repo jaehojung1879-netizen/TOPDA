@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-03"
+    "portal_checked_at": "2026-10-04"
   },
   "apartments": [
     {
@@ -88779,7 +88779,11 @@
         "name": "인천학익초등학교",
         "distance_m": 319,
         "in_zone": false
-      }
+      },
+      "display_name": "장미아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-04",
+      "name_evidence": "http://place.map.kakao.com/11348324"
     },
     {
       "name": "엑슬루타워",
@@ -108363,7 +108367,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-19",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "범물창신태성한라맨션",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-04",
+      "name_evidence": "http://place.map.kakao.com/11228888"
     },
     {
       "name": "래미안장위퍼스트하이",
