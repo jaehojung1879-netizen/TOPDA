@@ -234566,10 +234566,7 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 176
-      },
-      "households": 77,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2007
+      }
     },
     "서울 강서구|청솔샤르망1001동": {
       "addr": "서울 강서구 내발산동 676-23",
@@ -234582,10 +234579,7 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 159
-      },
-      "households": 49,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
+      }
     },
     "인천 미추홀구|행복캐슬103동": {
       "addr": "인천 미추홀구 숭의동 122-10",
@@ -234598,10 +234592,7 @@
       "elementary": {
         "name": "인천숭의초등학교",
         "distance_m": 531
-      },
-      "households": 24,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2014
+      }
     },
     "서울 양천구|주함헤븐103동": {
       "addr": "서울 양천구 신월동 203-14",
@@ -234610,10 +234601,7 @@
       "elementary": {
         "name": "서울신원초등학교",
         "distance_m": 57
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
+      }
     },
     "서울 강동구|광남캐스빌105동": {
       "addr": "서울 강동구 둔촌동 435-4",
@@ -234626,10 +234614,7 @@
       "elementary": {
         "name": "서울한산초등학교",
         "distance_m": 579
-      },
-      "households": 28,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
+      }
     },
     "서울 관악구|에메랄드105동": {
       "addr": "서울 관악구 봉천동 41-261",
@@ -234642,10 +234627,7 @@
       "elementary": {
         "name": "서울신봉초등학교",
         "distance_m": 324
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2012
+      }
     },
     "서울 강서구|우공팰리스101동": {
       "addr": "서울 강서구 화곡동 1026-27",
@@ -234658,10 +234640,7 @@
       "elementary": {
         "name": "서울신월초등학교",
         "distance_m": 450
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2005
+      }
     },
     "경기 용인시 수지구|죽전GS자이103동": {
       "addr": "경기 용인시 수지구 죽전동 96",
@@ -234670,11 +234649,21 @@
       "elementary": {
         "name": "대청초등학교",
         "distance_m": 472
+      }
+    },
+    "서울 서초구|DK밸리뷰시티": {
+      "addr": "서울 서초구 서초동 1584-6",
+      "lat": 37.485137,
+      "lng": 127.012014,
+      "subway": {
+        "station": "남부터미널역 3호선",
+        "distance_m": 370
       },
-      "households": 19,
-      "hh_src": "title.hhldCnt",
-      "built_year": 1998
+      "elementary": {
+        "name": "서울신중초등학교",
+        "distance_m": 601
+      }
     }
   },
-  "as_of": "2026-10-03"
+  "as_of": "2026-10-04"
 }
