@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1080" viewBox="0 0 900 1080" role="img" aria-labelledby="title desc">
+  <title id="title">등기권리증 분실 후 주택 매도 준비 절차</title>
+  <desc id="desc">등기권리증 분실 확인, 최신 등기기록 확인, 등기 담당자 통지, 본인확인 방법 선택, 일정과 비용 확정, 잔금과 이전등기 접수 순서로 이어지는 흐름도</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7faf9"/><stop offset="1" stop-color="#e9f3f0"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0f3d35" flood-opacity=".12"/></filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0L12 6L0 12Z" fill="#297267"/></marker>
+    <style>
+      .t{font-family:Pretendard,"Noto Sans KR",sans-serif;fill:#153b35}.h{font-weight:800;font-size:34px}.s{font-weight:600;font-size:19px;fill:#47635e}.n{font-weight:800;font-size:22px;fill:#fff}.bh{font-weight:800;font-size:24px}.bp{font-weight:500;font-size:18px;fill:#405d58}.note{font-weight:600;font-size:17px;fill:#5c746f}.line{stroke:#297267;stroke-width:4;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="900" height="1080" rx="36" fill="url(#bg)"/>
+  <text x="70" y="78" class="t h">등기권리증을 못 찾았다면</text>
+  <text x="70" y="115" class="t s">재발급을 찾기보다 이번 등기의 본인확인 방법부터 정합니다</text>
+
+  <g filter="url(#shadow)">
+    <rect x="86" y="160" width="728" height="116" rx="24" fill="#fff"/>
+    <circle cx="148" cy="218" r="30" fill="#297267"/><text x="148" y="226" text-anchor="middle" class="t n">1</text>
+    <text x="200" y="207" class="t bh">분실 사실과 현재 등기기록 확인</text>
+    <text x="200" y="240" class="t bp">최신 등기사항증명서에서 소유자·지분·새 권리변동 대조</text>
+  </g>
+  <path d="M450 277V317" class="line"/>
+  <g filter="url(#shadow)">
+    <rect x="86" y="326" width="728" height="116" rx="24" fill="#fff"/>
+    <circle cx="148" cy="384" r="30" fill="#297267"/><text x="148" y="392" text-anchor="middle" class="t n">2</text>
+    <text x="200" y="373" class="t bh">실제 등기 담당자에게 즉시 알림</text>
+    <text x="200" y="406" class="t bp">중개사에게만 맡기지 말고 변호사·법무사와 직접 일정 확인</text>
+  </g>
+  <path d="M450 443V483" class="line"/>
+  <g filter="url(#shadow)">
+    <rect x="86" y="492" width="728" height="164" rx="24" fill="#fff"/>
+    <circle cx="148" cy="550" r="30" fill="#297267"/><text x="148" y="558" text-anchor="middle" class="t n">3</text>
+    <text x="200" y="539" class="t bh">거래에 맞는 본인확인 방법 선택</text>
+    <text x="200" y="576" class="t bp">① 자격자대리인 확인  ② 등기소 출석 확인  ③ 공증</text>
+    <text x="200" y="610" class="t note">신청 방식·대리인 선임 여부에 따라 담당자와 결정</text>
+  </g>
+  <path d="M450 657V697" class="line"/>
+  <g filter="url(#shadow)">
+    <rect x="86" y="706" width="728" height="136" rx="24" fill="#fff"/>
+    <circle cx="148" cy="764" r="30" fill="#297267"/><text x="148" y="772" text-anchor="middle" class="t n">4</text>
+    <text x="200" y="753" class="t bh">면담·서류·추가 보수 확정</text>
+    <text x="200" y="786" class="t bp">신분증 원본, 인감·주소변경·공동명의 자료를 사전 점검</text>
+    <text x="200" y="817" class="t note">기본 등기보수와 분실 본인확인 보수를 나눠 견적 확인</text>
+  </g>
+  <path d="M450 843V883" class="line"/>
+  <g filter="url(#shadow)">
+    <rect x="86" y="892" width="728" height="116" rx="24" fill="#173f38"/>
+    <circle cx="148" cy="950" r="30" fill="#d7b15b"/><text x="148" y="958" text-anchor="middle" class="t n" fill="#173f38">5</text>
+    <text x="200" y="939" class="t bh" fill="#fff">잔금과 소유권이전등기 접수를 함께 진행</text>
+    <text x="200" y="972" class="t bp" fill="#e6f2ef">접수가 어렵다면 송금 전에 일정 변경을 서면 합의</text>
+  </g>
+  <text x="450" y="1050" text-anchor="middle" class="t note">근거: 부동산등기법 제51조 · 부동산등기규칙 제111조 · 기준일 2026-10-04</text>
+</svg>
