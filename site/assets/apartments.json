@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-04"
+    "portal_checked_at": "2026-10-05"
   },
   "apartments": [
     {
@@ -50105,7 +50105,11 @@
         "name": "성남서초등학교",
         "distance_m": 107,
         "in_zone": false
-      }
+      },
+      "display_name": "가천대역동부센트레빌1단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-05",
+      "name_evidence": "http://place.map.kakao.com/11342740"
     },
     {
       "name": "진로",
@@ -66788,7 +66792,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "래미안노블클래스2단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-05",
+      "name_evidence": "http://place.map.kakao.com/11146950"
     },
     {
       "name": "은행주공",
@@ -72633,7 +72641,11 @@
         "name": "성곡초등학교",
         "distance_m": 387,
         "in_zone": false
-      }
+      },
+      "display_name": "여월휴먼시아3단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-05",
+      "name_evidence": "http://place.map.kakao.com/12711539"
     },
     {
       "name": "삼두",
@@ -104859,7 +104871,11 @@
         32215
       ],
       "builder": "기타",
-      "households": 776
+      "households": 776,
+      "display_name": "신안2차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-05",
+      "name_evidence": "http://place.map.kakao.com/11323859"
     },
     {
       "name": "오산대역 엘크루",
@@ -124094,9 +124110,15 @@
         108500
       ],
       "builder": "기타",
-      "display_name": "광교상현마을 현대아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "광교상현마을현대아파트",
+      "name_src": "portal.kakao_local",
+      "households": 498,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-05",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-05",
+      "name_evidence": "http://place.map.kakao.com/8153099"
     }
   ]
 }
