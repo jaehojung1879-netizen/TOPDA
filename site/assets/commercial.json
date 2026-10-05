@@ -32,18 +32,18 @@
     "table_periods": {
       "office": {
         "rent": "202602",
-        "vacancy": "202601",
+        "vacancy": "202602",
         "yield": "202602"
       },
       "medium": {
-        "rent": "202602",
+        "rent": "202601",
         "vacancy": "202602",
         "yield": "202602"
       },
       "small": {
         "rent": "202602",
         "vacancy": "202602",
-        "yield": "202602"
+        "yield": "202601"
       },
       "collective": {
         "rent": "202602",
@@ -103,18 +103,18 @@
       "data": {
         "office": {
           "rent": 6307.68,
-          "vacancy": 22.42,
+          "vacancy": 22.62,
           "yield": 0.86
         },
         "medium": {
-          "rent": 14909.8,
+          "rent": 14928.3,
           "vacancy": 17.52,
           "yield": 0.74
         },
         "small": {
           "rent": 13306.2,
           "vacancy": 7.76,
-          "yield": 0.82
+          "yield": 0.72
         },
         "collective": {
           "rent": 18294.49,
@@ -132,18 +132,18 @@
       "data": {
         "office": {
           "rent": 13105.1,
-          "vacancy": 11.13,
+          "vacancy": 10.17,
           "yield": 2.33
         },
         "medium": {
-          "rent": 26718.69,
+          "rent": 26744.33,
           "vacancy": 11.85,
           "yield": 1.4
         },
         "small": {
           "rent": 23911.85,
           "vacancy": 7.58,
-          "yield": 1.08
+          "yield": 0.95
         },
         "collective": {
           "rent": 30274.21,
@@ -161,18 +161,18 @@
       "data": {
         "office": {
           "rent": 5724.08,
-          "vacancy": 16.88,
+          "vacancy": 15.96,
           "yield": 0.5
         },
         "medium": {
-          "rent": 15586.22,
+          "rent": 15626.53,
           "vacancy": 17.8,
           "yield": 0.35
         },
         "small": {
           "rent": 13008.56,
           "vacancy": 9.88,
-          "yield": 0.34
+          "yield": 0.46
         },
         "collective": {
           "rent": 19554.1,
@@ -190,18 +190,18 @@
       "data": {
         "office": {
           "rent": 5966.98,
-          "vacancy": 23.62,
+          "vacancy": 23.81,
           "yield": 0.65
         },
         "medium": {
-          "rent": 12752.56,
+          "rent": 12770.59,
           "vacancy": 18.88,
           "yield": 0.62
         },
         "small": {
           "rent": 13099.86,
           "vacancy": 10.03,
-          "yield": 0.68
+          "yield": 0.65
         },
         "collective": {
           "rent": 15808.36,
@@ -219,18 +219,18 @@
       "data": {
         "office": {
           "rent": 5444.58,
-          "vacancy": 18.86,
+          "vacancy": 18.57,
           "yield": 0.61
         },
         "medium": {
-          "rent": 21511.76,
+          "rent": 21529.79,
           "vacancy": 17.62,
           "yield": 0.62
         },
         "small": {
           "rent": 16664.65,
           "vacancy": 9.63,
-          "yield": 0.61
+          "yield": 0.55
         },
         "collective": {
           "rent": 21074.89,
@@ -248,18 +248,18 @@
       "data": {
         "office": {
           "rent": 7375.14,
-          "vacancy": 10.84,
+          "vacancy": 10.88,
           "yield": 0.68
         },
         "medium": {
-          "rent": 21720.15,
+          "rent": 21753.53,
           "vacancy": 18.92,
           "yield": 0.57
         },
         "small": {
           "rent": 20554.41,
           "vacancy": 10.83,
-          "yield": 0.45
+          "yield": 0.46
         },
         "collective": {
           "rent": 22857.38,
@@ -277,18 +277,18 @@
       "data": {
         "office": {
           "rent": 4720.48,
-          "vacancy": 13.85,
+          "vacancy": 14.5,
           "yield": 0.87
         },
         "medium": {
-          "rent": 18650.85,
+          "rent": 18675.53,
           "vacancy": 14.12,
           "yield": 0.96
         },
         "small": {
           "rent": 15081.93,
           "vacancy": 7.75,
-          "yield": 0.79
+          "yield": 0.76
         },
         "collective": {
           "rent": 22640.49,
@@ -306,18 +306,18 @@
       "data": {
         "office": {
           "rent": 7062.02,
-          "vacancy": 14.68,
+          "vacancy": 16.13,
           "yield": 1.16
         },
         "medium": {
-          "rent": 30110.6,
+          "rent": 30094.45,
           "vacancy": 15.62,
           "yield": 0.82
         },
         "small": {
           "rent": 26333.36,
           "vacancy": 8.57,
-          "yield": 0.73
+          "yield": 0.64
         },
         "collective": {
           "rent": 28976.78,
@@ -335,18 +335,18 @@
       "data": {
         "office": {
           "rent": 25068.75,
-          "vacancy": 5.19,
+          "vacancy": 5.44,
           "yield": 2.77
         },
         "medium": {
-          "rent": 56708.09,
+          "rent": 56364.3,
           "vacancy": 9.67,
           "yield": 1.87
         },
         "small": {
           "rent": 52777.79,
           "vacancy": 6.38,
-          "yield": 1.7
+          "yield": 1.53
         },
         "collective": {
           "rent": 49754.19,
@@ -363,14 +363,14 @@
       "lng": 127.289,
       "data": {
         "medium": {
-          "rent": 15742.4,
+          "rent": 15747.68,
           "vacancy": 29.68,
           "yield": 0.68
         },
         "small": {
           "rent": 15831.01,
           "vacancy": 9.03,
-          "yield": 0.67
+          "yield": 0.61
         },
         "collective": {
           "rent": 18109.32,
@@ -388,11 +388,11 @@
       "data": {
         "office": {
           "rent": 6800.08,
-          "vacancy": 14.62,
+          "vacancy": 16.32,
           "yield": 0.79
         },
         "medium": {
-          "rent": 16547.69,
+          "rent": 16567.03,
           "vacancy": 16.84,
           "yield": 0.41
         },
@@ -417,18 +417,18 @@
       "data": {
         "office": {
           "rent": 8289.36,
-          "vacancy": 16.88,
+          "vacancy": 17.28,
           "yield": 1.09
         },
         "medium": {
-          "rent": 25002.03,
+          "rent": 25020.97,
           "vacancy": 15.0,
           "yield": 1.15
         },
         "small": {
           "rent": 21361.18,
           "vacancy": 10.59,
-          "yield": 1.14
+          "yield": 0.93
         },
         "collective": {
           "rent": 27750.78,
@@ -446,18 +446,18 @@
       "data": {
         "office": {
           "rent": 4608.01,
-          "vacancy": 22.77,
+          "vacancy": 23.18,
           "yield": 0.64
         },
         "medium": {
-          "rent": 12618.19,
+          "rent": 12641.85,
           "vacancy": 14.68,
           "yield": 0.61
         },
         "small": {
           "rent": 10857.15,
           "vacancy": 10.45,
-          "yield": 0.58
+          "yield": 0.48
         },
         "collective": {
           "rent": 14800.42,
@@ -475,18 +475,18 @@
       "data": {
         "office": {
           "rent": 4250.88,
-          "vacancy": 17.45,
+          "vacancy": 17.72,
           "yield": 0.31
         },
         "medium": {
-          "rent": 14154.64,
+          "rent": 14178.77,
           "vacancy": 18.03,
           "yield": 0.68
         },
         "small": {
           "rent": 10850.35,
           "vacancy": 9.23,
-          "yield": 0.63
+          "yield": 0.58
         },
         "collective": {
           "rent": 19241.23,
@@ -504,11 +504,11 @@
       "data": {
         "office": {
           "rent": 4896.53,
-          "vacancy": 4.45,
+          "vacancy": 4.99,
           "yield": 0.43
         },
         "medium": {
-          "rent": 15000.31,
+          "rent": 15012.62,
           "vacancy": 11.69,
           "yield": 0.45
         },
@@ -533,18 +533,18 @@
       "data": {
         "office": {
           "rent": 6991.61,
-          "vacancy": 12.68,
+          "vacancy": 11.96,
           "yield": 0.78
         },
         "medium": {
-          "rent": 14408.95,
+          "rent": 14416.14,
           "vacancy": 16.03,
           "yield": 0.92
         },
         "small": {
           "rent": 12900.62,
           "vacancy": 7.3,
-          "yield": 0.87
+          "yield": 0.8
         },
         "collective": {
           "rent": 15759.64,
@@ -562,18 +562,18 @@
       "data": {
         "office": {
           "rent": 4265.32,
-          "vacancy": 29.86,
+          "vacancy": 28.14,
           "yield": 0.57
         },
         "medium": {
-          "rent": 17038.15,
+          "rent": 17070.9,
           "vacancy": 19.5,
           "yield": 0.82
         },
         "small": {
           "rent": 12603.8,
           "vacancy": 10.78,
-          "yield": 0.77
+          "yield": 0.78
         },
         "collective": {
           "rent": 14878.18,
