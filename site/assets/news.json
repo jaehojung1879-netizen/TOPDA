@@ -3,72 +3,65 @@
     "source": "Google News RSS (한국어) — 섹터별 부동산 검색 집계",
     "note": "여러 보도를 자동 집계한 목록이며 투자 권유가 아닙니다."
   },
-  "generated_at": "2026-10-06 06:57 KST",
+  "generated_at": "2026-10-07 05:09 KST",
   "weekly": {
     "as_of": "2026년 10월 2주",
-    "updated": "2026-10-06",
+    "updated": "2026-10-07",
     "headlines": [
       {
         "badge": "주택 매매·집값",
-        "title": "'서울 집값 감당 안 되네'…인천 아파트 거래량 10% 증가",
-        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1oNGZwRk9xb2NLR21Eem1zVEhuRm96VGVoUEZ1U0hvaXZlOVh1Qm02dmFxUnNmTk9TVTJiME8tTUZlSi1BZVRwcXVmcTR5NzNaY0lYQmZjZDVqZw?oc=5",
-        "source": "한국경제",
-        "date": "2026-09-29"
+        "title": "서울 집값 부담에 인천으로⋯거래 늘고 신고가 급증",
+        "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9sVGMwUV85VzAwTlJTVUREQ0ljZHhIUE03SUxOOXdHMGhQS2hfVkhMNVdWTEE2aGlNX296OXpIbEprVlU2Nno3bDhabEFxWmIzTFVlVw?oc=5",
+        "source": "이투데이",
+        "date": "2026-10-03"
       },
       {
         "badge": "전세·월세",
         "title": "서울 7~9월 부동산 거래 분석해보니…‘전세의 월세화’ 시작되고 있었다",
         "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1hRmJ1bF80WTZlLWV4c25VM2xpaGVPMFNTMWdCVFBPMGtYb3VRNzA0UVpOSFdnRE1BbHAxaEdyWUVxZjdBbVZSbFlHek1mRzdMWmtFTzdiRVRUSi1BMC1oMHFVbm5pVVhTU2RsY0x3?oc=5",
-        "source": "thescoop.co.kr",
+        "source": "더스쿠프",
         "date": "2026-10-02"
       },
       {
         "badge": "청약·분양",
-        "title": "[주간분양] '진주 판문지구 레이크써밋 웰가' 1순위 마감 성공",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1CbDdjWnZDTThuVGNiYlNnSkZJdGpaZmo1X1p6Y3lVOUpFOWlKXzJFVkc1dXB1Sm9XZGhwb3phYm9tTkxsRXhjMkNKZnRYRHF3Y2VwYzV0Tk9DNnJhbVBTU044bVVxbGVDRy1qNmNoemE?oc=5",
-        "source": "shinailbo.co.kr",
-        "date": "2026-10-03"
+        "title": "올해 아파트 청약경쟁률 5.6대 1로 하락…서울·공공분양 쏠림",
+        "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE1USzhCRGtXZFJwVFRQcExQYVJFazVSZlNjNlhkWm5aTU9taGdsOF9YSlpFLVR1UW8wRVdYbUtlRXN5YXRwQUx0NTlGdG1MbWtYM1JOYTN5YVJBSFpV?oc=5",
+        "source": "뉴스핌",
+        "date": "2026-10-06"
       },
       {
         "badge": "대출·금융",
         "title": "“50억 강남 집값 잡는 게 서민과 무슨 상관”…李정부 대출 규제의 역설 [잘살아보세]",
         "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1hOVNuOGc0Vzh0N0t6ZlJzMFN2MXFnZDZ1VlNpOFYxT1hfdlFFaGZtZHAzR0NMblFkTndycWpua014TWpzR0FVdnpmZzdENnJGZmFNcg?oc=5",
-        "source": "v.daum.net",
+        "source": "Daum",
         "date": "2026-10-02"
-      },
-      {
-        "badge": "정책·세제",
-        "title": "정부, 부동산 세제 특례 조인다...일시적 2주택 처분기한 단축",
-        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9YNFN2ZWpYeTBKSVU4WEg4NTYxZnRKUE90dXBYQXVGRDlIQnFVN1lfeTdiMFZ3dTR0RVZMWEdPOUNnUGRIaVBFeVp3S2lQOXN2WVJJMnU5UUNsYWM?oc=5",
-        "source": "경기일보",
-        "date": "2026-09-29"
       }
     ]
   },
   "daily": {
-    "updated": "2026-10-06 06:57 KST",
+    "updated": "2026-10-07 05:09 KST",
     "sectors": [
       {
         "key": "housing",
         "name": "주택 매매·집값",
         "items": [
           {
-            "title": "세제개편안 후 서울아파트 거래 줄었지만 집값은 버텼다",
-            "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBYVXpGdUtIVUtITkw3a1ByZzFIMEZ0MGQ0Y1FRbmpLS0FwMGh4T2JWa3lpc3Bubzl5aFlJQkV2blBubHNCbjUtTDMzVDY3cFU?oc=5",
-            "source": "v.daum.net",
-            "date": "2026-10-05"
+            "title": "동탄 거래 뚝, 옆 동네 신고가… 규제에 엇갈린 시장 비규제 ‘향남역 그로브 스위첸’ 분양 관심",
+            "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE00VE93VU9kdFNYcXR6TjhhUFpMdFVKa0hkdVdxMmhudnEzTlB1ZUlVRWsxSjdnQXVnOXo1R2wyZXQ4NWQ2WHdGeU1yZmdZTUd3MENWTko5cVdscm41c3FKSS10VQ?oc=5",
+            "source": "국토일보",
+            "date": "2026-10-06"
           },
           {
-            "title": "서울 아파트에 찬바람...거래량 급감에 거래절벽 장기화 조짐",
-            "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9pdEFUTTk3TWdJWU44eE44SFJSbWhZZDRaTVZkUV9CdGR0M0l0VE9PN3kwbjJLQXRPY3ptU0Q4QkRLeFZnTzJqejhlY3c3Nnh6SDhfdDNoUXkySU94ZzRldExlNA?oc=5",
-            "source": "더구루",
-            "date": "2026-10-04"
+            "title": "중대형 아파트 선호 현상… '경산 상방공원 호반써밋' 눈길",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1acE92dkFRRnhOVTdJWlZaRWRoY1l2WjlxZDVwSURkODR0UkpnWUduSnNYWEFDRHBkNGdsaUkzQ2R0RWlHYm1JaENWaE1XSS1TRlpkWW02RGJpM2xOUUNXM0pkSXNrVExEZF9lRQ?oc=5",
+            "source": "한경매거진&북",
+            "date": "2026-10-06"
           },
           {
-            "title": "홍콩의 부동산 가격이 회복세를 보이고 있는데도 왜 많은 소유주들이 여전히 손해를 보고 매도하는 걸까요?",
-            "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQT1MwVEwtaFB6NHVVcWJxWGNoRFcydnlfUldYV1lTZElJSS1SejkySG5Zd2NiUF9QRDduUFVRTXZMV3FrSTN5Q01pQjFiczJZQ2RPckFFcnNWV2lBajFESUVtNW9ELW1hZnhFMXdvdFZUZ0R1NTRNTi1DTFFoc3owMWZDV3dPQTM1cFN6ak5aLXF6b21Y?oc=5",
-            "source": "Vietnam.vn",
-            "date": "2026-10-05"
+            "title": "서울 아파트값 “86주 연속 상승”... 상승세 피로감에 숨 고르기 들어가나",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE54V1pONFNRRmVwNGJNcVVVQW8wYllXWkZ1Nk9aeTFNTk5HZFZJZzhwMW0tTm1qMnFvMFNyWWN1YU53R19FaElUdEJhRG8wRkgwTnNDOWRLbGFKbFZQZHMyTTZPVWZkTW9DSzE5StIBbEFVX3lxTE54V1pONFNRRmVwNGJNcVVVQW8wYllXWkZ1Nk9aeTFNTk5HZFZJZzhwMW0tTm1qMnFvMFNyWWN1YU53R19FaElUdEJhRG8wRkgwTnNDOWRLbGFKbFZQZHMyTTZPVWZkTW9DSzE5Sg?oc=5",
+            "source": "리얼캐스트",
+            "date": "2026-10-06"
           }
         ]
       },
@@ -77,22 +70,22 @@
         "name": "전세·월세",
         "items": [
           {
+            "title": "같은 심벌이 모이면 어떻게 될까? 아카라이브 룰렛 판정 방식",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5MeXJOR244UGFXV250bG16MXVfSlowM3M1TTlTcTZ4dFJGNUQ4N0NDaTFfbktIcDAwTGM2elN3V3hBbjlYRVd5RTJqQlppNWNaRk15YmxJUFNVb3hnWnZ4czh4OXpXNTd4ZUllUw?oc=5",
+            "source": "Calgary Roughnecks",
+            "date": "2026-10-06"
+          },
+          {
             "title": "첫 월세부터 내집마련까지…내게 맞는 청년주거정책은?",
             "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFByZmN5emRZOGFoLWpJcGNrSlBZT1VIS0ZsV0ZUQUJtQXFMbjVPWTlkT09GQkVEZ3BuenhuWUFnZ295OE1pSExXQ3Y1am5xQjE5el9BNjBkTnhMemdpY2piaFppdllwSWlLZERxODRySGg?oc=5",
-            "source": "news.bizwatch.co.kr",
+            "source": "비즈워치",
             "date": "2026-10-04"
           },
           {
-            "title": "한눈에 보는 게임 구성, 여초 사이트 시청역",
-            "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxOc1pHRUJCN3BvZF9EZFZaZkdVYjlqdVA5bFplNEhQZlB3NzgtSjlCYk9hYjhzSjc5ekxCemFRZUV2UFVCSmpoNEoyTkt2Zjg0SXdFc1RmQ0hBXzlPOTdTXzBBaVJSXzZyajZHb19fSE5WNUEyX1VDQ091YWtudHpCWkJQSl96NzNyUUxhNDI1UnNfckpYWmZnNmJZdVA0T0ZWeno0WENVNURFVnpwdG9xdjhRZWRLNTNTYVRWOWhSQUF1dFQwVUc4TzVIZGM3VFhwLVltenlScXVQdnFGZWVYbjIyVEp5a1dxV2g1VzRFdjJ5MVdybjZXaXZR?oc=5",
+            "title": "같은 모양의 심벌은 모두 같을까? 점프벳 토토 판정 기준",
+            "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPLU5HdXN6NDlhZVZRaE5ib1NCdElQT0c0YVpmYjFPUTEzTzc5aFBvT0s5X0h4ZEJjMEsydUNGMmpmZFBIS29OQ18wUDhNMjB3Q1JrRXVFRDJqei1PRFZ5ODA3WTl5ZGFjMllKaFRBZXdFX25jUHktWVRnLV9rdkRDeDNQWWc?oc=5",
             "source": "Calgary Roughnecks",
-            "date": "2026-10-04"
-          },
-          {
-            "title": "터치 반응이 늦을 때 점검하는 마작이랑 비슷한 보드게임 모바일 환경",
-            "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNOC1lUG5TTnl4dnNBQ2JXOE9IWndVc3BkdzJHNHpxSkVCLVBFSm9keEtFaXRmQkNrTFJ2RUVwbXlzZFBIdElfaXBVSGkwaERTNGxWalF6eFJkbkdZNkhKQVFJTTRTRFZCSVJ5SEh1LVNibDhXZmR3OFhTTEt4SzJJVFNuNFRRYmdRQnRUdjRUY0xCN2ZUdXppaHpiZG4wOURyYWc?oc=5",
-            "source": "Calgary Roughnecks",
-            "date": "2026-10-05"
+            "date": "2026-10-06"
           }
         ]
       },
@@ -101,20 +94,20 @@
         "name": "청약·분양",
         "items": [
           {
-            "title": "[분양 스케치] 대전 경남아너스빌, '최고 6억' 분양가에 청약 부진",
-            "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFBNNFltWXdScUxFeWxXZjJaUm8xNE5kd2FwYU82NHFwcUM4VG1YWXo2bHdNZHBhbi1wbkJPSG5EdTFLM1NoRkpLanJETXNPbF9TQjg0?oc=5",
-            "source": "네이트",
+            "title": "전국 청약경쟁률 반토막…분상제·서울 쏠림 심화",
+            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE12Vlc4UF9aVmRMZkFaeWlMdkpkelZVNDQ2VU9aaDdTd3RwSzYwYU9DQlFralY0SW96dXNTWm5pNU0wWDNKMFB3MDRUOVJBQk43Wm92NjJrV0w5cFU2aXNVNWVGbktLby1Q0gFsQVVfeXFMT0F1Z2ZrdDk4LXVZU2RzUFhDNnN5eGEyaHRwbzFfcGRTeGZGaW9tV195aFM4SE5mUUxNYzlMLXBCUXFmN2ZNeTFoSkJfeW85U0RqMEtLNWhXU3dnOV9MQXdDZHZjSlRmU1ZDQzNl?oc=5",
+            "source": "직썰",
+            "date": "2026-10-06"
+          },
+          {
+            "title": "세종 청약 경쟁률 17.7대 1…충청권 ‘홀로 강세’",
+            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9GZ0RNRk1KMmhQTWJPYXhSek9WT3AtWUpqNGhiYjAxdWN2azZYRXkwZWx3U1NXWUFWM1VpMVRnT1ozcS1lSDI2WFFWNGtHTHZ6QlFhcjV5eFB1MlpmRHAzWFhrUEllZWlPQmfSAW5BVV95cUxPNUdmN2swVTFETUNGSUJ5enpGWk1MdzlzaFVZcGR6bGdIWVM5WVA5NzhJR1U3ellFS3hHZk1wY3BUdDFjNThrMVR3ZS1KR2xDSWdnMWJtZmFqWm84QTBULVdDVGVkNlJBTi1ReFFNQQ?oc=5",
+            "source": "중부매일",
             "date": "2026-10-05"
           },
           {
-            "title": "시세 22억인데 분양가 12억…'10억 로또' 강변역센트럴아이파크 1가구 줍줍",
-            "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE4yRGJKWmNYcnZvWGJxZmRKd3BKZzFlY1hIY1dpZjBPcnFsNWR1a2pjZEtaU1dxSnBkSExmR2lGZEstTGRFckFaMEZZUWdxandMbFprSEdxeUQ5MnlqOEg4LXlsTmEwQmcyQjdkZ1RkZ3JwR1hTM2NLUUFscnA2c1HSAXNBVV95cUxQcUsyWVpjY3VISzM3bVN2aVZ1ZmM2SjBLUGFEZHcySTdVeXJZd1RFMGY0eFhXRDFDMzJ0XzA3OERBNk9uY2ZSOEVpOW5kdUgzOUVwSFRaQ2JSYk9Xbk9nV3FEVi1aQm42RzF1V2N6elZhcFdZ?oc=5",
-            "source": "땅집고",
-            "date": "2026-10-05"
-          },
-          {
-            "title": "무료경마예상지 - 초보자부터 전문가까지 - 장단점 비교 분석",
-            "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE5HLVNOenZqeVNScUN5MWpRTnZHQjQzeFJiemJVWE1FV3pMWTNJZXNNelFuVU9KMWlsYWlqSk82eEJ6UW9uMGZjREpGMDl4RlBVWFVLRkpINDQtb0RxMHdzR2ZUa0JPdUV2YVNQQlJQdnVDQQ?oc=5",
+            "title": "초보자가 이해하기 쉬운 도도 토토 판정 예시",
+            "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE0tdUFvTGJQVUhTTERLQXpSQUJaM3UzTmltMzFwQ2NmNm9jZHhlR2JuNkZFVE54enRMS0ZvaWJ4cHdRY2NTcGROeUEwU1FEa2dWYVhRNTk4aUdIMkRVTzAzT0VUS0Y?oc=5",
             "source": "Calgary Roughnecks",
             "date": "2026-10-05"
           }
@@ -125,22 +118,22 @@
         "name": "대출·금융",
         "items": [
           {
-            "title": "노도강 짒갑 3분의 1은 ‘빚’···대출 더 조이니 실수요자 ‘주거사다리’ 흔들?",
-            "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE93Y1U4UGd5UnYtcDQ5UG85bXVIMGc2QllSc0o5YXdmazJ4Q2lQVERRTVhsUS1rS1lhWWtiUUxEYUI0d0N5MTVtWm9IOV9IX2didlZ2bHhQeUMzVUpWbk5ZS3VVSEE3c3F5dFVMMWVLQUk3Z9IBdkFVX3lxTE0ta1VzQ1o1UUR1RG1VV3VmdmxxdDU5WFY3bkRrc3E3STNsTmhfY3h3Z2FWNkNrVFVsZU5BZWxwUXZNcmtOTlZOcS1uSUxva2FKcjdXTG1SWXdMNWhrY1ZHSzZSbFdOekJ2UVV0RDd2UjlYcFlKTHc?oc=5",
-            "source": "시사저널e",
-            "date": "2026-10-04"
-          },
-          {
-            "title": "자동 진행 기능이 있다면? 빅 데이터 블록 체인 설정 확인",
-            "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNWWViOElYM1A5Q3RnZHZ0dWZNWGlPbTNQS2xXRnlDOFNlMGtHb0hiNEY2VkU3RVc2MkhjZjRzTzhXdzlTeGd3TWE2aEVVRFNEdTBnTEN4MS1aMnZzQUhpWGhNX2JMLVM2eUJyYkNtRk9hMWxRdDlfc2VGdW9fT3BPODdxMVZxa0w3Q0VRUU1EZWliZVctbmFkdzhxMUtBRDVsR0tsbjBYRzZMdWNZeVdMekRxZkVBZFU5R24ySnBKY0tRZnFtcEd4OU9R?oc=5",
-            "source": "Calgary Roughnecks",
+            "title": "내국인 주담대 옥죄는데…외국인 '해외자금' 주택매입 규제 한계",
+            "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE55U3Z5UHZZemJHeldHa0NWcnBaVVg0SHBQLVhvakI2Unc3OE4tTnloN0d3Z2ZXZFlOeUZzaXR5SHJJUGhuQmlfdXA3NHlTS3FFUm1ZSk5jU2xreXPSAWBBVV95cUxPU3lJUV9BRTNqU1ZCaEg1TnRsTXpvaGdKUWZlX2NlR1hyYTRNWFc2R1F3OGl5TVBBTENza3VnbHlrNWZjdVY3UjlTSGJ1RExVbVpoVnIwTUJMZ3E0cHRIdWs?oc=5",
+            "source": "뉴스1",
             "date": "2026-10-05"
           },
           {
-            "title": "“50억 강남 집값 잡는 게 서민과 무슨 상관”…李정부 대출 규제의 역설 [잘살아보세]",
-            "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1hOVNuOGc0Vzh0N0t6ZlJzMFN2MXFnZDZ1VlNpOFYxT1hfdlFFaGZtZHAzR0NMblFkTndycWpua014TWpzR0FVdnpmZzdENnJGZmFNcg?oc=5",
-            "source": "v.daum.net",
-            "date": "2026-10-02"
+            "title": "[윤준의 부동산수첩] 지금 부동산의 핵심은 상승이 아니라 선별이다",
+            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBfaFhYUzBQX2lLeXdNbjVlbFNGR01ocVZteFI3ajY5bVdoU2R1UnlnUFRyVFVRNnRPUndNNWwzQUhOUjRGVmhvTndCZzNkWmpGYk83M1dnMm9Nc2pPYXA5c1RDeVZYQTBqR2fSAWpBVV95cUxQX2hYWFMwUF9pS3l3TW41ZWxTRkdNaHFWbXhSN2o2OW1XaFNkdVJ5Z1BUclRVUTZ0T1J3TTVsM0FITlI0RlZob053QmczZFpqRmJPNzNXZzJvTXNqT2FwOXNUQ3lWWEEwakdn?oc=5",
+            "source": "NBN미디어",
+            "date": "2026-10-06"
+          },
+          {
+            "title": "'6억 대출' 논쟁의 정확한 지점…LH 사장 발언이 드러낸 공급 시차와 사다리의 딜레마",
+            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9zbU90MTZHVm5yVXFudkMxMTlJQ1FpbjRXMURWM1JnbjdDYXdfdmpIcm1oRllDT1U5Wm5QeGUyb01xVm94XzdPTHRjVlRpT3c0V19iNnY2cXZfYWVZR0ZURXVoRGpZT2lZQnfSAWpBVV95cUxPc21PdDE2R1ZuclVxbnZDMTE5SUNRaW40VzFEVjNSZ243Q2F3X3ZqSHJtaEZZQ09VOVpuUHhlMm9NcVZveF83T0x0Y1ZUaU93NFdfYjZ2NnF2X2FlWUdGVEV1aERqWU9pWUJ3?oc=5",
+            "source": "CEO저널",
+            "date": "2026-10-06"
           }
         ]
       },
@@ -152,14 +145,7 @@
       {
         "key": "policy",
         "name": "정책·세제",
-        "items": [
-          {
-            "title": "정부, 부동산 세제 특례 조인다...일시적 2주택 처분기한 단축",
-            "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9YNFN2ZWpYeTBKSVU4WEg4NTYxZnRKUE90dXBYQXVGRDlIQnFVN1lfeTdiMFZ3dTR0RVZMWEdPOUNnUGRIaVBFeVp3S2lQOXN2WVJJMnU5UUNsYWM?oc=5",
-            "source": "경기일보",
-            "date": "2026-09-29"
-          }
-        ]
+        "items": []
       }
     ]
   }
