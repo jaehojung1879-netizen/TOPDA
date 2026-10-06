@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-05"
+    "portal_checked_at": "2026-10-06"
   },
   "apartments": [
     {
@@ -83923,7 +83923,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "이천송정신일1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-06",
+      "name_evidence": "http://place.map.kakao.com/11114860"
     },
     {
       "name": "이천증포새도시한양수자인3블럭",
@@ -114191,13 +114195,15 @@
         40692
       ],
       "builder": "현대건설",
-      "display_name": "힐스테이트 이천역 2단지",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "display_name": "힐스테이트이천역2단지아파트",
+      "name_src": "portal.kakao_local",
       "households": 885,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-02",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-06",
+      "name_evidence": "http://place.map.kakao.com/108370198"
     },
     {
       "name": "이안퍼스티엄이천부발",
@@ -119716,13 +119722,15 @@
         53959
       ],
       "builder": "대우건설",
-      "display_name": "의왕푸르지오포레움1단지",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "display_name": "의왕푸르지오포레움1블럭아파트",
+      "name_src": "portal.kakao_local",
       "households": 194,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-22",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-06",
+      "name_evidence": "http://place.map.kakao.com/563477644"
     },
     {
       "name": "중흥S-클래스에듀파크",
@@ -124413,7 +124421,11 @@
         210000
       ],
       "builder": "GS건설",
-      "households": null
+      "households": 273,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": []
     },
     {
       "name": "리첸시아용산B",
@@ -124440,7 +124452,11 @@
       "builder": "기타",
       "display_name": "리첸시아용산",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 260,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": []
     },
     {
       "name": "신림2차푸르지오",
@@ -124473,7 +124489,14 @@
         81000
       ],
       "builder": "대우건설",
-      "households": null
+      "households": 349,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "display_name": "신림푸르지오2차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-06"
     },
     {
       "name": "동부",
@@ -124504,7 +124527,14 @@
         73103
       ],
       "builder": "기타",
-      "households": null
+      "households": 592,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "display_name": "신림동부아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-06"
     },
     {
       "name": "원천성일",
@@ -124532,9 +124562,15 @@
         45000
       ],
       "builder": "기타",
-      "display_name": "매탄원천성일",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "성일아파트",
+      "name_src": "portal.kakao_local",
+      "households": 850,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-06",
+      "name_evidence": "http://place.map.kakao.com/11172860"
     },
     {
       "name": "힐스테이트판교엘포레A6BL",
@@ -124556,7 +124592,14 @@
         170746
       ],
       "builder": "현대건설",
-      "households": null
+      "households": 464,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "display_name": "힐스테이트판교엘포레6단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-06"
     },
     {
       "name": "버들치마을성복자이1차",
@@ -124599,9 +124642,15 @@
         117191
       ],
       "builder": "GS건설",
-      "display_name": "성복자이1차",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "버들치마을성복자이1차아파트",
+      "name_src": "portal.kakao_local",
+      "households": 719,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-06",
+      "name_evidence": "http://place.map.kakao.com/11358849"
     },
     {
       "name": "파크시엘",
@@ -124630,8 +124679,14 @@
       ],
       "builder": "기타",
       "display_name": "파크시엘아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "name_src": "portal.kakao_local",
+      "households": 923,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-06",
+      "name_evidence": "http://place.map.kakao.com/7929171"
     },
     {
       "name": "교동마을정광아파트",
@@ -124661,7 +124716,11 @@
       "builder": "기타",
       "display_name": "교동마을정광",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 478,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": []
     },
     {
       "name": "일산동문(2)",
@@ -124694,7 +124753,14 @@
         30000
       ],
       "builder": "기타",
-      "households": null
+      "households": 667,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "display_name": "일산2차동문아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-06"
     },
     {
       "name": "신원마을1단지우남퍼스트빌",
@@ -124722,7 +124788,14 @@
         48292
       ],
       "builder": "기타",
-      "households": null
+      "households": 611,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "display_name": "신원마을1단지우남퍼스트빌아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-06"
     },
     {
       "name": "수리산성원상떼빌2차",
@@ -124749,7 +124822,11 @@
         55467
       ],
       "builder": "기타",
-      "households": null
+      "households": 436,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": []
     },
     {
       "name": "삼화아르떼뷰",
@@ -124770,7 +124847,11 @@
         40500
       ],
       "builder": "기타",
-      "households": null
+      "households": 50,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": []
     },
     {
       "name": "느치미마을2단지",
@@ -124798,7 +124879,14 @@
         32435
       ],
       "builder": "기타",
-      "households": null
+      "households": 649,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "display_name": "느치미마을주공2단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-06"
     },
     {
       "name": "쌍용예가",
@@ -124826,9 +124914,15 @@
         94500
       ],
       "builder": "쌍용건설",
-      "display_name": "별내쌍용예가",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "별내쌍용예가아파트",
+      "name_src": "portal.kakao_local",
+      "households": 652,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-06",
+      "name_evidence": "http://place.map.kakao.com/11320622"
     },
     {
       "name": "주공7",
@@ -124865,7 +124959,14 @@
         31300
       ],
       "builder": "기타",
-      "households": null
+      "households": 1020,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "display_name": "주공7단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-06"
     },
     {
       "name": "태영",
@@ -124903,7 +125004,11 @@
         38106
       ],
       "builder": "기타",
-      "households": null
+      "households": 672,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": []
     },
     {
       "name": "후곡마을6단지주공",
@@ -124931,7 +125036,14 @@
         23150
       ],
       "builder": "기타",
-      "households": null
+      "households": 691,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "display_name": "후곡마을주공6단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-06"
     },
     {
       "name": "브라운스톤부평",
@@ -124958,9 +125070,15 @@
         44122
       ],
       "builder": "기타",
-      "display_name": "브라운스톤 부평",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "브라운스톤부평아파트",
+      "name_src": "portal.kakao_local",
+      "households": 726,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-06",
+      "name_evidence": "http://place.map.kakao.com/468213784"
     },
     {
       "name": "논현 파크 포레",
@@ -124983,9 +125101,15 @@
         40200
       ],
       "builder": "기타",
-      "display_name": "논현파크포레",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "논현파크포레아파트",
+      "name_src": "portal.kakao_local",
+      "households": 874,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-06",
+      "name_evidence": "http://place.map.kakao.com/11338277"
     },
     {
       "name": "삼신현대",
@@ -125014,8 +125138,14 @@
       ],
       "builder": "기타",
       "display_name": "삼신현대아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "name_src": "portal.kakao_local",
+      "households": 690,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-06",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-06",
+      "name_evidence": "http://place.map.kakao.com/11256016"
     }
   ]
 }
