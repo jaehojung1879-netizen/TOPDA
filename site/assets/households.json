@@ -81338,21 +81338,6 @@
         "distance_m": 492
       }
     },
-    "경기 성남시 분당구|성원상떼뷰201동": {
-      "households": 88,
-      "built_year": 2004,
-      "addr": "경기도 성남분당구 정자동 12-3 성원상떼뷰",
-      "lat": 37.369752,
-      "lng": 127.105596,
-      "subway": {
-        "station": "정자역 신분당선",
-        "distance_m": 373
-      },
-      "elementary": {
-        "name": "성남정자초등학교",
-        "distance_m": 523
-      }
-    },
     "경기 성남시 분당구|판교호반써밋플레이스": {
       "households": 178,
       "built_year": 2012,
@@ -234847,6 +234832,21 @@
       "hh_src": "recap.hhldCnt",
       "built_year": 2019
     },
+    "경기 성남시 분당구|성원상떼뷰": {
+      "households": 88,
+      "built_year": 2004,
+      "addr": "경기도 성남분당구 정자동 12-3 성원상떼뷰",
+      "lat": 37.369752,
+      "lng": 127.105596,
+      "subway": {
+        "station": "정자역 신분당선",
+        "distance_m": 373
+      },
+      "elementary": {
+        "name": "성남정자초등학교",
+        "distance_m": 523
+      }
+    },
     "서울 강서구|청솔숲속마을102동": {
       "addr": "서울 강서구 내발산동 738",
       "lat": 37.551938,
@@ -234858,10 +234858,7 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 176
-      },
-      "households": 77,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2007
+      }
     },
     "서울 강서구|청솔샤르망1001동": {
       "addr": "서울 강서구 내발산동 676-23",
@@ -234874,10 +234871,7 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 159
-      },
-      "households": 49,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
+      }
     },
     "인천 미추홀구|행복캐슬103동": {
       "addr": "인천 미추홀구 숭의동 122-10",
@@ -234890,10 +234884,7 @@
       "elementary": {
         "name": "인천숭의초등학교",
         "distance_m": 531
-      },
-      "households": 24,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2014
+      }
     },
     "서울 양천구|주함헤븐103동": {
       "addr": "서울 양천구 신월동 203-14",
@@ -234902,10 +234893,7 @@
       "elementary": {
         "name": "서울신원초등학교",
         "distance_m": 57
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
+      }
     },
     "서울 강동구|광남캐스빌105동": {
       "addr": "서울 강동구 둔촌동 435-4",
@@ -234918,10 +234906,7 @@
       "elementary": {
         "name": "서울한산초등학교",
         "distance_m": 579
-      },
-      "households": 28,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
+      }
     },
     "서울 관악구|에메랄드105동": {
       "addr": "서울 관악구 봉천동 41-261",
@@ -234949,6 +234934,19 @@
         "distance_m": 450
       }
     },
+    "경기 성남시 분당구|성원상떼뷰201동": {
+      "addr": "경기 성남시 분당구 정자동 12-2",
+      "lat": 37.370309,
+      "lng": 127.105593,
+      "subway": {
+        "station": "정자역 신분당선",
+        "distance_m": 420
+      },
+      "elementary": {
+        "name": "성남정자초등학교",
+        "distance_m": 461
+      }
+    },
     "경기 용인시 수지구|죽전GS자이103동": {
       "addr": "경기 용인시 수지구 죽전동 96",
       "lat": 37.330261,
@@ -234957,7 +234955,124 @@
         "name": "대청초등학교",
         "distance_m": 472
       }
+    },
+    "경기 남양주시|영광": {
+      "addr": "경기 남양주시 와부읍 덕소리 454-5",
+      "lat": 37.588462,
+      "lng": 127.211881,
+      "subway": {
+        "station": "덕소역 경의중앙선",
+        "distance_m": 320
+      },
+      "elementary": {
+        "name": "덕소초등학교",
+        "distance_m": 247
+      }
+    },
+    "인천 서구|예뜰채": {
+      "addr": "인천 서구 가정동 523-2",
+      "lat": 37.514401,
+      "lng": 126.67551,
+      "subway": {
+        "station": "가정중앙시장역 인천2호선",
+        "distance_m": 365
+      },
+      "elementary": {
+        "name": "인천가석초등학교",
+        "distance_m": 363
+      }
+    },
+    "서울 강서구|신세계(697-5)": {
+      "addr": "서울 강서구 내발산동 697-5",
+      "lat": 37.552205,
+      "lng": 126.833992,
+      "subway": {
+        "station": "우장산역 5호선",
+        "distance_m": 428
+      },
+      "elementary": {
+        "name": "서울발산초등학교",
+        "distance_m": 340
+      }
+    },
+    "대구 수성구|공작맨션": {
+      "addr": "대구 수성구 범어동 804-46",
+      "lat": 35.858201,
+      "lng": 128.621819,
+      "subway": {
+        "station": "범어역 대구2호선",
+        "distance_m": 459
+      },
+      "elementary": {
+        "name": "대구동도초등학교",
+        "distance_m": 248
+      }
+    },
+    "서울 강서구|임탑-B": {
+      "addr": "서울 강서구 화곡동 925-24",
+      "lat": 37.52935,
+      "lng": 126.842268,
+      "subway": {
+        "station": "까치산역 2호선",
+        "distance_m": 472
+      },
+      "elementary": {
+        "name": "서울신강초등학교",
+        "distance_m": 366
+      }
+    },
+    "경기 부천시 원미구|라비앙아파트": {
+      "addr": "경기 부천시 원미구 도당동 118-16",
+      "lat": 37.519469,
+      "lng": 126.793108,
+      "subway": {
+        "station": "원종역 서해선",
+        "distance_m": 1162
+      },
+      "elementary": {
+        "name": "도당초등학교",
+        "distance_m": 109
+      }
+    },
+    "서울 동작구|성우아파트": {
+      "addr": "서울 동작구 상도동 380-1",
+      "lat": 37.493781,
+      "lng": 126.935855,
+      "subway": {
+        "station": "당곡역 신림선",
+        "distance_m": 833
+      },
+      "elementary": {
+        "name": "서울당곡초등학교",
+        "distance_m": 667
+      }
+    },
+    "인천 미추홀구|태영": {
+      "addr": "인천 미추홀구 주안동 85-8",
+      "lat": 37.460134,
+      "lng": 126.683627,
+      "subway": {
+        "station": "시민공원역 인천2호선",
+        "distance_m": 297
+      },
+      "elementary": {
+        "name": "인천석암초등학교",
+        "distance_m": 361
+      }
+    },
+    "경기 안양시 만안구|안양역푸르지오더샵": {
+      "addr": "경기 안양시 만안구 안양동 1459",
+      "lat": 37.39838,
+      "lng": 126.926367,
+      "subway": {
+        "station": "안양역 1호선",
+        "distance_m": 487
+      },
+      "elementary": {
+        "name": "안양초등학교",
+        "distance_m": 457
+      }
     }
   },
-  "as_of": "2026-10-05"
+  "as_of": "2026-10-06"
 }
