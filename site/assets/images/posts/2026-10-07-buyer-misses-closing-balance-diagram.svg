@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1080" viewBox="0 0 900 1080" role="img" aria-labelledby="title desc">
+  <title id="title">매수인이 잔금을 보내지 않았을 때 매도인의 확인 순서</title>
+  <desc id="desc">잔금 미입금을 확인한 뒤 매도인이 이전등기와 인도 준비를 갖추고 상당한 기간을 정해 잔금 지급을 요구한다. 연장에 합의하면 새 조건을 서면으로 남기고, 최종기한도 지나면 해제 통지와 금전 정산을 검토하는 흐름도다.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f3e9"/>
+      <stop offset="1" stop-color="#eaf0ef"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#172e3b" flood-opacity=".12"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#365968"/>
+    </marker>
+  </defs>
+  <rect width="900" height="1080" rx="36" fill="url(#bg)"/>
+  <text x="450" y="68" text-anchor="middle" font-family="Pretendard, 'Noto Sans KR', sans-serif" font-size="32" font-weight="700" fill="#173341">잔금 미지급 뒤 매도인이 확인할 순서</text>
+  <text x="450" y="105" text-anchor="middle" font-family="Pretendard, 'Noto Sans KR', sans-serif" font-size="18" fill="#526b76">잔금일이 지났다고 계약이 자동으로 끝나는 것은 아닙니다</text>
+
+  <g filter="url(#shadow)" font-family="Pretendard, 'Noto Sans KR', sans-serif">
+    <rect x="170" y="145" width="560" height="112" rx="22" fill="#fff" stroke="#b8cbc9" stroke-width="2"/>
+    <circle cx="225" cy="201" r="27" fill="#d9ece8"/>
+    <text x="225" y="209" text-anchor="middle" font-size="23" font-weight="700" fill="#17564f">1</text>
+    <text x="275" y="190" font-size="24" font-weight="700" fill="#173341">잔금 미입금 확인</text>
+    <text x="275" y="224" font-size="18" fill="#526b76">은행 내역·연락 기록·계약서 기한을 보관</text>
+
+    <rect x="170" y="318" width="560" height="132" rx="22" fill="#fff" stroke="#b8cbc9" stroke-width="2"/>
+    <circle cx="225" cy="384" r="27" fill="#d9ece8"/>
+    <text x="225" y="392" text-anchor="middle" font-size="23" font-weight="700" fill="#17564f">2</text>
+    <text x="275" y="365" font-size="24" font-weight="700" fill="#173341">매도인의 이행 준비</text>
+    <text x="275" y="399" font-size="18" fill="#526b76">이전등기 서류·근저당 말소·주택 인도</text>
+    <text x="275" y="427" font-size="17" fill="#6b7e86">잔금과 맞바꿀 준비를 했다는 자료 남기기</text>
+
+    <rect x="170" y="511" width="560" height="142" rx="22" fill="#173f50"/>
+    <circle cx="225" cy="582" r="27" fill="#f0c87c"/>
+    <text x="225" y="590" text-anchor="middle" font-size="23" font-weight="700" fill="#173341">3</text>
+    <text x="275" y="558" font-size="24" font-weight="700" fill="#fff">상당한 기간을 정해 지급 최고</text>
+    <text x="275" y="594" font-size="18" fill="#e5eef1">미지급액·최종 지급일·계좌를 구체적으로</text>
+    <text x="275" y="624" font-size="17" fill="#c9d9de">내용증명 등 도달 사실이 남는 방식 활용</text>
+
+    <rect x="60" y="753" width="355" height="178" rx="24" fill="#fff" stroke="#6ba097" stroke-width="3"/>
+    <text x="238" y="796" text-anchor="middle" font-size="22" font-weight="700" fill="#17564f">연장하기로 합의</text>
+    <text x="92" y="836" font-size="17" fill="#526b76">• 새 잔금일과 추가 비용</text>
+    <text x="92" y="870" font-size="17" fill="#526b76">• 재불이행 때 처리 방법</text>
+    <text x="92" y="904" font-size="17" fill="#526b76">• 계약 당사자 서명으로 남기기</text>
+
+    <rect x="485" y="753" width="355" height="178" rx="24" fill="#fff" stroke="#b8765e" stroke-width="3"/>
+    <text x="663" y="796" text-anchor="middle" font-size="22" font-weight="700" fill="#8a3e2b">최종기한도 경과</text>
+    <text x="517" y="836" font-size="17" fill="#526b76">• 해제 의사 통지·도달 확인</text>
+    <text x="517" y="870" font-size="17" fill="#526b76">• 계약금·중도금·손해 정산</text>
+    <text x="517" y="904" font-size="17" fill="#526b76">• 이후 재매각 여부 결정</text>
+  </g>
+
+  <g fill="none" stroke="#365968" stroke-width="4" marker-end="url(#arrow)">
+    <path d="M450 257 V305"/>
+    <path d="M450 450 V498"/>
+    <path d="M450 653 V702 H238 V738"/>
+    <path d="M450 702 H663 V738"/>
+  </g>
+  <text x="276" y="694" text-anchor="middle" font-family="Pretendard, 'Noto Sans KR', sans-serif" font-size="17" font-weight="700" fill="#17564f">지급 가능·조건 협의</text>
+  <text x="627" y="694" text-anchor="middle" font-family="Pretendard, 'Noto Sans KR', sans-serif" font-size="17" font-weight="700" fill="#8a3e2b">지급 없음·합의 없음</text>
+
+  <rect x="60" y="972" width="780" height="62" rx="16" fill="#dde8e6"/>
+  <text x="450" y="998" text-anchor="middle" font-family="Pretendard, 'Noto Sans KR', sans-serif" font-size="15" fill="#425c67">계약·특약·당사자의 이행 준비 정도에 따라 결과가 달라질 수 있습니다.</text>
+  <text x="450" y="1022" text-anchor="middle" font-family="Pretendard, 'Noto Sans KR', sans-serif" font-size="14" fill="#61757d">기준 2026-10-07 · 민법 제536조·제544조·제548조 및 대법원 판례</text>
+</svg>
