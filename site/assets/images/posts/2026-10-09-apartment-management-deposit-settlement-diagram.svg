@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="980" viewBox="0 0 900 980" role="img" aria-labelledby="title desc">
+  <title id="title">아파트 선수관리비 잔금 정산 순서</title>
+  <desc id="desc">관리사무소에 예치액과 체납액을 확인하고, 공제 여부를 반영한 정산액을 확정해 매수인과 매도인이 지급 기록을 보관하는 절차입니다.</desc>
+  <rect width="900" height="980" rx="36" fill="#f2f7f6"/>
+  <text x="450" y="68" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="32" font-weight="800" fill="#173d3a">선수관리비, 잔금 전에 이렇게 확인하세요</text>
+  <text x="450" y="104" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="21" fill="#506663">법정 명칭은 관리비예치금 · 일반적인 아파트 매매 기준</text>
+
+  <rect x="110" y="150" width="680" height="130" rx="24" fill="#ffffff" stroke="#9ec9c3" stroke-width="3"/>
+  <circle cx="170" cy="215" r="34" fill="#1e625c"/>
+  <text x="170" y="225" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="28" font-weight="800" fill="#ffffff">1</text>
+  <text x="230" y="198" font-family="Pretendard, sans-serif" font-size="25" font-weight="800" fill="#173d3a">관리사무소에 세대별 금액 확인</text>
+  <text x="230" y="236" font-family="Pretendard, sans-serif" font-size="21" fill="#526c69">예치액 · 체납액 · 공제 여부 · 처리 방식</text>
+  <path d="M450 280v58" stroke="#1e625c" stroke-width="5" stroke-linecap="round"/>
+  <path d="m438 326 12 16 12-16" fill="none" stroke="#1e625c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="110" y="350" width="680" height="138" rx="24" fill="#ffffff" stroke="#9ec9c3" stroke-width="3"/>
+  <circle cx="170" cy="419" r="34" fill="#1e625c"/>
+  <text x="170" y="429" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="28" font-weight="800" fill="#ffffff">2</text>
+  <text x="230" y="398" font-family="Pretendard, sans-serif" font-size="25" font-weight="800" fill="#173d3a">확인서에서 공제 후 금액 확인</text>
+  <text x="230" y="437" font-family="Pretendard, sans-serif" font-size="21" fill="#526c69">체납이 있으면 총 예치액과 반환 잔액이 다를 수 있음</text>
+  <text x="230" y="469" font-family="Pretendard, sans-serif" font-size="19" fill="#788d8a">일반 관리비·장기수선충당금과 별도 표기</text>
+  <path d="M450 488v58" stroke="#1e625c" stroke-width="5" stroke-linecap="round"/>
+  <path d="m438 534 12 16 12-16" fill="none" stroke="#1e625c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="110" y="558" width="680" height="138" rx="24" fill="#ffffff" stroke="#9ec9c3" stroke-width="3"/>
+  <circle cx="170" cy="627" r="34" fill="#1e625c"/>
+  <text x="170" y="637" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="28" font-weight="800" fill="#ffffff">3</text>
+  <text x="230" y="606" font-family="Pretendard, sans-serif" font-size="25" font-weight="800" fill="#173d3a">계약·단지 방식에 맞춰 정산</text>
+  <text x="230" y="645" font-family="Pretendard, sans-serif" font-size="21" fill="#526c69">직접 반환·재징수 또는 매수인→매도인 지급</text>
+  <text x="230" y="677" font-family="Pretendard, sans-serif" font-size="19" fill="#788d8a">법의 반환 원칙과 현장 정산 관행을 구분</text>
+  <path d="M450 696v58" stroke="#1e625c" stroke-width="5" stroke-linecap="round"/>
+  <path d="m438 742 12 16 12-16" fill="none" stroke="#1e625c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="110" y="766" width="680" height="128" rx="24" fill="#173d3a"/>
+  <circle cx="170" cy="830" r="34" fill="#e6b85c"/>
+  <text x="170" y="840" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="28" font-weight="800" fill="#173d3a">4</text>
+  <text x="230" y="811" font-family="Pretendard, sans-serif" font-size="25" font-weight="800" fill="#ffffff">잔금표·이체증·확인서 보관</text>
+  <text x="230" y="851" font-family="Pretendard, sans-serif" font-size="21" fill="#d9eeeb">금액 · 상대방 · 기준일 · 지급 목적을 남김</text>
+  <text x="450" y="944" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="21" font-weight="700" fill="#1e625c">출처: 공동주택관리법 제24조 · 정보 기준일 2026-10-09</text>
+</svg>

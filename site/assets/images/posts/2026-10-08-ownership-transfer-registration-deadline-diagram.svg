@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="980" viewBox="0 0 900 980" role="img" aria-labelledby="title desc">
+  <title id="title">잔금 지급 뒤 취득세와 소유권이전등기 확인 절차</title>
+  <desc id="desc">잔금 지급일에 최신 등기부와 서류를 확인한 뒤 취득세 신고 납부와 소유권이전등기 신청을 각각 완료하고, 마지막으로 새 등기사항증명서를 확인하는 흐름도</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4faf9"/><stop offset="1" stop-color="#eef4f7"/></linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#173d3a" flood-opacity=".10"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#28766f"/></marker>
+  </defs>
+  <rect width="900" height="980" rx="28" fill="url(#bg)"/>
+  <text x="450" y="66" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="32" font-weight="800" fill="#173d3a">잔금 뒤에는 두 절차를 따로 끝내세요</text>
+  <text x="450" y="104" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="21" fill="#506663">일반적인 개인 간 아파트 매매 기준 · 2026-10-08</text>
+
+  <g filter="url(#shadow)"><rect x="170" y="145" width="560" height="150" rx="24" fill="#fff" stroke="#8bbdb7" stroke-width="2"/></g>
+  <circle cx="235" cy="220" r="35" fill="#28766f"/><text x="235" y="231" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="31" font-weight="800" fill="#fff">1</text>
+  <text x="300" y="205" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#173d3a">실제 잔금 지급일</text>
+  <text x="300" y="242" font-family="Pretendard, sans-serif" font-size="22" fill="#455b59">최신 등기부·매도인 서류·말소 순서 확인</text>
+  <text x="300" y="272" font-family="Pretendard, sans-serif" font-size="21" fill="#687b79">통상 이 날부터 두 개의 60일 기한을 관리</text>
+  <path d="M450 295V355" stroke="#28766f" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)"><rect x="55" y="370" width="370" height="230" rx="24" fill="#fff" stroke="#8bbdb7" stroke-width="2"/></g>
+  <circle cx="115" cy="430" r="31" fill="#dcefeb"/><text x="115" y="440" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#1e625c">2A</text>
+  <text x="165" y="421" font-family="Pretendard, sans-serif" font-size="25" font-weight="800" fill="#173d3a">취득세</text>
+  <text x="165" y="455" font-family="Pretendard, sans-serif" font-size="22" fill="#455b59">신고·납부</text>
+  <line x1="90" y1="490" x2="390" y2="490" stroke="#d9e7e5" stroke-width="2"/>
+  <text x="90" y="530" font-family="Pretendard, sans-serif" font-size="22" font-weight="700" fill="#173d3a">통상 취득일부터 60일 이내</text>
+  <text x="90" y="565" font-family="Pretendard, sans-serif" font-size="21" fill="#687b79">납부확인서 보관</text>
+
+  <g filter="url(#shadow)"><rect x="475" y="370" width="370" height="230" rx="24" fill="#fff" stroke="#8bbdb7" stroke-width="2"/></g>
+  <circle cx="535" cy="430" r="31" fill="#dcefeb"/><text x="535" y="440" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#1e625c">2B</text>
+  <text x="585" y="421" font-family="Pretendard, sans-serif" font-size="25" font-weight="800" fill="#173d3a">소유권이전등기</text>
+  <text x="585" y="455" font-family="Pretendard, sans-serif" font-size="22" fill="#455b59">등기소에 신청</text>
+  <line x1="510" y1="490" x2="810" y2="490" stroke="#d9e7e5" stroke-width="2"/>
+  <text x="510" y="530" font-family="Pretendard, sans-serif" font-size="22" font-weight="700" fill="#173d3a">통상 잔금 완료일부터 60일 이내</text>
+  <text x="510" y="565" font-family="Pretendard, sans-serif" font-size="21" fill="#687b79">접수증·접수번호 확인</text>
+
+  <path d="M240 600V675H420" fill="none" stroke="#28766f" stroke-width="4"/>
+  <path d="M660 600V675H480" fill="none" stroke="#28766f" stroke-width="4" marker-end="url(#arrow)"/>
+  <g filter="url(#shadow)"><rect x="170" y="695" width="560" height="165" rx="24" fill="#173d3a"/></g>
+  <circle cx="235" cy="777" r="35" fill="#fff" opacity=".16"/><text x="235" y="788" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="31" font-weight="800" fill="#fff">3</text>
+  <text x="300" y="755" font-family="Pretendard, sans-serif" font-size="27" font-weight="800" fill="#fff">등기 완료 뒤 다시 확인</text>
+  <text x="300" y="795" font-family="Pretendard, sans-serif" font-size="22" fill="#d9eeeb">새 소유자·지분·근저당·기존 권리 말소</text>
+  <text x="300" y="827" font-family="Pretendard, sans-serif" font-size="21" fill="#b8d7d3">새 등기사항증명서를 직접 발급해 점검</text>
+  <rect x="105" y="900" width="690" height="48" rx="24" fill="#dcefeb"/>
+  <text x="450" y="931" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="21" font-weight="700" fill="#1e625c">60일은 대기기간이 아닙니다. 가능하면 잔금일에 바로 접수하세요.</text>
+</svg>
