@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="980" viewBox="0 0 900 980" role="img" aria-labelledby="title desc">
+  <title id="title">전세보증 가입 확인과 거절 뒤 계약금 판단 순서</title>
+  <desc id="desc">계약 전 보증요건을 확인하고 구체적인 특약을 쓴 뒤 보증기관에 신청한다. 승인되면 계약을 진행하고, 거절되면 서면 사유를 받아 보완 여부와 특약 적용 여부를 판단한다.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f9fc}.box{fill:#fff;stroke:#243b53;stroke-width:2}.accent{fill:#e9f2ff;stroke:#2d6cdf;stroke-width:2}.warn{fill:#fff6e5;stroke:#c47a16;stroke-width:2}.ok{fill:#eaf7ef;stroke:#2d7d46;stroke-width:2}.title{font:700 32px 'Pretendard','Noto Sans KR',sans-serif;fill:#102a43}.h{font:700 23px 'Pretendard','Noto Sans KR',sans-serif;fill:#102a43}.p{font:500 18px 'Pretendard','Noto Sans KR',sans-serif;fill:#334e68}.small{font:500 15px 'Pretendard','Noto Sans KR',sans-serif;fill:#486581}.line{stroke:#829ab1;stroke-width:3;fill:none;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#829ab1"/></marker>
+  </defs>
+  <rect class="bg" width="900" height="980" rx="30"/>
+  <text class="title" x="450" y="58" text-anchor="middle">보증 가입 거절, 계약금은 어떻게 확인할까?</text>
+  <rect class="box" x="180" y="92" width="540" height="105" rx="18"/>
+  <text class="h" x="450" y="132" text-anchor="middle">계약 전 보증요건 사전 확인</text>
+  <text class="p" x="450" y="166" text-anchor="middle">주소·보증금·선순위채권·신청 시기 전달</text>
+  <path class="line" d="M450 197V232"/>
+  <rect class="accent" x="180" y="232" width="540" height="115" rx="18"/>
+  <text class="h" x="450" y="273" text-anchor="middle">특약을 구체적으로 합의</text>
+  <text class="p" x="450" y="307" text-anchor="middle">기관·기한·거절 사유·보완·전액 반환</text>
+  <path class="line" d="M450 347V382"/>
+  <rect class="box" x="250" y="382" width="400" height="92" rx="18"/>
+  <text class="h" x="450" y="420" text-anchor="middle">반환보증 정식 신청</text>
+  <text class="p" x="450" y="451" text-anchor="middle">결과와 사유를 서면으로 보관</text>
+  <path class="line" d="M450 474V512"/>
+  <rect class="accent" x="330" y="512" width="240" height="84" rx="42"/>
+  <text class="h" x="450" y="565" text-anchor="middle">승인됐나?</text>
+  <path class="line" d="M330 554H165V640"/>
+  <text class="small" x="240" y="540" text-anchor="middle">예</text>
+  <path class="line" d="M570 554H735V640"/>
+  <text class="small" x="660" y="540" text-anchor="middle">아니요</text>
+  <rect class="ok" x="55" y="640" width="300" height="118" rx="18"/>
+  <text class="h" x="205" y="684" text-anchor="middle">보증 약정 확인</text>
+  <text class="p" x="205" y="718" text-anchor="middle">보증기간·금액·갱신 조건 보관</text>
+  <rect class="warn" x="545" y="640" width="300" height="118" rx="18"/>
+  <text class="h" x="695" y="681" text-anchor="middle">거절 사유 구분</text>
+  <text class="p" x="695" y="715" text-anchor="middle">보완 가능 / 집·임대인 사유</text>
+  <path class="line" d="M695 758V795"/>
+  <rect class="box" x="460" y="795" width="390" height="122" rx="18"/>
+  <text class="h" x="655" y="836" text-anchor="middle">특약 조건과 대조</text>
+  <text class="p" x="655" y="870" text-anchor="middle">보완 또는 재신청</text>
+  <text class="p" x="655" y="900" text-anchor="middle">해당하면 서면 해제·계약금 반환 요구</text>
+  <text class="small" x="450" y="953" text-anchor="middle">기관별 심사기준과 계약 문구에 따라 결과가 달라질 수 있습니다 · 기준일 2026-10-11</text>
+</svg>
