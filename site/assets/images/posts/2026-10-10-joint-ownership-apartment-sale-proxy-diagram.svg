@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="980" viewBox="0 0 900 980" role="img" aria-labelledby="title desc">
+  <title id="title">공동명의 아파트 대리계약 확인 순서</title>
+  <desc id="desc">등기부에서 공동소유자와 지분을 확인한 뒤 전원이 참석하면 각자 서명하고, 불참자가 있으면 구체적인 위임서류와 본인 의사를 확인한다. 권한이 확인되지 않으면 계약금 지급을 멈추는 흐름도.</desc>
+  <rect width="900" height="980" rx="28" fill="#f6f2e9"/>
+  <text x="450" y="62" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="30" font-weight="700" fill="#19231f">공동명의 아파트, 계약 전에 여기까지 확인</text>
+  <text x="450" y="96" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#5a655f">부부 여부가 아니라 소유자 전원의 의사와 대리권을 봅니다</text>
+
+  <rect x="190" y="135" width="520" height="104" rx="20" fill="#ffffff" stroke="#1f6d59" stroke-width="3"/>
+  <circle cx="242" cy="187" r="27" fill="#1f6d59"/>
+  <text x="242" y="195" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="21" font-weight="700" fill="#fff">1</text>
+  <text x="292" y="177" font-family="Pretendard, sans-serif" font-size="22" font-weight="700" fill="#19231f">최신 등기사항증명서 확인</text>
+  <text x="292" y="207" font-family="Pretendard, sans-serif" font-size="17" fill="#52605a">공동소유자 이름 · 지분 · 새 권리변동</text>
+  <path d="M450 239v55" stroke="#82918a" stroke-width="4"/>
+  <path d="M439 283l11 14 11-14" fill="none" stroke="#82918a" stroke-width="4"/>
+
+  <rect x="220" y="300" width="460" height="96" rx="48" fill="#173f35"/>
+  <text x="450" y="340" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="21" font-weight="700" fill="#fff">공동소유자 전원이 계약에 참석하나?</text>
+  <text x="450" y="369" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="16" fill="#d9ebe4">계약서 매도인 전원을 기준으로 판단</text>
+
+  <path d="M300 396v74" stroke="#1f6d59" stroke-width="4"/>
+  <path d="M289 459l11 14 11-14" fill="none" stroke="#1f6d59" stroke-width="4"/>
+  <text x="265" y="436" text-anchor="end" font-family="Pretendard, sans-serif" font-size="18" font-weight="700" fill="#1f6d59">예</text>
+  <path d="M600 396v74" stroke="#a06a2d" stroke-width="4"/>
+  <path d="M589 459l11 14 11-14" fill="none" stroke="#a06a2d" stroke-width="4"/>
+  <text x="635" y="436" font-family="Pretendard, sans-serif" font-size="18" font-weight="700" fill="#a06a2d">아니요</text>
+
+  <rect x="75" y="475" width="390" height="150" rx="20" fill="#e4f1ec" stroke="#1f6d59" stroke-width="3"/>
+  <text x="270" y="516" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="21" font-weight="700" fill="#173f35">각 소유자가 직접 확인</text>
+  <text x="270" y="554" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#33443d">신분증과 등기 지분 대조</text>
+  <text x="270" y="583" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#33443d">계약서에 전원 서명 · 날인</text>
+
+  <rect x="495" y="475" width="330" height="150" rx="20" fill="#fff7e8" stroke="#a06a2d" stroke-width="3"/>
+  <text x="660" y="516" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="21" font-weight="700" fill="#704719">불참자별 대리권 확인</text>
+  <text x="660" y="554" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#5c4b36">위임장 · 인감증명서 원본</text>
+  <text x="660" y="583" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#5c4b36">본인에게 조건 · 계좌 재확인</text>
+
+  <path d="M270 625v88h180" fill="none" stroke="#1f6d59" stroke-width="4"/>
+  <path d="M660 625v42" stroke="#a06a2d" stroke-width="4"/>
+  <path d="M649 656l11 14 11-14" fill="none" stroke="#a06a2d" stroke-width="4"/>
+  <rect x="515" y="675" width="290" height="82" rx="41" fill="#ffffff" stroke="#a06a2d" stroke-width="3"/>
+  <text x="660" y="709" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="19" font-weight="700" fill="#704719">권한 범위가 구체적인가?</text>
+  <text x="660" y="736" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="15" fill="#5c4b36">계약 · 대금수령 · 등기협조</text>
+  <path d="M515 716h-65" stroke="#1f6d59" stroke-width="4"/>
+  <path d="M461 705l-14 11 14 11" fill="none" stroke="#1f6d59" stroke-width="4"/>
+  <text x="485" y="697" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="16" font-weight="700" fill="#1f6d59">예</text>
+  <path d="M660 757v48" stroke="#b44f43" stroke-width="4"/>
+  <path d="M649 794l11 14 11-14" fill="none" stroke="#b44f43" stroke-width="4"/>
+  <text x="687" y="786" font-family="Pretendard, sans-serif" font-size="16" font-weight="700" fill="#b44f43">아니요</text>
+
+  <rect x="95" y="770" width="455" height="130" rx="22" fill="#1f6d59"/>
+  <text x="322" y="816" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="23" font-weight="700" fill="#fff">계약 진행</text>
+  <text x="322" y="852" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#e1f0ea">입금계좌와 잔금 · 등기 서류까지 기록</text>
+  <text x="322" y="879" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="17" fill="#e1f0ea">공동소유자 지분 전부 이전 조건 확인</text>
+
+  <rect x="575" y="815" width="250" height="85" rx="20" fill="#f6dedb" stroke="#b44f43" stroke-width="3"/>
+  <text x="700" y="850" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="20" font-weight="700" fill="#8e352c">계약금 지급 중단</text>
+  <text x="700" y="878" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="15" fill="#6c3934">전원 참석 또는 서류 보완</text>
+
+  <text x="450" y="946" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="15" fill="#66736d">근거: 민법 제114조·제130조·제263조·제264조 · 기준일 2026-10-10</text>
+</svg>
