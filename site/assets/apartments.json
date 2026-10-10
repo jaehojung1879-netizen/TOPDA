@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-09"
+    "portal_checked_at": "2026-10-10"
   },
   "apartments": [
     {
@@ -50517,7 +50517,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "청구아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-10",
+      "name_evidence": "http://place.map.kakao.com/11264272"
     },
     {
       "name": "삼부",
@@ -123924,13 +123928,15 @@
         78900
       ],
       "builder": "기타",
-      "display_name": "수택남양아이좋은집",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "display_name": "남양아이좋은집아파트",
+      "name_src": "portal.kakao_local",
       "households": 319,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-10-02",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-10",
+      "name_evidence": "http://place.map.kakao.com/11249511"
     },
     {
       "name": "이천중리우미린어반퍼스트",
