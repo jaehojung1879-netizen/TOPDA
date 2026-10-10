@@ -1,21 +1,21 @@
 {
- "as_of": "2026-10-09",
+ "as_of": "2026-10-10",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 16555,
-  "filled": 16172,
+  "complexes": 14245,
+  "filled": 13891,
   "target": 452,
-  "kapt_list": 10781,
-  "kapt_ratio": 0.65,
+  "kapt_list": 9633,
+  "kapt_ratio": 0.68,
   "name_gap": 19,
-  "matched_this_run": 28,
+  "matched_this_run": 27,
   "filled_this_run": 0,
   "addr_reject": 0,
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
   "jibun_seeded": 9,
-  "dong_indexed": 10781
+  "dong_indexed": 9633
  },
  "regions": [
   {
@@ -1149,37 +1149,6 @@
    ]
   },
   {
-   "region": "서울 도봉구",
-   "target": 2,
-   "filled": 178,
-   "total": 180,
-   "kapt_list": 120,
-   "kapt_ratio": 0.67,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11320"
-   ],
-   "unmatched_sample": [
-    "그린스테이트",
-    "선덕빌라트아파트"
-   ]
-  },
-  {
-   "region": "경기 안산시 상록구",
-   "target": 0,
-   "filled": 88,
-   "total": 88,
-   "kapt_list": 56,
-   "kapt_ratio": 0.64,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "41271"
-   ],
-   "unmatched_sample": []
-  },
-  {
    "region": "경기 안양시 만안구",
    "target": 6,
    "filled": 182,
@@ -1191,139 +1160,7 @@
    "codes": [
     "41171"
    ],
-   "unmatched_sample": [
-    "안양KCC스위첸",
-    "원평노블레스6차",
-    "더베이프리미엄아파트",
-    "꿈에블리스나인",
-    "향림"
-   ]
-  },
-  {
-   "region": "서울 은평구",
-   "target": 9,
-   "filled": 354,
-   "total": 363,
-   "kapt_list": 162,
-   "kapt_ratio": 0.45,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11380"
-   ],
-   "unmatched_sample": [
-    "효민아크로뷰",
-    "극동메트로타워",
-    "응암아네스트",
-    "메트하임",
-    "제이타워3",
-    "대덕타워",
-    "유진아이디움",
-    "수정가,나동"
-   ]
-  },
-  {
-   "region": "서울 서초구",
-   "target": 2,
-   "filled": 463,
-   "total": 465,
-   "kapt_list": 203,
-   "kapt_ratio": 0.44,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11650"
-   ],
-   "unmatched_sample": [
-    "서초레몬",
-    "urbanplace"
-   ]
-  },
-  {
-   "region": "서울 서대문구",
-   "target": 5,
-   "filled": 219,
-   "total": 224,
-   "kapt_list": 96,
-   "kapt_ratio": 0.43,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11410"
-   ],
-   "unmatched_sample": [
-    "신촌자이엘라",
-    "피어리스",
-    "세한숲속마을",
-    "예스에이피엠",
-    "파라타워"
-   ]
-  },
-  {
-   "region": "서울 양천구",
-   "target": 0,
-   "filled": 347,
-   "total": 347,
-   "kapt_list": 152,
-   "kapt_ratio": 0.44,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11470"
-   ],
    "unmatched_sample": []
-  },
-  {
-   "region": "경기 부천시 오정구",
-   "target": 1,
-   "filled": 193,
-   "total": 194,
-   "kapt_list": 47,
-   "kapt_ratio": 0.24,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "41196"
-   ],
-   "unmatched_sample": [
-    "문화2차"
-   ]
-  },
-  {
-   "region": "경기 안양시 동안구",
-   "target": 5,
-   "filled": 201,
-   "total": 206,
-   "kapt_list": 132,
-   "kapt_ratio": 0.64,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "41173"
-   ],
-   "unmatched_sample": [
-    "미래센트럴타워",
-    "렉스타운",
-    "덕원아파트",
-    "뉴골든(다동)",
-    "렉스타워"
-   ]
-  },
-  {
-   "region": "서울 영등포구",
-   "target": 5,
-   "filled": 238,
-   "total": 243,
-   "kapt_list": 180,
-   "kapt_ratio": 0.74,
-   "name_gap": 0,
-   "matched": 1,
-   "codes": [
-    "11560"
-   ],
-   "unmatched_sample": [
-    "라이프콤비"
-   ]
   }
  ]
 }
