@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="980" viewBox="0 0 900 980" role="img" aria-labelledby="title desc">
+  <title id="title">실거주 갱신거절 뒤 손해배상 확인 순서</title>
+  <desc id="desc">임차인의 갱신요구와 집주인의 실거주 거절 기록을 확인하고, 갱신됐을 2년 안의 제3자 임대와 정당한 사유를 살핀 뒤 세 가지 손해액 중 큰 금액을 계산하는 흐름도</desc>
+  <rect width="900" height="980" rx="28" fill="#f7f5ef"/>
+  <text x="450" y="62" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="30" font-weight="800" fill="#172f4f">실거주 갱신거절 뒤 확인 순서</text>
+  <text x="450" y="96" text-anchor="middle" font-family="Pretendard, Apple SD Gothic Neo, sans-serif" font-size="17" fill="#5e6875">날짜와 문서를 먼저 맞춘 뒤 배상액을 계산합니다</text>
+  <g font-family="Pretendard, Apple SD Gothic Neo, sans-serif">
+    <rect x="135" y="135" width="630" height="106" rx="18" fill="#ffffff" stroke="#274494" stroke-width="3"/>
+    <circle cx="190" cy="188" r="28" fill="#274494"/><text x="190" y="196" text-anchor="middle" font-size="24" font-weight="800" fill="#fff">1</text>
+    <text x="240" y="178" font-size="22" font-weight="800" fill="#172f4f">갱신요구와 실거주 거절을 입증</text>
+    <text x="240" y="210" font-size="17" fill="#5e6875">문자·전자우편·녹음·계약서로 날짜와 사유 확인</text>
+    <path d="M450 241v55" stroke="#7b8796" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="135" y="300" width="630" height="106" rx="18" fill="#ffffff" stroke="#274494" stroke-width="3"/>
+    <circle cx="190" cy="353" r="28" fill="#274494"/><text x="190" y="361" text-anchor="middle" font-size="24" font-weight="800" fill="#fff">2</text>
+    <text x="240" y="343" font-size="22" font-weight="800" fill="#172f4f">갱신됐을 2년 안의 새 임대차 확인</text>
+    <text x="240" y="375" font-size="17" fill="#5e6875">확정일자부여기관에 임대차 정보제공 요청</text>
+    <path d="M450 406v55" stroke="#7b8796" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="180" y="465" width="540" height="108" rx="54" fill="#e8eef8" stroke="#274494" stroke-width="3"/>
+    <text x="450" y="508" text-anchor="middle" font-size="22" font-weight="800" fill="#172f4f">정당한 사유 없이 제3자에게 임대했나?</text>
+    <text x="450" y="540" text-anchor="middle" font-size="16" fill="#5e6875">공실·매도는 법정 계산식 자동 적용 대상이 아님</text>
+    <path d="M180 519H78v126" fill="none" stroke="#7b8796" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="115" y="497" text-anchor="middle" font-size="17" font-weight="700" fill="#8a5b25">아니오</text>
+    <rect x="35" y="650" width="310" height="132" rx="18" fill="#fff8eb" stroke="#b58a45" stroke-width="3"/>
+    <text x="190" y="695" text-anchor="middle" font-size="21" font-weight="800" fill="#6f471b">별도 민사책임 검토</text>
+    <text x="190" y="730" text-anchor="middle" font-size="16" fill="#5e6875">거절 당시 허위 의사·실제 손해</text>
+    <text x="190" y="758" text-anchor="middle" font-size="16" fill="#5e6875">매도 경위와 인과관계 입증</text>
+    <path d="M720 519h102v126" fill="none" stroke="#7b8796" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="785" y="497" text-anchor="middle" font-size="17" font-weight="700" fill="#275d43">예</text>
+    <rect x="555" y="650" width="310" height="132" rx="18" fill="#edf7f1" stroke="#3a7a59" stroke-width="3"/>
+    <text x="710" y="691" text-anchor="middle" font-size="21" font-weight="800" fill="#275d43">세 금액을 각각 계산</text>
+    <text x="710" y="724" text-anchor="middle" font-size="16" fill="#5e6875">① 환산월차임 3개월분</text>
+    <text x="710" y="750" text-anchor="middle" font-size="16" fill="#5e6875">② 차액 2년분 ③ 실제 손해</text>
+    <path d="M710 782v55" stroke="#7b8796" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="470" y="842" width="395" height="92" rx="18" fill="#172f4f"/>
+    <text x="667" y="882" text-anchor="middle" font-size="21" font-weight="800" fill="#fff">가장 큰 금액으로 서면 청구</text>
+    <text x="667" y="911" text-anchor="middle" font-size="16" fill="#d9e1ea">협의 → 분쟁조정 → 필요하면 소송</text>
+    <text x="35" y="957" font-size="14" fill="#707986">근거: 주택임대차보호법 제3조의6·제6조의3 | 기준일 2026-10-12</text>
+  </g>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#7b8796"/></marker></defs>
+</svg>
