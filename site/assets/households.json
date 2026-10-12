@@ -396,7 +396,10 @@
       "elementary": {
         "name": "서울청담초등학교",
         "distance_m": 624
-      }
+      },
+      "display_name": "압구정한양3단지",
+      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "name_checked_at": "2026-10-12"
     },
     "서울 강남구|한솔마을": {
       "households": 570,
@@ -6388,7 +6391,11 @@
       "elementary": {
         "name": "인천한빛초등학교",
         "distance_m": 328
-      }
+      },
+      "display_name": "호반베르디움아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/26824345"
     },
     "인천 남동구|영남": {
       "households": 282,
@@ -12951,7 +12958,7 @@
       },
       "display_name": "다솜금호아파트",
       "name_src": "portal.kakao_local",
-      "name_checked_at": "2026-09-19",
+      "name_checked_at": "2026-10-12",
       "name_evidence": "http://place.map.kakao.com/11022216"
     },
     "서울 구로구|우리유앤미": {
@@ -18602,7 +18609,7 @@
       },
       "display_name": "광명역푸르지오아파트",
       "name_src": "portal.kakao_local",
-      "name_checked_at": "2026-09-07",
+      "name_checked_at": "2026-10-12",
       "name_evidence": "http://place.map.kakao.com/26157297"
     },
     "경기 광명시|쌍마한신": {
@@ -21244,7 +21251,7 @@
       },
       "display_name": "래미안부평아파트",
       "name_src": "portal.kakao_local",
-      "name_checked_at": "2026-08-26",
+      "name_checked_at": "2026-10-12",
       "name_evidence": "http://place.map.kakao.com/17399155"
     },
     "인천 부평구|인천부평우미린더센트럴": {
@@ -21572,7 +21579,11 @@
       "elementary": {
         "name": "인천한길초등학교",
         "distance_m": 181
-      }
+      },
+      "display_name": "삼산주공미래타운5단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/8073579"
     },
     "인천 부평구|미도6": {
       "households": 222,
@@ -22249,7 +22260,11 @@
       "elementary": {
         "name": "대전갈마초등학교",
         "distance_m": 548
-      }
+      },
+      "display_name": "파랑새아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11254890"
     },
     "대전 서구|국화한신": {
       "households": 450,
@@ -36120,7 +36135,7 @@
       },
       "display_name": "문촌마을19단지신우아파트",
       "name_src": "portal.kakao_local",
-      "name_checked_at": "2026-09-14",
+      "name_checked_at": "2026-10-12",
       "name_evidence": "http://place.map.kakao.com/11073499"
     },
     "경기 고양시 일산서구|문촌마을10단지동부": {
@@ -36472,7 +36487,11 @@
       "elementary": {
         "name": "문화초등학교",
         "distance_m": 427
-      }
+      },
+      "display_name": "강선마을3단지한신아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11323115"
     },
     "경기 고양시 일산서구|강선마을6단지(금호,한양)": {
       "households": 556,
@@ -43349,7 +43368,11 @@
       "elementary": {
         "name": "가내초등학교",
         "distance_m": 201
-      }
+      },
+      "display_name": "평택소사벌반도유보라아이비파크1단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/25765720"
     },
     "경기 평택시|평택지제역동문디이스트5단지": {
       "households": 741,
@@ -51318,7 +51341,7 @@
       },
       "display_name": "당감동일스위트아파트",
       "name_src": "portal.kakao_local",
-      "name_checked_at": "2026-08-30",
+      "name_checked_at": "2026-10-12",
       "name_evidence": "http://place.map.kakao.com/11096853"
     },
     "부산 부산진구|서면대우디오빌2": {
@@ -52121,7 +52144,11 @@
       "elementary": {
         "name": "가남초등학교",
         "distance_m": 590
-      }
+      },
+      "display_name": "벽산블루밍아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/8328536"
     },
     "부산 부산진구|이진젠시티개금": {
       "households": 736,
@@ -55864,7 +55891,11 @@
       "elementary": {
         "name": "대구조암초등학교",
         "distance_m": 314
-      }
+      },
+      "display_name": "월성자이아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/8002950"
     },
     "대구 달서구|월성주공1(고층)": {
       "households": 1234,
@@ -60465,7 +60496,11 @@
       "elementary": {
         "name": "옥서초등학교",
         "distance_m": 394
-      }
+      },
+      "display_name": "옥동성도아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11133578"
     },
     "울산 남구|현대3차": {
       "households": 411,
@@ -60917,7 +60952,7 @@
       },
       "display_name": "한보라에듀포레아파트",
       "name_src": "portal.kakao_local",
-      "name_checked_at": "2026-09-11",
+      "name_checked_at": "2026-10-12",
       "name_evidence": "http://place.map.kakao.com/11073330"
     },
     "경기 용인시 기흥구|백현마을서해그랑블": {
@@ -68878,7 +68913,7 @@
       },
       "display_name": "아름마을LG아파트",
       "name_src": "portal.kakao_local",
-      "name_checked_at": "2026-09-02",
+      "name_checked_at": "2026-10-12",
       "name_evidence": "http://place.map.kakao.com/11116313"
     },
     "경기 구리시|e편한세상수택센트럴파크": {
@@ -76110,7 +76145,11 @@
       "elementary": {
         "name": "주원초등학교",
         "distance_m": 222
-      }
+      },
+      "display_name": "하늘빛마을휴먼시아7단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11325426"
     },
     "경기 양주시|푸른마을": {
       "households": 241,
@@ -77088,7 +77127,11 @@
       "elementary": {
         "name": "인천당산초등학교",
         "distance_m": 228
-      }
+      },
+      "display_name": "한진해모로아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11328436"
     },
     "인천 계양구|뉴서울6": {
       "households": 370,
@@ -82940,7 +82983,11 @@
       "elementary": {
         "name": "인천청라초등학교",
         "distance_m": 466
-      }
+      },
+      "display_name": "청라린스트라우스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11701322"
     },
     "인천 서구|서인천월드메르디앙": {
       "households": 778,
@@ -88760,7 +88807,11 @@
       },
       "households": 317,
       "hh_src": "recap.hhldCnt",
-      "built_year": 2000
+      "built_year": 2000,
+      "display_name": "해태그린아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11209064"
     },
     "인천 부평구|삼익": {
       "addr": "인천 부평구 청천동 300",
@@ -99286,7 +99337,11 @@
       },
       "households": 493,
       "hh_src": "recap.hhldCnt",
-      "built_year": 1984
+      "built_year": 1984,
+      "display_name": "극동아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11026062"
     },
     "서울 구로구|상우": {
       "addr": "서울 구로구 개봉동 473",
@@ -108537,7 +108592,11 @@
       },
       "households": 459,
       "hh_src": "recap.hhldCnt",
-      "built_year": 1993
+      "built_year": 1993,
+      "display_name": "영광아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11352862"
     },
     "서울 서대문구|태영으뜸(데시앙)": {
       "addr": "서울 서대문구 홍제동 373",
@@ -111134,7 +111193,11 @@
       },
       "households": 462,
       "hh_src": "recap.hhldCnt",
-      "built_year": 2000
+      "built_year": 2000,
+      "display_name": "보성청실아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11341488"
     },
     "경기 이천시|현대성우오스타4단지": {
       "addr": "경기 이천시 부발읍 아미리 1247",
@@ -125224,7 +125287,11 @@
       },
       "households": 477,
       "hh_src": "recap.hhldCnt",
-      "built_year": 2002
+      "built_year": 2002,
+      "display_name": "대주파크빌2차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/7829341"
     },
     "인천 연수구|래미안": {
       "addr": "인천 연수구 동춘동 924-3",
@@ -129549,7 +129616,11 @@
       },
       "households": 330,
       "hh_src": "recap.hhldCnt",
-      "built_year": 1995
+      "built_year": 1995,
+      "display_name": "현대아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11201829"
     },
     "인천 부평구|뉴서울아파트": {
       "addr": "인천 부평구 산곡동 255-1",
@@ -139354,7 +139425,11 @@
       },
       "households": 494,
       "hh_src": "recap.hhldCnt",
-      "built_year": 1999
+      "built_year": 1999,
+      "display_name": "오남한국1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11210644"
     },
     "경기 안산시 상록구|월드메르디앙": {
       "addr": "경기 안산시 상록구 사동 1346",
@@ -142136,7 +142211,11 @@
       },
       "households": 451,
       "hh_src": "title.hhldCnt",
-      "built_year": 2000
+      "built_year": 2000,
+      "display_name": "연지청구1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11270331"
     },
     "부산 부산진구|서면센트리움": {
       "addr": "부산 부산진구 부암동 121-9",
@@ -149474,7 +149553,11 @@
       },
       "households": 430,
       "hh_src": "recap.hhldCnt",
-      "built_year": 1991
+      "built_year": 1991,
+      "display_name": "쌍용아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-12",
+      "name_evidence": "http://place.map.kakao.com/11121110"
     },
     "경기 의정부시|성호": {
       "addr": "경기 의정부시 호원동 442",
