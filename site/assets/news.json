@@ -3,17 +3,17 @@
     "source": "Google News RSS (한국어) — 섹터별 부동산 검색 집계",
     "note": "여러 보도를 자동 집계한 목록이며 투자 권유가 아닙니다."
   },
-  "generated_at": "2026-10-12 04:27 KST",
+  "generated_at": "2026-10-13 07:27 KST",
   "weekly": {
     "as_of": "2026년 10월 3주",
-    "updated": "2026-10-12",
+    "updated": "2026-10-13",
     "headlines": [
       {
         "badge": "주택 매매·집값",
-        "title": "\"매물 7.7만건 쌓였는데 살 사람은 없다\"…'멈춰선' 서울 부동산 시장 - 머니투데이",
-        "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE8tbm1nNVlzMEZ3OXV0ZEpDbzQ4dGdSdEFzMjhrTldkam00bkFqTXhxc3QwRklnaEcySnppc00wNmdzRFVMMVFLM0R0QkQyV25GTTl1Ty1vTG9fMm5nTW5UR05TenJrcGU1Q0HSAW9BVV95cUxNY1Z0dWJrdGtidERBaEwyTGtnZVdWWDE5ZkhTV0o3ZllDX3liT0Z0MmI2Skh3ZVY4aF9Ld2FGcmhZcTJkci1pQmdlOU9ITUo1Ul9hbWxtQjVOVVpRa2IwZ004WThnN0xTQkVpdnJwdVk?oc=5",
-        "source": "머니투데이",
-        "date": "2026-10-07"
+        "title": "울산 아파트 거래가뭄에 매물만 수북",
+        "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE8yYVpnd3BrbnFTRlcwdEVKZU9ITDlzbGh1WjdDTlVMNkN1R3RQTG5Hckxmdl9zZDByWG9lRjluSlRxNUJLSzZzRnd4R09GV2laQ3NGX0Nvb3RQU2t4ZHdBYWNHNGoyckZYdTViMw?oc=5",
+        "source": "경상일보",
+        "date": "2026-10-11"
       },
       {
         "badge": "전세·월세",
@@ -31,10 +31,10 @@
       },
       {
         "badge": "대출·금융",
-        "title": "삼성전자 '5억 대출' 한 달…영통 집값 4.3% 상승 '경기 1위'",
-        "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBBd0ZUSjY2TjA4Sm5RZ3NVVkFOcjRrVW05TmJPN0wzaXZRMk05aUdQZUJ5UVBZUllLY000NkZ5WGNCU1ZRNTR0UWRKcnNqQXVXWWZEb3F2SmxfbDQ?oc=5",
-        "source": "뉴스1",
-        "date": "2026-10-10"
+        "title": "[정지서의 조곤조곤] 대통령의 말엔 금리가 붙는다",
+        "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1MYjZYM2VOcGk4SWE4MGNseEhNVDlCaWk2aE0wUUsyZWlBV3U5bjRJaDVMVXZyQk9LTFo2bDBQcHo0N0JlQ3hFVWoxTnJ1S0dsT2xUODZtUmdWWDZKTkdpdzN2RUlPR1J0Q2NNbV92VHRkQQ?oc=5",
+        "source": "KB Think",
+        "date": "2026-10-12"
       },
       {
         "badge": "오피스·상업용",
@@ -46,29 +46,29 @@
     ]
   },
   "daily": {
-    "updated": "2026-10-12 04:27 KST",
+    "updated": "2026-10-13 07:27 KST",
     "sectors": [
       {
         "key": "housing",
         "name": "주택 매매·집값",
         "items": [
           {
+            "title": "지방 아파트 거래 5년래 최대…분양 흥행 주목",
+            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBvaEkycTQyRHdCcVlCb3FwdEJmN2dTNGJNZ0wyRndnUU40d1VTYWxMXzZ5aGdnbVB3d1VjV1cxODFWS1pvTUhQQWp1VkY1ZUtvWno3VTQyUHBFd01jSlFFUVJCZVVnQ0pEZ21QVEtvTTPSAXRBVV95cUxOeWpXVDNhUkUxbGhqZEwzQ0Zka3c1NXlPTXpQWFY4bGpWbzdwRHNWSmwtWkhvRmVRWFNaQmdxN2trR003TWIzb0FLVG40OXhaYUtpV0d5TUh5THEydkZQVzNLaWxFaTA1LWdaRXhqbVBmMzg4cQ?oc=5",
+            "source": "팩트인뉴스",
+            "date": "2026-10-12"
+          },
+          {
+            "title": "올 상반기 지방 아파트 거래 5년만에 최대…분양시장 시험대",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1uRmRKOHRNWDRiLW4zOFlYYXotc3dodjN2aHpUeUE3azVYWG5zME5xdzJxUUI4WnptOExkVDN2QmFuRVlrQXNqc0xneWV3Y0J5MWF3b182MGZOTXU4MUFiUtIBeEFVX3lxTE5MaWp0cnhOV2UtWHJJcUFVSktQODhrTkFaU0JyT2kzcjJUaE8yNXpubEwzaHBQbC03Wi01MzVYbV9sWWJjZkx5Y2xiVFRWQzZfblFrWTA2QWhEdk1ROEM4b0hkZGZIOE8xbTlwLWxjUFpSa1RqVFZleA?oc=5",
+            "source": "뉴시스",
+            "date": "2026-10-11"
+          },
+          {
             "title": "울산 아파트 거래가뭄에 매물만 수북",
             "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE8yYVpnd3BrbnFTRlcwdEVKZU9ITDlzbGh1WjdDTlVMNkN1R3RQTG5Hckxmdl9zZDByWG9lRjluSlRxNUJLSzZzRnd4R09GV2laQ3NGX0Nvb3RQU2t4ZHdBYWNHNGoyckZYdTViMw?oc=5",
             "source": "경상일보",
             "date": "2026-10-11"
-          },
-          {
-            "title": "평택 집값 약세에도 지제동 8% 상승...신규 분양 시험대",
-            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9uSzk5cXBVVGQzY2xOZVRvS1dEaXBNemxPcDczVTU0VkN1OEdpa01Na25SQ2oyT3RLUXhCaEtteGhqdEZ0bTRqRUxvc01wc1lGV25vUE5aSzRxSk9ZWm9TV3J3WDhYY1ZkRVHSAW5BVV95cUxQYlpSYndDMTNwcFB2OEdqTWtQVTROWktkUGhHT1AwLWdsTUdOUkI4cFc1Ym9KVG9BUThZVkdKdTVIa2U1cnVFQU45d0JqbGVLV3lOV3VtMDNpZEhYSjhKem5tQ25UbDZGTTMxM1pxUQ?oc=5",
-            "source": "아시아에이",
-            "date": "2026-10-10"
-          },
-          {
-            "title": "'최악' 미분양 사태...지방 주택시장 악순환",
-            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9kOHdnMkp4aWptUmJ1cHp2SXNsZ1Z2UlQwM3BwcFN5eUUxRVNnZWJCVUcxUTJUX2xLdHV0SEZxMGpPQTYtRnhQd0Jyd2o3V3BDV0RGRmJlS3FXMVdxZzlnUEpfQjNfeXY3Q1E5aWs4cw?oc=5",
-            "source": "YTN",
-            "date": "2026-10-10"
           }
         ]
       },
@@ -77,22 +77,22 @@
         "name": "전세·월세",
         "items": [
           {
-            "title": "서울 아파트 월세 평균 164만 원...가파른 월세화 부작용 우려",
-            "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE5PX09kd185UFNnMjFQT0ZGVE9TQjVMQWNOZXRINUhLY1g1dE5uOUNtNTNFOXpuazE5alE0d3ZqZVBOZ2RvX3ptQ0NjU2xYanNrajNSdGFxUTI3anVNd2c?oc=5",
-            "source": "YTN",
-            "date": "2026-10-09"
+            "title": "[韓경제 아킬레스건](20) 전세제도의 역습 : 갭투자와 전세사기가 뒤흔든 주거안전망",
+            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFAzSTVENkVnX0dETmx6MDkzOVNLa3ktZHFlUTJOMEdtZEQzU2pJMU9qWHJKTER4WHhiZmZyZU9lVkI2QkpZd3huZklrTEJJRndpVWRBWE5rRUZOZGhMdEpSS1NJSFJIUVBNSXc?oc=5",
+            "source": "금융소비자뉴스",
+            "date": "2026-10-12"
           },
           {
-            "title": "서울 아파트 월세 평균 164만원…전세의 월세화에 주거비 부담 커져",
-            "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQOFFYXzY3VWNkWktLM09iYXVtU0xjU25mN3hzRS1EZ01NMmh0RHgwRU9ERzR4SkVnWDNMU05jUGRPX3lxaVIxN0tJZnozcFJtOUNad2s1ZUh3c3N0ZlNaQjBoOF9WbE1qekIyYTBuTEpHckJCYWhwT3A4SHZhTEZqMG5CeDF3YmEtTEE?oc=5",
-            "source": "글로벌이코노믹",
-            "date": "2026-10-10"
+            "title": "[데스크칼럼-프레스센터에서] 가파른 월세화… 이러니 전세가 없지",
+            "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1qN19Yd085R1VMeFJXQkhySkxyTVNlQk9YeHo0Q1hRU0E0MVZFeWlHSlpZcFRwYTVHN3hQWVkzTGl6T2tBN2ZCbEtIMUJ4OG1jUm5WOElERWpWMDk5Z3R0dXFBSjlLYk1WVTI1aG1XR1V6QQ?oc=5",
+            "source": "한양경제",
+            "date": "2026-10-12"
           },
           {
-            "title": "디즈니 카지노 4화 탄소 중립을 통한 요약: 원리, 방법 및 기술",
-            "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQU3lqOW4wTTllWUcxZG9oc3lqZk8zSmNrYXpGTFhpbGJKNlJtOEluQ0c1Qkw1MUhNalltRFl5ZGZsbHB0Sk1udVlOZ1E4Mm1CNWNtS2xCVVZmd2Y1Y01USzhRVGVDa3ZsNVZYQWt4b1VWUUVRYU9lQXRmX1dOVVZaVnBhTGdfNDJraDhibFU3aXZ3cjNLMW5ldWUtckEzbjZidFEwNjNhdng4U3doSDNtUmhnRUhlOC1QREJ0WTU5LU9YNTd0MTEw?oc=5",
-            "source": "Calgary Roughnecks",
-            "date": "2026-10-10"
+            "title": "文정부 넘어선 ‘전셋값 폭주’",
+            "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQdElZUUQ0c2UwaHVsLTFYNEoyX1JMcHlaQjFkQlRWb0VPVGxielFLVTFoUUhDVnNfa0lCUDVIc3BpVkhvRW1LbjFzb1g2VGYtZmRiR0lnRHZHOGtFaVFfZ1F5RHVWWE5yTWp1Vl9uemwtNWJ6b2VybGRJSmNvUGdlNGE0ZVU5UXhp?oc=5",
+            "source": "조선일보",
+            "date": "2026-10-12"
           }
         ]
       },
@@ -101,22 +101,22 @@
         "name": "청약·분양",
         "items": [
           {
-            "title": "한 가지 테마를 여러 방식으로 풀어낸 반티사이트 축구 분류",
-            "url": "https://news.google.com/rss/articles/CBMioAJBVV95cUxPbktPdmdTQTI3akl0SU9rT3pJSDRWaWVtR0JTcUt0Yk5MTS1aQ0ZDcDVLclB1dkZaMlVsdmg5UFhjTDhXS1RPUHpfQ3pzdmwwajVaZjBFQXo0N2NqbTRCQVBYVjRkVXR2S3lRbHBnYWxkNVROaDVPMnpod0YyYkoxdjlJcUpRY2tfSzBEanVjS2hMZ3RYNTluT2NySDZ0U2ZiV0pKbU53X0VVc1RVMlRQQXBRTGVtLXdXd2FwUGo3YnJLQ05BdE9jbm1OQ1NjdnJ0bXFiQW1jQTQtT2VlSzdySHJ0Mm9ENDNjRFQ0M1Myb05GRGktTHRxQ1hBaThYQ0liaTczaHhQd2pkSmtuOUtqU0liWTFWcGF6QlZwTG40MUs?oc=5",
-            "source": "Calgary Roughnecks",
-            "date": "2026-10-10"
+            "title": "89만 도시 청주의 역설···늘어나는 1인 세대, 따라가지 못하는 소형 주택 공급",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1zVjh2UC1wOGJtekE0ZGNmenJnY05IcmFabnFINFhoc0tVSWp2bjZZSVZZLWVYaDRrSl9CU1RuR3ZUSXAzMlk0UUtEVEstYUpEVUk2dkNpQm01Yk9ldHM1aC1IM29CdXVFbS1oNQ?oc=5",
+            "source": "스마트비즈",
+            "date": "2026-10-12"
           },
           {
-            "title": "운정신도시 2년 만의 신규 분양…‘GTX 운정중앙역 시티프라디움’ 10월 공급",
-            "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE01S1Zhck1aX0N3OVRVVXVxZmhEcVNsTFRSMm93ZDhVV1drMFBDVHZQMGZUSHVQOTlZNGVRaUxvN0xDRGdoMnc3a0M2dEwxZ1NHb2dGU2hHeTk?oc=5",
-            "source": "뷰어스",
+            "title": "李정부 서울 공공분양 공급 '0' … 닥공커녕 개점 휴업 수준",
+            "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPNW9vZjJGQ0tnTE0zSjZua25BNTZzYXpxMlpubjE4TFZWNm81elhaRU1ySjlKaG9PV1BKc3ptQl9xRkpXUnQzQWtKQ1c2MkNJOTBzMmpGX3ZvendGM2xlX2NMSE96YkR4VUFrZ0Z2WUlYbVhGOXFLLUw1MDRBUUZaMdIBgAFBVV95cUxPNW9vZjJGQ0tnTE0zSjZua25BNTZzYXpxMlpubjE4TFZWNm81elhaRU1ySjlKaG9PV1BKc3ptQl9xRkpXUnQzQWtKQ1c2MkNJOTBzMmpGX3ZvendGM2xlX2NMSE96YkR4VUFrZ0Z2WUlYbVhGOXFLLUw1MDRBUUZaMQ?oc=5",
+            "source": "뉴데일리",
+            "date": "2026-10-12"
+          },
+          {
+            "title": "올 상반기 지방 아파트 거래 5년만에 최대…분양시장 시험대",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1uRmRKOHRNWDRiLW4zOFlYYXotc3dodjN2aHpUeUE3azVYWG5zME5xdzJxUUI4WnptOExkVDN2QmFuRVlrQXNqc0xneWV3Y0J5MWF3b182MGZOTXU4MUFiUtIBeEFVX3lxTE5MaWp0cnhOV2UtWHJJcUFVSktQODhrTkFaU0JyT2kzcjJUaE8yNXpubEwzaHBQbC03Wi01MzVYbV9sWWJjZkx5Y2xiVFRWQzZfblFrWTA2QWhEdk1ROEM4b0hkZGZIOE8xbTlwLWxjUFpSa1RqVFZleA?oc=5",
+            "source": "뉴시스",
             "date": "2026-10-11"
-          },
-          {
-            "title": "서울 아파트값 87주째 상승…국민평형 분양가도 20억원 돌파",
-            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9fbFJBQ2hrcWIyeTVXTVpjUTdwamNxd0wtSEhaTHlZVGRiTk9kRkgybkFIUGk0bUdtbTVvdHBrQkU4ZldxZmltbE55QktqcWlqTDFxSFRxTlZUdHE3aGJnUG9JM3pFR2xE?oc=5",
-            "source": "www.ebn.co.kr",
-            "date": "2026-10-10"
           }
         ]
       },
@@ -125,22 +125,22 @@
         "name": "대출·금융",
         "items": [
           {
+            "title": "[정지서의 조곤조곤] 대통령의 말엔 금리가 붙는다",
+            "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE1MYjZYM2VOcGk4SWE4MGNseEhNVDlCaWk2aE0wUUsyZWlBV3U5bjRJaDVMVXZyQk9LTFo2bDBQcHo0N0JlQ3hFVWoxTnJ1S0dsT2xUODZtUmdWWDZKTkdpdzN2RUlPR1J0Q2NNbV92VHRkQQ?oc=5",
+            "source": "KB Think",
+            "date": "2026-10-12"
+          },
+          {
+            "title": "금융 신상품",
+            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBRemFTLUZ1WWpNOG1SdndqY0lSZTE0NzhHdlJ0YzNlSThaRkkwUDZmOFRoSE5EdzQycmFPVFZFZnJ1el8wY0EzSjN3b2hGb3VFTm1uSjRXYlUwaFd3NjV6WENuVHVXVE5y?oc=5",
+            "source": "한경매거진&북",
+            "date": "2026-10-11"
+          },
+          {
             "title": "삼성전자 '5억 대출' 한 달…영통 집값 4.3% 상승 '경기 1위'",
             "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBBd0ZUSjY2TjA4Sm5RZ3NVVkFOcjRrVW05TmJPN0wzaXZRMk05aUdQZUJ5UVBZUllLY000NkZ5WGNCU1ZRNTR0UWRKcnNqQXVXWWZEb3F2SmxfbDQ?oc=5",
             "source": "뉴스1",
             "date": "2026-10-10"
-          },
-          {
-            "title": "가계대출 증가 한도 1.5%→3%…허용 규모 60조원으로",
-            "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE8tZlR2Y3ROMk5BR25va25MdU1CNE1EdWx1c0gySHIwcUg1UXJrX1QzWW5ZaGxEYlhNVU9sWjdQMnZndkxtcldTeGRpbm1xNmtuUFZ0TW5ISG04cWhMb3lOb2FHRm5mLUhkMUNN?oc=5",
-            "source": "데일리 이코노미",
-            "date": "2026-10-10"
-          },
-          {
-            "title": "\"1000만원 차이로 대출 2억이 날아간다\"…서울 집 사려는 사람들이 '15억'에 줄 선 이유",
-            "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9EWVlENGJPYl9JMFB5SlVlUmRCMmhwdGlUVExqRE9aanNiV01KbkhzV0NWVWp4ZThjTDQwVmJ1TEI4VW1RWEJvMjctYnlpS21xc1ZGVXNfWk10S2ozM1BmSkpiWTVpWUFmVzNHYm1lN1MwVEE?oc=5",
-            "source": "경제시그널",
-            "date": "2026-10-08"
           }
         ]
       },
