@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="980" viewBox="0 0 900 980" role="img" aria-labelledby="title desc">
+  <title id="title">월세 연체액 확인과 계약 유지 또는 종료 절차</title>
+  <desc id="desc">계약서와 입금내역으로 현재 연체액을 계산한 뒤 두 달치 미만이면 지급 합의를 하고, 두 달치 이상이면 계약 유지 합의 또는 해지 통지와 인도 절차로 나누는 흐름도</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8fbff"/><stop offset="1" stop-color="#eef4f7"/></linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#183344" flood-opacity=".12"/></filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#56707f"/></marker>
+    <style>
+      .h{font:700 34px Pretendard,"Noto Sans KR",sans-serif;fill:#163244}.s{font:500 18px Pretendard,"Noto Sans KR",sans-serif;fill:#58707e}.t{font:700 24px Pretendard,"Noto Sans KR",sans-serif;fill:#183747}.b{font:500 18px Pretendard,"Noto Sans KR",sans-serif;fill:#415b69}.small{font:500 15px Pretendard,"Noto Sans KR",sans-serif;fill:#647985}.yes{font:700 16px Pretendard,"Noto Sans KR",sans-serif;fill:#167353}.no{font:700 16px Pretendard,"Noto Sans KR",sans-serif;fill:#a4561d}
+    </style>
+  </defs>
+  <rect width="900" height="980" rx="28" fill="url(#bg)"/>
+  <text x="60" y="66" class="h">월세가 밀렸다면 이 순서로 확인하세요</text>
+  <text x="60" y="100" class="s">일반 주택 월세계약 · 기준일 2026-10-13</text>
+
+  <g filter="url(#shadow)"><rect x="150" y="140" width="600" height="120" rx="22" fill="#fff"/><circle cx="206" cy="200" r="30" fill="#e3f1f5"/><text x="206" y="208" text-anchor="middle" class="t">1</text><text x="255" y="187" class="t">계약서와 입금내역을 월별로 맞추기</text><text x="255" y="222" class="b">월세·지급일·실제 입금액을 적고 관리비는 분리</text></g>
+  <path d="M450 260V310" stroke="#56707f" stroke-width="4" marker-end="url(#arrow)"/>
+  <g filter="url(#shadow)"><rect x="150" y="320" width="600" height="120" rx="22" fill="#fff"/><circle cx="206" cy="380" r="30" fill="#e3f1f5"/><text x="206" y="388" text-anchor="middle" class="t">2</text><text x="255" y="367" class="t">현재 남은 연체액 계산하기</text><text x="255" y="402" class="b">부분 납부를 반영한 잔액을 월세 두 달치와 비교</text></g>
+  <path d="M450 440V490" stroke="#56707f" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <g filter="url(#shadow)"><path d="M450 500 640 610 450 720 260 610Z" fill="#173f56"/><text x="450" y="598" text-anchor="middle" style="font:700 25px Pretendard,'Noto Sans KR',sans-serif;fill:#fff">연체액이</text><text x="450" y="635" text-anchor="middle" style="font:700 25px Pretendard,'Noto Sans KR',sans-serif;fill:#fff">월세 두 달치 이상인가?</text></g>
+  <path d="M260 610H150V760" stroke="#56707f" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M640 610H750V760" stroke="#56707f" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <text x="173" y="596" class="no">아니요</text><text x="682" y="596" class="yes">예</text>
+
+  <g filter="url(#shadow)"><rect x="60" y="770" width="350" height="140" rx="22" fill="#fff7ed" stroke="#f1c38e" stroke-width="2"/><text x="90" y="812" class="t">지급계획을 서면 합의</text><text x="90" y="849" class="b">지급일·금액·입금 목적 기록</text><text x="90" y="880" class="small">한 달 연체 특약만으로 자동 해지 불가</text></g>
+  <g filter="url(#shadow)"><rect x="490" y="770" width="350" height="140" rx="22" fill="#eefaf5" stroke="#90cdb6" stroke-width="2"/><text x="520" y="812" class="t">유지 합의 또는 해지 통지</text><text x="520" y="849" class="b">통지 도달·납부 합의 자료 보관</text><text x="520" y="880" class="small">강제 퇴거는 명도·집행 절차 필요</text></g>
+  <text x="450" y="954" text-anchor="middle" class="small">근거: 민법 제640조·제652조, 주택임대차보호법 제6조의3</text>
+</svg>
