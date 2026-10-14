@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-13"
+    "portal_checked_at": "2026-10-14"
   },
   "apartments": [
     {
@@ -33336,7 +33336,11 @@
         "여의도": 16,
         "광화문": 16
       },
-      "households": 834
+      "households": 834,
+      "display_name": "공덕삼성1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-14",
+      "name_evidence": "http://place.map.kakao.com/23890882"
     },
     {
       "name": "마포푸르지오더센트럴",
@@ -117080,12 +117084,14 @@
       ],
       "builder": "기타",
       "display_name": "마포현대아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "name_src": "portal.kakao_local",
       "households": 480,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-08",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-14",
+      "name_evidence": "http://place.map.kakao.com/11374458"
     },
     {
       "name": "진도3차아파트",
@@ -124033,7 +124039,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-10-01",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "안성우방아이유쉘에스티지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-14",
+      "name_evidence": "http://place.map.kakao.com/534416415"
     },
     {
       "name": "e편한세상안성그랑루체",
@@ -125192,7 +125202,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-10-02",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "울산대이즈플레이스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-14",
+      "name_evidence": "http://place.map.kakao.com/972452243"
     },
     {
       "name": "노원롯데캐슬시그니처",
@@ -127442,7 +127456,11 @@
         94000
       ],
       "builder": "기타",
-      "households": null
+      "households": 78,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": []
     },
     {
       "name": "약수(372-2796)",
@@ -127467,7 +127485,11 @@
         32449
       ],
       "builder": "기타",
-      "households": null
+      "households": 43,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": []
     },
     {
       "name": "현대조합",
@@ -127495,7 +127517,11 @@
         55690
       ],
       "builder": "기타",
-      "households": null
+      "households": 205,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": []
     },
     {
       "name": "상록",
@@ -127522,7 +127548,11 @@
         126000
       ],
       "builder": "기타",
-      "households": null
+      "households": 678,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": []
     },
     {
       "name": "수정",
@@ -127554,7 +127584,11 @@
         46679
       ],
       "builder": "기타",
-      "households": null
+      "households": 220,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": []
     },
     {
       "name": "가양강나루현대",
@@ -127582,7 +127616,11 @@
         123000
       ],
       "builder": "기타",
-      "households": null
+      "households": 642,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": []
     },
     {
       "name": "동현아파트1~6",
@@ -127603,7 +127641,11 @@
         284000
       ],
       "builder": "기타",
-      "households": null
+      "households": 548,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": []
     },
     {
       "name": "테라펠리체송파",
@@ -127630,7 +127672,11 @@
         60000
       ],
       "builder": "기타",
-      "households": null
+      "households": 64,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": []
     },
     {
       "name": "가락삼익맨숀",
@@ -127657,7 +127703,11 @@
         265000
       ],
       "builder": "기타",
-      "households": null
+      "households": 936,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": []
     },
     {
       "name": "가락금호아파트",
@@ -127686,7 +127736,11 @@
       "builder": "기타",
       "display_name": "가락금호",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 915,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": []
     },
     {
       "name": "신성둔촌미소지움1",
@@ -127713,9 +127767,15 @@
         138250
       ],
       "builder": "기타",
-      "display_name": "신성둔촌미소지움1차",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "신성둔촌미소지움아파트",
+      "name_src": "portal.kakao_local",
+      "households": 460,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-14",
+      "name_evidence": "http://place.map.kakao.com/11346918"
     },
     {
       "name": "삼일",
@@ -127735,7 +127795,11 @@
         10000
       ],
       "builder": "기타",
-      "households": null
+      "households": 45,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": []
     },
     {
       "name": "미사강변루나리움",
@@ -127768,9 +127832,15 @@
         119000
       ],
       "builder": "기타",
-      "display_name": "미사강변 루나리움",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "미사강변루나리움아파트",
+      "name_src": "portal.kakao_local",
+      "households": 1164,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-14",
+      "name_evidence": "http://place.map.kakao.com/19149380"
     },
     {
       "name": "이천증포대원칸타빌",
@@ -127793,9 +127863,15 @@
         33500
       ],
       "builder": "기타",
-      "display_name": "이천증포 대원칸타빌아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "이천증포대원칸타빌아파트",
+      "name_src": "portal.kakao_local",
+      "households": 346,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-14",
+      "name_evidence": "http://place.map.kakao.com/567242591"
     },
     {
       "name": "두산",
@@ -127828,7 +127904,14 @@
         29700
       ],
       "builder": "기타",
-      "households": null
+      "households": 957,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": [],
+      "display_name": "두산아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-14"
     },
     {
       "name": "동래대우",
@@ -127856,8 +127939,14 @@
       ],
       "builder": "기타",
       "display_name": "동래대우아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "name_src": "portal.kakao_local",
+      "households": 497,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-14",
+      "name_evidence": "http://place.map.kakao.com/11358071"
     },
     {
       "name": "한마을",
@@ -127885,7 +127974,14 @@
         33300
       ],
       "builder": "기타",
-      "households": null
+      "households": 1206,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-14",
+      "hh_evidence": [],
+      "display_name": "한마을아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-14"
     }
   ]
 }
