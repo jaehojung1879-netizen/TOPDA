@@ -1,12 +1,12 @@
 {
- "as_of": "2026-10-14",
+ "as_of": "2026-10-15",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 10509,
-  "filled": 10213,
-  "target": 469,
-  "kapt_list": 7182,
-  "kapt_ratio": 0.68,
+  "complexes": 11859,
+  "filled": 11524,
+  "target": 454,
+  "kapt_list": 7846,
+  "kapt_ratio": 0.66,
   "name_gap": 17,
   "matched_this_run": 28,
   "filled_this_run": 0,
@@ -14,8 +14,8 @@
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 23,
-  "dong_indexed": 7182
+  "jibun_seeded": 9,
+  "dong_indexed": 7846
  },
  "regions": [
   {
@@ -99,8 +99,8 @@
   {
    "region": "서울 강남구",
    "target": 14,
-   "filled": 400,
-   "total": 414,
+   "filled": 401,
+   "total": 415,
    "kapt_list": 233,
    "kapt_ratio": 0.56,
    "name_gap": 0,
@@ -261,8 +261,8 @@
   },
   {
    "region": "인천 미추홀구",
-   "target": 18,
-   "filled": 330,
+   "target": 17,
+   "filled": 331,
    "total": 348,
    "kapt_list": 117,
    "kapt_ratio": 0.34,
@@ -276,16 +276,16 @@
     "학익SKVIEW",
     "월드스테이트(112~123)",
     "대경이즈뷰",
-    "대준블루온",
     "골드프라임",
     "그레이스타워",
-    "더젠씨티(341-30)"
+    "더젠씨티(341-30)",
+    "투민힐스빌"
    ]
   },
   {
    "region": "서울 노원구",
-   "target": 4,
-   "filled": 283,
+   "target": 3,
+   "filled": 284,
    "total": 287,
    "kapt_list": 231,
    "kapt_ratio": 0.8,
@@ -297,8 +297,7 @@
    "unmatched_sample": [
     "상계주공14(고층)",
     "미성",
-    "상계주공10(고층)",
-    "광덕파크빌아파트"
+    "상계주공10(고층)"
    ]
   },
   {
@@ -320,9 +319,9 @@
   },
   {
    "region": "서울 중구",
-   "target": 14,
-   "filled": 100,
-   "total": 114,
+   "target": 13,
+   "filled": 102,
+   "total": 115,
    "kapt_list": 49,
    "kapt_ratio": 0.43,
    "name_gap": 0,
@@ -334,11 +333,11 @@
     "한양I-Class",
     "DUO302",
     "한진해모로",
-    "약수(372-2796)",
     "이지마루오장",
     "동대문솔하임",
     "오장동오팰리오",
-    "(1546-0)"
+    "(1546-0)",
+    "신당역솔하임"
    ]
   },
   {
@@ -383,9 +382,9 @@
   },
   {
    "region": "서울 송파구",
-   "target": 10,
-   "filled": 348,
-   "total": 358,
+   "target": 9,
+   "filled": 352,
+   "total": 361,
    "kapt_list": 177,
    "kapt_ratio": 0.49,
    "name_gap": 0,
@@ -396,12 +395,12 @@
    "unmatched_sample": [
     "장미2",
     "동광팰리스",
-    "다성리치빌",
     "이스턴잠실",
     "우정에쉐르",
     "올림픽파크리움",
     "현대그린빌",
-    "이연파레스"
+    "이연파레스",
+    "잠실시그마타워"
    ]
   },
   {
@@ -536,13 +535,13 @@
   },
   {
    "region": "경기 부천시 소사구",
-   "target": 7,
-   "filled": 210,
+   "target": 6,
+   "filled": 211,
    "total": 217,
    "kapt_list": 83,
    "kapt_ratio": 0.38,
    "name_gap": 0,
-   "matched": 2,
+   "matched": 1,
    "codes": [
     "41194"
    ],
@@ -614,8 +613,8 @@
   {
    "region": "인천 계양구",
    "target": 4,
-   "filled": 193,
-   "total": 197,
+   "filled": 194,
+   "total": 198,
    "kapt_list": 142,
    "kapt_ratio": 0.72,
    "name_gap": 0,
@@ -669,10 +668,10 @@
   {
    "region": "서울 마포구",
    "target": 11,
-   "filled": 266,
-   "total": 277,
+   "filled": 267,
+   "total": 278,
    "kapt_list": 143,
-   "kapt_ratio": 0.52,
+   "kapt_ratio": 0.51,
    "name_gap": 0,
    "matched": 3,
    "codes": [
@@ -712,8 +711,8 @@
   },
   {
    "region": "경기 평택시",
-   "target": 16,
-   "filled": 331,
+   "target": 14,
+   "filled": 333,
    "total": 347,
    "kapt_list": 312,
    "kapt_ratio": 0.9,
@@ -724,13 +723,13 @@
    ],
    "unmatched_sample": [
     "평택화양휴먼빌퍼스트시티아파트",
-    "SKVIEW2단지",
-    "대옥5",
     "외기노조",
     "평택서정동롯데캐슬",
     "평일",
     "영흥(가,나,다)",
-    "한일(A,B)"
+    "한일(A,B)",
+    "명원",
+    "베스트빌"
    ]
   },
   {
@@ -780,6 +779,29 @@
    ],
    "unmatched_sample": [
     "두류중흥S-클래스센텀포레"
+   ]
+  },
+  {
+   "region": "서울 종로구",
+   "target": 8,
+   "filled": 107,
+   "total": 115,
+   "kapt_list": 39,
+   "kapt_ratio": 0.34,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "11110"
+   ],
+   "unmatched_sample": [
+    "종로아인스빌",
+    "아르젠종로",
+    "삼전솔하임4차",
+    "디팰리스",
+    "익성씨티하임",
+    "롯데미도파광화문빌딩",
+    "종로동광모닝스카이",
+    "버넷하임1"
    ]
   },
   {
@@ -836,8 +858,8 @@
   {
    "region": "대전 유성구",
    "target": 3,
-   "filled": 208,
-   "total": 211,
+   "filled": 209,
+   "total": 212,
    "kapt_list": 173,
    "kapt_ratio": 0.82,
    "name_gap": 0,
@@ -881,9 +903,88 @@
    "kapt_list": 174,
    "kapt_ratio": 0.69,
    "name_gap": 0,
-   "matched": 2,
+   "matched": 3,
    "codes": [
     "30170"
+   ],
+   "unmatched_sample": [
+    "타워렉스",
+    "코스모스"
+   ]
+  },
+  {
+   "region": "경기 안성시",
+   "target": 1,
+   "filled": 98,
+   "total": 99,
+   "kapt_list": 84,
+   "kapt_ratio": 0.85,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "41550"
+   ],
+   "unmatched_sample": [
+    "원곡"
+   ]
+  },
+  {
+   "region": "부산 부산진구",
+   "target": 12,
+   "filled": 362,
+   "total": 374,
+   "kapt_list": 171,
+   "kapt_ratio": 0.46,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "26230"
+   ],
+   "unmatched_sample": [
+    "성원쌍떼뷰",
+    "타워팰리스",
+    "세영",
+    "토운모닝톤",
+    "KH마이우스",
+    "더블루오피스텔",
+    "다솜빌",
+    "목연정M팰리스"
+   ]
+  },
+  {
+   "region": "인천 남동구",
+   "target": 23,
+   "filled": 265,
+   "total": 288,
+   "kapt_list": 167,
+   "kapt_ratio": 0.58,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "28200"
+   ],
+   "unmatched_sample": [
+    "대준블루인",
+    "간석트인자리애",
+    "유진펠리스",
+    "(구)현광",
+    "하늘지움",
+    "더웰노블레스",
+    "퍼스트클래스",
+    "대명어반스테이"
+   ]
+  },
+  {
+   "region": "서울 서초구",
+   "target": 2,
+   "filled": 464,
+   "total": 466,
+   "kapt_list": 203,
+   "kapt_ratio": 0.44,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "11650"
    ],
    "unmatched_sample": []
   }
