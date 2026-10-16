@@ -236907,10 +236907,7 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 176
-      },
-      "households": 77,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2007
+      }
     },
     "서울 강서구|청솔샤르망1001동": {
       "addr": "서울 강서구 내발산동 676-23",
@@ -236923,10 +236920,7 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 159
-      },
-      "households": 49,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
+      }
     },
     "인천 미추홀구|행복캐슬103동": {
       "addr": "인천 미추홀구 숭의동 122-10",
@@ -236939,10 +236933,7 @@
       "elementary": {
         "name": "인천숭의초등학교",
         "distance_m": 531
-      },
-      "households": 24,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2014
+      }
     },
     "서울 양천구|주함헤븐103동": {
       "addr": "서울 양천구 신월동 203-14",
@@ -236951,10 +236942,7 @@
       "elementary": {
         "name": "서울신원초등학교",
         "distance_m": 57
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
+      }
     },
     "서울 강동구|광남캐스빌105동": {
       "addr": "서울 강동구 둔촌동 435-4",
@@ -236967,10 +236955,7 @@
       "elementary": {
         "name": "서울한산초등학교",
         "distance_m": 579
-      },
-      "households": 28,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
+      }
     },
     "서울 관악구|에메랄드105동": {
       "addr": "서울 관악구 봉천동 41-261",
@@ -236983,10 +236968,7 @@
       "elementary": {
         "name": "서울신봉초등학교",
         "distance_m": 324
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2012
+      }
     },
     "서울 강서구|우공팰리스101동": {
       "addr": "서울 강서구 화곡동 1026-27",
@@ -236999,10 +236981,7 @@
       "elementary": {
         "name": "서울신월초등학교",
         "distance_m": 450
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2005
+      }
     },
     "경기 성남시 분당구|성원상떼뷰201동": {
       "addr": "경기 성남시 분당구 정자동 12-2",
@@ -237015,10 +236994,7 @@
       "elementary": {
         "name": "성남정자초등학교",
         "distance_m": 461
-      },
-      "households": 33,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
+      }
     },
     "경기 용인시 수지구|죽전GS자이103동": {
       "addr": "경기 용인시 수지구 죽전동 96",
@@ -237027,11 +237003,138 @@
       "elementary": {
         "name": "대청초등학교",
         "distance_m": 472
+      }
+    },
+    "서울 은평구|정익제이원(4차)": {
+      "addr": "서울 은평구 불광동 484-56",
+      "lat": 37.62095,
+      "lng": 126.920665,
+      "subway": {
+        "station": "연신내역 3호선",
+        "distance_m": 197
       },
-      "households": 19,
-      "hh_src": "title.hhldCnt",
-      "built_year": 1998
+      "elementary": {
+        "name": "서울갈현초등학교",
+        "distance_m": 416
+      }
+    },
+    "서울 도봉구|스마트휴": {
+      "addr": "서울 도봉구 방학동 445-1",
+      "lat": 37.662701,
+      "lng": 127.028845,
+      "subway": {
+        "station": "북한산우이역 우이신설선",
+        "distance_m": 1419
+      },
+      "elementary": {
+        "name": "서울방학초등학교",
+        "distance_m": 312
+      }
+    },
+    "서울 서대문구|경향빌라트": {
+      "addr": "서울 서대문구 연희동 87-33",
+      "lat": 37.56986,
+      "lng": 126.934207,
+      "subway": {
+        "station": "신촌역 경의중앙선",
+        "distance_m": 1327
+      },
+      "elementary": {
+        "name": "서울연희초등학교",
+        "distance_m": 47
+      }
+    },
+    "서울 강서구|윤탁아트리움": {
+      "addr": "서울 강서구 화곡동 1026-18",
+      "lat": 37.544833,
+      "lng": 126.838153,
+      "subway": {
+        "station": "화곡역 5호선",
+        "distance_m": 407
+      },
+      "elementary": {
+        "name": "서울신월초등학교",
+        "distance_m": 495
+      }
+    },
+    "경기 의정부시|팰리체": {
+      "addr": "경기 의정부시 의정부동 206-5",
+      "lat": 37.743031,
+      "lng": 127.046146,
+      "subway": {
+        "station": "의정부중앙역 의정부경전철",
+        "distance_m": 317
+      },
+      "elementary": {
+        "name": "의정부중앙초등학교",
+        "distance_m": 239
+      }
+    },
+    "인천 남동구|삼보(가,나동)": {
+      "addr": "인천 남동구 구월동 1187",
+      "lat": 37.446307,
+      "lng": 126.70854,
+      "subway": {
+        "station": "예술회관역 인천1호선",
+        "distance_m": 718
+      },
+      "elementary": {
+        "name": "인천성리초등학교",
+        "distance_m": 142
+      }
+    },
+    "서울 구로구|한백고은": {
+      "addr": "서울 구로구 오류동 6-1",
+      "lat": 37.496352,
+      "lng": 126.839777,
+      "subway": {
+        "station": "오류동역 1호선",
+        "distance_m": 494
+      },
+      "elementary": {
+        "name": "서울오류초등학교",
+        "distance_m": 326
+      }
+    },
+    "부산 부산진구|양정해광빌리지": {
+      "addr": "부산 부산진구 양정동 213-3",
+      "lat": 35.176713,
+      "lng": 129.073422,
+      "subway": {
+        "station": "시청역 부산1호선",
+        "distance_m": 435
+      },
+      "elementary": {
+        "name": "양정초등학교",
+        "distance_m": 257
+      }
+    },
+    "서울 동대문구|이문아이파크자이": {
+      "addr": "서울 동대문구 이문동 149-8",
+      "lat": 37.598496,
+      "lng": 127.063535,
+      "subway": {
+        "station": "외대앞역 1호선",
+        "distance_m": 247
+      },
+      "elementary": {
+        "name": "서울이문초등학교",
+        "distance_m": 423
+      }
+    },
+    "서울 강서구|강서센트레빌3차": {
+      "addr": "서울 강서구 방화동 893",
+      "lat": 37.571866,
+      "lng": 126.816162,
+      "subway": {
+        "station": "신방화역 9호선",
+        "distance_m": 495
+      },
+      "elementary": {
+        "name": "서울송화초등학교",
+        "distance_m": 356
+      }
     }
   },
-  "as_of": "2026-10-15"
+  "as_of": "2026-10-16"
 }
