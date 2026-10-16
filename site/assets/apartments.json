@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-15"
+    "portal_checked_at": "2026-10-16"
   },
   "apartments": [
     {
@@ -15811,7 +15811,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "신나무실5단지주공아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-16",
+      "name_evidence": "http://place.map.kakao.com/11346387"
     },
     {
       "name": "원천레이크파크",
@@ -79270,7 +79274,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "충무마을주공2단지1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-16",
+      "name_evidence": "http://place.map.kakao.com/32016530"
     },
     {
       "name": "율곡",
@@ -111503,7 +111511,11 @@
         95803
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "display_name": "신성그랜드타워아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-16",
+      "name_evidence": "http://place.map.kakao.com/11315607"
     },
     {
       "name": "워커힐푸르지오",
@@ -119060,7 +119072,11 @@
       "hh_src": "address_alias:title.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-14",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "신반포아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-16",
+      "name_evidence": "http://place.map.kakao.com/11219893"
     },
     {
       "name": "우만주공1단지",
@@ -128393,7 +128409,11 @@
         36512
       ],
       "builder": "기타",
-      "households": null
+      "households": 29,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-16",
+      "hh_evidence": []
     },
     {
       "name": "목동센트럴아이파크위브3단지",
@@ -128568,9 +128588,15 @@
         71000
       ],
       "builder": "기타",
-      "display_name": "광신프로그레스리버뷰",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "안양광신프로그레스리버뷰아파트",
+      "name_src": "portal.kakao_local",
+      "households": 230,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-16",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-16",
+      "name_evidence": "http://place.map.kakao.com/129832825"
     },
     {
       "name": "한일유앤아이",
@@ -128608,7 +128634,14 @@
         34453
       ],
       "builder": "기타",
-      "households": null
+      "households": 700,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-16",
+      "hh_evidence": [],
+      "display_name": "한일유앤아이아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-16"
     },
     {
       "name": "롯데4",
@@ -128637,8 +128670,14 @@
       ],
       "builder": "기타",
       "display_name": "해운대롯데4차아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "name_src": "portal.kakao_local",
+      "households": 842,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-16",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-16",
+      "name_evidence": "http://place.map.kakao.com/11304331"
     },
     {
       "name": "광안더샵",
@@ -128662,8 +128701,14 @@
       ],
       "builder": "포스코이앤씨",
       "display_name": "광안더샵아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "name_src": "portal.kakao_local",
+      "households": 263,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-16",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-16",
+      "name_evidence": "http://place.map.kakao.com/26817714"
     },
     {
       "name": "신세계타운",
@@ -128696,7 +128741,14 @@
         52703
       ],
       "builder": "기타",
-      "households": null
+      "households": 930,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-16",
+      "hh_evidence": [],
+      "display_name": "신세계타운아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-16"
     }
   ]
 }
