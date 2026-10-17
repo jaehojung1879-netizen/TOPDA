@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1020" viewBox="0 0 900 1020" role="img" aria-labelledby="title desc">
+<title id="title">이사 취소 날짜와 책임 당사자에 따른 금액 비교</title>
+<desc id="desc">총 이사비 150만원, 기준 계약금과 이미 낸 돈 15만원을 가정한다. 고객 책임으로 전날까지 취소하면 총 부담 15만원, 당일에는 총 30만원이므로 기지급액 공제 후 추가 15만원이다. 업체 책임으로 전날 취소하면 계약금 15만원 반환과 배상 60만원을 합해 75만원이다. 별도 약정과 실제 책임은 따로 확인한다.</desc>
+<rect width="900" height="1020" rx="28" fill="#f4f5f1"/>
+<g font-family="Pretendard, Noto Sans KR, sans-serif" fill="#203b36">
+<text x="54" y="60" font-size="20" font-weight="700" letter-spacing="2">TOPDA · 이사 예약 취소</text>
+<text x="54" y="112" font-size="34" font-weight="800">누가, 언제 취소했나요?</text>
+<text x="54" y="153" font-size="23">예시: 총 이사비 150만원 · 기지급액 15만원</text>
+<rect x="48" y="185" width="804" height="76" rx="15" fill="#dce8df"/>
+<text x="72" y="217" font-size="23" font-weight="700">기준 계약금 = 운임 등 합계액의 10% = 15만원</text>
+<text x="72" y="246" font-size="19">소비자분쟁해결기준 적용 가정 · 별도 약정은 먼저 확인</text>
+<rect x="48" y="288" width="804" height="280" rx="20" fill="white" stroke="#bccfc6"/>
+<text x="76" y="331" font-size="28" font-weight="800">내 사정으로 취소</text>
+<path d="M104 382V510" stroke="#8ba89a" stroke-width="5"/>
+<circle cx="104" cy="393" r="10" fill="#2d6955"/>
+<text x="134" y="394" font-size="25" font-weight="700">전날까지 통보 → 총 부담 15만원</text>
+<text x="134" y="429" font-size="22">이미 낸 15만원 반영 → 추가 납부 0원</text>
+<circle cx="104" cy="482" r="10" fill="#b47745"/>
+<text x="134" y="483" font-size="25" font-weight="700">당일 통보 → 총 부담 30만원</text>
+<text x="134" y="518" font-size="22">이미 낸 15만원 반영 → 추가 납부 15만원</text>
+<rect x="48" y="594" width="804" height="227" rx="20" fill="white" stroke="#bccfc6"/>
+<text x="76" y="638" font-size="28" font-weight="800">업체 책임으로 전날 취소</text>
+<rect x="76" y="663" width="344" height="79" rx="12" fill="#e8efe8"/>
+<text x="99" y="697" font-size="22">계약금 반환</text>
+<text x="99" y="728" font-size="26" font-weight="700">15만원</text>
+<text x="435" y="712" font-size="30" font-weight="800">+</text>
+<rect x="476" y="663" width="348" height="79" rx="12" fill="#f5e8db"/>
+<text x="499" y="697" font-size="22">추가 배상: 계약금의 4배</text>
+<text x="499" y="728" font-size="26" font-weight="700">60만원</text>
+<text x="76" y="785" font-size="25" font-weight="800">합계 75만원 · 반환과 배상은 별개</text>
+<text x="54" y="871" font-size="21" font-weight="700">먼저 계약 조건·취소 원인·통보 시각을 확인하세요.</text>
+<text x="54" y="906" font-size="20">총 부담과 기지급액을 중복해서 더하지 않습니다.</text>
+<text x="54" y="950" font-size="18">출처: 공정거래위원회 소비자분쟁해결기준 별표 2</text>
+<text x="54" y="978" font-size="18">이사화물취급사업 · 확인 2026-10-18 · 예시는 톺다 계산</text>
+</g></svg>
