@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1000" viewBox="0 0 900 1000" role="img" aria-labelledby="title desc">
+<title id="title">주담대 금리인하요구권 신청 순서</title>
+<desc id="desc">보유 대출의 대상 여부를 확인하고, 신용상태 개선 자료를 준비한 뒤 은행에 직접 또는 동의한 마이데이터 사업자를 통해 신청한다. 은행 심사 후 승인되면 변경 금리와 적용일을 확인하고, 거절되면 사유와 정보 반영 여부를 확인한다.</desc>
+<defs><style>.k{font-family:Pretendard,'Noto Sans KR',sans-serif;fill:#193c4b}.h{font-size:32px;font-weight:800}.t{font-size:25px;font-weight:700}.p{font-size:20px}.s{font-size:17px;fill:#536b76}.box{fill:white;stroke:#bbd0d2;stroke-width:2}.line{fill:none;stroke:#587b82;stroke-width:3;marker-end:url(#arrow)}</style><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#587b82"/></marker></defs>
+<rect width="900" height="1000" rx="28" fill="#f1f7f6"/>
+<text x="55" y="65" class="k h">주담대 금리, 다시 심사받으려면</text>
+<text x="55" y="104" class="k p">신청할 권리와 금리 인하 승인은 서로 다릅니다</text>
+<rect x="100" y="145" width="700" height="115" rx="20" class="box"/>
+<text x="140" y="190" class="k t">보유 상품이 신청 대상인지 확인</text>
+<text x="140" y="230" class="k p">상품설명서·은행 앱·공식 상담창구 이용</text>
+<path d="M450 260V300" class="line"/>
+<rect x="100" y="305" width="700" height="115" rx="20" class="box"/>
+<text x="140" y="350" class="k t">소득·직장·부채의 변화 입증</text>
+<text x="140" y="390" class="k p">새 자료가 은행 평가에 반영되는지 확인</text>
+<path d="M450 420V460" class="line"/>
+<rect x="100" y="465" width="700" height="115" rx="20" class="box"/>
+<text x="140" y="510" class="k t">직접 신청 또는 자동 대행 동의</text>
+<text x="140" y="550" class="k p">대상 계좌·정보 제공 범위·접수일 기록</text>
+<path d="M450 580V620" class="line"/>
+<rect x="100" y="625" width="700" height="125" rx="20" fill="#234e61"/>
+<text x="140" y="670" class="k t" style="fill:white">은행이 금리 산정 영향 등을 심사</text>
+<text x="140" y="708" class="k p" style="fill:white">원칙적으로 10영업일 이내 결과·사유 안내</text>
+<text x="140" y="735" class="k s" style="fill:#dbe8ee">자료 보완 요청일부터 제출일까지의 기간 제외</text>
+<path d="M450 750V780H240V815" class="line"/>
+<path d="M450 750V780H660V815" class="line"/>
+<rect x="55" y="825" width="370" height="115" rx="20" fill="#e1f3e9" stroke="#78aa90"/>
+<text x="90" y="868" class="k t">승인: 새 납입표 확인</text>
+<text x="90" y="906" class="k p">인하 폭·적용일·월 납입액</text>
+<rect x="475" y="825" width="370" height="115" rx="20" fill="#fff1e7" stroke="#c89b79"/>
+<text x="510" y="868" class="k t">거절: 구체적 사유 확인</text>
+<text x="510" y="906" class="k p">상품 대상·자료·평가 결과 구분</text>
+<text x="450" y="975" text-anchor="middle" class="k s">기준일 2026-10-17 · 근거: 은행법 시행령 제18조의4, 금융위원회</text>
+</svg>
