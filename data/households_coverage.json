@@ -1,21 +1,21 @@
 {
- "as_of": "2026-10-17",
+ "as_of": "2026-10-18",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 10771,
-  "filled": 10453,
-  "target": 462,
-  "kapt_list": 7432,
-  "kapt_ratio": 0.69,
+  "complexes": 12186,
+  "filled": 11860,
+  "target": 458,
+  "kapt_list": 8493,
+  "kapt_ratio": 0.7,
   "name_gap": 17,
-  "matched_this_run": 27,
+  "matched_this_run": 28,
   "filled_this_run": 0,
   "addr_reject": 0,
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 14,
-  "dong_indexed": 7432
+  "jibun_seeded": 9,
+  "dong_indexed": 8493
  },
  "regions": [
   {
@@ -320,8 +320,8 @@
   },
   {
    "region": "서울 중구",
-   "target": 14,
-   "filled": 102,
+   "target": 13,
+   "filled": 103,
    "total": 116,
    "kapt_list": 49,
    "kapt_ratio": 0.42,
@@ -334,11 +334,11 @@
     "한양I-Class",
     "DUO302",
     "한진해모로",
-    "평화",
     "이지마루오장",
     "동대문솔하임",
     "오장동오팰리오",
-    "(1546-0)"
+    "(1546-0)",
+    "신당역솔하임"
    ]
   },
   {
@@ -480,8 +480,8 @@
   },
   {
    "region": "경기 수원시 장안구",
-   "target": 4,
-   "filled": 144,
+   "target": 3,
+   "filled": 145,
    "total": 148,
    "kapt_list": 94,
    "kapt_ratio": 0.64,
@@ -493,7 +493,6 @@
    "unmatched_sample": [
     "한일타운대림",
     "한일타운쌍용",
-    "예은퍼스트타워",
     "영림프라자"
    ]
   },
@@ -515,8 +514,8 @@
   },
   {
    "region": "경기 부천시 원미구",
-   "target": 15,
-   "filled": 291,
+   "target": 14,
+   "filled": 292,
    "total": 306,
    "kapt_list": 135,
    "kapt_ratio": 0.44,
@@ -529,11 +528,11 @@
     "역곡현대",
     "하이팰리스",
     "골든베이아파트",
-    "휴캐슬",
     "에코스마트3",
     "에코스마트2",
     "마스터웍바이로뎀",
-    "에코스마트1"
+    "에코스마트1",
+    "쁘띠-오타운"
    ]
   },
   {
@@ -919,7 +918,112 @@
    "codes": [
     "28200"
    ],
+   "unmatched_sample": [
+    "대준블루인",
+    "간석트인자리애",
+    "유진펠리스",
+    "(구)현광",
+    "하늘지움",
+    "더웰노블레스",
+    "퍼스트클래스",
+    "대명어반스테이"
+   ]
+  },
+  {
+   "region": "경기 용인시 기흥구",
+   "target": 0,
+   "filled": 255,
+   "total": 255,
+   "kapt_list": 233,
+   "kapt_ratio": 0.91,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "41463"
+   ],
    "unmatched_sample": []
+  },
+  {
+   "region": "부산 동래구",
+   "target": 3,
+   "filled": 296,
+   "total": 299,
+   "kapt_list": 126,
+   "kapt_ratio": 0.42,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "26260"
+   ],
+   "unmatched_sample": [
+    "아시아드코오롱하늘채",
+    "케이에이치마이우스",
+    "개나리"
+   ]
+  },
+  {
+   "region": "경기 광주시",
+   "target": 1,
+   "filled": 157,
+   "total": 158,
+   "kapt_list": 128,
+   "kapt_ratio": 0.81,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "41610"
+   ],
+   "unmatched_sample": [
+    "산호"
+   ]
+  },
+  {
+   "region": "경기 하남시",
+   "target": 0,
+   "filled": 135,
+   "total": 135,
+   "kapt_list": 123,
+   "kapt_ratio": 0.91,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "41450"
+   ],
+   "unmatched_sample": []
+  },
+  {
+   "region": "대구 수성구",
+   "target": 2,
+   "filled": 323,
+   "total": 325,
+   "kapt_list": 271,
+   "kapt_ratio": 0.83,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "27260"
+   ],
+   "unmatched_sample": [
+    "범어네거리클래시아",
+    "한도맨션"
+   ]
+  },
+  {
+   "region": "서울 영등포구",
+   "target": 5,
+   "filled": 238,
+   "total": 243,
+   "kapt_list": 180,
+   "kapt_ratio": 0.74,
+   "name_gap": 0,
+   "matched": 1,
+   "codes": [
+    "11560"
+   ],
+   "unmatched_sample": [
+    "여의휴젠느",
+    "라이프콤비"
+   ]
   }
  ]
 }
