@@ -58,6 +58,18 @@ try {
       if (name === 'report') {
         assert(await page.locator('.article-header h1').isVisible());
         assert.equal(await page.locator('.market-kpi').count(), 4);
+        const bars = await page.locator('.trend-bar').evaluateAll(items => items.map(item => ({
+          value: Number.parseFloat(item.querySelector('b')?.textContent),
+          height: item.querySelector('i')?.getBoundingClientRect().height,
+          intended: Number.parseFloat(item.querySelector('i')?.style.getPropertyValue('--h')),
+          label: item.querySelector('em')?.textContent
+        })));
+        assert(bars.length > 0, 'Weekly report renders chart bars');
+        for (const bar of bars) {
+          assert(Number.isFinite(bar.value) && bar.value > 0 && bar.label, 'Chart has numeric values and date labels');
+          assert(Math.abs(bar.height - bar.intended) < 1, `Chart bar must not shrink or clip at ${width}`);
+          assert(Math.abs(bar.height / bar.value - bars[0].height / bars[0].value) < 1, 'Bar heights remain proportional to values');
+        }
       }
     }
   }
