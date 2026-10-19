@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-18"
+    "portal_checked_at": "2026-10-19"
   },
   "apartments": [
     {
@@ -84766,7 +84766,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "이천증포새도시한양수자인3블럭아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-19",
+      "name_evidence": "http://place.map.kakao.com/26828594"
     },
     {
       "name": "대우2",
@@ -100620,7 +100624,11 @@
         "여의도": 59,
         "광화문": 57
       },
-      "households": 692
+      "households": 692,
+      "display_name": "산들마을2단지e편한세상아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-19",
+      "name_evidence": "http://place.map.kakao.com/11365348"
     },
     {
       "name": "중흥마을(주공)",
@@ -104966,7 +104974,11 @@
         26207
       ],
       "builder": "기타",
-      "households": 326
+      "households": 326,
+      "display_name": "현진에버빌1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-19",
+      "name_evidence": "http://place.map.kakao.com/8161756"
     },
     {
       "name": "일죽아이시타운",
@@ -128945,7 +128957,14 @@
         69498
       ],
       "builder": "동부건설",
-      "households": null
+      "households": 400,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-19",
+      "hh_evidence": [],
+      "display_name": "역촌센트레빌아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-19"
     },
     {
       "name": "목동신시가지10",
@@ -128978,7 +128997,11 @@
         392345
       ],
       "builder": "기타",
-      "households": null
+      "households": 2160,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-19",
+      "hh_evidence": []
     },
     {
       "name": "서초푸르지오써밋",
@@ -129015,7 +129038,11 @@
         489970
       ],
       "builder": "대우건설",
-      "households": null
+      "households": 907,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-19",
+      "hh_evidence": []
     },
     {
       "name": "갈현마을현대홈타운",
@@ -129037,7 +129064,14 @@
         69933
       ],
       "builder": "기타",
-      "households": null
+      "households": 584,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-19",
+      "hh_evidence": [],
+      "display_name": "갈현마을현대홈타운아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-19"
     },
     {
       "name": "용인서천효성해링턴플레이스",
@@ -129059,7 +129093,14 @@
         73326
       ],
       "builder": "기타",
-      "households": null
+      "households": 458,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-19",
+      "hh_evidence": [],
+      "display_name": "서천효성해링턴플레이스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-19"
     },
     {
       "name": "두산위브광주센트럴파크",
@@ -129086,7 +129127,14 @@
         46149
       ],
       "builder": "두산건설",
-      "households": null
+      "households": 693,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-19",
+      "hh_evidence": [],
+      "display_name": "두산위브광주센트럴파크아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-19"
     },
     {
       "name": "해운대 센트럴파크",
@@ -129120,8 +129168,14 @@
       ],
       "builder": "기타",
       "display_name": "해운대센트럴파크아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "name_src": "portal.kakao_local",
+      "households": 799,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-19",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-19",
+      "name_evidence": "http://place.map.kakao.com/11155074"
     },
     {
       "name": "성서동서서한",
@@ -129149,9 +129203,15 @@
         14069
       ],
       "builder": "기타",
-      "display_name": "성서동서서한타운",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "성서동서서한아파트",
+      "name_src": "portal.kakao_local",
+      "households": 974,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-19",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-19",
+      "name_evidence": "http://place.map.kakao.com/11352689"
     },
     {
       "name": "성당래미안e-편한세상3단지",
@@ -129186,7 +129246,11 @@
       "builder": "삼성물산",
       "display_name": "성당래미안e편한세상3단지",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 822,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-19",
+      "hh_evidence": []
     }
   ]
 }
