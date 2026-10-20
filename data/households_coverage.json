@@ -1,21 +1,21 @@
 {
- "as_of": "2026-10-19",
+ "as_of": "2026-10-20",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 13120,
-  "filled": 12760,
-  "target": 478,
-  "kapt_list": 8974,
+  "complexes": 13125,
+  "filled": 12774,
+  "target": 461,
+  "kapt_list": 8975,
   "kapt_ratio": 0.68,
-  "name_gap": 20,
-  "matched_this_run": 30,
+  "name_gap": 19,
+  "matched_this_run": 29,
   "filled_this_run": 0,
   "addr_reject": 0,
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 29,
-  "dong_indexed": 8974
+  "jibun_seeded": 10,
+  "dong_indexed": 8975
  },
  "regions": [
   {
@@ -66,7 +66,7 @@
    "target": 4,
    "filled": 198,
    "total": 202,
-   "kapt_list": 208,
+   "kapt_list": 209,
    "kapt_ratio": 1.03,
    "name_gap": 4,
    "matched": 1,
@@ -81,19 +81,18 @@
   },
   {
    "region": "경기 김포시",
-   "target": 3,
-   "filled": 186,
+   "target": 2,
+   "filled": 187,
    "total": 189,
    "kapt_list": 200,
    "kapt_ratio": 1.06,
-   "name_gap": 3,
+   "name_gap": 2,
    "matched": 0,
    "codes": [
     "41570"
    ],
    "unmatched_sample": [
     "캐슬앤파밀리에시티 2단지",
-    "에이원아파트",
     "My더퍼스트"
    ]
   },
@@ -116,8 +115,8 @@
   },
   {
    "region": "서울 강남구",
-   "target": 15,
-   "filled": 401,
+   "target": 14,
+   "filled": 402,
    "total": 416,
    "kapt_list": 234,
    "kapt_ratio": 0.56,
@@ -132,9 +131,9 @@
     "삼익대청아파트",
     "한보미도맨션2",
     "선릉역대우아이빌(890-49)",
-    "시티프라디움더강남2",
     "선릉역풍림아이원레몬",
-    "강남웅진베어스빌"
+    "강남웅진베어스빌",
+    "논현파라곤"
    ]
   },
   {
@@ -338,8 +337,8 @@
   },
   {
    "region": "서울 중구",
-   "target": 14,
-   "filled": 103,
+   "target": 13,
+   "filled": 104,
    "total": 117,
    "kapt_list": 49,
    "kapt_ratio": 0.42,
@@ -352,11 +351,11 @@
     "한양I-Class",
     "DUO302",
     "한진해모로",
-    "하영",
     "이지마루오장",
     "동대문솔하임",
     "오장동오팰리오",
-    "(1546-0)"
+    "(1546-0)",
+    "신당역솔하임"
    ]
   },
   {
@@ -378,8 +377,8 @@
   },
   {
    "region": "서울 구로구",
-   "target": 22,
-   "filled": 328,
+   "target": 21,
+   "filled": 329,
    "total": 350,
    "kapt_list": 181,
    "kapt_ratio": 0.52,
@@ -395,8 +394,8 @@
     "비즈트위트블루",
     "대림역포스큐",
     "대림역와이즈플레이스",
-    "한백힐",
-    "대림우성2"
+    "대림우성2",
+    "비즈트위트오렌지"
    ]
   },
   {
@@ -687,13 +686,13 @@
   },
   {
    "region": "서울 마포구",
-   "target": 11,
-   "filled": 267,
+   "target": 10,
+   "filled": 268,
    "total": 278,
    "kapt_list": 144,
    "kapt_ratio": 0.52,
    "name_gap": 0,
-   "matched": 3,
+   "matched": 2,
    "codes": [
     "11440"
    ],
@@ -710,8 +709,8 @@
   },
   {
    "region": "서울 광진구",
-   "target": 7,
-   "filled": 202,
+   "target": 6,
+   "filled": 203,
    "total": 209,
    "kapt_list": 97,
    "kapt_ratio": 0.46,
@@ -723,7 +722,6 @@
    "unmatched_sample": [
     "신성그랜드타워",
     "솔렌시아",
-    "태원강변",
     "신원리브웰화양동주상복합",
     "화양타워",
     "구의자이르네",
@@ -789,8 +787,8 @@
   {
    "region": "대구 달서구",
    "target": 2,
-   "filled": 317,
-   "total": 319,
+   "filled": 319,
+   "total": 321,
    "kapt_list": 247,
    "kapt_ratio": 0.77,
    "name_gap": 0,
@@ -928,8 +926,8 @@
   {
    "region": "경기 광주시",
    "target": 1,
-   "filled": 157,
-   "total": 158,
+   "filled": 158,
+   "total": 159,
    "kapt_list": 128,
    "kapt_ratio": 0.81,
    "name_gap": 0,
@@ -943,8 +941,8 @@
   },
   {
    "region": "부산 부산진구",
-   "target": 14,
-   "filled": 363,
+   "target": 12,
+   "filled": 365,
    "total": 377,
    "kapt_list": 171,
    "kapt_ratio": 0.45,
@@ -954,25 +952,25 @@
     "26230"
    ],
    "unmatched_sample": [
-    "지산오차드힐",
     "성원쌍떼뷰",
-    "서면동화더파크",
     "타워팰리스",
     "세영",
     "토운모닝톤",
     "KH마이우스",
-    "더블루오피스텔"
+    "더블루오피스텔",
+    "다솜빌",
+    "목연정M팰리스"
    ]
   },
   {
    "region": "대구 수성구",
-   "target": 3,
-   "filled": 323,
+   "target": 2,
+   "filled": 324,
    "total": 326,
    "kapt_list": 271,
    "kapt_ratio": 0.83,
    "name_gap": 0,
-   "matched": 1,
+   "matched": 0,
    "codes": [
     "27260"
    ],
@@ -983,13 +981,13 @@
   },
   {
    "region": "울산 남구",
-   "target": 8,
+   "target": 9,
    "filled": 387,
-   "total": 395,
+   "total": 396,
    "kapt_list": 173,
    "kapt_ratio": 0.44,
    "name_gap": 0,
-   "matched": 1,
+   "matched": 2,
    "codes": [
     "31140"
    ],
@@ -1001,22 +999,6 @@
     "드림펠리스",
     "수아지오시티",
     "에덴"
-   ]
-  },
-  {
-   "region": "부산 해운대구",
-   "target": 1,
-   "filled": 296,
-   "total": 297,
-   "kapt_list": 201,
-   "kapt_ratio": 0.68,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "26350"
-   ],
-   "unmatched_sample": [
-    "송남맨션"
    ]
   },
   {
@@ -1075,6 +1057,20 @@
     "케이에이치마이우스",
     "개나리"
    ]
+  },
+  {
+   "region": "부산 해운대구",
+   "target": 0,
+   "filled": 298,
+   "total": 298,
+   "kapt_list": 201,
+   "kapt_ratio": 0.67,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "26350"
+   ],
+   "unmatched_sample": []
   },
   {
    "region": "서울 영등포구",
