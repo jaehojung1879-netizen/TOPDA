@@ -3,10 +3,10 @@
     "source": "Google News RSS (한국어) — 섹터별 부동산 검색 집계",
     "note": "여러 보도를 자동 집계한 목록이며 투자 권유가 아닙니다."
   },
-  "generated_at": "2026-10-22 04:13 KST",
+  "generated_at": "2026-10-23 04:09 KST",
   "weekly": {
     "as_of": "2026년 10월 4주",
-    "updated": "2026-10-22",
+    "updated": "2026-10-23",
     "headlines": [
       {
         "badge": "주택 매매·집값",
@@ -17,10 +17,10 @@
       },
       {
         "badge": "전세·월세",
-        "title": "“전세사기 피해자 4명 중 3명은 2030 청년층” - 조선비즈",
-        "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPblZkMnoxQXVCTENqWUZmU1NtUTNqLThRMlpXWHRSbXhXQjdlZ3M5aURjenlVWGM4OGNfZEV5aHJHbjVCbVZsNjk0Mk1RWkRJR2hFSUFCWl9sMnpCSVVpcWJ4anVpdFJndWNSSmhtQ3M5cmQ0U25jVWxhTFdEdlZJMEYxRDkwNU1KY2ZWTjJwcDl3VEhzVDNWcdIBrAFBVV95cUxQOGtkb0xZdXUweUgtemd5OFJrRjRzWURoU1duMWdOSVlyZGhzb2RqRkZDVlNPb0JoQ29oRHp6ZEdObUlnQTBWMHhmZVZlQmxrWkdON0tSY015VnI1SURiY3JFWmZiTTdySkl4QXlpZzJMNWJKOFRGRE9oNlQxdEVPY0J6NnN0MEJwOGo3bkZRSVVMMzBIS3dqRUE4ZDBTUm90eUJ2RjZBTGV5SEVz?oc=5",
-        "source": "Chosunbiz",
-        "date": "2026-10-15"
+        "title": "‘월세 시대’가 1인 가구·전세 사기 때문? 현 정부 출범 1년 만에 비율 7%p 급등",
+        "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPV3o4eVpnb1hHcFQyNmNORVVxZWJoUEtka05ycDlEdi02V3NuSmtWVWlGakpTbUpjNTJ0UGlXZFhTRFVhZlZ4SXBnaXpjdjFaY3ZwUnBPR05jVWJkTWpjdGp2TU5CNk5rdWpldHU1M0NBM3FQaHhQRVNHZ2Y0cVlFakNHX1E5cjN1?oc=5",
+        "source": "조선일보",
+        "date": "2026-10-22"
       },
       {
         "badge": "청약·분양",
@@ -46,12 +46,18 @@
     ]
   },
   "daily": {
-    "updated": "2026-10-22 04:13 KST",
+    "updated": "2026-10-23 04:09 KST",
     "sectors": [
       {
         "key": "housing",
         "name": "주택 매매·집값",
         "items": [
+          {
+            "title": "서울 아파트 실거래가 1년 새 15.5% 껑충…거래 위축에도 상승세",
+            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE11aFloN1pfR1FjUGFHbWVuY3pWaVI2a2FZdWZVYWlNcC1TaW5yaUtvVWxlbF9XV1BfZU5kdVNNNmVhTTNUcS0tZ3k0NDJTa003Vm1yYWpXbFZBWTZoUkgzcW90d2pKYzBk?oc=5",
+            "source": "매일경제TV",
+            "date": "2026-10-22"
+          },
           {
             "title": "정부는 “주택시장 안정세”…전문가 “유동성 풍부, 예단 어려워”",
             "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5Vd050Q2RkYklzOUdsbVYweXg3dTZVeFBtM2phNUdWTDJxelVnODlOVnJfNWp3U2ZWMFE4SWRHWTJtNnV4UkVFY1ZxUTlEaXFRYm5JZmtzeGN6TjR3S2k4YU13SWo2Rk8y?oc=5",
@@ -59,16 +65,10 @@
             "date": "2026-10-21"
           },
           {
-            "title": "강남·서초 집값 10주 연속 하락…서울 주택시장 상승세 꺾이나",
-            "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE1sd0JLelkwQjV0R0xTTG1VMzlod3dyU2lPREkzSWNWOU0zZ1BfTjI3bFM3UFRjVGJwU2dYSnNjSTVNNlJKbnlhQjRRNmgtdlVDU3lWTVVud3JXWmsyaUpYUHpZUWRWMjhvOGF1TnBtcnQ?oc=5",
-            "source": "https://www.thedailyeconomy.kr/",
-            "date": "2026-10-20"
-          },
-          {
-            "title": "코스피 급락 후폭풍…주택 거래 위축·집값 하방 압력 커지나",
-            "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5ORHpSQkotLWpybi0yZ3VZdTRhTUplRGdlV1dBbGlza0FNaGp2WV8tUVo2QTlHUlp2eXFBYUFJdTJ0Z2YxVGZkLWtGRVd5bUpLMTJwSGNTUDNfXy1D?oc=5",
-            "source": "뉴스핌",
-            "date": "2026-10-20"
+            "title": "집값 움직이는 진짜 힘… “금리보다 시장심리·공급 여건 함께 살펴야”",
+            "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5sdUZuLUhhbE1fY3h5VDlRZWRCMUhtbUhhTURQam9CRU54djc0MXEwdk9kWnNNR0lJZmUzR0p3MlFkM2hMcjR2WFhZamhNTG9XQXIxUV9xNlRvUV9lc2dDdUlEUEhOMUx5V1ZyRzVn?oc=5",
+            "source": "월간중앙",
+            "date": "2026-10-22"
           }
         ]
       },
@@ -77,22 +77,22 @@
         "name": "전세·월세",
         "items": [
           {
-            "title": "전세 실종에...서울아파트 월세 비중 첫 '과반'",
-            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFA2dlprLVVYcWUyQ0RaeTNHY1FacUtqUG5NSTVmV3JrNFRncnZnbU1ZdjBORmpTZzhqMWVlaUhNdEdnXzFfakN0QXB1TzctWThGYTlEYzdKN3Z6UzctV00zemVNZjVtamR4YWp0Q0hXOA?oc=5",
-            "source": "YTN",
-            "date": "2026-10-20"
+            "title": "‘월세 시대’가 1인 가구·전세 사기 때문? 현 정부 출범 1년 만에 비율 7%p 급등",
+            "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPV3o4eVpnb1hHcFQyNmNORVVxZWJoUEtka05ycDlEdi02V3NuSmtWVWlGakpTbUpjNTJ0UGlXZFhTRFVhZlZ4SXBnaXpjdjFaY3ZwUnBPR05jVWJkTWpjdGp2TU5CNk5rdWpldHU1M0NBM3FQaHhQRVNHZ2Y0cVlFakNHX1E5cjN1?oc=5",
+            "source": "조선일보",
+            "date": "2026-10-22"
           },
           {
-            "title": "서울 아파트 월세가 절반 넘었다··· 대출 규제 등으로 올해 전세 27.5% 급감",
-            "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE5aM1llN1JjR0NFUkxaQW42N2d6YVh4OVlGV2ZlRTFTc0VpQS10RG9lWGRpU0dSdWdOc0QxWEF3TlZaUjhhcXY4S19NNTVaTlJEaEJuWTRNeTdiZUlRRWo2ZHl0UTY5S1FnNGlyelB5dDdLNEJCamfSAXpBVV95cUxORHQyRDRKaWpEcE9EZ0lGVW16cnphZ1ptY01sMFltNHd0b1l4OTdpaGtvemYtUl83NWppdXFTS3J0Y2JtY1B4SHRoRFJIWXdIMnZ5cjJVUE8xbFFmclduQ1A0algzTEg2UDcyMGZCNFV3R2VETUZuLUVKUQ?oc=5",
-            "source": "그린포스트코리아",
-            "date": "2026-10-20"
+            "title": "\"전세의 월세화 현상은 1인 가구·전세사기 탓\"",
+            "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBMbm9JNjdvNzM3SC1CNDYtN05CQVh4QjBUY1ZnVzVycmpkU2w0RVBUTHlHM216WVNOMElteE5iODljZGNjY1FpWlBSTktLTXhEdXc?oc=5",
+            "source": "매일경제 마켓",
+            "date": "2026-10-22"
           },
           {
-            "title": "서울 아파트 전월세 절반은 월세...전셋값 급등·매물 감소·전세사기 등 여파",
-            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFA2NlUyMGNRT1JMby0zNlBwN0hmUTUtV2RfR0paTW1uSmgwdWpneXlrZ3pObi1CbDZ4UFFILTI3ZG5Ca2ViUk5LR1BwRWVLX3B4TFZoRHFldFEzQnU3OVJQbG5zemdxVHdEMmc?oc=5",
-            "source": "뉴스웨이",
-            "date": "2026-10-20"
+            "title": "정점식 \"전세의 월세화, 李정부와 민주당 부동산 정책의 구조적 실패\"",
+            "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTFBEVTRmUEtpOWFvVlNsNWRmZGUwOEk3M21qckIxNFBmTmlvaWw5bkFHUDYyMTc3OHQ1WHM5QVBvaUx5dWVXbXFUS1daZmI0NkMwbzJQaEdEQ2IzSXB5?oc=5",
+            "source": "뉴스핌",
+            "date": "2026-10-22"
           }
         ]
       },
@@ -101,22 +101,22 @@
         "name": "청약·분양",
         "items": [
           {
-            "title": "'국평 10억' 인천 '산곡역자이힐스테이트&하늘채' 아파트 청약 미달 참패",
+            "title": "'국평 10억' 인천 '산곡역자이힐스테이트&하늘채' 아파트 청약 일정 돌입",
             "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE54NllqdEZoNkIxQ3RYRlEySUxMOUFuR1J0OTdEUnN6aldVelJfWktQc2tZdFMwZVVNY1V0TUVEODE3RnVRQkFDbDhIVmotbGxBazhtWWxsVmhROUV2Rkt0d2FqblZPbTZhX2JZczByMDlic2p1aWd4Rmg4Ym9MUnPSAXNBVV95cUxPTmxmV1dyLXRHNG9NaTQ3TmxUV2xfUEEyWEF2SGVIb3BKczVTYWs5Y3pjV3hid1haM1VtOTN3TG1jeVA0VUl5YXJiMzROSGNtRUJKWDBsVDNkQUZUM3c4NzMzT0dDY3ZsU0FvU1h4bFBLUnRB?oc=5",
             "source": "땅집고",
             "date": "2026-10-21"
           },
           {
-            "title": "숫자가 올라가는 연출과 최종 표시, 카지노 구인 화면 해설",
-            "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQQ2UwSWZjajhXRmFGNVdnaDRHcEJZZ3dQbDJGczltNWUxYmpON2lMc3B5ZGtnMFp0RkNYZmpYMVNDN1NWTnM1NDM5Nk10VkhodDFzVVI3N1ZxdnYxblg0VUVwZGthSkltUk53VmxCVC13c3JKWkpRX0p3VzFzN3V1YjN0MjFSYjhaYnR5amIzMEVHNFNmd2VYZFdmVDRPaWQ3ZjQyb0ZuV2hzTGZmUnhwMy1ORzJldmZuOGFsVDBkWlhZbkk?oc=5",
-            "source": "Calgary Roughnecks",
-            "date": "2026-10-19"
+            "title": "서울 영등포 도심권에 신규 아파트 공급… ‘해링턴 플레이스 문래’ 11월 분양 예정",
+            "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5OX3N3S0MzQ25YMzZKNk12Z3FTbHdvZHlSQVk3cGNLX3ptSGREUHVXMWhBdzJvT2xzUF9sTVk4dTNZU0xEVFF0LUlHV2M5YkVaUHB5dm1B?oc=5",
+            "source": "헤럴드경제",
+            "date": "2026-10-22"
           },
           {
-            "title": "강남은 8주째 하락인데 경기 남부 4%↑…집값 상승판 바뀌나",
-            "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9kMFVKR2c0NGkwV2haOE9ZX01hNng2dnl4UW82a2J0ZnZWbkNKQ2xhZ1RXTXl6ZmpHc3Fhc091Y1lXWldJUmxBdVVMdjRENUhZRXJMd3BYVDZFMUVC?oc=5",
-            "source": "뉴스핌",
-            "date": "2026-10-21"
+            "title": "전국 청약경쟁률 5.15대 1···39개월 만 최저, 미달 단지 급증",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5fRmRrM3ZMamNDTXprS3BYWGp2U1N1cWhabFNWazg4SlM1SFVkWFRleDNqdFJnekp6VURvZTIzQWl2NzUyV1RfS3NFX2FIR1BuV1I2TXpxemQ5d0JFODNvZDd2UU5WYmJOamVNUQ?oc=5",
+            "source": "스마트비즈",
+            "date": "2026-10-22"
           }
         ]
       },
@@ -125,22 +125,22 @@
         "name": "대출·금융",
         "items": [
           {
+            "title": "가계대출 총량 규제는 유지…금융당국, 운영 방식 개선 가능성 시사",
+            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE43X2s1Zll2bGFKQVBYMU1Oa0UtRTBrcmNSSUFaYU5tX2pXOWxVNjRkdF9BaHY2M1pPWmJMRXBoZ2NGbkdqVFpEQ0lySUJOSDdSWWJDaUVDeHVjVVlkWnp1RzJ2cEFTM0lQYVE?oc=5",
+            "source": "https://www.sisaworld.kr/",
+            "date": "2026-10-22"
+          },
+          {
             "title": "직장이 가른 내 집 마련 기회, 국힘 의원도 ‘사내 대출’ 규제 목소리",
             "url": "https://news.google.com/rss/articles/CBMiP0FVX3lxTE4tZ3E3Um1sczk3cEM3eUtBb3RIUGpaWjhrM0lfQWhyUnpzOG9oc0VIa2dibV9GZkktRDNKVjBFSQ?oc=5",
             "source": "슬로우뉴스",
             "date": "2026-10-21"
           },
           {
-            "title": "수도권 집값 오르고 내 집 마련은 더 멀어져…대출 규제에 무주택자 '구매력 역설'",
-            "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5pNml4b25Gak9hY2RscHNsRnphZG5FdWp1LVhxc25nS1F5ZUNMVjdIUURzS0xQalNSeExDYjd5aUswMUR0b1hRSjBfcVhBeFNrTXE2RTV3Q2JOWEo1V0NHYTl4dVbSAWhBVV95cUxOeUQxal9TSEFnajJjTWlMTjRDcXBleHNCbFpMQ2l0eGRsTjZPTDV5aU5zRHJLSlAzUU9OdXZoUGllVGFSS19WNmQ3cllJZ0RjRFBQSGljbk10QnZsdVVwcXNHOUJpVGxYdA?oc=5",
-            "source": "경인방송 뉴스",
-            "date": "2026-10-20"
-          },
-          {
-            "title": "부채, 우린 괜찮다는 착각은 다음 재앙의 도화선",
-            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1jakRvbnpFVGozMHJ5bUZkZkJ1cDQ1UTgzSjNVM19HMDV0RUE1dEFZT3JweTBBSUFXM2tiZERJSHd0TnB5TDRTdEkwTEpqbHNtb0hEWG1ZYmJkQmkwZHhPZWFEck4ydTE3VE9lcnd4TQ?oc=5",
-            "source": "한겨레21",
-            "date": "2026-10-20"
+            "title": "내년 1월 주담대 자본규제 강화…금융지주 환원선 13%까지 여력 최소 0.2%p",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE10ZzlhTHVxUVB0Z1REZjlDZUhRUHpjaC1iUEpyQWVRU2tpNV9UZmxRUzNUTXNvUk9YTjZnSG95ZHR6dlVaN0lvOUdDTU5uQTB1WERYSElSRjJ1RzBzcUtTdw?oc=5",
+            "source": "라온신문",
+            "date": "2026-10-22"
           }
         ]
       },
@@ -160,8 +160,14 @@
             "date": "2026-10-20"
           },
           {
+            "title": "'지방소멸기금 120억·세제 특례' 봇물… 동두천시, 도시 체질 바꿀 승부수 띄운다",
+            "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFA3U3pkNHd4WnhZazJWcklRcVZQcjZqZjdBejFHQXlIVWxDQXZLbXVBakFsV2tLT25hZ0h2SDdxamliV3REeldBa2hmZlNRTEdQcEZPTVJGeHJBV2VaVG1pTG5sMzF0Nkk?oc=5",
+            "source": "경기도정신문",
+            "date": "2026-10-22"
+          },
+          {
             "title": "이재명 정부 부동산 정책,시장경제 벗어 나면 안 된다",
-            "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9DeW5FYS1ZdWpIQXFGYU5TdnNQSVBsMGMxWExMQldQSzY5eDFqZnFzYm1PMGE0RlJvRjJuZWZRa3JyYW9IamtqMVJzaEp2NFVIV0dJQUxpNEtBb2x4cnRiTGZLUDlud0RmMXZPRV9n?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBzRHliQ0xLYUliRnl6VVpHNHlZcDhWem9VU29oYU93VjB6NlZLQ3V0X1NqNV9QWHM3eGtrMDQ1UTZmWklwa2lnVVB3dXdKajFWOXlOdlIwWWl3QVpBRGlaY1l3TGQ4OEpmT3ln?oc=5",
             "source": "푸른한국닷컴",
             "date": "2026-10-19"
           }
