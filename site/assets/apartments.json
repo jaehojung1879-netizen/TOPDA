@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-21"
+    "portal_checked_at": "2026-10-22"
   },
   "apartments": [
     {
@@ -810,7 +810,11 @@
       "mgmt_fee_per_pyeong": 7648,
       "builder": "HDC현대산업",
       "sido": "서울",
-      "sigungu": "영등포구"
+      "sigungu": "영등포구",
+      "display_name": "당산센트럴IPARK아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-22",
+      "name_evidence": "http://place.map.kakao.com/11368296"
     },
     {
       "id": "ap-heukseok",
@@ -41638,7 +41642,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "극동아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-22",
+      "name_evidence": "http://place.map.kakao.com/11031749"
     },
     {
       "name": "성북프라자",
@@ -129592,7 +129600,11 @@
         24265
       ],
       "builder": "기타",
-      "households": null
+      "households": 349,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-22",
+      "hh_evidence": []
     },
     {
       "name": "힐스테이트마포더퍼스트",
@@ -129764,7 +129776,14 @@
         53900
       ],
       "builder": "기타",
-      "households": null
+      "households": 493,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-22",
+      "hh_evidence": [],
+      "display_name": "극동아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-22"
     },
     {
       "name": "관악산신도브래뉴",
@@ -129786,7 +129805,11 @@
         67833
       ],
       "builder": "기타",
-      "households": null
+      "households": 206,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-22",
+      "hh_evidence": []
     },
     {
       "name": "당산효성1차",
@@ -129812,7 +129835,11 @@
         162333
       ],
       "builder": "기타",
-      "households": null
+      "households": 480,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-22",
+      "hh_evidence": []
     },
     {
       "name": "중앙하이츠강동",
@@ -129847,7 +129874,11 @@
         34456
       ],
       "builder": "기타",
-      "households": null
+      "households": 96,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-22",
+      "hh_evidence": []
     },
     {
       "name": "벽산아파트",
@@ -129880,7 +129911,11 @@
         31635
       ],
       "builder": "기타",
-      "households": null
+      "households": 238,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-22",
+      "hh_evidence": []
     },
     {
       "name": "판교밸리포레자이",
@@ -129900,7 +129935,11 @@
         113671
       ],
       "builder": "GS건설",
-      "households": null
+      "households": 603,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-22",
+      "hh_evidence": []
     },
     {
       "name": "주공1",
@@ -129928,7 +129967,14 @@
         39416
       ],
       "builder": "기타",
-      "households": null
+      "households": 916,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-22",
+      "hh_evidence": [],
+      "display_name": "덕소주공1단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-22"
     },
     {
       "name": "온천천경동리인타워",
@@ -129960,7 +130006,14 @@
         58911
       ],
       "builder": "기타",
-      "households": null
+      "households": 310,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-22",
+      "hh_evidence": [],
+      "display_name": "온천천경동리인타워1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-22"
     }
   ]
 }
