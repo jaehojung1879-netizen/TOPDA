@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-22"
+    "portal_checked_at": "2026-10-23"
   },
   "apartments": [
     {
@@ -130096,7 +130096,11 @@
       "builder": "기타",
       "display_name": "신정세양청마루",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 326,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-23",
+      "hh_evidence": []
     },
     {
       "name": "마곡현대아파트",
@@ -130124,7 +130128,14 @@
         72573
       ],
       "builder": "기타",
-      "households": null
+      "households": 202,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-23",
+      "hh_evidence": [],
+      "display_name": "마곡현대2차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-23"
     },
     {
       "name": "강남엘에이치1단지",
@@ -130156,7 +130167,14 @@
         185000
       ],
       "builder": "기타",
-      "households": null
+      "households": 809,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-23",
+      "hh_evidence": [],
+      "display_name": "강남엘에이치1단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-23"
     },
     {
       "name": "힐스테이트남천더퍼스트",
@@ -130191,7 +130209,11 @@
       "builder": "현대건설",
       "display_name": "힐스테이트 남천 더퍼스트",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 217,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-23",
+      "hh_evidence": []
     }
   ]
 }
