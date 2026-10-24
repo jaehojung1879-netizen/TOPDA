@@ -238254,10 +238254,7 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 176
-      },
-      "households": 77,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2007
+      }
     },
     "서울 강서구|청솔샤르망1001동": {
       "addr": "서울 강서구 내발산동 676-23",
@@ -238270,10 +238267,7 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 159
-      },
-      "households": 49,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
+      }
     },
     "인천 미추홀구|행복캐슬103동": {
       "addr": "인천 미추홀구 숭의동 122-10",
@@ -238286,10 +238280,7 @@
       "elementary": {
         "name": "인천숭의초등학교",
         "distance_m": 531
-      },
-      "households": 24,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2014
+      }
     },
     "서울 양천구|주함헤븐103동": {
       "addr": "서울 양천구 신월동 203-14",
@@ -238298,10 +238289,7 @@
       "elementary": {
         "name": "서울신원초등학교",
         "distance_m": 57
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
+      }
     },
     "서울 강동구|광남캐스빌105동": {
       "addr": "서울 강동구 둔촌동 435-4",
@@ -238314,10 +238302,7 @@
       "elementary": {
         "name": "서울한산초등학교",
         "distance_m": 579
-      },
-      "households": 28,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2006
+      }
     },
     "서울 관악구|에메랄드105동": {
       "addr": "서울 관악구 봉천동 41-261",
@@ -238330,10 +238315,7 @@
       "elementary": {
         "name": "서울신봉초등학교",
         "distance_m": 324
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2012
+      }
     },
     "서울 강서구|우공팰리스101동": {
       "addr": "서울 강서구 화곡동 1026-27",
@@ -238346,10 +238328,7 @@
       "elementary": {
         "name": "서울신월초등학교",
         "distance_m": 450
-      },
-      "households": 12,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2005
+      }
     },
     "경기 성남시 분당구|성원상떼뷰201동": {
       "addr": "경기 성남시 분당구 정자동 12-2",
@@ -238362,10 +238341,7 @@
       "elementary": {
         "name": "성남정자초등학교",
         "distance_m": 461
-      },
-      "households": 33,
-      "hh_src": "title.hhldCnt",
-      "built_year": 2004
+      }
     },
     "경기 용인시 수지구|죽전GS자이103동": {
       "addr": "경기 용인시 수지구 죽전동 96",
@@ -238374,11 +238350,86 @@
       "elementary": {
         "name": "대청초등학교",
         "distance_m": 472
+      }
+    },
+    "부산 부산진구|세운이노빌": {
+      "addr": "부산 부산진구 범천동 859-16",
+      "lat": 35.148512,
+      "lng": 129.062078,
+      "subway": {
+        "station": "범내골역 부산1호선",
+        "distance_m": 290
       },
-      "households": 19,
-      "hh_src": "title.hhldCnt",
-      "built_year": 1998
+      "elementary": {
+        "name": "성서초등학교",
+        "distance_m": 333
+      }
+    },
+    "경기 부천시 오정구|인수": {
+      "addr": "경기 부천시 오정구 원종동 363-7",
+      "lat": 37.52083,
+      "lng": 126.807874,
+      "subway": {
+        "station": "원종역 서해선",
+        "distance_m": 459
+      },
+      "elementary": {
+        "name": "원종초등학교",
+        "distance_m": 307
+      }
+    },
+    "경기 부천시 원미구|JY포에시아": {
+      "addr": "경기 부천시 원미구 심곡동 465-11",
+      "lat": 37.485354,
+      "lng": 126.776801,
+      "subway": {
+        "station": "부천역 1호선",
+        "distance_m": 575
+      },
+      "elementary": {
+        "name": "부천남초등학교",
+        "distance_m": 670
+      }
+    },
+    "서울 강동구|늘조은": {
+      "addr": "서울 강동구 성내동 244-8",
+      "lat": 37.534344,
+      "lng": 127.135267,
+      "subway": {
+        "station": "강동역 5호선",
+        "distance_m": 305
+      },
+      "elementary": {
+        "name": "서울천동초등학교",
+        "distance_m": 752
+      }
+    },
+    "서울 양천구|동양부로미(926-4)": {
+      "addr": "서울 양천구 신정동 926-4",
+      "lat": 37.527451,
+      "lng": 126.854255,
+      "subway": {
+        "station": "신정역 5호선",
+        "distance_m": 314
+      },
+      "elementary": {
+        "name": "서울양동초등학교",
+        "distance_m": 319
+      }
+    },
+    "서울 서초구|캐슬렉스": {
+      "addr": "서울 서초구 방배동 799-9",
+      "lat": 37.492881,
+      "lng": 126.997236,
+      "subway": {
+        "station": "내방역 7호선",
+        "distance_m": 662
+      },
+      "elementary": {
+        "name": "서울서래초등학교",
+        "distance_m": 793
+      }
     }
   },
-  "as_of": "2026-10-23"
+  "as_of": "2026-10-24"
 }
