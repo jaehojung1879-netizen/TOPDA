@@ -1,21 +1,21 @@
 {
- "as_of": "2026-10-24",
+ "as_of": "2026-10-25",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 14404,
-  "filled": 14028,
-  "target": 465,
-  "kapt_list": 9589,
+  "complexes": 13302,
+  "filled": 12940,
+  "target": 460,
+  "kapt_list": 8928,
   "kapt_ratio": 0.67,
   "name_gap": 19,
-  "matched_this_run": 29,
+  "matched_this_run": 28,
   "filled_this_run": 0,
   "addr_reject": 0,
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 15,
-  "dong_indexed": 9589
+  "jibun_seeded": 9,
+  "dong_indexed": 8928
  },
  "regions": [
   {
@@ -964,8 +964,8 @@
   },
   {
    "region": "부산 부산진구",
-   "target": 13,
-   "filled": 365,
+   "target": 12,
+   "filled": 366,
    "total": 378,
    "kapt_list": 171,
    "kapt_ratio": 0.45,
@@ -975,14 +975,14 @@
     "26230"
    ],
    "unmatched_sample": [
-    "세운이노빌",
     "성원쌍떼뷰",
     "타워팰리스",
     "세영",
     "토운모닝톤",
     "KH마이우스",
     "더블루오피스텔",
-    "다솜빌"
+    "다솜빌",
+    "목연정M팰리스"
    ]
   },
   {
@@ -1090,93 +1090,8 @@
    "unmatched_sample": [
     "포레스트힐시티",
     "양우내안애애플",
-    "이문스카이뷰",
-    "한일노벨리아",
-    "우창프라자",
-    "리베르떼",
-    "동대문베네스트",
-    "현대코아"
+    "이문스카이뷰"
    ]
-  },
-  {
-   "region": "대전 유성구",
-   "target": 3,
-   "filled": 209,
-   "total": 212,
-   "kapt_list": 173,
-   "kapt_ratio": 0.82,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "30200"
-   ],
-   "unmatched_sample": [
-    "K-town",
-    "유성캠퍼스타워-I",
-    "메가시티"
-   ]
-  },
-  {
-   "region": "경기 광주시",
-   "target": 1,
-   "filled": 158,
-   "total": 159,
-   "kapt_list": 128,
-   "kapt_ratio": 0.81,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "41610"
-   ],
-   "unmatched_sample": [
-    "산호"
-   ]
-  },
-  {
-   "region": "경기 안산시 상록구",
-   "target": 0,
-   "filled": 89,
-   "total": 89,
-   "kapt_list": 56,
-   "kapt_ratio": 0.63,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "41271"
-   ],
-   "unmatched_sample": []
-  },
-  {
-   "region": "서울 강서구",
-   "target": 3,
-   "filled": 450,
-   "total": 453,
-   "kapt_list": 213,
-   "kapt_ratio": 0.47,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11500"
-   ],
-   "unmatched_sample": [
-    "경동엠파이어스테이트",
-    "강서동도센트리움",
-    "강서크라운팰리스"
-   ]
-  },
-  {
-   "region": "경기 안양시 만안구",
-   "target": 6,
-   "filled": 183,
-   "total": 189,
-   "kapt_list": 91,
-   "kapt_ratio": 0.48,
-   "name_gap": 0,
-   "matched": 1,
-   "codes": [
-    "41171"
-   ],
-   "unmatched_sample": []
   }
  ]
 }
