@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-25"
+    "portal_checked_at": "2026-10-26"
   },
   "apartments": [
     {
@@ -127852,7 +127852,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-10-12",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "상암월드컵파크3단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-26",
+      "name_evidence": "http://place.map.kakao.com/11140771"
     },
     {
       "name": "쌍용",
@@ -130360,7 +130364,11 @@
       "builder": "현대건설",
       "display_name": "힐스테이트 창경궁",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 181,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-26",
+      "hh_evidence": []
     },
     {
       "name": "한사랑2삼성",
@@ -130388,9 +130396,15 @@
         149542
       ],
       "builder": "기타",
-      "display_name": "한사랑2차삼성아파트(등촌동)",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "한사랑2차삼성아파트",
+      "name_src": "portal.kakao_local",
+      "households": 339,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-26",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-26",
+      "name_evidence": "http://place.map.kakao.com/11062372"
     },
     {
       "name": "반석푸른숲",
@@ -130419,7 +130433,11 @@
       "builder": "기타",
       "display_name": "반석푸른숲아파트",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 137,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-26",
+      "hh_evidence": []
     },
     {
       "name": "장안",
@@ -130461,7 +130479,15 @@
         14322
       ],
       "builder": "기타",
-      "households": null
+      "households": 155,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-26",
+      "hh_evidence": [],
+      "display_name": "장안아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-26",
+      "name_evidence": "http://place.map.kakao.com/11343050"
     },
     {
       "name": "강촌마을(우방)",
@@ -130493,7 +130519,14 @@
         88251
       ],
       "builder": "기타",
-      "households": null
+      "households": 766,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-26",
+      "hh_evidence": [],
+      "display_name": "강촌마을8단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-26"
     },
     {
       "name": "에듀시티파라곤",
@@ -130521,7 +130554,14 @@
         41427
       ],
       "builder": "동양건설산업",
-      "households": null
+      "households": 600,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-26",
+      "hh_evidence": [],
+      "display_name": "에듀시티파라곤아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-26"
     },
     {
       "name": "장암주공7",
@@ -130550,8 +130590,14 @@
       ],
       "builder": "기타",
       "display_name": "장암주공7단지아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "name_src": "portal.kakao_local",
+      "households": 751,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-26",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-26",
+      "name_evidence": "http://place.map.kakao.com/11162840"
     },
     {
       "name": "새샘마을3단지(모아미래도리버시티)",
@@ -130586,7 +130632,11 @@
       "builder": "기타",
       "display_name": "새샘마을3단지 아파트",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 1211,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-26",
+      "hh_evidence": []
     },
     {
       "name": "경동",
@@ -130629,7 +130679,14 @@
         57929
       ],
       "builder": "기타",
-      "households": null
+      "households": 892,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-26",
+      "hh_evidence": [],
+      "display_name": "경동마리나아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-26"
     }
   ]
 }
