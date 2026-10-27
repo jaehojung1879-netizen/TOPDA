@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-26"
+    "portal_checked_at": "2026-10-27"
   },
   "apartments": [
     {
@@ -36599,7 +36599,11 @@
         "여의도": 23,
         "광화문": 11
       },
-      "households": 386
+      "households": 386,
+      "display_name": "남산롯데캐슬아이리스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-27",
+      "name_evidence": "http://place.map.kakao.com/11306687"
     },
     {
       "name": "우방",
@@ -58915,7 +58919,11 @@
         64000
       ],
       "builder": "아이에스동서",
-      "households": 225
+      "households": 225,
+      "display_name": "광안에일린의뜰아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-27",
+      "name_evidence": "http://place.map.kakao.com/1984039371"
     },
     {
       "name": "광원",
@@ -130779,7 +130787,11 @@
       "builder": "기타",
       "display_name": "동원베네스트",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 129,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-27",
+      "hh_evidence": []
     },
     {
       "name": "왕십리자이",
@@ -130806,9 +130818,15 @@
         176135
       ],
       "builder": "GS건설",
-      "display_name": "왕십리 자이 아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "왕십리자이아파트",
+      "name_src": "portal.kakao_local",
+      "households": 713,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-27",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-27",
+      "name_evidence": "http://place.map.kakao.com/27149061"
     },
     {
       "name": "한신휴플러스(1280-0)",
@@ -130835,7 +130853,14 @@
         79525
       ],
       "builder": "기타",
-      "households": null
+      "households": 419,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-27",
+      "hh_evidence": [],
+      "display_name": "한신휴플러스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-27"
     },
     {
       "name": "원종e편한세상",
@@ -130864,7 +130889,11 @@
       "builder": "DL이앤씨",
       "display_name": "원종e-편한세상",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 158,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-27",
+      "hh_evidence": []
     },
     {
       "name": "서동탄역우남퍼스트빌아파트",
@@ -130887,7 +130916,14 @@
         44320
       ],
       "builder": "기타",
-      "households": null
+      "households": 1113,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-27",
+      "hh_evidence": [],
+      "display_name": "서동탄역우남퍼스트빌2차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-27"
     },
     {
       "name": "파라곤센트럴오션시티",
@@ -130916,8 +130952,14 @@
       ],
       "builder": "동양건설산업",
       "display_name": "파라곤센트럴오션시티아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "name_src": "portal.kakao_local",
+      "households": 656,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-27",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-27",
+      "name_evidence": "http://place.map.kakao.com/1488506822"
     }
   ]
 }
