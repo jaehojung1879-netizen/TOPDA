@@ -1,21 +1,21 @@
 {
- "as_of": "2026-10-27",
+ "as_of": "2026-10-28",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 9201,
-  "filled": 8913,
-  "target": 475,
-  "kapt_list": 6191,
-  "kapt_ratio": 0.67,
+  "complexes": 9777,
+  "filled": 9489,
+  "target": 466,
+  "kapt_list": 6691,
+  "kapt_ratio": 0.68,
   "name_gap": 13,
-  "matched_this_run": 24,
+  "matched_this_run": 26,
   "filled_this_run": 0,
   "addr_reject": 0,
-  "addr_purged": 1,
+  "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 24,
-  "dong_indexed": 6191
+  "jibun_seeded": 13,
+  "dong_indexed": 6691
  },
  "regions": [
   {
@@ -43,8 +43,8 @@
   {
    "region": "경기 화성시",
    "target": 5,
-   "filled": 379,
-   "total": 384,
+   "filled": 380,
+   "total": 385,
    "kapt_list": 430,
    "kapt_ratio": 1.12,
    "name_gap": 5,
@@ -103,8 +103,8 @@
   },
   {
    "region": "서울 동작구",
-   "target": 8,
-   "filled": 199,
+   "target": 7,
+   "filled": 200,
    "total": 207,
    "kapt_list": 138,
    "kapt_ratio": 0.67,
@@ -117,7 +117,6 @@
     "극동(105)",
     "건영(103동-106동)",
     "사당우성3",
-    "상도고구아파트",
     "메가스터디타워",
     "현대주택조합",
     "상진아파트"
@@ -268,9 +267,9 @@
   },
   {
    "region": "서울 노원구",
-   "target": 3,
+   "target": 4,
    "filled": 285,
-   "total": 288,
+   "total": 289,
    "kapt_list": 231,
    "kapt_ratio": 0.8,
    "name_gap": 0,
@@ -281,7 +280,8 @@
    "unmatched_sample": [
     "상계주공14(고층)",
     "미성",
-    "상계주공10(고층)"
+    "상계주공10(고층)",
+    "청수대아파트"
    ]
   },
   {
@@ -344,8 +344,8 @@
   {
    "region": "서울 구로구",
    "target": 21,
-   "filled": 331,
-   "total": 352,
+   "filled": 332,
+   "total": 353,
    "kapt_list": 181,
    "kapt_ratio": 0.51,
    "name_gap": 0,
@@ -440,9 +440,9 @@
   },
   {
    "region": "인천 부평구",
-   "target": 29,
+   "target": 30,
    "filled": 324,
-   "total": 353,
+   "total": 354,
    "kapt_list": 160,
    "kapt_ratio": 0.45,
    "name_gap": 0,
@@ -452,13 +452,13 @@
    ],
    "unmatched_sample": [
     "우성1차2차(294-35)",
+    "신한타워",
     "서광팰리스",
     "프리미엄팰리스",
     "블루밍아파트A동",
     "블루밍아파트B동",
     "드림홈",
-    "청담아이리스",
-    "플러스타워"
+    "청담아이리스"
    ]
   },
   {
@@ -631,11 +631,11 @@
   },
   {
    "region": "서울 용산구",
-   "target": 6,
-   "filled": 187,
-   "total": 193,
+   "target": 5,
+   "filled": 189,
+   "total": 194,
    "kapt_list": 86,
-   "kapt_ratio": 0.45,
+   "kapt_ratio": 0.44,
    "name_gap": 0,
    "matched": 0,
    "codes": [
@@ -644,7 +644,6 @@
    "unmatched_sample": [
     "한강자이에클라트",
     "리버뷰",
-    "리버힐에이동",
     "용산큐브",
     "현대안성타워",
     "전자타운한신(A)"
@@ -652,18 +651,17 @@
   },
   {
    "region": "서울 마포구",
-   "target": 11,
-   "filled": 271,
+   "target": 10,
+   "filled": 272,
    "total": 282,
    "kapt_list": 144,
    "kapt_ratio": 0.51,
    "name_gap": 0,
-   "matched": 2,
+   "matched": 3,
    "codes": [
     "11440"
    ],
    "unmatched_sample": [
-    "현대하이츠",
     "성지",
     "솔리스타",
     "엠제이더퍼스트홍대",
@@ -752,8 +750,8 @@
   },
   {
    "region": "대구 달서구",
-   "target": 3,
-   "filled": 319,
+   "target": 2,
+   "filled": 320,
    "total": 322,
    "kapt_list": 247,
    "kapt_ratio": 0.77,
@@ -763,14 +761,13 @@
     "27290"
    ],
    "unmatched_sample": [
-    "남도",
     "두류중흥S-클래스센텀포레"
    ]
   },
   {
    "region": "서울 종로구",
-   "target": 9,
-   "filled": 109,
+   "target": 8,
+   "filled": 110,
    "total": 118,
    "kapt_list": 39,
    "kapt_ratio": 0.33,
@@ -782,12 +779,12 @@
    "unmatched_sample": [
     "종로아인스빌",
     "버넷하임1",
-    "르트랑시망",
     "아르젠종로",
     "삼전솔하임4차",
     "디팰리스",
     "익성씨티하임",
-    "롯데미도파광화문빌딩"
+    "롯데미도파광화문빌딩",
+    "종로동광모닝스카이"
    ]
   },
   {
@@ -795,12 +792,66 @@
    "target": 8,
    "filled": 338,
    "total": 346,
-   "kapt_list": 328,
+   "kapt_list": 329,
    "kapt_ratio": 0.95,
+   "name_gap": 0,
+   "matched": 1,
+   "codes": [
+    "41360"
+   ],
+   "unmatched_sample": [
+    "우남",
+    "현대1",
+    "광릉",
+    "삼금",
+    "신한미",
+    "보영",
+    "대림강변"
+   ]
+  },
+  {
+   "region": "경기 오산시",
+   "target": 0,
+   "filled": 125,
+   "total": 125,
+   "kapt_list": 110,
+   "kapt_ratio": 0.88,
    "name_gap": 0,
    "matched": 0,
    "codes": [
-    "41360"
+    "41370"
+   ],
+   "unmatched_sample": []
+  },
+  {
+   "region": "대전 유성구",
+   "target": 3,
+   "filled": 210,
+   "total": 213,
+   "kapt_list": 173,
+   "kapt_ratio": 0.81,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "30200"
+   ],
+   "unmatched_sample": [
+    "유성캠퍼스타워-I",
+    "K-town",
+    "메가시티"
+   ]
+  },
+  {
+   "region": "세종 세종시",
+   "target": 0,
+   "filled": 233,
+   "total": 233,
+   "kapt_list": 216,
+   "kapt_ratio": 0.93,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "36110"
    ],
    "unmatched_sample": []
   }
