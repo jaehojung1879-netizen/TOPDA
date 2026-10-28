@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-27"
+    "portal_checked_at": "2026-10-28"
   },
   "apartments": [
     {
@@ -47791,7 +47791,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "우성아파트(101~111동)",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-28",
+      "name_evidence": "http://place.map.kakao.com/11182639"
     },
     {
       "name": "동아",
@@ -117493,7 +117497,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-05",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "현대아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-28",
+      "name_evidence": "http://place.map.kakao.com/7975206"
     },
     {
       "name": "호수마을(청구)",
@@ -120880,7 +120888,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "용종마을신대진아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-28",
+      "name_evidence": "http://place.map.kakao.com/17110983"
     },
     {
       "name": "우방2",
@@ -126910,7 +126922,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-10-06",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "태영아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-28",
+      "name_evidence": "http://place.map.kakao.com/11336282"
     },
     {
       "name": "후곡마을6단지주공",
@@ -131063,9 +131079,15 @@
         12176
       ],
       "builder": "기타",
-      "display_name": "한실들마을2차",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "한실들마을주공5단지아파트",
+      "name_src": "portal.kakao_local",
+      "households": 1119,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-28",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-28",
+      "name_evidence": "http://place.map.kakao.com/11334197"
     }
   ]
 }
