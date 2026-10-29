@@ -1,21 +1,21 @@
 {
- "as_of": "2026-10-28",
+ "as_of": "2026-10-29",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 9777,
-  "filled": 9489,
-  "target": 466,
-  "kapt_list": 6691,
-  "kapt_ratio": 0.68,
-  "name_gap": 13,
-  "matched_this_run": 26,
+  "complexes": 9212,
+  "filled": 8923,
+  "target": 471,
+  "kapt_list": 6192,
+  "kapt_ratio": 0.67,
+  "name_gap": 14,
+  "matched_this_run": 27,
   "filled_this_run": 0,
   "addr_reject": 0,
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 13,
-  "dong_indexed": 6691
+  "jibun_seeded": 17,
+  "dong_indexed": 6192
  },
  "regions": [
   {
@@ -42,13 +42,13 @@
   },
   {
    "region": "경기 화성시",
-   "target": 5,
+   "target": 6,
    "filled": 380,
-   "total": 385,
+   "total": 386,
    "kapt_list": 430,
-   "kapt_ratio": 1.12,
-   "name_gap": 5,
-   "matched": 2,
+   "kapt_ratio": 1.11,
+   "name_gap": 6,
+   "matched": 3,
    "codes": [
     "41591",
     "41593",
@@ -267,8 +267,8 @@
   },
   {
    "region": "서울 노원구",
-   "target": 4,
-   "filled": 285,
+   "target": 3,
+   "filled": 286,
    "total": 289,
    "kapt_list": 231,
    "kapt_ratio": 0.8,
@@ -280,8 +280,7 @@
    "unmatched_sample": [
     "상계주공14(고층)",
     "미성",
-    "상계주공10(고층)",
-    "청수대아파트"
+    "상계주공10(고층)"
    ]
   },
   {
@@ -326,9 +325,9 @@
   },
   {
    "region": "서울 중랑구",
-   "target": 2,
+   "target": 3,
    "filled": 233,
-   "total": 235,
+   "total": 236,
    "kapt_list": 137,
    "kapt_ratio": 0.58,
    "name_gap": 0,
@@ -338,14 +337,15 @@
    ],
    "unmatched_sample": [
     "신내두산아파트",
+    "다온APT",
     "태능에셈빌"
    ]
   },
   {
    "region": "서울 구로구",
-   "target": 21,
+   "target": 22,
    "filled": 332,
-   "total": 353,
+   "total": 354,
    "kapt_list": 181,
    "kapt_ratio": 0.51,
    "name_gap": 0,
@@ -355,13 +355,13 @@
    ],
    "unmatched_sample": [
     "대림2",
+    "(749-8)",
     "로제리움2차",
     "해담채3",
     "비즈트위트블루",
     "대림역포스큐",
     "대림역와이즈플레이스",
-    "대림우성2",
-    "비즈트위트오렌지"
+    "대림우성2"
    ]
   },
   {
@@ -378,11 +378,11 @@
    ],
    "unmatched_sample": [
     "장미2",
+    "올림픽파크리움",
     "동광팰리스",
     "에비뉴잠실",
     "이스턴잠실",
     "우정에쉐르",
-    "올림픽파크리움",
     "현대그린빌",
     "이연파레스"
    ]
@@ -481,9 +481,9 @@
   },
   {
    "region": "경기 수원시 권선구",
-   "target": 1,
+   "target": 2,
    "filled": 187,
-   "total": 188,
+   "total": 189,
    "kapt_list": 143,
    "kapt_ratio": 0.76,
    "name_gap": 0,
@@ -492,14 +492,15 @@
     "41113"
    ],
    "unmatched_sample": [
-    "엘지빌리지2"
+    "엘지빌리지2",
+    "드림3차"
    ]
   },
   {
    "region": "경기 부천시 원미구",
-   "target": 15,
+   "target": 16,
    "filled": 292,
-   "total": 307,
+   "total": 308,
    "kapt_list": 135,
    "kapt_ratio": 0.44,
    "name_gap": 0,
@@ -510,12 +511,12 @@
    "unmatched_sample": [
     "역곡현대",
     "JY포에시아",
+    "대건",
     "하이팰리스",
     "골든베이아파트",
     "에코스마트3",
     "에코스마트2",
-    "마스터웍바이로뎀",
-    "에코스마트1"
+    "마스터웍바이로뎀"
    ]
   },
   {
@@ -751,10 +752,10 @@
   {
    "region": "대구 달서구",
    "target": 2,
-   "filled": 320,
-   "total": 322,
+   "filled": 321,
+   "total": 323,
    "kapt_list": 247,
-   "kapt_ratio": 0.77,
+   "kapt_ratio": 0.76,
    "name_gap": 0,
    "matched": 1,
    "codes": [
@@ -798,60 +799,6 @@
    "matched": 1,
    "codes": [
     "41360"
-   ],
-   "unmatched_sample": [
-    "우남",
-    "현대1",
-    "광릉",
-    "삼금",
-    "신한미",
-    "보영",
-    "대림강변"
-   ]
-  },
-  {
-   "region": "경기 오산시",
-   "target": 0,
-   "filled": 125,
-   "total": 125,
-   "kapt_list": 110,
-   "kapt_ratio": 0.88,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "41370"
-   ],
-   "unmatched_sample": []
-  },
-  {
-   "region": "대전 유성구",
-   "target": 3,
-   "filled": 210,
-   "total": 213,
-   "kapt_list": 173,
-   "kapt_ratio": 0.81,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "30200"
-   ],
-   "unmatched_sample": [
-    "유성캠퍼스타워-I",
-    "K-town",
-    "메가시티"
-   ]
-  },
-  {
-   "region": "세종 세종시",
-   "target": 0,
-   "filled": 233,
-   "total": 233,
-   "kapt_list": 216,
-   "kapt_ratio": 0.93,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "36110"
    ],
    "unmatched_sample": []
   }
