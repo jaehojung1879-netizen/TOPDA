@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-28"
+    "portal_checked_at": "2026-10-29"
   },
   "apartments": [
     {
@@ -131177,7 +131177,11 @@
       "builder": "기타",
       "display_name": "목동신시가지 6단지아파트",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 1362,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-29",
+      "hh_evidence": []
     },
     {
       "name": "현대(362-4)",
@@ -131197,7 +131201,11 @@
         20100
       ],
       "builder": "기타",
-      "households": null
+      "households": 40,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-29",
+      "hh_evidence": []
     },
     {
       "name": "해밀마을신안인스빌",
@@ -131220,7 +131228,14 @@
         45750
       ],
       "builder": "기타",
-      "households": null
+      "households": 1100,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-29",
+      "hh_evidence": [],
+      "display_name": "해밀마을신안인스빌아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-29"
     }
   ]
 }
