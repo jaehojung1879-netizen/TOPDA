@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-29"
+    "portal_checked_at": "2026-10-30"
   },
   "apartments": [
     {
@@ -131396,9 +131396,15 @@
         85817
       ],
       "builder": "기타",
-      "display_name": "정릉중앙하이츠빌1단지",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "정릉중앙하이츠빌1단지아파트",
+      "name_src": "portal.kakao_local",
+      "households": 433,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-30",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-30",
+      "name_evidence": "http://place.map.kakao.com/8078840"
     },
     {
       "name": "보라매 신동아 파밀리에",
@@ -131425,9 +131431,15 @@
         119000
       ],
       "builder": "기타",
-      "display_name": "보라매 신동아파밀리에아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "보라매신동아파밀리에아파트",
+      "name_src": "portal.kakao_local",
+      "households": 247,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-30",
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-30",
+      "name_evidence": "http://place.map.kakao.com/26302663"
     },
     {
       "name": "새뜸마을2단지(메이저시티)",
@@ -131454,7 +131466,11 @@
         50215
       ],
       "builder": "기타",
-      "households": null
+      "households": 696,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-30",
+      "hh_evidence": []
     }
   ]
 }
