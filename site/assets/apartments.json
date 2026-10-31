@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-10-30"
+    "portal_checked_at": "2026-10-31"
   },
   "apartments": [
     {
@@ -85389,7 +85389,11 @@
         "name": "대월초등학교",
         "distance_m": 832,
         "in_zone": false
-      }
+      },
+      "display_name": "삼원엑스포아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-31",
+      "name_evidence": "http://place.map.kakao.com/11365770"
     },
     {
       "name": "증포동한솔솔파크",
@@ -115917,7 +115921,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-02",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "이천내안애아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-31",
+      "name_evidence": "http://place.map.kakao.com/12514432"
     },
     {
       "name": "힐스테이트이천역2단지",
@@ -123325,7 +123333,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-10-01",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "영등포자이르네아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-10-31",
+      "name_evidence": "http://place.map.kakao.com/2012110001"
     },
     {
       "name": "유원제일2차",
@@ -125668,13 +125680,15 @@
         55863
       ],
       "builder": "우미건설",
-      "display_name": "이천중리 우미린 어반퍼스트아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "display_name": "이천중리우미린어반퍼스트아파트",
+      "name_src": "portal.kakao_local",
       "households": 785,
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-10-02",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-10-31",
+      "name_evidence": "http://place.map.kakao.com/296080828"
     },
     {
       "name": "쌍용더플래티넘광주",
@@ -131499,7 +131513,11 @@
         143483
       ],
       "builder": "기타",
-      "households": null
+      "households": 338,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-10-31",
+      "hh_evidence": []
     }
   ]
 }
