@@ -91387,7 +91387,11 @@
         "name": "민락초등학교",
         "distance_m": 688,
         "in_zone": false
-      }
+      },
+      "display_name": "e편한세상오션테라스4단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/906691168"
     },
     {
       "name": "엑슬루타워",
@@ -111314,13 +111318,15 @@
         122704
       ],
       "builder": "기타",
-      "display_name": "강남브리즈힐",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "display_name": "강남브리즈힐아파트",
+      "name_src": "portal.kakao_local",
       "households": 402,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-01",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/19148015"
     },
     {
       "name": "가락미륭아파트",
@@ -114545,7 +114551,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-04",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "씨티아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11343068"
     },
     {
       "name": "이화우성",
@@ -129820,7 +129830,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-11-01",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "서울대입구역서희스타힐스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/18284833"
     },
     {
       "name": "금호2",
@@ -132363,7 +132377,11 @@
       "builder": "기타",
       "display_name": "구의강변우성",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 354,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-03",
+      "hh_evidence": []
     },
     {
       "name": "롯데캐슬골든힐스",
@@ -132385,9 +132403,15 @@
         129003
       ],
       "builder": "롯데건설",
-      "display_name": "길음뉴타운11단지 롯데캐슬골든힐스아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "길음뉴타운11단지롯데캐슬골든힐스아파트",
+      "name_src": "portal.kakao_local",
+      "households": 399,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-03",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/965638311"
     },
     {
       "name": "방배임광3차",
@@ -132419,7 +132443,11 @@
         168500
       ],
       "builder": "기타",
-      "households": null
+      "households": 316,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-03",
+      "hh_evidence": []
     },
     {
       "name": "강남자곡아이파크",
@@ -132450,7 +132478,11 @@
         222463
       ],
       "builder": "HDC현대산업",
-      "households": null
+      "households": 716,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-03",
+      "hh_evidence": []
     },
     {
       "name": "신동아파밀리에",
@@ -132482,9 +132514,15 @@
         120432
       ],
       "builder": "신동아건설",
-      "display_name": "강동역신동아파밀리에",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "둔촌신동아파밀리에아파트",
+      "name_src": "portal.kakao_local",
+      "households": 230,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-03",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11374881"
     },
     {
       "name": "호매실한신",
@@ -132530,9 +132568,15 @@
         40500
       ],
       "builder": "GS건설",
-      "display_name": "푸른마을 용인 자이 아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "푸른마을용인자이아파트",
+      "name_src": "portal.kakao_local",
+      "households": 502,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-03",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11291031"
     },
     {
       "name": "삼성에코뷰",
@@ -132557,7 +132601,11 @@
         30713
       ],
       "builder": "기타",
-      "households": null
+      "households": 28,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-03",
+      "hh_evidence": []
     },
     {
       "name": "솔거",
@@ -132584,7 +132632,14 @@
         42947
       ],
       "builder": "기타",
-      "households": null
+      "households": 498,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-03",
+      "hh_evidence": [],
+      "display_name": "솔거아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03"
     },
     {
       "name": "대우장미",
@@ -132606,7 +132661,11 @@
         27967
       ],
       "builder": "기타",
-      "households": null
+      "households": 520,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-03",
+      "hh_evidence": []
     },
     {
       "name": "현대",
@@ -132633,7 +132692,14 @@
         17539
       ],
       "builder": "기타",
-      "households": null
+      "households": 350,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-03",
+      "hh_evidence": [],
+      "display_name": "현대아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03"
     },
     {
       "name": "무거현대",
@@ -132666,7 +132732,14 @@
         17285
       ],
       "builder": "기타",
-      "households": null
+      "households": 677,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-03",
+      "hh_evidence": [],
+      "display_name": "무거현대아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03"
     }
   ]
 }

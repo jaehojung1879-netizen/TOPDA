@@ -274,9 +274,10 @@
         "name": "서울세명초등학교",
         "distance_m": 421
       },
-      "display_name": "강남브리즈힐",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "name_checked_at": "2026-09-01"
+      "display_name": "강남브리즈힐아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/19148015"
     },
     "서울 강남구|래미안라클래시": {
       "households": 679,
@@ -2915,7 +2916,7 @@
       },
       "display_name": "둔촌신동아파밀리에아파트",
       "name_src": "portal.kakao_local",
-      "name_checked_at": "2026-09-12",
+      "name_checked_at": "2026-11-03",
       "name_evidence": "http://place.map.kakao.com/11374881"
     },
     "서울 강동구|더샵둔촌포레": {
@@ -3217,7 +3218,11 @@
       "elementary": {
         "name": "서울명일초등학교",
         "distance_m": 370
-      }
+      },
+      "display_name": "강동현대홈타운아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/8158915"
     },
     "서울 강동구|강일리버파크10단지": {
       "households": 694,
@@ -6857,7 +6862,11 @@
       "elementary": {
         "name": "서울봉현초등학교",
         "distance_m": 455
-      }
+      },
+      "display_name": "서울대입구역서희스타힐스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/18284833"
     },
     "서울 관악구|주공1": {
       "households": 960,
@@ -10935,7 +10944,11 @@
       "elementary": {
         "name": "서울동작초등학교",
         "distance_m": 246
-      }
+      },
+      "display_name": "이수힐스테이트아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/15101318"
     },
     "서울 동작구|보라매파크빌": {
       "households": 423,
@@ -15287,7 +15300,11 @@
       "elementary": {
         "name": "원천초등학교",
         "distance_m": 259
-      }
+      },
+      "display_name": "한국2차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11208505"
     },
     "경기 수원시 영통구|그대가센트럴파크": {
       "households": 270,
@@ -24512,7 +24529,10 @@
       "elementary": {
         "name": "서울구남초등학교",
         "distance_m": 213
-      }
+      },
+      "display_name": "구의강변우성",
+      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "name_checked_at": "2026-11-03"
     },
     "서울 광진구|아크로리버": {
       "households": 220,
@@ -25484,7 +25504,11 @@
       "elementary": {
         "name": "은석초등학교",
         "distance_m": 368
-      }
+      },
+      "display_name": "휘경베스트빌현대아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/10914081"
     },
     "서울 동대문구|롯데캐슬피렌체": {
       "households": 435,
@@ -27303,7 +27327,7 @@
       },
       "display_name": "길음뉴타운11단지롯데캐슬골든힐스아파트",
       "name_src": "portal.kakao_local",
-      "name_checked_at": "2026-09-13",
+      "name_checked_at": "2026-11-03",
       "name_evidence": "http://place.map.kakao.com/965638311"
     },
     "서울 성북구|정릉2차대주피오레": {
@@ -30207,7 +30231,11 @@
       "elementary": {
         "name": "서울상신초등학교",
         "distance_m": 283
-      }
+      },
+      "display_name": "씨티아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11343068"
     },
     "서울 은평구|동익파크1동(355-95)": {
       "households": 118,
@@ -32819,7 +32847,11 @@
       "elementary": {
         "name": "양운초등학교",
         "distance_m": 208
-      }
+      },
+      "display_name": "대림3차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11003116"
     },
     "부산 해운대구|해운대더샵센텀그린": {
       "households": 464,
@@ -33211,7 +33243,11 @@
       "elementary": {
         "name": "신재초등학교",
         "distance_m": 299
-      }
+      },
+      "display_name": "센텀파미르아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/10254280"
     },
     "부산 해운대구|경남마리나": {
       "households": 624,
@@ -34111,7 +34147,11 @@
       "elementary": {
         "name": "운봉초등학교",
         "distance_m": 215
-      }
+      },
+      "display_name": "삼한그린타운1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/7925802"
     },
     "부산 해운대구|해운대비스타동원": {
       "households": 504,
@@ -53676,7 +53716,11 @@
       "elementary": {
         "name": "대구범일초등학교",
         "distance_m": 366
-      }
+      },
+      "display_name": "범물서한화성아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11330154"
     },
     "대구 수성구|수성푸르지오리버센트": {
       "households": 714,
@@ -53937,7 +53981,11 @@
       "elementary": {
         "name": "대구용지초등학교",
         "distance_m": 187
-      }
+      },
+      "display_name": "지산우방타운아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11185910"
     },
     "대구 수성구|우방3차범어타운": {
       "households": 145,
@@ -66470,7 +66518,7 @@
       },
       "display_name": "푸른마을용인자이아파트",
       "name_src": "portal.kakao_local",
-      "name_checked_at": "2026-09-25",
+      "name_checked_at": "2026-11-03",
       "name_evidence": "http://place.map.kakao.com/11291031"
     },
     "경기 용인시 처인구|e편한세상용인한숲시티2단지": {
@@ -88573,7 +88621,11 @@
       },
       "households": 200,
       "hh_src": "title.hhldCnt",
-      "built_year": 1995
+      "built_year": 1995,
+      "display_name": "삼청장미아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11164461"
     },
     "경기 남양주시|평내마을금호어울림": {
       "addr": "경기 남양주시 평내동 550",
@@ -94688,7 +94740,11 @@
       },
       "households": 912,
       "hh_src": "recap.hhldCnt",
-      "built_year": 2007
+      "built_year": 2007,
+      "display_name": "더샵파크리치아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/8256823"
     },
     "대구 달서구|한빛마을(성서주공3차)": {
       "addr": "대구 달서구 이곡동 1306-4",
@@ -103982,7 +104038,11 @@
       },
       "households": 793,
       "hh_src": "recap.hhldCnt",
-      "built_year": 1990
+      "built_year": 1990,
+      "display_name": "동래화목타운아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11200656"
     },
     "부산 동래구|조양": {
       "addr": "부산 동래구 명장동 24-1",
@@ -120760,7 +120820,11 @@
       },
       "households": 556,
       "hh_src": "recap.hhldCnt",
-      "built_year": 2002
+      "built_year": 2002,
+      "display_name": "능곡2차현대홈타운아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/8162678"
     },
     "경기 안양시 동안구|향촌마을현대4차": {
       "addr": "경기 안양시 동안구 평촌동 899-2",
@@ -145639,7 +145703,11 @@
       },
       "households": 277,
       "hh_src": "recap.hhldCnt",
-      "built_year": 1987
+      "built_year": 1987,
+      "display_name": "현대아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11203304"
     },
     "서울 강동구|용명브릿지아파트": {
       "addr": "서울 강동구 천호동 28",
@@ -159942,7 +160010,11 @@
       },
       "households": 186,
       "hh_src": "recap.hhldCnt",
-      "built_year": 1997
+      "built_year": 1997,
+      "display_name": "상일동아아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11096698"
     },
     "경기 수원시 권선구|전원": {
       "addr": "경기 수원시 권선구 세류동 1010-1",
@@ -240020,7 +240092,11 @@
       "elementary": {
         "name": "성사초등학교",
         "distance_m": 108
-      }
+      },
+      "display_name": "임창아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11265845"
     },
     "경기 안양시 만안구|엠씨티": {
       "addr": "경기 안양시 만안구 안양동 392-11",
@@ -240142,7 +240218,11 @@
       "elementary": {
         "name": "오정초등학교",
         "distance_m": 524
-      }
+      },
+      "display_name": "동광모닝스카이1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-03",
+      "name_evidence": "http://place.map.kakao.com/11254354"
     },
     "경기 부천시 원미구|삼융그린": {
       "addr": "경기 부천시 원미구 심곡동 141-2",
