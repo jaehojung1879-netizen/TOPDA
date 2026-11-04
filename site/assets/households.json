@@ -239969,7 +239969,10 @@
       "display_name": "임창아파트",
       "name_src": "portal.kakao_local",
       "name_checked_at": "2026-11-03",
-      "name_evidence": "http://place.map.kakao.com/11265845"
+      "name_evidence": "http://place.map.kakao.com/11265845",
+      "households": 96,
+      "hh_src": "recap.hhldCnt",
+      "built_year": 1988
     },
     "경기 안양시 만안구|엠씨티": {
       "addr": "경기 안양시 만안구 안양동 392-11",
@@ -239982,7 +239985,8 @@
       "elementary": {
         "name": "안양초등학교",
         "distance_m": 188
-      }
+      },
+      "built_year": 2019
     },
     "인천 미추홀구|우진3차": {
       "addr": "인천 미추홀구 숭의동 309-23",
@@ -239995,7 +239999,10 @@
       "elementary": {
         "name": "용마루초등학교",
         "distance_m": 399
-      }
+      },
+      "households": 13,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2003
     },
     "경기 부천시 오정구|한울(344-23)": {
       "addr": "경기 부천시 오정구 원종동 344-23",
@@ -240008,7 +240015,10 @@
       "elementary": {
         "name": "오정초등학교",
         "distance_m": 557
-      }
+      },
+      "households": 20,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2017
     },
     "경기 수원시 권선구|호매실한신": {
       "addr": "경기 수원시 권선구 호매실동 1371",
@@ -240017,7 +240027,10 @@
       "elementary": {
         "name": "호매실초등학교",
         "distance_m": 383
-      }
+      },
+      "households": 1428,
+      "hh_src": "recap.hhldCnt",
+      "built_year": 2015
     },
     "서울 강동구|태천해오름18차": {
       "addr": "서울 강동구 길동 83-2",
@@ -240030,7 +240043,10 @@
       "elementary": {
         "name": "서울신명초등학교",
         "distance_m": 231
-      }
+      },
+      "households": 18,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2003
     },
     "울산 남구|풍진하이츠빌": {
       "addr": "울산 남구 야음동 671-4",
@@ -240039,7 +240055,10 @@
       "elementary": {
         "name": "대현초등학교",
         "distance_m": 333
-      }
+      },
+      "households": 18,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2003
     },
     "서울 영등포구|계명": {
       "addr": "서울 영등포구 당산동 121-19",
@@ -240052,7 +240071,10 @@
       "elementary": {
         "name": "서울영동초등학교",
         "distance_m": 124
-      }
+      },
+      "households": 17,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2002
     },
     "경기 화성시|경기": {
       "addr": "경기 화성시 병점동 348-19",
@@ -240065,7 +240087,10 @@
       "elementary": {
         "name": "병점초등학교",
         "distance_m": 314
-      }
+      },
+      "households": 19,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1989
     },
     "서울 강남구|논현아트빌": {
       "addr": "서울 강남구 논현동 215-14",
@@ -240078,7 +240103,10 @@
       "elementary": {
         "name": "서울학동초등학교",
         "distance_m": 646
-      }
+      },
+      "households": 11,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2003
     },
     "경기 부천시 오정구|동광모닝스카이1차": {
       "addr": "경기 부천시 오정구 고강동 306",
@@ -240095,7 +240123,10 @@
       "display_name": "동광모닝스카이1차아파트",
       "name_src": "portal.kakao_local",
       "name_checked_at": "2026-11-03",
-      "name_evidence": "http://place.map.kakao.com/11254354"
+      "name_evidence": "http://place.map.kakao.com/11254354",
+      "households": 138,
+      "hh_src": "recap.hhldCnt",
+      "built_year": 2007
     },
     "경기 부천시 원미구|삼융그린": {
       "addr": "경기 부천시 원미구 심곡동 141-2",
@@ -240108,7 +240139,8 @@
       "elementary": {
         "name": "부천남초등학교",
         "distance_m": 500
-      }
+      },
+      "built_year": 2002
     },
     "서울 관악구|뉴파크플러스(1608-27)": {
       "addr": "서울 관악구 봉천동 1608-27",
@@ -240121,7 +240153,10 @@
       "elementary": {
         "name": "서울청룡초등학교",
         "distance_m": 254
-      }
+      },
+      "households": 15,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2005
     },
     "경기 광명시|광명휴먼림": {
       "addr": "경기 광명시 광명동 783",
@@ -240134,7 +240169,10 @@
       "elementary": {
         "name": "광문초등학교",
         "distance_m": 249
-      }
+      },
+      "households": 30,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2008
     },
     "서울 양천구|목동중앙하이츠": {
       "addr": "서울 양천구 신정동 1330",
@@ -240147,7 +240185,10 @@
       "elementary": {
         "name": "서울신목초등학교",
         "distance_m": 84
-      }
+      },
+      "households": 103,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2026
     },
     "서울 강서구|청솔숲속마을102동": {
       "addr": "서울 강서구 내발산동 738",
@@ -240160,7 +240201,10 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 176
-      }
+      },
+      "households": 77,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2007
     },
     "서울 강서구|청솔샤르망1001동": {
       "addr": "서울 강서구 내발산동 676-23",
@@ -240173,7 +240217,10 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 159
-      }
+      },
+      "households": 49,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2004
     },
     "인천 미추홀구|행복캐슬103동": {
       "addr": "인천 미추홀구 숭의동 122-10",
@@ -240186,7 +240233,10 @@
       "elementary": {
         "name": "인천숭의초등학교",
         "distance_m": 531
-      }
+      },
+      "households": 24,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2014
     },
     "서울 양천구|주함헤븐103동": {
       "addr": "서울 양천구 신월동 203-14",
@@ -240195,7 +240245,10 @@
       "elementary": {
         "name": "서울신원초등학교",
         "distance_m": 57
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2006
     },
     "서울 강동구|광남캐스빌105동": {
       "addr": "서울 강동구 둔촌동 435-4",
@@ -240208,7 +240261,10 @@
       "elementary": {
         "name": "서울한산초등학교",
         "distance_m": 579
-      }
+      },
+      "households": 28,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2006
     },
     "서울 관악구|에메랄드105동": {
       "addr": "서울 관악구 봉천동 41-261",
@@ -240221,7 +240277,10 @@
       "elementary": {
         "name": "서울신봉초등학교",
         "distance_m": 324
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2012
     },
     "서울 강서구|우공팰리스101동": {
       "addr": "서울 강서구 화곡동 1026-27",
@@ -240234,7 +240293,10 @@
       "elementary": {
         "name": "서울신월초등학교",
         "distance_m": 450
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2005
     },
     "경기 성남시 분당구|성원상떼뷰201동": {
       "addr": "경기 성남시 분당구 정자동 12-2",
@@ -240247,7 +240309,10 @@
       "elementary": {
         "name": "성남정자초등학교",
         "distance_m": 461
-      }
+      },
+      "households": 33,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2004
     },
     "경기 용인시 수지구|죽전GS자이103동": {
       "addr": "경기 용인시 수지구 죽전동 96",
@@ -240256,7 +240321,10 @@
       "elementary": {
         "name": "대청초등학교",
         "distance_m": 472
-      }
+      },
+      "households": 19,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1998
     },
     "인천 미추홀구|네오빌3차": {
       "addr": "인천 미추홀구 주안동 219-4",
@@ -240269,7 +240337,10 @@
       "elementary": {
         "name": "인천주안북초등학교",
         "distance_m": 651
-      }
+      },
+      "households": 99,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2011
     },
     "경기 부천시 소사구|해마루플러스": {
       "addr": "경기 부천시 소사구 송내동 565-1",
@@ -240282,7 +240353,10 @@
       "elementary": {
         "name": "성주초등학교",
         "distance_m": 662
-      }
+      },
+      "households": 18,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2012
     },
     "서울 성북구|미아헤리츠타워": {
       "addr": "서울 성북구 하월곡동 80-55",
@@ -240295,7 +240369,10 @@
       "elementary": {
         "name": "서울숭곡초등학교",
         "distance_m": 285
-      }
+      },
+      "households": 254,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2026
     },
     "서울 강남구|삼성오네뜨": {
       "addr": "서울 강남구 삼성동 127-5",
@@ -240308,7 +240385,10 @@
       "elementary": {
         "name": "서울삼릉초등학교",
         "distance_m": 766
-      }
+      },
+      "households": 48,
+      "hh_src": "recap.hhldCnt",
+      "built_year": 2004
     },
     "인천 미추홀구|다드림아파트": {
       "addr": "인천 미추홀구 숭의동 166-17",
@@ -240321,7 +240401,10 @@
       "elementary": {
         "name": "용마루초등학교",
         "distance_m": 807
-      }
+      },
+      "households": 27,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2016
     },
     "서울 서초구|반포힐스": {
       "addr": "서울 서초구 반포동 50-6",
