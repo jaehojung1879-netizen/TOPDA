@@ -1,11 +1,11 @@
 {
- "as_of": "2026-11-03",
+ "as_of": "2026-11-04",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 9897,
-  "filled": 9606,
-  "target": 468,
-  "kapt_list": 6489,
+  "complexes": 10384,
+  "filled": 10085,
+  "target": 474,
+  "kapt_list": 6895,
   "kapt_ratio": 0.66,
   "name_gap": 13,
   "matched_this_run": 29,
@@ -14,8 +14,8 @@
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 24,
-  "dong_indexed": 6489
+  "jibun_seeded": 15,
+  "dong_indexed": 6895
  },
  "regions": [
   {
@@ -78,9 +78,9 @@
   },
   {
    "region": "서울 강남구",
-   "target": 15,
-   "filled": 404,
-   "total": 419,
+   "target": 16,
+   "filled": 405,
+   "total": 421,
    "kapt_list": 235,
    "kapt_ratio": 0.56,
    "name_gap": 0,
@@ -93,10 +93,10 @@
     "한보미도맨션1",
     "삼익대청아파트",
     "한보미도맨션2",
+    "삼성오네뜨",
     "논현아트빌",
     "선릉역풍림아이원레몬",
-    "선릉역대우아이빌(890-49)",
-    "강남웅진베어스빌"
+    "선릉역대우아이빌(890-49)"
    ]
   },
   {
@@ -141,11 +141,11 @@
   },
   {
    "region": "서울 성북구",
-   "target": 5,
-   "filled": 185,
-   "total": 190,
+   "target": 6,
+   "filled": 186,
+   "total": 192,
    "kapt_list": 148,
-   "kapt_ratio": 0.78,
+   "kapt_ratio": 0.77,
    "name_gap": 0,
    "matched": 1,
    "codes": [
@@ -154,6 +154,7 @@
    "unmatched_sample": [
     "한진(609-1)",
     "한신",
+    "미아헤리츠타워",
     "한신플러스A",
     "한신플러스B"
    ]
@@ -244,9 +245,9 @@
   },
   {
    "region": "인천 미추홀구",
-   "target": 18,
+   "target": 20,
    "filled": 333,
-   "total": 351,
+   "total": 353,
    "kapt_list": 117,
    "kapt_ratio": 0.33,
    "name_gap": 0,
@@ -258,11 +259,11 @@
     "월드스테이트(101~111,124~132)",
     "학익SKVIEW",
     "월드스테이트(112~123)",
+    "네오빌3차",
     "우진3차",
+    "다드림아파트",
     "대경이즈뷰",
-    "골드프라임",
-    "그레이스타워",
-    "더젠씨티(341-30)"
+    "골드프라임"
    ]
   },
   {
@@ -520,9 +521,9 @@
   },
   {
    "region": "경기 부천시 소사구",
-   "target": 5,
+   "target": 6,
    "filled": 212,
-   "total": 217,
+   "total": 218,
    "kapt_list": 83,
    "kapt_ratio": 0.38,
    "name_gap": 0,
@@ -532,6 +533,7 @@
    ],
    "unmatched_sample": [
     "주공뜨란채",
+    "해마루플러스",
     "순영지타워",
     "HB엘림캐슬",
     "부성힐하우스"
@@ -579,10 +581,10 @@
   {
    "region": "경기 의왕시",
    "target": 2,
-   "filled": 112,
-   "total": 114,
+   "filled": 114,
+   "total": 116,
    "kapt_list": 88,
-   "kapt_ratio": 0.77,
+   "kapt_ratio": 0.76,
    "name_gap": 0,
    "matched": 0,
    "codes": [
@@ -672,8 +674,8 @@
   {
    "region": "서울 광진구",
    "target": 6,
-   "filled": 205,
-   "total": 211,
+   "filled": 206,
+   "total": 212,
    "kapt_list": 97,
    "kapt_ratio": 0.46,
    "name_gap": 0,
@@ -855,12 +857,44 @@
    ]
   },
   {
+   "region": "대전 유성구",
+   "target": 3,
+   "filled": 213,
+   "total": 216,
+   "kapt_list": 173,
+   "kapt_ratio": 0.8,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "30200"
+   ],
+   "unmatched_sample": [
+    "K-town",
+    "유성캠퍼스타워-I",
+    "메가시티"
+   ]
+  },
+  {
+   "region": "경기 용인시 기흥구",
+   "target": 0,
+   "filled": 260,
+   "total": 260,
+   "kapt_list": 233,
+   "kapt_ratio": 0.9,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "41463"
+   ],
+   "unmatched_sample": []
+  },
+  {
    "region": "경기 용인시 처인구",
    "target": 0,
-   "filled": 166,
-   "total": 166,
+   "filled": 167,
+   "total": 167,
    "kapt_list": 89,
-   "kapt_ratio": 0.54,
+   "kapt_ratio": 0.53,
    "name_gap": 0,
    "matched": 0,
    "codes": [
