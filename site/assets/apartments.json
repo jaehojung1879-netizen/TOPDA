@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-03"
+    "portal_checked_at": "2026-11-04"
   },
   "apartments": [
     {
@@ -108354,8 +108354,10 @@
       ],
       "builder": "기타",
       "households": 263,
-      "display_name": "번동기산그린",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)"
+      "display_name": "기산그린아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-04",
+      "name_evidence": "http://place.map.kakao.com/10208365"
     },
     {
       "name": "황송마을",
@@ -132860,7 +132862,11 @@
         29419
       ],
       "builder": "기타",
-      "households": null
+      "households": 254,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-04",
+      "hh_evidence": []
     },
     {
       "name": "선경1차(1동-7동)",
@@ -132920,7 +132926,14 @@
         56959
       ],
       "builder": "현대건설",
-      "households": null
+      "households": 927,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-04",
+      "hh_evidence": [],
+      "display_name": "수원장안힐스테이트아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-04"
     },
     {
       "name": "망포벽산이빌리지",
@@ -132953,7 +132966,14 @@
         53000
       ],
       "builder": "기타",
-      "households": null
+      "households": 344,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-04",
+      "hh_evidence": [],
+      "display_name": "망포마을벽산이빌리지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-04"
     },
     {
       "name": "산호",
@@ -133013,9 +133033,15 @@
         85000
       ],
       "builder": "SM경남기업",
-      "display_name": "버들치마을 경남아너스빌1차",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "버들치마을경남아너스빌1차아파트",
+      "name_src": "portal.kakao_local",
+      "households": 816,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-04",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-04",
+      "name_evidence": "http://place.map.kakao.com/23812698"
     },
     {
       "name": "가람마을4단지한양수자인",
@@ -133048,7 +133074,14 @@
         37553
       ],
       "builder": "한양",
-      "households": null
+      "households": 780,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-04",
+      "hh_evidence": [],
+      "display_name": "가람마을4단지한양수자인아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-04"
     },
     {
       "name": "세븐하이츠",
@@ -133076,7 +133109,14 @@
         15750
       ],
       "builder": "기타",
-      "households": null
+      "households": 794,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-04",
+      "hh_evidence": [],
+      "display_name": "성서주공7단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-04"
     },
     {
       "name": "한화꿈에그린1차",
@@ -133108,9 +133148,15 @@
         44041
       ],
       "builder": "한화 건설부문",
-      "display_name": "노은한화꿈에그린1단지",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "대덕테크노밸리1단지꿈에그린아파트",
+      "name_src": "portal.kakao_local",
+      "households": 666,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-04",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-04",
+      "name_evidence": "http://place.map.kakao.com/8593240"
     }
   ]
 }
