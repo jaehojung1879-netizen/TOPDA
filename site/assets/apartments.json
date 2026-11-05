@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-04"
+    "portal_checked_at": "2026-11-05"
   },
   "apartments": [
     {
@@ -130915,7 +130915,11 @@
         81066
       ],
       "builder": "대우건설",
-      "households": null
+      "households": null,
+      "display_name": "안양역푸르지오더샵아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-05",
+      "name_evidence": "http://place.map.kakao.com/1139759536"
     },
     {
       "name": "복사골아파트",
@@ -133301,8 +133305,14 @@
       ],
       "builder": "GS건설",
       "display_name": "영통자이아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "name_src": "portal.kakao_local",
+      "households": 653,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-05",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-05",
+      "name_evidence": "http://place.map.kakao.com/837577418"
     },
     {
       "name": "장성마을(대명2)",
@@ -133329,7 +133339,14 @@
         34096
       ],
       "builder": "기타",
-      "households": null
+      "households": 591,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-05",
+      "hh_evidence": [],
+      "display_name": "장성마을2단지대명아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-05"
     },
     {
       "name": "안화동마을주공7단지",
@@ -133357,7 +133374,14 @@
         36832
       ],
       "builder": "기타",
-      "households": null
+      "households": 742,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-05",
+      "hh_evidence": [],
+      "display_name": "안화동마을주공7단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-05"
     },
     {
       "name": "금호이수마운트밸리",
@@ -133390,7 +133414,14 @@
         53900
       ],
       "builder": "기타",
-      "households": null
+      "households": 1367,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-05",
+      "hh_evidence": [],
+      "display_name": "금호이수마운트밸리아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-05"
     },
     {
       "name": "간석신동아파밀리에명품",
@@ -133418,7 +133449,14 @@
         42973
       ],
       "builder": "신동아건설",
-      "households": null
+      "households": 715,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-05",
+      "hh_evidence": [],
+      "display_name": "간석신동아파밀리에명품아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-05"
     },
     {
       "name": "해운대더샵센텀그린",
@@ -133446,7 +133484,14 @@
         34300
       ],
       "builder": "포스코이앤씨",
-      "households": null
+      "households": 464,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-05",
+      "hh_evidence": [],
+      "display_name": "해운대더샵센텀그린아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-05"
     },
     {
       "name": "초읍월드메르디앙에듀포레",
@@ -133473,7 +133518,11 @@
         38726
       ],
       "builder": "기타",
-      "households": null
+      "households": 116,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-05",
+      "hh_evidence": []
     }
   ]
 }
