@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-05"
+    "portal_checked_at": "2026-11-06"
   },
   "apartments": [
     {
@@ -122480,7 +122480,11 @@
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-10-01",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "광명신원아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-06",
+      "name_evidence": "http://place.map.kakao.com/11111831"
     },
     {
       "name": "감일한라비발디",
@@ -131951,13 +131955,15 @@
         67500
       ],
       "builder": "기타",
-      "display_name": "문영칸타빌레아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "display_name": "대림동문영칸타빌레아파트",
+      "name_src": "portal.kakao_local",
       "households": 133,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-11-02",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-06",
+      "name_evidence": "http://place.map.kakao.com/11009382"
     },
     {
       "name": "잠실올림픽공원아이파크",
@@ -133646,7 +133652,11 @@
         81200
       ],
       "builder": "기타",
-      "households": null
+      "households": 72,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-06",
+      "hh_evidence": []
     },
     {
       "name": "수유프리미어엠",
@@ -133676,7 +133686,11 @@
         11922
       ],
       "builder": "기타",
-      "households": null
+      "households": 110,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-06",
+      "hh_evidence": []
     },
     {
       "name": "현대그린",
@@ -133697,9 +133711,15 @@
         81333
       ],
       "builder": "기타",
-      "display_name": "홍제현대그린",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "현대그린아파트",
+      "name_src": "portal.kakao_local",
+      "households": 240,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-06",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-06",
+      "name_evidence": "http://place.map.kakao.com/11199594"
     },
     {
       "name": "이펜하우스2단지",
@@ -133727,7 +133747,11 @@
       "builder": "기타",
       "display_name": "신정이펜하우스2단지",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 471,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-06",
+      "hh_evidence": []
     },
     {
       "name": "수원로얄팰리스",
@@ -133774,7 +133798,14 @@
         51236
       ],
       "builder": "기타",
-      "households": null
+      "households": 614,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-06",
+      "hh_evidence": [],
+      "display_name": "수원로얄팰리스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-06"
     },
     {
       "name": "미사강변파밀리에",
@@ -133806,9 +133837,15 @@
         129042
       ],
       "builder": "기타",
-      "display_name": "미사강변 파밀리에",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "미사강변파밀리에아파트",
+      "name_src": "portal.kakao_local",
+      "households": 976,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-06",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-06",
+      "name_evidence": "http://place.map.kakao.com/17043468"
     },
     {
       "name": "올레오",
@@ -133840,7 +133877,14 @@
         10256
       ],
       "builder": "기타",
-      "households": null
+      "households": 52,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-06",
+      "hh_evidence": [],
+      "display_name": "올레오아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-06"
     }
   ]
 }
