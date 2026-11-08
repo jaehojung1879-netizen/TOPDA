@@ -1,21 +1,21 @@
 {
- "as_of": "2026-11-07",
+ "as_of": "2026-11-08",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 8122,
-  "filled": 7862,
-  "target": 468,
-  "kapt_list": 5148,
+  "complexes": 7979,
+  "filled": 7726,
+  "target": 460,
+  "kapt_list": 5054,
   "kapt_ratio": 0.63,
   "name_gap": 6,
-  "matched_this_run": 24,
+  "matched_this_run": 21,
   "filled_this_run": 0,
   "addr_reject": 0,
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
   "jibun_seeded": 9,
-  "dong_indexed": 5148
+  "dong_indexed": 5054
  },
  "regions": [
   {
@@ -141,8 +141,8 @@
   },
   {
    "region": "서울 관악구",
-   "target": 6,
-   "filled": 223,
+   "target": 5,
+   "filled": 224,
    "total": 229,
    "kapt_list": 93,
    "kapt_ratio": 0.41,
@@ -155,7 +155,6 @@
     "관악드림(동아)",
     "관악드림(삼성)",
     "서울대역마에스트로",
-    "윤정",
     "프라비다1",
     "신동아"
    ]
@@ -419,8 +418,8 @@
   },
   {
    "region": "인천 부평구",
-   "target": 30,
-   "filled": 327,
+   "target": 29,
+   "filled": 328,
    "total": 357,
    "kapt_list": 160,
    "kapt_ratio": 0.45,
@@ -431,13 +430,13 @@
    ],
    "unmatched_sample": [
     "우성1차2차(294-35)",
-    "마이홈",
     "더갤러리",
     "신한타워",
     "서광팰리스",
     "프리미엄팰리스",
     "블루밍아파트A동",
-    "블루밍아파트B동"
+    "블루밍아파트B동",
+    "드림홈"
    ]
   },
   {
@@ -677,50 +676,15 @@
    "kapt_list": 312,
    "kapt_ratio": 0.9,
    "name_gap": 0,
-   "matched": 2,
+   "matched": 1,
    "codes": [
     "41220"
    ],
    "unmatched_sample": [
     "평택화양휴먼빌퍼스트시티아파트",
     "외기노조",
-    "평일",
-    "평택서정동롯데캐슬",
-    "영흥(가,나,다)",
-    "한일(A,B)",
-    "명원",
-    "베스트빌"
+    "평일"
    ]
-  },
-  {
-   "region": "경기 과천시",
-   "target": 1,
-   "filled": 21,
-   "total": 22,
-   "kapt_list": 20,
-   "kapt_ratio": 0.91,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "41290"
-   ],
-   "unmatched_sample": [
-    "주공8"
-   ]
-  },
-  {
-   "region": "경기 수원시 팔달구",
-   "target": 4,
-   "filled": 117,
-   "total": 121,
-   "kapt_list": 74,
-   "kapt_ratio": 0.61,
-   "name_gap": 0,
-   "matched": 2,
-   "codes": [
-    "41115"
-   ],
-   "unmatched_sample": []
   }
  ]
 }
