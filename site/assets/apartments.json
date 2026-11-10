@@ -134517,7 +134517,11 @@
         89500
       ],
       "builder": "기타",
-      "households": null
+      "households": 254,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": []
     },
     {
       "name": "삼부컨비니언",
@@ -134548,7 +134552,14 @@
         72424
       ],
       "builder": "기타",
-      "households": null
+      "households": 684,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": [],
+      "display_name": "돈암삼부아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-10"
     },
     {
       "name": "대우",
@@ -134574,7 +134585,11 @@
         83598
       ],
       "builder": "기타",
-      "households": null
+      "households": 260,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": []
     },
     {
       "name": "한원힐트리움수유",
@@ -134595,7 +134610,11 @@
         25800
       ],
       "builder": "기타",
-      "households": null
+      "households": 66,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": []
     },
     {
       "name": "송파파인타운6단지",
@@ -134618,7 +134637,11 @@
         199117
       ],
       "builder": "기타",
-      "households": null
+      "households": 564,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": []
     },
     {
       "name": "고강3차",
@@ -134645,7 +134668,11 @@
       "builder": "기타",
       "display_name": "고강3차아파트",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 210,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": []
     },
     {
       "name": "한솔리치빌(1단지)",
@@ -134669,8 +134696,14 @@
       ],
       "builder": "기타",
       "display_name": "한솔리치빌1단지아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "name_src": "portal.kakao_local",
+      "households": 747,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-10",
+      "name_evidence": "http://place.map.kakao.com/11212120"
     },
     {
       "name": "e편한세상 금정역 에코센트럴 아파트",
@@ -134708,7 +134741,14 @@
         99215
       ],
       "builder": "DL이앤씨",
-      "households": null
+      "households": 677,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": [],
+      "display_name": "e편한세상금정역에코센트럴아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-10"
     },
     {
       "name": "부영",
@@ -134736,7 +134776,14 @@
         12134
       ],
       "builder": "기타",
-      "households": null
+      "households": 795,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": [],
+      "display_name": "안성부영아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-10"
     }
   ]
 }
