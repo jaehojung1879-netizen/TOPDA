@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-08"
+    "portal_checked_at": "2026-11-10"
   },
   "apartments": [
     {
@@ -130655,7 +130655,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-11-01",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "산운마을9단지노블랜드아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-10",
+      "name_evidence": "http://place.map.kakao.com/11506223"
     },
     {
       "name": "까치마을(3단지)(신원)",
@@ -134051,7 +134055,11 @@
         14500
       ],
       "builder": "기타",
-      "households": null
+      "households": 364,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": []
     },
     {
       "name": "목동경동미르웰",
@@ -134072,7 +134080,11 @@
         13033
       ],
       "builder": "기타",
-      "households": null
+      "households": 104,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": []
     },
     {
       "name": "여의도이튼브라운",
@@ -134099,7 +134111,11 @@
         30000
       ],
       "builder": "기타",
-      "households": null
+      "households": 216,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": []
     },
     {
       "name": "리시본하우스",
@@ -134130,7 +134146,11 @@
         82382
       ],
       "builder": "기타",
-      "households": null
+      "households": 27,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": []
     },
     {
       "name": "매화마을(주공3)",
@@ -134173,7 +134193,14 @@
         90000
       ],
       "builder": "기타",
-      "households": null
+      "households": 851,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": [],
+      "display_name": "매화마을주공3단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-10"
     },
     {
       "name": "백현마을동일하이빌",
@@ -134201,7 +134228,14 @@
         75000
       ],
       "builder": "기타",
-      "households": null
+      "households": 743,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-10",
+      "hh_evidence": [],
+      "display_name": "백현마을동일하이빌아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-10"
     }
   ]
 }
