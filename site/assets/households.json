@@ -241032,7 +241032,10 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 176
-      }
+      },
+      "households": 77,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2007
     },
     "서울 강서구|청솔샤르망1001동": {
       "addr": "서울 강서구 내발산동 676-23",
@@ -241045,7 +241048,10 @@
       "elementary": {
         "name": "서울내발산초등학교",
         "distance_m": 159
-      }
+      },
+      "households": 49,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2004
     },
     "인천 미추홀구|행복캐슬103동": {
       "addr": "인천 미추홀구 숭의동 122-10",
@@ -241058,7 +241064,10 @@
       "elementary": {
         "name": "인천숭의초등학교",
         "distance_m": 531
-      }
+      },
+      "households": 24,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2014
     },
     "서울 양천구|주함헤븐103동": {
       "addr": "서울 양천구 신월동 203-14",
@@ -241067,7 +241076,10 @@
       "elementary": {
         "name": "서울신원초등학교",
         "distance_m": 57
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2006
     },
     "서울 강동구|광남캐스빌105동": {
       "addr": "서울 강동구 둔촌동 435-4",
@@ -241080,7 +241092,10 @@
       "elementary": {
         "name": "서울한산초등학교",
         "distance_m": 579
-      }
+      },
+      "households": 28,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2006
     },
     "서울 관악구|에메랄드105동": {
       "addr": "서울 관악구 봉천동 41-261",
@@ -241093,7 +241108,10 @@
       "elementary": {
         "name": "서울신봉초등학교",
         "distance_m": 324
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2012
     },
     "서울 강서구|우공팰리스101동": {
       "addr": "서울 강서구 화곡동 1026-27",
@@ -241106,7 +241124,10 @@
       "elementary": {
         "name": "서울신월초등학교",
         "distance_m": 450
-      }
+      },
+      "households": 12,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2005
     },
     "경기 성남시 분당구|성원상떼뷰201동": {
       "addr": "경기 성남시 분당구 정자동 12-2",
@@ -241119,7 +241140,10 @@
       "elementary": {
         "name": "성남정자초등학교",
         "distance_m": 461
-      }
+      },
+      "households": 33,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2004
     },
     "경기 용인시 수지구|죽전GS자이103동": {
       "addr": "경기 용인시 수지구 죽전동 96",
@@ -241128,7 +241152,10 @@
       "elementary": {
         "name": "대청초등학교",
         "distance_m": 472
-      }
+      },
+      "households": 19,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1998
     },
     "대전 서구|둔산더샵엘리프1단지": {
       "addr": "대전 서구 용문동 266-2",
@@ -241141,7 +241168,10 @@
       "elementary": {
         "name": "탄방초등학교",
         "distance_m": 379
-      }
+      },
+      "households": 997,
+      "hh_src": "recap.hhldCnt",
+      "built_year": 2025
     },
     "대구 수성구|신천지하이츠": {
       "addr": "대구 수성구 황금동 254-1",
@@ -241154,7 +241184,10 @@
       "elementary": {
         "name": "대구성동초등학교",
         "distance_m": 794
-      }
+      },
+      "households": 292,
+      "hh_src": "recap.hhldCnt",
+      "built_year": 1992
     },
     "울산 남구|세원명가": {
       "addr": "울산 남구 달동 1377-12",
@@ -241163,7 +241196,10 @@
       "elementary": {
         "name": "동평초등학교",
         "distance_m": 261
-      }
+      },
+      "households": 19,
+      "hh_src": "title.hhldCnt",
+      "built_year": 2004
     },
     "서울 금천구|낙원": {
       "addr": "서울 금천구 시흥동 952",
@@ -241176,7 +241212,10 @@
       "elementary": {
         "name": "서울금산초등학교",
         "distance_m": 269
-      }
+      },
+      "households": 35,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1996
     },
     "경기 용인시 처인구|동원프라자": {
       "addr": "경기 용인시 처인구 역북동 386-7",
@@ -241189,7 +241228,10 @@
       "elementary": {
         "name": "역북초등학교",
         "distance_m": 454
-      }
+      },
+      "households": 10,
+      "hh_src": "title.hhldCnt",
+      "built_year": 1992
     }
   },
   "as_of": "2026-11-10"
