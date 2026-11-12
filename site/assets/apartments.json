@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-11"
+    "portal_checked_at": "2026-11-12"
   },
   "apartments": [
     {
@@ -111252,12 +111252,14 @@
       ],
       "builder": "GS건설",
       "display_name": "DMC아트포레자이아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "name_src": "portal.kakao_local",
       "households": 672,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-01",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-12",
+      "name_evidence": "http://place.map.kakao.com/399591340"
     },
     {
       "name": "래미안남가좌2차",
@@ -135352,9 +135354,15 @@
         112008
       ],
       "builder": "기타",
-      "display_name": "삼선코오롱아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "코오롱아파트",
+      "name_src": "portal.kakao_local",
+      "households": 453,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-12",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-12",
+      "name_evidence": "http://place.map.kakao.com/11363643"
     },
     {
       "name": "테헤란로대우아이빌(891-6)",
@@ -135388,7 +135396,11 @@
       "builder": "기타",
       "display_name": "테헤란로대우아이빌",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 372,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-12",
+      "hh_evidence": []
     },
     {
       "name": "현대8차(성수현대:91~95동)",
@@ -135419,7 +135431,11 @@
         475578
       ],
       "builder": "기타",
-      "households": null
+      "households": 516,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-12",
+      "hh_evidence": []
     },
     {
       "name": "성지",
@@ -135446,7 +135462,11 @@
         28129
       ],
       "builder": "기타",
-      "households": null
+      "households": 441,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-12",
+      "hh_evidence": []
     },
     {
       "name": "초원마을대림",
@@ -135474,7 +135494,14 @@
         94500
       ],
       "builder": "기타",
-      "households": null
+      "households": 1035,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-12",
+      "hh_evidence": [],
+      "display_name": "초원2단지대림아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-12"
     },
     {
       "name": "이진젠시티개금",
@@ -135507,9 +135534,15 @@
         59319
       ],
       "builder": "기타",
-      "display_name": "이진젠시티",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "이진젠시티개금아파트",
+      "name_src": "portal.kakao_local",
+      "households": 736,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-12",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-12",
+      "name_evidence": "http://place.map.kakao.com/2088346123"
     }
   ]
 }
