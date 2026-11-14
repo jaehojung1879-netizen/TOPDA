@@ -1,48 +1,31 @@
 {
- "as_of": "2026-11-13",
+ "as_of": "2026-11-14",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 9631,
-  "filled": 9339,
-  "target": 481,
-  "kapt_list": 6282,
-  "kapt_ratio": 0.65,
-  "name_gap": 11,
-  "matched_this_run": 28,
+  "complexes": 8146,
+  "filled": 7887,
+  "target": 463,
+  "kapt_list": 5150,
+  "kapt_ratio": 0.63,
+  "name_gap": 4,
+  "matched_this_run": 23,
   "filled_this_run": 0,
   "addr_reject": 0,
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 14,
-  "dong_indexed": 6282
+  "jibun_seeded": 10,
+  "dong_indexed": 5150
  },
  "regions": [
   {
-   "region": "경기 화성시",
-   "target": 6,
-   "filled": 384,
-   "total": 390,
-   "kapt_list": 430,
-   "kapt_ratio": 1.1,
-   "name_gap": 6,
-   "matched": 1,
-   "codes": [
-    "41591",
-    "41593",
-    "41595",
-    "41597"
-   ],
-   "unmatched_sample": []
-  },
-  {
    "region": "경기 성남시 분당구",
    "target": 7,
-   "filled": 212,
-   "total": 219,
+   "filled": 213,
+   "total": 220,
    "kapt_list": 215,
    "kapt_ratio": 0.98,
-   "name_gap": 3,
+   "name_gap": 2,
    "matched": 0,
    "codes": [
     "41135"
@@ -76,8 +59,8 @@
   },
   {
    "region": "서울 강남구",
-   "target": 16,
-   "filled": 409,
+   "target": 15,
+   "filled": 410,
    "total": 425,
    "kapt_list": 236,
    "kapt_ratio": 0.56,
@@ -92,9 +75,9 @@
     "삼익대청아파트",
     "한보미도맨션2",
     "선경1차(1동-7동)",
-    "메트로",
     "선릉역풍림아이원레몬",
-    "선릉역대우아이빌(890-49)"
+    "선릉역대우아이빌(890-49)",
+    "강남웅진베어스빌"
    ]
   },
   {
@@ -198,8 +181,8 @@
   },
   {
    "region": "경기 광명시",
-   "target": 5,
-   "filled": 115,
+   "target": 4,
+   "filled": 116,
    "total": 120,
    "kapt_list": 89,
    "kapt_ratio": 0.74,
@@ -212,7 +195,6 @@
     "도덕파크타운2단지",
     "주공8(고층)",
     "도덕파크타운1단지",
-    "제니스뷰",
     "오덕"
    ]
   },
@@ -322,8 +304,8 @@
   },
   {
    "region": "서울 중랑구",
-   "target": 3,
-   "filled": 235,
+   "target": 2,
+   "filled": 236,
    "total": 238,
    "kapt_list": 137,
    "kapt_ratio": 0.58,
@@ -334,7 +316,6 @@
    ],
    "unmatched_sample": [
     "신내두산아파트",
-    "승일카이저",
     "태능에셈빌"
    ]
   },
@@ -363,8 +344,8 @@
   },
   {
    "region": "서울 송파구",
-   "target": 9,
-   "filled": 361,
+   "target": 8,
+   "filled": 362,
    "total": 370,
    "kapt_list": 178,
    "kapt_ratio": 0.48,
@@ -375,7 +356,6 @@
    ],
    "unmatched_sample": [
     "장미2",
-    "선경쉐르빌(106-15)",
     "올림픽파크리움",
     "동광팰리스",
     "이스턴잠실",
@@ -386,13 +366,13 @@
   },
   {
    "region": "경기 고양시 덕양구",
-   "target": 3,
-   "filled": 238,
+   "target": 2,
+   "filled": 239,
    "total": 241,
    "kapt_list": 199,
    "kapt_ratio": 0.83,
    "name_gap": 0,
-   "matched": 1,
+   "matched": 0,
    "codes": [
     "41281"
    ],
@@ -495,8 +475,8 @@
   },
   {
    "region": "경기 부천시 원미구",
-   "target": 18,
-   "filled": 295,
+   "target": 17,
+   "filled": 296,
    "total": 313,
    "kapt_list": 135,
    "kapt_ratio": 0.43,
@@ -508,12 +488,12 @@
    "unmatched_sample": [
     "역곡현대",
     "마스터웍바이로뎀",
-    "더퍼스트",
     "에코스마트3",
     "센텀시티",
     "JY포에시아",
     "삼융그린",
-    "하이팰리스"
+    "하이팰리스",
+    "골든베이아파트"
    ]
   },
   {
@@ -647,9 +627,9 @@
   },
   {
    "region": "서울 마포구",
-   "target": 9,
-   "filled": 274,
-   "total": 283,
+   "target": 10,
+   "filled": 275,
+   "total": 285,
    "kapt_list": 144,
    "kapt_ratio": 0.51,
    "name_gap": 0,
@@ -658,6 +638,7 @@
     "11440"
    ],
    "unmatched_sample": [
+    "중앙하이츠104동",
     "성지",
     "솔리스타",
     "엠제이더퍼스트홍대",
@@ -690,8 +671,8 @@
   },
   {
    "region": "경기 평택시",
-   "target": 13,
-   "filled": 335,
+   "target": 12,
+   "filled": 336,
    "total": 348,
    "kapt_list": 313,
    "kapt_ratio": 0.9,
@@ -702,13 +683,13 @@
    ],
    "unmatched_sample": [
     "평택화양휴먼빌퍼스트시티아파트",
-    "평택고덕국제신도시디에트르리비에르",
     "평택서정동롯데캐슬",
     "외기노조",
     "평일",
     "영흥(가,나,다)",
     "한일(A,B)",
-    "명원"
+    "명원",
+    "베스트빌"
    ]
   },
   {
@@ -735,120 +716,9 @@
    "kapt_list": 74,
    "kapt_ratio": 0.61,
    "name_gap": 0,
-   "matched": 2,
+   "matched": 1,
    "codes": [
     "41115"
-   ],
-   "unmatched_sample": [
-    "현대콤비타운",
-    "유엘비치나움"
-   ]
-  },
-  {
-   "region": "대구 달서구",
-   "target": 2,
-   "filled": 325,
-   "total": 327,
-   "kapt_list": 247,
-   "kapt_ratio": 0.76,
-   "name_gap": 0,
-   "matched": 1,
-   "codes": [
-    "27290"
-   ],
-   "unmatched_sample": [
-    "두류중흥S-클래스센텀포레"
-   ]
-  },
-  {
-   "region": "서울 종로구",
-   "target": 8,
-   "filled": 112,
-   "total": 120,
-   "kapt_list": 39,
-   "kapt_ratio": 0.33,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11110"
-   ],
-   "unmatched_sample": [
-    "종로아인스빌",
-    "버넷하임1",
-    "아르젠종로",
-    "삼전솔하임4차",
-    "디팰리스",
-    "익성씨티하임",
-    "롯데미도파광화문빌딩",
-    "종로동광모닝스카이"
-   ]
-  },
-  {
-   "region": "서울 금천구",
-   "target": 2,
-   "filled": 123,
-   "total": 125,
-   "kapt_list": 55,
-   "kapt_ratio": 0.44,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11545"
-   ],
-   "unmatched_sample": [
-    "와이즈플레이스",
-    "성지"
-   ]
-  },
-  {
-   "region": "경기 안양시 만안구",
-   "target": 8,
-   "filled": 185,
-   "total": 193,
-   "kapt_list": 91,
-   "kapt_ratio": 0.47,
-   "name_gap": 0,
-   "matched": 1,
-   "codes": [
-    "41171"
-   ],
-   "unmatched_sample": [
-    "엠씨티",
-    "안양KCC스위첸",
-    "힐스테이트안양펠루스",
-    "원평노블레스6차",
-    "더베이프리미엄아파트",
-    "꿈에블리스나인",
-    "향림"
-   ]
-  },
-  {
-   "region": "경기 성남시 중원구",
-   "target": 1,
-   "filled": 98,
-   "total": 99,
-   "kapt_list": 54,
-   "kapt_ratio": 0.55,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "41133"
-   ],
-   "unmatched_sample": [
-    "산호"
-   ]
-  },
-  {
-   "region": "세종 세종시",
-   "target": 0,
-   "filled": 234,
-   "total": 234,
-   "kapt_list": 216,
-   "kapt_ratio": 0.92,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "36110"
    ],
    "unmatched_sample": []
   }
