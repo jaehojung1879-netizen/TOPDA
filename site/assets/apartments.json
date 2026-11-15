@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-14"
+    "portal_checked_at": "2026-11-15"
   },
   "apartments": [
     {
@@ -83,7 +83,11 @@
       "mgmt_fee_per_pyeong": 11121,
       "builder": "HDC현대산업",
       "sido": "서울",
-      "sigungu": "송파구"
+      "sigungu": "송파구",
+      "display_name": "헬리오시티아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-15",
+      "name_evidence": "http://place.map.kakao.com/27360701"
     },
     {
       "id": "ap-grace",
@@ -24664,7 +24668,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "호반베르디움앤영무예다음아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-15",
+      "name_evidence": "http://place.map.kakao.com/11277419"
     },
     {
       "name": "루원시티SKLeaders'VIEW",
@@ -59634,7 +59642,11 @@
         57100
       ],
       "builder": "기타",
-      "households": 299
+      "households": 299,
+      "display_name": "범어태왕아너스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-15",
+      "name_evidence": "http://place.map.kakao.com/11063944"
     },
     {
       "name": "수성골드클래스더센텀",
