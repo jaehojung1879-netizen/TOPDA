@@ -2,44 +2,22 @@
  "as_of": "2026-11-17",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 8007,
-  "filled": 7749,
+  "complexes": 8155,
+  "filled": 7893,
   "target": 470,
-  "kapt_list": 5056,
+  "kapt_list": 5150,
   "kapt_ratio": 0.63,
-  "name_gap": 4,
-  "matched_this_run": 22,
+  "name_gap": 3,
+  "matched_this_run": 23,
   "filled_this_run": 0,
   "addr_reject": 0,
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 17,
-  "dong_indexed": 5056
+  "jibun_seeded": 15,
+  "dong_indexed": 5150
  },
  "regions": [
-  {
-   "region": "경기 성남시 분당구",
-   "target": 7,
-   "filled": 213,
-   "total": 220,
-   "kapt_list": 215,
-   "kapt_ratio": 0.98,
-   "name_gap": 2,
-   "matched": 0,
-   "codes": [
-    "41135"
-   ],
-   "unmatched_sample": [
-    "양지마을(5단지)(한양501-514)",
-    "시범한신",
-    "양지마을(5단지)(한양515-529)",
-    "무지개(3단지)(건영)",
-    "정든마을(2단지)(동아)",
-    "정든마을(6단지)(우성)",
-    "양지마을(6단지)(한양603동)"
-   ]
-  },
   {
    "region": "경기 김포시",
    "target": 2,
@@ -58,9 +36,31 @@
    ]
   },
   {
+   "region": "경기 성남시 분당구",
+   "target": 7,
+   "filled": 214,
+   "total": 221,
+   "kapt_list": 215,
+   "kapt_ratio": 0.97,
+   "name_gap": 1,
+   "matched": 0,
+   "codes": [
+    "41135"
+   ],
+   "unmatched_sample": [
+    "양지마을(5단지)(한양501-514)",
+    "시범한신",
+    "양지마을(5단지)(한양515-529)",
+    "무지개(3단지)(건영)",
+    "정든마을(2단지)(동아)",
+    "정든마을(6단지)(우성)",
+    "양지마을(6단지)(한양603동)"
+   ]
+  },
+  {
    "region": "서울 강남구",
-   "target": 16,
-   "filled": 410,
+   "target": 15,
+   "filled": 411,
    "total": 426,
    "kapt_list": 236,
    "kapt_ratio": 0.55,
@@ -75,7 +75,7 @@
     "삼익대청아파트",
     "한보미도맨션2",
     "선경1차(1동-7동)",
-    "현대10차(201,202동)",
+    "강남웅진베어스빌",
     "선릉역풍림아이원레몬",
     "선릉역대우아이빌(890-49)"
    ]
@@ -103,8 +103,8 @@
   },
   {
    "region": "경기 용인시 수지구",
-   "target": 5,
-   "filled": 266,
+   "target": 4,
+   "filled": 267,
    "total": 271,
    "kapt_list": 208,
    "kapt_ratio": 0.77,
@@ -117,7 +117,6 @@
     "동아아파트",
     "삼익아파트",
     "풍림아파트",
-    "대진",
     "에버하임"
    ]
   },
@@ -225,8 +224,8 @@
   {
    "region": "인천 미추홀구",
    "target": 17,
-   "filled": 337,
-   "total": 354,
+   "filled": 336,
+   "total": 353,
    "kapt_list": 117,
    "kapt_ratio": 0.33,
    "name_gap": 0,
@@ -248,10 +247,10 @@
   {
    "region": "서울 노원구",
    "target": 3,
-   "filled": 287,
-   "total": 290,
+   "filled": 288,
+   "total": 291,
    "kapt_list": 231,
-   "kapt_ratio": 0.8,
+   "kapt_ratio": 0.79,
    "name_gap": 0,
    "matched": 0,
    "codes": [
@@ -322,8 +321,8 @@
   },
   {
    "region": "서울 구로구",
-   "target": 22,
-   "filled": 336,
+   "target": 21,
+   "filled": 337,
    "total": 358,
    "kapt_list": 181,
    "kapt_ratio": 0.51,
@@ -335,12 +334,12 @@
    "unmatched_sample": [
     "대림2",
     "늘푸른주상복합",
-    "백록빌라",
     "대림역와이즈플레이스",
     "로제리움2차",
     "해담채3",
     "비즈트위트블루",
-    "대림역포스큐"
+    "대림역포스큐",
+    "대림우성2"
    ]
   },
   {
@@ -419,8 +418,8 @@
   },
   {
    "region": "인천 부평구",
-   "target": 30,
-   "filled": 329,
+   "target": 29,
+   "filled": 330,
    "total": 359,
    "kapt_list": 160,
    "kapt_ratio": 0.45,
@@ -434,10 +433,10 @@
     "그랜드캐슬",
     "JY팰리스",
     "더갤러리",
-    "세화",
     "신한타워",
     "서광팰리스",
-    "프리미엄팰리스"
+    "프리미엄팰리스",
+    "블루밍아파트A동"
    ]
   },
   {
@@ -476,9 +475,9 @@
   },
   {
    "region": "경기 부천시 원미구",
-   "target": 17,
+   "target": 18,
    "filled": 296,
-   "total": 313,
+   "total": 314,
    "kapt_list": 135,
    "kapt_ratio": 0.43,
    "name_gap": 0,
@@ -488,13 +487,13 @@
    ],
    "unmatched_sample": [
     "역곡현대",
+    "더파크힐2아파트",
     "마스터웍바이로뎀",
     "에코스마트3",
     "센텀시티",
     "JY포에시아",
     "삼융그린",
-    "하이팰리스",
-    "골든베이아파트"
+    "하이팰리스"
    ]
   },
   {
@@ -592,9 +591,9 @@
   },
   {
    "region": "경기 고양시 일산서구",
-   "target": 1,
+   "target": 2,
    "filled": 189,
-   "total": 190,
+   "total": 191,
    "kapt_list": 150,
    "kapt_ratio": 0.79,
    "name_gap": 0,
@@ -603,16 +602,17 @@
     "41287"
    ],
    "unmatched_sample": [
-    "후곡마을(롯데)"
+    "후곡마을(롯데)",
+    "후곡마을(코오롱)"
    ]
   },
   {
    "region": "서울 용산구",
-   "target": 5,
-   "filled": 191,
-   "total": 196,
+   "target": 6,
+   "filled": 192,
+   "total": 198,
    "kapt_list": 86,
-   "kapt_ratio": 0.44,
+   "kapt_ratio": 0.43,
    "name_gap": 0,
    "matched": 0,
    "codes": [
@@ -623,6 +623,7 @@
     "리버뷰",
     "현대안성타워",
     "용산큐브",
+    "몬테피오레",
     "전자타운한신(A)"
    ]
   },
@@ -686,8 +687,42 @@
     "평택화양휴먼빌퍼스트시티아파트",
     "평택서정동롯데캐슬",
     "외기노조",
-    "평일"
+    "평일",
+    "영흥(가,나,다)",
+    "한일(A,B)",
+    "명원",
+    "베스트빌"
    ]
+  },
+  {
+   "region": "경기 과천시",
+   "target": 1,
+   "filled": 21,
+   "total": 22,
+   "kapt_list": 20,
+   "kapt_ratio": 0.91,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "41290"
+   ],
+   "unmatched_sample": [
+    "주공8"
+   ]
+  },
+  {
+   "region": "경기 수원시 팔달구",
+   "target": 4,
+   "filled": 117,
+   "total": 121,
+   "kapt_list": 74,
+   "kapt_ratio": 0.61,
+   "name_gap": 0,
+   "matched": 1,
+   "codes": [
+    "41115"
+   ],
+   "unmatched_sample": []
   }
  ]
 }
