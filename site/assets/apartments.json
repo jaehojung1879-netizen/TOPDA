@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-15"
+    "portal_checked_at": "2026-11-17"
   },
   "apartments": [
     {
@@ -74234,7 +74234,11 @@
         "name": "효행초등학교",
         "distance_m": 337,
         "in_zone": false
-      }
+      },
+      "display_name": "봉담센트럴푸르지오아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-17",
+      "name_evidence": "http://place.map.kakao.com/26157302"
     },
     {
       "name": "신동탄포레자이",
@@ -130003,7 +130007,11 @@
         153000
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "display_name": "현대안성타워아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-17",
+      "name_evidence": "http://place.map.kakao.com/11201693"
     },
     {
       "name": "중앙하이츠빌1단지",
@@ -134313,7 +134321,11 @@
         35303
       ],
       "builder": "기타",
-      "households": null
+      "households": null,
+      "display_name": "산호아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-17",
+      "name_evidence": "http://place.map.kakao.com/11334702"
     },
     {
       "name": "버들치마을경남아너스빌1차",
@@ -136078,7 +136090,11 @@
       "builder": "동부건설",
       "display_name": "이촌동부센트레빌",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 309,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-17",
+      "hh_evidence": []
     },
     {
       "name": "쌍용",
@@ -136099,7 +136115,11 @@
         214000
       ],
       "builder": "기타",
-      "households": null
+      "households": 840,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-17",
+      "hh_evidence": []
     },
     {
       "name": "불암현대",
@@ -136131,7 +136151,14 @@
         49570
       ],
       "builder": "기타",
-      "households": null
+      "households": 826,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-17",
+      "hh_evidence": [],
+      "display_name": "불암현대아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-17"
     },
     {
       "name": "서초쌍용플래티넘",
@@ -136163,7 +136190,11 @@
         110680
       ],
       "builder": "기타",
-      "households": null
+      "households": 109,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-17",
+      "hh_evidence": []
     },
     {
       "name": "상록마을(우성)1",
@@ -136216,7 +136247,14 @@
         249000
       ],
       "builder": "기타",
-      "households": null
+      "households": 1762,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-17",
+      "hh_evidence": [],
+      "display_name": "상록마을3단지우성아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-17"
     },
     {
       "name": "후곡마을(코오롱)",
@@ -136281,9 +136319,15 @@
         39127
       ],
       "builder": "기타",
-      "display_name": "파주문산역2차 동문디이스트 아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "파주문산역2차동문디이스트아파트",
+      "name_src": "portal.kakao_local",
+      "households": 1503,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-17",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-17",
+      "name_evidence": "http://place.map.kakao.com/1209125257"
     }
   ]
 }
