@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-17"
+    "portal_checked_at": "2026-11-18"
   },
   "apartments": [
     {
@@ -37959,7 +37959,11 @@
         "여의도": 17,
         "광화문": 17
       },
-      "households": 867
+      "households": 867,
+      "display_name": "용산e편한세상아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-18",
+      "name_evidence": "http://place.map.kakao.com/12683598"
     },
     {
       "name": "신동아",
@@ -47538,7 +47542,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "임광1,2차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-18",
+      "name_evidence": "http://place.map.kakao.com/11338253"
     },
     {
       "name": "래미안서초유니빌",
@@ -136844,7 +136852,14 @@
         88058
       ],
       "builder": "기타",
-      "households": null
+      "households": 529,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-18",
+      "hh_evidence": [],
+      "display_name": "푸른마을동아아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-18"
     },
     {
       "name": "삼성",
@@ -136872,7 +136887,14 @@
         48950
       ],
       "builder": "기타",
-      "households": null
+      "households": 582,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-18",
+      "hh_evidence": [],
+      "display_name": "삼성아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-18"
     },
     {
       "name": "남광센트럴뷰",
@@ -136898,7 +136920,11 @@
         59900
       ],
       "builder": "기타",
-      "households": null
+      "households": 28,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-18",
+      "hh_evidence": []
     }
   ]
 }
