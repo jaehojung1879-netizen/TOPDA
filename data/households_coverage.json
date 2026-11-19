@@ -1,11 +1,11 @@
 {
- "as_of": "2026-11-18",
+ "as_of": "2026-11-19",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 8019,
-  "filled": 7759,
-  "target": 474,
-  "kapt_list": 5056,
+  "complexes": 8021,
+  "filled": 7762,
+  "target": 475,
+  "kapt_list": 5058,
   "kapt_ratio": 0.63,
   "name_gap": 3,
   "matched_this_run": 23,
@@ -14,8 +14,8 @@
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 17,
-  "dong_indexed": 5056
+  "jibun_seeded": 19,
+  "dong_indexed": 5058
  },
  "regions": [
   {
@@ -123,8 +123,8 @@
   {
    "region": "서울 성북구",
    "target": 5,
-   "filled": 190,
-   "total": 195,
+   "filled": 191,
+   "total": 196,
    "kapt_list": 148,
    "kapt_ratio": 0.76,
    "name_gap": 0,
@@ -184,8 +184,8 @@
    "target": 4,
    "filled": 116,
    "total": 120,
-   "kapt_list": 89,
-   "kapt_ratio": 0.74,
+   "kapt_list": 91,
+   "kapt_ratio": 0.76,
    "name_gap": 0,
    "matched": 0,
    "codes": [
@@ -223,9 +223,9 @@
   },
   {
    "region": "인천 미추홀구",
-   "target": 17,
+   "target": 18,
    "filled": 337,
-   "total": 354,
+   "total": 355,
    "kapt_list": 117,
    "kapt_ratio": 0.33,
    "name_gap": 0,
@@ -237,11 +237,11 @@
     "월드스테이트(101~111,124~132)",
     "학익SKVIEW",
     "월드스테이트(112~123)",
+    "세중(395-6)",
     "서원",
     "대경이즈뷰",
     "골드프라임",
-    "그레이스타워",
-    "더젠씨티(341-30)"
+    "그레이스타워"
    ]
   },
   {
@@ -321,8 +321,8 @@
   },
   {
    "region": "서울 구로구",
-   "target": 22,
-   "filled": 337,
+   "target": 21,
+   "filled": 338,
    "total": 359,
    "kapt_list": 181,
    "kapt_ratio": 0.5,
@@ -334,12 +334,12 @@
    "unmatched_sample": [
     "대림2",
     "늘푸른주상복합",
-    "한신주택",
     "대림역와이즈플레이스",
     "로제리움2차",
     "해담채3",
     "비즈트위트블루",
-    "대림역포스큐"
+    "대림역포스큐",
+    "대림우성2"
    ]
   },
   {
@@ -476,8 +476,8 @@
   },
   {
    "region": "경기 부천시 원미구",
-   "target": 18,
-   "filled": 297,
+   "target": 17,
+   "filled": 298,
    "total": 315,
    "kapt_list": 135,
    "kapt_ratio": 0.43,
@@ -489,12 +489,12 @@
    "unmatched_sample": [
     "역곡현대",
     "마스터웍바이로뎀",
-    "대진2단지",
     "에코스마트3",
     "센텀시티",
     "JY포에시아",
     "삼융그린",
-    "하이팰리스"
+    "하이팰리스",
+    "골든베이아파트"
    ]
   },
   {
@@ -686,9 +686,9 @@
    "unmatched_sample": [
     "평택화양휴먼빌퍼스트시티아파트",
     "평택서정동롯데캐슬",
+    "평일",
     "신미",
-    "외기노조",
-    "평일"
+    "외기노조"
    ]
   }
  ]
