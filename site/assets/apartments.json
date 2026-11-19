@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-18"
+    "portal_checked_at": "2026-11-19"
   },
   "apartments": [
     {
@@ -137058,7 +137058,11 @@
         82000
       ],
       "builder": "기타",
-      "households": null
+      "households": 29,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-19",
+      "hh_evidence": []
     },
     {
       "name": "서서울삼성",
@@ -137082,7 +137086,11 @@
       "builder": "기타",
       "display_name": "서서울삼성아파트",
       "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "households": 208,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-19",
+      "hh_evidence": []
     },
     {
       "name": "파크하비오",
@@ -137109,9 +137117,15 @@
         204592
       ],
       "builder": "기타",
-      "display_name": "파크하비오푸르지오아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "송파파크하비오푸르지오아파트",
+      "name_src": "portal.kakao_local",
+      "households": 999,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-19",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-19",
+      "name_evidence": "http://place.map.kakao.com/22278334"
     },
     {
       "name": "역북신원아침도시",
@@ -137139,9 +137153,15 @@
         52923
       ],
       "builder": "기타",
-      "display_name": "역북신원아침도시아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "용인역북신원아침도시아파트",
+      "name_src": "portal.kakao_local",
+      "households": 452,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-19",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-19",
+      "name_evidence": "http://place.map.kakao.com/991262339"
     },
     {
       "name": "산들마을5단지",
@@ -137164,9 +137184,15 @@
         41675
       ],
       "builder": "기타",
-      "display_name": "일산산들마을5단지동문",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "산들마을5단지동문굿모닝힐아파트",
+      "name_src": "portal.kakao_local",
+      "households": 926,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-19",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-19",
+      "name_evidence": "http://place.map.kakao.com/10439393"
     },
     {
       "name": "프라자",
@@ -137199,9 +137225,15 @@
         42431
       ],
       "builder": "기타",
-      "display_name": "안양프라자",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "프라자아파트",
+      "name_src": "portal.kakao_local",
+      "households": 637,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-19",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-19",
+      "name_evidence": "http://place.map.kakao.com/11228930"
     },
     {
       "name": "하남힐즈파크푸르지오2단지",
@@ -137234,7 +137266,14 @@
         85000
       ],
       "builder": "대우건설",
-      "households": null
+      "households": 456,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-19",
+      "hh_evidence": [],
+      "display_name": "미사힐즈파크푸르지오2단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-19"
     },
     {
       "name": "논현단풍마을트리플에듀",
@@ -137262,7 +137301,14 @@
         40008
       ],
       "builder": "기타",
-      "households": null
+      "households": 898,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-19",
+      "hh_evidence": [],
+      "display_name": "논현단풍마을트리플에듀아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-19"
     }
   ]
 }
