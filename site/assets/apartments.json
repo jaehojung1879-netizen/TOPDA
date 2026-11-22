@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-21"
+    "portal_checked_at": "2026-11-22"
   },
   "apartments": [
     {
@@ -137653,7 +137653,14 @@
         99909
       ],
       "builder": "한화 건설부문",
-      "households": null
+      "households": 1063,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-22",
+      "hh_evidence": [],
+      "display_name": "포레나북수원아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-22"
     }
   ]
 }
