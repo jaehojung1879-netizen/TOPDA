@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,follow"><title>자동 주간 자료 브리핑 — 톺다</title>
+<link rel="canonical" href="https://topda.kr/posts/weekly-data.html">
+<style>body{font:16px/1.7 system-ui,sans-serif;max-width:760px;margin:2rem auto;padding:0 1rem;color:#202a34}a{color:#145a88}h2{margin-top:2rem}li{margin:0.7rem 0}small{display:block;color:#59636d}select{font:inherit;padding:.4rem}table{border-collapse:collapse;width:100%}td,th{padding:.5rem;border-bottom:1px solid #ddd;text-align:left}</style></head>
+<body><nav><a href="../index.html">톺다 홈</a> · <a href="index.html">매거진</a> · <a href="../market.html">시세정보</a></nav>
+<main><h1>자동 주간 자료 브리핑</h1><p>기존 공개 RSS 수집 결과를 주 단위로 보관합니다. AI가 작성한 분석이나 운영자가 검증한 정책 판단이 아닙니다. 기사의 사실·시행 여부는 원문에서 확인하세요.</p>
+<label for="week">회차 선택</label> <select id="week" disabled></select><p id="status" role="status">자료 불러오는 중…</p><ul id="links"></ul>
+<h2>최신 월간 아파트 가격지수 참고</h2><p>한국부동산원 R-ONE 월간 지수입니다. 주간 변동률이 아니며, 선택한 과거 뉴스 회차와 별개인 최신 데이터입니다.</p><p id="market-status" role="status">자료 불러오는 중…</p><table><thead><tr><th>지역</th><th>통계월</th><th>매매 전월비</th><th>전세 전월비</th></tr></thead><tbody id="market"></tbody></table>
+<p><a href="https://www.reb.or.kr/r-one/">한국부동산원 R-ONE</a> · <a href="../calculators/market-trends.html">시세 추이 보기</a></p></main>
+<script>
+'use strict';
+const el=id=>document.getElementById(id);
+const get=async path=>{const r=await fetch(path);if(!r.ok)throw Error('HTTP '+r.status);return r.json()};
+const node=(tag,value)=>{const n=document.createElement(tag);n.textContent=value;return n};
+get('../assets/news.json').then(data=>{
+ const archive=data.weekly_archive||{};const keys=Object.keys(archive).filter(k=>/^\d{4}-W\d{2}$/.test(k)).sort().reverse();
+ const items=[['latest',data.weekly],...keys.map(k=>[k,archive[k]])].filter(x=>x[1]&&Array.isArray(x[1].headlines));
+ if(!items.length)throw Error('no items');
+ for(const [k,v] of items){const opt=node('option',k==='latest'?'최근 수집 결과':k+' · '+(v.updated||''));opt.value=k;el('week').append(opt)}
+ function render(){const entry=items.find(x=>x[0]===el('week').value);if(!entry)return;const v=entry[1];el('status').textContent='수집일: '+(v.updated||'미확인')+' · 검색 집계 (원문 검증 전)';el('links').replaceChildren();
+ for(const it of v.headlines){if(!it.title)continue;let u;try{u=new URL(it.url);if(u.protocol!=='https:')continue}catch{continue}
+ const li=node('li','');const a=node('a',it.title);a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';li.append(a,node('small',[it.badge,it.source,it.date].filter(Boolean).join(' · ')));el('links').append(li)}}
+ el('week').disabled=false;el('week').addEventListener('change',render);render();
+}).catch(()=>{el('status').textContent='뉴스 자료를 확인할 수 없습니다. 잠시 후 다시 접속하세요.'});
+get('../assets/market.json').then(data=>{
+ const fmt=(a,b)=>Number.isFinite(a)&&Number.isFinite(b)&&b>0?((a/b-1)*100).toFixed(2)+'%':'—';
+ for(const key of ['전국','서울','경기','인천']){const r=(data.regions||[]).find(v=>v.key===key||v.name===key+' 전체'||v.name===key);if(!r)continue;
+ const s=(r.series||[]).filter(v=>/^\d{4}-\d{2}$/.test(v.month)).sort((a,b)=>a.month.localeCompare(b.month));if(s.length<2)continue;
+ const a=s[s.length-1],b=s[s.length-2];const delta=(Number(a.month.slice(0,4))-Number(b.month.slice(0,4)))*12+Number(a.month.slice(5))-Number(b.month.slice(5));if(delta!==1)continue;
+ const tr=node('tr','');for(const val of [key,a.month,fmt(a.sale_index,b.sale_index),fmt(a.jeonse_index,b.jeonse_index)])tr.append(node('td',val));el('market').append(tr)}
+ el('market-status').textContent=el('market').children.length?'공표된 월간 데이터의 연속 두 달을 비교합니다.':'표시할 연속 월간 데이터가 없습니다.';
+}).catch(()=>{el('market-status').textContent='월간 지수를 확인할 수 없습니다.'});
+</script></body></html>

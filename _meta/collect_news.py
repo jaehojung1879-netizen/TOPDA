@@ -283,6 +283,20 @@ def main():
         if prev is None:
             sys.exit(0)  # 첫 실행에서 빈 결과면 그냥 종료(워크플로 실패로 보지 않음)
         return
+    # Freeze the first successfully collected brief of each KST ISO week.
+    # This is an automated source-link digest, not an editorial market forecast.
+    prev = load_json(NEWS_JSON) or {}
+    archive = prev.get("weekly_archive", {})
+    if not isinstance(archive, dict):
+        archive = {}
+    archive = {k: v for k, v in archive.items()
+               if isinstance(k, str) and re.fullmatch(r"\d{4}-W\d{2}", k)
+               and isinstance(v, dict)}
+    iso = now.isocalendar()
+    week_key = f"{iso.year}-W{iso.week:02d}"
+    if week_key not in archive and len(headlines) >= 3:
+        archive[week_key] = weekly
+    payload["weekly_archive"] = dict(sorted(archive.items(), reverse=True)[:52])
     save_json_safe(NEWS_JSON, payload)
     inject_static(payload)
 
