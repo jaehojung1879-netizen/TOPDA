@@ -1,21 +1,21 @@
 {
- "as_of": "2026-11-22",
+ "as_of": "2026-11-24",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 7465,
-  "filled": 7227,
-  "target": 469,
-  "kapt_list": 4648,
-  "kapt_ratio": 0.62,
+  "complexes": 6795,
+  "filled": 6568,
+  "target": 481,
+  "kapt_list": 4268,
+  "kapt_ratio": 0.63,
   "name_gap": 3,
-  "matched_this_run": 21,
+  "matched_this_run": 20,
   "filled_this_run": 0,
   "addr_reject": 0,
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 13,
-  "dong_indexed": 4648
+  "jibun_seeded": 25,
+  "dong_indexed": 4268
  },
  "regions": [
   {
@@ -59,9 +59,9 @@
   },
   {
    "region": "서울 강남구",
-   "target": 15,
+   "target": 16,
    "filled": 411,
-   "total": 426,
+   "total": 427,
    "kapt_list": 236,
    "kapt_ratio": 0.55,
    "name_gap": 0,
@@ -75,9 +75,9 @@
     "삼익대청아파트",
     "한보미도맨션2",
     "선경1차(1동-7동)",
+    "라디안",
     "강남웅진베어스빌",
-    "선릉역풍림아이원레몬",
-    "선릉역대우아이빌(890-49)"
+    "선릉역풍림아이원레몬"
    ]
   },
   {
@@ -223,9 +223,9 @@
   },
   {
    "region": "인천 미추홀구",
-   "target": 17,
+   "target": 18,
    "filled": 338,
-   "total": 355,
+   "total": 356,
    "kapt_list": 117,
    "kapt_ratio": 0.33,
    "name_gap": 0,
@@ -238,10 +238,10 @@
     "학익SKVIEW",
     "월드스테이트(112~123)",
     "서원",
+    "삼영",
     "대경이즈뷰",
     "골드프라임",
-    "그레이스타워",
-    "더젠씨티(341-30)"
+    "그레이스타워"
    ]
   },
   {
@@ -295,11 +295,11 @@
     "한양I-Class",
     "DUO302",
     "한진해모로",
+    "남산트라팰리스",
     "이지마루오장",
     "동대문솔하임",
     "오장동오팰리오",
-    "(1546-0)",
-    "신당역솔하임"
+    "(1546-0)"
    ]
   },
   {
@@ -333,8 +333,8 @@
    ],
    "unmatched_sample": [
     "대림2",
-    "늘푸른주상복합",
     "대림역와이즈플레이스",
+    "늘푸른주상복합",
     "로제리움2차",
     "해담채3",
     "비즈트위트블루",
@@ -384,19 +384,20 @@
   },
   {
    "region": "경기 의정부시",
-   "target": 4,
+   "target": 6,
    "filled": 292,
-   "total": 296,
+   "total": 298,
    "kapt_list": 248,
-   "kapt_ratio": 0.84,
+   "kapt_ratio": 0.83,
    "name_gap": 0,
-   "matched": 0,
+   "matched": 1,
    "codes": [
     "41150"
    ],
    "unmatched_sample": [
     "풍림",
     "한국아파트",
+    "신일골든휴아파트",
     "신도아크라티움",
     "팰리체"
    ]
@@ -443,10 +444,10 @@
   {
    "region": "경기 수원시 장안구",
    "target": 3,
-   "filled": 149,
-   "total": 152,
+   "filled": 150,
+   "total": 153,
    "kapt_list": 94,
-   "kapt_ratio": 0.62,
+   "kapt_ratio": 0.61,
    "name_gap": 0,
    "matched": 0,
    "codes": [
@@ -460,9 +461,9 @@
   },
   {
    "region": "경기 수원시 권선구",
-   "target": 2,
+   "target": 3,
    "filled": 190,
-   "total": 192,
+   "total": 193,
    "kapt_list": 143,
    "kapt_ratio": 0.74,
    "name_gap": 0,
@@ -471,14 +472,15 @@
     "41113"
    ],
    "unmatched_sample": [
-    "엘지빌리지2"
+    "엘지빌리지2",
+    "탑캐슬17차"
    ]
   },
   {
    "region": "경기 부천시 원미구",
-   "target": 16,
+   "target": 17,
    "filled": 298,
-   "total": 314,
+   "total": 315,
    "kapt_list": 135,
    "kapt_ratio": 0.43,
    "name_gap": 0,
@@ -492,9 +494,9 @@
     "에코스마트3",
     "센텀시티",
     "JY포에시아",
+    "삼융그린",
     "하이팰리스",
-    "골든베이아파트",
-    "에코스마트2"
+    "골든베이아파트"
    ]
   },
   {
@@ -589,57 +591,6 @@
     "까치마을태화",
     "도두리마을롯데"
    ]
-  },
-  {
-   "region": "경기 고양시 일산서구",
-   "target": 2,
-   "filled": 190,
-   "total": 192,
-   "kapt_list": 150,
-   "kapt_ratio": 0.78,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "41287"
-   ],
-   "unmatched_sample": [
-    "후곡마을(롯데)",
-    "후곡마을(코오롱)"
-   ]
-  },
-  {
-   "region": "서울 용산구",
-   "target": 5,
-   "filled": 193,
-   "total": 198,
-   "kapt_list": 86,
-   "kapt_ratio": 0.43,
-   "name_gap": 0,
-   "matched": 0,
-   "codes": [
-    "11170"
-   ],
-   "unmatched_sample": [
-    "한강자이에클라트",
-    "리버뷰",
-    "현대안성타워",
-    "용산큐브",
-    "전자타운한신(A)"
-   ]
-  },
-  {
-   "region": "서울 마포구",
-   "target": 10,
-   "filled": 277,
-   "total": 287,
-   "kapt_list": 144,
-   "kapt_ratio": 0.5,
-   "name_gap": 0,
-   "matched": 2,
-   "codes": [
-    "11440"
-   ],
-   "unmatched_sample": []
   }
  ]
 }
