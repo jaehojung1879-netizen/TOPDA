@@ -41,7 +41,7 @@ permissions:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -108,7 +108,10 @@ jobs:
 
       # 로고 원본(688KB)이 바뀌었는데 파생본을 안 만들면 모든 페이지가 다시 원본을
       # 받게 된다 — 2026-08-02 실측에서 계산기 화면의 가장 느린 리소스였다.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: 로고 파생본 최신 여부
         run: |
-          python3 -m pip install --quiet --disable-pip-version-check pillow
-          python3 _meta/build_logo_sizes.py --check
+          python -m pip install --quiet --disable-pip-version-check Pillow==12.0.0
+          python _meta/build_logo_sizes.py --check

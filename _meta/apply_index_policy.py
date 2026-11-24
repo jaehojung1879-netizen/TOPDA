@@ -46,6 +46,7 @@ NOINDEX_GLOBS = (
     "/naverad*.html",                                          # 검색엔진 소유확인 파일
     # 자체 본문이 없는 JS 렌더링 링크 셸 — 탐색용으로 유지하되 색인에서 뺀다.
     "/market.html", "/*/market.html",
+    "/weekly-data.html",  # 자동 링크 집계, 편집 기사와 분리
     # 레거시 영문 지역 별칭 및 과거 단지별 URL. 실제 지역 콘텐츠는 /apt/*.html 하나만 둔다.
     "/apt/*/", "/apt/*/index.html",
 

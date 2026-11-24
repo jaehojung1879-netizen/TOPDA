@@ -1,0 +1,51 @@
+name: Rebuild generated assets for PR 261 (one-off)
+on:
+  push:
+    branches:
+      - maintenance/2026-11-24-policy-and-data-brief
+    paths:
+      - '.github/workflows/maintenance-rebuild-261.yml'
+permissions:
+  contents: write
+jobs:
+  rebuild:
+    if: github.repository == 'jaehojung1879-netizen/TOPDA'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Rebuild and verify generated assets
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --disable-pip-version-check Pillow==12.0.0
+          python _meta/build_logo_sizes.py
+          python _meta/build_logo_sizes.py --check
+          node scripts/bump_asset_version.mjs
+          node scripts/bump_asset_version.mjs --check
+          node scripts/check_golden_cases.mjs
+          node scripts/check_rule_versioning.mjs
+          node scripts/check_tax_rules.mjs
+          node scripts/check_calc_boundaries.mjs
+          node scripts/check_calc_invariants.mjs
+          node scripts/check_calc_parity.mjs
+          node scripts/check_transfer_tax_parity.mjs
+          node scripts/check_total_dashboard_parity.mjs
+      - name: Commit generated files to this PR branch only
+        run: |
+          set -euo pipefail
+          git status --short
+          git config user.name topda-bot
+          git config user.email actions@users.noreply.github.com
+          git add -- site _meta scripts
+          if ! git diff --cached --quiet; then
+            git commit -m 'Regenerate logo assets and static cache versions for PR 261'
+            git push origin HEAD:refs/heads/maintenance/2026-11-24-policy-and-data-brief
+          fi
