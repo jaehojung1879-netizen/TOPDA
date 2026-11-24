@@ -37,7 +37,7 @@ SECTORS = [
     {"key": "supply",     "name": "청약·분양",      "query": "아파트 청약 분양 경쟁률 입주물량"},
     {"key": "loan",       "name": "대출·금융",      "query": "부동산 대출 DSR LTV 금리 규제"},
     {"key": "commercial", "name": "오피스·상업용",  "query": "오피스 상가 상업용부동산 빌딩 공실률 꼬마빌딩"},
-    {"key": "policy",     "name": "정책·세제",      "query": "부동산 정책 세제 양도세 종부세 취득세"},
+    {"key": "policy",     "name": "정책·세제",      "query": "부동산 (세제 OR 양도세 OR 종부세 OR 취득세 OR 재건축부담금 OR 주택정책)"},
 ]
 
 # 섹터당 노출 기사 수(가로형 카드) — 핵심만 2~3건.
