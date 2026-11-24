@@ -19,6 +19,12 @@ const TARGETS = [
   { id: 'hf', label: 'HF 한국주택금융공사', url: 'https://www.hf.go.kr/' },
   { id: 'molit', label: '국토교통부 (외국인 부동산 정책)', url: 'https://www.molit.go.kr/' },
   { id: 'kb', label: 'KB국민은행 (외국인 전세대출)', url: 'https://obank.kbstar.com/' },
+  { id: 'income-decree', label: '소득세법 시행령 개정문', url: 'https://www.law.go.kr/lsRvsDocListP.do?lsId=003956' },
+  { id: 'local-decree', label: '지방세법 시행령 개정문', url: 'https://www.law.go.kr/lsRvsDocListP.do?lsId=005077' },
+  { id: 'holding-decree', label: '종합부동산세법 시행령 개정문', url: 'https://www.law.go.kr/lsRvsDocListP.do?lsId=009968' },
+  { id: 'rebuild-law', label: '재건축초과이익 환수에 관한 법률', url: 'https://www.law.go.kr/법령/재건축초과이익환수에관한법률' },
+  { id: 'bok', label: '한국은행 통화정책방향 결정회의', url: 'https://www.bok.or.kr/portal/main/contents.do?menuNo=200755' },
+  { id: 'fsc', label: '금융위원회 보도자료', url: 'https://www.fsc.go.kr/no010101' },
 ];
 
 function normalize(html) {
@@ -65,7 +71,7 @@ for (const t of TARGETS) {
 
 writeFileSync(SNAP, JSON.stringify(next, null, 2) + '\n');
 
-let md = `## 외국인 정책 페이지 변경 감지 (${now.slice(0, 10)})\n\n`;
+let md = `## 부동산·세제 정책 페이지 변경 감지 (${now.slice(0, 10)})\n\n`;
 if (changed.length) {
   md += '**변경 감지** — 아래 페이지에서 콘텐츠 변화가 감지되었습니다. 공식 내용을 확인 후 수동 반영하세요(자동 덮어쓰기 안 함):\n\n';
   for (const t of changed) md += `- [${t.label}](${t.url})\n`;

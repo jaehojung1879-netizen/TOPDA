@@ -1,11 +1,11 @@
-name: foreigner policy watch
+name: Housing and tax policy watch
 
-# 외국인 대출·부동산 정책 페이지 변경 감지 — 매월 1일 10:00 KST(01:00 UTC).
+# 대출·부동산 법령 및 정책 페이지 변경 감지 — 매주 월요일 10:00 KST.
 # 기존 일일 갱신·대시보드(평일 07:00 KST)와 겹치지 않는다.
 # 변경 감지 시 GitHub Issue 를 생성하고, 콘텐츠 자동 반영은 하지 않는다(오판 방지, 수동 검토).
 on:
   schedule:
-    - cron: "0 1 1 * *"
+    - cron: "0 1 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   watch:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,10 +47,11 @@ jobs:
         if: steps.watch.outputs.changed != '0' && steps.watch.outputs.changed != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WATCH_BODY: ${{ steps.watch.outputs.body }}
         run: |
-          gh label create policy-watch --color b60205 --description "외국인 정책 페이지 변경 감지" 2>/dev/null || true
-          printf '%b' "${{ steps.watch.outputs.body }}" > /tmp/body.md
+          gh label create policy-watch --color b60205 --description "부동산·세제 정책 페이지 변경 감지" 2>/dev/null || true
+          printf '%s' "$WATCH_BODY" | sed 's/%0A/\n/g' > /tmp/body.md
           gh issue create \
-            --title "외국인 정책 페이지 변경 감지 ($(date -u +%Y-%m-%d))" \
+            --title "부동산·세제 정책 페이지 변경 감지 ($(date -u +%Y-%m-%d))" \
             --label policy-watch \
             --body-file /tmp/body.md

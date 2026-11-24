@@ -386,7 +386,9 @@ def main():
         meta["auto_discovered"] = adopted   # 자동 발견 ID — 확인 후 METRICS에 고정 권장
     data = {
         "_meta": meta,
-        "as_of": dt.date.today().strftime("%Y-%m"), "regions": out_regions,
+        "as_of": max(row["month"] for region in out_regions for row in region["series"]
+                     if row.get("sale_index") is not None or row.get("jeonse_index") is not None),
+        "collected_at": dt.date.today().isoformat(), "regions": out_regions,
     }
     L.save_json_safe(MARKET_JSON, data, min_items_key="regions")
 

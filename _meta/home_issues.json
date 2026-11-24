@@ -22,5 +22,55 @@
     "",
     "갱신 후 실행:  python build_home_issues.py"
   ],
-  "issues": []
+  "issues": [
+    {
+      "title": "일시적 2주택 특례, 조정대상지역은 2년 확인",
+      "changed": "2026년 10월 1일 시행령에 따라 종전·신규 주택이 모두 조정대상지역인 일정 경우 양도세·종부세 특례기간이 3년에서 2년으로 단축됐습니다. 취득세도 별도 경과규정을 적용합니다.",
+      "affected": "갈아타기 등으로 일시적 2주택이 되는 세대",
+      "reflected": "취득세·양도세 계산기 안내 수정. 특례 해당 여부는 세목별 계약·취득·처분일과 경과규정을 직접 확인해야 합니다.",
+      "source": "재정경제부 · 정책브리핑",
+      "source_url": "https://www.korea.kr/news/policyNewsView.do?newsId=148972735",
+      "reviewed": "2026-11-24",
+      "links": [
+        {
+          "label": "세제개편 가이드",
+          "href": "/posts/real-estate-tax-reform-2026.html"
+        },
+        {
+          "label": "취득세 계산기",
+          "href": "/calculators/acquisition-tax.html"
+        }
+      ]
+    },
+    {
+      "title": "전월세 전환율 법정 상한 5.00%",
+      "changed": "한국은행이 10월 22일 기준금리 3.00%를 유지했습니다. 기존 임대차계약의 보증금 월세 전환에 적용되는 법정 상한은 연 5.00%입니다.",
+      "affected": "기존 전세보증금의 일부를 월세로 전환하는 임대인·임차인",
+      "reflected": "계산기 기준금리·상한 갱신. 신규 계약 시장 전환율과 구분합니다.",
+      "source": "한국은행 통화정책방향",
+      "source_url": "https://www.bok.or.kr/portal/bbs/P0000559/view.do?menuNo=200690&nttId=11065823",
+      "reviewed": "2026-11-24",
+      "links": [
+        {
+          "label": "전월세 전환율 계산기",
+          "href": "/calculators/jeonse-monthly.html"
+        }
+      ]
+    },
+    {
+      "title": "종부세 9월 수정 정부안과 현행법 구분",
+      "changed": "9월 1일 수정 정부안에서 비거주 1주택 기본공제 12억원 및 세부담 상한 150%를 유지하기로 했습니다. 아직 법률 시행을 뜻하지 않습니다.",
+      "affected": "고가 1주택·다주택 보유자, 향후 매도 계획을 세우는 가구",
+      "reflected": "8월 발표안과 9월 수정안을 구분해 안내. 확정 전 개편 세율은 계산에 적용하지 않습니다.",
+      "source": "재정경제부",
+      "source_url": "https://mofe.go.kr/nw/nes/detailNesDtaView.do?menuNo=4010100&searchNttId1=MOSF_000000000079193",
+      "reviewed": "2026-11-24",
+      "links": [
+        {
+          "label": "세제개편 가이드",
+          "href": "/posts/real-estate-tax-reform-2026.html"
+        }
+      ]
+    }
+  ]
 }
