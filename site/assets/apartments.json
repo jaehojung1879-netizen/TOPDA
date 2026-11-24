@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-22"
+    "portal_checked_at": "2026-11-24"
   },
   "apartments": [
     {
@@ -88475,7 +88475,11 @@
         "여의도": 27,
         "광화문": 27
       },
-      "households": 829
+      "households": 829,
+      "display_name": "반포래미안아이파크아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-24",
+      "name_evidence": "http://place.map.kakao.com/27316106"
     },
     {
       "name": "광교e편한세상",
@@ -101048,7 +101052,11 @@
         "name": "내동초등학교",
         "distance_m": 188,
         "in_zone": false
-      }
+      },
+      "display_name": "두산위브인덕원센트럴2단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-24",
+      "name_evidence": "http://place.map.kakao.com/11083964"
     },
     {
       "name": "신동아1",
@@ -124770,7 +124778,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-10-02",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "동방아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-24",
+      "name_evidence": "http://place.map.kakao.com/11247334"
     },
     {
       "name": "구리인창2차동문굿모닝힐",
@@ -137829,7 +137841,11 @@
         110000
       ],
       "builder": "기타",
-      "households": null
+      "households": 19,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-24",
+      "hh_evidence": []
     },
     {
       "name": "동작상떼빌",
@@ -137856,9 +137872,15 @@
         82779
       ],
       "builder": "기타",
-      "display_name": "동작상떼빌주상복합",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "동작상떼빌아파트",
+      "name_src": "portal.kakao_local",
+      "households": 545,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-24",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-24",
+      "name_evidence": "http://place.map.kakao.com/554815387"
     },
     {
       "name": "효자촌(현대)",
@@ -137896,7 +137918,11 @@
         225000
       ],
       "builder": "기타",
-      "households": null
+      "households": 710,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-24",
+      "hh_evidence": []
     },
     {
       "name": "호평현대아이파크아파트",
@@ -137924,9 +137950,15 @@
         47217
       ],
       "builder": "HDC현대산업",
-      "display_name": "호평현대아이파크",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "호평마을아이파크아파트",
+      "name_src": "portal.kakao_local",
+      "households": 920,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-24",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-24",
+      "name_evidence": "http://place.map.kakao.com/11205666"
     },
     {
       "name": "광복현대",
@@ -137953,9 +137985,15 @@
         65631
       ],
       "builder": "기타",
-      "display_name": "철산광복현대",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "광복현대아파트",
+      "name_src": "portal.kakao_local",
+      "households": 841,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-24",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-24",
+      "name_evidence": "http://place.map.kakao.com/11032162"
     },
     {
       "name": "이편한세상1차",
@@ -137978,7 +138016,11 @@
         41300
       ],
       "builder": "DL이앤씨",
-      "households": null
+      "households": 480,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-24",
+      "hh_evidence": []
     }
   ]
 }
