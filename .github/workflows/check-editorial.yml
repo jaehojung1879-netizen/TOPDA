@@ -16,7 +16,7 @@ permissions:
   contents: read
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # Playwright 1.51.1 supports Ubuntu 24.04, not 26.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4

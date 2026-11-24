@@ -4,11 +4,22 @@
   "description": "전월세 전환 — 주택임대차보호법 제7조의2 및 시행령 제9조. 법정 상한은 min(연 10%, 한국은행 기준금리 + 2%p).",
   "cases": [
     {
-      "case_id": "jm_legal_cap_base_275",
-      "effective_date": "2026-08-17",
-      "boundary": "기준금리 2.75% → 상한 4.75% (10% 하드캡에 걸리지 않는 구간)",
-      "inputs": { "mode": "toMonthly", "deposit": 300000000, "monthly": 0, "baseDeposit": 50000000, "rate": 4.75, "bokBaseRatePct": 2.75 },
-      "expected": { "legalCapPct": 4.75, "convertibleDeposit": 250000000, "calcMonthly": 989583.3333333334 },
+      "case_id": "jm_legal_cap_base_300",
+      "effective_date": "2026-11-24",
+      "boundary": "기준금리 3.00% → 상한 5.00% (10% 하드캡에 걸리지 않는 구간)",
+      "inputs": {
+        "mode": "toMonthly",
+        "deposit": 300000000,
+        "monthly": 0,
+        "baseDeposit": 50000000,
+        "rate": 5,
+        "bokBaseRatePct": 3
+      },
+      "expected": {
+        "legalCapPct": 5,
+        "convertibleDeposit": 250000000,
+        "calcMonthly": 1041666.6666666666
+      },
       "tolerance": 1,
       "source": {
         "type": "LAW",
@@ -17,17 +28,29 @@
         "effective_from": "2020-09-29",
         "effective_to": null
       },
-      "verification_method": ["independent_reference_formula"],
+      "verification_method": [
+        "independent_reference_formula"
+      ],
       "confidence": "A",
-      "verified_at": "2026-08-17",
-      "note": "bokBaseRatePct 는 reference 전용 입력이다. production 은 rates.js 의 jeonseConversion.baseRatePct 를 읽으므로, 두 값이 어긋나면 이 케이스가 실패한다 — 기준금리 갱신 누락 탐지 장치."
+      "verified_at": "2026-11-24",
+      "note": "bokBaseRatePct 는 reference 전용 입력이다. production 은 rates.js 의 jeonseConversion.baseRatePct 를 읽으므로, 두 값이 어긋나면 이 케이스가 실패한다 — 기준금리 갱신 누락 탐지 장치. 한국은행 2026-10-22 통화정책방향: https://www.bok.or.kr/portal/bbs/P0000559/view.do?menuNo=200690&nttId=11065823"
     },
     {
       "case_id": "jm_deposit_to_monthly",
-      "effective_date": "2026-08-17",
+      "effective_date": "2026-11-24",
       "boundary": "전세 → 월세 환산: 월세 = 전환대상 보증금 × 전환율 ÷ 12",
-      "inputs": { "mode": "toMonthly", "deposit": 500000000, "monthly": 0, "baseDeposit": 100000000, "rate": 6.0, "bokBaseRatePct": 2.75 },
-      "expected": { "convertibleDeposit": 400000000, "calcMonthly": 2000000 },
+      "inputs": {
+        "mode": "toMonthly",
+        "deposit": 500000000,
+        "monthly": 0,
+        "baseDeposit": 100000000,
+        "rate": 6,
+        "bokBaseRatePct": 3
+      },
+      "expected": {
+        "convertibleDeposit": 400000000,
+        "calcMonthly": 2000000
+      },
       "tolerance": 1,
       "source": {
         "type": "LAW",
@@ -36,17 +59,29 @@
         "effective_from": "2020-09-29",
         "effective_to": null
       },
-      "verification_method": ["independent_reference_formula"],
+      "verification_method": [
+        "independent_reference_formula"
+      ],
       "confidence": "A",
-      "verified_at": "2026-08-17",
-      "note": "입력 전환율 6%는 법정 상한 4.75%를 넘는 시장 전환율이다. 계산기는 상한 초과를 경고로 표시하되 사용자가 입력한 값으로 계산한다(신규 계약은 상한 적용 대상이 아니기 때문)."
+      "verified_at": "2026-11-24",
+      "note": "입력 전환율 6%는 법정 상한 5.00%를 넘는 시장 전환율이다. 계산기는 상한 초과를 경고로 표시하되 사용자가 입력한 값으로 계산한다(신규 계약은 상한 적용 대상이 아니기 때문)."
     },
     {
       "case_id": "jm_monthly_to_deposit",
-      "effective_date": "2026-08-17",
+      "effective_date": "2026-11-24",
       "boundary": "월세 → 전세 역환산 (전환 공식의 가역성)",
-      "inputs": { "mode": "toJeonse", "deposit": 100000000, "monthly": 2000000, "baseDeposit": 0, "rate": 6.0, "bokBaseRatePct": 2.75 },
-      "expected": { "convertibleDeposit": 400000000, "calcDeposit": 500000000 },
+      "inputs": {
+        "mode": "toJeonse",
+        "deposit": 100000000,
+        "monthly": 2000000,
+        "baseDeposit": 0,
+        "rate": 6,
+        "bokBaseRatePct": 3
+      },
+      "expected": {
+        "convertibleDeposit": 400000000,
+        "calcDeposit": 500000000
+      },
       "tolerance": 1,
       "source": {
         "type": "LAW",
@@ -55,9 +90,11 @@
         "effective_from": "2020-09-29",
         "effective_to": null
       },
-      "verification_method": ["independent_reference_formula"],
+      "verification_method": [
+        "independent_reference_formula"
+      ],
       "confidence": "A",
-      "verified_at": "2026-08-17"
+      "verified_at": "2026-11-24"
     }
   ]
 }
