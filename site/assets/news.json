@@ -3,17 +3,17 @@
     "source": "Google News RSS (한국어) — 섹터별 부동산 검색 집계",
     "note": "여러 보도를 자동 집계한 목록이며 투자 권유가 아닙니다."
   },
-  "generated_at": "2026-11-25 08:50 KST",
+  "generated_at": "2026-11-26 08:33 KST",
   "weekly": {
     "as_of": "2026년 11월 5주",
-    "updated": "2026-11-25",
+    "updated": "2026-11-26",
     "headlines": [
       {
         "badge": "주택 매매·집값",
-        "title": "서울 아파트 매물 석 달 새 35.6% 급증…강북까지 번진 매도 압력",
-        "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5Xc2lJVEVhYlhOeTB5SVhQenR0RWtsOTJZMUh2R1BHNTNuZjlseWc0UFd6YkNsUHNiMHlHeEJYTExjZndnXy05XzlZajZhczY0MThjX095eUNLTWMybEoxTmVaTHl2LXFhNnZ0dGtNZkY?oc=5",
-        "source": "https://www.thedailyeconomy.kr/",
-        "date": "2026-11-24"
+        "title": "반토막 난 서울 아파트 거래량… 집값 상승세 줄어든다지만 - 머니투데이",
+        "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFB0OW1ybnJMbVRGT2Z2U21LT3VfMHVXMnVPZzdIQjZaa0xiQzFURmg0aWhiN1R1WnVONFJ4OEJrSnV1YUlUenc2Tzg4R2NmblBtaHZYcVJpWHRvTlM2bmJ1YXZCd09aMVhMTUHSAW9BVV95cUxOV1FkSl9wX2h5d0RUU01tN21SaldQalBMMnZ0SWJkM0JCRnhpQ19MVnZTWHlENGtsX2tzTVI4OGdUaGNPSmhUX3pjS2ZiRzNlUUhIX01IRXJRNXFxWnpZMUFSbEVIdDkwUDVVMDAxLVk?oc=5",
+        "source": "머니투데이",
+        "date": "2026-11-25"
       },
       {
         "badge": "전세·월세",
@@ -46,28 +46,28 @@
     ]
   },
   "daily": {
-    "updated": "2026-11-25 08:50 KST",
+    "updated": "2026-11-26 08:33 KST",
     "sectors": [
       {
         "key": "housing",
         "name": "주택 매매·집값",
         "items": [
           {
+            "title": "반토막 난 서울 아파트 거래량… 집값 상승세 줄어든다지만 - 머니투데이",
+            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFB0OW1ybnJMbVRGT2Z2U21LT3VfMHVXMnVPZzdIQjZaa0xiQzFURmg0aWhiN1R1WnVONFJ4OEJrSnV1YUlUenc2Tzg4R2NmblBtaHZYcVJpWHRvTlM2bmJ1YXZCd09aMVhMTUHSAW9BVV95cUxOV1FkSl9wX2h5d0RUU01tN21SaldQalBMMnZ0SWJkM0JCRnhpQ19MVnZTWHlENGtsX2tzTVI4OGdUaGNPSmhUX3pjS2ZiRzNlUUhIX01IRXJRNXFxWnpZMUFSbEVIdDkwUDVVMDAxLVk?oc=5",
+            "source": "머니투데이",
+            "date": "2026-11-25"
+          },
+          {
+            "title": "집값 잡혔다는데 빌라마저 뛴다…거래절벽이 만든 통계의 착시 - 머니투데이",
+            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5oSTNmTnVQdUM2d0VJXzYwNHQ1Zm5XZmFxZzE4YmRfNzNDQ2oxQWxzMXR4YnBFMlV5SGIzYWhMTV9MR2FWYzFZb1lxaXVVVGl4MkxSd2lvUlExaUhmVF9HZkhjZWMxd3RtYUZqdG5QNNIBb0FVX3lxTE5oSTNmTnVQdUM2d0VJXzYwNHQ1Zm5XZmFxZzE4YmRfNzNDQ2oxQWxzMXR4YnBFMlV5SGIzYWhMTV9MR2FWYzFZb1lxaXVVVGl4MkxSd2lvUlExaUhmVF9HZkhjZWMxd3RtYUZqdG5QNA?oc=5",
+            "source": "머니투데이",
+            "date": "2026-11-25"
+          },
+          {
             "title": "서울 아파트 매물 석 달 새 35.6% 급증…강북까지 번진 매도 압력",
             "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5Xc2lJVEVhYlhOeTB5SVhQenR0RWtsOTJZMUh2R1BHNTNuZjlseWc0UFd6YkNsUHNiMHlHeEJYTExjZndnXy05XzlZajZhczY0MThjX095eUNLTWMybEoxTmVaTHl2LXFhNnZ0dGtNZkY?oc=5",
             "source": "https://www.thedailyeconomy.kr/",
-            "date": "2026-11-24"
-          },
-          {
-            "title": "인천 집값 제자리인데 전·월세 가파른 오름세",
-            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBtSlNnT3dXTmtuSl9PS0g3SEktSHJpRVVzYnBRMG1UWllESTFkZUJrS2h1SWx5dXdOVVRCNU56QmVHRGJoRlF2Vll5ekFJNkJMLU9JSVpJaml2NmtMRllETlc1RkxLSjlR?oc=5",
-            "source": "일간경기",
-            "date": "2026-11-24"
-          },
-          {
-            "title": "인천 집값, 드디어 바닥 찍었나…그런데 전·월세는 또 올랐다",
-            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5FZ25TVFlpX3djbm5Lb29oWm1MOFRJNFByeF9icVFxTVRZX2s1cm1zYS12TE53R3UwSXhvb2FyYXEwT1BmX0ktcUdOTmNZWlptZU0tNlNpZ291eThDdkV1cU5BdWxIWVVC?oc=5",
-            "source": "한국NGO신문",
             "date": "2026-11-24"
           }
         ]
@@ -77,21 +77,21 @@
         "name": "전세·월세",
         "items": [
           {
+            "title": "동작구, 내달 8일 고3 학생 300명에 전세사기 예방교육…구민 50명 추가 모집",
+            "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE92dS0xV1A1a19XSFNRZkpoYWpFWElRNzFLZFBPMHRPMVRhUDFIYm5FejdGSUJpb1R0TURaeGNJUWhSYTBIZXhkdDc1UmNYOTZfR2hNQUFuZkFJek84akJ5dlNtSHhjcTZ6Smlj?oc=5",
+            "source": "시정일보",
+            "date": "2026-11-25"
+          },
+          {
+            "title": "“전세 살이보다 월세 살이가 훨씬 많다”··· 서울은 3집 중 1집이 월세",
+            "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE52NW9tXzNPMHlmc1pYUy1nMGlNSHVYakF1cEh6MkU3OVVFT0tKSFhVd1F0UnVHeURaeDYzZmxuR3FNYV9TZm1jbUR1LVdmMVlo0gFUQVVfeXFMT0l0RzhUaUF1cWhmUGdndGY1eUQxYzkzZ01UMmhXOHJJMWs5MWJqdFFoX1FOeDVIdExNZmctVDQyZmw5SGRzNnFrc0d0b2RZYk5QSGNN?oc=5",
+            "source": "세계일보",
+            "date": "2026-11-25"
+          },
+          {
             "title": "전세가 월세보다 2배 많았는데…25년 만에 뒤집힌 임대차",
             "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFB6T1J6R1kxdF9qc0hTV3lNeDNVOFZVenp1VkpBaF83NGFfMmViTFBoY1RJbG1ZU3cyOUxPa2tBMkppNlVXMUlib0RKREtDZDNMWDNHRmJMTFVmcnBHUjJabzZEdUJoOTR1TzlhdXNB?oc=5",
             "source": "더스쿠프",
-            "date": "2026-11-24"
-          },
-          {
-            "title": "서울 2030 세대주 절반 이상 월세살이…전세가구 비중 21% ‘역대 최저’",
-            "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE13TmMyUHVIRGdRQ2lKQm1lMVdPbVFPeTBjV0tSemUwRG9ldnZvdEw2V2dudmt0eDl6bXg4djZhMkhNUGdCaDhxem1paDlwZ2FRUDFUSElHN1dqb2Fyd0ZkcEdrS2FlRzM0VlpyMGw3bk5qdw?oc=5",
-            "source": "한겨레",
-            "date": "2026-11-24"
-          },
-          {
-            "title": "월세 가구 585만, 전세의 두 배 육박…25년 새 전세 비중 반 토막 난 이유는? 🏠",
-            "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE8yNF9HM1BNNHAyMmduc0ZObmt6TUFnY2p0OVNzd3pRbEVWdnBCUXJqVktGYUxJaHU2aXVmcUlWV3c0Q3M0MExfVlJGUFc0ZHBEb01J?oc=5",
-            "source": "뉴닉",
             "date": "2026-11-24"
           }
         ]
@@ -107,15 +107,15 @@
             "date": "2026-11-24"
           },
           {
-            "title": "강남 집값 주춤해도 청약은 뜨겁다… 신축 희소성에 재초환 부담까지",
-            "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1VVTVBXzF0OUFjOFk0N2d2WEh0ZW9ic1VYa1c3dmZ0S1BqbUwzdGpOejYtMEJqNzJrYzdRUlA5aGQ1YlhsU1luNG9fY3k0bmlqMkZDMHBtV1pDWVlSd1lnZUpyUU1zQUN0SDI40gFUQVVfeXFMUDdoaEtzQ08xdzlhNTZLN2xrMVBfQU0wV3BTbjM1Y0ItbkJfckMtZFhOVllxMGdoQ294Q0pVNlVLTHJGY09jb1paRmlhdmx2WFZ6dFVL?oc=5",
-            "source": "세계일보",
-            "date": "2026-11-23"
+            "title": "‘해링턴 플레이스 문래’, 1순위 평균 10.75대 1 마감... 12월 2일 당첨자 발표",
+            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1KUXJ1SnVQbHhRSjRqOHpLaUV0a2VDeUxZT2lpQTh3c2h3YkQ5M1ZiLV9IOXdQWjJTV0toMml2eWlwS3FjeXFDbVNHNXUxMDd5bU1HeUN1TmplbVFZNWk2Y2Rmbkw4Skxm0gFsQVVfeXFMTVhfbFhBZkd3cVk5WXY5N3l4Yi1ES3dDMGlKVC1aUWFGU2djYVVDR1ZQR1EwWjlqNU9Ickl3NW05WVpkZTJhbk5ueUtuV05oUV8yMGhqRWFDSWZGZ0czbFlyNGxJLW44R2lxTzd4?oc=5",
+            "source": "리얼캐스트",
+            "date": "2026-11-25"
           },
           {
-            "title": "강남권 청약 시장 뜨겁다 ... 공급 부족·재초환에 신축 선호",
-            "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBLeXYtTkJhSVd4eU9uR0lWQzkzNzMwOTl5a21Mb05hVFZWS1UxdFFHanRwdDl6c01DdGVSNm5lMWRZblUzWFVqNDk3ektkZXlUY3RQbmZzMFIwSmdoaVNtRGllLW1EeHJw?oc=5",
-            "source": "Queen 이코노미퀸",
+            "title": "두 단지에 청약 15만건 몰렸는데…전국 3곳 중 2곳은 '미달'",
+            "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE0tbnlCdUNSX1pSaGJna1Bhdm1NY2JIbllZR3FBS1gzTG1ETzMtUUcxRjVtMW1LWkdPVVZsdExhT3lrNFFKejFHVjN1bzA3UnlneEw1QWdLdURlQQ?oc=5",
+            "source": "한국경제",
             "date": "2026-11-23"
           }
         ]
@@ -124,12 +124,6 @@
         "key": "loan",
         "name": "대출·금융",
         "items": [
-          {
-            "title": "금리 재산정 앞둔 ‘영끌 차주’…대환·상환조건 조정으로 부담 낮출까 [저금리 5년의 청구서]",
-            "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE4xd0ZBQV82bkZvMkpYRXNXUXRYVUN2VGpCZG9SWFViTDU4d1JtT0o0WV96YlRzQ0tNTW5lMFRHcmFGNTZrbmZTOTRzZ2R1V3ZndlRiUQ?oc=5",
-            "source": "이투데이",
-            "date": "2026-11-23"
-          },
           {
             "title": "[천살의 부동산 칼럼] 주담대 5% 시대의 역설: 은행 창구에서 포착된 2026년 연말 부동산 시장의 진짜 생존 공식",
             "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE44LXVSS19ENS1zbEMxMWY4QzMxcmlGX1NGVEdJWF90VFdDSFdJLXFtdENwOHkyakZBS1BjdmE1LUttOGxxS3hFVjhodTNRenpvS2RsZ1hwbmJicnhJV1ZZcWhB?oc=5",
@@ -141,6 +135,12 @@
             "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5fWllXa1BxZzFKOEZaWm13V19LSXdyVVlSNVNRcExTU3lGWEVncm4zakU2UE1tS2J6dVhYM1R4bUlEYmN3WFRpXzR3dw?oc=5",
             "source": "아이뉴스24",
             "date": "2026-11-19"
+          },
+          {
+            "title": "금리 재산정 앞둔 ‘영끌 차주’…대환·상환조건 조정으로 부담 낮출까 [저금리 5년의 청구서]",
+            "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE4xd0ZBQV82bkZvMkpYRXNXUXRYVUN2VGpCZG9SWFViTDU4d1JtT0o0WV96YlRzQ0tNTW5lMFRHcmFGNTZrbmZTOTRzZ2R1V3ZndlRiUQ?oc=5",
+            "source": "이투데이",
+            "date": "2026-11-23"
           }
         ]
       },
@@ -154,21 +154,21 @@
         "name": "정책·세제",
         "items": [
           {
+            "title": "부동산 세제 개편 정부안에…국회 “매매·전월세 매물 줄어들 우려”",
+            "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBpbjVVaU9iYjYwLVhFYlhHZC0yQlBCSkVpTWZ4S1lKSUVSR3N6Mms4SDN4ZWF2dTNMcXNJeVR1T2owVzVCQU5oc1ZGVmJBSnFSS2c?oc=5",
+            "source": "매일경제 마켓",
+            "date": "2026-11-25"
+          },
+          {
+            "title": "與 '비거주 1주택 종부세 차등' 반대 목소리 사라져",
+            "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBrY3VnZFdENTJsVEp0aXZvTTNzUlJMUHJtX3k3cEFwWm9DVWhicElIWXViLVAzNmJ6UWdlalVDZnpBRkpkdkJSQ0lQZGlpaU5zQllZZmZyT0lTdw?oc=5",
+            "source": "한국경제",
+            "date": "2026-11-25"
+          },
+          {
             "title": "강남 불패는 계속될까, 세제 개편과 부동산",
             "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBkLXhlVV9RVWhRT2FSQ2ZXcHNJRVh1MTRMMnRQUWJodndORlVUV0w0YTZ6blFyQ0Q2aHFaVzVQN0pPQTNIZVdONTAwRW51RDFQTzZKZTFMMmplajkwZXVJWlNGNTNrN0VU?oc=5",
             "source": "SPI - 상업용 부동산 콘텐츠 & 데이터 애널리틱스",
-            "date": "2026-11-24"
-          },
-          {
-            "title": "2026 종부세 고지서 이번 주 확인하세요｜1주택 12억·부부 공동명의 18억·세금 계산·분납·12월 15일 납부 완벽 가이드",
-            "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPQWpBeUN6MTVFa3BRdThhbE1nWEE4YThWbE8yRVdVQVF1NWd3bWhLOHV4ZUw5N3hXUVFxeUpDaHNaZURFdVBKNXd6Tk1ydVB6SHFmSlJPUk9HSTBjeXo5LXpYTlJJNHNLQlQ0VlREd0c3dHpHSGR6Z2pTZXhwbWhtMTFkYXpxMVFyYUow?oc=5",
-            "source": "네이버 프리미엄콘텐츠",
-            "date": "2026-11-24"
-          },
-          {
-            "title": "“서류에는 밭인데 실제로는 주차장”…종부세 어떻게 매길까? [DD집톡]",
-            "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9rZVJjbGtGa0pZWUtXVnM2NUhVRE1pTXFhNjRIamEwQzZPLXV4M2VyYXNlWU1xTVg4d0t0SGV1dkFLTDR2UVdSMHUySkcySlpCaEZhQUtFWldSeTliZTNIQXpqa0U?oc=5",
-            "source": "디지털데일리",
             "date": "2026-11-24"
           }
         ]
