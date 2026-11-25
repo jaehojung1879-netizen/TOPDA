@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-24"
+    "portal_checked_at": "2026-11-25"
   },
   "apartments": [
     {
@@ -73896,7 +73896,11 @@
         "name": "동산초등학교",
         "distance_m": 163,
         "in_zone": false
-      }
+      },
+      "display_name": "오정생활휴먼시아2단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-25",
+      "name_evidence": "http://place.map.kakao.com/8016396"
     },
     {
       "name": "길성그랑프리텔",
@@ -79140,7 +79144,11 @@
         "name": "과천초등학교",
         "distance_m": 292,
         "in_zone": false
-      }
+      },
+      "display_name": "래미안에코팰리스아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-25",
+      "name_evidence": "http://place.map.kakao.com/10367893"
     },
     {
       "name": "래미안센트럴스위트",
@@ -138208,7 +138216,11 @@
         300000
       ],
       "builder": "현대건설",
-      "households": null
+      "households": 283,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-25",
+      "hh_evidence": []
     },
     {
       "name": "홍익봄마을(101동)",
@@ -138230,7 +138242,14 @@
         74500
       ],
       "builder": "기타",
-      "households": null
+      "households": 14,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-25",
+      "hh_evidence": [],
+      "display_name": "홍익봄마을아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-25"
     },
     {
       "name": "길음역금호어울림센터힐",
@@ -138258,9 +138277,15 @@
         115500
       ],
       "builder": "금호건설",
-      "display_name": "금호어울림센터힐아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "display_name": "길음역금호어울림센터힐아파트",
+      "name_src": "portal.kakao_local",
+      "households": 490,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-25",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-25",
+      "name_evidence": "http://place.map.kakao.com/26614032"
     },
     {
       "name": "목동현대3차",
@@ -138293,8 +138318,14 @@
       ],
       "builder": "기타",
       "display_name": "목동현대아파트",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "households": null
+      "name_src": "portal.kakao_local",
+      "households": 972,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-25",
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-25",
+      "name_evidence": "http://place.map.kakao.com/11067168"
     },
     {
       "name": "에코타운(A블럭)",
@@ -138322,7 +138353,14 @@
         90450
       ],
       "builder": "기타",
-      "households": null
+      "households": 525,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-25",
+      "hh_evidence": [],
+      "display_name": "에코타운1단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-25"
     },
     {
       "name": "양도마을(서해그랑블)",
@@ -138365,7 +138403,14 @@
         43157
       ],
       "builder": "기타",
-      "households": null
+      "households": 1206,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-25",
+      "hh_evidence": [],
+      "display_name": "양도마을서해아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-25"
     },
     {
       "name": "아름마을일신",
@@ -138398,7 +138443,14 @@
         52938
       ],
       "builder": "기타",
-      "households": null
+      "households": 441,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-25",
+      "hh_evidence": [],
+      "display_name": "아름마을일신건영1차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-25"
     }
   ]
 }
