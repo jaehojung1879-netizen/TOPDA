@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-25"
+    "portal_checked_at": "2026-11-26"
   },
   "apartments": [
     {
@@ -138535,7 +138535,11 @@
         239374
       ],
       "builder": "기타",
-      "households": null
+      "households": 300,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-26",
+      "hh_evidence": []
     },
     {
       "name": "현대벤처빌",
@@ -138572,7 +138576,11 @@
         34091
       ],
       "builder": "기타",
-      "households": null
+      "households": 203,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-26",
+      "hh_evidence": []
     },
     {
       "name": "위례센트럴푸르지오",
@@ -138599,7 +138607,11 @@
         182601
       ],
       "builder": "대우건설",
-      "households": null
+      "households": 687,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-26",
+      "hh_evidence": []
     }
   ]
 }
