@@ -1,30 +1,30 @@
 {
- "as_of": "2026-11-25",
+ "as_of": "2026-11-26",
  "note": "지역별 세대수 보강 커버리지. total=그 지역 전체 실거래 단지(target 잔여분 + filled 기보강), kapt_list=K-apt 단지목록 수, kapt_ratio=kapt_list/total(수록범위 상한), name_gap=K-apt에 있을 법한데 아직 못 붙인 수(이름 규칙으로 회수 가능한 상한), matched=이번 실행의 이름매칭 성공. kapt_ratio가 1보다 많이 작으면 수록범위 한계라 이름 규칙을 고쳐도 소용없고, 1에 가까운데 name_gap이 크면 표기 차이다. target만 kapt_list와 견주면 분모가 틀려 반대로 읽히니 주의.",
  "total": {
-  "complexes": 8044,
-  "filled": 7783,
-  "target": 476,
-  "kapt_list": 5058,
+  "complexes": 8526,
+  "filled": 8256,
+  "target": 481,
+  "kapt_list": 5399,
   "kapt_ratio": 0.63,
   "name_gap": 2,
-  "matched_this_run": 23,
+  "matched_this_run": 27,
   "filled_this_run": 0,
   "addr_reject": 0,
   "addr_purged": 0,
   "addr_backfill": 0,
   "addr_backfill_queue": 0,
-  "jibun_seeded": 19,
-  "dong_indexed": 5058
+  "jibun_seeded": 25,
+  "dong_indexed": 5399
  },
  "regions": [
   {
    "region": "경기 김포시",
    "target": 2,
-   "filled": 187,
-   "total": 189,
+   "filled": 188,
+   "total": 190,
    "kapt_list": 200,
-   "kapt_ratio": 1.06,
+   "kapt_ratio": 1.05,
    "name_gap": 2,
    "matched": 0,
    "codes": [
@@ -38,8 +38,8 @@
   {
    "region": "서울 강남구",
    "target": 17,
-   "filled": 412,
-   "total": 429,
+   "filled": 413,
+   "total": 430,
    "kapt_list": 236,
    "kapt_ratio": 0.55,
    "name_gap": 0,
@@ -54,8 +54,8 @@
     "한보미도맨션2",
     "선경1차(1동-7동)",
     "이스턴오피스텔",
-    "청담아르지움",
-    "강남웅진베어스빌"
+    "강남웅진베어스빌",
+    "선릉역풍림아이원레몬"
    ]
   },
   {
@@ -103,9 +103,9 @@
   },
   {
    "region": "경기 용인시 수지구",
-   "target": 4,
+   "target": 5,
    "filled": 268,
-   "total": 272,
+   "total": 273,
    "kapt_list": 208,
    "kapt_ratio": 0.76,
    "name_gap": 0,
@@ -117,16 +117,17 @@
     "동아아파트",
     "삼익아파트",
     "풍림아파트",
+    "현대시티빌(102동)",
     "에버하임"
    ]
   },
   {
    "region": "서울 성북구",
    "target": 5,
-   "filled": 191,
-   "total": 196,
+   "filled": 192,
+   "total": 197,
    "kapt_list": 148,
-   "kapt_ratio": 0.76,
+   "kapt_ratio": 0.75,
    "name_gap": 0,
    "matched": 1,
    "codes": [
@@ -181,13 +182,13 @@
   },
   {
    "region": "경기 광명시",
-   "target": 4,
+   "target": 5,
    "filled": 118,
-   "total": 122,
+   "total": 123,
    "kapt_list": 91,
-   "kapt_ratio": 0.75,
+   "kapt_ratio": 0.74,
    "name_gap": 0,
-   "matched": 0,
+   "matched": 1,
    "codes": [
     "41210"
    ],
@@ -476,9 +477,9 @@
   },
   {
    "region": "경기 부천시 원미구",
-   "target": 17,
+   "target": 18,
    "filled": 298,
-   "total": 315,
+   "total": 316,
    "kapt_list": 135,
    "kapt_ratio": 0.43,
    "name_gap": 0,
@@ -488,13 +489,13 @@
    ],
    "unmatched_sample": [
     "역곡현대",
+    "한도(1-6동)",
     "에코스마트3",
     "마스터웍바이로뎀",
     "센텀시티",
     "JY포에시아",
     "삼융그린",
-    "하이팰리스",
-    "골든베이아파트"
+    "하이팰리스"
    ]
   },
   {
@@ -519,8 +520,8 @@
   {
    "region": "경기 구리시",
    "target": 4,
-   "filled": 177,
-   "total": 181,
+   "filled": 178,
+   "total": 182,
    "kapt_list": 89,
    "kapt_ratio": 0.49,
    "name_gap": 0,
@@ -610,8 +611,8 @@
   {
    "region": "서울 용산구",
    "target": 5,
-   "filled": 194,
-   "total": 199,
+   "filled": 195,
+   "total": 200,
    "kapt_list": 86,
    "kapt_ratio": 0.43,
    "name_gap": 0,
@@ -653,8 +654,8 @@
   {
    "region": "서울 광진구",
    "target": 6,
-   "filled": 209,
-   "total": 215,
+   "filled": 210,
+   "total": 216,
    "kapt_list": 97,
    "kapt_ratio": 0.45,
    "name_gap": 0,
@@ -673,8 +674,8 @@
   },
   {
    "region": "경기 평택시",
-   "target": 14,
-   "filled": 337,
+   "target": 13,
+   "filled": 338,
    "total": 351,
    "kapt_list": 313,
    "kapt_ratio": 0.89,
@@ -685,12 +686,61 @@
    ],
    "unmatched_sample": [
     "평택화양휴먼빌퍼스트시티아파트",
-    "대옥한미8",
     "평택서정동롯데캐슬",
     "평일",
     "신미",
-    "외기노조"
+    "외기노조",
+    "영흥(가,나,다)",
+    "한일(A,B)",
+    "명원"
    ]
+  },
+  {
+   "region": "경기 과천시",
+   "target": 1,
+   "filled": 21,
+   "total": 22,
+   "kapt_list": 20,
+   "kapt_ratio": 0.91,
+   "name_gap": 0,
+   "matched": 0,
+   "codes": [
+    "41290"
+   ],
+   "unmatched_sample": [
+    "주공8"
+   ]
+  },
+  {
+   "region": "경기 수원시 팔달구",
+   "target": 4,
+   "filled": 118,
+   "total": 122,
+   "kapt_list": 74,
+   "kapt_ratio": 0.61,
+   "name_gap": 0,
+   "matched": 2,
+   "codes": [
+    "41115"
+   ],
+   "unmatched_sample": [
+    "현대콤비타운",
+    "유엘비치나움"
+   ]
+  },
+  {
+   "region": "대구 달서구",
+   "target": 2,
+   "filled": 327,
+   "total": 329,
+   "kapt_list": 247,
+   "kapt_ratio": 0.75,
+   "name_gap": 0,
+   "matched": 1,
+   "codes": [
+    "27290"
+   ],
+   "unmatched_sample": []
   }
  ]
 }
