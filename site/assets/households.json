@@ -6026,7 +6026,11 @@
       "elementary": {
         "name": "인천원동초등학교",
         "distance_m": 147
-      }
+      },
+      "display_name": "에코메트로5단지한화꿈에그린아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-27",
+      "name_evidence": "http://place.map.kakao.com/11101430"
     },
     "인천 남동구|구월룩소르주상복합아파트": {
       "households": 1,
@@ -74686,9 +74690,10 @@
         "name": "산들초등학교",
         "distance_m": 237
       },
-      "display_name": "산내마을2단지 센트럴리움",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
-      "name_checked_at": "2026-09-08"
+      "display_name": "산내마을2단지센트럴리움아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-27",
+      "name_evidence": "http://place.map.kakao.com/472200466"
     },
     "경기 파주시|가람마을8단지동문굿모닝힐": {
       "households": 1225,
@@ -243076,5 +243081,5 @@
       "built_year": 2004
     }
   },
-  "as_of": "2026-11-26"
+  "as_of": "2026-11-27"
 }

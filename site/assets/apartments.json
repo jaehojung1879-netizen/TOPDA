@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-26"
+    "portal_checked_at": "2026-11-27"
   },
   "apartments": [
     {
@@ -118288,13 +118288,15 @@
         44600
       ],
       "builder": "기타",
-      "display_name": "산내마을2단지 센트럴리움",
-      "name_src": "K-apt 단지목록(주소/법정동 검증)",
+      "display_name": "산내마을2단지센트럴리움아파트",
+      "name_src": "portal.kakao_local",
       "households": 1362,
       "hh_src": "address_alias:기존 자료",
       "hh_confidence": "high",
       "hh_checked_at": "2026-09-08",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "name_checked_at": "2026-11-27",
+      "name_evidence": "http://place.map.kakao.com/472200466"
     },
     {
       "name": "모전리현대",
@@ -138719,7 +138721,11 @@
         93000
       ],
       "builder": "기타",
-      "households": null
+      "households": 64,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-27",
+      "hh_evidence": []
     },
     {
       "name": "샛별한양6(고층1109-4)",
@@ -138752,7 +138758,11 @@
         48304
       ],
       "builder": "기타",
-      "households": null
+      "households": 1076,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-27",
+      "hh_evidence": []
     },
     {
       "name": "장미",
@@ -138778,7 +138788,11 @@
         17924
       ],
       "builder": "기타",
-      "households": null
+      "households": 90,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-27",
+      "hh_evidence": []
     },
     {
       "name": "주공8",
@@ -138831,7 +138845,14 @@
         30457
       ],
       "builder": "기타",
-      "households": null
+      "households": 1020,
+      "hh_src": "address_alias:title.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-27",
+      "hh_evidence": [],
+      "display_name": "주공8단지아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-27"
     },
     {
       "name": "현대(124-1)",
@@ -138864,7 +138885,14 @@
         25157
       ],
       "builder": "기타",
-      "households": null
+      "households": 1161,
+      "hh_src": "address_alias:recap.hhldCnt",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-27",
+      "hh_evidence": [],
+      "display_name": "산곡현대5차아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-27"
     },
     {
       "name": "브라운스톤더프라임",
@@ -138923,7 +138951,14 @@
         69279
       ],
       "builder": "기타",
-      "households": null
+      "households": 1762,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-27",
+      "hh_evidence": [],
+      "display_name": "트리풀시티레이크포레아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-27"
     },
     {
       "name": "롯데캐슬골드2단지",
@@ -138961,7 +138996,11 @@
         54941
       ],
       "builder": "롯데건설",
-      "households": null
+      "households": 1051,
+      "hh_src": "address_alias:기존 자료",
+      "hh_confidence": "high",
+      "hh_checked_at": "2026-11-27",
+      "hh_evidence": []
     }
   ]
 }
