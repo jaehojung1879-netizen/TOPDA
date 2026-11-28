@@ -12,7 +12,7 @@
       "geocode": "도로명주소 API / V-World (주소→좌표)"
     },
     "disclaimer": "예시용 데이터로 실제 시세·거리와 다를 수 있습니다.",
-    "portal_checked_at": "2026-11-27"
+    "portal_checked_at": "2026-11-28"
   },
   "apartments": [
     {
@@ -5809,7 +5809,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "LIG서울역리가아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/11904213"
     },
     {
       "name": "힐스테이트세운센트럴2단지",
@@ -31233,7 +31237,11 @@
         "여의도": 17,
         "광화문": 20
       },
-      "households": 888
+      "households": 888,
+      "display_name": "파크타워아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/12803034"
     },
     {
       "name": "텐즈힐(1단지)",
@@ -32823,7 +32831,11 @@
       "hh_src": "address_alias:title.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "청화아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/11232918"
     },
     {
       "name": "매월동아델리움로제비앙",
@@ -35997,7 +36009,11 @@
         "여의도": 37,
         "광화문": 27
       },
-      "households": 253
+      "households": 253,
+      "display_name": "화양현대아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/11333955"
     },
     {
       "name": "마포그랑자이",
@@ -38061,7 +38077,11 @@
         "여의도": 21,
         "광화문": 13
       },
-      "households": 226
+      "households": 226,
+      "display_name": "라이프미주아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/11069045"
     },
     {
       "name": "북한강(성원)",
@@ -38101,7 +38121,11 @@
         "여의도": 14,
         "광화문": 20
       },
-      "households": 340
+      "households": 340,
+      "display_name": "북한강성원아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/11360694"
     },
     {
       "name": "용산e편한세상",
@@ -38360,7 +38384,11 @@
         "여의도": 18,
         "광화문": 15
       },
-      "households": 384
+      "households": 384,
+      "display_name": "용산데시앙포레아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/1460573667"
     },
     {
       "name": "시범",
@@ -38810,7 +38838,11 @@
         "여의도": 32,
         "광화문": 19
       },
-      "households": 480
+      "households": 480,
+      "display_name": "한신무학아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/11215915"
     },
     {
       "name": "두산",
@@ -39090,7 +39122,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "대동아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/11011161"
     },
     {
       "name": "구의현대7단지현대홈타운",
@@ -39265,7 +39301,11 @@
         "여의도": 40,
         "광화문": 32
       },
-      "households": 322
+      "households": 322,
+      "display_name": "로얄동아아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/12558031"
     },
     {
       "name": "현대5",
@@ -64533,7 +64573,11 @@
         "name": "서울도성초등학교",
         "distance_m": 431,
         "in_zone": false
-      }
+      },
+      "display_name": "역삼푸르지오아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/8000614"
     },
     {
       "name": "우성아파트",
@@ -97856,7 +97900,11 @@
       "hh_src": "address_alias:recap.hhldCnt",
       "hh_confidence": "high",
       "hh_checked_at": "2026-08-17",
-      "hh_evidence": []
+      "hh_evidence": [],
+      "display_name": "성수아이파크아파트",
+      "name_src": "portal.kakao_local",
+      "name_checked_at": "2026-11-28",
+      "name_evidence": "http://place.map.kakao.com/11506189"
     },
     {
       "name": "꿈의숲롯데캐슬",
